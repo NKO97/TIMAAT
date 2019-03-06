@@ -1,0 +1,67 @@
+.timaat-colorPicker
+{
+    position: relative;
+    clear: both;
+    width: 1.25em;
+    height: 1.25em;
+}
+
+.timaat-colorPicker .track {
+    background:     #EFEFEF url(images/text-color.png) no-repeat 50% 50%;
+    height:         152px;
+    width:          152px;
+    position:       absolute;
+    cursor:         crosshair;
+    float:          left;
+    left:           -66px;
+    top:            -66px;
+    display:        none;
+    border:         1px solid #666;
+    z-index:        10;
+    -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+    border-radius: 150px;
+
+}
+
+.timaat-colorPicker .color {
+    width:          1.25em;
+    height:         1.25em;
+    padding:        1px;
+    border:         1px solid #ccc;
+    display:        block;
+    position:       relative;
+    z-index:        11;
+    background-color: #EFEFEF;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
+    border-radius: 27px;
+    cursor: pointer;
+}
+
+.timaat-colorPicker .colorInner {
+    width:          1em;
+    height:         1em;
+    -webkit-border-radius: 27px;
+    -moz-border-radius: 27px;
+    border-radius: 27px;
+}
+
+.timaat-colorPicker .dropdown {
+    list-style: none;
+    display: none;
+    width: 22px;
+    position: absolute;
+    top: 23px;
+    border: 1px solid #ccc;
+    left: 0;
+    z-index: 1000;
+}
+
+.timaat-colorPicker .dropdown li{
+    height: 25px;
+    cursor: pointer;
+}

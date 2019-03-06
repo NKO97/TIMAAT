@@ -1,0 +1,190 @@
+.playbutton i.play {
+	display: inline-block;
+}
+.playbutton i.pause {
+	display: none;
+}
+.playing i.play {
+	display: none !important;
+}
+.playing i.pause {
+	display: inline-block !important;
+}
+
+.playbutton, .stepbckbutton, .stepfwdbutton {
+	cursor: pointer;
+}
+
+body.timaat-login-modal-open #wrapper {
+    -webkit-filter: blur(50px);
+    -moz-filter: blur(50px);
+    -o-filter: blur(50px);
+    -ms-filter: blur(50px);
+    filter: blur(50px);
+}
+
+.timaat-component {
+	display: none;
+}
+
+.timaat-video-card {
+	cursor: pointer;
+	width: 16rem;
+	float: left;
+	margin-right: 2em;
+	margin-bottom: 2em;
+}
+
+.timaat-video-card .duration {
+	margin-top: -1.7em;
+	margin-right: 0.5em;
+}
+
+.timaat-video-card .title {
+	font-size: 0.75rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.timaat-sidebar-tab:hover {
+	background-color: white;
+}
+.timaat-sidebar-tab a.selected {
+	color: white !important;
+}
+.timaat-sidebar-tab a {
+	color: #555 !important;
+}
+
+.timaat-annotation-list-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.timaat-annotation-list-wrapper {
+	overflow-y: inherit;
+	overflow-x: hidden;
+}
+
+#timaat-annotation-list li {
+	cursor: pointer;
+}
+#timaat-annotation-list li:hover {
+	background-color: #e5e5e5;
+}
+.timat-annotation-list-selected {
+	background-color: #c9e2ff;
+}
+.timat-annotation-list-selected:hover {
+	background-color: #c9e2ff !important;
+}
+
+#timaat-annotation-metadata {
+	display: none;
+}
+a.dropdown-item {
+	cursor: pointer;
+}
+
+#timaat-map-overlay {
+	display: none;
+	z-index: 1000;
+	background-color: white;
+	position: absolute;
+	left: 70px;
+	right: 20px;
+	top: 20px;
+	bottom: 69px;
+}
+
+#timaat-video-seek-bar {
+	width: 100%;
+	z-index: 100;
+}
+
+#timaat-timeline-marker-pane {
+	width: 100%;
+	height: 15px;
+}
+.timaat-timeline-marker {
+	position: absolute;
+	float: left;
+	width: 0px;
+	height: 18px;
+	background-color: rgba(200,0,100,0.3);
+	border-left: 2px solid #c80064;
+}
+.timaat-timeline-markerhead {
+	border-radius: 2px;
+	display: block;
+	width: 10px;
+	height: 10px;
+	position: absolute;
+	margin-top: -10px;
+	margin-left: -6px;
+	background-color: #c80064;
+}
+.sidebar {
+	position: absolute;
+	left: 0;
+}
+#side-menu {
+	display: flex;
+	flex-wrap: wrap;
+	padding-left: 0;
+	margin-bottom: 0;
+	list-style: none;
+}
+#side-menu li {
+	width: 50px;
+	height: 50px;
+	font-size: 150%;
+	padding-left: 10px;
+	padding-top: 5px;
+}
+#side-menu li a {
+	color: #337ab7;
+}
+#side-menu li a:hover {
+	color: #23527c;	
+}
+
+.timaat-timeline-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  background: #d3d3d3;
+  background: linear-gradient(to right,  #ed1e24 0%,#ed1e24 0%,#939393 0%,#939393 100%);
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.timaat-timeline-slider:hover {
+  opacity: 1;
+}
+
+.timaat-timeline-slider:hover::-webkit-slider-thumb {
+  opacity: 1;
+  display: block;
+}
+
+.timaat-timeline-slider::-webkit-slider-thumb {
+	display: none;
+	border: 1px solid #666;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 4px;
+  height: 18px;
+  background: #EEE;
+  cursor: pointer;
+}
+
+.timaat-timeline-slider::-moz-range-thumb {
+	border: 1px solid #666;
+  width: 4px;
+  height: 18px;
+  background: #EEE;
+  cursor: pointer;
+}
