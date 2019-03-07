@@ -154,8 +154,8 @@ const TIMAAT = {
 		updateUI() {
 			this.listView.attr('data-starttime', this.model.startTime);
 			this.listView.find('i').css('color', '#'+this.svg.color);
-			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime);
+			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			this.listView.find('span').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			
@@ -515,6 +515,7 @@ const TIMAAT = {
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
 			$('.timaat-videoplayer-ui').show();			
+			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
 //    			var videoUrl = '../data/al-hayat-transcoded.mp4'+'?token='+video.viewToken; // TODO retrieve from model
     			var videoUrl = '/TIMAAT/api/media/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 			
@@ -527,14 +528,6 @@ const TIMAAT = {
 			
 			// attach event handlers for UI elements
 			$(this.video).on('canplay', function(ev) {
-				secs = TIMAAT.VideoPlayer.video.duration;
-				mins = Math.floor(secs / 60);
-				secs = secs - (mins*60);
-				secs = Math.floor(secs);
-				if (mins < 10 ) mins = "0"+mins;
-				if (secs < 10 ) secs = "0"+secs;
-		
-				$('.videoduration').html(mins+":"+secs);
 				$('#timaat-video-seek-bar').val(0);
 				map.invalidateSize(true);
 				
@@ -542,15 +535,7 @@ const TIMAAT = {
 
 			});
 			$(this.video).on('timeupdate', function(ev) {
-				secs = TIMAAT.VideoPlayer.video.currentTime;
-				frame = Math.floor(25 * (secs % 1));
-				mins = Math.floor(secs / 60);
-				secs = secs - (mins*60);
-				secs = Math.floor(secs);
-				if (mins < 10 ) mins = "0"+mins;
-				if (secs < 10 ) secs = "0"+secs;
-		
-				$('.videotime').html(mins+":"+secs+"."+frame);
+				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true));
 		
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
 				$('#timaat-video-seek-bar').val(value);
@@ -906,7 +891,7 @@ const TIMAAT = {
 						
 			var fraction = seconds - ((hours*60*60) + (mins * 60) + secs);
 
-			if ( fraction != 0 && withFraction ) time += "."+fraction.toFixed(2).substring(2);
+			if ( fraction != 0 && withFraction ) time += "."+fraction.toFixed(3).substring(2);
 
 			return time;
 		},

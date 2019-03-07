@@ -71,10 +71,12 @@ public class Annotation implements Serializable {
 	private SegmentSelectorType segmentSelectorType;
 
 	@JsonIgnore
-	private Time sequenceEndTime;
+	@Column(name="SequenceEndTime")
+	private Timestamp sequenceEndTime;
 
 	@JsonIgnore
-	private Time sequenceStartTime;
+	@Column(name="SequenceStartTime")
+	private Timestamp sequenceStartTime;
 
 	private String title;
 
@@ -86,6 +88,11 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="annotation", cascade=CascadeType.ALL)
 	private List<SelectorSvg> svgList;
+
+	//bi-directional many-to-many association to Tag
+	@ManyToMany(mappedBy="annotations")
+	private List<Tag> tags;
+
 
 	public Annotation() {
 	}
@@ -202,20 +209,28 @@ public class Annotation implements Serializable {
 		this.segmentSelectorType = segmentSelectorType;
 	}
 
-	public Time getSequenceEndTime() {
+	public Timestamp getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
-	public void setSequenceEndTime(Time sequenceEndTime) {
+	public void setSequenceEndTime(Timestamp sequenceEndTime) {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public Time getSequenceStartTime() {
+	public Timestamp getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
-	public void setSequenceStartTime(Time sequenceStartTime) {
+	public void setSequenceStartTime(Timestamp sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
+	}
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 
 	public String getTitle() {
@@ -262,8 +277,7 @@ public class Annotation implements Serializable {
 	}
 
 	public void setStartTime(float startTime) {
-		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new Time(0);
-		this.sequenceStartTime.setTime((long)(startTime*1000f));
+		this.sequenceStartTime = new java.sql.Timestamp((long)(startTime*1000f));
 	}
 
 	public float getEndTime() {
@@ -272,8 +286,7 @@ public class Annotation implements Serializable {
 	}
 
 	public void setEndTime(float endTime) {
-		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new Time(0);
-		this.sequenceEndTime.setTime((long)(endTime*1000f));
+		this.sequenceEndTime = new java.sql.Timestamp((long)(endTime*1000f));
 	}
 	
 

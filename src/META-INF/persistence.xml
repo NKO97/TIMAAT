@@ -17,6 +17,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_TitlePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Tag</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TagSet</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternative</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternativePK</class>

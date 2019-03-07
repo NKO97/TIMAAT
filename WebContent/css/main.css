@@ -68,6 +68,7 @@ body.timaat-login-modal-open #wrapper {
 
 #timaat-annotation-list li {
 	cursor: pointer;
+	font-size: 90%;
 }
 #timaat-annotation-list li:hover {
 	background-color: #e5e5e5;
@@ -107,6 +108,7 @@ a.dropdown-item {
 	height: 15px;
 }
 .timaat-timeline-marker {
+	margin-top: -6px;
 	position: absolute;
 	float: left;
 	width: 0px;
@@ -120,9 +122,12 @@ a.dropdown-item {
 	width: 10px;
 	height: 10px;
 	position: absolute;
-	margin-top: -10px;
+	margin-top: 18px;
 	margin-left: -6px;
 	background-color: #c80064;
+}
+.timaat-timeline-markerhead.picture {
+	border-radius: 25px;
 }
 .sidebar {
 	position: absolute;

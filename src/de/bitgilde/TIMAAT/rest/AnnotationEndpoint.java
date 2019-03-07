@@ -142,6 +142,7 @@ public class AnnotationEndpoint {
 		if ( updatedAnno.getComment() != null ) m.setComment(updatedAnno.getComment());
 		if ( updatedAnno.getStartTime() >= 0 ) m.setStartTime(updatedAnno.getStartTime());
 		if ( updatedAnno.getEndTime() >= 0 ) m.setEndTime(updatedAnno.getEndTime());
+
 		if ( updatedAnno.getSVG() != null 
 			 && (updatedAnno.getSVG().size() > 0) 
 			 && updatedAnno.getSVG().get(0).getColor() != null ) m.getSVG().get(0).setColor(updatedAnno.getSVG().get(0).getColor());
@@ -154,6 +155,7 @@ public class AnnotationEndpoint {
 
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
+		em.merge(m);
 		em.persist(m);
 		tx.commit();
 
