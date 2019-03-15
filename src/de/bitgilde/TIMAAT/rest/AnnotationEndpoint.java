@@ -182,6 +182,7 @@ public class AnnotationEndpoint {
 		em.merge(m);
 		em.persist(m);
 		tx.commit();
+		em.refresh(m);
 
 		return Response.ok().entity(m).build();
 	}

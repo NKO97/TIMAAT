@@ -99,6 +99,30 @@ body.timaat-login-modal-open #wrapper {
 	background-color: white !important;
 }
 
+.timaat-volumecontrol {
+	display: inline-block;
+	overflow: hidden;
+	height: 1.3rem;
+	padding-top: 2px;
+	width: 20px;
+	transition: width 0.1s;
+}
+.timaat-volumecontrol:hover {
+	width: 130px;
+}
+.timaat-volumecontrol input {
+	width: 100px;
+	float: right;
+	margin-top: 3px;
+	height: 1.3rem;
+}
+#timaat-volumeicon i.volume {
+	display: inline;
+}
+#timaat-volumeicon i.mute {
+	display: none;
+}
+
 .timaat-annotation-list-segment {
 	 padding: 0.1rem 0.5rem;
 	 color: white !important;
