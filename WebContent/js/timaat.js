@@ -573,8 +573,8 @@ const TIMAAT = {
 					$('#timaat-volumeicon').find('.volume').hide();
 					$('#timaat-volumeicon').find('.mute').show();
 				}
-
 			});
+			
 			$('#timaat-volumeicon').click(function() {
 				if ( !TIMAAT.VideoPlayer.video ) return;
 				if ( TIMAAT.VideoPlayer.video.volume > 0 ) {

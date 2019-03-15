@@ -116,6 +116,9 @@ body.timaat-login-modal-open #wrapper {
 	margin-top: 3px;
 	height: 1.3rem;
 }
+#timaat-volumeicon {
+	cursor: pointer;
+}
 #timaat-volumeicon i.volume {
 	display: inline;
 }
