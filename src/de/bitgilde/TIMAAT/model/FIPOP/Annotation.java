@@ -5,7 +5,6 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -65,6 +64,21 @@ public class Annotation implements Serializable {
 	@JsonIgnore
 	private MediumAnalysisList mediumAnalysisList;
 	
+	@ManyToOne
+	@JoinTable(
+			name="Annotation_has_Medium"
+			, inverseJoinColumns={
+				@JoinColumn(name="MediumID")
+				}
+			, joinColumns={
+				@JoinColumn(name="AnnotationID")
+				}
+			)
+	@JsonIgnore
+	private Medium medium;
+
+	@Transient
+	private int mediumID;
 
 	@JoinColumn(name="SegmentSelectorTypeID")
 	@JsonIgnore
@@ -200,6 +214,14 @@ public class Annotation implements Serializable {
 	public void setLayerVisual(int layerVisual) {
 		this.layerVisual = layerVisual;
 	}
+	
+	public Medium getMedium() {
+		return this.medium;
+	}
+
+	public void setMedium(Medium medium) {
+		this.medium = medium;
+	}
 
 	public SegmentSelectorType getSegmentSelectorType() {
 		return this.segmentSelectorType;
@@ -296,6 +318,17 @@ public class Annotation implements Serializable {
 
 	public void setMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
 		this.mediumAnalysisList = mediumAnalysisList;
+	}
+
+	
+	
+	public int getMediumID() {
+		if ( this.medium != null) return this.medium.getId();
+		return this.mediumID;
+	}
+	
+	public void setMediumID(int mediumID) {
+		this.mediumID = mediumID;
 	}
 
 

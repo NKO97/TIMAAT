@@ -16,6 +16,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 
@@ -37,6 +40,9 @@ import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 @Service
 @Path("/annotation")
 public class AnnotationEndpoint {
+	
+	@Context ContainerRequestContext crc;
+	
 
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,7 +61,7 @@ public class AnnotationEndpoint {
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-	@Path("media/{id}")
+	@Path("medium/{id}")
 	@Secured
 	public Response createAnnotation(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -76,19 +82,26 @@ public class AnnotationEndpoint {
 		// sanitize object data
 		newAnno.setId(0);
 		newAnno.getSVG().get(0).setId(0);
+		newAnno.setMedium(m);
+		
 		// get analysis list id for medium
-		int analysisListID = 0;
 		@SuppressWarnings("unchecked")
-		List<Integer> idList = em.createQuery("SELECT m.id FROM MediumAnalysisList m WHERE m.medium=:medium")
-		.setParameter("medium", m).getResultList();
-		if ( idList.size() < 1 ) Response.status(Status.NOT_FOUND).build();
-		analysisListID = idList.get(0);
-		newAnno.setAnalysisListID(analysisListID);
+		List<MediumAnalysisList> malList = em.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
+		.setParameter("medium", m)
+		.setParameter("listId", newAnno.getAnalysisListID()).getResultList();
+		if ( malList.size() < 1 ) Response.status(Status.NOT_FOUND).build();
+		newAnno.setMediumAnalysisList(malList.get(0));
 
+		// update log metadata
 		newAnno.setCreated(new Timestamp(System.currentTimeMillis()));
 		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		newAnno.setCreator_UserAccountID(3); // TODO
-		newAnno.setLastEditedBy_UserAccountID(3); // TODO
+		if ( crc.getProperty("TIMAAT.userID") != null ) {
+			newAnno.setCreator_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+			newAnno.setLastEditedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error			
+		}
+
 		newAnno.setAnalysisContentAudio(null);
 		newAnno.setAnalysisContentVisual(null);
 		newAnno.setAnalysisNarrative(null);
@@ -105,9 +118,12 @@ public class AnnotationEndpoint {
 		em.persist(newSVG);
 		newAnno.addSVG(newSVG);
 		em.persist(newAnno);
+		malList.get(0).getAnnotations().add(newAnno);
+		em.persist(malList.get(0));
 		em.flush();
 		tx.commit();
 		em.refresh(newAnno);
+		em.refresh(malList.get(0));
 		em.refresh(newSVG);
 		
 
@@ -153,6 +169,14 @@ public class AnnotationEndpoint {
 				 && (updatedAnno.getSVG().size() > 0) 
 				 && updatedAnno.getSVG().get(0).getSvgData() != null ) m.getSVG().get(0).setSvgData(updatedAnno.getSVG().get(0).getSvgData());
 
+		// update log metadata
+		m.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		if ( crc.getProperty("TIMAAT.userID") != null ) {
+			m.setLastEditedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error			
+		}
+		
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.merge(m);
@@ -174,8 +198,12 @@ public class AnnotationEndpoint {
 		
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
+		MediumAnalysisList mal = m.getMediumAnalysisList();
+		mal.removeAnnotation(m);
+		em.persist(mal);
 		em.remove(m);
 		tx.commit();
+		em.refresh(mal);
 
 		return Response.ok().build();
 	}

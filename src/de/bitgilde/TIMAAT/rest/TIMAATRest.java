@@ -15,6 +15,10 @@ import javax.ws.rs.core.SecurityContext;
 
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 
+/**
+*
+* @author Jens-Martin Loebel <loebel@bitgilde.de>
+*/
 @Path("/")
 public class TIMAATRest {
 	

@@ -6,7 +6,11 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContentAudio</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContentVisual</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisNarrative</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.EpisodeInformation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Iri</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaType</class>
@@ -15,8 +19,14 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_TitlePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Reference</class>		
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceEntryType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirementPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Source</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Tag</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TagSet</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>

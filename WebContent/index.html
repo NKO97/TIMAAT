@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="bitGilde IT Solutions UG (haftungsbeschr&auml;nkt)">
 
-    <title>TIMAAT - Client v0.1</title>
+    <title>TIMAAT - Client v0.Sprint-2</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -39,6 +39,8 @@
 
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- jQuery Plugins-->
+    <script src="vendor/jquery/plugins/jquery-taginput.js"></script>
 
     <!-- Popper for Bootstrap JavaScript -->
     <script src="vendor/popper/popper.min.js"></script>
@@ -51,6 +53,9 @@
     <!-- Tinycolorpicker JavaScript -->
     <script src="vendor/tinycolorpicker/jquery.tinycolorpicker.js"></script>
 
+    <!-- Dropzone JavaScript -->
+    <script src="vendor/dropzone/dropzone.js"></script>
+
     <!-- Custom Theme JavaScript -->
     <script src="js/sb-admin-2.js"></script>
 
@@ -58,6 +63,7 @@
     <script src="vendor/leaflet/leaflet.js"></script>
     <script src="vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable.js"></script>
     <script src="vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag.js"></script>
+    <script src="vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom.js"></script>
 
     <!-- TIMAAT -->
     <script src="js/timaat.js"></script>
@@ -186,6 +192,7 @@
 						<strong>Verfügbare Videos</strong>
 		                        </div>
 		                        <div class="card-body" id="timaat-video-list">
+		                        
 						<div class="d-flex alert alert-secondary justify-content-center" role="alert">
 							<h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
 						</div>
@@ -199,6 +206,58 @@
 <!--  ------------------------------------------------------------------------------------------------------------------------------------------  -->
 
             <div class="container-fluid timaat-component" id="timaat-component-videoplayer">
+
+
+<div class="modal fade" id="timaat-videoplayer-analysislist-delete" tabindex="-1" role="dialog" aria-labelledby="analysislistDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="analysislistDeleteLabel">Liste löschen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Möchten Sie die ausgewählte Analyseliste mitsamt Annotationen löschen?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+        <button type="button" class="btn btn-danger" id="timaat-analysislist-delete-submit">Liste löschen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="timaat-videoplayer-analysislist-meta" tabindex="-1" role="dialog" aria-labelledby="analysislistMetaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="analysislistMetaLabel">Liste hinzufügen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" id="timaat-analysislist-meta-title" placeholder="Titel" aria-label="Titel">
+		</div>
+
+		<div class="input-group mb-3">
+		  <textarea class="form-control" aria-label="Kommentar" id="timaat-analysislist-meta-comment" placeholder="Kommentar eingeben"></textarea>
+		</div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+        <button type="button" class="btn btn-primary" id="timaat-analysislist-meta-submit" disabled>Hinzufügen</button>
+      </div>
+    </div>
+  </div>
+</div>		
 
 
 
@@ -221,6 +280,7 @@
     </div>
   </div>
 </div>
+
 
 
 		
@@ -252,6 +312,9 @@
 				<span class="input-group-text">Start</span>
 			</div>
 			<input type="text" class="form-control"  id="timaat-annotation-meta-start"placeholder="00:00:00" aria-label="Start Timecode">
+			<div class="input-group-append">
+			    <button class="btn btn-secondary" type="button"><i class="far fa-clock"></i></button>
+			</div>&nbsp;&nbsp;
 			<div class="input-group-prepend">
 				
 				<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
@@ -268,6 +331,15 @@
 
 			</div>
 			<input type="text" class="form-control" placeholder="00:00:00" id="timaat-annotation-meta-end" aria-label="Ende Timecode">
+			<div class="input-group-append">
+			    <button class="btn btn-secondary" type="button"><i class="far fa-clock"></i></button>
+			</div>
+		</div>
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">Tags</span>
+			</div>
+        		<input class="form-control" id="form-tags-4" name="tags-4" type="text" value="">
 		</div>
 
 		<div class="input-group mb-3">
@@ -290,31 +362,46 @@
 		</div>
 		
                 <div class="row timaat-videoplayer-ui" style="padding-top: 1em;">
-		<div class="col-lg-2">
+		<div class="col-lg-3">
                     <div class="card">
-			    <div class="timaat-annotation-list-wrapper" style="max-height: 487px;min-height: 487px">
-				    <div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
-				    <ul id="timaat-annotation-list" class="list-group list-group-flush">
-			    </ul>
-		    	</div>
-		    
-                        <div class="card-footer">
-				<button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
-				<button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
+                        <div class="card-header" style="padding:0">
+<div class="input-group">
+  <div class="input-group-prepend">
+<button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i title="Annotationsliste" class="far fa-fw fa-list-alt"></i></button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysislist()" id="timaat-analysislist-edit">Liste bearbeiten...</a>
+      <div role="separator" class="dropdown-divider"></div>
+      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add" >Neue Liste erstellen</a>
+      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Liste löschen</a>
+    </div>
+  </div>
+ <select disabled class="custom-select bg-light text-info" id="timaat-analysislist-chooser">
+  </select>
+</div>
                         </div>
+
+                    	<div class="timaat-annotation-list-wrapper" style="max-height: 461px;min-height: 461px">
+				    		<div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
+				    		<ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
+		    			</div>
+<!-- 
+                        <div class="card-footer">
+							<button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
+							<button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
+                        </div>
+ -->
                     </div>
                 </div>
-		
 		<div class="col-lg-10" id="timaat-annotation-metadata" style="max-height: 541px;min-height: 541px">
                     <div class="card">
 			    <div class="card-header">Annotation Metadaten</div>
 			    <div class="card-body">
-			   	 lala
+			   	 
 		   	    </div>
                     </div>
                 </div>
 		
-		<div class="col-lg-10">
+		<div class="col-lg-9">
                     <div class="card">
                         <div class="list-group list-group-flush">
                            <div id="map" style="height: 450px; width: 100%;"></div>

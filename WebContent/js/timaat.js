@@ -120,7 +120,8 @@ const TIMAAT = {
 			// create and style list view element
 			this.listView = $('<li class="list-group-item" style="padding:0"> \
 					    <div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div> \
-				 		<i class="fas fa-image fa-fw" aria-hidden="true"></i><span class="timaat-time"></span><br> \
+				 		<i class="timaat-annotation-list-type fas fa-image fa-fw" aria-hidden="true"></i><span class="timaat-annotation-list-time"></span> \
+						<span class="timaat-annotation-list-tags float-right text-muted"><i class=""></i></span><br> \
 						<div class="timaat-annotation-list-title text-muted"></div> \
 					</li>'
 			);
@@ -153,11 +154,16 @@ const TIMAAT = {
 		
 		updateUI() {
 			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.find('i').css('color', '#'+this.svg.color);
+			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-			this.listView.find('span').html(timeString);
+			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
+			// tags
+			this.listView.find('.timaat-annotation-list-tags i').attr('title', this.model.tags.length+" Tags");			
+			if (this.model.tags.length == 0) this.listView.find('.timaat-annotation-list-tags i').attr('class','');
+			else if (this.model.tags.length == 1) this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tag').attr('title', "ein Tag");
+			else this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tags');
 			
 			// update svg
 			var anno = this;
@@ -182,8 +188,8 @@ const TIMAAT = {
 			this.svg.layer.addLayer(item);
 
 			// update UI
-			this.listView.find('i').removeClass('fa-image');
-			this.listView.find('i').addClass('fa-draw-polygon');
+			this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
+			this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
 			
 			// attach item event handlers
 			var anno = this;
@@ -209,8 +215,8 @@ const TIMAAT = {
 
 			// update UI
 			if ( this.svg.items.length == 0 ) {
-				this.listView.find('i').removeClass('fa-draw-polygon');
-				this.listView.find('i').addClass('fa-image');
+				this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
+				this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
 			}
 		}
 		
@@ -271,28 +277,34 @@ const TIMAAT = {
 		
 		_parseSVG(svgitem) {
 			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 			switch (svgitem.type) {
 				case "rectangle":
 					// [[ height, x], [ y, width]]
-					var bounds = [[ 450-(factor*svgitem.y), svgitem.x*factor], [ 450-((svgitem.y+svgitem.height)*factor), (svgitem.x+svgitem.width)*factor]];
+					var bounds = [[ Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
 					return L.rectangle(bounds, {draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
-				
 			}
 		}
 		
 		_syncToModel() {
 			var jsonData = [];
 			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 			this.svg.items.forEach(function(item) {
 				if ( item instanceof L.Rectangle ) {
 					var jsonItem = {
 						type: 'rectangle',
-						x: Math.abs(item.getBounds().getWest()/factor),
-						y: Math.abs((450-item.getBounds().getNorth())/factor),
-						width: Math.abs((item.getBounds().getEast()-item.getBounds().getWest())/factor),
-						height: Math.abs((item.getBounds().getNorth()-item.getBounds().getSouth())/factor),
+						x: parseFloat( (Math.abs(item.getBounds().getWest()/factor) / width).toFixed(5) ),
+						y: parseFloat( (Math.abs((450-item.getBounds().getNorth())/factor) / height).toFixed(5) ),
+						width: parseFloat( (Math.abs((item.getBounds().getEast()-item.getBounds().getWest())/factor) / width).toFixed(5) ),
+						height: parseFloat( (Math.abs((item.getBounds().getNorth()-item.getBounds().getSouth())/factor) / height).toFixed(5) ),
 					}
-					jsonData.push(jsonItem);
+					// sanitize data
+					jsonItem.x = Math.max(0.0, Math.min(1.0,jsonItem.x));
+					jsonItem.y = Math.max(0.0, Math.min(1.0,jsonItem.y));
+					if ( jsonItem.width > 0 && jsonItem.height > 0 ) jsonData.push(jsonItem);
 				}
 				
 			});
@@ -318,36 +330,109 @@ const TIMAAT = {
 			TIMAAT.Service.listVideos(TIMAAT.VideoChooser.setVideoList);
 		},
 		
+		updateVideoStatus: function(video) {
+			video.poll = window.setInterval(function() {
+				jQuery.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.id+'/status',
+					type:"GET",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					video.status = data;
+					if (data == 'unavailable' || data == 'ready') {
+						window.clearInterval(video.poll);
+						// TODO handle unavailable video error
+						if ( data == 'unavailable' ) video.ui.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+						if ( data == 'ready' ) video.ui.find('.timaat-video-transcoding').hide();
+					}
+				})
+				.fail(function(e) {
+					// TODO handle error
+					window.clearInterval(video.poll);
+					video.ui.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+					console.log( "error", e );
+				});
+
+			}, 1000);
+			
+		},
+		
 		setVideoList: function(videos) {
 			if ( !videos ) return;
 			
 			// clear video UI list
 			$('#timaat-video-list').empty();
 			
-			this.videos = videos;
-			videos.forEach(function(video) {
-				var videoelement = $('<div class="card timaat-video-card"> \
-						  	<img class="card-img-top" src="img/video-placeholder.png" alt="Video Platzhalter"> \
-						  	<div class="text-right text-white duration">00:00</div> \
-						  	<div class="card-footer text-left title">/div> \
-						      </div>'
-				).appendTo('#timaat-video-list');
-
-				videoelement.find('.title').html(video.primaryTitle.title);
-				videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
+			// setup upload dropzone UI and events
+			this.uploadItem = $('<div class="card timaat-video-card timaat-video-upload-card"><div id="timaat-video-upload"></div> \
+												<img class="card-img-top" src="img/video-upload.png" alt="Video Upload" /> \
+												<div class="card-footer text-center title">Videodatei hochladen</div> \
+												</div>');
+			this.uploadItem.appendTo('#timaat-video-list');
+			TIMAAT.VideoChooser.uploadZone = new Dropzone("#timaat-video-upload", {
+				url: "/TIMAAT/api/medium/upload",
+				createImageThumbnails: false,
+				acceptedFiles: 'video/mp4',
+				maxFilesize: 1024,
+				maxFiles: 1,
+				headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
+				previewTemplate: '<div class="dz-preview dz-file-preview" style="margin-top:136px"> \
+					<div class="progress" style="height: 24px;"> \
+					  	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span></div> \
+						</div> \
+					</div>',
 				
-				videoelement.click(function(ev) {
-					$('.timaat-video-card').removeClass('bg-info text-white');
-					$(this).addClass('bg-info text-white');
-					TIMAAT.UI.showComponent('videoplayer');
-
-					// setup video in player
-					TIMAAT.VideoPlayer.setupVideo(video);
-					// load video annotations from server
-					TIMAAT.Service.listAnnotations(video.id, TIMAAT.VideoPlayer.setupAnnotations);
-				});
 				
 			});
+			
+			TIMAAT.VideoChooser.uploadZone.on("complete", function(file) {
+				if ( file.status == "success" && file.accepted ) {
+					var video = JSON.parse(file.xhr.response);
+					TIMAAT.VideoChooser.videos.push(video);
+					TIMAAT.VideoChooser._addVideo(video);
+				}
+				TIMAAT.VideoChooser.uploadZone.removeFile(file);
+			});
+			
+			
+			TIMAAT.VideoChooser.videos = videos;
+			videos.forEach(function(video) {
+				TIMAAT.VideoChooser._addVideo(video);
+			});
+		},
+		
+		_addVideo: function(video) {
+			var videoelement = $('<div class="card timaat-video-card"> <div class="timaat-video-transcoding"><i class="fas fa-cog fa-spin"></i> Transcodiere...</div> \
+				  	<img class="card-img-top timmat-video-thumbnail" src="img/video-placeholder.png" alt="Video Platzhalter"> \
+				  	<div class="text-right text-white duration">00:00</div> \
+				  	<div class="card-footer text-left title">/div> \
+				      </div>'
+			);
+			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.appendTo('#timaat-video-list');
+
+			videoelement.find('.title').html(video.primaryTitle.title);
+			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
+		
+			if ( video.status != 'ready' ) videoelement.find('.timaat-video-transcoding').show();
+			if ( video.status == 'unavailable' ) videoelement.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+			
+			video.ui = videoelement;
+			videoelement.click(function(ev) {
+				if ( video.status && video.status != 'ready' ) return;
+				$('.timaat-video-card').removeClass('bg-info text-white');
+				$(this).addClass('bg-info text-white');
+				TIMAAT.UI.showComponent('videoplayer');
+
+				// setup video in player
+				TIMAAT.VideoPlayer.setupVideo(video);
+				// load video annotations from server
+				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+			});
+			
+			if ( video.status == "transcoding" ) TIMAAT.VideoChooser.updateVideoStatus(video);
+
 		},
 		
 	},
@@ -360,6 +445,7 @@ const TIMAAT = {
 		duration: 1,
 		annotationList: [],
 		curAnnotation: null,
+		curList: null,
 		markerList: [],
 		overlay: null,
 		UI: Object(),
@@ -369,6 +455,90 @@ const TIMAAT = {
 			// init UI
 			$('.timaat-videoplayer-novideo').show();
 			$('.timaat-videoplayer-ui').hide();
+			
+			L.control.custom({
+			    position: 'topleft',
+			    content : '<button id="timaat-videoplayer-annotation-add-button" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="btn btn-light">'+
+			              '    <i class="fa fa-plus"></i>'+
+			              '</button>'+
+			              '<button id="timaat-videoplayer-annotation-remove-button" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="btn btn-light">'+
+			              '    <i class="fa fa-minus"></i>'+
+			              '</button>',
+			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
+			    style   :
+			    {
+			        margin: '10px',
+			        padding: '0px 0 0 0',
+			        cursor: 'pointer',
+			    },
+			})
+			.addTo(map);
+			
+			L.EditControl = L.Control.extend({
+
+		        options: {
+		            position: 'topleft',
+		            callback: null,
+		            kind: '',
+		            html: ''
+		        },
+
+		        onAdd: function (map) {
+		            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+		                link = L.DomUtil.create('a', '', container);
+
+		            link.href = '#';
+		            link.title = 'Erzeuge ' + this.options.kind;
+		            link.innerHTML = this.options.html;
+		            L.DomEvent.on(link, 'click', L.DomEvent.stop)
+		                      .on(link, 'click', function () {
+					      if ( !$(this._container).find('a').hasClass('leaflet-disabled') )
+						      window.LAYER = this.options.callback.call(map.editTools);
+		                      }, this);
+
+		            return container;
+		        }
+
+		    });
+
+		    
+		    L.NewRectangleControl = L.EditControl.extend({
+
+		        options: {
+		            position: 'topleft',
+		            callback: map.editTools.startRectangle,
+		            kind: 'Rechteck-Annotation',
+		            html: '<i class="fas fa-vector-square"></i>'
+		        }
+
+		    });
+		    
+		    map.on('editable:editing', function (e) {
+		        e.layer.setStyle({weight: 1, fillOpacity: 0.2});
+		    });
+
+		    var ctrl = new L.NewRectangleControl();
+		    map.editCtrl = ctrl;
+		    map.addControl(ctrl);
+		    $(map.editCtrl._container).find('a').addClass('leaflet-disabled');
+		    
+		    map.on('editable:drawing:start', function(x) {
+		    	TIMAAT.VideoPlayer.pause();
+			    $(map.editCtrl._container).find('a').addClass('bg-success');
+			    x.layer.setStyle({color: '#'+TIMAAT.VideoPlayer.curAnnotation.svg.color, weight: TIMAAT.VideoPlayer.curAnnotation.svg.strokeWidth});
+		    });
+		    
+		    map.on('editable:drawing:end', function(x) {
+			    $(map.editCtrl._container).find('a').removeClass('bg-success');
+			    x.layer.dragging.enable();
+			    map.removeLayer(x.layer);
+			    if ( TIMAAT.VideoPlayer.curAnnotation ) {
+				    TIMAAT.VideoPlayer.curAnnotation.addSVGItem(x.layer);
+				    TIMAAT.Service.updateAnnotation(TIMAAT.VideoPlayer.curAnnotation);
+				    x.layer.dragging._draggable = null;
+				    x.layer.dragging.addHooks();
+			    }
+		    });
 			
 			// setup video controls UI events
 			$('.playbutton').click(function(ev) {
@@ -407,6 +577,11 @@ const TIMAAT = {
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});
 			
+			// setup analysis lists UI and events
+			$('#timaat-analysislist-chooser').change(function(ev) {
+				var list = TIMAAT.VideoPlayer.model.lists.find(x => x.id === parseInt($(this).val()));
+				if ( list ) TIMAAT.VideoPlayer.setupAnnotations(list);
+			});
 			
 			// setup annotation modal UI and events
 			$('#timaat-annotation-meta-colorPicker').tinycolorpicker();
@@ -427,7 +602,42 @@ const TIMAAT = {
 				if (anno) TIMAAT.VideoPlayer._annotationRemoved(anno);
 				modal.modal('hide');
 			});
-						
+
+			$('#timaat-analysislist-delete-submit').click(function(ev) {
+				var modal = $('#timaat-videoplayer-analysislist-delete');
+				var list = modal.data('analysislist');
+
+				if (list) TIMAAT.VideoPlayer._analysislistRemoved(list);
+				modal.modal('hide');
+			});
+
+			$('#timaat-analysislist-meta-submit').click(function(ev) {
+				var modal = $('#timaat-videoplayer-analysislist-meta');
+				var list = modal.data('analysislist');
+
+				var title = $("#timaat-analysislist-meta-title").val();
+				var comment = $("#timaat-analysislist-meta-comment").val();
+				
+				if (list) {
+					anno.model.title = title;
+					anno.model.comment = comment;
+					
+					TIMAAT.VideoPlayer.updateAnalysislist(anno);
+				} else {
+					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
+				}
+				modal.modal('hide');
+			});
+			$('#timaat-analysislist-meta-title').on('input', function(ev) {
+				if ( $("#timaat-analysislist-meta-title").val().length > 0 ) {
+					$('#timaat-analysislist-meta-submit').prop("disabled", false);
+					$('#timaat-analysislist-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-analysislist-meta-submit').prop("disabled", true);
+					$('#timaat-analysislist-meta-submit').attr("disabled");
+				}
+			});
+
 			$('#timaat-annotation-meta-submit').click(function(ev) {
 				var modal = $('#timaat-videoplayer-annotation-meta');
 				var anno = modal.data('annotation');
@@ -447,7 +657,7 @@ const TIMAAT = {
 					anno.model.svg[0].color = color;
 					TIMAAT.VideoPlayer.updateAnnotation(anno);
 				} else {
-					TIMAAT.Service.createAnnotation(title, comment, startTime, endTime, color, 1, TIMAAT.VideoPlayer._annotationAdded);
+					TIMAAT.Service.createAnnotation(title, comment, startTime, endTime, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
 				}
 				modal.modal('hide');
 			});
@@ -469,6 +679,24 @@ const TIMAAT = {
 				$("#timaat-annotation-meta-end").val(TIMAAT.Util.formatTime(endTime, true));
 				
 			});
+
+			$('#timaat-videoplayer-analysislist-meta').on('show.bs.modal', function (ev) {
+				var modal = $(this);
+				var list = modal.data('analysislist');
+				
+				var heading = (list) ? "Liste bearbeiten" : "Liste hinzufügen";
+				var submit = (list) ? "Speichern" : "Hinzufügen";
+				var title = (list) ? list.title : "";
+				var comment = (list) ? list.comment : "";
+				
+				// setup UI from Video Player state
+				$('#analysislistMetaLabel').html(heading);
+				$('#timaat-analysislist-meta-submit').html(submit);
+				$("#timaat-analysislist-meta-title").val(title).trigger('input');
+				$("#timaat-analysislist-meta-comment").val(comment);
+				
+			});
+			
 			$('#timaat-videoplayer-annotation-meta').on('show.bs.modal', function (ev) {
 				var modal = $(this);
 				var anno = modal.data('annotation');
@@ -479,7 +707,7 @@ const TIMAAT = {
 				var title = (anno) ? anno.model.title : "";
 				var comment = (anno) ? anno.model.comment : "";
 				var start = (anno) ? TIMAAT.Util.formatTime(anno.model.startTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
-				var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime,true) : TIMAAT.Util.formatTime(Math.min(TIMAAT.VideoPlayer.video.currentTime+2,TIMAAT.VideoPlayer.duration),true);
+				var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime,true) : TIMAAT.Util.formatTime(Math.min(TIMAAT.VideoPlayer.video.currentTime,TIMAAT.VideoPlayer.duration),true);
 				
 				// setup UI from Video Player state
 				$('#annotationMetaLabel').html(heading);
@@ -490,7 +718,7 @@ const TIMAAT = {
 				$("#timaat-annotation-meta-start").val(start);
 				$("#timaat-annotation-meta-end").val(end);
 				
-			})
+			});
 			
 		},
 		
@@ -505,6 +733,12 @@ const TIMAAT = {
 			this.curAnnotation = null;
 			
 			// remove old video
+			if ( TIMAAT.VideoPlayer.video ) {
+				$(TIMAAT.VideoPlayer.video).unbind('canplay');
+				TIMAAT.VideoPlayer.pause();
+				TIMAAT.VideoPlayer.jumpTo(0);
+				$('#timaat-video-seek-bar').val(0);
+			}
 			if ( this.overlay ) map.removeLayer(this.overlay);
 			
 			// setup annotation UI
@@ -514,10 +748,10 @@ const TIMAAT = {
 
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
-			$('.timaat-videoplayer-ui').show();			
+			$('.timaat-videoplayer-ui').show();
+			$('#timaat-videoplayer-video-title').html(video.primaryTitle.title);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
-//    			var videoUrl = '../data/al-hayat-transcoded.mp4'+'?token='+video.viewToken; // TODO retrieve from model
-    			var videoUrl = '/TIMAAT/api/media/'+this.model.video.id+'/download'+'?token='+video.viewToken;
+    			var videoUrl = '/TIMAAT/api/medium/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 			
 			videoBounds = [[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]];
 			map.setMaxBounds(videoBounds);
@@ -546,24 +780,95 @@ const TIMAAT = {
 			});	
 		},
 		
+		setupAnalysisLists: function (lists) {
+			// clear old lists if any
+			$('#timaat-analysislist-chooser').empty();
+			
+			// setup model
+			TIMAAT.VideoPlayer.model.lists = lists;
+			lists.forEach(function(list) {
+				list.ui = $('<option value="'+list.id+'">'+list.title+'</option>');
+				list.ui.data('list', list);
+				$('#timaat-analysislist-chooser').append(list.ui);
+			});
+			
+			// update UI
+			$('#timaat-analysislist-options').prop("disabled", false);
+			$('#timaat-analysislist-options').removeAttr("disabled");
+			$('#timaat-analysislist-chooser').prop("disabled", false);
+			$('#timaat-analysislist-chooser').removeAttr("disabled");
+			
+			
+			if ( lists.length > 0 ) {
+				TIMAAT.VideoPlayer.setupAnnotations(lists[0]);
+				$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysislist()');
+				$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
+				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
+			}
+			else {
+				TIMAAT.VideoPlayer.setupAnnotations(null);
+				$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').removeAttr('onclick');
+				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-delete').removeAttr('onclick');
+			}
+		},
+		
 		setupAnnotations: function(annotations) {
 			// setup model
 			TIMAAT.VideoPlayer.model.annotations = annotations;
-
+			
+			// clear old list contents if any
+			if ( TIMAAT.VideoPlayer.curList ) {
+				TIMAAT.VideoPlayer.annotationList.forEach(function(anno) {
+					anno.remove();
+				});
+			}
+			TIMAAT.VideoPlayer.annotationList = [];
+			TIMAAT.VideoPlayer.curList = annotations;
+						
 			// build annotation list from model
-			annotations.annotations.forEach(function(annotation) {
-				TIMAAT.VideoPlayer.annotationList.push(new TIMAAT.Annotation(annotation));				
-			});
+			if ( annotations ) {
+				annotations.annotations.forEach(function(annotation) {
+					TIMAAT.VideoPlayer.annotationList.push(new TIMAAT.Annotation(annotation));				
+				});				
+			}
+			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 
 			// setup annotations UI
 			$('#timaat-annotation-list-loader').hide();
-			$('#timaat-videoplayer-annotation-add-button').prop("disabled", false);
-			$('#timaat-videoplayer-annotation-add-button').removeAttr("disabled");
+			$('#timaat-videoplayer-annotation-add-button').prop("disabled", TIMAAT.VideoPlayer.curList == null);
+			if ( TIMAAT.VideoPlayer.curList ) $('#timaat-videoplayer-annotation-add-button').removeAttr("disabled");
+			else $('#timaat-videoplayer-annotation-add-button').attr("disabled");
+
+		},
+		
+		addAnalysislist: function() {
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-analysislist-meta').data('analysislist', null);
+			$('#timaat-videoplayer-analysislist-meta').modal('show');
+		},
+		
+		editAnalysislist: function() {
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-analysislist-meta').data('analysislist', TIMAAT.VideoPlayer.curList);
+			$('#timaat-videoplayer-analysislist-meta').modal('show');			
+		},
+		
+		removeAnalysislist: function() {
+			if ( !TIMAAT.VideoPlayer.curList ) return;
+			$('#timaat-videoplayer-analysislist-delete').data('analysislist', TIMAAT.VideoPlayer.curList);
+			$('#timaat-videoplayer-analysislist-delete').modal('show');
 		},
 		
 		addAnnotation: function() {
+			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-annotation-meta').data('annotation', null);
 			$('#timaat-videoplayer-annotation-meta').modal('show');
 		},
@@ -601,6 +906,12 @@ const TIMAAT = {
 				$(map.editCtrl._container).find('a').addClass('leaflet-disabled');
 				$('#timaat-videoplayer-annotation-remove-button').prop("disabled", true);
 				$('#timaat-videoplayer-annotation-remove-button').attr("disabled");
+				// stop editing in progress
+				if ( map.editTools.drawing() ) {
+					try {
+						map.editTools.stopDrawing();
+					} catch(err) {};
+				}
 			}
 		},
 		
@@ -650,6 +961,7 @@ const TIMAAT = {
 		
 		_annotationAdded: function(annotation) {
 			TIMAAT.VideoPlayer.annotationList.push(annotation);
+			TIMAAT.VideoPlayer.curList.annotations.push(annotation.model);
 			annotation.updateUI();
 			annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 			TIMAAT.VideoPlayer.updateListUI();
@@ -662,6 +974,10 @@ const TIMAAT = {
 			TIMAAT.Service.removeAnnotation(annotation);
 			var index = TIMAAT.VideoPlayer.annotationList.indexOf(annotation);
 			if (index > -1) TIMAAT.VideoPlayer.annotationList.splice(index, 1);
+			// remove from model list
+			var anno = TIMAAT.VideoPlayer.curList.annotations.find(x => x.id === annotation.model.id);
+			index = TIMAAT.VideoPlayer.curList.annotations.indexOf(anno);
+			if (index > -1) TIMAAT.VideoPlayer.curList.annotations.splice(index, 1);
 
 			// update UI list view
 			annotation.remove();
@@ -690,7 +1006,7 @@ const TIMAAT = {
 
 		listVideos(callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/media/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -706,9 +1022,9 @@ const TIMAAT = {
 			
 		},
 		
-		listAnnotations(videoID, callback) {
+		getAnalysisLists(videoID, callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/media/"+videoID+"/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+videoID+"/analysislists",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -723,11 +1039,39 @@ const TIMAAT = {
 			});
 			
 		},
+
+		createAnalysislist(title, comment, mediumID, callback) {
+			var model = {
+					"id": 0,
+					"analysisFreeTextField": comment,
+					"title": title,
+					"analysisSegments": [],
+					"annotations": [],
+					"mediumID": mediumID
+			};
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/medium/"+mediumID,
+				type:"POST",
+				data: JSON.stringify(model),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
 		
-		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, callback) {
+		
+		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, list, callback) {
 			var model = { 	
 				id: 0, 
-				analysisListID: 0,
+				analysisListID: list,
 				comment: comment,
 				title: title,
 				startTime: startTime,
@@ -740,7 +1084,7 @@ const TIMAAT = {
 					}]
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/media/"+TIMAAT.VideoPlayer.model.video.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.id,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -754,13 +1098,7 @@ const TIMAAT = {
 			.fail(function(e) {
 				console.log( "error", e );
 				console.log( e.responseText );
-			});
-			
-			// TODO sync to server and callback
-			model.id = Math.floor(Math.random() * 1000) + 1;
-			model.svg.id = Math.floor(Math.random() * 1000) + 1;
-//			callback(new TIMAAT.Annotation(model));
-			
+			});			
 		},
 		
 		updateAnnotation(annotation) {
@@ -891,7 +1229,7 @@ const TIMAAT = {
 						
 			var fraction = seconds - ((hours*60*60) + (mins * 60) + secs);
 
-			if ( fraction != 0 && withFraction ) time += "."+fraction.toFixed(3).substring(2);
+			if ( withFraction ) time += "."+fraction.toFixed(3).substring(2);
 
 			return time;
 		},
@@ -993,7 +1331,7 @@ function setupTIMAAT() {
 	map.dragging.disable();
 	map.touchZoom.disable();
 	map.doubleClickZoom.disable();
-	map.scrollWheelZoom.disable();	
+	map.scrollWheelZoom.disable();
 
 	$(window).resize(function() {
 		TIMAAT.VideoPlayer.markerList.forEach(function(marker) {
@@ -1016,79 +1354,25 @@ window.addEventListener('keypress', function (evt) {
 });
 	*/
 	
-	
-	L.EditControl = L.Control.extend({
 
-	        options: {
-	            position: 'topleft',
-	            callback: null,
-	            kind: '',
-	            html: ''
-	        },
-
-	        onAdd: function (map) {
-	            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
-	                link = L.DomUtil.create('a', '', container);
-
-	            link.href = '#';
-	            link.title = 'Erzeuge ' + this.options.kind;
-	            link.innerHTML = this.options.html;
-	            L.DomEvent.on(link, 'click', L.DomEvent.stop)
-	                      .on(link, 'click', function () {
-				      if ( !$(this._container).find('a').hasClass('leaflet-disabled') )
-					      window.LAYER = this.options.callback.call(map.editTools);
-	                      }, this);
-
-	            return container;
-	        }
-
-	    });
-
-	    
-	    L.NewRectangleControl = L.EditControl.extend({
-
-	        options: {
-	            position: 'topleft',
-	            callback: map.editTools.startRectangle,
-	            kind: 'Rechteck-Annotation',
-	            html: '<i class="fas fa-vector-square"></i>'
-	        }
-
-	    });
-	    
-	    map.on('editable:editing', function (e) {
-	        e.layer.setStyle({weight: 1, fillOpacity: 0.2});
-	    });
-	    
-
-	    var ctrl = new L.NewRectangleControl();
-	    map.editCtrl = ctrl;
-	    map.addControl(ctrl);
-	    $(map.editCtrl._container).find('a').addClass('leaflet-disabled');
-	    
-	    map.on('editable:drawing:start', function(x) {
-		    $(map.editCtrl._container).find('a').addClass('bg-success');
-		    x.layer.setStyle({color: '#'+TIMAAT.VideoPlayer.curAnnotation.svg.color, weight: TIMAAT.VideoPlayer.curAnnotation.svg.strokeWidth});
-	    });
-	    
-	    map.on('editable:drawing:end', function(x) {
-		    $(map.editCtrl._container).find('a').removeClass('bg-success');
-		    x.layer.dragging.enable();
-		    map.removeLayer(x.layer);
-		    if ( TIMAAT.VideoPlayer.curAnnotation ) {
-			    TIMAAT.VideoPlayer.curAnnotation.addSVGItem(x.layer);
-			    TIMAAT.Service.updateAnnotation(TIMAAT.VideoPlayer.curAnnotation);
-			    x.layer.dragging._draggable = null;
-			    x.layer.dragging.addHooks();
-		    }
-	    });
 	   
 	    TIMAAT.UI.init();
 
-
-	    /*
-	    map.on('editable:drawing:click', updateTooltip);
-	    */
+	    $('#form-tags-4').tagsInput({
+	    	placeholder: 'Tag hinzufügen'
+		});
+	    
+	    
+	    // DEBUG
+	    $('#timaat-login-user').val('admin');
+		$('#timaat-login-pass').val('geheim123');
+		$('#timaat-login-submit').click();
+		setTimeout(function() { 
+		    $('body').removeClass('timaat-login-modal-open');
+		    $('#timaat-login-modal').modal('hide');
+		    $('#timaat-user-info').html("admin");
+		}, 700);
+		
 
 
 }

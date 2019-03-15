@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -60,23 +61,59 @@ public class Medium implements Serializable {
 	@JoinColumn(name="MediaTypeID")
 	private MediaType mediaType;
 
-	private int primarySource_SourceID;
+	//bi-directional many-to-one association to Source
+	@ManyToOne
+	@JoinColumn(name="PrimarySource_SourceID")
+	private Source source;
 
 	@OneToOne
 	@JoinColumn(name="primaryTitle_TitleID")
 	private Title primaryTitle;
 
-	private int propagandaTypeID;
+	//bi-directional many-to-one association to PropagandaType
+	@ManyToOne
+	@JoinColumn(name="PropagandaTypeID")
+	private PropagandaType propagandaType;
 
-	private int referenceID;
+	//bi-directional many-to-one association to Reference
+	@ManyToOne
+	@JoinColumn(name="ReferenceID")
+	private Reference reference;
 
 	@Temporal(TemporalType.DATE)
 	private Date releaseDate;
 
 	private String remark;
+
+	@OneToMany
+	@JoinTable(
+		name="Annotation_has_Medium"
+		, joinColumns={
+			@JoinColumn(name="MediumID")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="AnnotationID")
+			}
+		)
+	@JsonIgnore
+	private List<Annotation> annotations;
+
+	@OneToMany(mappedBy="medium")
+	private List<MediumAnalysisList> mediumAnalysisLists;
+
+	//bi-directional many-to-many association to Tag
+	@ManyToMany(mappedBy="mediums")
+	@JsonIgnore
+	private List<Tag> tags;
+
+	
+	@Transient
+	private String status;
 	
 	@Transient
 	private String viewToken;
+	
+	
 
 
 	public Medium() {
@@ -114,12 +151,12 @@ public class Medium implements Serializable {
 		this.mediaType = mediaType;
 	}
 
-	public int getPrimarySource_SourceID() {
-		return this.primarySource_SourceID;
+	public Source getSource() {
+		return this.source;
 	}
 
-	public void setPrimarySource_SourceID(int primarySource_SourceID) {
-		this.primarySource_SourceID = primarySource_SourceID;
+	public void setSource(Source source) {
+		this.source = source;
 	}
 
 	public Title getPrimaryTitle() {
@@ -130,20 +167,20 @@ public class Medium implements Serializable {
 		this.primaryTitle = primaryTitle;
 	}
 
-	public int getPropagandaTypeID() {
-		return this.propagandaTypeID;
+	public PropagandaType getPropagandaType() {
+		return this.propagandaType;
 	}
 
-	public void setPropagandaTypeID(int propagandaTypeID) {
-		this.propagandaTypeID = propagandaTypeID;
+	public void setPropagandaType(PropagandaType propagandaType) {
+		this.propagandaType = propagandaType;
 	}
 
-	public int getReferenceID() {
-		return this.referenceID;
+	public Reference getReference() {
+		return this.reference;
 	}
 
-	public void setReferenceID(int referenceID) {
-		this.referenceID = referenceID;
+	public void setReference(Reference reference) {
+		this.reference = reference;
 	}
 
 	public Date getReleaseDate() {
@@ -161,7 +198,53 @@ public class Medium implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
+	}
+
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
+	}
+
+	public List<MediumAnalysisList> getMediumAnalysisLists() {
+		return this.mediumAnalysisLists;
+	}
+
+	public void setMediumAnalysisLists(List<MediumAnalysisList> mediumAnalysisLists) {
+		this.mediumAnalysisLists = mediumAnalysisLists;
+	}
+
+	public MediumAnalysisList addMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
+		getMediumAnalysisLists().add(mediumAnalysisList);
+		mediumAnalysisList.setMedium(this);
+
+		return mediumAnalysisList;
+	}
+
+	public MediumAnalysisList removeMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
+		getMediumAnalysisLists().remove(mediumAnalysisList);
+		mediumAnalysisList.setMedium(null);
+
+		return mediumAnalysisList;
+	}
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getViewToken() {
 		return viewToken;
 	}

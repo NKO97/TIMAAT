@@ -49,6 +49,11 @@
     		<artifactId>jersey-hk2</artifactId>
             <version>${jersey2.version}</version>
 		</dependency>
+        <dependency>
+    		<groupId>org.glassfish.jersey.media</groupId>
+    		<artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey2.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -60,12 +65,18 @@
     		<artifactId>mysql-connector-java</artifactId>
     		<version>8.0.12</version>
 		</dependency>
-<dependency>
+		<dependency>
   			<groupId>org.glassfish.jersey.media</groupId>
   			<artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey2.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20180813</version>
+		</dependency>
+
 		<dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-api</artifactId>

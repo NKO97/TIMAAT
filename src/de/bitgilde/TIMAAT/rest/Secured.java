@@ -9,6 +9,10 @@ import java.lang.annotation.Target;
 
 import javax.ws.rs.NameBinding;
 
+/**
+*
+* @author Jens-Martin Loebel <loebel@bitgilde.de>
+*/
 @NameBinding
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD })

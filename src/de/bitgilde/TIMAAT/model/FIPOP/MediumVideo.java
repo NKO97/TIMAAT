@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 
 /**
@@ -20,15 +21,15 @@ public class MediumVideo implements Serializable {
 
 	private int dataRate;
 
-	private int episodeInformationID;
-
 	private int frameRate;
 
 	private int height;
 
 	private int isEpisode;
 
-	private Time length;
+	private Integer episodeInformationID;
+
+	private Timestamp length;
 
 	private int totalBitrate;
 
@@ -64,11 +65,11 @@ public class MediumVideo implements Serializable {
 		this.dataRate = dataRate;
 	}
 
-	public int getEpisodeInformationID() {
-		return this.episodeInformationID;
+	public Integer getEpisodeInformationID() {
+		return null; // TODO Placeholder
 	}
 
-	public void setEpisodeInformationID(int episodeInformationID) {
+	public void setEpisodeInformationID(Integer episodeInformationID) {
 		this.episodeInformationID = episodeInformationID;
 	}
 
@@ -101,7 +102,7 @@ public class MediumVideo implements Serializable {
 	}
 
 	public void setLength(float length) {
-		this.length.setTime((long)(length*1000f));
+		this.length = new Timestamp((long)(length*1000f));
 	}
 
 	public int getTotalBitrate() {

@@ -30,11 +30,18 @@ public class MediumAnalysisList implements Serializable {
 
 	private String title;
 
+	//bi-directional many-to-one association to AnalysisSegment
+	@OneToMany(mappedBy="mediumAnalysisList")
+	private List<AnalysisSegment> analysisSegments;
+
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
 	@JoinColumn(name="MediumID")
 	@JsonIgnore
 	private Medium medium;
+
+	@Transient
+	private int mediumID;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList")
@@ -79,6 +86,28 @@ public class MediumAnalysisList implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public List<AnalysisSegment> getAnalysisSegments() {
+		return this.analysisSegments;
+	}
+
+	public void setAnalysisSegments(List<AnalysisSegment> analysisSegments) {
+		this.analysisSegments = analysisSegments;
+	}
+
+	public AnalysisSegment addAnalysisSegment(AnalysisSegment analysisSegment) {
+		getAnalysisSegments().add(analysisSegment);
+		analysisSegment.setMediumAnalysisList(this);
+
+		return analysisSegment;
+	}
+
+	public AnalysisSegment removeAnalysisSegment(AnalysisSegment analysisSegment) {
+		getAnalysisSegments().remove(analysisSegment);
+		analysisSegment.setMediumAnalysisList(null);
+
+		return analysisSegment;
 	}
 
 	public List<Annotation> getAnnotations() {
@@ -126,6 +155,10 @@ public class MediumAnalysisList implements Serializable {
 	
 	public int getMediumID() {
 		return medium.getId();
+	}
+
+	public void setMediumID(int mediumID) {
+		this.mediumID = mediumID;
 	}
 
 }

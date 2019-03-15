@@ -8,6 +8,10 @@ import java.io.RandomAccessFile;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+/**
+*
+* @author Jens-Martin Loebel <loebel@bitgilde.de>
+*/
 public class RangedStreamingOutput implements StreamingOutput {
 
 	private File file;
