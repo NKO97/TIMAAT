@@ -305,10 +305,7 @@ const TIMAAT = {
 		}
 		
 		saveChanges() {
-			console.log(this.model.svg[0].svgData);
 			this._syncToModel();
-			console.log("done");
-			console.log(this.model.svg[0].svgData);
 			this.changed = false;
 		}
 
