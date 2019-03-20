@@ -189,8 +189,8 @@ public class MediumServiceEndpoint {
 
              // rename file with medium
              File tempFile = new File("/opt/TIMAAT/files/"+tempName);
-             tempFile.renameTo(new File("/opt/TIMAAT/files/"+newMedium.getId()+"_original.mp4")); // TODO assume only mp4 upload
-             newMedium.setFilePath("/opt/TIMAAT/files/"+newMedium.getId()+"_original.mp4");
+             tempFile.renameTo(new File("/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
+             newMedium.setFilePath("/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
              tx = em.getTransaction();
              tx.begin();
              em.persist(newMedium);
@@ -203,7 +203,7 @@ public class MediumServiceEndpoint {
              // start transcoding video
              newMedium.setStatus("transcoding");
              newMedium.setViewToken(issueFileToken(newMedium.getId()));
-             TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), "/opt/TIMAAT/files/"+newMedium.getId()+"_original.mp4");
+             TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), "/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
              videoTranscoder.start();
 
          } catch (IOException e) {e.printStackTrace();}  
