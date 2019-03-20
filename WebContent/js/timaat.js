@@ -589,7 +589,7 @@ const TIMAAT = {
 			
 			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
 			    position: 'topleft',
-			    content : '<button id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" style="background-color: #99ff99;" class="btn btn-light">'+
+			    content : '<button id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-success">'+
 			              '    <i class="fa fa-save"></i>' +
 			              '</button>',
 			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
