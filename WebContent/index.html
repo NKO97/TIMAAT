@@ -105,6 +105,7 @@
 <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
+    <div class="text-muted d-flex justify-content-end mr-1">v0.Sprint-2</div>
       <div class="modal-header">
 		<h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
       </div>
@@ -313,7 +314,7 @@
 			</div>
 			<input type="text" class="form-control"  id="timaat-annotation-meta-start"placeholder="00:00:00" aria-label="Start Timecode">
 			<div class="input-group-append">
-			    <button class="btn btn-secondary" type="button"><i class="far fa-clock"></i></button>
+			    <button class="btn btn-secondary" id="timaat-annotation-meta-setstart" type="button"><i class="far fa-clock"></i></button>
 			</div>&nbsp;&nbsp;
 			<div class="input-group-prepend">
 				
@@ -332,14 +333,8 @@
 			</div>
 			<input type="text" class="form-control" placeholder="00:00:00" id="timaat-annotation-meta-end" aria-label="Ende Timecode">
 			<div class="input-group-append">
-			    <button class="btn btn-secondary" type="button"><i class="far fa-clock"></i></button>
+			    <button class="btn btn-secondary" id="timaat-annotation-meta-setend" type="button"><i class="far fa-clock"></i></button>
 			</div>
-		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Tags</span>
-			</div>
-        		<input class="form-control" id="form-tags-4" name="tags-4" type="text" value="">
 		</div>
 
 		<div class="input-group mb-3">

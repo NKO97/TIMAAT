@@ -104,7 +104,7 @@ public class Annotation implements Serializable {
 	private List<SelectorSvg> svgList;
 
 	//bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="annotations")
+	@ManyToMany(mappedBy="annotations", cascade=CascadeType.PERSIST)
 	private List<Tag> tags;
 
 

@@ -25,12 +25,14 @@ import javax.ws.rs.core.Response.Status;
 import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.x.protobuf.Mysqlx.Ok;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 
 /**
 *
@@ -206,6 +208,87 @@ public class AnnotationEndpoint {
 		tx.commit();
 		em.refresh(mal);
 
+		return Response.ok().build();
+	}
+	
+	@POST
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+		
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	Annotation anno = em.find(Annotation.class, id);
+    	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
+
+    	// check if tag exists
+    	Tag tag = null;
+    	try {
+        	tag = (Tag) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
+        			.setParameter("name", tagName)
+        			.getSingleResult();    		
+    	} catch(Exception e) {};
+    	
+    	// create tag if it doesn't exist yet
+    	if ( tag == null ) {
+    		tag = new Tag();
+    		tag.setName(tagName);
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(tag);
+    	}
+    	
+    	// check if Annotation already has tag
+    	if ( !anno.getTags().contains(tag) ) {
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+        	anno.getTags().add(tag);
+    		tag.getAnnotations().add(anno);
+    		em.merge(tag);
+    		em.merge(anno);
+    		em.persist(anno);
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(anno);
+    	}
+ 	
+		return Response.ok().entity(tag).build();
+	}
+	
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+		
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	Annotation anno = em.find(Annotation.class, id);
+    	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+    	// check if Annotation already has tag
+    	Tag tag = null;
+    	for ( Tag annotag:anno.getTags() ) {
+    		if ( annotag.getName().compareTo(tagName) == 0 ) tag = annotag;
+    	}
+    	if ( tag != null ) {
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+        	anno.getTags().remove(tag);
+    		tag.getAnnotations().remove(anno);
+    		em.merge(tag);
+    		em.merge(anno);
+    		em.persist(anno);
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(anno);
+    	}
+ 	
 		return Response.ok().build();
 	}
 	

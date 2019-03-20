@@ -121,13 +121,54 @@ const TIMAAT = {
 			this.listView = $('<li class="list-group-item" style="padding:0"> \
 					    <div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div> \
 				 		<i class="timaat-annotation-list-type fas fa-image fa-fw" aria-hidden="true"></i><span class="timaat-annotation-list-time"></span> \
-						<span class="timaat-annotation-list-tags float-right text-muted"><i class=""></i></span><br> \
+						<span class="text-nowrap timaat-annotation-list-tags float-right text-muted"><i class=""></i></span><br> \
 						<div class="timaat-annotation-list-title text-muted"></div> \
 					</li>'
 			);
 			this.updateUI();
 			$('#timaat-annotation-list').append(this.listView);
+			this.listView.find('.timaat-annotation-list-tags').popover({
+				placement: 'right',
+				title: 'Tags bearbeiten',
+				trigger: 'click',
+				html: true,
+				content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
+				container: 'body',
+				boundary: 'viewport',
+				
+			});
 			
+			// attach tag editor
+			var anno = this;
+			this.listView.find('.timaat-annotation-list-tags').on('inserted.bs.popover', function () {
+				var tags = "";
+				anno.model.tags.forEach(function(item) { tags += ','+item.name });
+				tags = tags.substring(1);
+				$('.timaat-tag-input').val(tags);
+			    $('.timaat-tag-input').tagsInput({
+			    	placeholder: 'Tag hinzufügen',
+			    	onAddTag: function(taginput,tag) {
+			    		TIMAAT.Service.addTag(anno, tag, function(newtag) {
+			    			anno.model.tags.push(newtag);
+			    			anno.updateUI();
+			    		});
+			    	},
+			    	onRemoveTag: function(taginput,tag) {
+			    		TIMAAT.Service.removeTag(anno, tag, function(tagname) {
+			    			// find tag in model
+			    			var found = -1;
+			    			anno.model.tags.forEach(function(item, index) {
+			    				if ( item.name == tagname ) found = index;
+			    			});
+			    			if (found > -1) anno.model.tags.splice(found, 1);
+			    			anno.updateUI();
+			    		});
+			    	},				
+			    });
+			});
+			this.listView.find('.timaat-annotation-list-tags').on('hidden.bs.popover', function () { anno.updateUI(); });
+			this.listView.find('.timaat-annotation-list-tags').dblclick(function(ev) {ev.stopPropagation();});
+
 			// convert SVG data
 			var anno = this;
 			this.svg.model.forEach(function(svgitem) {
@@ -149,7 +190,8 @@ const TIMAAT = {
 				$('#timaat-videoplayer-annotation-meta').modal('show');
 			});
 			
-			
+			this.changed = false;
+
 		}
 		
 		updateUI() {
@@ -161,9 +203,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// tags
 			this.listView.find('.timaat-annotation-list-tags i').attr('title', this.model.tags.length+" Tags");			
-			if (this.model.tags.length == 0) this.listView.find('.timaat-annotation-list-tags i').attr('class','');
-			else if (this.model.tags.length == 1) this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tag').attr('title', "ein Tag");
-			else this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tags');
+			if (this.model.tags.length == 0) this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tag timaat-no-tags');
+			else if (this.model.tags.length == 1) this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "ein Tag");
+			else this.listView.find('.timaat-annotation-list-tags i').attr('class','fas fa-tags text-dark');
 			
 			// update svg
 			var anno = this;
@@ -186,6 +228,8 @@ const TIMAAT = {
 			if ( !item || this.svg.items.includes(item) ) return;
 			this.svg.items.push(item);
 			this.svg.layer.addLayer(item);
+			
+			this.changed = true;
 
 			// update UI
 			this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
@@ -198,20 +242,22 @@ const TIMAAT = {
 				// delete annotation if user presses alt
 				if ( ev.originalEvent.altKey ) {
 					anno.removeSVGItem(ev.target);
-				    TIMAAT.Service.updateAnnotation(anno);
+				    TIMAAT.VideoPlayer.updateUI();
 				}
 				
 			});
-			item.on('dragstart', function(ev) {TIMAAT.VideoPlayer.selectAnnotation(anno);});
-			item.on('dragend', function(ev) {TIMAAT.Service.updateAnnotation(anno);});
+			item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
+			item.on('dragend', function(ev) {anno.setChanged;TIMAAT.VideoPlayer.updateUI();});
 			
 		}
-		
+				
 		removeSVGItem (item) {
 			if ( !item || !this.svg.items.includes(item) ) return;
 			this.svg.layer.removeLayer(item);
 			var index = this.svg.items.indexOf(item);
 			if (index > -1) this.svg.items.splice(index, 1);
+			
+			this.changed = true;
 
 			// update UI
 			if ( this.svg.items.length == 0 ) {
@@ -220,9 +266,50 @@ const TIMAAT = {
 			}
 		}
 		
+		setChanged() {
+			this.changed = true;
+		}
+		
+		hasChanges() {
+			return this.changed;
+		}
+
+		
 		getModel() {
-			this._syncToModel();
 			return this.model;
+		}
+		
+		discardChanges() {
+			if ( !this.changed ) return;
+			this.svg.layer.clearLayers();
+			this.svg.items = Array();
+			
+			var anno = this;
+			this.svg.model = JSON.parse(this.model.svg[0].svgData);
+			this.svg.model.forEach(function(svgitem) {
+				var item = anno._parseSVG(svgitem);
+				anno.addSVGItem(item);
+			});
+			
+			// update UI
+			if ( this.svg.items.length == 0 ) {
+				this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
+				this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
+			} else {
+				this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
+				this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
+			}
+			
+			this.changed = false;
+
+		}
+		
+		saveChanges() {
+			console.log(this.model.svg[0].svgData);
+			this._syncToModel();
+			console.log("done");
+			console.log(this.model.svg[0].svgData);
+			this.changed = false;
 		}
 
 		updateStatus(time) {
@@ -249,11 +336,12 @@ const TIMAAT = {
 				this._scrollIntoView(this.listView);
 				
 			} else {
+				this.discardChanges();
 				this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
 				map.editTools.editLayer.removeLayer(this.svg.layer);
 			}
 		}
-		
+				
 		setSelected(selected) {
 			if ( this.selected == selected ) return;			
 			this.selected = selected;
@@ -501,7 +589,24 @@ const TIMAAT = {
 
 		    });
 
-		    
+			
+			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
+			    position: 'topleft',
+			    content : '<button id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" style="background-color: #99ff99;" class="btn btn-light">'+
+			              '    <i class="fa fa-save"></i>' +
+			              '</button>',
+			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
+			    style   :
+			    {
+			        margin: '10px',
+			        padding: '0px 0 0 0',
+			        cursor: 'pointer',
+			    },
+			});
+			TIMAAT.VideoPlayer.savePolygonCtrl.addTo(map);
+			$('#timaat-videoplayer-save-polygons-button').hide();
+
+			
 		    L.NewRectangleControl = L.EditControl.extend({
 		        options: {
 		            position: 'topleft',
@@ -532,12 +637,14 @@ const TIMAAT = {
 			    map.removeLayer(x.layer);
 			    if ( TIMAAT.VideoPlayer.curAnnotation ) {
 				    TIMAAT.VideoPlayer.curAnnotation.addSVGItem(x.layer);
-				    TIMAAT.Service.updateAnnotation(TIMAAT.VideoPlayer.curAnnotation);
+				    TIMAAT.VideoPlayer.updateUI();
 				    x.layer.dragging._draggable = null;
 				    x.layer.dragging.addHooks();
 			    }
 		    });
 			
+		    
+		    
 			// setup video controls UI events
 			$('.playbutton').click(function(ev) {
 				ev.preventDefault();
@@ -701,6 +808,23 @@ const TIMAAT = {
 				$("#timaat-annotation-meta-end").val(TIMAAT.Util.formatTime(endTime, true));
 				
 			});
+			$('#timaat-annotation-meta-setstart').click(function() {
+				var startTime = TIMAAT.Util.parseTime($('#timaat-annotation-meta-start').val());
+				var endTime = TIMAAT.Util.parseTime($('#timaat-annotation-meta-end').val());
+				var duration = endTime-startTime;
+				duration = Math.max(0,Math.min(duration,TIMAAT.VideoPlayer.video.duration));
+				
+				startTime = TIMAAT.VideoPlayer.video.currentTime;
+				endTime = startTime+duration;
+				$('#timaat-annotation-meta-start').val(TIMAAT.Util.formatTime(startTime,true));
+				$('#timaat-annotation-meta-end').val(TIMAAT.Util.formatTime(endTime,true));
+				$('#timaat-annotation-meta-start').trigger('blur');
+			});
+			$('#timaat-annotation-meta-setend').click(function() {
+				endTime = TIMAAT.VideoPlayer.video.currentTime;
+				$('#timaat-annotation-meta-end').val(TIMAAT.Util.formatTime(endTime,true));
+				$('#timaat-annotation-meta-start').trigger('blur');				
+			});
 
 			$('#timaat-videoplayer-analysislist-meta').on('show.bs.modal', function (ev) {
 				var modal = $(this);
@@ -729,7 +853,7 @@ const TIMAAT = {
 				var title = (anno) ? anno.model.title : "";
 				var comment = (anno) ? anno.model.comment : "";
 				var start = (anno) ? TIMAAT.Util.formatTime(anno.model.startTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
-				var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime,true) : TIMAAT.Util.formatTime(Math.min(TIMAAT.VideoPlayer.video.currentTime,TIMAAT.VideoPlayer.duration),true);
+				var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.duration,true);
 				
 				// setup UI from Video Player state
 				$('#annotationMetaLabel').html(heading);
@@ -767,6 +891,17 @@ const TIMAAT = {
 			$('#timaat-annotation-list-loader').show();
 			$('#timaat-videoplayer-annotation-add-button').prop("disabled", true);
 			$('#timaat-videoplayer-annotation-add-button').attr("disabled");
+			
+			// setup analysis list UI
+			$('#timaat-analysislist-chooser').empty();
+			$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-edit').removeAttr('onclick');
+			$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-delete').removeAttr('onclick');
+			$('#timaat-analysislist-add').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-add').removeAttr('onclick');
 
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
@@ -819,7 +954,9 @@ const TIMAAT = {
 			$('#timaat-analysislist-options').removeAttr("disabled");
 			$('#timaat-analysislist-chooser').prop("disabled", false);
 			$('#timaat-analysislist-chooser').removeAttr("disabled");
-			
+			$('#timaat-analysislist-add').removeClass("timaat-item-disabled");
+			$('#timaat-analysislist-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysislist()');
+
 			
 			if ( lists.length > 0 ) {
 				TIMAAT.VideoPlayer.setupAnnotations(lists[0]);
@@ -843,6 +980,8 @@ const TIMAAT = {
 		setupAnnotations: function(annotations) {
 			// setup model
 			TIMAAT.VideoPlayer.model.annotations = annotations;
+			// close UI tag editors if any
+			TIMAAT.UI.hidePopups();
 			
 			// clear old list contents if any
 			if ( TIMAAT.VideoPlayer.curList ) {
@@ -915,6 +1054,23 @@ const TIMAAT = {
 			this.sortListUI();
 		},
 		
+		updateAnnotations: function() {
+			if ( this.annotationList == null ) return;
+			this.annotationList.forEach(function(annotation) {
+				if ( annotation.isActive() && annotation.hasChanges() ) {
+					annotation.saveChanges();
+					TIMAAT.Service.updateAnnotation(annotation);
+					// update UI
+					annotation.updateUI();
+				}
+			});
+
+			// update UI list view
+			this.updateListUI();
+			this.sortListUI();
+			this.updateUI();
+		},
+		
 		removeAnnotation: function() {
 			if ( !this.curAnnotation ) return;
 			TIMAAT.VideoPlayer.pause();
@@ -964,10 +1120,22 @@ const TIMAAT = {
 		},
 		
 		updateListUI: function() {
+			var hasChanges = false;
 			this.annotationList.forEach(function(annotation) {
 				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 				if ( TIMAAT.VideoPlayer.curAnnotation == annotation && !annotation.isActive() ) TIMAAT.VideoPlayer.selectAnnotation(null);
+				if ( annotation.isActive() && annotation.hasChanges() ) hasChanges = true;
 			});
+			if ( hasChanges ) $('#timaat-videoplayer-save-polygons-button').show(); else $('#timaat-videoplayer-save-polygons-button').hide();
+		},
+		
+		updateUI: function() {
+			var hasChanges = false;
+			this.annotationList.forEach(function(annotation) {
+				if ( annotation.isActive() && annotation.hasChanges() ) hasChanges = true;
+			});
+			
+			if ( hasChanges ) $('#timaat-videoplayer-save-polygons-button').show(); else $('#timaat-videoplayer-save-polygons-button').hide();
 		},
 		
 		pause: function() {
@@ -1014,22 +1182,23 @@ const TIMAAT = {
 		_analysislistRemoved: function(analysislist) {
 			// sync to server
 			TIMAAT.Service.removeAnalysislist(analysislist);
-			/*
-			var index = TIMAAT.VideoPlayer.annotationList.indexOf(annotation);
-			if (index > -1) TIMAAT.VideoPlayer.annotationList.splice(index, 1);
-			// remove from model list
-			var anno = TIMAAT.VideoPlayer.curList.annotations.find(x => x.id === annotation.model.id);
-			index = TIMAAT.VideoPlayer.curList.annotations.indexOf(anno);
-			if (index > -1) TIMAAT.VideoPlayer.curList.annotations.splice(index, 1);
+
+			// remove from model lists
+			var index = TIMAAT.VideoPlayer.model.lists.indexOf(analysislist);
+			if (index > -1) TIMAAT.VideoPlayer.model.lists.splice(index, 1);
 			
 			// update UI list view
-			$('#timaat-analysislist-chooser').find('[value="1"]').remove()
+			$('#timaat-analysislist-chooser').find('[value="'+analysislist.id+'"]').remove();
 			$('#timaat-analysislist-chooser').trigger('change');
-			annotation.remove();
-			TIMAAT.VideoPlayer.updateListUI();
-			TIMAAT.VideoPlayer.sortListUI();
-			TIMAAT.VideoPlayer.selectAnnotation(null);
-*/
+			if ( TIMAAT.VideoPlayer.model.lists.length == 0 ) {
+				TIMAAT.VideoPlayer.setupAnnotations(null);
+				$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-edit').removeAttr('onclick');
+				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
+				$('#timaat-analysislist-delete').removeAttr('onclick');
+			}
 		},
 
 		
@@ -1257,6 +1426,38 @@ const TIMAAT = {
 			});
 		},
 
+		addTag(annotation, tagname, callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotation.model.id+"/tag/"+tagname,
+				type:"POST",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+		removeTag(annotation, tagname, callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotation.model.id+"/tag/"+tagname,
+				type:"DELETE",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(tagname);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
 
 	},
 	
@@ -1277,6 +1478,22 @@ const TIMAAT = {
 				$('body').addClass('timaat-login-modal-open');
 				$('#timaat-login-modal').modal('show');				
 			}
+			
+			// init tag popover functionality
+		    $(document).on('click', function (e) {
+		        $('[data-toggle="popover"],[data-original-title]').each(function () {
+		            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {                
+		                (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false
+		            }
+		        });
+		    });	    
+
+		},
+		
+		hidePopups: function() {
+			$('[data-toggle="popover"],[data-original-title]').each(function () {
+				(($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false
+	        });
 		},
 		
 		showComponent: function(component) {
@@ -1477,11 +1694,7 @@ window.addEventListener('keypress', function (evt) {
 	   
 	    TIMAAT.UI.init();
 
-	    $('#form-tags-4').tagsInput({
-	    	placeholder: 'Tag hinzufügen'
-		});
-	    
-	    
+    
 	    // DEBUG
 	    $('#timaat-login-user').val('admin');
 		$('#timaat-login-pass').val('geheim123');
