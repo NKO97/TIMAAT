@@ -1691,17 +1691,6 @@ window.addEventListener('keypress', function (evt) {
 	   
 	    TIMAAT.UI.init();
 
-    
-	    // DEBUG
-	    $('#timaat-login-user').val('admin');
-		$('#timaat-login-pass').val('geheim123');
-		$('#timaat-login-submit').click();
-		setTimeout(function() { 
-		    $('body').removeClass('timaat-login-modal-open');
-		    $('#timaat-login-modal').modal('hide');
-		    $('#timaat-user-info').html("admin");
-		}, 700);
-		
 
 
 }
