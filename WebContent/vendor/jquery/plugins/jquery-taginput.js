@@ -16,8 +16,9 @@
 		
 		this.each(function() {
 			var id = $(this).attr('id');
-
+			
 			var tagslist = $(this).val().split(_getDelimiter(delimiter[id]));
+			
 			if (tagslist[0] === '') tagslist = [];
 
 			value = jQuery.trim(value);

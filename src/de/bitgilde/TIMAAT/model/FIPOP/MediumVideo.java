@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -36,6 +37,7 @@ public class MediumVideo implements Serializable {
 	private String videoCodec;
 
 	private int width;
+
 
 	public MediumVideo() {
 	}

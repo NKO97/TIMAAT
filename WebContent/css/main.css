@@ -157,18 +157,26 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-annotation-list li {
+#timaat-annotation-list li, #timaat-tagset-list li {
 	cursor: pointer;
 	font-size: 90%;
 }
-#timaat-annotation-list li:hover {
+#timaat-annotation-list li:hover, #timaat-tagset-list li:hover {
 	background-color: #e5e5e5;
 }
-.timat-annotation-list-selected {
+.timat-annotation-list-selected, .timat-tagset-list-selected {
 	background-color: #c9e2ff;
 }
-.timat-annotation-list-selected:hover {
+.timat-annotation-list-selected:hover, .timat-tagset-list-selected:hover {
 	background-color: #c9e2ff !important;
+}
+
+.timaat-tagset-chooser {
+	margin-top: 0.5em;
+}
+
+.timaat-tagset-remove {
+	margin-right: 1em;
 }
 
 #timaat-videoplayer-annotation-add-button:disabled, #timaat-videoplayer-annotation-remove-button:disabled {
@@ -287,6 +295,28 @@ a.dropdown-item {
   height: 18px;
   background: #EEE;
   cursor: pointer;
+}
+
+#timaat-videoplayer-video-title {
+	color: grey;
+}
+#timaat-videoplayer-video-speed {
+	font-weight: bold;
+	cursor: pointer;
+}
+.timaat-user-log {
+	cursor: pointer;
+}
+.timaat-user-log:disabled {
+	cursor: default;
+}
+
+#timaat-medium-tags {
+	cursor: pointer;
+}
+
+#timaat-videoplayer-video-speed:hover,#timaat-volumeicon:hover,.stepbckbutton i:hover,.playbutton i:hover,.stepfwdbutton i:hover, .timaat-user-log i:hover, .timaat-annotation-list-tags i:hover, #timaat-medium-tags i:hover {
+	color: #17a2b8;
 }
 
 

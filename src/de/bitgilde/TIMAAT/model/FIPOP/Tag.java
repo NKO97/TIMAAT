@@ -53,6 +53,7 @@ public class Tag implements Serializable {
 
 	//bi-directional many-to-many association to TagSet
 	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
 	private List<TagSet> tagSets;
 
 	public Tag() {

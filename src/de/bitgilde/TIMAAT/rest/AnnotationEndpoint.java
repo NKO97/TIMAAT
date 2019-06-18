@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response.Status;
 import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.x.protobuf.Mysqlx.Ok;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
@@ -33,6 +32,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
 *
@@ -50,7 +50,7 @@ public class AnnotationEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response geAnnotation(@PathParam("id") int id) {
+	public Response getAnnotation(@PathParam("id") int id) {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
     	EntityManager em = emf.createEntityManager();
     	Annotation m = em.find(Annotation.class, id);
@@ -128,6 +128,8 @@ public class AnnotationEndpoint {
 		em.refresh(malList.get(0));
 		em.refresh(newSVG);
 		
+		// add log entry
+		UserLogManager.getLogger().addLogEntry(newAnno.getCreator_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		return Response.ok().entity(newAnno).build();
 	}
@@ -185,6 +187,9 @@ public class AnnotationEndpoint {
 		em.persist(m);
 		tx.commit();
 		em.refresh(m);
+		
+		// add log entry
+		UserLogManager.getLogger().addLogEntry(m.getLastEditedBy_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONEDITED);
 
 		return Response.ok().entity(m).build();
 	}
@@ -208,9 +213,13 @@ public class AnnotationEndpoint {
 		tx.commit();
 		em.refresh(mal);
 
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
+
 		return Response.ok().build();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/tag/{name}")
@@ -222,13 +231,18 @@ public class AnnotationEndpoint {
     	Annotation anno = em.find(Annotation.class, id);
     	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	// check if tag exists
+    	// check if tag exists    	
     	Tag tag = null;
+    	List<Tag> tags = null;
     	try {
-        	tag = (Tag) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
+        	tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
         			.setParameter("name", tagName)
-        			.getSingleResult();    		
+        			.getResultList();
     	} catch(Exception e) {};
+    	
+    	// find tag case sensitive
+    	for ( Tag listTag : tags )
+    		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;
     	
     	// create tag if it doesn't exist yet
     	if ( tag == null ) {

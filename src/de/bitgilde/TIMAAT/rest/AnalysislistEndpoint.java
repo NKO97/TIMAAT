@@ -32,6 +32,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
 *
@@ -98,6 +99,9 @@ public class AnalysislistEndpoint {
 		em.refresh(newList);
 		em.refresh(m);
 		
+		// add log entry
+		UserLogManager.getLogger().addLogEntry(newList.getUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
+		
 		return Response.ok().entity(newList).build();
 	}
 	
@@ -137,6 +141,9 @@ public class AnalysislistEndpoint {
 		tx.commit();
 		em.refresh(mal);
 
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
+
 		return Response.ok().entity(mal).build();
 	}
 	
@@ -156,6 +163,9 @@ public class AnalysislistEndpoint {
 		while (mal.getAnnotations().size() >0) mal.removeAnnotation(mal.getAnnotations().get(0));
 		em.remove(mal);
 		tx.commit();
+
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTDELETED);
 
 		return Response.ok().build();
 	}

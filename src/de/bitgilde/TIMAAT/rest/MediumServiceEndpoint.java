@@ -18,6 +18,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -39,11 +40,14 @@ import org.json.JSONObject;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.model.VideoInformation;
+import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -205,6 +209,9 @@ public class MediumServiceEndpoint {
              newMedium.setViewToken(issueFileToken(newMedium.getId()));
              TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), "/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
              videoTranscoder.start();
+             
+     		// add log entry
+     		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
 
          } catch (IOException e) {e.printStackTrace();}  
 
@@ -225,10 +232,11 @@ public class MediumServiceEndpoint {
 
 	@GET
 	@Path("{id}/thumbnail")
-	@Produces("image/png")
+	@Produces("image/jpg")
 	public Response getVideoThumbnail(
 			@PathParam("id") int id,
-			@QueryParam("token") String fileToken) {
+			@QueryParam("token") String fileToken,
+			@QueryParam("time") String time) {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -240,14 +248,31 @@ public class MediumServiceEndpoint {
 		}		
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-		// load thumbnail from storage
-		File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
-		if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
+		int seks = -1;
+		if ( time != null ) try {
+			seks = Integer.parseInt(time);
+		} catch (NumberFormatException e) { seks = -1; };		
+		if ( seks >= 0 ) seks++;
+		
+		if ( seks < 0 ) {
+			// load thumbnail from storage
+			File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
+			if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
-		File thumbnail = new File("/opt/TIMAAT/files/"+id+"/"+id+"-thumb.png");
-		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(ctx.getRealPath("img/video-placeholder.png"));
+			File thumbnail = new File("/opt/TIMAAT/files/"+id+"/"+id+"-thumb.png");
+			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(ctx.getRealPath("img/video-placeholder.png"));
 		    	
-		return Response.ok().entity(thumbnail).build();
+			return Response.ok().entity(thumbnail).build();
+		} else {
+			// load timecode thumbnail from storage
+			File frameDir = new File("/opt/TIMAAT/files/"+id+"/frames"); // TODO load storage dir from config
+			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
+    	
+			File thumbnail = new File("/opt/TIMAAT/files/"+id+"/frames/"+id+"-frame-"+String.format("%05d", seks)+".jpg");
+			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(ctx.getRealPath("img/preview-placeholder.png"));
+
+			return Response.ok().entity(thumbnail).build();
+		}
 	}
 	
 
@@ -272,7 +297,96 @@ public class MediumServiceEndpoint {
     	em.refresh(m);
     	
     	return Response.ok(m.getMediumAnalysisLists()).build();    	
-	}	
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+		
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	Medium medium = em.find(Medium.class, id);
+    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+
+    	// check if tag exists    	
+    	Tag tag = null;
+    	List<Tag> tags = null;
+    	try {
+        	tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
+        			.setParameter("name", tagName)
+        			.getResultList();
+    	} catch(Exception e) {};
+    	
+    	// find tag case sensitive
+    	for ( Tag listTag : tags )
+    		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;
+    	
+    	// create tag if it doesn't exist yet
+    	if ( tag == null ) {
+    		tag = new Tag();
+    		tag.setName(tagName);
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(tag);
+    	}
+    	
+    	// check if Annotation already has tag
+    	if ( !medium.getTags().contains(tag) ) {
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+    		medium.getTags().add(tag);
+    		tag.getMediums().add(medium);
+    		em.merge(tag);
+    		em.merge(medium);
+    		em.persist(medium);
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(medium);
+    	}
+ 	
+		return Response.ok().entity(tag).build();
+	}
+	
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+		
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	Medium medium = em.find(Medium.class, id);
+    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+    	// check if Annotation already has tag
+    	Tag tag = null;
+    	for ( Tag mediumtag:medium.getTags() ) {
+    		if ( mediumtag.getName().compareTo(tagName) == 0 ) tag = mediumtag;
+    	}
+    	if ( tag != null ) {
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+    		medium.getTags().remove(tag);
+    		tag.getMediums().remove(medium);
+    		em.merge(tag);
+    		em.merge(medium);
+    		em.persist(medium);
+    		em.persist(tag);
+    		tx.commit();
+    		em.refresh(medium);
+    	}
+ 	
+		return Response.ok().build();
+	}
+
+	
 
 	private Response downloadFile(String fileName, HttpHeaders headers) {     
 		Response response = null;

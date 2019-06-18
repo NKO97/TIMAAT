@@ -21,9 +21,12 @@ public class TranscoderThread extends Thread {
 
 	public void run(){
 		Process p;
+		Process pFrames;
 
 		File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
 		if ( !videoDir.exists() ) videoDir.mkdirs();
+		File frameDir = new File("/opt/TIMAAT/files/"+id+"/frames"); // TODO load storage dir from config
+		if ( !frameDir.exists() ) frameDir.mkdirs();
 		
 		String[] commandLine = { "/usr/local/bin/ffmpeg", // TODO get from config
 		"-i", filename, "-c:v", "libx264",
@@ -32,6 +35,12 @@ public class TranscoderThread extends Thread {
 		"/opt/TIMAAT/files/"+id+"/"+id+"-video-transcoding.mp4" };
 		ProcessBuilder pb = new ProcessBuilder(commandLine);
 //		pb.inheritIO();
+
+		String[] commandLineFrames = { "/usr/local/bin/ffmpeg", // TODO get from config
+		"-i", filename, "-vf", 
+		"fps=1,scale=240:-1,pad=max(iw\\,ih)",
+		"/opt/TIMAAT/files/"+id+"/frames/"+id+"-frame-%05d.jpg" };
+		ProcessBuilder pbFrames = new ProcessBuilder(commandLineFrames);
 
 
 		try {
@@ -57,6 +66,31 @@ public class TranscoderThread extends Thread {
 				transcodedVideo.delete();
 			} else transcodedVideo.renameTo(new File("/opt/TIMAAT/files/"+id+"/"+id+"-video.mp4"));
 			
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		System.out.println("here");
+		
+		
+		// TODO put in separate thread
+		// create frame preview
+		try {
+			pFrames = pbFrames.start();
+			BufferedReader is = new BufferedReader(new InputStreamReader(pFrames.getErrorStream()));
+
+			try {
+				while ( pFrames.isAlive() ) {
+					sleep(500);
+					String line = is.readLine();
+					System.out.println(id+": "+line);
+				}
+				
+			} catch (InterruptedException e) {
+				System.err.println(e);  // "can't happen"
+			}
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block

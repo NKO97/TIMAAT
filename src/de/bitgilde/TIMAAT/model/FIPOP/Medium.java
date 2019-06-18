@@ -57,6 +57,9 @@ public class Medium implements Serializable {
 	@JsonIgnore
 	private String filePath;
 
+	@JsonIgnore
+	private String fileHash;
+
 	@ManyToOne
 	@JoinColumn(name="MediaTypeID")
 	private MediaType mediaType;
@@ -103,7 +106,6 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediums")
-	@JsonIgnore
 	private List<Tag> tags;
 
 	
@@ -141,6 +143,14 @@ public class Medium implements Serializable {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getFileHash() {
+		return this.fileHash;
+	}
+
+	public void setFileHash(String fileHash) {
+		this.fileHash = fileHash;
 	}
 
 	public MediaType getMediaType() {

@@ -2,6 +2,12 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +41,15 @@ public class UserAccount implements Serializable {
 	private UserAccountStatus userAccountStatus;
 
 	//bi-directional many-to-one association to UserPassword
+	@JsonIgnore
+	@XmlTransient
 	@ManyToOne
 	@JoinColumn(name="UserPasswordID")
 	private UserPassword userPassword;
 
 	//bi-directional many-to-one association to UserLog
+	@JsonIgnore
+	@XmlTransient
 	@OneToMany(mappedBy="userAccount")
 	private List<UserLog> userLogs;
 
@@ -102,6 +112,7 @@ public class UserAccount implements Serializable {
 		this.userAccountStatus = userAccountStatus;
 	}
 
+	@JsonIgnore
 	public UserPassword getUserPassword() {
 		return this.userPassword;
 	}
@@ -110,6 +121,7 @@ public class UserAccount implements Serializable {
 		this.userPassword = userPassword;
 	}
 
+	@JsonIgnore
 	public List<UserLog> getUserLogs() {
 		return this.userLogs;
 	}

@@ -25,7 +25,9 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
+import de.bitgilde.TIMAAT.model.FIPOP.UserLog;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.mkammerer.argon2.Argon2Advanced;
 import de.mkammerer.argon2.Argon2Factory;
 import de.mkammerer.argon2.Argon2Factory.Argon2Types;
@@ -59,6 +61,8 @@ public class AuthenticationEndpoint {
             // Issue a token for the user
             String token = issueToken(username);
 
+            // write log entry
+            UserLogManager.getLogger().addLogEntry(user.getId(),UserLogManager.LogEvents.LOGIN);
             // Return the token on the response
             return Response.ok("{\"token\":\""+token+"\","
             		+ "\"id\":"+user.getId()+","
@@ -86,7 +90,7 @@ public class AuthenticationEndpoint {
 				+ "}"				
 				+ "}").build();
 	}
-	
+
 	
 	// ----------------------------------------------------------------------------
 	
@@ -100,7 +104,7 @@ public class AuthenticationEndpoint {
 				.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
 				.setParameter("username", username)
 				.getSingleResult();
-		
+				
 		// check if account is suspended
 		if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
 			throw new AccountSuspendedException();
