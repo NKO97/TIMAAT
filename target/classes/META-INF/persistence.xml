@@ -7,7 +7,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContentVisual</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisNarrative</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EpisodeInformation</class>

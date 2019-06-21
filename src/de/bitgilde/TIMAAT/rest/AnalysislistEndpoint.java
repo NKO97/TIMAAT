@@ -169,6 +169,112 @@ public class AnalysislistEndpoint {
 
 		return Response.ok().build();
 	}
+	
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/segment")
+	public Response createAnalysisSegment(@PathParam("id") int id, String jsonData) {
+		ObjectMapper mapper = new ObjectMapper();
+		AnalysisSegment newSegment = null;
 
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
+    	if ( mal == null ) return Response.status(Status.NOT_FOUND).build();
+		
+    	// parse JSON data
+		try {
+			newSegment = mapper.readValue(jsonData, AnalysisSegment.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newSegment == null ) return Response.status(Status.BAD_REQUEST).build();
+		// sanitize object data
+		newSegment.setId(0);
+		mal.addAnalysisSegment(newSegment);
+		
+		// persist analysissegment and list
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.persist(newSegment);
+		em.flush();
+		newSegment.setMediumAnalysisList(mal);
+		em.persist(mal);
+		tx.commit();
+		em.refresh(newSegment);
+		em.refresh(mal);
+		
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTCREATED);
+		
+		return Response.ok().entity(newSegment).build();
+	}
+	
+	@PATCH
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Path("segment/{id}")
+	@Secured
+	public Response updateAnalysisSegment(@PathParam("id") int id, String jsonData) {
+		ObjectMapper mapper = new ObjectMapper();
+		AnalysisSegment updatedSegment = null;
+
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	AnalysisSegment seg = em.find(AnalysisSegment.class, id);
+    	if ( seg == null ) return Response.status(Status.NOT_FOUND).build();
+		
+    	// parse JSON data
+		try {
+			updatedSegment = mapper.readValue(jsonData, AnalysisSegment.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedSegment == null ) return Response.notModified().build();
+		    	
+    	// update analysislist
+		if ( updatedSegment.getName() != null ) seg.setName(updatedSegment.getName());
+		if ( updatedSegment.getStartTime() > -1 ) seg.setStartTime(updatedSegment.getStartTime());
+		if ( updatedSegment.getEndTime() > -1 ) seg.setEndTime(updatedSegment.getEndTime());
+				
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.merge(seg);
+		em.persist(seg);
+		tx.commit();
+		em.refresh(seg);
+
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTMODIFIED);
+
+		return Response.ok().entity(seg).build();
+	}
+
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("segment/{id}")
+	@Secured
+	public Response deleteAnalysisSegment(@PathParam("id") int id) {
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	EntityManager em = emf.createEntityManager();
+    	AnalysisSegment seg = em.find(AnalysisSegment.class, id);
+    	if ( seg == null ) return Response.status(Status.NOT_FOUND).build();
+		
+    	MediumAnalysisList mal = seg.getMediumAnalysisList();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.remove(seg);
+		tx.commit();
+		em.refresh(mal);
+		
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTDELETED);
+
+		return Response.ok().build();
+	}
 
 }

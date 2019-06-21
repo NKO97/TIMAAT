@@ -1,6 +1,8 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,8 +17,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class AnalysisSegment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private AnalysisSegmentPK id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
 
 	private String name;
 
@@ -25,15 +28,22 @@ public class AnalysisSegment implements Serializable {
 	@JoinColumn(name="AnalysisListID")
 	@JsonIgnore
 	private MediumAnalysisList mediumAnalysisList;
+	
+	@Column(name="EndTime")
+	private Timestamp endTime;
+
+	@Column(name="StartTime")
+	private Timestamp startTime;
+
 
 	public AnalysisSegment() {
 	}
 
-	public AnalysisSegmentPK getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(AnalysisSegmentPK id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -52,5 +62,32 @@ public class AnalysisSegment implements Serializable {
 	public void setMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
 		this.mediumAnalysisList = mediumAnalysisList;
 	}
+
+	public void setStartTime(Timestamp startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(Timestamp endTime) {
+		this.endTime = endTime;
+	}
+
+	public float getStartTime() {
+		if ( startTime == null ) return -1;
+		return startTime.getTime()/1000f;
+	}
+
+	public void setStartTime(float startTime) {
+		this.startTime = new java.sql.Timestamp((long)(startTime*1000f));
+	}
+
+	public float getEndTime() {
+		if ( endTime == null ) return -1;
+		return endTime.getTime()/1000f;
+	}
+
+	public void setEndTime(float endTime) {
+		this.endTime = new java.sql.Timestamp((long)(endTime*1000f));
+	}
+	
 
 }

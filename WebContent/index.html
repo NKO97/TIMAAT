@@ -288,6 +288,29 @@
 
 
 
+
+<div class="modal fade" id="timaat-videoplayer-segment-delete" tabindex="-1" role="dialog" aria-labelledby="segmentDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="segmentDeleteLabel">Segment löschen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Möchten Sie das ausgewählte Segment löschen?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+        <button type="button" class="btn btn-danger" id="timaat-segment-delete-commit-submit">Segment löschen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 		
 <div class="modal fade" id="timaat-videoplayer-annotation-meta" tabindex="-1" role="dialog" aria-labelledby="annotationMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -353,7 +376,69 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+<div class="modal fade" id="timaat-videoplayer-segment-meta" tabindex="-1" role="dialog" aria-labelledby="segmentMetaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="segmentMetaLabel">Segment hinzufügen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" id="timaat-segment-meta-title" placeholder="Titel" aria-label="Titel">
+		</div>
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">Start</span>
+			</div>
+			<input type="text" class="form-control"  id="timaat-segment-meta-start"placeholder="00:00:00" aria-label="Start Timecode">
+			<div class="input-group-append">
+			    <button class="btn btn-secondary" id="timaat-segment-meta-setstart" type="button"><i class="far fa-clock"></i></button>
+			</div>&nbsp;&nbsp;
+			<div class="input-group-prepend">
+				
+				<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+				    <div class="dropdown-menu"  id="timaat-annotation-meta-duration-menu">
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(0)">dieses Frame</a>
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(1)">1 sek</a>
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(5)">5 sek</a>
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(15)">15 sek</a>
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(30)">30 sek</a>
+				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(60)">1 min</a>
+				      <div role="separator" class="dropdown-divider"></div>
+				      <a class="dropdown-item"><input type="text" id="timaat-segment-meta-duration" class="form-control" placeholder="Sekunden" aria-label="Sekunden"></a>
+				    </div>
+
+			</div>
+			<input type="text" class="form-control" placeholder="00:00:00" id="timaat-segment-meta-end" aria-label="Ende Timecode">
+			<div class="input-group-append">
+			    <button class="btn btn-secondary" id="timaat-segment-meta-setend" type="button"><i class="far fa-clock"></i></button>
+			</div>
+		</div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger mr-auto" id="timaat-segment-delete-submit" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+        <button type="button" class="btn btn-primary" id="timaat-segment-meta-submit" disabled>Hinzufügen</button>
+      </div>
+    </div>
+  </div>
 </div>		
+
+
+
+
+
+
+		
                 <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
 			<div class="d-flex justify-content-center col-lg-12">
 				<h1>Kein Video geladen</h1>
@@ -369,6 +454,7 @@
 <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i title="Annotationsliste" class="far fa-fw fa-list-alt"></i></button>
     <div class="dropdown-menu">
       <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysislist()" id="timaat-analysislist-edit">Liste bearbeiten...</a>
+      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-edit"><i class="fas fa-indent"></i> Neues Segment</a>
       <div role="separator" class="dropdown-divider"></div>
       <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add" >Neue Liste erstellen</a>
       <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Liste löschen</a>
@@ -436,6 +522,7 @@
 				<div class="card">
 					<div class="card-body">
 						<span>00:00</span><span style="float: right" class="timaat-videoduration">xx:xx</span>
+						<div id="timaat-timeline-segment-pane"></div>
 						<input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
 						<br>
 						<div id="timaat-timeline-marker-pane"></div>
