@@ -798,6 +798,7 @@ const TIMAAT = {
 				createImageThumbnails: false,
 				acceptedFiles: 'video/mp4',
 				maxFilesize: 1024,
+				timeout: 60*60*1000, // 1 hour
 				maxFiles: 1,
 				headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
 				previewTemplate: '<div class="dz-preview dz-file-preview" style="margin-top:136px"> \

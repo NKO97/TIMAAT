@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.rest;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -141,7 +142,20 @@ public class MediumServiceEndpoint {
 		 try {
 			 // TODO assume MP4 only upload
 			 String tempName = ThreadLocalRandom.current().nextInt(1, 65535)+System.currentTimeMillis()+"-upload.mp4";
-             FileOutputStream out = new FileOutputStream(new File("/opt/TIMAAT/files/"+tempName));
+			 File uploadTempFile = new File("/opt/TIMAAT/files/"+tempName);
+
+			 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream( uploadTempFile ));
+			 byte [] bytes = new byte[1024];
+			 int sizeRead;
+			 while ((sizeRead = uploadedInputStream.read(bytes,0, 1024)) > 0) {
+				 stream.write(bytes, 0, sizeRead);
+			 }
+			 stream.flush();
+			 stream.close();
+			 System.out.println( "You successfully uploaded !" );
+
+             
+/*             
              int read = 0;  
              byte[] bytes = new byte[1024];  
              
@@ -150,6 +164,7 @@ public class MediumServiceEndpoint {
                  out.flush();  
              }  
              out.close();
+             */
              
              // persist medium
              EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
