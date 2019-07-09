@@ -806,8 +806,6 @@ const TIMAAT = {
 					  	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span></div> \
 						</div> \
 					</div>',
-				
-				
 			});
 			
 			TIMAAT.VideoChooser.uploadZone.on("complete", function(file) {
@@ -853,6 +851,15 @@ const TIMAAT = {
 				TIMAAT.VideoPlayer.setupVideo(video);
 				// load video annotations from server
 				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+			});
+			
+			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.mediumVideo.length);
+				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
+			});
+			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 			});
 			
 			if ( video.status == "transcoding" ) TIMAAT.VideoChooser.updateVideoStatus(video);
@@ -977,7 +984,7 @@ const TIMAAT = {
 		            position: 'topleft',
 		            callback: TIMAAT.VideoPlayer.createPolygon,
 		            kind: 'Polygon-Annotation',
-		            html: '<i class="far fa-draw-polygon"></i>'
+		            html: '<i class="fas fa-draw-polygon"></i>'
 		        }
 		    });
 

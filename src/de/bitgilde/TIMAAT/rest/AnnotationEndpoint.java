@@ -5,9 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -26,6 +24,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
@@ -51,8 +50,8 @@ public class AnnotationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response getAnnotation(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Annotation m = em.find(Annotation.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
     	    	
@@ -69,8 +68,8 @@ public class AnnotationEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation newAnno = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Medium m = em.find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -144,8 +143,8 @@ public class AnnotationEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation updatedAnno = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Annotation m = em.find(Annotation.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -199,8 +198,8 @@ public class AnnotationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteAnnotation(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Annotation m = em.find(Annotation.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -226,8 +225,8 @@ public class AnnotationEndpoint {
 	@Secured
 	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Annotation anno = em.find(Annotation.class, id);
     	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -279,8 +278,8 @@ public class AnnotationEndpoint {
 	@Secured
 	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Annotation anno = em.find(Annotation.class, id);
     	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
     	

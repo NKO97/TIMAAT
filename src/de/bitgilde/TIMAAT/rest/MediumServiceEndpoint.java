@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -40,6 +38,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONObject;
 import org.jvnet.hk2.annotations.Service;
 
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.VideoInformation;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -74,8 +74,8 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("{id}")
 	public Response getMediaInfo(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	Medium m = emf.createEntityManager().find(Medium.class, id);   
+    	
+    	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);   
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
     	
 		m.setStatus(videoStatus(id));
@@ -89,9 +89,9 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("list")
 	public Response getMediaList() {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	
     	@SuppressWarnings("unchecked")
-		List<Medium> mlist = emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
+		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
     	
     	for (Medium m : mlist ) {
     		m.setStatus(videoStatus(m.getId()));
@@ -119,14 +119,14 @@ public class MediumServiceEndpoint {
 		}		
 		if ( tokenMediumID != id ) return Response.status(401).build();
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	Medium m = emf.createEntityManager().find(Medium.class, id);
+    	
+    	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
     	if ( videoStatus(id).compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
     	
 		
-		return downloadFile("/opt/TIMAAT/files/"+id+"/"+id+"-video.mp4", headers);
+		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4", headers);
 	}
 	
 	
@@ -142,7 +142,7 @@ public class MediumServiceEndpoint {
 		 try {
 			 // TODO assume MP4 only upload
 			 String tempName = ThreadLocalRandom.current().nextInt(1, 65535)+System.currentTimeMillis()+"-upload.mp4";
-			 File uploadTempFile = new File("/opt/TIMAAT/files/"+tempName);
+			 File uploadTempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
 
 			 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream( uploadTempFile ));
 			 byte [] bytes = new byte[1024];
@@ -167,11 +167,10 @@ public class MediumServiceEndpoint {
              */
              
              // persist medium
-             EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-             EntityManager em = emf.createEntityManager();
+             
+             EntityManager em = TIMAATApp.emf.createEntityManager();
              // TODO load from config
              de.bitgilde.TIMAAT.model.FIPOP.MediaType mt = em.find(de.bitgilde.TIMAAT.model.FIPOP.MediaType.class, 1);
-             // TODO load default language from config
              Language lang = em.find(Language.class, 1);
              
              Title title = new Title();
@@ -179,7 +178,7 @@ public class MediumServiceEndpoint {
              title.setTitle(fileDetail.getFileName().substring(0, fileDetail.getFileName().length()-4));
              
              newMedium = new Medium();
-             newMedium.setFilePath("/opt/TIMAAT/files/"+tempName);
+             newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
              newMedium.setMediaType(mt);
              newMedium.setReference(null);
              newMedium.setSource(null);
@@ -189,7 +188,7 @@ public class MediumServiceEndpoint {
              videoInfo.setAudioCodecInformationID(1);
 
              // get data from ffmpeg
-             VideoInformation info = getVideoFileInfo("/opt/TIMAAT/files/"+tempName);
+             VideoInformation info = getVideoFileInfo(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
              videoInfo.setWidth(info.getWidth());
              videoInfo.setHeight(info.getHeight());
              videoInfo.setFrameRate(info.getFramerate());
@@ -207,9 +206,9 @@ public class MediumServiceEndpoint {
              em.refresh(newMedium);
 
              // rename file with medium
-             File tempFile = new File("/opt/TIMAAT/files/"+tempName);
-             tempFile.renameTo(new File("/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
-             newMedium.setFilePath("/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
+             File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
+             tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
+             newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
              tx = em.getTransaction();
              tx.begin();
              em.persist(newMedium);
@@ -217,12 +216,12 @@ public class MediumServiceEndpoint {
              tx.commit();
              em.refresh(newMedium);
              
-             createThumbnails(newMedium.getId(), "/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
+             createThumbnails(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
              
              // start transcoding video
              newMedium.setStatus("transcoding");
              newMedium.setViewToken(issueFileToken(newMedium.getId()));
-             TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), "/opt/TIMAAT/files/"+newMedium.getId()+"-video-original.mp4");
+             TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
              videoTranscoder.start();
              
      		// add log entry
@@ -239,7 +238,7 @@ public class MediumServiceEndpoint {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Secured
 	public Response getVideoStatus(@PathParam("id") int id) {
-		File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
+		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 		if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
 		return Response.ok().entity(videoStatus(id)).build();
@@ -271,19 +270,19 @@ public class MediumServiceEndpoint {
 		
 		if ( seks < 0 ) {
 			// load thumbnail from storage
-			File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
+			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 			if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
-			File thumbnail = new File("/opt/TIMAAT/files/"+id+"/"+id+"-thumb.png");
+			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-thumb.png");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(ctx.getRealPath("img/video-placeholder.png"));
 		    	
 			return Response.ok().entity(thumbnail).build();
 		} else {
 			// load timecode thumbnail from storage
-			File frameDir = new File("/opt/TIMAAT/files/"+id+"/frames"); // TODO load storage dir from config
+			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames");
 			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
-			File thumbnail = new File("/opt/TIMAAT/files/"+id+"/frames/"+id+"-frame-"+String.format("%05d", seks)+".jpg");
+			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames/"+id+"-frame-"+String.format("%05d", seks)+".jpg");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(ctx.getRealPath("img/preview-placeholder.png"));
 
 			return Response.ok().entity(thumbnail).build();
@@ -302,8 +301,8 @@ public class MediumServiceEndpoint {
 	@Path("{id}/analysislists")
 	@Secured
 	public Response getAnnotationLists(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
 
     	// find medium
     	Medium m = em.find(Medium.class, id);
@@ -321,8 +320,8 @@ public class MediumServiceEndpoint {
 	@Secured
 	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Medium medium = em.find(Medium.class, id);
     	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -374,8 +373,8 @@ public class MediumServiceEndpoint {
 	@Secured
 	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Medium medium = em.find(Medium.class, id);
     	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
     	
@@ -462,12 +461,12 @@ public class MediumServiceEndpoint {
 	}
 	
 	private String videoStatus(int id) {
-		File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
+		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 		String status = "unavailable";
 		if ( !videoDir.exists() ) return status;
     	
-		if ( new File("/opt/TIMAAT/files/"+id+"/"+id+"-video.mp4").exists() ) status="ready";
-		else if ( new File("/opt/TIMAAT/files/"+id+"/"+id+"-video-transcoding.mp4").exists() ) status="transcoding";
+		if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4").exists() ) status="ready";
+		else if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video-transcoding.mp4").exists() ) status="transcoding";
 		
 		return status;
 	}
@@ -478,7 +477,7 @@ public class MediumServiceEndpoint {
 	    BufferedReader is;  // reader for output of process
 	    String line;
 	    
-	    String[] commandLine = { "/usr/local/bin/ffprobe", // TODO get from config
+	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe",
 	    "-v", "error", "-select_streams", "v:0",
 	    "-show_entries", "stream=width,height,r_frame_rate,codec_name",
 	    "-show_entries", "format=duration",
@@ -518,17 +517,17 @@ public class MediumServiceEndpoint {
 	}
 	
 	private void createThumbnails(int id, String filename) {
-		File videoDir = new File("/opt/TIMAAT/files/"+id); // TODO load storage dir from config
+		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
 
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
 	    
-	    String[] commandLine = { "/usr/local/bin/ffmpeg", // TODO get from config
+	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg",
 	    "-i", filename,
 	    "-ss", "00:00:01.000", // timecode of thumbnail
 	    "-vframes", "1", "-y", 
-	    "/opt/TIMAAT/files/"+id+"/"+id+"-thumb.png" };
+	    TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-thumb.png" };
 
 	    try {
 			p = r.exec(commandLine);

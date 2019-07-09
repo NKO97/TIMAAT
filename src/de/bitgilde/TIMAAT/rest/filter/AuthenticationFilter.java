@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.security.Key;
 
 import javax.annotation.Priority;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
@@ -16,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.Priorities;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
@@ -105,8 +104,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private UserAccount validateAccountStatus(String username) throws Exception {
     	// verify user and user status
     	if ( username == null ) throw new Exception("provided credentials invalid");
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-		UserAccount user = (UserAccount) emf.createEntityManager()
+		
+		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
 			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
 			.setParameter("username", username)
 			.getSingleResult();

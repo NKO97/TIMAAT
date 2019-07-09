@@ -1,14 +1,11 @@
 package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,13 +26,9 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
-import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
-import de.bitgilde.TIMAAT.model.FIPOP.Medium;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.TagSet;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -62,8 +55,8 @@ public class TagSetEndpoint {
 	public Response getAllTagSets() {
 		List<TagSet> tagsets = null;
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	try {
     		tagsets = (List<TagSet>) em.createQuery("SELECT ts from TagSet ts")
         			.getResultList();
@@ -94,8 +87,8 @@ public class TagSetEndpoint {
 	@Secured
 	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	TagSet ts = em.find(TagSet.class, id);
     	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -147,8 +140,8 @@ public class TagSetEndpoint {
 	@Secured
 	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	TagSet ts = em.find(TagSet.class, id);
     	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
     	
@@ -183,8 +176,8 @@ public class TagSetEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		TagSet newSet = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
 		
     	// parse JSON data
 		try {
@@ -222,8 +215,8 @@ public class TagSetEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		TagSet updateSet = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	TagSet ts = em.find(TagSet.class, id);
     	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -259,8 +252,8 @@ public class TagSetEndpoint {
 	@Path("tagset/{id}")
 	@Secured
 	public Response deleteTagset(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	TagSet ts = em.find(TagSet.class, id);
     	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
 		

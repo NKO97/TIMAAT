@@ -5,9 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,6 +25,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
@@ -60,8 +59,8 @@ public class AnalysislistEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList newList = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Medium m = em.find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -115,8 +114,8 @@ public class AnalysislistEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList updatedList = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
     	if ( mal == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -152,8 +151,8 @@ public class AnalysislistEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteAnalysislist(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
     	if ( mal == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -180,8 +179,8 @@ public class AnalysislistEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment newSegment = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
     	if ( mal == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -223,8 +222,8 @@ public class AnalysislistEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment updatedSegment = null;
 
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	AnalysisSegment seg = em.find(AnalysisSegment.class, id);
     	if ( seg == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -259,8 +258,8 @@ public class AnalysislistEndpoint {
 	@Path("segment/{id}")
 	@Secured
 	public Response deleteAnalysisSegment(@PathParam("id") int id) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	AnalysisSegment seg = em.find(AnalysisSegment.class, id);
     	if ( seg == null ) return Response.status(Status.NOT_FOUND).build();
 		

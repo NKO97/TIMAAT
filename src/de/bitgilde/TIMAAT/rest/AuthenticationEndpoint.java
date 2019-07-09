@@ -22,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.jvnet.hk2.annotations.Service;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
@@ -98,9 +99,9 @@ public class AuthenticationEndpoint {
     private UserAccount authenticate(String username, String password) throws Exception {
         // Authenticate against the FIP-OP database
         // Throw an Exception if the credentials are invalid
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	
 		
-		UserAccount user = (UserAccount) emf.createEntityManager()
+		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
 				.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
 				.setParameter("username", username)
 				.getSingleResult();

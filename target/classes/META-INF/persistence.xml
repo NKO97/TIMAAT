@@ -42,13 +42,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
-
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/FIPOP?useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.password" value="geheim123"/>
-     
-
+			<property name="autoReconnect" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>

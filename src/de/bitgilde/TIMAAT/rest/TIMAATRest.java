@@ -1,8 +1,7 @@
 package de.bitgilde.TIMAAT.rest;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 
 /**
@@ -37,9 +37,9 @@ public class TIMAATRest {
 	@Secured
     public Response verifyRESTService() {
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
 		
-		UserAccount ua = emf.createEntityManager().find(UserAccount.class, msgContext.getProperty("TIMAAT.userID"));
+		
+		UserAccount ua = TIMAATApp.emf.createEntityManager().find(UserAccount.class, msgContext.getProperty("TIMAAT.userID"));
 
 		// return HTTP response 200 in case of success
 		return Response.status(200).entity(ua).build();
