@@ -4,10 +4,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
+import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserLog;
 import de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType;
@@ -64,7 +63,7 @@ public class UserLogManager {
 	public List<UserLog> getLogForUser(int id, int limit) {
 		
 		List<UserLog> log = null;
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
+    	
     	
     	
     	limit = Math.abs(limit);
@@ -72,7 +71,7 @@ public class UserLogManager {
     	
     	limit = 12; // TODO implement
 
-    	log = (List<UserLog>) emf.createEntityManager()
+    	log = (List<UserLog>) TIMAATApp.emf.createEntityManager()
 				.createQuery("SELECT ul FROM UserLog ul WHERE ul.userAccount.id=:id ORDER BY ul.dateTime DESC")
 				.setParameter("id", id)
 				.setMaxResults(limit)
@@ -82,8 +81,8 @@ public class UserLogManager {
 	}
 
 	public void addLogEntry(int userID, LogEvents type) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
-    	EntityManager em = emf.createEntityManager();
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
     	try {
             EntityTransaction tx = em.getTransaction();
     		tx.begin();
