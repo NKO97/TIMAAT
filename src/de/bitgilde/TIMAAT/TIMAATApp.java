@@ -39,6 +39,7 @@ public class TIMAATApp extends Application {
     public final static PropertyManagement timaatProps = new PropertyManagement();
     
     public static EntityManagerFactory emf;
+	public static String systemExt;
 
 
     /**
@@ -50,7 +51,9 @@ public class TIMAATApp extends Application {
         super();
         Logger.getGlobal().log(Level.INFO, "[TIMAAT Application Init]");
         initEntityManager();
-
+        
+    	if ( System.getProperty("os.name").startsWith("Windows") ) systemExt=".exe";
+    	else systemExt = "";
     }
     
     /**

@@ -477,7 +477,7 @@ public class MediumServiceEndpoint {
 	    BufferedReader is;  // reader for output of process
 	    String line;
 	    
-	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe",
+	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 	    "-v", "error", "-select_streams", "v:0",
 	    "-show_entries", "stream=width,height,r_frame_rate,codec_name",
 	    "-show_entries", "format=duration",
@@ -523,7 +523,7 @@ public class MediumServiceEndpoint {
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
 	    
-	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg",
+	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 	    "-i", filename,
 	    "-ss", "00:00:01.000", // timecode of thumbnail
 	    "-vframes", "1", "-y", 

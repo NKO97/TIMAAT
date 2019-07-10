@@ -22,7 +22,7 @@ public class TranscoderThread extends Thread {
 		this.filename = filename;
 	}
 
-	public void run(){
+	public void run(){		
 		Process p;
 		Process pFrames;
 
@@ -31,7 +31,7 @@ public class TranscoderThread extends Thread {
 		File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames");
 		if ( !frameDir.exists() ) frameDir.mkdirs();
 		
-		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg", // TODO get from config
+		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 		"-i", filename, "-c:v", "libx264",
 		"-crf", "23", // transcoded quality setting
 		"-c:a", "aac", "-movflags", "faststart", "-movflags", "rtphint", "-y",
@@ -39,7 +39,7 @@ public class TranscoderThread extends Thread {
 		ProcessBuilder pb = new ProcessBuilder(commandLine);
 //		pb.inheritIO();
 
-		String[] commandLineFrames = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg", // TODO get from config
+		String[] commandLineFrames = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 		"-i", filename, "-vf", 
 		"fps=1,scale=240:-1,pad=max(iw\\,ih)",
 		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames/"+id+"-frame-%05d.jpg" };
