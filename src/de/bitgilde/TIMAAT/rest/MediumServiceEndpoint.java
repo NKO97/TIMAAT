@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -41,7 +42,6 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.VideoInformation;
-import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
@@ -59,7 +59,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 @Path("/medium")
-public class MediumServiceEndpoint {
+public class MediumServiceEndpoint{
 
 	@Context
 	private UriInfo uriInfo;
@@ -101,9 +101,37 @@ public class MediumServiceEndpoint {
     	
 		return Response.ok().entity(mlist).build();
 	}
+	
+	@HEAD
+	@Path("{id}/download")
+    @Produces("video/mp4")
+    public Response getMediaFileInfo(
+    		@PathParam("id") int id,
+    		@QueryParam("token") String fileToken) {
+    	
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}		
+		if ( tokenMediumID != id ) return Response.status(401).build();
+    	if ( videoStatus(id).compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
+
+        File file = new File( TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4" );
+        
+        return Response.ok()
+        		.status( Response.Status.PARTIAL_CONTENT )
+        		.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+        		.header( "Accept-Ranges", "bytes" )
+        		.build();
+    }
 
 	@GET
 	@Path("{id}/download")
+    @Produces("video/mp4")
 	public Response getMediaFile(
 			@Context HttpHeaders headers,
 			@PathParam("id") int id,

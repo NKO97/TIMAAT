@@ -2,7 +2,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,7 +25,6 @@ public class UserLogEventType implements Serializable {
 
 	//bi-directional many-to-one association to UserLog
 	@JsonIgnore
-	@XmlTransient
 	@OneToMany(mappedBy="userLogEventType")
 	private List<UserLog> userLogs;
 

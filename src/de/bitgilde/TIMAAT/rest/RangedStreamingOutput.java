@@ -30,11 +30,11 @@ public class RangedStreamingOutput implements StreamingOutput {
 		try {
 			rangedFile = new RandomAccessFile(file, "r");
 			rangedFile.seek(from);
-			byte[] bytes = new byte[1048576]; // new byte[to-from+1];	    				  
+			byte[] bytes = new byte[10240]; // new byte[to-from+1];	    				  
 			int count = to-from+1;
 
 			while ( count > 0 ) {
-				int toWrite = Math.min(count, 1048576);
+				int toWrite = Math.min(count, 10240);
 				toWrite = rangedFile.read(bytes, 0, toWrite);
 				output.write(bytes);
 
@@ -45,7 +45,7 @@ public class RangedStreamingOutput implements StreamingOutput {
 			output.close();
 			rangedFile.close();
 		} catch (org.apache.catalina.connector.ClientAbortException e) {
-			System.out.println("Client aborted media stream: "+file.getName());
+//			System.out.println("Client aborted media stream: "+file.getName());
 			if ( rangedFile != null ) rangedFile.close();
 
 		} catch (IOException e) {
