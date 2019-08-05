@@ -162,25 +162,25 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-annotation-list li, #timaat-tagset-list li {
+#timaat-annotation-list li, #timaat-tagset-list li, #timaat-event-list li {
 	cursor: pointer;
 	font-size: 90%;
 }
-#timaat-annotation-list li:hover, #timaat-tagset-list li:hover {
+#timaat-annotation-list li:hover, #timaat-tagset-list li:hover, #timaat-event-list li:hover {
 	background-color: #e5e5e5;
 }
-.timat-annotation-list-selected, .timat-tagset-list-selected {
+.timaat-annotation-list-selected, .timaat-tagset-list-selected, .timaat-event-list-selected {
 	background-color: #c9e2ff;
 }
-.timat-annotation-list-selected:hover, .timat-tagset-list-selected:hover {
+.timaat-annotation-list-selected:hover, .timaat-tagset-list-selected:hover, .timaat-event-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
 
-.timaat-tagset-chooser {
+.timaat-tagset-chooser, .timaat-event-chooser {
 	margin-top: 0.5em;
 }
 
-.timaat-tagset-remove {
+.timaat-tagset-remove, .timaat-event-remove {
 	margin-right: 1em;
 }
 

@@ -17,13 +17,11 @@ public class MediaType implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private int hasAudio;
-
-	private int hasNarrative;
-
 	private int hasVisual;
 
-	private String type;
+	private int hasAudio;
+
+	private int hasContent;
 
 	public MediaType() {
 	}
@@ -44,12 +42,12 @@ public class MediaType implements Serializable {
 		this.hasAudio = hasAudio;
 	}
 
-	public int getHasNarrative() {
-		return this.hasNarrative;
+	public int getHasContent() {
+		return this.hasContent;
 	}
 
-	public void setHasNarrative(int hasNarrative) {
-		this.hasNarrative = hasNarrative;
+	public void setHasContent(int hasContent) {
+		this.hasContent = hasContent;
 	}
 
 	public int getHasVisual() {
@@ -58,14 +56,6 @@ public class MediaType implements Serializable {
 
 	public void setHasVisual(int hasVisual) {
 		this.hasVisual = hasVisual;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 }

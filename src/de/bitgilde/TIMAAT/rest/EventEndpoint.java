@@ -28,17 +28,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
-import de.bitgilde.TIMAAT.model.FIPOP.TagSet;
+import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
+* @author Mirko Scherf <mscherf@uni-mainz.de>
 */
 
 @Service
 @Path("/tag")
-public class TagSetEndpoint {
+public class EventEndpoint {
 	@Context
 	private UriInfo uriInfo;
 	@Context
@@ -51,46 +52,45 @@ public class TagSetEndpoint {
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("tagset/all")
-	public Response getAllTagSets() {
-		List<TagSet> tagsets = null;
+	@Path("event/all")
+	public Response getAllEvents() {
+		List<Event> events = null;
 		
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	try {
-    		tagsets = (List<TagSet>) em.createQuery("SELECT ts from TagSet ts")
+    		events = (List<Event>) em.createQuery("SELECT e from Event e")
         			.getResultList();
     	} catch(Exception e) {};
 		
-    	if ( tagsets != null ) {
+    	if ( events != null ) {
     		List<Tag> tags = null;
         	try {
-        		tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM TagSet ts WHERE ts.tags = t)")
+        		tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Event e WHERE e.tags = t)")
             			.getResultList();
         	} catch(Exception e) {};
     		if ( tags != null ) {
-    			TagSet emptySet = new TagSet();
-    			emptySet.setId(-1);
-    			emptySet.setName("-unassigned-");
-    			emptySet.setTags(tags);
-    			tagsets.add(0, emptySet);
+    			Event emptyEvent = new Event();
+    			emptyEvent.setId(-1);
+    			emptyEvent.setName("-unassigned-");
+    			emptyEvent.setTags(tags);
+    			events.add(0, emptyEvent);
     		}
-    	}
-    	
-		return Response.ok().entity(tagsets).build();
+    	}    	
+		return Response.ok().entity(events).build();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("tagset/{id}/tag/{name}")
+	@Path("event/{id}/tag/{name}")
 	@Secured
 	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	TagSet ts = em.find(TagSet.class, id);
-    	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
+    	Event event = em.find(Event.class, id);
+    	if ( event == null ) return Response.status(Status.NOT_FOUND).build();
 
     	// check if tag exists    	
     	Tag tag = null;
@@ -116,19 +116,19 @@ public class TagSetEndpoint {
     		em.refresh(tag);
     	}
     	
-    	// check if Annotation already has tag
-    	if ( !ts.getTags().contains(tag) ) {
-        	// attach tag to annotation and vice versa    	
+    	// check if event already has tag
+    	if ( !event.getTags().contains(tag) ) {
+        	// attach tag to event and vice versa    	
     		EntityTransaction tx = em.getTransaction();
     		tx.begin();
-    		ts.getTags().add(tag);
-    		tag.getTagSets().add(ts);
+    		event.getTags().add(tag);
+    		tag.getEvents().add(event);
     		em.merge(tag);
-    		em.merge(ts);
-    		em.persist(ts);
+    		em.merge(event);
+    		em.persist(event);
     		em.persist(tag);
     		tx.commit();
-    		em.refresh(ts);
+    		em.refresh(event);
     	}
  	
 		return Response.ok().entity(tag).build();
@@ -136,32 +136,32 @@ public class TagSetEndpoint {
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("tagset/{id}/tag/{name}")
+	@Path("event/{id}/tag/{name}")
 	@Secured
 	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	TagSet ts = em.find(TagSet.class, id);
-    	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
+    	Event event = em.find(Event.class, id);
+    	if ( event == null ) return Response.status(Status.NOT_FOUND).build();
     	
-    	// check if Annotation already has tag
+    	// check if event already has tag
     	Tag tag = null;
-    	for ( Tag tstag:ts.getTags() ) {
-    		if ( tstag.getName().compareTo(tagName) == 0 ) tag = tstag;
+    	for ( Tag eventTag:event.getTags() ) {
+    		if ( eventTag.getName().compareTo(tagName) == 0 ) tag = eventTag;
     	}
     	if ( tag != null ) {
-        	// attach tag to annotation and vice versa    	
+        	// attach tag to event and vice versa    	
     		EntityTransaction tx = em.getTransaction();
     		tx.begin();
-    		ts.getTags().remove(tag);
-    		tag.getTagSets().remove(ts);
+    		event.getTags().remove(tag);
+    		tag.getEvents().remove(event);
     		em.merge(tag);
-    		em.merge(ts);
-    		em.persist(ts);
+    		em.merge(event);
+    		em.persist(event);
     		em.persist(tag);
     		tx.commit();
-    		em.refresh(ts);
+    		em.refresh(event);
     	}
  	
 		return Response.ok().build();
@@ -171,101 +171,96 @@ public class TagSetEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("tagset")
-	public Response createTagset(String jsonData) {
+	@Path("event")
+	public Response createEvent(String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
-		TagSet newSet = null;
-
-    	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-		
-    	// parse JSON data
+		Event newEvent = null;    	
+    EntityManager em = TIMAATApp.emf.createEntityManager();		
+    // parse JSON data
 		try {
-			newSet = mapper.readValue(jsonData, TagSet.class);
+			newEvent = mapper.readValue(jsonData, Event.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newSet == null ) return Response.status(Status.BAD_REQUEST).build();
+		if ( newEvent == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
-		newSet.setId(0);
-		newSet.setTags(new ArrayList<Tag>());
+		newEvent.setId(0);
+		newEvent.setTags(new ArrayList<Tag>());
 		
-		// persist analysislist and polygons
+		// persist event and polygons
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
-		em.persist(newSet);
+		em.persist(newEvent);
 		em.flush();
 		tx.commit();
-		em.refresh(newSet);
+		em.refresh(newEvent);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TAGSETCREATED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.EVENTCREATED);
 		
-		return Response.ok().entity(newSet).build();
+		return Response.ok().entity(newEvent).build();
 	}
 	
 	
 	@PATCH
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-	@Path("tagset/{id}")
+	@Path("event/{id}")
 	@Secured
-	public Response updateTagset(@PathParam("id") int id, String jsonData) {
+	public Response updateEvent(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
-		TagSet updateSet = null;
+		Event updateEvent = null;
 
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	TagSet ts = em.find(TagSet.class, id);
-    	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
+    	Event event = em.find(Event.class, id);
+    	if ( event == null ) return Response.status(Status.NOT_FOUND).build();
 		
     	// parse JSON data
 		try {
-			updateSet = mapper.readValue(jsonData, TagSet.class);
+			updateEvent = mapper.readValue(jsonData, Event.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updateSet == null ) return Response.notModified().build();
+		if ( updateEvent == null ) return Response.notModified().build();
 		    	
     	// update analysislist
-		if ( updateSet.getName() != null ) ts.setName(updateSet.getName());
+		if ( updateEvent.getName() != null ) event.setName(updateEvent.getName());
 
 		// TODO update log metadata in general log
 		
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
-		em.merge(ts);
-		em.persist(ts);
+		em.merge(event);
+		em.persist(event);
 		tx.commit();
-		em.refresh(ts);
+		em.refresh(event);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TAGSETEDITED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.EVENTEDITED);
 
-		return Response.ok().entity(ts).build();
+		return Response.ok().entity(event).build();
 	}
 	
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("tagset/{id}")
+	@Path("event/{id}")
 	@Secured
-	public Response deleteTagset(@PathParam("id") int id) {
-    	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	TagSet ts = em.find(TagSet.class, id);
-    	if ( ts == null ) return Response.status(Status.NOT_FOUND).build();
-		
+	public Response deleteEvent(@PathParam("id") int id) {    	
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Event event = em.find(Event.class, id);
+		if ( event == null ) return Response.status(Status.NOT_FOUND).build();		
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
-		em.remove(ts);
+		em.remove(event);
 		tx.commit();
-
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TAGSETDELETED);
-
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.EVENTDELETED);
 		return Response.ok().build();
 	}
-
 }

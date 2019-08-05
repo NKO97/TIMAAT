@@ -28,10 +28,10 @@ public class Tag implements Serializable {
 	@JoinTable(
 		name="Annotation_has_Tag"
 		, joinColumns={
-			@JoinColumn(name="TagID")
+			@JoinColumn(name="Tag_ID")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="AnnotationID")
+			@JoinColumn(name="Annotation_ID")
 			}
 		)
 	@JsonIgnore
@@ -42,14 +42,33 @@ public class Tag implements Serializable {
 	@JoinTable(
 		name="Medium_has_Tag"
 		, joinColumns={
-			@JoinColumn(name="TagID")
+			@JoinColumn(name="Tag_ID")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="MediumID")
+			@JoinColumn(name="Medium_ID")
 			}
 		)
 	@JsonIgnore
 	private List<Medium> mediums;
+
+		// //bi-directional many-to-many association to Event
+		// @ManyToMany
+		// @JoinTable(
+		// 	name="Event_has_Tag"
+		// 	, joinColumns={
+		// 		@JoinColumn(name="Tag_ID")
+		// 		}
+		// 	, inverseJoinColumns={
+		// 		@JoinColumn(name="Event_ID")
+		// 		}
+		// 	)
+		// @JsonIgnore
+		// private List<Event> events;
+
+	//bi-directional many-to-many association to Event
+	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
+	private List<Event> events;
 
 	//bi-directional many-to-many association to TagSet
 	@ManyToMany(mappedBy="tags")
@@ -97,6 +116,14 @@ public class Tag implements Serializable {
 
 	public void setTagSets(List<TagSet> tagSets) {
 		this.tagSets = tagSets;
+	}
+
+	public List<Event> getEvents() {
+		return this.events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
 	}
 
 }

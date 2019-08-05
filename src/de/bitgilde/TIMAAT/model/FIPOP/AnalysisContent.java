@@ -6,12 +6,12 @@ import java.util.List;
 
 
 /**
- * The persistent class for the AnalysisNarrative database table.
+ * The persistent class for the AnalysisContent database table.
  * 
  */
 @Entity
-@NamedQuery(name="AnalysisNarrative.findAll", query="SELECT a FROM AnalysisNarrative a")
-public class AnalysisNarrative implements Serializable {
+@NamedQuery(name="AnalysisContent.findAll", query="SELECT a FROM AnalysisContent a")
+public class AnalysisContent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,11 +19,11 @@ public class AnalysisNarrative implements Serializable {
 	private int id;
 
 	//bi-directional many-to-one association to Annotation
-	@OneToMany(mappedBy="analysisNarrative")
+	@OneToMany(mappedBy="analysisContent")
 	private List<Annotation> annotations;
 
 
-	public AnalysisNarrative() {
+	public AnalysisContent() {
 	}
 
 	public int getId() {
@@ -44,14 +44,14 @@ public class AnalysisNarrative implements Serializable {
 
 	public Annotation addAnnotation(Annotation annotation) {
 		getAnnotations().add(annotation);
-		annotation.setAnalysisNarrative(this);
+		annotation.setAnalysisContent(this);
 
 		return annotation;
 	}
 
 	public Annotation removeAnnotation(Annotation annotation) {
 		getAnnotations().remove(annotation);
-		annotation.setAnalysisNarrative(null);
+		annotation.setAnalysisContent(null);
 
 		return annotation;
 	}

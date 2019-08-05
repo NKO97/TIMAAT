@@ -24,26 +24,26 @@ public class Annotation implements Serializable {
 
 	private int analysisListID;
 
-	//bi-directional many-to-one association to AnalysisNarrative
+	//bi-directional many-to-one association to AnalysisContent
 	@ManyToOne
-	@JoinColumn(name="AnalysisNarrativeID", nullable = true)
-	private AnalysisNarrative analysisNarrative;
+	@JoinColumn(name="AnalysisContentID", nullable = true)
+	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
-	@JoinColumn(name="AnalysisAudioID", nullable= true)
+	@JoinColumn(name="AnalysisContentAudioID", nullable= true)
 	private AnalysisContentAudio analysisContentAudio;
 
 	//bi-directional many-to-one association to AnalysisContentVisual
 	@ManyToOne
-	@JoinColumn(name="AnalysisVisualID", nullable = true)
+	@JoinColumn(name="AnalysisContentVisualID", nullable = true)
 	private AnalysisContentVisual analysisContentVisual;
 
 	private String comment;
 
-	private Timestamp created;
+	private Timestamp createdAt;
 
-	private int creator_UserAccountID;
+	private int createdBy_UserAccountID;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
@@ -135,12 +135,12 @@ public class Annotation implements Serializable {
 		this.analysisListID = analysisListID;
 	}
 
-	public AnalysisNarrative getAnalysisNarrative() {
-		return this.analysisNarrative;
+	public AnalysisContent getAnalysisContent() {
+		return this.analysisContent;
 	}
 
-	public void setAnalysisNarrative(AnalysisNarrative analysisNarrative) {
-		this.analysisNarrative = analysisNarrative;
+	public void setAnalysisContent(AnalysisContent analysisContent) {
+		this.analysisContent = analysisContent;
 	}
 
 	public AnalysisContentVisual getAnalysisContentVisual() {
@@ -159,20 +159,20 @@ public class Annotation implements Serializable {
 		this.comment = comment;
 	}
 
-	public Timestamp getCreated() {
-		return this.created;
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
 	}
 
-	public void setCreated(Timestamp created) {
-		this.created = created;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public int getCreator_UserAccountID() {
-		return this.creator_UserAccountID;
+	public int getCreatedBy_UserAccountID() {
+		return this.createdBy_UserAccountID;
 	}
 
-	public void setCreator_UserAccountID(int creator_UserAccountID) {
-		this.creator_UserAccountID = creator_UserAccountID;
+	public void setCreatedBy_UserAccountID(int createdBy_UserAccountID) {
+		this.createdBy_UserAccountID = createdBy_UserAccountID;
 	}
 
 	public Iri getIri() {

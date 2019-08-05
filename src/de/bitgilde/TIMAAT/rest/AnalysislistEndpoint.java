@@ -129,7 +129,7 @@ public class AnalysislistEndpoint {
 		    	
     	// update analysislist
 		if ( updatedList.getTitle() != null ) mal.setTitle(updatedList.getTitle());
-		if ( updatedList.getAnalysisFreeTextField() != null ) mal.setAnalysisFreeTextField(updatedList.getAnalysisFreeTextField());
+		if ( updatedList.getText() != null ) mal.setText(updatedList.getText());
 
 		// TODO update log metadata in general log
 		
@@ -158,8 +158,12 @@ public class AnalysislistEndpoint {
 		
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
+		// remove all associated annotations
 		for (Annotation anno : mal.getAnnotations()) em.remove(anno);
 		while (mal.getAnnotations().size() >0) mal.removeAnnotation(mal.getAnnotations().get(0));
+		// remove all associated segments
+		for (AnalysisSegment segment : mal.getAnalysisSegments()) em.remove(segment);
+		while (mal.getAnalysisSegments().size() >0) mal.removeAnalysisSegment(mal.getAnalysisSegments().get(0));
 		em.remove(mal);
 		tx.commit();
 

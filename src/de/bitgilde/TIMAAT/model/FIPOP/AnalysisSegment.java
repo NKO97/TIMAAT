@@ -29,10 +29,10 @@ public class AnalysisSegment implements Serializable {
 	@JsonIgnore
 	private MediumAnalysisList mediumAnalysisList;
 	
-	@Column(name="EndTime")
+	@Column(name="SegmentEndTime")
 	private Timestamp endTime;
 
-	@Column(name="StartTime")
+	@Column(name="SegmentStartTime")
 	private Timestamp startTime;
 
 
