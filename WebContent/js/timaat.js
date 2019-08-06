@@ -2669,27 +2669,27 @@ const TIMAAT = {
 			});
 		},
 
-		getAllEvents: function(callback) {
-			console.log("TCL: getAllEvents: function(callback)");
-			// console.log("TCL: callback", callback);
-				jQuery.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/event/all",
-					type:"GET",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-					callback(data);
-				})
-				.fail(function(e) {
-					console.log( "error", e );
-				});
-			},
+		// getAllEvents: function(callback) {
+		// 	console.log("TCL: getAllEvents: function(callback)");
+		// 	// console.log("TCL: callback", callback);
+		// 		jQuery.ajax({
+		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/all",
+		// 			type:"GET",
+		// 			contentType:"application/json; charset=utf-8",
+		// 			dataType:"json",
+		// 			beforeSend: function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		}).done(function(data) {
+		// 			callback(data);
+		// 		})
+		// 		.fail(function(e) {
+		// 			console.log( "error", e );
+		// 		});
+		// 	},
 
 		listEvents(callback) {
-      console.log("TCL: listEvents -> callback", callback);
+      // console.log("TCL: listEvents -> callback", callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/list",
 				type:"GET",
@@ -2718,13 +2718,13 @@ const TIMAAT = {
       // console.log("TCL: createEvent -> callback", callback);
       // console.log("TCL: createEvent -> name, description, beginsAtDate, endsAtDate, callback", name, description, beginsAtDate, endsAtDate, callback);
 			var model = { 	
-				"id": 0, 
-				// "locationID": locationID,
+				id: 0, 
+				// locationID: null,        
 				// "beginsAtDate": beginsAtDate,
 				// "endsAtDate": endsAtDate,
-				"name": name, // TODO change to eventTranslation
+				name: name, // TODO change to eventTranslation
 				// "description": description, // TODO change to eventTranslation
-				"tags": []
+				// tags: []
 				// eventTranslation: [{
 				// 	id: 0,
 				// 	languageID: list,
@@ -2732,9 +2732,10 @@ const TIMAAT = {
 				// 	description: description
 				// }]				
 			};
+			// console.log("TCL: createEvent -> locationID", model.locationID);
 			jQuery.ajax({
-				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+id,
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/event/",
+				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/",
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -2752,27 +2753,27 @@ const TIMAAT = {
 			});			
 		},
 		
-		updateEvents(event) {
-			console.log("TCL: updateEvents -> event", event);
-		},
+		// updateEvents(event) {
+		// 	console.log("TCL: updateEvents -> event", event);
+		// },
 
 		updateEvent(event) {
 			console.log("TCL: updateEvent -> event", event);
 			var ev = {
 				id: event.model.id,
-				name: event.model.name,
-				description: event.model.description,
-				beginsAtDate: event.model.beginsAtDate,
-				endsAtDate: event.model.endsAtDate,
-				// locationID: event.model.locationID,
-				tags: []
+				name: event.model.name
+			// 	description: event.model.description,
+			// 	beginsAtDate: event.model.beginsAtDate,
+			// 	endsAtDate: event.model.endsAtDate,
+			// 	locationID: event.model.locationID,
+			// 	// tags: []
 			};
+			// console.log("TCL: updateEvent -> locationID", event.model.locationID);
 			// var thisEvent = event;
 			jQuery.ajax({
 				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+thisEvent.model.id,
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/event/"+ev.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.id,
 				type:"PATCH",
-				// data: JSON.stringify(event.getModel()),
 				data: JSON.stringify(ev),
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -2781,10 +2782,12 @@ const TIMAAT = {
 				},
 			}).done(function(data) {
 				// thisEvent.model = data;
+				// ev.model = data;
 				event.model.id = data.id;
-				event.model.description = data.description;
-				event.model.beginsAtDate = data.beginsAtDate;
-				event.model.endsAtDate = data.endsAtDate;
+				event.model.title = data.title;
+				// event.model.description = data.description;
+				// event.model.beginsAtDate = data.beginsAtDate;
+				// event.model.endsAtDate = data.endsAtDate;
 				console.log("TCL: updateEvent -> event.updateUI()");
 				event.updateUI(); 
 			})
@@ -2796,9 +2799,9 @@ const TIMAAT = {
 
 		removeEvent(event) {
       console.log("TCL: removeEvent -> event", event);
-			// var thisEvent = event;
+			var ev = event;
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/event/"+thisEvent.model.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -2810,6 +2813,44 @@ const TIMAAT = {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
+		},
+
+		addEventTag(event, tagname, callback) {
+      console.log("TCL: addEventTag -> event, tagname, callback", event, tagname, callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.id+"/tag/"+tagname,
+				type:"POST",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				// TIMAAT.Service.updateTagsets(tagname);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+
+		removeEventTag(event, tagname, callback) {
+      console.log("TCL: removeEventTag -> event, tagname, callback", event, tagname, callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.id+"/tag/"+tagname,
+				type:"DELETE",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				// TIMAAT.Service.updateTagsets(tagname);
+				callback(tagname);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
 		},
 		
 
@@ -2854,7 +2895,7 @@ const TIMAAT = {
 			    		TIMAAT.Service.removeMediumTag(TIMAAT.VideoPlayer.model.video, tag, function(tagname) {
 			    			// find tag in model
 			    			var found = -1;
-			    			aTIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
+			    			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
 			    				if ( item.name == tagname ) found = index;
 			    			});
 			    			if (found > -1) TIMAAT.VideoPlayer.model.video.splice(found, 1);
@@ -2900,7 +2941,7 @@ const TIMAAT = {
 				
 				if (tagset) {
 					tagset.model.name = title;
-					console.log("TCL: tagset.updateUI() - Settings init()");
+					// console.log("TCL: tagset.updateUI() - Settings init()");
 					tagset.updateUI();          
 					TIMAAT.Service.updateTagset(tagset);
 				} else {
@@ -2982,16 +3023,18 @@ const TIMAAT = {
 		init: function() {
 			console.log("TCL: Datasets: init: function()");
 			// attach tag editor
-			$('#timaat-medium-tags').popover({
+			$('#timaat-event-tags').popover({
 				placement: 'right',
-				title: 'Medium Tags bearbeiten',
+				title: 'Event Tags bearbeiten (datasets init function)',
 				trigger: 'click',
 				html: true,
-				content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
+				content: `<div class="input-group">
+										<input class="form-control timaat-tag-input" type="text" value="">
+									</div>`,
 				container: 'body',
 				boundary: 'viewport',				
 			});
-			$('#timaat-medium-tags').on('inserted.bs.popover', function () {
+			$('#timaat-event-tags').on('inserted.bs.popover', function () {
 				var tags = "";
 				if ( TIMAAT.VideoPlayer.video == null ) {
 					$('.timaat-tag-input').html('Kein Video geladen');
@@ -3003,17 +3046,17 @@ const TIMAAT = {
 				tags = tags.substring(1);
 				$('.timaat-tag-input').val(tags);
 			    $('.timaat-tag-input').tagsInput({
-			    	placeholder: 'Medium Tag hinzufügen',
+			    	placeholder: 'Event Tag hinzufügen (datasets init function)',
 			    	onAddTag: function(taginput,tag) {
-			    		TIMAAT.Service.addMediumTag(TIMAAT.VideoPlayer.model.video, tag, function(newtag) {
+			    		TIMAAT.Service.addEventTag(TIMAAT.VideoPlayer.model.video, tag, function(newtag) {
 			    			TIMAAT.VideoPlayer.model.video.tags.push(newtag);
 			    		});
 			    	},
 			    	onRemoveTag: function(taginput,tag) {
-			    		TIMAAT.Service.removeMediumTag(TIMAAT.VideoPlayer.model.video, tag, function(tagname) {
+			    		TIMAAT.Service.removeEventTag(TIMAAT.VideoPlayer.model.video, tag, function(tagname) {
 			    			// find tag in model
 			    			var found = -1;
-			    			aTIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
+			    			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
 			    				if ( item.name == tagname ) found = index;
 			    			});
 			    			if (found > -1) TIMAAT.VideoPlayer.model.video.splice(found, 1);
@@ -3024,7 +3067,7 @@ const TIMAAT = {
 			    	}
 			    });
 			});
-			$('#timaat-medium-tags').on('hidden.bs.popover', function () { 
+			$('#timaat-event-tags').on('hidden.bs.popover', function () { 
 			});
 			// delete event functionality
 			$('#timaat-event-delete-submit').click(function(ev) {
@@ -3037,37 +3080,41 @@ const TIMAAT = {
 			$('#timaat-event-add').attr('onclick','TIMAAT.Datasets.addEvent()');
 			$('#timaat-datasets-event-meta').on('show.bs.modal', function (ev) {
 				var modal = $(this);
-        console.log("TCL: modal", modal);
 				var event = modal.data('event');				
-        console.log("TCL: event", event);
 				var heading = (event) ? "Event bearbeiten" : "Event hinzufügen";
-        console.log("TCL: heading", heading);
 				var submit = (event) ? "Speichern" : "Hinzufügen";
-        console.log("TCL: submit", submit);
-				var title = (event) ? event.model.name : "";				
-        console.log("TCL: title", title);
+				var title = (event) ? event.model.name : "";
+				// var description = (event) ? event.model.description : "";
+				// var beginsAtDate = (event) ? event.model.beginsAtDate : "";
+				// var endsAtDate = (event) ? event.model.endsAtDate : "";				
 				// setup UI from Video Player state
 				$('#eventMetaLabel').html(heading);
 				$('#timaat-event-meta-submit').html(submit);
-				$("#timaat-event-meta-title").val(title).trigger('input');				
+				$("#timaat-event-meta-title").val(title).trigger('input');
+				// $("#timaat-event-meta-start").val(beginsAtDate);
+				// $("#timaat-event-meta-end").val(endsAtDate);
+				// $("#timaat-event-meta-description").val(description);			
 			});
 			$('#timaat-event-meta-submit').click(function(ev) {
 				var modal = $('#timaat-datasets-event-meta');
-        console.log("TCL: modal", modal);
 				var event = modal.data('event');
-        console.log("TCL: event", event);
-				var title = $("#timaat-event-meta-title").val();				
-        console.log("TCL: title", title);
+				var title = $("#timaat-event-meta-title").val();
+				// var description = $("#timaat-annotation-meta-comment").val();
+				// var beginsAtDate = $("#timaat-annotation-meta-start").val();
+				// var endsAtDate = $("#timaat-annotation-meta-end").val();				
 				if (event) {
 					event.model.name = title;
+					// event.model.description = description;
+					// event.model.beginsAtDate = beginsAtDate;
+					// event.model.endsAtDate = endsAtDate;
 					console.log("TCL: event.updateUI() - Datasets:init:function()");
-					event.updateUI();          
+					event.updateUI();
 					TIMAAT.Service.updateEvent(event);
 				} else {
-					TIMAAT.Service.createEvent(title, TIMAAT.Datasets._eventAdded);
+					TIMAAT.Service.createEvent(title, TIMAAT.Datasets._eventAdded); // TODO add event parameters
           console.log("TCL: title", title);
-          console.log("TCL: TIMAAT.Datasets._eventAdded", TIMAAT.Datasets._eventAdded);
-          console.log("TCL: TIMAAT.Service.createEvent(title, TIMAAT.Datasets._eventAdded)");
+          // console.log("TCL: TIMAAT.Datasets._eventAdded", TIMAAT.Datasets._eventAdded);
+          // console.log("TCL: TIMAAT.Service.createEvent(title, TIMAAT.Datasets._eventAdded)");
 				}
 				modal.modal('hide');
 			});
@@ -3085,7 +3132,7 @@ const TIMAAT = {
 		loadEvents: function() {
     	console.log("TCL: loadEvents: function()");
 			// load events
-			TIMAAT.Service.getAllEvents(TIMAAT.Datasets.setEventLists);
+			TIMAAT.Service.listEvents(TIMAAT.Datasets.setEventLists);
 		},
 		
 		setEventLists: function(events) {
@@ -3148,9 +3195,10 @@ const TIMAAT = {
 				+ deleteEvent +
 				'<span class="timaat-event-list-title"></span>' +
 				'<span class="text-nowrap timaat-event-list-tags float-right text-muted"><i class=""></i></span><br> \
+				<span class="timaat-event-list-time"></span> \
 				<div class="timaat-event-list-count text-muted float-left"></div> \
-				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user-disabled"></i></div> \
-				</li>'
+				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
+		 </li>'
 			);
 			$('#timaat-event-list').append(this.listView);
 			console.log("TCL: Event -> constructor -> this.updateUI()");
@@ -3174,14 +3222,14 @@ const TIMAAT = {
 			    $('.timaat-tag-input').tagsInput({
 			    	placeholder: 'Tag hinzufügen',
 			    	onAddTag: function(taginput,tag) {
-			    		TIMAAT.Service.addTag(event, tag, function(newtag) {
+			    		TIMAAT.Service.addTag(event, tag, function(newtag) { // TODO addTag?
 								event.model.tags.push(newtag);
 								console.log("TCL: Event -> constructor -> event.updateUI() - onAddTag");
 			    			event.updateUI();                
 			    		});
 			    	},
 			    	onRemoveTag: function(taginput,tag) {
-			    		TIMAAT.Service.removeTag(event, tag, function(tagname) {
+			    		TIMAAT.Service.removeTag(event, tag, function(tagname) { // TODO removeTag?
 			    			// find tag in model
 			    			var found = -1;
 			    			event.model.tags.forEach(function(item, index) {
@@ -3252,8 +3300,8 @@ const TIMAAT = {
 			// remove event from UI
 			this.listView.remove();
 			// remove from tagset list
-			var index = TIMAAT.Datasets.events.indexOf(this);
-			if (index > -1) TIMAAT.Datasets.events.splice(index, 1);
+			// var index = TIMAAT.Datasets.events.indexOf(this);
+			// if (index > -1) TIMAAT.Datasets.events.splice(index, 1);
 			// remove from model list
 			index = TIMAAT.Datasets.events.model.indexOf(this);
 			if (index > -1) TIMAAT.Datasets.events.model.splice(index, 1);
@@ -3261,8 +3309,7 @@ const TIMAAT = {
 
 		// getModel() {
     //   console.log("TCL: Event -> getModel -> getModel()");
-		// 	return this.modename: name,
-		// description: descriptionl;
+		// 	return this.model;
 		// }
 
 		// setSelected(selected) {

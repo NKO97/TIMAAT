@@ -689,10 +689,23 @@
             </button>
           </div>
           <div class="modal-body">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="timaat-event-meta-title" placeholder="Title" aria-label="Title">
-        </div>      
-          </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="timaat-event-meta-title" placeholder="Title" aria-label="Title">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Von</span>
+              </div>
+              <input type="text" class="form-control" id="timaat-event-meta-start" placeholder="DD-MM-YYYY" aria-label="Event Start Date">
+              <div class="input-group-prepend">  
+                <span class="input-group-text">Bis</span> 
+              </div>         
+              <input type="text" class="form-control" id="timaat-event-meta-end" placeholder="DD-MM-YYYY" aria-label="Evend End Date">
+            </div>
+            <div class="input-group mb-3">
+              <textarea class="form-control" aria-label="Beschreibung" id="timaat-event-meta-description" placeholder="Beschreibung eingeben"></textarea>
+            </div>    
+          </div>  
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
             <button type="button" class="btn btn-primary" id="timaat-event-meta-submit" disabled>Hinzufügen</button>

@@ -32,14 +32,16 @@ public class Event implements Serializable {
 	private String description;
 
 	//bi-directional many-to-one association to UserAccount
-	@ManyToOne
-	@JoinColumn(name="created_by_user_account_id")
-	private UserAccount created_by_user_account_id;
+	// @ManyToOne
+	// @JoinColumn(name="created_by_user_account_id")
+	// private UserAccount created_by_user_account_id;
+	private int created_by_user_account_id;
 
 	//bi-directional many-to-one association to UserAccount
-	@ManyToOne
-	@JoinColumn(name="last_Edited_by_user_account_id")
-	private UserAccount last_edited_by_user_account_id;
+	// @ManyToOne
+	// @JoinColumn(name="last_Edited_by_user_account_id")
+	// private UserAccount last_edited_by_user_account_id;
+	private int last_edited_by_user_account_id;
 
 	private Timestamp created_at;
 
@@ -63,28 +65,28 @@ public class Event implements Serializable {
 	// private List<Annotation> annotations;
 
 	// //bi-directional many-to-many association to Tag
-	// @ManyToMany(mappedBy="events")
-	// private List<Tag> tags;
+	@ManyToMany(mappedBy="events", cascade=CascadeType.PERSIST)
+	private List<Tag> tags;
 	
 	//bi-directional many-to-many association to Tag
-	@ManyToMany
-	@JoinTable(
-		name="Event_has_Tag"
-		, joinColumns={
-			@JoinColumn(name="Event_ID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="Tag_ID")
-			}
-		)
-	private List<Tag> tags;
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="Event_has_Tag"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="Event_ID")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="Tag_ID")
+	// 		}
+	// 	)
+	// private List<Tag> tags;
 
 	//bi-directional many-to-one association to Location
-	// @ManyToOne
+	@ManyToOne
 	// @JoinColumn(name="LocationID")
-	// private Location location;
+	private Location location;
 
-	private int locationID;
+	// private int locationID;
 
 	//bi-directional many-to-one association to EventRelatesToEvent
 	@OneToMany(mappedBy="event1")
@@ -157,19 +159,19 @@ public class Event implements Serializable {
 		this.endsAtDate = endsAtDate;
 	}
 
-	public UserAccount getCreatedByUserAccountID() {
+	public int getCreatedByUserAccountID() { // public UserAccount getCreatedByUserAccountID() {
 		return this.created_by_user_account_id;
 	}
 
-	public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
+	public void setCreatedByUserAccountID(int created_by_user_account_id) { // public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
 		this.created_by_user_account_id = created_by_user_account_id;
 	}
 	
-	public UserAccount getLastEditedByUserAccountID() {
+	public int getLastEditedByUserAccountID() { // public UserAccount getLastEditedByUserAccountID() {
 		return this.last_edited_by_user_account_id;
 	}
 
-	public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) { // public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
 		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
 	}
 
@@ -205,21 +207,21 @@ public class Event implements Serializable {
 	// 	this.annotations = annotations;
 	// }
 
-	// public Location getLocation() {
-	// 	return this.location;
-	// }
-
-	// public void setLocation(Location location) {
-	// 	this.location = location;
-	// }
-
-	public int getLocationID() {
-		return this.locationID;
+	public Location getLocation() {
+		return this.location;
 	}
 
-	public void setLocationID(int locationID) {
-		this.locationID = locationID;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
+
+	// public int getLocationID() {
+	// 	return this.locationID;
+	// }
+
+	// public void setLocationID(int locationID) {
+	// 	this.locationID = locationID;
+	// }
 
 	public List<EventRelatesToEvent> getEventRelatesToEvents1() {
 		return this.eventRelatesToEvents1;

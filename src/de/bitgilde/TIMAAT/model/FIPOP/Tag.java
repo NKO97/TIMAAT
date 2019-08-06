@@ -51,24 +51,24 @@ public class Tag implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
-		// //bi-directional many-to-many association to Event
-		// @ManyToMany
-		// @JoinTable(
-		// 	name="Event_has_Tag"
-		// 	, joinColumns={
-		// 		@JoinColumn(name="Tag_ID")
-		// 		}
-		// 	, inverseJoinColumns={
-		// 		@JoinColumn(name="Event_ID")
-		// 		}
-		// 	)
-		// @JsonIgnore
-		// private List<Event> events;
-
 	//bi-directional many-to-many association to Event
-	@ManyToMany(mappedBy="tags")
+	@ManyToMany
+	@JoinTable(
+		name="Event_has_Tag"
+		, joinColumns={
+			@JoinColumn(name="Tag_ID")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="Event_ID")
+			}
+		)
 	@JsonIgnore
 	private List<Event> events;
+
+	//bi-directional many-to-many association to Event
+	// @ManyToMany(mappedBy="tags")
+	// @JsonIgnore
+	// private List<Event> events;
 
 	//bi-directional many-to-many association to TagSet
 	@ManyToMany(mappedBy="tags")
