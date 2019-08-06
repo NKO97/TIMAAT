@@ -2306,7 +2306,7 @@ const TIMAAT = {
       console.log("TCL: createAnalysislist -> title", title);
       console.log("TCL: createAnalysislist -> comment", comment);
       console.log("TCL: createAnalysislist -> mediumID", mediumID);
-      console.log("TCL: createAnalysislist -> callback", callback);
+      // console.log("TCL: createAnalysislist -> callback", callback);
       // console.log("TCL: createAnalysislist -> title, comment, mediumID, callback", title, comment, mediumID, callback);
 			var model = {
 					"id": 0,
@@ -2763,7 +2763,7 @@ const TIMAAT = {
 			// console.log("TCL: createEvent -> locationID", model.locationID);
 			jQuery.ajax({
 				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
