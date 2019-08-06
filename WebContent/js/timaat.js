@@ -172,6 +172,7 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+      console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
 						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdBy_UserAccountID+'">[ID '+anno.model.createdBy_UserAccountID+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(anno.model.created)+'<br>\
@@ -587,10 +588,30 @@ const TIMAAT = {
 				html: true,
 				content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
 				container: 'body',
-				boundary: 'viewport',
-				
+				boundary: 'viewport',				
 			});
-			
+			// attach user log info
+			// this.listView.find('.timaat-user-log').popover({
+			// 	placement: 'right',
+			// 	title: '<i class="fas fa-user"></i> Bearbeitungslog',
+			// 	trigger: 'click',
+			// 	html: true,
+			// 	content: '<div class="timaat-user-log-details">Lade...</div>',
+			// 	container: 'body',
+			// 	boundary: 'viewport',				
+			// });
+			// this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			// 	TIMAAT.UI.hidePopups();
+			// });
+			// this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			// 	$('.timaat-user-log-details').html(
+			// 			'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+tagset.model.createdByUserAccountID+'">[ID '+tagset.model.createdByUserAccountID+']</span></b><br>\
+			// 			 '+TIMAAT.Util.formatDate(tagset.model.createdAt)+'<br>\
+			// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+tagset.model.lastEditedByUserAccountID+'">[ID '+tagset.model.lastEditedByUserAccountID+']</span></b><br>\
+			// 			 '+TIMAAT.Util.formatDate(tagset.model.lastEditedAt)+'<br>'
+			// 	);
+			// 	$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			// });
 			// attach tag editor
 			this.listView.find('.timaat-tagset-list-tags').on('inserted.bs.popover', function () {
 				var tags = "";
@@ -629,6 +650,11 @@ const TIMAAT = {
 			this.listView.find('.timaat-tagset-list-tags').on('hidden.bs.popover', function () { tagset.updateUI(); });
 			this.listView.find('.timaat-tagset-list-tags').dblclick(function(ev) {ev.stopPropagation();});
 
+			// // attach user log info
+			// this.listView.find('.timaat-user-log').click(function(ev) {
+			// 	ev.preventDefault();
+			// 	ev.stopPropagation();
+			// });
 			
 			// attach event handlers
 			$(this.listView).click(this, function(ev) {
@@ -3216,7 +3242,30 @@ const TIMAAT = {
 				content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
 				container: 'body',
 				boundary: 'viewport',				
-			});			
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+      console.log("TCL: Event -> constructor -> Display Bearbeitungslog");
+				$('.timaat-user-log-details').html(
+						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccountID+'">[ID '+event.model.createdByUserAccountID+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccountID+'">[ID '+event.model.lastEditedByUserAccountID+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(event.model.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
 			// attach tag editor
 			this.listView.find('.timaat-event-list-tags').on('inserted.bs.popover', function () {
 				var tags = "";
@@ -3252,6 +3301,12 @@ const TIMAAT = {
 			console.log("TCL: Event -> constructor -> event.updateUI()");
 			this.listView.find('.timaat-event-list-tags').on('hidden.bs.popover', function () { event.updateUI(); });
 			this.listView.find('.timaat-event-list-tags').dblclick(function(ev) {ev.stopPropagation();});
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
 
 			// attach event handlers
 			$(this.listView).click(this, function(ev) {
@@ -3603,6 +3658,7 @@ const TIMAAT = {
 			if ( !myself ) myself="mir";
 			
 			var id = $(idElement).data('userid');
+      console.log("TCL: resolveUserID: id", id);
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
 			else if ( TIMAAT.Service.idCache.has(id) ) $(idElement).text(TIMAAT.Service.idCache.get(id));
 			else {
