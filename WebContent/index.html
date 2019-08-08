@@ -227,7 +227,6 @@
 
             <div class="container-fluid timaat-component" id="timaat-component-videoplayer">
 
-
 <div class="modal fade" id="timaat-videoplayer-analysislist-delete" tabindex="-1" role="dialog" aria-labelledby="analysislistDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -247,10 +246,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 <div class="modal fade" id="timaat-videoplayer-analysislist-meta" tabindex="-1" role="dialog" aria-labelledby="analysislistMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -264,12 +259,9 @@
 		<div class="input-group mb-3">
 			<input type="text" class="form-control" id="timaat-analysislist-meta-title" placeholder="Titel" aria-label="Titel">
 		</div>
-
 		<div class="input-group mb-3">
 		  <textarea class="form-control" aria-label="Kommentar" id="timaat-analysislist-meta-comment" placeholder="Kommentar eingeben"></textarea>
 		</div>
-
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -278,9 +270,6 @@
     </div>
   </div>
 </div>		
-
-
-
 <div class="modal fade" id="timaat-videoplayer-annotation-delete" tabindex="-1" role="dialog" aria-labelledby="annotationDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -300,10 +289,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 <div class="modal fade" id="timaat-videoplayer-segment-delete" tabindex="-1" role="dialog" aria-labelledby="segmentDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -323,10 +308,6 @@
     </div>
   </div>
 </div>
-
-
-
-		
 <div class="modal fade" id="timaat-videoplayer-annotation-meta" tabindex="-1" role="dialog" aria-labelledby="annotationMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -358,8 +339,7 @@
 			<div class="input-group-append">
 			    <button class="btn btn-secondary" id="timaat-annotation-meta-setstart" type="button"><i class="far fa-clock"></i></button>
 			</div>&nbsp;&nbsp;
-			<div class="input-group-prepend">
-				
+			<div class="input-group-prepend">				
 				<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
 				    <div class="dropdown-menu"  id="timaat-annotation-meta-duration-menu">
 				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(0)">dieses Frame</a>
@@ -371,19 +351,15 @@
 				      <div role="separator" class="dropdown-divider"></div>
 				      <a class="dropdown-item"><input type="text" id="timaat-annotation-meta-duration" class="form-control" placeholder="Sekunden" aria-label="Sekunden"></a>
 				    </div>
-
 			</div>
 			<input type="text" class="form-control" placeholder="00:00:00" id="timaat-annotation-meta-end" aria-label="Ende Timecode">
 			<div class="input-group-append">
 			    <button class="btn btn-secondary" id="timaat-annotation-meta-setend" type="button"><i class="far fa-clock"></i></button>
 			</div>
 		</div>
-
 		<div class="input-group mb-3">
 		  <textarea class="form-control" aria-label="Kommentar" id="timaat-annotation-meta-comment" placeholder="Kommentar eingeben"></textarea>
 		</div>
-
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -392,9 +368,6 @@
     </div>
   </div>
 </div>
-
-
-
 <div class="modal fade" id="timaat-videoplayer-segment-meta" tabindex="-1" role="dialog" aria-labelledby="segmentMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -416,8 +389,7 @@
 			<div class="input-group-append">
 			    <button class="btn btn-secondary" id="timaat-segment-meta-setstart" type="button"><i class="far fa-clock"></i></button>
 			</div>&nbsp;&nbsp;
-			<div class="input-group-prepend">
-				
+			<div class="input-group-prepend">				
 				<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
 				    <div class="dropdown-menu"  id="timaat-annotation-meta-duration-menu">
 				      <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(0)">dieses Frame</a>
@@ -429,15 +401,12 @@
 				      <div role="separator" class="dropdown-divider"></div>
 				      <a class="dropdown-item"><input type="text" id="timaat-segment-meta-duration" class="form-control" placeholder="Sekunden" aria-label="Sekunden"></a>
 				    </div>
-
 			</div>
 			<input type="text" class="form-control" placeholder="00:00:00" id="timaat-segment-meta-end" aria-label="Ende Timecode">
 			<div class="input-group-append">
 			    <button class="btn btn-secondary" id="timaat-segment-meta-setend" type="button"><i class="far fa-clock"></i></button>
 			</div>
 		</div>
-
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger mr-auto" id="timaat-segment-delete-submit" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button>
@@ -447,19 +416,11 @@
     </div>
   </div>
 </div>		
-
-
-
-
-
-
-		
                 <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
 			<div class="d-flex justify-content-center col-lg-12">
 				<h1>Kein Video geladen</h1>
 			</div>
-		</div>
-		
+		</div>		
                 <div class="row timaat-videoplayer-ui" style="padding-top: 1em;">
 		<div class="col-lg-3">
                     <div class="card">
@@ -480,10 +441,8 @@
   <div class="input-group-append">
       <div class="input-group-text timaat-user-log" id="timaat-user-log-analysislist" onclick="TIMAAT.VideoPlayer.userLogForList()"><i class="fas fa-user"></i></div>
   </div>
-
 </div>
                         </div>
-
                     	<div class="timaat-annotation-list-wrapper" style="max-height: 486px;min-height: 486px">
 				    		<div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
 				    		<ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
@@ -499,12 +458,10 @@
 		<div class="col-lg-10" id="timaat-annotation-metadata" style="max-height: 541px;min-height: 541px">
                     <div class="card">
 			    <div class="card-header">Annotation Metadaten</div>
-			    <div class="card-body">
-			   	 
+			    <div class="card-body">			   	 
 		   	    </div>
                     </div>
-                </div>
-		
+                </div>		
 		<div class="col-lg-9">
                     <div class="card">
                         <div class="list-group list-group-flush">
@@ -528,10 +485,8 @@
 				 <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log"><i class="fas fa-user"></i></div>
                         </div>
                     </div>
-	    	</div>
-		
-                </div> <!-- row -->
-		
+	    	</div>		
+                </div> <!-- row -->		
                 <div class="row timaat-videoplayer-ui">
 			<div class="col-lg-12">
 				<div class="card">
@@ -545,9 +500,6 @@
 				</div>
 			</div>
 		</div>
-		
-		
-		
             </div>
             <!-- /.container-fluid -->
 
@@ -555,10 +507,7 @@
 <!--  ------------------------------------------------------------------------------------------------------------------------------------------  -->
 
 
-      <div class="container-fluid timaat-component" id="timaat-component-settings">
-               
-               
-      
+      <div class="container-fluid timaat-component" id="timaat-component-settings">     
 <div class="modal fade" id="timaat-settings-tagset-delete" tabindex="-1" role="dialog" aria-labelledby="tagsetDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -578,9 +527,6 @@
     </div>
   </div>
 </div>
-               
-               
-               
 <div class="modal fade" id="timaat-settings-tagset-meta" tabindex="-1" role="dialog" aria-labelledby="tagsettMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -594,7 +540,6 @@
 		<div class="input-group mb-3">
 			<input type="text" class="form-control" id="timaat-tagset-meta-title" placeholder="Titel" aria-label="Titel">
 		</div>
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -602,10 +547,7 @@
       </div>
     </div>
   </div>
-</div>		
-               
-               
-               
+</div>
 	                <div class="row" style="padding-top: 1em;">
 				<div class="col-lg-12">
 		                        <ul class="nav nav-tabs">
@@ -616,40 +558,24 @@
     <a class="nav-link disabled" href="#timaat-settings-general" tabindex="-1" aria-disabled="true"><i class="fas fa-cogs"></i> Allgemein</a>
   </li>
   </ul>
-
 <div class="tab-content" id="timaat-settings-content">
   <div class="tab-pane fade show active" id="timaat-settings-tags" role="tabpanel" aria-labelledby="home-tab">
-
-
-
-
                 <div class="row timaat-settings-ui" style="padding-top: 1em;">
 		<div class="col-lg-4">
                     <div class="card">
                         <div class="card-header">Tagsets
                         <button type="button" id="timaat-tagset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                         </div>
-
                     	<div class="timaat-tagset-list-wrapper" style="max-height: 480px;min-height: 100px">
 				    		<div id="timaat-tagset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
 				    		<ul id="timaat-tagset-list" class="list-group list-group-flush"></ul>
 		    			</div>
                     </div>
-        </div>
-		
-                </div> <!-- row -->
-		
-
-
-
-
-	
-	
+        </div>		
+                </div> <!-- row -->	
   </div>
   <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">not yet implemented</div>
-</div>		                        
-		                        
-				
+</div>
 				</div>
 			</div>
 		</div>
@@ -696,11 +622,11 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Von</span>
               </div>
-              <input type="text" class="form-control" id="timaat-event-meta-start" placeholder="DD-MM-YYYY" aria-label="Event Start Date">
+              <input type="date" class="form-control" id="timaat-event-meta-start" aria-label="Event Start Date">
               <div class="input-group-prepend">  
                 <span class="input-group-text">Bis</span> 
               </div>         
-              <input type="text" class="form-control" id="timaat-event-meta-end" placeholder="DD-MM-YYYY" aria-label="Evend End Date">
+              <input type="date" class="form-control" id="timaat-event-meta-end" aria-label="Evend End Date">
             </div>
             <div class="input-group mb-3">
               <textarea class="form-control" aria-label="Beschreibung" id="timaat-event-meta-description" placeholder="Beschreibung eingeben"></textarea>
@@ -718,11 +644,6 @@
     <div class="col-lg-12">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active" href="#timaat-datasets-events">
-            <i class="fas fa-calendar-alt"></i> Events
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link disabled" href="#timaat-datasets-actors" tabindex="-1" aria-disabled="true">
             <i class="fas fa-users"></i> Actors</a>
         </li>
@@ -730,11 +651,16 @@
           <a class="nav-link disabled" href="#timaat-datasets-locations" tabindex="-1" aria-disabled="true">
             <i class="fas fa-map-marked-alt"></i> Locations</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#timaat-datasets-events">
+              <i class="fas fa-calendar-alt"></i> Events
+            </a>
+          </li>
       </ul>  
       <div class="tab-content" id="timaat-datasets-content">
         <div class="tab-pane fade show active" id="timaat-datasets-events" role="tabpanel" aria-labelledby="home-tab">
           <div class="row timaat-datasets-ui" style="padding-top: 1em;">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
               <div class="card">
                 <div class="card-header">Events
                   <button type="button" id="timaat-event-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
