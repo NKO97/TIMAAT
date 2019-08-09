@@ -18,62 +18,62 @@ public class Location implements Serializable {
 	private int id;
 
 	//bi-directional one-to-one association to City
-	// @OneToOne(mappedBy="location")
-	// private City city;
+	@OneToOne(mappedBy="location")
+	private City city;
 
 	//bi-directional one-to-one association to Country
-	// @OneToOne(mappedBy="location")
-	// private Country country;
+	@OneToOne(mappedBy="location")
+	private Country country;
 
 	//bi-directional one-to-one association to County
-	// @OneToOne(mappedBy="location")
-	// private County county;
+	@OneToOne(mappedBy="location")
+	private County county;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="location")
 	private List<Event> events;
 
 	//bi-directional many-to-many association to Annotation
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="annotation_has_location"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="LocationID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="AnnotationID")
-	// 		}
-	// 	)
-	// private List<Annotation> annotations;
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_location"
+		, joinColumns={
+			@JoinColumn(name="LocationID")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="AnnotationID")
+			}
+		)
+	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to Locationtype
 	// @ManyToOne
-	// @JoinColumn(name="LocationTypeID")
-	// private Locationtype locationtype;
+	@JoinColumn(name="LocationTypeID")
+	private Locationtype locationtype;
 
 	//bi-directional many-to-one association to Locationtranslation
-	// @OneToMany(mappedBy="location")
-	// private List<Locationtranslation> locationtranslations;
+	@OneToMany(mappedBy="location")
+	private List<Locationtranslation> locationtranslations;
 
 	//bi-directional many-to-one association to Person
-	// @OneToMany(mappedBy="location1")
-	// private List<Person> persons1;
+	@OneToMany(mappedBy="location1")
+	private List<Person> persons1;
 
 	//bi-directional many-to-one association to Person
-	// @OneToMany(mappedBy="location2")
-	// private List<Person> persons2;
+	@OneToMany(mappedBy="location2")
+	private List<Person> persons2;
 
 	//bi-directional one-to-one association to Province
-	// @OneToOne(mappedBy="location")
-	// private Province province;
+	@OneToOne(mappedBy="location")
+	private Province province;
 
 	//bi-directional one-to-one association to Street
-	// @OneToOne(mappedBy="location")
-	// private Street street;
+	@OneToOne(mappedBy="location")
+	private Street street;
 
 	//bi-directional many-to-many association to Territory
-	// @ManyToMany(mappedBy="locations")
-	// private List<Territory> territories;
+	@ManyToMany(mappedBy="locations")
+	private List<Territory> territories;
 
 	public Location() {
 	}
@@ -86,29 +86,29 @@ public class Location implements Serializable {
 		this.id = id;
 	}
 
-	// public City getCity() {
-	// 	return this.city;
-	// }
+	public City getCity() {
+		return this.city;
+	}
 
-	// public void setCity(City city) {
-	// 	this.city = city;
-	// }
+	public void setCity(City city) {
+		this.city = city;
+	}
 
-	// public Country getCountry() {
-	// 	return this.country;
-	// }
+	public Country getCountry() {
+		return this.country;
+	}
 
-	// public void setCountry(Country country) {
-	// 	this.country = country;
-	// }
+	public void setCountry(Country country) {
+		this.country = country;
+	}
 
-	// public County getCounty() {
-	// 	return this.county;
-	// }
+	public County getCounty() {
+		return this.county;
+	}
 
-	// public void setCounty(County county) {
-	// 	this.county = county;
-	// }
+	public void setCounty(County county) {
+		this.county = county;
+	}
 
 	public List<Event> getEvents() {
 		return this.events;
@@ -132,110 +132,110 @@ public class Location implements Serializable {
 		return event;
 	}
 
-	// public List<Annotation> getAnnotations() {
-	// 	return this.annotations;
-	// }
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
+	}
 
-	// public void setAnnotations(List<Annotation> annotations) {
-	// 	this.annotations = annotations;
-	// }
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
+	}
 
-	// public Locationtype getLocationtype() {
-	// 	return this.locationtype;
-	// }
+	public Locationtype getLocationtype() {
+		return this.locationtype;
+	}
 
-	// public void setLocationtype(Locationtype locationtype) {
-	// 	this.locationtype = locationtype;
-	// }
+	public void setLocationtype(Locationtype locationtype) {
+		this.locationtype = locationtype;
+	}
 
-	// public List<Locationtranslation> getLocationtranslations() {
-	// 	return this.locationtranslations;
-	// }
+	public List<Locationtranslation> getLocationtranslations() {
+		return this.locationtranslations;
+	}
 
-	// public void setLocationtranslations(List<Locationtranslation> locationtranslations) {
-	// 	this.locationtranslations = locationtranslations;
-	// }
+	public void setLocationtranslations(List<Locationtranslation> locationtranslations) {
+		this.locationtranslations = locationtranslations;
+	}
 
-	// public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
-	// 	getLocationtranslations().add(locationtranslation);
-	// 	locationtranslation.setLocation(this);
+	public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
+		getLocationtranslations().add(locationtranslation);
+		locationtranslation.setLocation(this);
 
-	// 	return locationtranslation;
-	// }
+		return locationtranslation;
+	}
 
-	// public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
-	// 	getLocationtranslations().remove(locationtranslation);
-	// 	locationtranslation.setLocation(null);
+	public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
+		getLocationtranslations().remove(locationtranslation);
+		locationtranslation.setLocation(null);
 
-	// 	return locationtranslation;
-	// }
+		return locationtranslation;
+	}
 
-	// public List<Person> getPersons1() {
-	// 	return this.persons1;
-	// }
+	public List<Person> getPersons1() {
+		return this.persons1;
+	}
 
-	// public void setPersons1(List<Person> persons1) {
-	// 	this.persons1 = persons1;
-	// }
+	public void setPersons1(List<Person> persons1) {
+		this.persons1 = persons1;
+	}
 
-	// public Person addPersons1(Person persons1) {
-	// 	getPersons1().add(persons1);
-	// 	persons1.setLocation1(this);
+	public Person addPersons1(Person persons1) {
+		getPersons1().add(persons1);
+		persons1.setLocation1(this);
 
-	// 	return persons1;
-	// }
+		return persons1;
+	}
 
-	// public Person removePersons1(Person persons1) {
-	// 	getPersons1().remove(persons1);
-	// 	persons1.setLocation1(null);
+	public Person removePersons1(Person persons1) {
+		getPersons1().remove(persons1);
+		persons1.setLocation1(null);
 
-	// 	return persons1;
-	// }
+		return persons1;
+	}
 
-	// public List<Person> getPersons2() {
-	// 	return this.persons2;
-	// }
+	public List<Person> getPersons2() {
+		return this.persons2;
+	}
 
-	// public void setPersons2(List<Person> persons2) {
-	// 	this.persons2 = persons2;
-	// }
+	public void setPersons2(List<Person> persons2) {
+		this.persons2 = persons2;
+	}
 
-	// public Person addPersons2(Person persons2) {
-	// 	getPersons2().add(persons2);
-	// 	persons2.setLocation2(this);
+	public Person addPersons2(Person persons2) {
+		getPersons2().add(persons2);
+		persons2.setLocation2(this);
 
-	// 	return persons2;
-	// }
+		return persons2;
+	}
 
-	// public Person removePersons2(Person persons2) {
-	// 	getPersons2().remove(persons2);
-	// 	persons2.setLocation2(null);
+	public Person removePersons2(Person persons2) {
+		getPersons2().remove(persons2);
+		persons2.setLocation2(null);
 
-	// 	return persons2;
-	// }
+		return persons2;
+	}
 
-	// public Province getProvince() {
-	// 	return this.province;
-	// }
+	public Province getProvince() {
+		return this.province;
+	}
 
-	// public void setProvince(Province province) {
-	// 	this.province = province;
-	// }
+	public void setProvince(Province province) {
+		this.province = province;
+	}
 
-	// public Street getStreet() {
-	// 	return this.street;
-	// }
+	public Street getStreet() {
+		return this.street;
+	}
 
-	// public void setStreet(Street street) {
-	// 	this.street = street;
-	// }
+	public void setStreet(Street street) {
+		this.street = street;
+	}
 
-	// public List<Territory> getTerritories() {
-	// 	return this.territories;
-	// }
+	public List<Territory> getTerritories() {
+		return this.territories;
+	}
 
-	// public void setTerritories(List<Territory> territories) {
-	// 	this.territories = territories;
-	// }
+	public void setTerritories(List<Territory> territories) {
+		this.territories = territories;
+	}
 
 }

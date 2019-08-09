@@ -3,12 +3,44 @@
 	<persistence-unit name="FIPOP-JPA" transaction-type="RESOURCE_LOCAL">
 	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:/FIPOP</jta-data-source>   
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Academictitle</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actor</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipTypetranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddressPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailaddress</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailaddressPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRolePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountry</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountryPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actorname</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actornamepart</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actornameparttype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actornameparttypetranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActor</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActorPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actortype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Actortypetranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Address</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Addresstype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Addresstypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContent</class> 
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContentAudio</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisContentVisual</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Citizenship</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Citizenshiptranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.City</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Collective</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Country</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Emailaddress</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Emailaddresstype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Emailaddresstypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EpisodeInformation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Event</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Eventdomain</class>
@@ -23,32 +55,51 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Iri</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Locationtranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Locationtype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Locationtypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_Title</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_TitlePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshiptype</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshiptypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEvent</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEventPK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_Title</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_TitlePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideo</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Person</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollective</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollectivePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Persontranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Phonenumber</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Phonenumbertype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Phonenumbertypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Province</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Reference</class>		
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceEntryType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirementPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceEntryType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Role</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Rolegroup</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Rolegrouptranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Roletranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Sex</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Sextranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Source</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Street</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Tag</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TagSet</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Territory</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Territorytranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslationPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternative</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternativePK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslationPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLog</class>
