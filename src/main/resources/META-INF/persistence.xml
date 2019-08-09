@@ -22,7 +22,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Eventtypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Iri</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList</class>

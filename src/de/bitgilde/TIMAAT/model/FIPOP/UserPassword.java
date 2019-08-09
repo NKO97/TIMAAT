@@ -34,7 +34,7 @@ public class UserPassword implements Serializable {
 
 	//bi-directional many-to-one association to UserPasswordHashType
 	@ManyToOne
-	@JoinColumn(name="UserPasswordHashTypeID")
+	@JoinColumn(name="UserPasswordHashType_ID")
 	private UserPasswordHashType userPasswordHashType;
 
 	//bi-directional many-to-one association to UserPasswordOldHashes

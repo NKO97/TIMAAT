@@ -17,9 +17,9 @@ public class Language implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String language;
+	private String code;
 
-	private String languageCode;
+	private String name;
 
 	public Language() {
 	}
@@ -32,20 +32,20 @@ public class Language implements Serializable {
 		this.id = id;
 	}
 
-	public String getLanguage() {
-		return this.language;
+	public String getCode() {
+		return this.code;
 	}
 
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public String getLanguageCode() {
-		return this.languageCode;
+	public String getName() {
+		return this.name;
 	}
 
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

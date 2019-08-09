@@ -31,10 +31,10 @@ public class TagSet implements Serializable {
 	@JoinTable(
 		name="TagSet_has_Tag"
 		, joinColumns={
-			@JoinColumn(name="TagSetID")
+			@JoinColumn(name="TagSet_ID")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="TagID")
+			@JoinColumn(name="Tag_ID")
 			}
 		)
 	private List<Tag> tags;

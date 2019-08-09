@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.*;
 
@@ -39,7 +40,7 @@ public class Medium implements Serializable {
         @AttributeOverride(name="length", column=@Column(table="MediumVideo")),
         @AttributeOverride(name="totalBitrate", column=@Column(table="MediumVideo")),
         @AttributeOverride(name="videoCodec", column=@Column(table="MediumVideo")),
-        @AttributeOverride(name="width", column=@Column(table="MediumVideo")),
+		@AttributeOverride(name="width", column=@Column(table="MediumVideo")),
     })
     private MediumVideo mediumVideo;
 	
@@ -51,6 +52,24 @@ public class Medium implements Serializable {
 	public void setMediumVideo(MediumVideo mediumVideo) {
 		this.mediumVideo = mediumVideo;
 	}
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="CreatedBy_UserAccountId")
+	private UserAccount createdBy_UserAccountID;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="lastEditedBy_UserAccountId")
+	private UserAccount lastEditedBy_UserAccountID;
+
+	// private UserAccount createdBy_UserAccountID;
+
+	// private UserAccount lastEditedBy_UserAccountID;
+
+	private Timestamp createdAt;
+
+	private Timestamp lastEditedAt;
 
 	private String copyright;
 
@@ -115,9 +134,6 @@ public class Medium implements Serializable {
 	@Transient
 	private String viewToken;
 	
-	
-
-
 	public Medium() {
 	}
 
@@ -263,5 +279,53 @@ public class Medium implements Serializable {
 		this.viewToken = viewToken;
 	}
 
+	public UserAccount getCreatedBy_UserAccountID() {
+		return this.createdBy_UserAccountID;
+	}
+
+	public void setCreatedBy_UserAccountID(UserAccount createdBy_UserAccountID) {
+		this.createdBy_UserAccountID = createdBy_UserAccountID;
+	}
+	
+	public UserAccount getLastEditedBy_UserAccountID() {
+		return this.lastEditedBy_UserAccountID;
+	}
+
+	public void setLastEditedBy_UserAccountID(UserAccount lastEditedBy_UserAccountID) {
+		this.lastEditedBy_UserAccountID = lastEditedBy_UserAccountID;
+	}
+
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.lastEditedAt;
+	}
+
+	public void setLastEditedAt(Timestamp lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
+	}
+
+
+	// public UserAccount getUserAccount1() {
+	// 	return this.userAccount1;
+	// }
+
+	// public void setUserAccount1(UserAccount userAccount1) {
+	// 	this.userAccount1 = userAccount1;
+	// }
+
+	// public UserAccount getUserAccount2() {
+	// 	return this.userAccount2;
+	// }
+
+	// public void setUserAccount2(UserAccount userAccount2) {
+	// 	this.userAccount2 = userAccount2;
+	// }
 
 }

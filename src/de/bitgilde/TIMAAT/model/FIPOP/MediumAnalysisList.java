@@ -26,7 +26,7 @@ public class MediumAnalysisList implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String analysisFreeTextField;
+	private String text;
 
 	private Timestamp createdAt;
 
@@ -34,6 +34,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
+	@CascadeOnDelete
 	private List<AnalysisSegment> analysisSegments;
 
 	//bi-directional many-to-one association to Medium
@@ -52,7 +53,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
-	@JoinColumn(name="Creator_UserAccountID")
+	@JoinColumn(name="CreatedBy_UserAccountID")
 	@JsonIgnore
 	private UserAccount userAccount;
 
@@ -67,12 +68,12 @@ public class MediumAnalysisList implements Serializable {
 		this.id = id;
 	}
 
-	public String getAnalysisFreeTextField() {
-		return this.analysisFreeTextField;
+	public String getText() {
+		return this.text;
 	}
 
-	public void setAnalysisFreeTextField(String analysisFreeTextField) {
-		this.analysisFreeTextField = analysisFreeTextField;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -108,7 +109,7 @@ public class MediumAnalysisList implements Serializable {
 
 	public AnalysisSegment removeAnalysisSegment(AnalysisSegment analysisSegment) {
 		getAnalysisSegments().remove(analysisSegment);
-		analysisSegment.setMediumAnalysisList(null);
+		// analysisSegment.setMediumAnalysisList(null);
 
 		return analysisSegment;
 	}

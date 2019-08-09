@@ -94,10 +94,10 @@ public class AnnotationEndpoint {
 		newAnno.setMediumAnalysisList(malList.get(0));
 
 		// update log metadata
-		newAnno.setCreated(new Timestamp(System.currentTimeMillis()));
+		newAnno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newAnno.setCreator_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+			newAnno.setCreatedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
 			newAnno.setLastEditedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
@@ -105,7 +105,7 @@ public class AnnotationEndpoint {
 
 		newAnno.setAnalysisContentAudio(null);
 		newAnno.setAnalysisContentVisual(null);
-		newAnno.setAnalysisNarrative(null);
+		newAnno.setAnalysisContent(null);
 		newAnno.setSegmentSelectorType(em.find(SegmentSelectorType.class, 1)); // TODO
 		
 		SelectorSvg newSVG = newAnno.getSVG().get(0);
@@ -128,7 +128,7 @@ public class AnnotationEndpoint {
 		em.refresh(newSVG);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newAnno.getCreator_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONCREATED);
+		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedBy_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		return Response.ok().entity(newAnno).build();
 	}
