@@ -18,17 +18,17 @@ public class Role implements Serializable {
 	private int id;
 
 	//bi-directional many-to-many association to Actor
-	@ManyToMany
-	@JoinTable(
-		name="actor_has_role"
-		, joinColumns={
-			@JoinColumn(name="RoleID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="ActorID")
-			}
-		)
-	private List<Actor> actors;
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="actor_has_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="RoleID")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="ActorID")
+	// 		}
+	// 	)
+	// private List<Actor> actors;
 
 	//bi-directional many-to-many association to Rolegroup
 	@ManyToMany(mappedBy="roles")
@@ -61,13 +61,13 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public List<Actor> getActors() {
-		return this.actors;
-	}
+	// public List<Actor> getActors() {
+	// 	return this.actors;
+	// }
 
-	public void setActors(List<Actor> actors) {
-		this.actors = actors;
-	}
+	// public void setActors(List<Actor> actors) {
+	// 	this.actors = actors;
+	// }
 
 	public List<Rolegroup> getRolegroups() {
 		return this.rolegroups;

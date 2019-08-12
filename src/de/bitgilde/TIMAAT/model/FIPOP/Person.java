@@ -37,7 +37,7 @@ public class Person implements Serializable {
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
-	@JoinColumn(name="ActorID")
+	@PrimaryKeyJoinColumn(name="ActorID")
 	private Actor actor;
 
 	//bi-directional many-to-many association to Citizenship

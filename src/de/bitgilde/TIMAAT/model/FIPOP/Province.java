@@ -27,7 +27,7 @@ public class Province implements Serializable {
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
-	@JoinColumn(name="LocationID")
+	@PrimaryKeyJoinColumn(name="LocationID")
 	private Location location;
 
 	public Province() {

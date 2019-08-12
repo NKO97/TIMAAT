@@ -123,10 +123,27 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
+	//bi-directional many-to-many association to ActorHasRole
+	// @ManyToMany(mappedBy="mediums")
+	// private List<ActorHasRole> actorHasRoles;
+
+	// //bi-directional many-to-many association to ActorHasRole
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="medium_has_actor_with_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="mediumID")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="actor_has_role_ActorID", referencedColumnName="ActorID"),
+	// 		@JoinColumn(name="actor_has_role_RoleID", referencedColumnName="RoleID")
+	// 		}
+	// 	)
+	// private List<ActorHasRole> actorHasRoles;
+	
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediums")
 	private List<Tag> tags;
-
 	
 	@Transient
 	private String status;
@@ -254,6 +271,14 @@ public class Medium implements Serializable {
 
 		return mediumAnalysisList;
 	}
+
+	// public List<ActorHasRole> getActorHasRoles() {
+	// 	return this.actorHasRoles;
+	// }
+
+	// public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
+	// 	this.actorHasRoles = actorHasRoles;
+	// }
 
 	public List<Tag> getTags() {
 		return this.tags;

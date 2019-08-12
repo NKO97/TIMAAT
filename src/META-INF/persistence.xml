@@ -5,14 +5,12 @@
 		<jta-data-source>java:/FIPOP</jta-data-source>   
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Academictitle</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Actor</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipType</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipTypetranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshiptype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshiptypetranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddressPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailaddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailaddressPK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountry</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountryPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Actorname</class>

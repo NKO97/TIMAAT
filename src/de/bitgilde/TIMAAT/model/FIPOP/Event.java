@@ -51,6 +51,20 @@ public class Event implements Serializable {
 	// @ManyToMany(mappedBy="events")
 	// private List<ActorHasRole> actorHasRoles;
 
+	// //bi-directional many-to-many association to ActorHasRole
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="event_has_actor_with_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="EventID")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="actor_has_role_ActorID", referencedColumnName="ActorID"),
+	// 		@JoinColumn(name="actor_has_role_RoleID", referencedColumnName="RoleID")
+	// 		}
+	// 	)
+	// private List<ActorHasRole> actorHasRoles;
+
 	// //bi-directional many-to-many association to Annotation
 	// @ManyToMany
 	// @JoinTable(

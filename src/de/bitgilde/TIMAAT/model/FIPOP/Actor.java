@@ -15,6 +15,7 @@ public class Actor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private byte isFictional;
@@ -48,8 +49,8 @@ public class Actor implements Serializable {
 	private List<Actortype> actortypes;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany(mappedBy="actors")
-	private List<Annotation> annotations;
+	// @ManyToMany(mappedBy="actors")
+	// private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to Collective
 	@OneToOne(mappedBy="actor")
@@ -68,16 +69,20 @@ public class Actor implements Serializable {
 	private List<Phonenumber> phonenumbers;
 
 	//bi-directional many-to-many association to Role
-	@ManyToMany(mappedBy="actors")
-	private List<Role> roles;
+	// @ManyToMany(mappedBy="actors")
+	// private List<Role> roles;
+
+	//bi-directional many-to-many association to Role
+	// @ManyToMany(mappedBy="actor")
+	// private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-one association to Siocuseraccount
 	// @OneToMany(mappedBy="actor")
 	// private List<Siocuseraccount> siocuseraccounts;
 
-	//bi-directional many-to-one association to Source
-	@OneToMany(mappedBy="actor")
-	private List<Source> sources;
+	//bi-directional many-to-one association to Source // TODO there should be no connection between actor and source
+	// @OneToMany(mappedBy="actor")
+	// private List<Source> sources;
 
 	//bi-directional many-to-one association to Spatialsemanticstypeperson
 	// @OneToMany(mappedBy="actor")
@@ -242,13 +247,13 @@ public class Actor implements Serializable {
 		this.actortypes = actortypes;
 	}
 
-	public List<Annotation> getAnnotations() {
-		return this.annotations;
-	}
+	// public List<Annotation> getAnnotations() {
+	// 	return this.annotations;
+	// }
 
-	public void setAnnotations(List<Annotation> annotations) {
-		this.annotations = annotations;
-	}
+	// public void setAnnotations(List<Annotation> annotations) {
+	// 	this.annotations = annotations;
+	// }
 
 	public Collective getCollective() {
 		return this.collective;
@@ -296,13 +301,35 @@ public class Actor implements Serializable {
 		this.phonenumbers = phonenumbers;
 	}
 
-	public List<Role> getRoles() {
-		return this.roles;
-	}
+	// public List<Role> getRoles() {
+	// 	return this.roles;
+	// }
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+	// public void setRoles(List<Role> roles) {
+	// 	this.roles = roles;
+	// }
+
+	// public List<ActorHasRole> getActorHasRoles() {
+	// 	return this.actorHasRoles;
+	// }
+
+	// public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
+	// 	this.actorHasRoles = actorHasRoles;
+	// }
+
+	// public ActorHasRole addActorHasRole(ActorHasRole actorHasRole) {
+	// 	getActorHasRoles().add(actorHasRole);
+	// 	actorHasRole.setActor(this);
+
+	// 	return actorHasRole;
+	// }
+
+	// public ActorHasRole removeActorHasRole(ActorHasRole actorHasRole) {
+	// 	getActorHasRoles().remove(actorHasRole);
+	// 	actorHasRole.setActor(null);
+
+	// 	return actorHasRole;
+	// }
 
 	// public List<Siocuseraccount> getSiocuseraccounts() {
 	// 	return this.siocuseraccounts;
@@ -326,13 +353,13 @@ public class Actor implements Serializable {
 	// 	return siocuseraccount;
 	// }
 
-	public List<Source> getSources() {
-		return this.sources;
-	}
+	// public List<Source> getSources() {
+	// 	return this.sources;
+	// }
 
-	public void setSources(List<Source> sources) {
-		this.sources = sources;
-	}
+	// public void setSources(List<Source> sources) {
+	// 	this.sources = sources;
+	// }
 
 	// public Source addSource(Source source) { // TODO connection between Actor and Source?
 	// 	getSources().add(source);

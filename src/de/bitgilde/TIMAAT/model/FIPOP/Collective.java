@@ -26,7 +26,7 @@ public class Collective implements Serializable {
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
-	@JoinColumn(name="ActorID")
+	@PrimaryKeyJoinColumn(name="ActorID")
 	private Actor actor;
 
 	//bi-directional many-to-one association to PersonIsMemberOfCollective

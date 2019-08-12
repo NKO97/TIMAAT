@@ -30,9 +30,9 @@ public class Actortype implements Serializable {
 		)
 	private List<Actor> actors;
 
-	//bi-directional many-to-one association to Actortypetranslaton
+	//bi-directional many-to-one association to Actortypetranslation
 	@OneToMany(mappedBy="actortype")
-	private List<Actortypetranslaton> actortypetranslatons;
+	private List<Actortypetranslation> actortypetranslations;
 
 	public Actortype() {
 	}
@@ -53,26 +53,26 @@ public class Actortype implements Serializable {
 		this.actors = actors;
 	}
 
-	public List<Actortypetranslaton> getActortypetranslatons() {
-		return this.actortypetranslatons;
+	public List<Actortypetranslation> getActortypetranslations() {
+		return this.actortypetranslations;
 	}
 
-	public void setActortypetranslatons(List<Actortypetranslaton> actortypetranslatons) {
-		this.actortypetranslatons = actortypetranslatons;
+	public void setActortypetranslations(List<Actortypetranslation> actortypetranslations) {
+		this.actortypetranslations = actortypetranslations;
 	}
 
-	public Actortypetranslaton addActortypetranslaton(Actortypetranslaton actortypetranslaton) {
-		getActortypetranslatons().add(actortypetranslaton);
-		actortypetranslaton.setActortype(this);
+	public Actortypetranslation addActortypetranslation(Actortypetranslation actortypetranslation) {
+		getActortypetranslations().add(actortypetranslation);
+		actortypetranslation.setActortype(this);
 
-		return actortypetranslaton;
+		return actortypetranslation;
 	}
 
-	public Actortypetranslaton removeActortypetranslaton(Actortypetranslaton actortypetranslaton) {
-		getActortypetranslatons().remove(actortypetranslaton);
-		actortypetranslaton.setActortype(null);
+	public Actortypetranslation removeActortypetranslation(Actortypetranslation actortypetranslation) {
+		getActortypetranslations().remove(actortypetranslation);
+		actortypetranslation.setActortype(null);
 
-		return actortypetranslaton;
+		return actortypetranslation;
 	}
 
 }
