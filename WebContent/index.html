@@ -181,21 +181,6 @@
                   <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
                       <a href="#settings" onclick="TIMAAT.UI.showComponent('settings')" data-toggle="popover" data-trigger="hover" data-animation="false" data-placement="right" data-template="<div class='popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3></div>" title="Einstellungen"><i class="fa fa-wrench fa-fw"></i></a>
                   </li>
-                  <!-- <li class="timaat-sidebar-tab timaat-sidebar-tab-datasets">                    
-                    <a href="#datasets" 
-                      onclick="TIMAAT.UI.showComponent('datasets')" 
-                      data-toggle="popover" 
-                      data-trigger="hover" 
-                      data-animation="false" 
-                      data-placement="right" 
-                      data-template="
-                        <div class='popover' role='tooltip'>
-                            <div class='arrow'></div>
-                            <h3 class='popover-header'></h3>
-                        </div>" title="Datasets">
-                      <i class="fa fa-table fa-fw"></i>
-                    </a>
-                  </li> -->
                   <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
                     <a href="#actors"            
                       onclick="TIMAAT.UI.showComponent('actors')" 
@@ -629,7 +614,7 @@
 <!---------------------------------------------------------------------------->
 <div class="container-fluid timaat-component" id="timaat-component-actors">
   <!-- delete actor -->
-  <div class="modal fade" id="actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
+  <div class="modal fade" id="timaat-datasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -649,7 +634,7 @@
     </div>
   </div>
   <!-- add Actor -->
-  <div class="modal fade" id="actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
+  <div class="modal fade" id="timaat-datasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -662,7 +647,7 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="timaat-actor-meta-title" placeholder="Title" aria-label="Title">
           </div>
-          <div class="input-group mb-3">
+          <!-- <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">Von</span>
             </div>
@@ -674,8 +659,8 @@
           </div>
           <div class="input-group mb-3">
             <textarea class="form-control" aria-label="Beschreibung" id="timaat-actor-meta-description" placeholder="Beschreibung eingeben"></textarea>
-          </div>    
-        </div>  
+          </div> -->   
+        </div>   
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
           <button type="button" class="btn btn-primary" id="timaat-actor-meta-submit" disabled>Hinzufügen</button>
@@ -686,13 +671,13 @@
   <div class="row" style="padding-top: 1em;">
     <div class="col-lg-12">
       <!-- Nav bar tabs -->
-      <ul class="nav nav-tabs" id="actors-tabs" role="tablist">
+      <!-- <ul class="nav nav-tabs" id="actors-tabs" role="tablist">
         <li class="nav-item">          
           <a class="nav-link active" href="#actors">
             <i class="fas fa-users"></i> Akteure
           </a>
         </li>
-      </ul>  
+      </ul>   -->
       <div class="tab-content" id="content">
         <!-- Actors UI -->
         <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors-tab">
@@ -722,6 +707,61 @@
 <!-- Locations                                                                 -->
 <!---------------------------------------------------------------------------->
 <div class="container-fluid timaat-component" id="timaat-component-locations">
+  <!-- delete location -->
+  <div class="modal fade" id="timaat-datasets-location-delete" tabindex="-1" role="dialog" aria-labelledby="locationDeleteLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="locationDeleteLabel">Ort löschen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Möchten Sie den ausgewählten Ort löschen?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+            <button type="button" class="btn btn-danger" id="timaat-location-delete-submit">Ort löschen</button>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- add Location -->
+  <div class="modal fade" id="timaat-datasets-location-meta" tabindex="-1" role="dialog" aria-labelledby="locationMetaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="locationMetaLabel">Ort hinzufügen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="timaat-location-meta-title" placeholder="Title" aria-label="Title">
+          </div>
+          <!-- <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Von</span>
+            </div>
+            <input type="date" class="form-control" id="timaat-location-meta-start" aria-label="Location Start Date">
+            <div class="input-group-prepend">  
+              <span class="input-group-text">Bis</span> 
+            </div>         
+            <input type="date" class="form-control" id="timaat-location-meta-end" aria-label="Evend End Date">
+          </div> 
+            <div class="input-group mb-3">
+              <textarea class="form-control" aria-label="Beschreibung" id="timaat-location-meta-description" placeholder="Beschreibung eingeben"></textarea>
+            </div>   -->
+        </div>  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+          <button type="button" class="btn btn-primary" id="timaat-location-meta-submit" disabled>Hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="row" style="padding-top: 1em;">
     <div class="col-lg-12">
       <!-- Nav bar tabs -->
@@ -731,6 +771,11 @@
             <i class="fas fa-map-marked-alt"></i> Orte
           </a>
         </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#territories">
+            <i class="far fa-object-group"></i> Territorien
+          </a>
+        </li> -->
       </ul>  
       <div class="tab-content" id="content">
         <!-- Locations UI -->
@@ -739,13 +784,13 @@
             <div class="col-lg-6">
               <div class="card">
                 <div class="card-header">Orte
-                  <!-- <button type="button" id="timaat-location-add" class="btn btn-outline btn-success btn-sm float-right">
+                  <button type="button" id="timaat-location-add" class="btn btn-outline btn-success btn-sm float-right">
                     <i class="fas fa-plus"></i>
-                  </button> -->
+                  </button>
                 </div>
                 <div class="timaat-location-list-wrapper" style="max-height: 480px;min-height: 100px">
                   <div id="timaat-location-list-loader" class="text-center card-body bg-info text-white">
-                    <!-- <i class="fas fa-spinner fa-spin"></i>-->Not yet implemented... <!-- Lade Daten... -->
+                    <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                   </div>
                   <ul id="timaat-location-list" class="list-group list-group-flush"></ul>
                 </div>
@@ -762,27 +807,27 @@
 <!---------------------------------------------------------------------------->
 <div class="container-fluid timaat-component" id="timaat-component-events">
   <!-- delete event -->
-  <div class="modal fade" id="event-delete" tabindex="-1" role="dialog" aria-labelledby="eventDeleteLabel" aria-hidden="true">
+  <div class="modal fade" id="timaat-datasets-event-delete" tabindex="-1" role="dialog" aria-labelledby="eventDeleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="eventDeleteLabel">Ereigniss löschen</h5>
+          <h5 class="modal-title" id="eventDeleteLabel">Ereignis löschen</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          Möchten Sie das ausgewählte Ereigniss löschen?
+          Möchten Sie das ausgewählte Ereignis löschen?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-          <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereigniss löschen</button>
+          <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereignis löschen</button>
         </div>
       </div>
     </div>
   </div>
   <!-- add Event -->
-  <div class="modal fade" id="event-meta" tabindex="-1" role="dialog" aria-labelledby="eventMetaLabel" aria-hidden="true">
+  <div class="modal fade" id="timaat-datasets-event-meta" tabindex="-1" role="dialog" aria-labelledby="eventMetaLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -819,9 +864,9 @@
   <div class="row" style="padding-top: 1em;">
     <div class="col-lg-12">
       <!-- Nav bar tabs -->
-      <ul class="nav nav-tabs" id="events-tabs" role="tablist">
+      <ul class="nav nav-tabs">
         <li class="nav-item">            
-          <a class="nav-link active" href="#events">
+          <a class="nav-link active" href="#events" tabindex="-1" aria-disabled="true">
             <i class="fas fa-calendar-alt"></i> Ereignisse
           </a>
         </li>

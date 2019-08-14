@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -28,8 +31,8 @@ public class Country implements Serializable {
 	private String trunkPrefix;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
-	@OneToMany(mappedBy="country")
-	private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
+	// @OneToMany(mappedBy="country")
+	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
 
 	//bi-directional many-to-many association to Citizenship
 	@ManyToMany
@@ -108,27 +111,27 @@ public class Country implements Serializable {
 		this.trunkPrefix = trunkPrefix;
 	}
 
-	public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
-		return this.actorIsLocatedInCountries;
-	}
+	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
+	// 	return this.actorIsLocatedInCountries;
+	// }
 
-	public void setActorIsLocatedInCountries(List<ActorIsLocatedInCountry> actorIsLocatedInCountries) {
-		this.actorIsLocatedInCountries = actorIsLocatedInCountries;
-	}
+	// public void setActorIsLocatedInCountries(List<ActorIsLocatedInCountry> actorIsLocatedInCountries) {
+	// 	this.actorIsLocatedInCountries = actorIsLocatedInCountries;
+	// }
 
-	public ActorIsLocatedInCountry addActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
-		getActorIsLocatedInCountries().add(actorIsLocatedInCountry);
-		actorIsLocatedInCountry.setCountry(this);
+	// public ActorIsLocatedInCountry addActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
+	// 	getActorIsLocatedInCountries().add(actorIsLocatedInCountry);
+	// 	actorIsLocatedInCountry.setCountry(this);
 
-		return actorIsLocatedInCountry;
-	}
+	// 	return actorIsLocatedInCountry;
+	// }
 
-	public ActorIsLocatedInCountry removeActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
-		getActorIsLocatedInCountries().remove(actorIsLocatedInCountry);
-		actorIsLocatedInCountry.setCountry(null);
+	// public ActorIsLocatedInCountry removeActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
+	// 	getActorIsLocatedInCountries().remove(actorIsLocatedInCountry);
+	// 	actorIsLocatedInCountry.setCountry(null);
 
-		return actorIsLocatedInCountry;
-	}
+	// 	return actorIsLocatedInCountry;
+	// }
 
 	public List<Citizenship> getCitizenships() {
 		return this.citizenships;

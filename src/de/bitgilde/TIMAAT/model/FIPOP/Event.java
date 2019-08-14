@@ -173,19 +173,35 @@ public class Event implements Serializable {
 		this.endsAtDate = endsAtDate;
 	}
 
-	public int getCreatedByUserAccountID() { // public UserAccount getCreatedByUserAccountID() {
+	// public UserAccount getCreatedByUserAccount() {
+	// 	return this.created_by_user_account;
+	// }
+
+	// public void setCreatedByUserAccount(UserAccount created_by_user_account) {
+	// 	this.created_by_user_account = created_by_user_account;
+	// }
+	
+	// public UserAccount getLastEditedByUserAccount() {
+	// 	return this.last_edited_by_user_account;
+	// }
+
+	// public void setLastEditedByUserAccount(UserAccount last_edited_by_user_account) {
+	// 	this.last_edited_by_user_account = last_edited_by_user_account;
+	// }
+
+	public int getCreatedByUserAccountID() {
 		return this.created_by_user_account_id;
 	}
 
-	public void setCreatedByUserAccountID(int created_by_user_account_id) { // public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
+	public void setCreatedByUserAccountID(int created_by_user_account_id) {
 		this.created_by_user_account_id = created_by_user_account_id;
 	}
 	
-	public int getLastEditedByUserAccountID() { // public UserAccount getLastEditedByUserAccountID() {
+	public int getLastEditedByUserAccountID() {
 		return this.last_edited_by_user_account_id;
 	}
 
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) { // public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
 		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
 	}
 

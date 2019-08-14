@@ -1,7 +1,12 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -15,7 +20,24 @@ public class Location implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+
+	//bi-directional many-to-one association to UserAccount
+	// @ManyToOne
+	// @JoinColumn(name="created_by_user_account_id")
+	// private UserAccount created_by_user_account_id;
+	private int created_by_user_account_id;
+
+	//bi-directional many-to-one association to UserAccount
+	// @ManyToOne
+	// @JoinColumn(name="last_edited_by_user_account_id")
+	// private UserAccount last_edited_by_user_account_id;
+	private int last_edited_by_user_account_id;
+
+	private Timestamp created_at;
+
+	private Timestamp last_edited_at;
 
 	//bi-directional one-to-one association to City
 	@OneToOne(mappedBy="location")
@@ -23,6 +45,7 @@ public class Location implements Serializable {
 
 	//bi-directional one-to-one association to Country
 	@OneToOne(mappedBy="location")
+	@JsonIgnore
 	private Country country;
 
 	//bi-directional one-to-one association to County
@@ -47,12 +70,14 @@ public class Location implements Serializable {
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to Locationtype
-	// @ManyToOne
+	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="LocationTypeID")
 	private Locationtype locationtype;
 
 	//bi-directional many-to-one association to Locationtranslation
 	@OneToMany(mappedBy="location")
+	@JsonIgnore
 	private List<Locationtranslation> locationtranslations;
 
 	//bi-directional many-to-one association to Person
@@ -84,6 +109,14 @@ public class Location implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return this.locationtranslations.get(0).getName(); // TODO get correct list item
+	}
+
+	public void setName(String name) {
+		this.locationtranslations.get(0).setName(name); // TODO get correct list item
 	}
 
 	public City getCity() {
@@ -130,6 +163,54 @@ public class Location implements Serializable {
 		event.setLocation(null);
 
 		return event;
+	}
+
+	public int getCreatedByUserAccountID() {
+		return this.created_by_user_account_id;
+	}
+
+	public void setCreatedByUserAccountID(int created_by_user_account_id) {
+		this.created_by_user_account_id = created_by_user_account_id;
+	}
+	
+	public int getLastEditedByUserAccountID() {
+		return this.last_edited_by_user_account_id;
+	}
+
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
+		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	}
+
+	// public UserAccount getCreatedByUserAccountID() {
+	// 	return this.created_by_user_account_id;
+	// }
+
+	// public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
+	// 	this.created_by_user_account_id = created_by_user_account_id;
+	// }
+	
+	// public UserAccount getLastEditedByUserAccountID() {
+	// 	return this.last_edited_by_user_account_id;
+	// }
+
+	// public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
+	// 	this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	// }
+
+	public Timestamp getCreatedAt() {
+		return this.created_at;
+	}
+
+	public void setCreatedAt(Timestamp created_at) {
+		this.created_at = created_at;
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.last_edited_at;
+	}
+
+	public void setLastEditedAt(Timestamp last_edited_at) {
+		this.last_edited_at = last_edited_at;
 	}
 
 	public List<Annotation> getAnnotations() {

@@ -100,4 +100,12 @@ public class Actorname implements Serializable {
 		return actornamepart;
 	}
 
+	public String getName() {
+		return this.actornameparts.toString(); // TODO verify whether this works
+	}
+
+	public void setName(String name) {
+		this.actornameparts.get(0).setName(name); // TODO verify whether this works
+	}
+
 }

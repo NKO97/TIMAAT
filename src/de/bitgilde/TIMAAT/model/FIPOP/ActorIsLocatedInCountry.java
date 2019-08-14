@@ -31,6 +31,7 @@ public class ActorIsLocatedInCountry implements Serializable {
 
 	//bi-directional many-to-one association to Country
 	@ManyToOne
+	@JoinColumn(name="Country_LocationID")
 	private Country country;
 
 	public ActorIsLocatedInCountry() {

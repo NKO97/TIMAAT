@@ -1,6 +1,8 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,6 +22,22 @@ public class Actor implements Serializable {
 
 	private byte isFictional;
 
+	//bi-directional many-to-one association to UserAccount
+	// @ManyToOne
+	// @JoinColumn(name="created_by_user_account_id")
+	// private UserAccount created_by_user_account_id;
+	private int created_by_user_account_id;
+
+	//bi-directional many-to-one association to UserAccount
+	// @ManyToOne
+	// @JoinColumn(name="last_edited_by_user_account_id")
+	// private UserAccount last_edited_by_user_account_id;
+	private int last_edited_by_user_account_id;
+
+	private Timestamp created_at;
+
+	private Timestamp last_edited_at;
+
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
 	private List<ActorHasAddress> actorHasAddresses;
@@ -29,8 +47,8 @@ public class Actor implements Serializable {
 	private List<ActorHasEmailaddress> actorHasEmailaddresses;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
-	@OneToMany(mappedBy="actor")
-	private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
+	// @OneToMany(mappedBy="actor")
+	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor1")
@@ -107,6 +125,62 @@ public class Actor implements Serializable {
 		this.isFictional = isFictional;
 	}
 
+	public String getName() {
+		return this.actornames.get(0).getName(); // TODO get correct list item
+	}
+
+	public void setName(String name) {
+		this.actornames.get(0).setName(name); // TODO get correct list item
+	}
+
+	public int getCreatedByUserAccountID() {
+		return this.created_by_user_account_id;
+	}
+
+	public void setCreatedByUserAccountID(int created_by_user_account_id) {
+		this.created_by_user_account_id = created_by_user_account_id;
+	}
+	
+	public int getLastEditedByUserAccountID() {
+		return this.last_edited_by_user_account_id;
+	}
+
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
+		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	}
+
+	// public UserAccount getCreatedByUserAccountID() {
+	// 	return this.created_by_user_account_id;
+	// }
+
+	// public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
+	// 	this.created_by_user_account_id = created_by_user_account_id;
+	// }
+	
+	// public UserAccount getLastEditedByUserAccountID() {
+	// 	return this.last_edited_by_user_account_id;
+	// }
+
+	// public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
+	// 	this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	// }
+
+	public Timestamp getCreatedAt() {
+		return this.created_at;
+	}
+
+	public void setCreatedAt(Timestamp created_at) {
+		this.created_at = created_at;
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.last_edited_at;
+	}
+
+	public void setLastEditedAt(Timestamp last_edited_at) {
+		this.last_edited_at = last_edited_at;
+	}
+
 	public List<ActorHasAddress> getActorHasAddresses() {
 		return this.actorHasAddresses;
 	}
@@ -151,27 +225,27 @@ public class Actor implements Serializable {
 		return actorHasEmailaddress;
 	}
 
-	public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
-		return this.actorIsLocatedInCountries;
-	}
+	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
+	// 	return this.actorIsLocatedInCountries;
+	// }
 
-	public void setActorIsLocatedInCountries(List<ActorIsLocatedInCountry> actorIsLocatedInCountries) {
-		this.actorIsLocatedInCountries = actorIsLocatedInCountries;
-	}
+	// public void setActorIsLocatedInCountries(List<ActorIsLocatedInCountry> actorIsLocatedInCountries) {
+	// 	this.actorIsLocatedInCountries = actorIsLocatedInCountries;
+	// }
 
-	public ActorIsLocatedInCountry addActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
-		getActorIsLocatedInCountries().add(actorIsLocatedInCountry);
-		actorIsLocatedInCountry.setActor(this);
+	// public ActorIsLocatedInCountry addActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
+	// 	getActorIsLocatedInCountries().add(actorIsLocatedInCountry);
+	// 	actorIsLocatedInCountry.setActor(this);
 
-		return actorIsLocatedInCountry;
-	}
+	// 	return actorIsLocatedInCountry;
+	// }
 
-	public ActorIsLocatedInCountry removeActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
-		getActorIsLocatedInCountries().remove(actorIsLocatedInCountry);
-		actorIsLocatedInCountry.setActor(null);
+	// public ActorIsLocatedInCountry removeActorIsLocatedInCountry(ActorIsLocatedInCountry actorIsLocatedInCountry) {
+	// 	getActorIsLocatedInCountries().remove(actorIsLocatedInCountry);
+	// 	actorIsLocatedInCountry.setActor(null);
 
-		return actorIsLocatedInCountry;
-	}
+	// 	return actorIsLocatedInCountry;
+	// }
 
 	public List<ActorRelatesToActor> getActorRelatesToActors1() {
 		return this.actorRelatesToActors1;
