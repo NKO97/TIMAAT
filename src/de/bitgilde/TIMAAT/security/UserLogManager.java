@@ -49,7 +49,10 @@ public class UserLogManager {
 			ACTORDELETED(25),
 			LOCATIONCREATED(23),
 			LOCATIONEDITED(24),
-			LOCATIONDELETED(25);
+			LOCATIONDELETED(25),
+			COUNTRYCREATED(26),
+			COUNTRYEDITED(27),
+			COUNTRYDELETED(28);
 		
 
 	    private final int value;

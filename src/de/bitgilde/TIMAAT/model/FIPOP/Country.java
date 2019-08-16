@@ -1,9 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.sql.Timestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ public class Country implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int locationID;
 
 	private String countryCallingCode;
@@ -71,6 +72,22 @@ public class Country implements Serializable {
 		this.locationID = locationID;
 	}
 
+	public int getId() {
+		return this.getLocation().getId();
+	}
+
+	public void setId(int id) {
+		this.getLocation().setId(id);
+	}
+
+	public String getName() {
+		return this.getLocation().getLocationtranslations().get(0).getName(); // TODO get correct list item
+	}
+
+	public void setName(String name) {
+		this.getLocation().getLocationtranslations().get(0).setName(name); // TODO get correct list item
+	}
+
 	public String getCountryCallingCode() {
 		return this.countryCallingCode;
 	}
@@ -109,6 +126,38 @@ public class Country implements Serializable {
 
 	public void setTrunkPrefix(String trunkPrefix) {
 		this.trunkPrefix = trunkPrefix;
+	}
+
+	public int getCreatedByUserAccountID() {
+		return this.getLocation().getCreatedByUserAccountID();
+	}
+
+	public void setCreatedByUserAccountID(int created_by_user_account_id) {
+		this.getLocation().setCreatedByUserAccountID(created_by_user_account_id);
+	}
+	
+	public int getLastEditedByUserAccountID() {
+		return this.getLocation().getLastEditedByUserAccountID();
+	}
+
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
+		this.getLocation().setLastEditedByUserAccountID(last_edited_by_user_account_id);
+	}
+
+	public Timestamp getCreatedAt() {
+		return this.location.getCreatedAt();
+	}
+
+	public void setCreatedAt(Timestamp created_at) {
+		this.getLocation().setCreatedAt(created_at);
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.location.getLastEditedAt();
+	}
+
+	public void setLastEditedAt(Timestamp last_edited_at) {
+		this.getLocation().setLastEditedAt(last_edited_at);
 	}
 
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {

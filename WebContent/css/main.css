@@ -168,7 +168,8 @@ body.timaat-login-modal-open #wrapper {
 #timaat-annotation-list li, 
 #timaat-tagset-list li, 
 #timaat-event-list li, 
-#timaat-location-list li, 
+#timaat-location-list li,
+#timaat-country-list li,
 #timaat-actor-list li {
 	cursor: pointer;
 	font-size: 90%;
@@ -177,13 +178,15 @@ body.timaat-login-modal-open #wrapper {
 #timaat-tagset-list li:hover, 
 #timaat-event-list li:hover, 
 #timaat-location-list li:hover, 
+#timaat-country-list li:hover, 
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
 }
 .timaat-annotation-list-selected, 
 .timaat-tagset-list-selected, 
 .timaat-event-list-selected, 
-.timaat-location-list-selected, 
+.timaat-location-list-selected,
+.timaat-country-list-selected,
 .timaat-ctor-list-selected {
 	background-color: #c9e2ff;
 }
@@ -191,6 +194,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-tagset-list-selected:hover,
 .timaat-event-list-selected:hover,
 .timaat-location-list-selected:hover,
+.timaat-country-list-selected:hover,
 .timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
@@ -198,6 +202,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-tagset-chooser,
 .timaat-event-chooser,
 .timaat-location-chooser,
+.timaat-country-chooser,
 .timaat-actor-chooser {
 	margin-top: 0.5em;
 }
@@ -205,6 +210,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-tagset-remove,
 .timaat-event-remove,
 .timaat-location-remove,
+.timaat-country-remove,
 .timaat-actor-remove {
 	margin-right: 1em;
 }

@@ -27,8 +27,6 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.Tag;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Location;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
@@ -54,9 +52,9 @@ public class LocationEndpoint {
 	@Path("{id}")
 	public Response getLocation(@PathParam("id") int id) {    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Location e = entityManager.find(Location.class, id);
-		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
-	return Response.ok().entity(e).build();
+		Location location = entityManager.find(Location.class, id);
+		if ( location == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+	return Response.ok().entity(location).build();
 	}
 
 	@GET
@@ -73,43 +71,6 @@ public class LocationEndpoint {
 			// }			
 		return Response.ok().entity(locationList).build();
 	}
-
-	///////////////////////////
-	// @Produces(MediaType.APPLICATION_JSON)
-	// @Consumes(MediaType.APPLICATION_JSON)
-	// @Secured
-	// @Path("{id}")
-	// public Response createLocation(@PathParam("id") int id, String jsonData) {
-	// 	ObjectMapper mapper = new ObjectMapper();
-	// 	Location newLocation = null;    	
-  //   EntityManager em = TIMAATApp.emf.createEntityManager();		
-  //   // parse JSON data
-	// 	try {
-	// 		newLocation = mapper.readValue(jsonData, Location.class);
-	// 	} catch (IOException e) {
-	// 		e.printStackTrace();
-	// 		return Response.status(Status.BAD_REQUEST).build();
-	// 	}
-	// 	if ( newLocation == null ) return Response.status(Status.BAD_REQUEST).build();
-	// 	// sanitize object data
-	// 	newLocation.setId(0);
-	// 	// newLocation.setTags(new ArrayList<Tag>());
-		
-	// 	// persist location and polygons
-	// 	EntityTransaction tx = em.getTransaction();
-	// 	tx.begin();
-	// 	em.persist(newLocation);
-	// 	em.flush();
-	// 	tx.commit();
-	// 	em.refresh(newLocation);
-		
-	// 	// add log entry
-	// 	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-	// 																					UserLogManager.LogLocations.LOCATIONCREATED);
-		
-	// 	return Response.ok().entity(newLocation).build();
-	// }
-	///////////////////////////
 
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -211,82 +172,6 @@ public class LocationEndpoint {
 		return Response.ok().build();
 	}
 	
-	// @SuppressWarnings("unchecked")
-	// @POST
-  //   @Produces(MediaType.APPLICATION_JSON)
-	// @Path("{id}/tag/{name}") // 	@Path("location/{id}/tag/{name}")
-	// @Secured
-	// public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
-  //   	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-  //   	Location location = entityManager.find(Location.class, id);
-  //   	if ( location == null ) return Response.status(Status.NOT_FOUND).build();
-  //   	// check if tag exists    	
-  //   	Tag tag = null;
-  //   	List<Tag> tags = null;
-  //   	try {
-  //       	tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE t.name=:name")
-  //       			.setParameter("name", tagName)
-  //       			.getResultList();
-  //   	} catch(Exception e) {};    	
-  //   	// find tag case sensitive
-  //   	for ( Tag listTag : tags )
-  //   		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;    	
-  //   	// create tag if it doesn't exist yet
-  //   	if ( tag == null ) {
-  //   		tag = new Tag();
-  //   		tag.setName(tagName);
-  //   		EntityTransaction entityTransaction = entityManager.getTransaction();
-  //   		entityTransaction.begin();
-  //   		entityManager.persist(tag);
-  //   		entityTransaction.commit();
-  //   		entityManager.refresh(tag);
-  //   	}    	
-  //   	// check if location already has tag
-  //   	if ( !location.getTags().contains(tag) ) {
-  //       	// attach tag to location and vice versa    	
-  //   		EntityTransaction entityTransaction = entityManager.getTransaction();
-  //   		entityTransaction.begin();
-  //   		location.getTags().add(tag);
-  //   		tag.getLocations().add(location);
-  //   		entityManager.merge(tag);
-  //   		entityManager.merge(location);
-  //   		entityManager.persist(location);
-  //   		entityManager.persist(tag);
-  //   		entityTransaction.commit();
-  //   		entityManager.refresh(location);
-  //   	} 	
-	// 	return Response.ok().entity(tag).build();
-	// }
-	
-	// @DELETE
-  //   @Produces(MediaType.APPLICATION_JSON)
-	// @Path("{id}/tag/{name}")
-	// @Secured
-	// public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
-  //   	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-  //   	Location location = entityManager.find(Location.class, id);
-  //   	if ( location == null ) return Response.status(Status.NOT_FOUND).build();    	
-  //   	// check if location already has tag
-  //   	Tag tag = null;
-  //   	for ( Tag locationTag:location.getTags() ) {
-  //   		if ( locationTag.getName().compareTo(tagName) == 0 ) tag = locationTag;
-  //   	}
-  //   	if ( tag != null ) {
-  //       	// attach tag to location and vice versa    	
-  //   		EntityTransaction entityTransaction = entityManager.getTransaction();
-  //   		entityTransaction.begin();
-  //   		location.getTags().remove(tag);
-  //   		tag.getLocations().remove(location);
-  //   		entityManager.merge(tag);
-  //   		entityManager.merge(location);
-  //   		entityManager.persist(location);
-  //   		entityManager.persist(tag);
-  //   		entityTransaction.commit();
-  //   		entityManager.refresh(location);
-  //   	} 	
-	// 	return Response.ok().build();
-	// }
-	
 	@SuppressWarnings("unchecked")
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -296,23 +181,23 @@ public class LocationEndpoint {
 		List<Location> locations = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
-			locations = (List<Location>) entityManager.createQuery("SELECT e from Location e")
+			locations = (List<Location>) entityManager.createQuery("SELECT l from Location l")
 						.getResultList();
 		} catch(Exception e) {};	
-		if ( locations != null ) {
-			List<Tag> tags = null;
-				try {
-					tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Location e WHERE e.tags = t)")
-								.getResultList();
-				} catch(Exception e) {};
-			if ( tags != null ) {
-				Location emptyLocation = new Location();
-				emptyLocation.setId(-1);
-				emptyLocation.setName("-unassigned-");
-				// emptyLocation.setTags(tags);
-				locations.add(0, emptyLocation);
-			}
-		}    	
+		// if ( locations != null ) {
+		// 	List<Tag> tags = null;
+		// 		try {
+		// 			tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Location e WHERE e.tags = t)")
+		// 						.getResultList();
+		// 		} catch(Exception e) {};
+		// 	if ( tags != null ) {
+		// 		Location emptyLocation = new Location();
+		// 		emptyLocation.setId(-1);
+		// 		emptyLocation.setName("-unassigned-");
+		// 		// emptyLocation.setTags(tags);
+		// 		locations.add(0, emptyLocation);
+		// 	}
+		// }    	
 		return Response.ok().entity(locations).build();
 	}
 }

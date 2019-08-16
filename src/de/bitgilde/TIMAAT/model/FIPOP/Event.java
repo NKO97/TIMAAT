@@ -139,22 +139,22 @@ public class Event implements Serializable {
 
 	public String getName() {
 		return this.name;
-		// return this.eventtranslations.get(id).getName();
+		// return this.eventtranslations.get(0).getName(); // TODO get correct list item
 	}
 
 	public void setName(String name) {
 		this.name = name;
-		// this.eventtranslations.get(id).setName(name);
+		// this.eventtranslations.get(0).setName(name); // TODO get correct list item
 	}
 
 	public String getDescription() {
 		return this.description;
-		// return this.eventtranslations.get(id).getDescription();
+		// return this.eventtranslations.get(0).getDescription(); // TODO get correct list item
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-		// this.eventtranslations.get(id).setDescription(description);
+		// this.eventtranslations.get(0).setDescription(description); // TODO get correct list item
 	}
 
 	public Date getBeginsAtDate() {

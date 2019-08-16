@@ -2,7 +2,6 @@ package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -29,9 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
-import de.bitgilde.TIMAAT.model.FIPOP.Actorname;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -265,20 +262,20 @@ public class ActorEndpoint {
 			actors = (List<Actor>) entityManager.createQuery("SELECT e from Actor e")
 						.getResultList();
 		} catch(Exception e) {};	
-		if ( actors != null ) {
-			List<Tag> tags = null;
-				try {
-					tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Actor e WHERE e.tags = t)")
-								.getResultList();
-				} catch(Exception e) {};
-			if ( tags != null ) {
-				Actor emptyActor = new Actor();
-        emptyActor.setId(-1);
-				emptyActor.setActornames(null); // TODO proper unassigned name setting
-				// emptyActor.setTags(tags);
-				actors.add(0, emptyActor);
-			}
-		}    	
+		// if ( actors != null ) {
+		// 	List<Tag> tags = null;
+		// 		try {
+		// 			tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Actor e WHERE e.tags = t)")
+		// 						.getResultList();
+		// 		} catch(Exception e) {};
+		// 	if ( tags != null ) {
+		// 		Actor emptyActor = new Actor();
+    //     emptyActor.setId(-1);
+		// 		emptyActor.setActornames(null); // TODO proper unassigned name setting
+		// 		// emptyActor.setTags(tags);
+		// 		actors.add(0, emptyActor);
+		// 	}
+		// }    	
 		return Response.ok().entity(actors).build();
 	}
 }
