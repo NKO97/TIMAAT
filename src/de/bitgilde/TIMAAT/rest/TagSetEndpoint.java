@@ -172,7 +172,7 @@ public class TagSetEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("tagset")
-	public Response createAnalysisList(String jsonData) {
+	public Response createTagset(String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		TagSet newSet = null;
 

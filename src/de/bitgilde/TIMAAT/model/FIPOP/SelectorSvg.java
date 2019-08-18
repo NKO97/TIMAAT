@@ -19,7 +19,7 @@ public class SelectorSvg implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String color;
+	private String colorRGBA;
 
 	private String svgData;
 
@@ -44,11 +44,11 @@ public class SelectorSvg implements Serializable {
 	}
 
 	public String getColor() {
-		return this.color;
+		return this.colorRGBA;
 	}
 
-	public void setColor(String color) {
-		this.color = color;
+	public void setColor(String colorRGBA) {
+		this.colorRGBA = colorRGBA;
 	}
 
 	public int getStrokeWidth() {

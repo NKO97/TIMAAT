@@ -2,7 +2,12 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import model.AudioCodecInformation;
+
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -40,6 +45,10 @@ public class MediumVideo implements Serializable {
 	public MediumVideo() {
 	}
 
+	// //bi-directional many-to-one association to AudioCodecInformation
+	// @ManyToOne
+	// @JoinColumn(name="audioCodec_InformationId")
+	// private AudioCodecInformation audioCodecInformation;
 
 	public int getAudioCodecInformationID() {
 		return this.audioCodecInformationID;
@@ -48,6 +57,14 @@ public class MediumVideo implements Serializable {
 	public void setAudioCodecInformationID(int audioCodecInformationID) {
 		this.audioCodecInformationID = audioCodecInformationID;
 	}
+	    
+    // public AudioCodecInformation getAudioCodecInformation() {
+	// 	return this.audioCodecInformation;
+	// }
+
+	// public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
+	// 	this.audioCodecInformation = audioCodecInformation;
+    // }
 
 	public String getBrand() {
 		return this.brand;
