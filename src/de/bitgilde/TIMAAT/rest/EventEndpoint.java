@@ -144,8 +144,8 @@ public class EventEndpoint {
 		if ( updatedEvent == null ) return Response.notModified().build();		    	
 		// update event
 		// System.out.println("EventEndpoint updateEvent - event.id:"+event.getId());
-		if ( updatedEvent.getName() != null ) event.setName(updatedEvent.getName());
-		if ( updatedEvent.getDescription() != null ) event.setDescription(updatedEvent.getDescription());
+		// if ( updatedEvent.getName() != null ) event.setName(updatedEvent.getName());
+		// if ( updatedEvent.getDescription() != null ) event.setDescription(updatedEvent.getDescription());
 		// if ( updatedEvent.getName() != null ) event.getEventtranslations().get(0).setName(updatedEvent.getName());
 		// if ( updatedEvent.getDescription() != null ) event.getEventtranslations().get(0).setDescription(updatedEvent.getDescription());
 		if ( updatedEvent.getBeginsAtDate() != null ) event.setBeginsAtDate(updatedEvent.getBeginsAtDate());

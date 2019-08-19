@@ -3124,8 +3124,8 @@ const TIMAAT = {
 				// thisEvent.model = data;
 				// ev.model = data;
 				event.model.id = data.id;
-				event.model.eventtranslations[0].name = data.name;
-				event.model.eventtranslations[0].description = data.description;
+				event.model.eventtranslations[0].name = data.eventtranslations[0].name;
+				event.model.eventtranslations[0].description = data.eventtranslations[0].description;
 				event.model.beginsAtDate = data.beginsAtDate;
 				event.model.endsAtDate = data.endsAtDate;
 				event.model.eventTranslationID = data.eventtranslations[0].id;
@@ -3714,8 +3714,10 @@ const TIMAAT = {
 				var event = modal.data('event');				
 				var heading = (event) ? "Event bearbeiten" : "Event hinzufügen";
 				var submit = (event) ? "Speichern" : "Hinzufügen";
-				var name = (event) ? event.model.name : "";
-				var description = (event) ? event.model.description : "";
+				// var name = (event) ? event.model.name : "";
+				// var description = (event) ? event.model.description : "";
+				var name = (event) ? event.model.eventtranslations[0].name : "";
+				var description = (event) ? event.model.eventtranslations[0].description : "";
 				var beginsAtDate = (event) ? event.model.beginsAtDate : 0;
 				var endsAtDate = (event) ? event.model.endsAtDate : 0;
 
@@ -3753,9 +3755,9 @@ const TIMAAT = {
 				var beginsAtDate = $("#timaat-event-meta-start").val();
 				var endsAtDate = $("#timaat-event-meta-end").val();
 				if (event) {
-					event.model.name = name;
+					// event.model.name = name;
 					event.model.eventtranslations[0].name = name;
-					event.model.description = description;
+					// event.model.description = description;
 					event.model.eventtranslations[0].description = description;
 					event.model.beginsAtDate = beginsAtDate;
 					event.model.endsAtDate = endsAtDate;
@@ -4498,8 +4500,9 @@ const TIMAAT = {
 
 		updateUI() {
 			// console.log("TCL: Event -> updateUI -> updateUI()");
-			var name = this.model.name;
-			var beginsAt = new Date(this.model.beginsAtDate);
+			console.log("TCL: Event -> updateUI -> this.model.eventtranslations[0].name", this.model.eventtranslations[0].name);
+			var name = this.model.eventtranslations[0].name;
+      var beginsAt = new Date(this.model.beginsAtDate);
 			var endsAt = new Date(this.model.endsAtDate);
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-event-list-name').text(name);
