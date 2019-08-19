@@ -3045,7 +3045,7 @@ const TIMAAT = {
 				// locationID: null,
 				beginsAtDate: beginsAtDate,
 				endsAtDate: endsAtDate,
-				// eventtranslations: [],
+				eventtranslations: [],
 				name: name, // TODO change to eventTranslation
 				description: description // TODO change to eventTranslation
 			};
@@ -3104,10 +3104,10 @@ const TIMAAT = {
 			console.log("TCL: updateEvent -> event", event);
 			var updatedEvent = {
 				id: event.model.id,
-				name: event.model.name,
-				description: event.model.description,
+				name: event.model.eventtranslations[0].name,
+				description: event.model.eventtranslations[0].description,
 				beginsAtDate: event.model.beginsAtDate,
-				endsAtDate: event.model.endsAtDate
+				endsAtDate: event.model.endsAtDate,
 			};
       console.log("TCL: updateEvent -> updatedEvent:", updatedEvent);
 			jQuery.ajax({
@@ -3124,10 +3124,11 @@ const TIMAAT = {
 				// thisEvent.model = data;
 				// ev.model = data;
 				event.model.id = data.id;
-				event.model.name = data.name;
-				event.model.description = data.description;
+				event.model.eventtranslations[0].name = data.name;
+				event.model.eventtranslations[0].description = data.description;
 				event.model.beginsAtDate = data.beginsAtDate;
 				event.model.endsAtDate = data.endsAtDate;
+				event.model.eventTranslationID = data.eventtranslations[0].id;
 				console.log("TCL: updateEvent -> event.updateUI()");
 				event.updateUI(); 
 			})
@@ -3141,12 +3142,12 @@ const TIMAAT = {
       console.log("TCL: updateEventTranslation -> event", event);
 			// update event translation
 			var updatedEventTranslation = {
-				eventTranslationID: event.model.eventTranslationID,
-				name: event.model.name,
-				description: event.model.description,
+				id: event.model.eventtranslations[0].id, // TODO get the correct translationID
+				name: event.model.eventtranslations[0].name,
+				description: event.model.eventtranslations[0].description,
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+updatedEventTranslation.id+"/translation/"+updatedEventTranslation.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.model.id+"/translation/"+updatedEventTranslation.id,
 				type:"PATCH",
 				data: JSON.stringify(updatedEventTranslation),
 				contentType:"application/json; charset=utf-8",
@@ -3154,11 +3155,11 @@ const TIMAAT = {
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
-			}).done(function(data) {
-      console.log("TCL: updateEvent -> data", data);
-				event.model.eventTranslationID = data.eventTranslationID;
-				event.model.name = data.name;
-				event.model.description = data.description;
+			}).done(function(translationData) {
+      console.log("TCL: updateEvent -> translationData", translationData);
+				event.model.eventtranslations[0].id = translationData.id;
+				event.model.name = translationData.name;
+				event.model.description = translationData.description;
 				console.log("TCL: updateEvent -> event.updateUI()");
 				event.updateUI(); 
 			})
@@ -3753,15 +3754,17 @@ const TIMAAT = {
 				var endsAtDate = $("#timaat-event-meta-end").val();
 				if (event) {
 					event.model.name = name;
+					event.model.eventtranslations[0].name = name;
 					event.model.description = description;
+					event.model.eventtranslations[0].description = description;
 					event.model.beginsAtDate = beginsAtDate;
 					event.model.endsAtDate = endsAtDate;
 					// console.log("TCL: event.updateUI() - Datasets:init:function()");
 					// event.updateUI(); // shouldn't be necessary as it will be called in the updateEvent(event) function again
 					console.log("TCL: update event", event);
 					TIMAAT.Service.updateEvent(event);
-          // console.log("TCL: update event translation", event);
-					// TIMAAT.Service.updateEventTranslation(event);
+          console.log("TCL: update event translation", event);
+					TIMAAT.Service.updateEventTranslation(event);
 				} else {
 					console.log("TCL: update new event");
 					TIMAAT.Service.createEvent(name, description, beginsAtDate, endsAtDate, TIMAAT.Datasets._eventAdded);

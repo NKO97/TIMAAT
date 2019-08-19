@@ -67,7 +67,7 @@ public class EventEndpoint {
 	public Response getEventList() {
 		System.out.println("EvendEndpoint getEventList");
 		@SuppressWarnings("unchecked")
-		List<Event> eventList = TIMAATApp.emf.createEntityManager().createNamedQuery("Event.findAll").getResultList();		
+		List<Event> eventList = TIMAATApp.emf.createEntityManager().createNamedQuery("Event.findAll").getResultList();
 		// for (Event event : eventList ) {
 		// 	event.setName(event.getName());
 		// 	event.setDescription(event.getDescription());
@@ -143,6 +143,7 @@ public class EventEndpoint {
 		}
 		if ( updatedEvent == null ) return Response.notModified().build();		    	
 		// update event
+		// System.out.println("EventEndpoint updateEvent - event.id:"+event.getId());
 		if ( updatedEvent.getName() != null ) event.setName(updatedEvent.getName());
 		if ( updatedEvent.getDescription() != null ) event.setDescription(updatedEvent.getDescription());
 		// if ( updatedEvent.getName() != null ) event.getEventtranslations().get(0).setName(updatedEvent.getName());
@@ -342,8 +343,8 @@ public class EventEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("translation/{id}")
-	public Response updateEventTranslation(@PathParam("id") int id, String jsonData) {
+	@Path("{event}/translation/{id}")
+	public Response updateEventTranslation(@PathParam("event") int eventid, @PathParam("id") int id, String jsonData) {
 		System.out.println("EventEndpoint updateEventTranslation");
 		ObjectMapper mapper = new ObjectMapper();
 		Eventtranslation updatedTranslation = null;    	
