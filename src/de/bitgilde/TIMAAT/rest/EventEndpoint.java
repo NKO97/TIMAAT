@@ -31,6 +31,7 @@ import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.Eventtranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -65,7 +66,7 @@ public class EventEndpoint {
 	@Secured
 	@Path("list")
 	public Response getEventList() {
-		System.out.println("EvendEndpoint getEventList");
+		// System.out.println("EvendEndpoint getEventList");
 		@SuppressWarnings("unchecked")
 		List<Event> eventList = TIMAATApp.emf.createEntityManager().createNamedQuery("Event.findAll").getResultList();
 		// for (Event event : eventList ) {
@@ -119,7 +120,7 @@ public class EventEndpoint {
 		entityManager.refresh(newEvent);		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newEvent.getCreatedByUserAccountID(), UserLogManager.LogEvents.EVENTCREATED);
-		System.out.println("EventEndpoint: event created");
+		System.out.println("EventEndpoint: event created with id "+newEvent.getId());
 		return Response.ok().entity(newEvent).build();
 	}
 
@@ -303,13 +304,14 @@ public class EventEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{id}/translation")
-	public Response createEventTranslation(@PathParam("id") int id, String jsonData) {
-		System.out.println("EventEndpoint createEventTranslation");
+	@Path("{event}/translation/{id}")
+	public Response createEventTranslation(@PathParam("event") int eventid, @PathParam("id") int id, String jsonData) {
+		System.out.println("EventEndpoint: createEventTranslation");
 		ObjectMapper mapper = new ObjectMapper();
 		Eventtranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Event event = entityManager.find(Event.class, id);
+		Event event = entityManager.find(Event.class, eventid);
+		System.out.println("EvendEndpoint: createEventTranslation jsonData: "+jsonData);
 		if ( event == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
@@ -319,10 +321,18 @@ public class EventEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
+		// System.out.println("EventEndpoint: createEventTranslation - translation exists");
 		// sanitize object data
+		// System.out.println("newTranslation.setId(0);");
 		newTranslation.setId(0);
+		// System.out.println("newTranslation.setEvent(event);" + event);
 		newTranslation.setEvent(event); // TODO check if valid
+		Language language = entityManager.find(Language.class, 1); // TODO get proper language id
+		// System.out.println("newTranslation.setLanguage(language);" + language);
+		newTranslation.setLanguage(language);
+		// System.out.println("event.addEventtranslation(newTranslation); " + newTranslation);
 		event.addEventtranslation(newTranslation);
+		// System.out.println("so far so good? start persistence");
 		// persist eventTranslation and event
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -333,9 +343,11 @@ public class EventEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(newTranslation);
 		entityManager.refresh(event);
+		// System.out.println("persistence completed!");
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.EVENTCREATED); // TODO own log event required?
+		System.out.println("EventEndpoint: event translation created with id "+newTranslation.getId());
 		return Response.ok().entity(newTranslation).build();
 	}
 
@@ -370,6 +382,7 @@ public class EventEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.EVENTEDITED);
+		System.out.println("EventEndpoint updateEventTranslation - updated");
 		return Response.ok().entity(eventTranslation).build();
 	}
 

@@ -27,10 +27,6 @@ public class Event implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endsAtDate;
 
-	private String name;
-
-	private String description;
-
 	//bi-directional many-to-one association to UserAccount
 	// @ManyToOne
 	// @JoinColumn(name="created_by_user_account_id")
@@ -135,26 +131,6 @@ public class Event implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return this.name;
-		// return this.eventtranslations.get(0).getName(); // TODO get correct list item
-	}
-
-	public void setName(String name) {
-		this.name = name;
-		// this.eventtranslations.get(0).setName(name); // TODO get correct list item
-	}
-
-	public String getDescription() {
-		return this.description;
-		// return this.eventtranslations.get(0).getDescription(); // TODO get correct list item
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-		// this.eventtranslations.get(0).setDescription(description); // TODO get correct list item
 	}
 
 	public Date getBeginsAtDate() {
