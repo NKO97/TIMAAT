@@ -3034,9 +3034,8 @@ const TIMAAT = {
 			})
 			.fail(function(e) {
 				console.log( "error", e );
-			});	
+			});
 		},
-
 
 		createEvent(model, modelTranslation, callback) {
 			console.log("TCL: [1] createEvent -> model", model);
@@ -3082,12 +3081,7 @@ const TIMAAT = {
 		},
 
 		createEventTranslation(model, modelTranslation, callback) {
-      // console.log("TCL: createEventTranslation -> model", model);
-      // console.log("TCL: createEventTranslation -> modelTranslation", modelTranslation);
-			// var modelTranslation = model.eventtranslations;
-			// createEventTranslation(name, description, eventID) {
-			// console.log("TCL: [4] createEventTranslation -> modelTranslation, eventID: ", modelTranslation, model.id);
-			//  create Event translation
+			// create Event translation
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id+"/translation/"+modelTranslation.id,
 				type:"POST",
@@ -3099,59 +3093,13 @@ const TIMAAT = {
 				},
 			}).done(function(data) {
       	// console.log("TCL: [5] createEventTranslation .done() -> data", data);
-				// callback(new TIMAAT.Event(data));
 				model.eventtranslations[0] = data;
-				// console.log("TCL: [6] createEventTranslation -> modelTranslation.id", model.eventtranslations[0].id);
-				// return model;
-				// event.model.eventtranslations[0].name = data.eventtranslations[0].name;
-				// event.model.eventtranslations[0].description = data.eventtranslations[0].description;
 				callback(model);
 			}).fail(function(e) {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
 		},
-
-		// createEvent: async function(model) {
-		// 	console.log("TCL: [1] createEvent -> model", model);
-		// 	// create Event
-		// 	try {
-		// 		result = await jQuery.ajax({
-		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
-		// 			type:"POST",
-		// 			data: JSON.stringify(model),
-		// 			contentType:"application/json; charset=utf-8",
-		// 			dataType:"json",
-		// 			beforeSend: function (xhr) {
-		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 			},
-		// 		});
-		// 		return data;
-		// 	} catch (error) {
-		// 		console.log("error: ", error.responseText);
-		// 	}
-		// },
-
-		// createEventTranslation: async function(model, modelTranslation) {
-		// // createEventTranslation(name, description, eventID) {
-		// 	console.log("TCL: [4] createEventTranslation -> modelTranslation, eventID: ", modelTranslation, eventID);
-		// 	//  create Event translation
-		// 	try {
-		// 		result = await jQuery.ajax({
-		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id+"/translation/"+modelTranslation.id,
-		// 			type:"POST",
-		// 			data: JSON.stringify(modelTranslation),
-		// 			contentType:"application/json; charset=utf-8",
-		// 			dataType:"json",
-		// 			beforeSend: function (xhr) {
-		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 			},
-		// 		});
-		// 		return data;
-		// 	} catch (error) {
-		// 		console.log("error: ", error.responseText);
-		// 	}
-		// },
 
 		updateEvent(event) {
 			console.log("TCL: updateEvent -> event", event);
@@ -3814,27 +3762,17 @@ const TIMAAT = {
 					event.model.eventtranslations[0].description = description;
 					event.model.beginsAtDate = beginsAtDate;
 					event.model.endsAtDate = endsAtDate;
-					// console.log("TCL: event.updateUI() - Datasets:init:function()");
 					event.updateUI(); // shouldn't be necessary as it will be called in the updateEvent(event) function again
 					console.log("TCL: update event", event);
 					TIMAAT.Service.updateEvent(event);
-					// console.log("TCL: update event translation", event);
-					// event.updateUI(); 
 					TIMAAT.Service.updateEventTranslation(event);
-					// event.updateUI(); 
-				} else {
-					console.log("TCL: create new event");
+				} else { // create new event
 					var model = {
 						id: 0,
 						beginsAtDate: beginsAtDate,
 						endsAtDate: endsAtDate,
 						eventtranslations: [],
 						tags: [],
-						// eventtranslations: [{
-						// 	id: 0,
-						// 	name: name,
-						// 	description: description,
-						// }],
 					};
 					var modelTranslation = {
 						id: 0,
@@ -3842,41 +3780,6 @@ const TIMAAT = {
 						description: description,
 					};
 					TIMAAT.Service.createEvent(model, modelTranslation, TIMAAT.Datasets._eventAdded);
-					
-					/** 
-					 * Start creating Event
-					 * Before finishing creating Event: Create EventTranslation using Event.id
-					 * After EventTranslation finishes: Report back that creating Event succeeded
-					 * call _EventAdded to push complete Event information to event list
-					*/
-
-					// const myPromise = new Promise(function(resolve, reject) {
-					// // code here
-					// try {
-					// 	TIMAAT.Service.createEvent(model).then(TIMAAT.Service.createEventTranslation(model, modelTranslation))
-					// } catch (error) {
-					// 	console.log("error: ", error.responseText);
-					// });
-					
-					// 	if (model.id > 0) {
-					// 		resolve('fine')
-					// 	} else {
-					// 		reject('error')
-					// 	}
-					// });
-
-					// let promise = new Promise(
-					// 	(resolve, reject) => {
-					// 		TIMAAT.Service.createEvent(model);
-					// 	}
-					// )
-					// promise.then(TIMAAT.Service.createEventTranslation(model))
-					// 	.then(TIMAAT.Datasets._eventAdded(model));
-
-					// console.log("TCL: initEvents createEvent -> model", model);
-					// model.eventtranslations = TIMAAT.Service.createEventTranslation(modelTranslation, model.id);
-					// console.log("TCL: initEvents createEvent -> model", model);
-					// TIMAAT.Datasets._eventAdded(model);
 				}
 				modal.modal('hide');
 			});
@@ -4067,24 +3970,10 @@ const TIMAAT = {
 
 		_eventAdded: function(event) {
     	// console.log("TCL: _eventAdded: function(event)");
-    	// console.log("TCL: [6] _eventAdded: event", event);
 			TIMAAT.Datasets.events.model.push(event);
 			TIMAAT.Datasets.events.push(new TIMAAT.Event(event));
 			return event;
-      // console.log("TCL: _eventAdded successful?");			
 		},
-
-		// _eventTranslationAdded: function(eventTranslation) {
-    // 	console.log("TCL: _eventTranslationAdded: function(event)");
-		// 	console.log("TCL: _eventTranslationAdded: eventTranslation", eventTranslation);
-		// 	var translatedEvent = TIMAAT.Datasets.events.model.pop()
-    //   console.log("TCL: _eventTranslationAdded: -> translatedEvent", translatedEvent);
-		// 	translatedEvent.eventtranslations = eventTranslation;
-		// 	TIMAAT.Datasets.events.model.push(translatedEvent);
-		// 	// TIMAAT.Datasets.events.push(new TIMAAT.Event(event));			
-		// 	// TIMAAT.Datasets.events.model.eventtranslations.push(eventTranslation);
-		// 	console.log("TCL: _eventTranslationAdded successful?");	
-		// },
 
 		_eventRemoved: function(event) {
     console.log("TCL: _eventRemoved: function(event)");
@@ -4617,11 +4506,6 @@ const TIMAAT = {
 
 		updateUI() {
 			// console.log("TCL: Event -> updateUI -> updateUI()");
-			// console.log("TCL: Event -> updateUI -> this.model", this.model);
-			// console.log("TCL: Event -> updateUI -> this.model.eventtranslations[0].name", this.model.eventtranslations[0].name);
-			// var name = this.model.eventtranslations[0].name; // TODO not working with newly created events
-			// if ( this.model.id >= 0 && this.model.eventtranslations.length > 0 ) var name = this.model.eventtranslations[0].name;
-			// else var name = "[translation name not available yet]";
 			var name = this.model.eventtranslations[0].name;
 			var beginsAt = new Date(this.model.beginsAtDate);
 			var endsAt = new Date(this.model.endsAtDate);
