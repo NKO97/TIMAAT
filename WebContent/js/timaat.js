@@ -3034,25 +3034,14 @@ const TIMAAT = {
 			})
 			.fail(function(e) {
 				console.log( "error", e );
-			});
-			
+			});	
 		},
 
-		createEvent(name, description, beginsAtDate, endsAtDate, callback) {
-      console.log("TCL: createEvent -> name, description, beginsAtDate, endsAtDate, callback", name, description, beginsAtDate, endsAtDate, callback);
-			var model = { 	
-				id: 0,
-				// locationID: null,
-				beginsAtDate: beginsAtDate,
-				endsAtDate: endsAtDate,
-				eventtranslations: [],
-				//  [{
-				// 	id: 0,
-				// 	name: name,
-				// 	description: description
-				// }],
-			};
-      // console.log("TCL: createEvent -> model", model);
+
+		createEvent(model, modelTranslation, callback) {
+			console.log("TCL: [1] createEvent -> model", model);
+			var event = model;
+      console.log("TCL: [1a] createEvent -> event", event);			
 			// create Event
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
@@ -3064,54 +3053,105 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      // console.log("TCL: createEvent jQuery.ajax().done -> data: ", data);
-				// callback(new TIMAAT.Event(data));
-				// console.log("TCL: createEvent -> data.id", data.id);
-				// console.log("TCL: createEvent -> name, description, data.id: ", name, description, data.id);
-				// TIMAAT.Service.createEventTranslation(name, description, data.id);
-				// TIMAAT.Service.createEventTranslation(name, description, data.id, TIMAAT.Datasets._eventAdded);
-				callback(data);
-			})
-			.fail(function(e) {
+				// console.log("TCL: [2] createEvent done -> data", data);
+				event.id = data.id;
+        // console.log("TCL: [2a] createEvent -> event", event);
+				jQuery.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+data.id+"/translation/"+modelTranslation.id,
+					type:"POST",
+					data: JSON.stringify(modelTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+				// console.log("TCL: [3] createEventTranslation -> data", data);
+				event.eventtranslations[0] = data;
+				// console.log("TCL: [3a] createEvent -> event", event);
+				callback(event);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				})
+			}).done(function(data) {
+				// console.log("TCL: [4] createEvent -> data", data);
+				// console.log("TCL: [4a] createEvent -> event", event);
+			}).fail(function(e) {
 				console.log( "error: ", e.responseText );
 			});
-			
 		},
 
-		createEventTranslation(name, description, eventID, callback) {
-		// createEventTranslation(name, description, eventID) {
-			console.log("TCL: createEventTranslation -> name, description, eventID: ", name, description, eventID);
-			// console.log("TCL: createEventTranslation -> name, description, eventID, callback: ", name, description, eventID, callback);
+		createEventTranslation(model, modelTranslation, callback) {
+      // console.log("TCL: createEventTranslation -> model", model);
+      // console.log("TCL: createEventTranslation -> modelTranslation", modelTranslation);
+			// var modelTranslation = model.eventtranslations;
+			// createEventTranslation(name, description, eventID) {
+			// console.log("TCL: [4] createEventTranslation -> modelTranslation, eventID: ", modelTranslation, model.id);
 			//  create Event translation
-			var eventTranslationModel = {
-				id: 0,
-				// eventID: eventID, // TODO get the right event id
-				// language: 1, // TODO proper language selection
-				name: name,
-				description: description,
-			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+eventID+"/translation/"+eventTranslationModel.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id+"/translation/"+modelTranslation.id,
 				type:"POST",
-				data: JSON.stringify(eventTranslationModel),
+				data: JSON.stringify(modelTranslation),
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      console.log("TCL: createEventTranslation .done() -> data", data);
+      	// console.log("TCL: [5] createEventTranslation .done() -> data", data);
 				// callback(new TIMAAT.Event(data));
-				// event.model.eventtranslations[0].id = data.eventtranslations[0].id;
+				model.eventtranslations[0] = data;
+				// console.log("TCL: [6] createEventTranslation -> modelTranslation.id", model.eventtranslations[0].id);
+				// return model;
 				// event.model.eventtranslations[0].name = data.eventtranslations[0].name;
 				// event.model.eventtranslations[0].description = data.eventtranslations[0].description;
-				callback(data);
-			})
-			.fail(function(e) {
+				callback(model);
+			}).fail(function(e) {
 				console.log( "error", e );
 				console.log( e.responseText );
-			});		
+			});
 		},
+
+		// createEvent: async function(model) {
+		// 	console.log("TCL: [1] createEvent -> model", model);
+		// 	// create Event
+		// 	try {
+		// 		result = await jQuery.ajax({
+		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
+		// 			type:"POST",
+		// 			data: JSON.stringify(model),
+		// 			contentType:"application/json; charset=utf-8",
+		// 			dataType:"json",
+		// 			beforeSend: function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		});
+		// 		return data;
+		// 	} catch (error) {
+		// 		console.log("error: ", error.responseText);
+		// 	}
+		// },
+
+		// createEventTranslation: async function(model, modelTranslation) {
+		// // createEventTranslation(name, description, eventID) {
+		// 	console.log("TCL: [4] createEventTranslation -> modelTranslation, eventID: ", modelTranslation, eventID);
+		// 	//  create Event translation
+		// 	try {
+		// 		result = await jQuery.ajax({
+		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id+"/translation/"+modelTranslation.id,
+		// 			type:"POST",
+		// 			data: JSON.stringify(modelTranslation),
+		// 			contentType:"application/json; charset=utf-8",
+		// 			dataType:"json",
+		// 			beforeSend: function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		});
+		// 		return data;
+		// 	} catch (error) {
+		// 		console.log("error: ", error.responseText);
+		// 	}
+		// },
 
 		updateEvent(event) {
 			console.log("TCL: updateEvent -> event", event);
@@ -3206,7 +3246,7 @@ const TIMAAT = {
       console.log("TCL: removeEvent -> event", event);
 			var ev = event;
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id+"/translation/"+ev.eventTranslationModel.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id+"/translation/"+ev.model.eventtranslations[0].id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -3417,7 +3457,6 @@ const TIMAAT = {
 		
 	Datasets: {
 		events: null,
-		eventtranslations: null,
 		actors: null,
 		locations: null,
 
@@ -3768,13 +3807,15 @@ const TIMAAT = {
 				var description = $("#timaat-event-meta-description").val();
 				var beginsAtDate = $("#timaat-event-meta-start").val();
 				var endsAtDate = $("#timaat-event-meta-end").val();
+				if (!beginsAtDate ) beginsAtDate = 0; // required with type="date" input format to ensure !null
+				if (!endsAtDate ) endssAtDate = 0; // required with type="date" input format to ensure !null
 				if (event) {
 					event.model.eventtranslations[0].name = name;
 					event.model.eventtranslations[0].description = description;
 					event.model.beginsAtDate = beginsAtDate;
 					event.model.endsAtDate = endsAtDate;
 					// console.log("TCL: event.updateUI() - Datasets:init:function()");
-					// event.updateUI(); // shouldn't be necessary as it will be called in the updateEvent(event) function again
+					event.updateUI(); // shouldn't be necessary as it will be called in the updateEvent(event) function again
 					console.log("TCL: update event", event);
 					TIMAAT.Service.updateEvent(event);
 					// console.log("TCL: update event translation", event);
@@ -3783,14 +3824,59 @@ const TIMAAT = {
 					// event.updateUI(); 
 				} else {
 					console.log("TCL: create new event");
-					TIMAAT.Service.createEvent(name, description, beginsAtDate, endsAtDate, TIMAAT.Datasets._eventAdded)
-					// TIMAAT.Service.createEventTranslation(name, description, TIMAAT.Datasets._eventTranslationAdded);
-					// TIMAAT.Service.createEventTranslation(name, description, eventID, TIMAAT.Datasets._eventTranslationAdded);
-					// TIMAAT.Service.createEvent()
-					// .then(function(result) {
-					// 	return TIMAAT.Service.createEventTranslation(result)
-					// })
-					// .catch(errror => console.log(error));
+					var model = {
+						id: 0,
+						beginsAtDate: beginsAtDate,
+						endsAtDate: endsAtDate,
+						eventtranslations: [],
+						tags: [],
+						// eventtranslations: [{
+						// 	id: 0,
+						// 	name: name,
+						// 	description: description,
+						// }],
+					};
+					var modelTranslation = {
+						id: 0,
+						name: name,
+						description: description,
+					};
+					TIMAAT.Service.createEvent(model, modelTranslation, TIMAAT.Datasets._eventAdded);
+					
+					/** 
+					 * Start creating Event
+					 * Before finishing creating Event: Create EventTranslation using Event.id
+					 * After EventTranslation finishes: Report back that creating Event succeeded
+					 * call _EventAdded to push complete Event information to event list
+					*/
+
+					// const myPromise = new Promise(function(resolve, reject) {
+					// // code here
+					// try {
+					// 	TIMAAT.Service.createEvent(model).then(TIMAAT.Service.createEventTranslation(model, modelTranslation))
+					// } catch (error) {
+					// 	console.log("error: ", error.responseText);
+					// });
+					
+					// 	if (model.id > 0) {
+					// 		resolve('fine')
+					// 	} else {
+					// 		reject('error')
+					// 	}
+					// });
+
+					// let promise = new Promise(
+					// 	(resolve, reject) => {
+					// 		TIMAAT.Service.createEvent(model);
+					// 	}
+					// )
+					// promise.then(TIMAAT.Service.createEventTranslation(model))
+					// 	.then(TIMAAT.Datasets._eventAdded(model));
+
+					// console.log("TCL: initEvents createEvent -> model", model);
+					// model.eventtranslations = TIMAAT.Service.createEventTranslation(modelTranslation, model.id);
+					// console.log("TCL: initEvents createEvent -> model", model);
+					// TIMAAT.Datasets._eventAdded(model);
 				}
 				modal.modal('hide');
 			});
@@ -3958,8 +4044,8 @@ const TIMAAT = {
 		},
 		
 		setEventLists: function(events) {
-    // console.log("TCL: setEventLists: function(events)");
-    console.log("TCL: setEventLists: function(events): ", events);
+    	// console.log("TCL: setEventLists: function(events)");
+    	console.log("TCL: events: ", events);
 			if ( !events ) return;
 			$('#timaat-event-list-loader').remove();
 
@@ -3980,19 +4066,25 @@ const TIMAAT = {
 		},
 
 		_eventAdded: function(event) {
-    	console.log("TCL: _eventAdded: function(event)");
-    	console.log("TCL: event", event);
+    	// console.log("TCL: _eventAdded: function(event)");
+    	// console.log("TCL: [6] _eventAdded: event", event);
 			TIMAAT.Datasets.events.model.push(event);
 			TIMAAT.Datasets.events.push(new TIMAAT.Event(event));
-      console.log("TCL: _eventAdded successful?");			
+			return event;
+      // console.log("TCL: _eventAdded successful?");			
 		},
 
-		_eventTranslationAdded: function(eventTranslation) {
-    	console.log("TCL: _eventTranslationAdded: function(event)");
-    	console.log("TCL: eventTranslation", eventTranslation);
-			// TIMAAT.Datasets.events.model.eventtranslations.push(eventTranslation);
-			console.log("TCL: _eventTranslationAdded successful?");	
-		},
+		// _eventTranslationAdded: function(eventTranslation) {
+    // 	console.log("TCL: _eventTranslationAdded: function(event)");
+		// 	console.log("TCL: _eventTranslationAdded: eventTranslation", eventTranslation);
+		// 	var translatedEvent = TIMAAT.Datasets.events.model.pop()
+    //   console.log("TCL: _eventTranslationAdded: -> translatedEvent", translatedEvent);
+		// 	translatedEvent.eventtranslations = eventTranslation;
+		// 	TIMAAT.Datasets.events.model.push(translatedEvent);
+		// 	// TIMAAT.Datasets.events.push(new TIMAAT.Event(event));			
+		// 	// TIMAAT.Datasets.events.model.eventtranslations.push(eventTranslation);
+		// 	console.log("TCL: _eventTranslationAdded successful?");	
+		// },
 
 		_eventRemoved: function(event) {
     console.log("TCL: _eventRemoved: function(event)");
@@ -4526,11 +4618,11 @@ const TIMAAT = {
 		updateUI() {
 			// console.log("TCL: Event -> updateUI -> updateUI()");
 			// console.log("TCL: Event -> updateUI -> this.model", this.model);
-			// console.log("TCL: Event -> updateUI -> this.model.name", this.model.name);
-			// console.log("TCL: Event -> updateUI -> this.model.eventtranslations[0]", this.model.eventtranslations[0]);
+			// console.log("TCL: Event -> updateUI -> this.model.eventtranslations[0].name", this.model.eventtranslations[0].name);
 			// var name = this.model.eventtranslations[0].name; // TODO not working with newly created events
-			if ( this.model.id >= 0 && this.model.eventtranslations.length > 0 ) var name = this.model.eventtranslations[0].name;
-			else var name = "[translation name not available yet]";			
+			// if ( this.model.id >= 0 && this.model.eventtranslations.length > 0 ) var name = this.model.eventtranslations[0].name;
+			// else var name = "[translation name not available yet]";
+			var name = this.model.eventtranslations[0].name;
 			var beginsAt = new Date(this.model.beginsAtDate);
 			var endsAt = new Date(this.model.endsAtDate);
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";

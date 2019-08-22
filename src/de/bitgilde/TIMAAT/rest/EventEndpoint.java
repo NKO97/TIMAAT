@@ -85,17 +85,17 @@ public class EventEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		Event newEvent = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		System.out.println("EvendEndpoint createEvent jsonData: "+jsonData);
+		// System.out.println("EvendEndpoint: createEvent jsonData: "+jsonData);
 		// parse JSON data
 		try {
 			newEvent = mapper.readValue(jsonData, Event.class);
 		} catch (IOException e) {
-			System.out.println("EvendEndpoint createEvent: IOException e !");
+			// System.out.println("EvendEndpoint: createEvent: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newEvent == null ) {
-			System.out.println("EvendEndpoint createEvent: newEvent == null !");
+			// System.out.println("EvendEndpoint: createEvent: newEvent == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
@@ -130,7 +130,7 @@ public class EventEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateEvent(@PathParam("id") int id, String jsonData) {
-		System.out.println("EventEndpoint updateEvent");
+		// System.out.println("EventEndpoint: updateEvent");
 		ObjectMapper mapper = new ObjectMapper();
 		Event updatedEvent = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -175,7 +175,7 @@ public class EventEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteEvent(@PathParam("id") int id) {  
-		System.out.println("EventEndpoint deleteEvent");  	
+		System.out.println("EventEndpoint: deleteEvent");  	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		if ( event == null ) return Response.status(Status.NOT_FOUND).build();		
@@ -190,7 +190,7 @@ public class EventEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.EVENTDELETED);
-		System.out.println("EventEndpoint deleteEvent - event deleted");  
+		System.out.println("EventEndpoint: deleteEvent - event deleted");  
 		return Response.ok().build();
 	}
 	
@@ -276,7 +276,7 @@ public class EventEndpoint {
 	@Secured
 	@Path("all")
 	public Response getAllEvents() {
-		System.out.println("EventEndpoint getAllEvents");
+		// System.out.println("EventEndpoint: getAllEvents");
 		List<Event> events = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
@@ -357,7 +357,7 @@ public class EventEndpoint {
 	@Secured
 	@Path("{event}/translation/{id}")
 	public Response updateEventTranslation(@PathParam("event") int eventid, @PathParam("id") int id, String jsonData) {
-		System.out.println("EventEndpoint updateEventTranslation");
+		// System.out.println("EventEndpoint: updateEventTranslation");
 		ObjectMapper mapper = new ObjectMapper();
 		Eventtranslation updatedTranslation = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -382,7 +382,7 @@ public class EventEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.EVENTEDITED);
-		System.out.println("EventEndpoint updateEventTranslation - updated");
+		// System.out.println("EventEndpoint: updateEventTranslation - updated");
 		return Response.ok().entity(eventTranslation).build();
 	}
 
@@ -391,7 +391,7 @@ public class EventEndpoint {
 	@Path("translation/{id}")
 	@Secured
 	public Response deleteEventTranslation(@PathParam("id") int id) {		
-		System.out.println("EventEndpoint deleteEventTranslation");
+		System.out.println("EventEndpoint: deleteEventTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Eventtranslation eventTranslation = entityManager.find(Eventtranslation.class, id);
 		if ( eventTranslation == null ) return Response.status(Status.NOT_FOUND).build();	
