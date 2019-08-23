@@ -3191,7 +3191,7 @@ const TIMAAT = {
 		},
 
 		removeEventTranslation(event) {
-      console.log("TCL: removeEvent -> event", event);
+      console.log("TCL: removeEventTranslation -> event", event);
 			var ev = event;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id+"/translation/"+ev.model.eventtranslations[0].id,
@@ -3208,6 +3208,7 @@ const TIMAAT = {
 			});
 		},
 
+		// not needed?
 		addEventTag(event, tagname, callback) {
       console.log("TCL: addEventTag -> event.id", event.id);
       console.log("TCL: addEventTag -> event, tagname, callback", event, tagname, callback);
@@ -3229,6 +3230,7 @@ const TIMAAT = {
 			});			
 		},
 
+		// not needed?
 		removeEventTag(event, tagname, callback) {
       console.log("TCL: removeEventTag -> event.id", event.id);
       console.log("TCL: removeEventTag -> event, tagname, callback", event, tagname, callback);

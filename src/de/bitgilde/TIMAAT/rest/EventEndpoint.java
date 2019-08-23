@@ -76,6 +76,36 @@ public class EventEndpoint {
 		return Response.ok().entity(eventList).build();
 	}
 
+	@SuppressWarnings("unchecked")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("all")
+	public Response getAllEvents() {
+		// System.out.println("EventEndpoint: getAllEvents");
+		List<Event> events = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		try {
+			events = (List<Event>) entityManager.createQuery("SELECT e from Event e")
+						.getResultList();
+		} catch(Exception e) {};	
+		if ( events != null ) {
+			List<Tag> tags = null;
+				try {
+					tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Event e WHERE e.tags = t)")
+								.getResultList();
+				} catch(Exception e) {};
+			if ( tags != null ) {
+				Event emptyEvent = new Event();
+				emptyEvent.setId(-1);
+				// emptyEvent.setName("-unassigned-");
+				emptyEvent.setTags(tags);
+				events.add(0, emptyEvent);
+			}
+		}    	
+		return Response.ok().entity(events).build();
+	}
+
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -175,7 +205,7 @@ public class EventEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteEvent(@PathParam("id") int id) {  
-		System.out.println("EventEndpoint: deleteEvent");  	
+		System.out.println("EventEndpoint: deleteEvent with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		if ( event == null ) return Response.status(Status.NOT_FOUND).build();		
@@ -183,8 +213,11 @@ public class EventEndpoint {
 		entityTransaction.begin();
 		// remove all associated translations
 		for (Eventtranslation eventTranslation : event.getEventtranslations()) entityManager.remove(eventTranslation);
-		while (event.getEventtranslations().size() > 0)
+		while (event.getEventtranslations().size() > 0) {
+			// System.out.println("EventEndpoint: try to delete event translation with id: "+ event.getEventtranslations().get(0).getId());
 			event.removeEventtranslation(event.getEventtranslations().get(0));
+		}
+		// System.out.println("EventEndpoint: all event translations deleted");
 		entityManager.remove(event);
 		entityTransaction.commit();
 		// add log entry
@@ -194,112 +227,6 @@ public class EventEndpoint {
 		return Response.ok().build();
 	}
 	
-	@SuppressWarnings("unchecked")
-	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
-	@Secured
-	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Event event = entityManager.find(Event.class, id);
-		if ( event == null ) return Response.status(Status.NOT_FOUND).build();
-		// check if tag exists    	
-		Tag tag = null;
-		List<Tag> tags = null;
-		try {
-			tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE t.name=:name")
-				.setParameter("name", tagName)
-				.getResultList();
-		} catch(Exception e) {};    	
-		// find tag case sensitive
-		for ( Tag listTag : tags )
-			if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;    	
-		// create tag if it doesn't exist yet
-		if ( tag == null ) {
-			tag = new Tag();
-			tag.setName(tagName);
-			EntityTransaction entityTransaction = entityManager.getTransaction();
-			entityTransaction.begin();
-			entityManager.persist(tag);
-			entityTransaction.commit();
-			entityManager.refresh(tag);
-		}
-		// check if event already has tag
-		if ( !event.getTags().contains(tag) ) {
-				// attach tag to event and vice versa    	
-			EntityTransaction entityTransaction = entityManager.getTransaction();
-			entityTransaction.begin();
-			event.getTags().add(tag);
-			tag.getEvents().add(event);
-			entityManager.merge(tag);
-			entityManager.merge(event);
-			entityManager.persist(event);
-			entityManager.persist(tag);
-			entityTransaction.commit();
-			entityManager.refresh(event);
-		}
-		return Response.ok().entity(tag).build();
-	}
-	
-	@DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
-	@Secured
-	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Event event = entityManager.find(Event.class, id);
-    	if ( event == null ) return Response.status(Status.NOT_FOUND).build();    	
-    	// check if event already has tag
-    	Tag tag = null;
-    	for ( Tag eventTag:event.getTags() ) {
-    		if ( eventTag.getName().compareTo(tagName) == 0 ) tag = eventTag;
-    	}
-    	if ( tag != null ) {
-        	// attach tag to event and vice versa    	
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		event.getTags().remove(tag);
-    		tag.getEvents().remove(event);
-    		entityManager.merge(tag);
-    		entityManager.merge(event);
-    		entityManager.persist(event);
-    		entityManager.persist(tag);
-    		entityTransaction.commit();
-    		entityManager.refresh(event);
-    	} 	
-		return Response.ok().build();
-	}
-	
-	@SuppressWarnings("unchecked")
-	@GET
-    @Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("all")
-	public Response getAllEvents() {
-		// System.out.println("EventEndpoint: getAllEvents");
-		List<Event> events = null;    	
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		try {
-			events = (List<Event>) entityManager.createQuery("SELECT e from Event e")
-						.getResultList();
-		} catch(Exception e) {};	
-		if ( events != null ) {
-			List<Tag> tags = null;
-				try {
-					tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Event e WHERE e.tags = t)")
-								.getResultList();
-				} catch(Exception e) {};
-			if ( tags != null ) {
-				Event emptyEvent = new Event();
-				emptyEvent.setId(-1);
-				// emptyEvent.setName("-unassigned-");
-				emptyEvent.setTags(tags);
-				events.add(0, emptyEvent);
-			}
-		}    	
-		return Response.ok().entity(events).build();
-	}
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -386,11 +313,13 @@ public class EventEndpoint {
 		return Response.ok().entity(eventTranslation).build();
 	}
 
+
+	// not needed yet (should be necessary once several translations for an event exist and individual ones need to be removed)
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("translation/{id}")
+	@Path("{event}/translation/{id}")
 	@Secured
-	public Response deleteEventTranslation(@PathParam("id") int id) {		
+	public Response deleteEventTranslation(@PathParam("event") int eventid, @PathParam("id") int id) {		
 		System.out.println("EventEndpoint: deleteEventTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Eventtranslation eventTranslation = entityManager.find(Eventtranslation.class, id);
@@ -406,4 +335,81 @@ public class EventEndpoint {
 																						UserLogManager.LogEvents.EVENTDELETED);
 		return Response.ok().build();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Event event = entityManager.find(Event.class, id);
+		if ( event == null ) return Response.status(Status.NOT_FOUND).build();
+		// check if tag exists    	
+		Tag tag = null;
+		List<Tag> tags = null;
+		try {
+			tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE t.name=:name")
+				.setParameter("name", tagName)
+				.getResultList();
+		} catch(Exception e) {};    	
+		// find tag case sensitive
+		for ( Tag listTag : tags )
+			if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;    	
+		// create tag if it doesn't exist yet
+		if ( tag == null ) {
+			tag = new Tag();
+			tag.setName(tagName);
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.persist(tag);
+			entityTransaction.commit();
+			entityManager.refresh(tag);
+		}
+		// check if event already has tag
+		if ( !event.getTags().contains(tag) ) {
+				// attach tag to event and vice versa    	
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			event.getTags().add(tag);
+			tag.getEvents().add(event);
+			entityManager.merge(tag);
+			entityManager.merge(event);
+			entityManager.persist(event);
+			entityManager.persist(tag);
+			entityTransaction.commit();
+			entityManager.refresh(event);
+		}
+		return Response.ok().entity(tag).build();
+	}
+	
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/tag/{name}")
+	@Secured
+	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Event event = entityManager.find(Event.class, id);
+    	if ( event == null ) return Response.status(Status.NOT_FOUND).build();    	
+    	// check if event already has tag
+    	Tag tag = null;
+    	for ( Tag eventTag:event.getTags() ) {
+    		if ( eventTag.getName().compareTo(tagName) == 0 ) tag = eventTag;
+    	}
+    	if ( tag != null ) {
+        	// attach tag to event and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		event.getTags().remove(tag);
+    		tag.getEvents().remove(event);
+    		entityManager.merge(tag);
+    		entityManager.merge(event);
+    		entityManager.persist(event);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(event);
+    	} 	
+		return Response.ok().build();
+	}
+	
 }

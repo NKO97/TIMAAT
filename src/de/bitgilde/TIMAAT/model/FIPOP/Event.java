@@ -298,8 +298,6 @@ public class Event implements Serializable {
 
 	public Eventtranslation removeEventtranslation(Eventtranslation eventtranslation) {
 		getEventtranslations().remove(eventtranslation);
-		eventtranslation.setEvent(null);
-
 		return eventtranslation;
 	}
 
