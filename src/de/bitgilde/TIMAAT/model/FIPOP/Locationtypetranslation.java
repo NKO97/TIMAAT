@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the locationtypetranslation database table.
@@ -14,6 +16,7 @@ public class Locationtypetranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String type;
@@ -25,6 +28,7 @@ public class Locationtypetranslation implements Serializable {
 
 	//bi-directional many-to-one association to Locationtype
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="LocationTypeID")
 	private Locationtype locationtype;
 

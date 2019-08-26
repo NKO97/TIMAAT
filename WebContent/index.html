@@ -741,19 +741,6 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="timaat-location-meta-name" placeholder="Name" aria-label="Name">
           </div>
-          <!-- <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Von</span>
-            </div>
-            <input type="date" class="form-control" id="timaat-location-meta-start" aria-label="Location Start Date">
-            <div class="input-group-prepend">  
-              <span class="input-group-text">Bis</span> 
-            </div>         
-            <input type="date" class="form-control" id="timaat-location-meta-end" aria-label="Evend End Date">
-          </div>  -->
-            <!-- <div class="input-group mb-3">
-              <textarea class="form-control" aria-label="Beschreibung" id="timaat-location-meta-description" placeholder="Beschreibung eingeben"></textarea>
-            </div>   -->
         </div>  
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -794,21 +781,39 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Name</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-name" placeholder="[Name]" aria-label="Name">
           </div>
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" title="International Dialing Prefix">IDP</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-idp" placeholder="[International Dialing Prefix (e.g. 00)]" aria-label="International Dialing Prefix">
           </div>
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" title="Trunc Prefix">TP</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-tp" placeholder="[Trunk Prefix (e.g. 0)]" aria-label="Trunk Prefix">
           </div>
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" title="Country Calling Code">CCC</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-ccc" placeholder="[Country Calling Code (e.g. +49)]" aria-label="Country Calling Code">
           </div>
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" title="Time Zone">TZ</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-tz" placeholder="[Time Zone (e.g. UTC+01:00)]" aria-label="Time Zone">
           </div>
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" title="Daylight Saving Time">DST</span>
+            </div>
             <input type="text" class="form-control" id="timaat-country-meta-dst" placeholder="[Daylight Saving Time (e.g. UTC+02:00)]" aria-label="Daylight Saving Time">
           </div>
         </div>  
@@ -914,6 +919,9 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Name</span>
+              </div>
             <input type="text" class="form-control" id="timaat-event-meta-name" placeholder="Title" aria-label="Title">
           </div>
           <div class="input-group mb-3">
@@ -927,6 +935,9 @@
             <input type="date" class="form-control" id="timaat-event-meta-end" aria-label="Evend End Date">
           </div>
           <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">Beschreibung</span>
+                </div>
             <textarea class="form-control" aria-label="Beschreibung" id="timaat-event-meta-description" placeholder="Beschreibung eingeben"></textarea>
           </div>    
         </div>  

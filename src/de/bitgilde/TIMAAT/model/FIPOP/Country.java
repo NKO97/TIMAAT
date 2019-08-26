@@ -242,4 +242,24 @@ public class Country implements Serializable {
 		return province;
 	}
 
+	public List<Locationtranslation> getLocationtranslations() {
+		return this.getLocation().getLocationtranslations();
+	}
+
+	public void setLocationtranslations(List<Locationtranslation> locationtranslations) {
+		this.getLocation().setLocationtranslations(locationtranslations);
+	}
+
+	public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
+		getLocation().getLocationtranslations().add(locationtranslation);
+		// locationtranslation.setLocation(this);
+		getLocation().getLocationtranslations().get(0).setLocation(this.getLocation()); // TODO verify
+		return locationtranslation;
+	}
+
+	public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
+		getLocationtranslations().remove(locationtranslation);
+		return locationtranslation;
+	}
+
 }

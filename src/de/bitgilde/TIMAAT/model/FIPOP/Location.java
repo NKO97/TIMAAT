@@ -77,7 +77,6 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to Locationtranslation
 	@OneToMany(mappedBy="location")
-	@JsonIgnore
 	private List<Locationtranslation> locationtranslations;
 
 	//bi-directional many-to-one association to Person
@@ -111,13 +110,13 @@ public class Location implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return this.locationtranslations.get(0).getName(); // TODO get correct list item
-	}
+	// public String getName() {
+	// 	return this.locationtranslations.get(0).getName(); // TODO get correct list item
+	// }
 
-	public void setName(String name) {
-		this.locationtranslations.get(0).setName(name); // TODO get correct list item
-	}
+	// public void setName(String name) {
+	// 	this.locationtranslations.get(0).setName(name); // TODO get correct list item
+	// }
 
 	public City getCity() {
 		return this.city;
@@ -240,14 +239,12 @@ public class Location implements Serializable {
 	public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
 		getLocationtranslations().add(locationtranslation);
 		locationtranslation.setLocation(this);
-
 		return locationtranslation;
 	}
 
 	public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
 		getLocationtranslations().remove(locationtranslation);
-		locationtranslation.setLocation(null);
-
+		// locationtranslation.setLocation(null);
 		return locationtranslation;
 	}
 
