@@ -3671,30 +3671,29 @@ const TIMAAT = {
 				var locationtype = modal.data('locationtype');				
 				var heading = (locationtype) ? "Locationtype bearbeiten" : "Locationtype hinzufügen";
 				var submit = (locationtype) ? "Speichern" : "Hinzufügen";
-				var type = (locationtype) ? locationtype.model.locationtypetranslations[0].type : "";
+				var type = (locationtype) ? locationtype.model.type : "";
 
 				// setup UI
 				$('#locationtypeMetaLabel').html(heading);
 				$('#timaat-locationtype-meta-submit').html(submit);
-				$("#timaat-locationtype-meta-name").val(title).trigger('input');		
+				$("#timaat-locationtype-meta-name").val(type).trigger('input');
 			});
 			// Submit locationtype data
 			$('#timaat-locationtype-meta-submit').click(function(ev) {
 				// console.log("TCL: Create/Edit locationtype window submitted data validation");
 				var modal = $('#timaat-datasets-locationtype-meta');
 				var locationtype = modal.data('locationtype');
-				var name = $("#timaat-locationtype-meta-name").val();
-				var type = $("timaat-locationtype-meta-locationtypetype").val();
-				// var locationtypeType =$("timaat-locationtype-meta-locationtypetype").val();	
+				var type = $("#timaat-locationtype-meta-name").val();
+				// var locationtype =$("timaat-locationtype-meta-type").val();	
 				if (locationtype) {
 					locationtype.model.locationtypetranslations[0].type = type;
-					locationtype.model.locationtypeType = type;
 					locationtype.updateUI();
 					TIMAAT.Service.updateLocationtype(locationtype);
 					TIMAAT.Service.updateLocationtypeTranslation(locationtype);
 				} else { // create new locationtype
 					var model = {
 						id: 0,
+						locationtranslations: [],
 					};
 					var modelTranslation = {
 						id: 0,
@@ -3736,12 +3735,15 @@ const TIMAAT = {
 				var location = modal.data('location');				
 				var heading = (location) ? "Location bearbeiten" : "Location hinzufügen";
 				var submit = (location) ? "Speichern" : "Hinzufügen";
-				var title = (location) ? location.model.locationtranslations[0].name : "";
+				var name = (location) ? location.model.locationtranslations[0].name : ""; // name of the location
+				// var type = (location) ? location.model.locationtype.locationtypetranslations[0].type : ""; // type of the location
+				var typeId = (location) ? location.model.locationtype.id : "";
 
 				// setup UI
 				$('#locationMetaLabel').html(heading);
 				$('#timaat-location-meta-submit').html(submit);
-				$("#timaat-location-meta-name").val(title).trigger('input');		
+				$("#timaat-location-meta-name").val(name).trigger('input');
+				$("#timaat-location-meta-locationtypeid").val(typeId);
 			});
 			// Submit location data
 			$('#timaat-location-meta-submit').click(function(ev) {
@@ -3749,19 +3751,19 @@ const TIMAAT = {
 				var modal = $('#timaat-datasets-location-meta');
 				var location = modal.data('location');
 				var name = $("#timaat-location-meta-name").val();
-				var type = $("timaat-location-meta-locationtype").val();
-				// var locationType =$("timaat-location-meta-locationtype").val();	
+				var typeId = $("timaat-location-meta-locationtypeid").val();
 				if (location) {
 					location.model.locationtranslations[0].name = name;
-					location.model.locationType = type;
+					location.model.locationtype.id = typeId;
 					location.updateUI();
 					TIMAAT.Service.updateLocation(location);
 					TIMAAT.Service.updateLocationTranslation(location);
 				} else { // create new location
 					var model = {
 						id: 0,
-						locationType: type,
-						locationTypeID: 0,
+						locationtype: {
+							id: typeId,
+						},
 						locationtranslations: [],
 					};
 					var modelTranslation = {
@@ -3831,7 +3833,7 @@ const TIMAAT = {
 				var countryCallingCode = $("#timaat-country-meta-ccc").val();
 				var timeZone = $("#timaat-country-meta-tz").val();
 				var dst = $("#timaat-country-meta-dst").val();
-				// var locationType =$("timaat-country-meta-locationtype").val();
+				var locationTypeId =$("timaat-country-meta-locationtypeid").val();
 				if (country) {
 					country.model.countrytranslations[0].name = name;
 					country.model.internationalDialingPrefix = internationalDialingPrefix;
@@ -3844,12 +3846,15 @@ const TIMAAT = {
 					TIMAAT.Service.updateCountry(country);
 				} else {
 					var model = {
-						id: 0,
+						id: 0,						
 						internationalDialingPrefix: idp,
 						trunkPrefix: tp,
 						countryCallingCode: ccc,
 						timeZone: tz,
-						dst: dst,		
+						dst: dst,
+						locationtype: {
+							id: locationTypeId,
+						},
 						countrytranslations: [],
 					};
 					var modelTranslation = {
@@ -4391,7 +4396,7 @@ const TIMAAT = {
 				+ deleteLocation +
 				'<span class="timaat-location-list-name"></span>' +
 				'<br> \
-				<span class="timaat-location-list-locationtype"></span> \
+				<span class="timaat-location-list-locationtypeid"></span> \
 				<div class="timaat-location-list-count text-muted float-left"></div> \
 				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
 		 </li>'
@@ -4455,10 +4460,10 @@ const TIMAAT = {
 			// console.log("TCL: Location -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var name = this.model.locationtranslations[0].name;
-			var type = this.model.locationType;
+			var type = this.model.locationtype.locationtypetranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-location-list-name').text(name);
-			this.listView.find('.timaat-location-list-locationtype').text(type);
+			this.listView.find('.timaat-location-list-locationtypeid').html(type);
 			// tag count
 			// var count = this.model.tags.length + " Tags";
 			// if ( this.model.tags.length == 0 ) count = "keine Tags";

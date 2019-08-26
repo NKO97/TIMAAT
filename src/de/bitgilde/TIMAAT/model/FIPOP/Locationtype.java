@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -19,6 +22,7 @@ public class Locationtype implements Serializable {
 	private int id;
 
 	//bi-directional many-to-one association to Location
+	@JsonIgnore
 	@OneToMany(mappedBy="locationtype")
 	private List<Location> locations;
 

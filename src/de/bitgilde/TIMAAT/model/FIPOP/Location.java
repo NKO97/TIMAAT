@@ -40,15 +40,17 @@ public class Location implements Serializable {
 	private Timestamp last_edited_at;
 
 	//bi-directional one-to-one association to City
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private City city;
 
 	//bi-directional one-to-one association to Country
-	@OneToOne(mappedBy="location")
 	@JsonIgnore
+	@OneToOne(mappedBy="location")
 	private Country country;
 
 	//bi-directional one-to-one association to County
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private County county;
 
@@ -71,7 +73,6 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to Locationtype
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="LocationTypeID")
 	private Locationtype locationtype;
 
@@ -88,10 +89,12 @@ public class Location implements Serializable {
 	private List<Person> persons2;
 
 	//bi-directional one-to-one association to Province
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Province province;
 
 	//bi-directional one-to-one association to Street
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Street street;
 

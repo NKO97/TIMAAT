@@ -741,7 +741,22 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="timaat-location-meta-name" placeholder="Name" aria-label="Name">
           </div>
-        </div>  
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Type</span>
+            </div>
+            <select class="custom-select" id="timaat-location-meta-locationtypeid" aria-label="Location Type">
+              <option selected>Choose Location Type...</option>
+              <option value="1">Country</option>
+              <option value="2">Province</option>
+              <option value="3">County</option>
+              <option value="4">City</option>
+              <option value="5">Street</option>
+            </select>
+          </div>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
           <button type="button" class="btn btn-primary" id="timaat-location-meta-submit" disabled>Hinzufügen</button>
