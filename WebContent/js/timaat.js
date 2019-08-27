@@ -3804,7 +3804,7 @@ const TIMAAT = {
 						model: {
 							id: country.model.locationID,
 							locationtranslations: [{
-								id: country.model.id,
+								id: country.model.location.locationtranslations[0].id,
 								name: country.model.location.locationtranslations[0].name,
 							}],
 						},
@@ -3816,10 +3816,10 @@ const TIMAAT = {
         } else {
 					var model = {
 						locationID: 0,						
-						internationalDialingPrefix: idp,
-						trunkPrefix: tp,
-						countryCallingCode: ccc,
-						timeZone: tz,
+						internationalDialingPrefix: internationalDialingPrefix,
+						trunkPrefix: trunkPrefix,
+						countryCallingCode: countryCallingCode,
+						timeZone: timeZone,
 						dst: dst,
 					  location: {
 							id: 0,
@@ -3844,10 +3844,11 @@ const TIMAAT = {
 							id: 0,
 							name: name,
 					};
-					console.log("TCL: [1a] createCountry -> country", country);		
+					console.log("TCL: [1a] createCountry -> country", model);		
 					// create Location and Location translation
 					var newLocation = TIMAAT.Service.createLocation(location, locationTranslation, TIMAAT.Datasets._locationAdded);
 					model.id = newLocation.id;
+          console.log("TCL: createCountry -> model", model);
 					TIMAAT.Service.createCountry(model, TIMAAT.Datasets._countryAdded);
 				}
 				modal.modal('hide');
