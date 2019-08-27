@@ -83,7 +83,7 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
-	// @JoinColumn(name="LocationID")
+	@JoinColumn(name="LocationID")
 	private Location location;
 
 	// private int locationID;

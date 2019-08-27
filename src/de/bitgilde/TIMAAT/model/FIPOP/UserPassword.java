@@ -13,6 +13,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="user_password")
 @NamedQuery(name="UserPassword.findAll", query="SELECT u FROM UserPassword u")
 public class UserPassword implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,10 +22,12 @@ public class UserPassword implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="key_stretching_iterations")
 	private int keyStretchingIterations;
 
 	private String salt;
 
+	@Column(name="stretched_hash_encrypted")
 	private String stretchedHashEncrypted;
 
 	//bi-directional many-to-one association to UserAccount
@@ -34,7 +37,7 @@ public class UserPassword implements Serializable {
 
 	//bi-directional many-to-one association to UserPasswordHashType
 	@ManyToOne
-	@JoinColumn(name="UserPasswordHashType_ID")
+	@JoinColumn(name="user_password_hash_type_id")
 	private UserPasswordHashType userPasswordHashType;
 
 	//bi-directional many-to-one association to UserPasswordOldHashes

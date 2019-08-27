@@ -15,6 +15,7 @@ import java.util.List;
  * 
  */
 @Entity(name="UserAccount")
+@Table(name="user_account")
 @NamedQuery(name="UserAccount.findAll", query="SELECT u FROM UserAccount u")
 public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,24 +24,33 @@ public class UserAccount implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="account_name")
 	private String accountName;
 
+	@Column(name="content_access_rights")
 	private String contentAccessRights;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="created_at")
 	private Date createdAt;
 
+	@Column(name="display_name")
+	private String displayName;
+
+	@Column(name="recovery_email_encrypted")
 	private String recoveryEmailEncrypted;
 
+	@Column(name="user_settings_web_interface")
 	private String userSettingsWebInterface;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name="user_account_status")
 	private UserAccountStatus userAccountStatus;
 
 	//bi-directional many-to-one association to UserPassword
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="UserPasswordID")
+	@JoinColumn(name="user_password_id")
 	private UserPassword userPassword;
 
 	//bi-directional many-to-one association to UserLog
@@ -81,6 +91,14 @@ public class UserAccount implements Serializable {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getDisplayName() {
+		return this.displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public String getRecoveryEmailEncrypted() {

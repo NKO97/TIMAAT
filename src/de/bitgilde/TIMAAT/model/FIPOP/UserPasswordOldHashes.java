@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  */
 @Entity
-@Table(name="UserPasswordOldHashes")
+@Table(name="user_password_old_hashes")
 @NamedQuery(name="UserPasswordOldHashes.findAll", query="SELECT u FROM UserPasswordOldHashes u")
 public class UserPasswordOldHashes implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,16 +20,18 @@ public class UserPasswordOldHashes implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="key_stretching_iterations")
 	private int keyStretchingIterations;
 
 	private String salt;
 
+	@Column(name="stretched_hash_encrypted")
 	private String stretchedHashEncrypted;
 
 	//bi-directional many-to-one association to UserPassword
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name="UserPasswordID")
+	@JoinColumn(name="user_password_id")
 	private UserPassword userPassword;
 
 	public UserPasswordOldHashes() {
