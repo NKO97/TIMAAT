@@ -9,8 +9,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -126,6 +129,19 @@ public class Medium implements Serializable {
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediums")
 	private List<Tag> tags;
+
+	//bi-directional many-to-many association to Category
+		@ManyToMany
+		@JoinTable(
+			name="medium_has_category"
+			, joinColumns={
+				@JoinColumn(name="medium_id")
+				}
+			, inverseJoinColumns={
+				@JoinColumn(name="category_id")
+				}
+			)
+		private Set<Category> categories;
 
 	
 	@Transient

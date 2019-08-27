@@ -33,7 +33,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium_has_TitlePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideo</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Reference</class>		
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceEntryType</class>
@@ -50,13 +49,18 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title_has_TitleTranslationPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLog</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPassword</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHashes</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Category</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySet</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategoryPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySet</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySetPK</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>
