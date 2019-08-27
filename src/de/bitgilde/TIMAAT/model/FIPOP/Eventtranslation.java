@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the eventtranslation database table.
@@ -14,6 +16,7 @@ public class Eventtranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String description;
@@ -22,6 +25,7 @@ public class Eventtranslation implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
+	@JsonIgnore // to prevent infinite recursion ( TODO check why that happens)
 	@JoinColumn(name="EventID")
 	private Event event;
 

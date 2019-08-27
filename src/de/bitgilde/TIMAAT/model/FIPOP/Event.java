@@ -27,10 +27,6 @@ public class Event implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endsAtDate;
 
-	private String name;
-
-	private String description;
-
 	//bi-directional many-to-one association to UserAccount
 	// @ManyToOne
 	// @JoinColumn(name="created_by_user_account_id")
@@ -49,6 +45,20 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-many association to ActorHasRole
 	// @ManyToMany(mappedBy="events")
+	// private List<ActorHasRole> actorHasRoles;
+
+	// //bi-directional many-to-many association to ActorHasRole
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="event_has_actor_with_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="EventID")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="actor_has_role_ActorID", referencedColumnName="ActorID"),
+	// 		@JoinColumn(name="actor_has_role_RoleID", referencedColumnName="RoleID")
+	// 		}
+	// 	)
 	// private List<ActorHasRole> actorHasRoles;
 
 	// //bi-directional many-to-many association to Annotation
@@ -123,26 +133,6 @@ public class Event implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return this.name;
-		// return this.eventtranslations.get(id).getName();
-	}
-
-	public void setName(String name) {
-		this.name = name;
-		// this.eventtranslations.get(id).setName(name);
-	}
-
-	public String getDescription() {
-		return this.description;
-		// return this.eventtranslations.get(id).getDescription();
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-		// this.eventtranslations.get(id).setDescription(description);
-	}
-
 	public Date getBeginsAtDate() {
 		return this.beginsAtDate;
 	}
@@ -159,19 +149,35 @@ public class Event implements Serializable {
 		this.endsAtDate = endsAtDate;
 	}
 
-	public int getCreatedByUserAccountID() { // public UserAccount getCreatedByUserAccountID() {
+	// public UserAccount getCreatedByUserAccount() {
+	// 	return this.created_by_user_account;
+	// }
+
+	// public void setCreatedByUserAccount(UserAccount created_by_user_account) {
+	// 	this.created_by_user_account = created_by_user_account;
+	// }
+	
+	// public UserAccount getLastEditedByUserAccount() {
+	// 	return this.last_edited_by_user_account;
+	// }
+
+	// public void setLastEditedByUserAccount(UserAccount last_edited_by_user_account) {
+	// 	this.last_edited_by_user_account = last_edited_by_user_account;
+	// }
+
+	public int getCreatedByUserAccountID() {
 		return this.created_by_user_account_id;
 	}
 
-	public void setCreatedByUserAccountID(int created_by_user_account_id) { // public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
+	public void setCreatedByUserAccountID(int created_by_user_account_id) {
 		this.created_by_user_account_id = created_by_user_account_id;
 	}
 	
-	public int getLastEditedByUserAccountID() { // public UserAccount getLastEditedByUserAccountID() {
+	public int getLastEditedByUserAccountID() {
 		return this.last_edited_by_user_account_id;
 	}
 
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) { // public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
+	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
 		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
 	}
 
@@ -292,8 +298,6 @@ public class Event implements Serializable {
 
 	public Eventtranslation removeEventtranslation(Eventtranslation eventtranslation) {
 		getEventtranslations().remove(eventtranslation);
-		eventtranslation.setEvent(null);
-
 		return eventtranslation;
 	}
 

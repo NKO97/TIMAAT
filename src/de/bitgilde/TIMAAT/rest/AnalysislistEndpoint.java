@@ -57,13 +57,10 @@ public class AnalysislistEndpoint {
 	@Path("medium/{id}")
 	public Response createAnalysisList(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
-		MediumAnalysisList newList = null;
-
-    	
+		MediumAnalysisList newList = null;    	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	Medium m = em.find(Medium.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
-		
+    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();		
     	// parse JSON data
 		try {
 			newList = mapper.readValue(jsonData, MediumAnalysisList.class);
@@ -75,7 +72,6 @@ public class AnalysislistEndpoint {
 		// sanitize object data
 		newList.setId(0);
 		newList.setMedium(m);
-
 		// update log metadata
 		newList.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
@@ -85,8 +81,7 @@ public class AnalysislistEndpoint {
 			return Response.serverError().build();
 		}
 		newList.setAnalysisSegments(new ArrayList<AnalysisSegment>());
-		newList.setAnnotations(new ArrayList<Annotation>());
-		
+		newList.setAnnotations(new ArrayList<Annotation>());		
 		// persist analysislist and polygons
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
@@ -181,14 +176,11 @@ public class AnalysislistEndpoint {
 	@Path("{id}/segment")
 	public Response createAnalysisSegment(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
-		AnalysisSegment newSegment = null;
-
-    	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
-    	if ( mal == null ) return Response.status(Status.NOT_FOUND).build();
-		
-    	// parse JSON data
+		AnalysisSegment newSegment = null;    	
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mal = em.find(MediumAnalysisList.class, id);
+		if ( mal == null ) return Response.status(Status.NOT_FOUND).build();	
+		// parse JSON data
 		try {
 			newSegment = mapper.readValue(jsonData, AnalysisSegment.class);
 		} catch (IOException e) {
@@ -198,8 +190,7 @@ public class AnalysislistEndpoint {
 		if ( newSegment == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newSegment.setId(0);
-		mal.addAnalysisSegment(newSegment);
-		
+		mal.addAnalysisSegment(newSegment);		
 		// persist analysissegment and list
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
@@ -209,11 +200,9 @@ public class AnalysislistEndpoint {
 		em.persist(mal);
 		tx.commit();
 		em.refresh(newSegment);
-		em.refresh(mal);
-		
+		em.refresh(mal);		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTCREATED);
-		
 		return Response.ok().entity(newSegment).build();
 	}
 	

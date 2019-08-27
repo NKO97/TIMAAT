@@ -11,7 +11,9 @@
 	display: inline-block !important;
 }
 
-.playbutton, .stepbckbutton, .stepfwdbutton {
+.playbutton, 
+.stepbckbutton, 
+.stepfwdbutton {
 	cursor: pointer;
 }
 
@@ -142,7 +144,8 @@ body.timaat-login-modal-open #wrapper {
 /*	 cursor: default !important; */
 }
 
-.timaat-annotation-list-title, .timaat-annotation-segment-title {
+.timaat-annotation-list-title,
+.timaat-annotation-segment-title {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -162,29 +165,58 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-annotation-list li, #timaat-tagset-list li, #timaat-event-list li {
+#timaat-annotation-list li, 
+#timaat-tagset-list li, 
+#timaat-event-list li, 
+#timaat-location-list li,
+#timaat-country-list li,
+#timaat-actor-list li {
 	cursor: pointer;
 	font-size: 90%;
 }
-#timaat-annotation-list li:hover, #timaat-tagset-list li:hover, #timaat-event-list li:hover {
+#timaat-annotation-list li:hover, 
+#timaat-tagset-list li:hover, 
+#timaat-event-list li:hover, 
+#timaat-location-list li:hover, 
+#timaat-country-list li:hover, 
+#timaat-actor-list li:hover {
 	background-color: #e5e5e5;
 }
-.timaat-annotation-list-selected, .timaat-tagset-list-selected, .timaat-event-list-selected {
+.timaat-annotation-list-selected, 
+.timaat-tagset-list-selected, 
+.timaat-event-list-selected, 
+.timaat-location-list-selected,
+.timaat-country-list-selected,
+.timaat-ctor-list-selected {
 	background-color: #c9e2ff;
 }
-.timaat-annotation-list-selected:hover, .timaat-tagset-list-selected:hover, .timaat-event-list-selected:hover {
+.timaat-annotation-list-selected:hover,
+.timaat-tagset-list-selected:hover,
+.timaat-event-list-selected:hover,
+.timaat-location-list-selected:hover,
+.timaat-country-list-selected:hover,
+.timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
 
-.timaat-tagset-chooser, .timaat-event-chooser {
+.timaat-tagset-chooser,
+.timaat-event-chooser,
+.timaat-location-chooser,
+.timaat-country-chooser,
+.timaat-actor-chooser {
 	margin-top: 0.5em;
 }
 
-.timaat-tagset-remove, .timaat-event-remove {
+.timaat-tagset-remove,
+.timaat-event-remove,
+.timaat-location-remove,
+.timaat-country-remove,
+.timaat-actor-remove {
 	margin-right: 1em;
 }
 
-#timaat-videoplayer-annotation-add-button:disabled, #timaat-videoplayer-annotation-remove-button:disabled {
+#timaat-videoplayer-annotation-add-button:disabled,
+#timaat-videoplayer-annotation-remove-button:disabled {
 	color: #bbb;
 }
 
@@ -342,7 +374,14 @@ a.dropdown-item {
 	cursor: pointer;
 }
 
-#timaat-videoplayer-video-speed:hover,#timaat-volumeicon:hover,.stepbckbutton i:hover,.playbutton i:hover,.stepfwdbutton i:hover, .timaat-user-log i:hover, .timaat-annotation-list-tags i:hover, #timaat-medium-tags i:hover {
+#timaat-videoplayer-video-speed:hover,
+#timaat-volumeicon:hover,
+.stepbckbutton i:hover,
+.playbutton i:hover,
+.stepfwdbutton i:hover,
+.timaat-user-log i:hover,
+.timaat-annotation-list-tags i:hover,
+#timaat-medium-tags i:hover {
 	color: #17a2b8;
 }
 
