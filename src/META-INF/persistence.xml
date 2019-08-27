@@ -99,13 +99,20 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternative</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TitleTranslation_has_TitleTranslationAlternativePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLog</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPassword</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHashes</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRolePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Category</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySet</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategoryPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySet</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySetPK</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

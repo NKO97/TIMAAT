@@ -226,7 +226,7 @@ public class MediumServiceEndpoint{
              EntityTransaction tx = em.getTransaction();
              tx.begin();
              em.persist(title);
-             newMedium.setPrimaryTitle(title);
+             newMedium.setTitle(title);
              newMedium.setMediumVideo(videoInfo);
              em.persist(newMedium);
              em.flush();
