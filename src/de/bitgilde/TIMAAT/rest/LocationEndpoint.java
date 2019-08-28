@@ -105,6 +105,7 @@ public class LocationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response createLocation(@PathParam("id") int id, String jsonData) {
+		System.out.println("LocationEndpoint: createLocation");
 		ObjectMapper mapper = new ObjectMapper();
 		Location newLocation = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -145,6 +146,7 @@ public class LocationEndpoint {
 		entityManager.refresh(loctype);
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newLocation.getCreatedByUserAccountID(), UserLogManager.LogEvents.LOCATIONCREATED);
+		System.out.println("LocationEndpoint: createLocation - done");
 		return Response.ok().entity(newLocation).build();
 	}
 
