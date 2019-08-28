@@ -5,10 +5,11 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
-          <jersey2.version>2.27</jersey2.version>
+    <jersey2.version>2.27</jersey2.version>
   </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <finalName>TIMAAT</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
