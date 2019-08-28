@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -49,6 +51,7 @@ public class Country implements Serializable {
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
+	// @JsonIgnore
 	@PrimaryKeyJoinColumn(name="LocationID")
 	private Location location;
 

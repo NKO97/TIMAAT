@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import model.AudioCodecInformation;
+// import model.AudioCodecInformation;
 
 import java.sql.Time;
 import java.sql.Timestamp;

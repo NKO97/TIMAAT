@@ -105,23 +105,28 @@ public class LocationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response createLocation(@PathParam("id") int id, String jsonData) {
-		System.out.println("LocationEndpoint: createLocation");
+		System.out.println("LocationEndpoint: createLocation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Location newLocation = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Locationtype loctype = entityManager.find(Locationtype.class, id);
-		if (loctype == null) return Response.status(Status.NOT_FOUND).build();
   	// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// parse JSON data
 		try {
 			newLocation = mapper.readValue(jsonData, Location.class);
 		} catch (IOException e) {
+			System.out.println("LocationEndpoint: createLocation - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newLocation == null ) return Response.status(Status.BAD_REQUEST).build();
+		if ( newLocation == null ) {
+			System.out.println("LocationEndpoint: createLocation - newLocation == 0");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// System.out.println("LocationEndpoint: determine location tpye: " + newLocation.getLocationtype().getId());
+		// Locationtype loctype = entityManager.find(Locationtype.class, newLocation.getLocationtype().getId());
+		// if (loctype == null) return Response.status(Status.NOT_FOUND).build();
 		// sanitize object data
 		newLocation.setId(0);
-		newLocation.setLocationtype(loctype);
+		// newLocation.setLocationtype(loctype);
 		// Locationtype locationtype = entityManager.find(Locationtype.class, id);
 		// newLocation.setLocationtype(locationtype);
 		// update log metadata
@@ -139,11 +144,11 @@ public class LocationEndpoint {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newLocation);
-		entityManager.persist(loctype);
+		// entityManager.persist(loctype);
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newLocation);
-		entityManager.refresh(loctype);
+		// entityManager.refresh(loctype);
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newLocation.getCreatedByUserAccountID(), UserLogManager.LogEvents.LOCATIONCREATED);
 		System.out.println("LocationEndpoint: createLocation - done");
@@ -325,12 +330,12 @@ public class LocationEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("country/{id}")
 	@Secured
-	public Response createCountry(@PathParam("location") int locationid, @PathParam("id") int id, String jsonData) {
+	public Response createCountry(@PathParam("id") int id, String jsonData) {
+		System.out.println("LocationEndpoint: createCountry jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Country newCountry = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Location location = entityManager.find(Location.class, locationid);
-		System.out.println("LocationEndpoint: createCountry jsonData: "+jsonData);
+		// Location location = entityManager.find(Location.class, locationid);
 		// parse JSON data
 		try {
 			newCountry = mapper.readValue(jsonData, Country.class);
@@ -344,26 +349,31 @@ public class LocationEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
-		newCountry.setId(0);
-		newCountry.setLocation(location);
+		// System.out.println("LocationEndpoint: createCountry: set locationID" + locationid);
+		// newCountry.setLocationID(locationid);
+		// newCountry.setLocation(location);
 		// update log metadata
-		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-		newCountry.setCreatedAt(creationDate);
-		newCountry.setLastEditedAt(creationDate);
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newCountry.setCreatedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newCountry.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
-			return Response.serverError().build();	
-		}
+		// Not necessary, a country will always be created in conjunction with a location
+		// System.out.println("LocationEndpoint: createCountry: add creation info");
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newCountry.setCreatedAt(creationDate);
+		// newCountry.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	newCountry.setCreatedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newCountry.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error		
+		// 	return Response.serverError().build();	
+		// }
+		System.out.println("LocationEndpoint: createCountry: persist country");
 		// persist country
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newCountry);
 		entityManager.flush();
 		entityTransaction.commit();
-		entityManager.refresh(newCountry);		
+		entityManager.refresh(newCountry);
+		System.out.println("LocationEndpoint: createCountry: add log entry");	
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCountry.getCreatedByUserAccountID(), UserLogManager.LogEvents.COUNTRYCREATED);
 		System.out.println("LocationEndpoint: country created with id "+newCountry.getId());
