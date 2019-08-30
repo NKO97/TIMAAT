@@ -19,18 +19,16 @@ public class MediumRelatesToEvent implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
-	@JoinColumn(name="EventID")
 	private Event event;
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
-	@JoinColumn(name="MediumID")
 	private Medium medium;
 
-	//bi-directional many-to-one association to MediumEventRelationshiptype
+	//bi-directional many-to-one association to MediumEventRelationshipType
 	@ManyToOne
-	@JoinColumn(name="Medium_Event_RelationshipTypeID")
-	private MediumEventRelationshiptype mediumEventRelationshiptype;
+	@JoinColumn(name="medium_event_relationship_type_id")
+	private MediumEventRelationshipType mediumEventRelationshipType;
 
 	public MediumRelatesToEvent() {
 	}
@@ -59,12 +57,12 @@ public class MediumRelatesToEvent implements Serializable {
 		this.medium = medium;
 	}
 
-	public MediumEventRelationshiptype getMediumEventRelationshiptype() {
-		return this.mediumEventRelationshiptype;
+	public MediumEventRelationshipType getMediumEventRelationshipType() {
+		return this.mediumEventRelationshipType;
 	}
 
-	public void setMediumEventRelationshiptype(MediumEventRelationshiptype mediumEventRelationshiptype) {
-		this.mediumEventRelationshiptype = mediumEventRelationshiptype;
+	public void setMediumEventRelationshipType(MediumEventRelationshipType mediumEventRelationshipType) {
+		this.mediumEventRelationshipType = mediumEventRelationshipType;
 	}
 
 }

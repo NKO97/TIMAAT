@@ -2,6 +2,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,7 +32,7 @@ public class Category implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
-	private Set<Annotation> annotations;
+	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="category")
@@ -39,10 +40,14 @@ public class Category implements Serializable {
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="categories")
-	private Set<Medium> mediums;
+	private List<Medium> mediums;
 
 	public Category() {
 	}
+
+	// public Category(String name) {
+	// 	this.name = name;
+	// }
 
 	public int getId() {
 		return this.id;
@@ -60,11 +65,11 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-	public Set<Annotation> getAnnotations() {
+	public List<Annotation> getAnnotations() {
 		return this.annotations;
 	}
 
-	public void setAnnotations(Set<Annotation> annotations) {
+	public void setAnnotations(List<Annotation> annotations) {
 		this.annotations = annotations;
 	}
 
@@ -90,12 +95,19 @@ public class Category implements Serializable {
 		return categorySetHasCategory;
 	}
 
-	public Set<Medium> getMediums() {
+	public List<Medium> getMediums() {
 		return this.mediums;
 	}
 
-	public void setMediums(Set<Medium> mediums) {
+	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
+	}
+
+	// get all CategorySets this category is a member of
+	public List<CategorySet> getCategorySets() { // TODO
+		// Find all CategorySetHasCategory where Category appears
+		// list all CategorySets found that way
+		return null;
 	}
 
 }

@@ -19,18 +19,18 @@ public class EventRelatesToEvent implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
-	@JoinColumn(name="EventID")
+	@JoinColumn(name="event_id")
 	private Event event1;
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
-	@JoinColumn(name="Relates_to_EventID")
+	@JoinColumn(name="relates_to_event_id")
 	private Event event2;
 
-	//bi-directional many-to-one association to EventEventRelationshiptype
+	//bi-directional many-to-one association to EventEventRelationshipType
 	@ManyToOne
-	@JoinColumn(name="Event_Event_RelationshipTypeID")
-	private EventEventRelationshiptype eventEventRelationshiptype;
+	@JoinColumn(name="event_event_relationship_type_id")
+	private EventEventRelationshipType eventEventRelationshipType;
 
 	public EventRelatesToEvent() {
 	}
@@ -59,12 +59,12 @@ public class EventRelatesToEvent implements Serializable {
 		this.event2 = event2;
 	}
 
-	public EventEventRelationshiptype getEventEventRelationshiptype() {
-		return this.eventEventRelationshiptype;
+	public EventEventRelationshipType getEventEventRelationshipType() {
+		return this.eventEventRelationshipType;
 	}
 
-	public void setEventEventRelationshiptype(EventEventRelationshiptype eventEventRelationshiptype) {
-		this.eventEventRelationshiptype = eventEventRelationshiptype;
+	public void setEventEventRelationshipType(EventEventRelationshipType eventEventRelationshipType) {
+		this.eventEventRelationshipType = eventEventRelationshipType;
 	}
 
 }

@@ -20,35 +20,47 @@ public class Actor implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="is_fictional")
 	private byte isFictional;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="created_by_user_account_id")
-	// private UserAccount created_by_user_account_id;
-	private int created_by_user_account_id;
+	//bi-directional many-to-many association to ActorType
+	@ManyToMany(mappedBy="actors")
+	private List<ActorType> actorTypes;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="last_edited_by_user_account_id")
-	// private UserAccount last_edited_by_user_account_id;
-	private int last_edited_by_user_account_id;
+	@JoinColumn(name="created_by_user_account_id")
+	private UserAccount createdByUserAccount;
 
-	private Timestamp created_at;
+	@JoinColumn(name="last_edited_by_user_account_id")
+	private UserAccount lastEditedByUserAccount;
 
-	private Timestamp last_edited_at;
+	@Column(name="created_at")
+	private Timestamp createdAt;
 
+	@Column(name="last_edited_at")
+	private Timestamp lastEditedAt;
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
 	private List<ActorHasAddress> actorHasAddresses;
 
-	//bi-directional many-to-one association to ActorHasEmailaddress
+	//bi-directional many-to-one association to ActorHasEmailAddress
 	@OneToMany(mappedBy="actor")
-	private List<ActorHasEmailaddress> actorHasEmailaddresses;
+	private List<ActorHasEmailAddress> actorHasEmailAddresses;
+
+	//bi-directional many-to-many association to PhoneNumber
+	@ManyToMany(mappedBy="actors")
+	private List<PhoneNumber> phoneNumbers;
+
+	//bi-directional many-to-many association to Role
+	@ManyToMany(mappedBy="actors")
+	private List<Role> roles;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
 	// @OneToMany(mappedBy="actor")
 	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
+
+	//bi-directional many-to-one association to ActorName
+	@OneToMany(mappedBy="actor")
+	private List<ActorName> actorNames;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor1")
@@ -58,53 +70,29 @@ public class Actor implements Serializable {
 	@OneToMany(mappedBy="actor2")
 	private List<ActorRelatesToActor> actorRelatesToActors2;
 
-	//bi-directional many-to-one association to Actorname
-	@OneToMany(mappedBy="actor")
-	private List<Actorname> actornames;
-
-	//bi-directional many-to-many association to Actortype
-	@ManyToMany(mappedBy="actors")
-	private List<Actortype> actortypes;
-
 	//bi-directional many-to-many association to Annotation
-	// @ManyToMany(mappedBy="actors")
-	// private List<Annotation> annotations;
+	@ManyToMany(mappedBy="actors")
+	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to Collective
 	@OneToOne(mappedBy="actor")
 	private Collective collective;
 
-	//bi-directional many-to-one association to GreimasactantialmodelHasActor
+	//bi-directional many-to-one association to GreimasActantialModelHasActor
 	// @OneToMany(mappedBy="actor")
-	// private List<GreimasactantialmodelHasActor> greimasactantialmodelHasActors;
+	// private List<GreimasActantialModelHasActor> greimasActantialModelHasActors;
 
 	//bi-directional one-to-one association to Person
 	@OneToOne(mappedBy="actor")
 	private Person person;
 
-	//bi-directional many-to-many association to Phonenumber
-	@ManyToMany(mappedBy="actors")
-	private List<Phonenumber> phonenumbers;
-
-	//bi-directional many-to-many association to Role
-	// @ManyToMany(mappedBy="actors")
-	// private List<Role> roles;
-
-	//bi-directional many-to-many association to Role
-	// @ManyToMany(mappedBy="actor")
-	// private List<ActorHasRole> actorHasRoles;
-
-	//bi-directional many-to-one association to Siocuseraccount
+	//bi-directional many-to-one association to SiocUserAccount
 	// @OneToMany(mappedBy="actor")
-	// private List<Siocuseraccount> siocuseraccounts;
+	// private List<SiocUserAccount> siocUserAccounts;
 
-	//bi-directional many-to-one association to Source // TODO there should be no connection between actor and source
+	//bi-directional many-to-one association to SpatialSemanticsTypePerson
 	// @OneToMany(mappedBy="actor")
-	// private List<Source> sources;
-
-	//bi-directional many-to-one association to Spatialsemanticstypeperson
-	// @OneToMany(mappedBy="actor")
-	// private List<Spatialsemanticstypeperson> spatialsemanticstypepersons;
+	// private List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons;
 
 	public Actor() {
 	}
@@ -126,59 +114,51 @@ public class Actor implements Serializable {
 	}
 
 	public String getName() {
-		return this.actornames.get(0).getName(); // TODO get correct list item
+		return this.actorNames.get(0).getName(); // TODO get correct list item
 	}
 
 	public void setName(String name) {
-		this.actornames.get(0).setName(name); // TODO get correct list item
+		this.actorNames.get(0).setName(name); // TODO get correct list item
 	}
 
-	public int getCreatedByUserAccountID() {
-		return this.created_by_user_account_id;
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
 	}
 
-	public void setCreatedByUserAccountID(int created_by_user_account_id) {
-		this.created_by_user_account_id = created_by_user_account_id;
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
 	}
 	
-	public int getLastEditedByUserAccountID() {
-		return this.last_edited_by_user_account_id;
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
 	}
 
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
-		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
-
-	// public UserAccount getCreatedByUserAccountID() {
-	// 	return this.created_by_user_account_id;
-	// }
-
-	// public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
-	// 	this.created_by_user_account_id = created_by_user_account_id;
-	// }
-	
-	// public UserAccount getLastEditedByUserAccountID() {
-	// 	return this.last_edited_by_user_account_id;
-	// }
-
-	// public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
-	// 	this.last_edited_by_user_account_id = last_edited_by_user_account_id;
-	// }
 
 	public Timestamp getCreatedAt() {
-		return this.created_at;
+		return this.createdAt;
 	}
 
-	public void setCreatedAt(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public Timestamp getLastEditedAt() {
-		return this.last_edited_at;
+		return this.lastEditedAt;
 	}
 
-	public void setLastEditedAt(Timestamp last_edited_at) {
-		this.last_edited_at = last_edited_at;
+	public void setLastEditedAt(Timestamp lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
+	}
+
+	public List<ActorType> getActorTypes() {
+		return this.actorTypes;
+	}
+
+	public void setActorTypes(List<ActorType> actorTypes) {
+		this.actorTypes = actorTypes;
 	}
 
 	public List<ActorHasAddress> getActorHasAddresses() {
@@ -203,26 +183,42 @@ public class Actor implements Serializable {
 		return actorHasAddress;
 	}
 
-	public List<ActorHasEmailaddress> getActorHasEmailaddresses() {
-		return this.actorHasEmailaddresses;
+	public List<ActorHasEmailAddress> getActorHasEmailAddresses() {
+		return this.actorHasEmailAddresses;
 	}
 
-	public void setActorHasEmailaddresses(List<ActorHasEmailaddress> actorHasEmailaddresses) {
-		this.actorHasEmailaddresses = actorHasEmailaddresses;
+	public void setActorHasEmailAddresses(List<ActorHasEmailAddress> actorHasEmailAddresses) {
+		this.actorHasEmailAddresses = actorHasEmailAddresses;
 	}
 
-	public ActorHasEmailaddress addActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().add(actorHasEmailaddress);
-		actorHasEmailaddress.setActor(this);
+	public ActorHasEmailAddress addActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().add(actorHasEmailAddress);
+		actorHasEmailAddress.setActor(this);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
 	}
 
-	public ActorHasEmailaddress removeActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().remove(actorHasEmailaddress);
-		actorHasEmailaddress.setActor(null);
+	public ActorHasEmailAddress removeActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().remove(actorHasEmailAddress);
+		actorHasEmailAddress.setActor(null);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
+	}
+
+	public List<PhoneNumber> getPhoneNumbers() {
+		return this.phoneNumbers;
+	}
+
+	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+	public List<Role> getRoles() {
+		return this.roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
@@ -246,6 +242,28 @@ public class Actor implements Serializable {
 
 	// 	return actorIsLocatedInCountry;
 	// }
+
+	public List<ActorName> getActorNames() {
+		return this.actorNames;
+	}
+
+	public void setActorNames(List<ActorName> actorNames) {
+		this.actorNames = actorNames;
+	}
+
+	public ActorName addActorName(ActorName actorName) {
+		getActorNames().add(actorName);
+		actorName.setActor(this);
+
+		return actorName;
+	}
+
+	public ActorName removeActorName(ActorName actorName) {
+		getActorNames().remove(actorName);
+		actorName.setActor(null);
+
+		return actorName;
+	}
 
 	public List<ActorRelatesToActor> getActorRelatesToActors1() {
 		return this.actorRelatesToActors1;
@@ -291,43 +309,13 @@ public class Actor implements Serializable {
 		return actorRelatesToActors2;
 	}
 
-	public List<Actorname> getActornames() {
-		return this.actornames;
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
 	}
 
-	public void setActornames(List<Actorname> actornames) {
-		this.actornames = actornames;
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
 	}
-
-	public Actorname addActorname(Actorname actorname) {
-		getActornames().add(actorname);
-		actorname.setActor(this);
-
-		return actorname;
-	}
-
-	public Actorname removeActorname(Actorname actorname) {
-		getActornames().remove(actorname);
-		actorname.setActor(null);
-
-		return actorname;
-	}
-
-	public List<Actortype> getActortypes() {
-		return this.actortypes;
-	}
-
-	public void setActortypes(List<Actortype> actortypes) {
-		this.actortypes = actortypes;
-	}
-
-	// public List<Annotation> getAnnotations() {
-	// 	return this.annotations;
-	// }
-
-	// public void setAnnotations(List<Annotation> annotations) {
-	// 	this.annotations = annotations;
-	// }
 
 	public Collective getCollective() {
 		return this.collective;
@@ -337,26 +325,26 @@ public class Actor implements Serializable {
 		this.collective = collective;
 	}
 
-	// public List<GreimasactantialmodelHasActor> getGreimasactantialmodelHasActors() {
-	// 	return this.greimasactantialmodelHasActors;
+	// public List<GreimasActantialModelHasActor> getGreimasActantialModelHasActors() {
+	// 	return this.greimasActantialModelHasActors;
 	// }
 
-	// public void setGreimasactantialmodelHasActors(List<GreimasactantialmodelHasActor> greimasactantialmodelHasActors) {
-	// 	this.greimasactantialmodelHasActors = greimasactantialmodelHasActors;
+	// public void setGreimasActantialModelHasActors(List<GreimasActantialModelHasActor> greimasActantialModelHasActors) {
+	// 	this.greimasActantialModelHasActors = greimasActantialModelHasActors;
 	// }
 
-	// public GreimasactantialmodelHasActor addGreimasactantialmodelHasActor(GreimasactantialmodelHasActor greimasactantialmodelHasActor) {
-	// 	getGreimasactantialmodelHasActors().add(greimasactantialmodelHasActor);
-	// 	greimasactantialmodelHasActor.setActor(this);
+	// public GreimasActantialModelHasActor addGreimasActantialModelHasActor(GreimasActantialModelHasActor greimasActantialModelHasActor) {
+	// 	getGreimasActantialModelHasActors().add(greimasActantialModelHasActor);
+	// 	greimasActantialModelHasActor.setActor(this);
 
-	// 	return greimasactantialmodelHasActor;
+	// 	return greimasActantialModelHasActor;
 	// }
 
-	// public GreimasactantialmodelHasActor removeGreimasactantialmodelHasActor(GreimasactantialmodelHasActor greimasactantialmodelHasActor) {
-	// 	getGreimasactantialmodelHasActors().remove(greimasactantialmodelHasActor);
-	// 	greimasactantialmodelHasActor.setActor(null);
+	// public GreimasActantialModelHasActor removeGreimasActantialModelHasActor(GreimasActantialModelHasActor greimasActantialModelHasActor) {
+	// 	getGreimasActantialModelHasActors().remove(greimasActantialModelHasActor);
+	// 	greimasActantialModelHasActor.setActor(null);
 
-	// 	return greimasactantialmodelHasActor;
+	// 	return greimasActantialModelHasActor;
 	// }
 
 	public Person getPerson() {
@@ -367,108 +355,48 @@ public class Actor implements Serializable {
 		this.person = person;
 	}
 
-	public List<Phonenumber> getPhonenumbers() {
-		return this.phonenumbers;
-	}
-
-	public void setPhonenumbers(List<Phonenumber> phonenumbers) {
-		this.phonenumbers = phonenumbers;
-	}
-
-	// public List<Role> getRoles() {
-	// 	return this.roles;
+	// public List<SiocUserAccount> getSiocUserAccounts() {
+	// 	return this.siocUserAccounts;
 	// }
 
-	// public void setRoles(List<Role> roles) {
-	// 	this.roles = roles;
+	// public void setSiocUserAccounts(List<SiocUserAccount> siocUserAccounts) {
+	// 	this.siocUserAccounts = siocUserAccounts;
 	// }
 
-	// public List<ActorHasRole> getActorHasRoles() {
-	// 	return this.actorHasRoles;
+	// public SiocUserAccount addSiocUserAccount(SiocUserAccount siocUserAccount) {
+	// 	getSiocUserAccounts().add(siocUserAccount);
+	// 	siocUserAccount.setActor(this);
+
+	// 	return siocUserAccount;
 	// }
 
-	// public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
-	// 	this.actorHasRoles = actorHasRoles;
+	// public SiocUserAccount removeSiocUserAccount(SiocUserAccount siocUserAccount) {
+	// 	getSiocUserAccounts().remove(siocUserAccount);
+	// 	siocUserAccount.setActor(null);
+
+	// 	return siocUserAccount;
 	// }
 
-	// public ActorHasRole addActorHasRole(ActorHasRole actorHasRole) {
-	// 	getActorHasRoles().add(actorHasRole);
-	// 	actorHasRole.setActor(this);
-
-	// 	return actorHasRole;
+	// public List<SpatialSemanticsTypePerson> getSpatialSemanticsTypePersons() {
+	// 	return this.spatialSemanticsTypePersons;
 	// }
 
-	// public ActorHasRole removeActorHasRole(ActorHasRole actorHasRole) {
-	// 	getActorHasRoles().remove(actorHasRole);
-	// 	actorHasRole.setActor(null);
-
-	// 	return actorHasRole;
+	// public void setSpatialSemanticsTypePersons(List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons) {
+	// 	this.spatialSemanticsTypePersons = spatialSemanticsTypePersons;
 	// }
 
-	// public List<Siocuseraccount> getSiocuseraccounts() {
-	// 	return this.siocuseraccounts;
+	// public SpatialSemanticsTypePerson addSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
+	// 	getSpatialSemanticsTypePersons().add(spatialSemanticsTypePerson);
+	// 	spatialSemanticsTypePerson.setActor(this);
+
+	// 	return spatialSemanticsTypePerson;
 	// }
 
-	// public void setSiocuseraccounts(List<Siocuseraccount> siocuseraccounts) {
-	// 	this.siocuseraccounts = siocuseraccounts;
-	// }
+	// public SpatialSemanticsTypePerson removeSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
+	// 	getSpatialSemanticsTypePersons().remove(spatialSemanticsTypePerson);
+	// 	spatialSemanticsTypePerson.setActor(null);
 
-	// public Siocuseraccount addSiocuseraccount(Siocuseraccount siocuseraccount) {
-	// 	getSiocuseraccounts().add(siocuseraccount);
-	// 	siocuseraccount.setActor(this);
-
-	// 	return siocuseraccount;
-	// }
-
-	// public Siocuseraccount removeSiocuseraccount(Siocuseraccount siocuseraccount) {
-	// 	getSiocuseraccounts().remove(siocuseraccount);
-	// 	siocuseraccount.setActor(null);
-
-	// 	return siocuseraccount;
-	// }
-
-	// public List<Source> getSources() {
-	// 	return this.sources;
-	// }
-
-	// public void setSources(List<Source> sources) {
-	// 	this.sources = sources;
-	// }
-
-	// public Source addSource(Source source) { // TODO connection between Actor and Source?
-	// 	getSources().add(source);
-	// 	source.setActor(this);
-
-	// 	return source;
-	// }
-
-	// public Source removeSource(Source source) {
-	// 	getSources().remove(source);
-	// 	source.setActor(null);
-
-	// 	return source;
-	// }
-
-	// public List<Spatialsemanticstypeperson> getSpatialsemanticstypepersons() {
-	// 	return this.spatialsemanticstypepersons;
-	// }
-
-	// public void setSpatialsemanticstypepersons(List<Spatialsemanticstypeperson> spatialsemanticstypepersons) {
-	// 	this.spatialsemanticstypepersons = spatialsemanticstypepersons;
-	// }
-
-	// public Spatialsemanticstypeperson addSpatialsemanticstypeperson(Spatialsemanticstypeperson spatialsemanticstypeperson) {
-	// 	getSpatialsemanticstypepersons().add(spatialsemanticstypeperson);
-	// 	spatialsemanticstypeperson.setActor(this);
-
-	// 	return spatialsemanticstypeperson;
-	// }
-
-	// public Spatialsemanticstypeperson removeSpatialsemanticstypeperson(Spatialsemanticstypeperson spatialsemanticstypeperson) {
-	// 	getSpatialsemanticstypepersons().remove(spatialsemanticstypeperson);
-	// 	spatialsemanticstypeperson.setActor(null);
-
-	// 	return spatialsemanticstypeperson;
+	// 	return spatialSemanticsTypePerson;
 	// }
 
 }

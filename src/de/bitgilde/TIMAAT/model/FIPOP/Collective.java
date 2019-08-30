@@ -16,7 +16,8 @@ public class Collective implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private int actorID;
+	@Column(name="actor_id")
+	private int actorId;
 
 	@Temporal(TemporalType.DATE)
 	private Date disbanded;
@@ -26,7 +27,7 @@ public class Collective implements Serializable {
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="ActorID")
+	@PrimaryKeyJoinColumn(name="actor_id")
 	private Actor actor;
 
 	//bi-directional many-to-one association to PersonIsMemberOfCollective
@@ -36,12 +37,12 @@ public class Collective implements Serializable {
 	public Collective() {
 	}
 
-	public int getActorID() {
-		return this.actorID;
+	public int getActorId() {
+		return this.actorId;
 	}
 
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
+	public void setActorId(int actorId) {
+		this.actorId = actorId;
 	}
 
 	public Date getDisbanded() {

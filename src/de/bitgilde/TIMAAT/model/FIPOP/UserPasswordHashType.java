@@ -9,12 +9,12 @@ import java.util.List;
 
 
 /**
- * The persistent class for the UserPasswordHashType database table.
+ * The persistent class for the user_password_hash_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="UserPasswordHashType.findAll", query="SELECT u FROM UserPasswordHashType u")
 @Table(name="user_password_hash_type")
+@NamedQuery(name="UserPasswordHashType.findAll", query="SELECT u FROM UserPasswordHashType u")
 public class UserPasswordHashType implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,6 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 
@@ -28,25 +31,23 @@ public class CategorySet implements Serializable {
 
 	private String name;
 
-	/*
 	//bi-directional many-to-one association to AnalysisSpeech
-	@OneToMany(mappedBy="categorySet")
-	private Set<AnalysisSpeech> analysisSpeeches;
+	// @OneToMany(mappedBy="categorySet")
+	// private List<AnalysisSpeech> analysisSpeeches;
 
 	//bi-directional many-to-one association to AnalysisVoice
-	@OneToMany(mappedBy="categorySet")
-	private Set<AnalysisVoice> analysisVoices;
-	 */
-	
-	//bi-directional many-to-one association to UserAccount
-	@ManyToOne
-	@JoinColumn(name="last_edited_by_user_account_id")
-	private UserAccount userAccount1;
+	// @OneToMany(mappedBy="categorySet")
+	// private List<AnalysisVoice> analysisVoices;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	private UserAccount userAccount2;
+	private UserAccount createdByUserAccount;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="last_edited_by_user_account_id")
+	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="categorySet")
@@ -54,7 +55,9 @@ public class CategorySet implements Serializable {
 
 	//bi-directional many-to-one association to UserAccountHasCategorySet
 	@OneToMany(mappedBy="categorySet")
-	private Set<UserAccountHasCategorySet> userAccountHasCategorySets;
+	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
+
+	private List<CategorySetHasCategory> categories = new ArrayList<>();
 
 	public CategorySet() {
 	}
@@ -90,69 +93,65 @@ public class CategorySet implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	/*
 
-	public Set<AnalysisSpeech> getAnalysisSpeeches() {
-		return this.analysisSpeeches;
+	// public List<AnalysisSpeech> getAnalysisSpeeches() {
+	// 	return this.analysisSpeeches;
+	// }
+
+	// public void setAnalysisSpeeches(List<AnalysisSpeech> analysisSpeeches) {
+	// 	this.analysisSpeeches = analysisSpeeches;
+	// }
+
+	// public AnalysisSpeech addAnalysisSpeech(AnalysisSpeech analysisSpeech) {
+	// 	getAnalysisSpeeches().add(analysisSpeech);
+	// 	analysisSpeech.setCategorySet(this);
+
+	// 	return analysisSpeech;
+	// }
+
+	// public AnalysisSpeech removeAnalysisSpeech(AnalysisSpeech analysisSpeech) {
+	// 	getAnalysisSpeeches().remove(analysisSpeech);
+	// 	analysisSpeech.setCategorySet(null);
+
+	// 	return analysisSpeech;
+	// }
+
+	// public List<AnalysisVoice> getAnalysisVoices() {
+	// 	return this.analysisVoices;
+	// }
+
+	// public void setAnalysisVoices(List<AnalysisVoice> analysisVoices) {
+	// 	this.analysisVoices = analysisVoices;
+	// }
+
+	// public AnalysisVoice addAnalysisVoice(AnalysisVoice analysisVoice) {
+	// 	getAnalysisVoices().add(analysisVoice);
+	// 	analysisVoice.setCategorySet(this);
+
+	// 	return analysisVoice;
+	// }
+
+	// public AnalysisVoice removeAnalysisVoice(AnalysisVoice analysisVoice) {
+	// 	getAnalysisVoices().remove(analysisVoice);
+	// 	analysisVoice.setCategorySet(null);
+
+	// 	return analysisVoice;
+	// }
+
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
 	}
 
-	public void setAnalysisSpeeches(Set<AnalysisSpeech> analysisSpeeches) {
-		this.analysisSpeeches = analysisSpeeches;
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
 	}
 
-	public AnalysisSpeech addAnalysisSpeech(AnalysisSpeech analysisSpeech) {
-		getAnalysisSpeeches().add(analysisSpeech);
-		analysisSpeech.setCategorySet(this);
-
-		return analysisSpeech;
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
 	}
 
-	public AnalysisSpeech removeAnalysisSpeech(AnalysisSpeech analysisSpeech) {
-		getAnalysisSpeeches().remove(analysisSpeech);
-		analysisSpeech.setCategorySet(null);
-
-		return analysisSpeech;
-	}
-
-	public Set<AnalysisVoice> getAnalysisVoices() {
-		return this.analysisVoices;
-	}
-
-	public void setAnalysisVoices(Set<AnalysisVoice> analysisVoices) {
-		this.analysisVoices = analysisVoices;
-	}
-
-	public AnalysisVoice addAnalysisVoice(AnalysisVoice analysisVoice) {
-		getAnalysisVoices().add(analysisVoice);
-		analysisVoice.setCategorySet(this);
-
-		return analysisVoice;
-	}
-
-	public AnalysisVoice removeAnalysisVoice(AnalysisVoice analysisVoice) {
-		getAnalysisVoices().remove(analysisVoice);
-		analysisVoice.setCategorySet(null);
-
-		return analysisVoice;
-	}
-
-	 */
-
-	public UserAccount getUserAccount1() {
-		return this.userAccount1;
-	}
-
-	public void setUserAccount1(UserAccount userAccount1) {
-		this.userAccount1 = userAccount1;
-	}
-
-	public UserAccount getUserAccount2() {
-		return this.userAccount2;
-	}
-
-	public void setUserAccount2(UserAccount userAccount2) {
-		this.userAccount2 = userAccount2;
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
 
 	public Set<CategorySetHasCategory> getCategorySetHasCategories() {
@@ -177,11 +176,11 @@ public class CategorySet implements Serializable {
 		return categorySetHasCategory;
 	}
 
-	public Set<UserAccountHasCategorySet> getUserAccountHasCategorySets() {
+	public List<UserAccountHasCategorySet> getUserAccountHasCategorySets() {
 		return this.userAccountHasCategorySets;
 	}
 
-	public void setUserAccountHasCategorySets(Set<UserAccountHasCategorySet> userAccountHasCategorySets) {
+	public void setUserAccountHasCategorySets(List<UserAccountHasCategorySet> userAccountHasCategorySets) {
 		this.userAccountHasCategorySets = userAccountHasCategorySets;
 	}
 
@@ -198,5 +197,29 @@ public class CategorySet implements Serializable {
 
 		return userAccountHasCategorySet;
 	}
+
+	public void addCategories(List<Category> categories) {
+
+	}
+
+	public void addCategory(Category category) {
+		CategorySetHasCategory categorySetHasCategory = new CategorySetHasCategory(this, category);
+		categories.add(categorySetHasCategory);
+		// category.getCategorySets().add(categorySetHasCategory);
+	}
+
+	// public void removeCategory(Category category) {
+	// 	for (Iterator<CategorySetHasCategory> iterator = categories.iterator();
+	// 		iterator.hasNext(); ) {
+	// 			CategorySetHasCategory categorySetHasCategory = iterator.next();
+	// 			if (categorySetHasCategory.getCategorySet().equals(this) &&
+	// 				categorySetHasCategory.getCategory().equals(category)) {
+	// 					iterator.remove();
+	// 					categorySetHasCategory.getCategory().getCategorySets().remove(categorySetHasCategory);
+	// 					categorySetHasCategory.setCategorySet(null);
+	// 					categorySetHasCategory.setCategory(null);						
+	// 				}
+	// 		}
+	// }
 
 }

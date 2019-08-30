@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the Reference database table.
+ * The persistent class for the reference database table.
  * 
  */
 @Entity
@@ -212,12 +212,12 @@ public class Reference implements Serializable {
 	//bi-directional many-to-many association to Bibliography
 	@ManyToMany
 	@JoinTable(
-		name="Bibliography_has_Reference"
+		name="bibliography_has_reference"
 		, joinColumns={
-			@JoinColumn(name="ReferenceID")
+			@JoinColumn(name="reference_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="BibliographyID")
+			@JoinColumn(name="bibliography_id")
 			}
 		)
 	private List<Bibliography> bibliographies;
@@ -228,7 +228,7 @@ public class Reference implements Serializable {
 
 	//bi-directional many-to-one association to ReferenceEntryType
 	@ManyToOne
-	@JoinColumn(name="ReferenceTypeID")
+	@JoinColumn(name="reference_entry_type_id")
 	private ReferenceEntryType referenceEntryType;
 
 	//bi-directional many-to-one association to ReferenceDataFieldRequirement

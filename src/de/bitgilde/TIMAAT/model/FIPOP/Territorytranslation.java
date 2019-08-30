@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the territorytranslation database table.
+ * The persistent class for the territory_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Territorytranslation.findAll", query="SELECT t FROM Territorytranslation t")
-public class Territorytranslation implements Serializable {
+@Table(name="territory_translation")
+@NamedQuery(name="TerritoryTranslation.findAll", query="SELECT t FROM TerritoryTranslation t")
+public class TerritoryTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,13 @@ public class Territorytranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
 	//bi-directional many-to-one association to Territory
 	@ManyToOne
-	@JoinColumn(name="TerritoryID")
 	private Territory territory;
 
-	public Territorytranslation() {
+	public TerritoryTranslation() {
 	}
 
 	public int getId() {

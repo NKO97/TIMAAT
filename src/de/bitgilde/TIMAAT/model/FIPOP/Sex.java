@@ -21,9 +21,9 @@ public class Sex implements Serializable {
 	@OneToMany(mappedBy="sex")
 	private List<Person> persons;
 
-	//bi-directional many-to-one association to Sextranslation
+	//bi-directional many-to-one association to SexTranslation
 	@OneToMany(mappedBy="sex")
-	private List<Sextranslation> sextranslations;
+	private List<SexTranslation> sexTranslations;
 
 	public Sex() {
 	}
@@ -58,26 +58,26 @@ public class Sex implements Serializable {
 		return person;
 	}
 
-	public List<Sextranslation> getSextranslations() {
-		return this.sextranslations;
+	public List<SexTranslation> getSexTranslations() {
+		return this.sexTranslations;
 	}
 
-	public void setSextranslations(List<Sextranslation> sextranslations) {
-		this.sextranslations = sextranslations;
+	public void setSexTranslations(List<SexTranslation> sexTranslations) {
+		this.sexTranslations = sexTranslations;
 	}
 
-	public Sextranslation addSextranslation(Sextranslation sextranslation) {
-		getSextranslations().add(sextranslation);
-		sextranslation.setSex(this);
+	public SexTranslation addSexTranslation(SexTranslation sexTranslation) {
+		getSexTranslations().add(sexTranslation);
+		sexTranslation.setSex(this);
 
-		return sextranslation;
+		return sexTranslation;
 	}
 
-	public Sextranslation removeSextranslation(Sextranslation sextranslation) {
-		getSextranslations().remove(sextranslation);
-		sextranslation.setSex(null);
+	public SexTranslation removeSexTranslation(SexTranslation sexTranslation) {
+		getSexTranslations().remove(sexTranslation);
+		sexTranslation.setSex(null);
 
-		return sextranslation;
+		return sexTranslation;
 	}
 
 }

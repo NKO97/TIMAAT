@@ -91,15 +91,15 @@ public class CountryEndpoint {
 		// sanitize object data
 		newCountry.setId(0);
 		// update log metadata
-		newCountry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-		newCountry.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newCountry.setCreatedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newCountry.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
-			return Response.serverError().build();	
-		}
+		// newCountry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		// newCountry.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	newCountry.setCreatedByUserAccount((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newCountry.setLastEditedByUserAccount((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error		
+		// 	return Response.serverError().build();	
+		// }
 		// persist country
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -108,7 +108,7 @@ public class CountryEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(newCountry);		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newCountry.getCreatedByUserAccountID(), UserLogManager.LogEvents.COUNTRYCREATED);
+		UserLogManager.getLogger().addLogEntry(newCountry.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COUNTRYCREATED);
 		return Response.ok().entity(newCountry).build();
 	}
 
@@ -130,12 +130,12 @@ public class CountryEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedCountry == null ) return Response.notModified().build();		    	
-    	// update country
+    // update country
 		if ( updatedCountry.getName() != null ) country.setName(updatedCountry.getName());
 		// update log metadata
-		country.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		country.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			country.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			country.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		

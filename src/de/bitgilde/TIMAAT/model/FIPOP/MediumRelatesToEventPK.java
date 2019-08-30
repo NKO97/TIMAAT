@@ -1,4 +1,5 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -11,34 +12,34 @@ public class MediumRelatesToEventPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int mediumID;
+	@Column(name="medium_id", insertable=false, updatable=false)
+	private int mediumId;
 
-	@Column(insertable=false, updatable=false)
-	private int eventID;
+	@Column(name="event_id", insertable=false, updatable=false)
+	private int eventId;
 
-	@Column(insertable=false, updatable=false)
-	private int medium_Event_RelationshipTypeID;
+	@Column(name="medium_event_relationship_type_id", insertable=false, updatable=false)
+	private int mediumEventRelationshipTypeId;
 
 	public MediumRelatesToEventPK() {
 	}
-	public int getMediumID() {
-		return this.mediumID;
+	public int getMediumId() {
+		return this.mediumId;
 	}
-	public void setMediumID(int mediumID) {
-		this.mediumID = mediumID;
+	public void setMediumId(int mediumId) {
+		this.mediumId = mediumId;
 	}
-	public int getEventID() {
-		return this.eventID;
+	public int getEventId() {
+		return this.eventId;
 	}
-	public void setEventID(int eventID) {
-		this.eventID = eventID;
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
 	}
-	public int getMedium_Event_RelationshipTypeID() {
-		return this.medium_Event_RelationshipTypeID;
+	public int getMediumEventRelationshipTypeId() {
+		return this.mediumEventRelationshipTypeId;
 	}
-	public void setMedium_Event_RelationshipTypeID(int medium_Event_RelationshipTypeID) {
-		this.medium_Event_RelationshipTypeID = medium_Event_RelationshipTypeID;
+	public void setMediumEventRelationshipTypeId(int mediumEventRelationshipTypeId) {
+		this.mediumEventRelationshipTypeId = mediumEventRelationshipTypeId;
 	}
 
 	public boolean equals(Object other) {
@@ -50,17 +51,17 @@ public class MediumRelatesToEventPK implements Serializable {
 		}
 		MediumRelatesToEventPK castOther = (MediumRelatesToEventPK)other;
 		return 
-			(this.mediumID == castOther.mediumID)
-			&& (this.eventID == castOther.eventID)
-			&& (this.medium_Event_RelationshipTypeID == castOther.medium_Event_RelationshipTypeID);
+			(this.mediumId == castOther.mediumId)
+			&& (this.eventId == castOther.eventId)
+			&& (this.mediumEventRelationshipTypeId == castOther.mediumEventRelationshipTypeId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.mediumID;
-		hash = hash * prime + this.eventID;
-		hash = hash * prime + this.medium_Event_RelationshipTypeID;
+		hash = hash * prime + this.mediumId;
+		hash = hash * prime + this.eventId;
+		hash = hash * prime + this.mediumEventRelationshipTypeId;
 		
 		return hash;
 	}

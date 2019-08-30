@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the roletranslation database table.
+ * The persistent class for the role_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Roletranslation.findAll", query="SELECT r FROM Roletranslation r")
-public class Roletranslation implements Serializable {
+@Table(name="role_translation")
+@NamedQuery(name="RoleTranslation.findAll", query="SELECT r FROM RoleTranslation r")
+public class RoleTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,13 @@ public class Roletranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne
-	@JoinColumn(name="RoleID")
 	private Role role;
 
-	public Roletranslation() {
+	public RoleTranslation() {
 	}
 
 	public int getId() {

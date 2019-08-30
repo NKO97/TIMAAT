@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actornameparttypetranslation database table.
+ * The persistent class for the actor_name_part_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actornameparttypetranslation.findAll", query="SELECT a FROM Actornameparttypetranslation a")
-public class Actornameparttypetranslation implements Serializable {
+@Table(name="actor_name_part_type_translation")
+@NamedQuery(name="ActorNamePartTypeTranslation.findAll", query="SELECT a FROM ActorNamePartTypeTranslation a")
+public class ActorNamePartTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Actornameparttypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Actornameparttype
+	//bi-directional many-to-one association to ActorNamePartType
 	@ManyToOne
-	@JoinColumn(name="ActorNamePartTypeID")
-	private Actornameparttype actornameparttype;
+	@JoinColumn(name="actor_name_part_type_id")
+	private ActorNamePartType actorNamePartType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Actornameparttypetranslation() {
+	public ActorNamePartTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +47,12 @@ public class Actornameparttypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Actornameparttype getActornameparttype() {
-		return this.actornameparttype;
+	public ActorNamePartType getActorNamePartType() {
+		return this.actorNamePartType;
 	}
 
-	public void setActornameparttype(Actornameparttype actornameparttype) {
-		this.actornameparttype = actornameparttype;
+	public void setActorNamePartType(ActorNamePartType actorNamePartType) {
+		this.actorNamePartType = actorNamePartType;
 	}
 
 	public Language getLanguage() {

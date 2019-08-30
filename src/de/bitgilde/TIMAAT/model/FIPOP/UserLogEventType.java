@@ -9,10 +9,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the UserLogEventType database table.
+ * The persistent class for the user_log_event_type database table.
  * 
  */
 @Entity
+@Table(name="user_log_event_type")
 @NamedQuery(name="UserLogEventType.findAll", query="SELECT u FROM UserLogEventType u")
 public class UserLogEventType implements Serializable {
 	private static final long serialVersionUID = 1L;

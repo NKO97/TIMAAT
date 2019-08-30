@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the locationtypetranslation database table.
+ * The persistent class for the location_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Locationtypetranslation.findAll", query="SELECT l FROM Locationtypetranslation l")
-public class Locationtypetranslation implements Serializable {
+@Table(name="location_type_translation")
+@NamedQuery(name="LocationTypeTranslation.findAll", query="SELECT l FROM LocationTypeTranslation l")
+public class LocationTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,14 @@ public class Locationtypetranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	//bi-directional many-to-one association to Locationtype
+	//bi-directional many-to-one association to LocationType
 	@ManyToOne
-	@JoinColumn(name="LocationTypeID")
-	private Locationtype locationtype;
+	@JoinColumn(name="location_type_id")
+	private LocationType locationType;
 
-	public Locationtypetranslation() {
+	public LocationTypeTranslation() {
 	}
 
 	public int getId() {
@@ -55,12 +55,12 @@ public class Locationtypetranslation implements Serializable {
 		this.language = language;
 	}
 
-	public Locationtype getLocationtype() {
-		return this.locationtype;
+	public LocationType getLocationType() {
+		return this.locationType;
 	}
 
-	public void setLocationtype(Locationtype locationtype) {
-		this.locationtype = locationtype;
+	public void setLocationType(LocationType locationType) {
+		this.locationType = locationType;
 	}
 
 }

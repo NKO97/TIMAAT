@@ -42,6 +42,12 @@ public class CategorySetHasCategory implements Serializable {
 	public CategorySetHasCategory() {
 	}
 
+	public CategorySetHasCategory(CategorySet categorySet, Category category) {
+		this.categorySet = categorySet;
+		this.category = category;
+		this.id = new CategorySetHasCategoryPK(categorySet.getId(), category.getId());
+	}
+
 	public CategorySetHasCategoryPK getId() {
 		return this.id;
 	}

@@ -12,25 +12,25 @@ public class PersonIsMemberOfCollectivePK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int person_ActorID;
+	@Column(name="person_actor_id", insertable=false, updatable=false)
+	private int personActorId;
 
-	@Column(insertable=false, updatable=false)
-	private int memberOf_Collective_ActorID;
+	@Column(name="member_of_collective_actor_id", insertable=false, updatable=false)
+	private int memberOfCollectiveActorId;
 
 	public PersonIsMemberOfCollectivePK() {
 	}
-	public int getPerson_ActorID() {
-		return this.person_ActorID;
+	public int getPersonActorId() {
+		return this.personActorId;
 	}
-	public void setPerson_ActorID(int person_ActorID) {
-		this.person_ActorID = person_ActorID;
+	public void setPersonActorId(int personActorId) {
+		this.personActorId = personActorId;
 	}
-	public int getMemberOf_Collective_ActorID() {
-		return this.memberOf_Collective_ActorID;
+	public int getMemberOfCollectiveActorId() {
+		return this.memberOfCollectiveActorId;
 	}
-	public void setMemberOf_Collective_ActorID(int memberOf_Collective_ActorID) {
-		this.memberOf_Collective_ActorID = memberOf_Collective_ActorID;
+	public void setMemberOfCollectiveActorId(int memberOfCollectiveActorId) {
+		this.memberOfCollectiveActorId = memberOfCollectiveActorId;
 	}
 
 	public boolean equals(Object other) {
@@ -42,15 +42,15 @@ public class PersonIsMemberOfCollectivePK implements Serializable {
 		}
 		PersonIsMemberOfCollectivePK castOther = (PersonIsMemberOfCollectivePK)other;
 		return 
-			(this.person_ActorID == castOther.person_ActorID)
-			&& (this.memberOf_Collective_ActorID == castOther.memberOf_Collective_ActorID);
+			(this.personActorId == castOther.personActorId)
+			&& (this.memberOfCollectiveActorId == castOther.memberOfCollectiveActorId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.person_ActorID;
-		hash = hash * prime + this.memberOf_Collective_ActorID;
+		hash = hash * prime + this.personActorId;
+		hash = hash * prime + this.memberOfCollectiveActorId;
 		
 		return hash;
 	}

@@ -6,35 +6,36 @@ import java.util.List;
 
 
 /**
- * The persistent class for the eventdomain database table.
+ * The persistent class for the event_domain database table.
  * 
  */
 @Entity
-@NamedQuery(name="Eventdomain.findAll", query="SELECT e FROM Eventdomain e")
-public class Eventdomain implements Serializable {
+@Table(name="event_domain")
+@NamedQuery(name="EventDomain.findAll", query="SELECT e FROM EventDomain e")
+public class EventDomain implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
+	//bi-directional many-to-one association to EventDomainTranslation
+	@OneToMany(mappedBy="eventDomain")
+	private List<EventDomainTranslation> eventDomainTranslations;
+
 	//bi-directional many-to-many association to Event
 	@ManyToMany
 	@JoinTable(
-		name="event_has_eventdomain"
+		name="event_has_event_domain"
 		, joinColumns={
-			@JoinColumn(name="EventDomainID")
+			@JoinColumn(name="event_domain_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="EventID")
+			@JoinColumn(name="event_id")
 			}
 		)
 	private List<Event> events;
 
-	//bi-directional many-to-one association to EventdomainTranslation
-	@OneToMany(mappedBy="eventdomain")
-	private List<EventdomainTranslation> eventdomainTranslations;
-
-	public Eventdomain() {
+	public EventDomain() {
 	}
 
 	public int getId() {
@@ -45,34 +46,34 @@ public class Eventdomain implements Serializable {
 		this.id = id;
 	}
 
+	public List<EventDomainTranslation> getEventDomainTranslations() {
+		return this.eventDomainTranslations;
+	}
+
+	public void setEventDomainTranslations(List<EventDomainTranslation> eventDomainTranslations) {
+		this.eventDomainTranslations = eventDomainTranslations;
+	}
+
+	public EventDomainTranslation addEventDomainTranslation(EventDomainTranslation eventDomainTranslation) {
+		getEventDomainTranslations().add(eventDomainTranslation);
+		eventDomainTranslation.setEventDomain(this);
+
+		return eventDomainTranslation;
+	}
+
+	public EventDomainTranslation removeEventDomainTranslation(EventDomainTranslation eventDomainTranslation) {
+		getEventDomainTranslations().remove(eventDomainTranslation);
+		// eventDomainTranslation.setEventDomain(null);
+
+		return eventDomainTranslation;
+	}
+
 	public List<Event> getEvents() {
 		return this.events;
 	}
 
 	public void setEvents(List<Event> events) {
 		this.events = events;
-	}
-
-	public List<EventdomainTranslation> getEventdomainTranslations() {
-		return this.eventdomainTranslations;
-	}
-
-	public void setEventdomainTranslations(List<EventdomainTranslation> eventdomainTranslations) {
-		this.eventdomainTranslations = eventdomainTranslations;
-	}
-
-	public EventdomainTranslation addEventdomainTranslation(EventdomainTranslation eventdomainTranslation) {
-		getEventdomainTranslations().add(eventdomainTranslation);
-		eventdomainTranslation.setEventdomain(this);
-
-		return eventdomainTranslation;
-	}
-
-	public EventdomainTranslation removeEventdomainTranslation(EventdomainTranslation eventdomainTranslation) {
-		getEventdomainTranslations().remove(eventdomainTranslation);
-		eventdomainTranslation.setEventdomain(null);
-
-		return eventdomainTranslation;
 	}
 
 }

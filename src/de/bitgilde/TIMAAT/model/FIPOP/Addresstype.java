@@ -6,26 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the addresstype database table.
+ * The persistent class for the address_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Addresstype.findAll", query="SELECT a FROM Addresstype a")
-public class Addresstype implements Serializable {
+@Table(name="address_type")
+@NamedQuery(name="AddressType.findAll", query="SELECT a FROM AddressType a")
+public class AddressType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
 	//bi-directional many-to-one association to ActorHasAddress
-	@OneToMany(mappedBy="addresstype")
+	@OneToMany(mappedBy="addressType")
 	private List<ActorHasAddress> actorHasAddresses;
 
-	//bi-directional many-to-one association to Addresstypetranslation
-	@OneToMany(mappedBy="addresstype")
-	private List<Addresstypetranslation> addresstypetranslations;
+	//bi-directional many-to-one association to AddressTypeTranslation
+	@OneToMany(mappedBy="addressType")
+	private List<AddressTypeTranslation> addressTypeTranslations;
 
-	public Addresstype() {
+	public AddressType() {
 	}
 
 	public int getId() {
@@ -46,38 +47,38 @@ public class Addresstype implements Serializable {
 
 	public ActorHasAddress addActorHasAddress(ActorHasAddress actorHasAddress) {
 		getActorHasAddresses().add(actorHasAddress);
-		actorHasAddress.setAddresstype(this);
+		actorHasAddress.setAddressType(this);
 
 		return actorHasAddress;
 	}
 
 	public ActorHasAddress removeActorHasAddress(ActorHasAddress actorHasAddress) {
 		getActorHasAddresses().remove(actorHasAddress);
-		actorHasAddress.setAddresstype(null);
+		actorHasAddress.setAddressType(null);
 
 		return actorHasAddress;
 	}
 
-	public List<Addresstypetranslation> getAddresstypetranslations() {
-		return this.addresstypetranslations;
+	public List<AddressTypeTranslation> getAddressTypeTranslations() {
+		return this.addressTypeTranslations;
 	}
 
-	public void setAddresstypetranslations(List<Addresstypetranslation> addresstypetranslations) {
-		this.addresstypetranslations = addresstypetranslations;
+	public void setAddressTypeTranslations(List<AddressTypeTranslation> addressTypeTranslations) {
+		this.addressTypeTranslations = addressTypeTranslations;
 	}
 
-	public Addresstypetranslation addAddresstypetranslation(Addresstypetranslation addresstypetranslation) {
-		getAddresstypetranslations().add(addresstypetranslation);
-		addresstypetranslation.setAddresstype(this);
+	public AddressTypeTranslation addAddressTypeTranslation(AddressTypeTranslation addressTypeTranslation) {
+		getAddressTypeTranslations().add(addressTypeTranslation);
+		addressTypeTranslation.setAddressType(this);
 
-		return addresstypetranslation;
+		return addressTypeTranslation;
 	}
 
-	public Addresstypetranslation removeAddresstypetranslation(Addresstypetranslation addresstypetranslation) {
-		getAddresstypetranslations().remove(addresstypetranslation);
-		addresstypetranslation.setAddresstype(null);
+	public AddressTypeTranslation removeAddressTypeTranslation(AddressTypeTranslation addressTypeTranslation) {
+		getAddressTypeTranslations().remove(addressTypeTranslation);
+		addressTypeTranslation.setAddressType(null);
 
-		return addresstypetranslation;
+		return addressTypeTranslation;
 	}
 
 }

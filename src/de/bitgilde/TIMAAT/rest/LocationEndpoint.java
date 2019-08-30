@@ -97,8 +97,8 @@ public class LocationEndpoint {
 		newLocation.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		newLocation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newLocation.setCreatedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newLocation.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newLocation.getCreatedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newLocation.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();	
@@ -111,7 +111,7 @@ public class LocationEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(newLocation);		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newLocation.getCreatedByUserAccountID(), UserLogManager.LogEvents.LOCATIONCREATED);
+		UserLogManager.getLogger().addLogEntry(newLocation.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.LOCATIONCREATED);
 		return Response.ok().entity(newLocation).build();
 	}
 
@@ -138,7 +138,7 @@ public class LocationEndpoint {
 		// update log metadata
 		location.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			location.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			location.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		

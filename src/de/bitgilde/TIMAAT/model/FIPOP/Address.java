@@ -17,12 +17,16 @@ public class Address implements Serializable {
 	@Id
 	private int id;
 
-	private String postalCode;
-
+	@Column(name="post_office_box")
 	private String postOfficeBox;
 
+	@Column(name="postal_code")
+	private String postalCode;
+
+	@Column(name="street_address_addition")
 	private String streetAddressAddition;
 
+	@Column(name="street_address_number")
 	private String streetAddressNumber;
 
 	//bi-directional many-to-one association to ActorHasAddress
@@ -44,20 +48,20 @@ public class Address implements Serializable {
 		this.id = id;
 	}
 
-	public String getPostalCode() {
-		return this.postalCode;
-	}
-
-	public void setPostalCode(String postalCode) {
-		this.postalCode = postalCode;
-	}
-
 	public String getPostOfficeBox() {
 		return this.postOfficeBox;
 	}
 
 	public void setPostOfficeBox(String postOfficeBox) {
 		this.postOfficeBox = postOfficeBox;
+	}
+
+	public String getPostalCode() {
+		return this.postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 
 	public String getStreetAddressAddition() {

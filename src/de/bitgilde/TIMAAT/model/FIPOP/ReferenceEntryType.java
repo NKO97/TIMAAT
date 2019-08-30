@@ -6,10 +6,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the ReferenceEntryType database table.
+ * The persistent class for the reference_entry_type database table.
  * 
  */
 @Entity
+@Table(name="reference_entry_type")
 @NamedQuery(name="ReferenceEntryType.findAll", query="SELECT r FROM ReferenceEntryType r")
 public class ReferenceEntryType implements Serializable {
 	private static final long serialVersionUID = 1L;

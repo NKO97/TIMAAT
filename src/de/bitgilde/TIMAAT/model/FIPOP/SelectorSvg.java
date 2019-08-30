@@ -3,14 +3,13 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 /**
- * The persistent class for the SelectorSvg database table.
+ * The persistent class for the selector_svg database table.
  * 
  */
 @Entity
+@Table(name="selector_svg")
 @NamedQuery(name="SelectorSvg.findAll", query="SELECT s FROM SelectorSvg s")
 public class SelectorSvg implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,18 +18,24 @@ public class SelectorSvg implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String colorRGBA;
+	@Column(name="color_rgba")
+	private String colorRgba;
 
+	@Column(name="stroke_width")
+	private byte strokeWidth;
+
+	@Lob
+	@Column(name="svg_data")
 	private String svgData;
 
-	private int strokeWidth;
-
 	//bi-directional many-to-one association to Annotation
-	@ManyToOne(cascade=CascadeType.PERSIST)
-	@JoinColumn(name="AnnotationID")
-	@JsonIgnore
+	@ManyToOne
 	private Annotation annotation;
 
+	//bi-directional many-to-one association to SvgShapeType
+	@ManyToOne
+	@JoinColumn(name="svg_shape_type_id")
+	private SvgShapeType svgShapeType;
 
 	public SelectorSvg() {
 	}
@@ -43,19 +48,19 @@ public class SelectorSvg implements Serializable {
 		this.id = id;
 	}
 
-	public String getColor() {
-		return this.colorRGBA;
+	public String getColorRgba() {
+		return this.colorRgba;
 	}
 
-	public void setColor(String colorRGBA) {
-		this.colorRGBA = colorRGBA;
+	public void setColorRgba(String colorRgba) {
+		this.colorRgba = colorRgba;
 	}
 
-	public int getStrokeWidth() {
+	public byte getStrokeWidth() {
 		return this.strokeWidth;
 	}
 
-	public void setStrokeWidth(int strokeWidth) {
+	public void setStrokeWidth(byte strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 
@@ -73,6 +78,14 @@ public class SelectorSvg implements Serializable {
 
 	public void setAnnotation(Annotation annotation) {
 		this.annotation = annotation;
+	}
+
+	public SvgShapeType getSvgShapeType() {
+		return this.svgShapeType;
+	}
+
+	public void setSvgShapeType(SvgShapeType svgShapeType) {
+		this.svgShapeType = svgShapeType;
 	}
 
 }

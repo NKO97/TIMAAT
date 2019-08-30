@@ -17,9 +17,9 @@ public class Citizenship implements Serializable {
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to Citizenshiptranslation
+	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="citizenship")
-	private List<Citizenshiptranslation> citizenshiptranslations;
+	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-many association to Country
 	@ManyToMany(mappedBy="citizenships")
@@ -40,26 +40,26 @@ public class Citizenship implements Serializable {
 		this.id = id;
 	}
 
-	public List<Citizenshiptranslation> getCitizenshiptranslations() {
-		return this.citizenshiptranslations;
+	public List<CitizenshipTranslation> getCitizenshipTranslations() {
+		return this.citizenshipTranslations;
 	}
 
-	public void setCitizenshiptranslations(List<Citizenshiptranslation> citizenshiptranslations) {
-		this.citizenshiptranslations = citizenshiptranslations;
+	public void setCitizenshipTranslations(List<CitizenshipTranslation> citizenshipTranslations) {
+		this.citizenshipTranslations = citizenshipTranslations;
 	}
 
-	public Citizenshiptranslation addCitizenshiptranslation(Citizenshiptranslation citizenshiptranslation) {
-		getCitizenshiptranslations().add(citizenshiptranslation);
-		citizenshiptranslation.setCitizenship(this);
+	public CitizenshipTranslation addCitizenshipTranslation(CitizenshipTranslation citizenshipTranslation) {
+		getCitizenshipTranslations().add(citizenshipTranslation);
+		citizenshipTranslation.setCitizenship(this);
 
-		return citizenshiptranslation;
+		return citizenshipTranslation;
 	}
 
-	public Citizenshiptranslation removeCitizenshiptranslation(Citizenshiptranslation citizenshiptranslation) {
-		getCitizenshiptranslations().remove(citizenshiptranslation);
-		citizenshiptranslation.setCitizenship(null);
+	public CitizenshipTranslation removeCitizenshipTranslation(CitizenshipTranslation citizenshipTranslation) {
+		getCitizenshipTranslations().remove(citizenshipTranslation);
+		citizenshipTranslation.setCitizenship(null);
 
-		return citizenshiptranslation;
+		return citizenshipTranslation;
 	}
 
 	public List<Country> getCountries() {

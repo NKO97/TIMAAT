@@ -6,45 +6,48 @@ import java.util.List;
 
 
 /**
- * The persistent class for the phonenumber database table.
+ * The persistent class for the phone_number database table.
  * 
  */
 @Entity
-@NamedQuery(name="Phonenumber.findAll", query="SELECT p FROM Phonenumber p")
-public class Phonenumber implements Serializable {
+@Table(name="phone_number")
+@NamedQuery(name="PhoneNumber.findAll", query="SELECT p FROM PhoneNumber p")
+public class PhoneNumber implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
+	@Column(name="area_code")
 	private int areaCode;
 
+	@Column(name="phone_number")
 	private int phoneNumber;
 
 	//bi-directional many-to-many association to Actor
 	@ManyToMany
 	@JoinTable(
-		name="actor_has_phonenumber"
+		name="actor_has_phone_number"
 		, joinColumns={
-			@JoinColumn(name="PhoneNumberID")
+			@JoinColumn(name="phone_number_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="ActorID")
+			@JoinColumn(name="actor_id")
 			}
 		)
 	private List<Actor> actors;
 
 	//bi-directional many-to-one association to Country
 	@ManyToOne
-	@JoinColumn(name="IDDPrefix_Country_LocationID")
+	@JoinColumn(name="idd_prefix_country_location_id")
 	private Country country;
 
-	//bi-directional many-to-one association to Phonenumbertype
+	//bi-directional many-to-one association to PhoneNumberType
 	@ManyToOne
-	@JoinColumn(name="PhoneNumberTypeID")
-	private Phonenumbertype phonenumbertype;
+	@JoinColumn(name="phone_number_type_id")
+	private PhoneNumberType phoneNumberType;
 
-	public Phonenumber() {
+	public PhoneNumber() {
 	}
 
 	public int getId() {
@@ -87,12 +90,12 @@ public class Phonenumber implements Serializable {
 		this.country = country;
 	}
 
-	public Phonenumbertype getPhonenumbertype() {
-		return this.phonenumbertype;
+	public PhoneNumberType getPhoneNumberType() {
+		return this.phoneNumberType;
 	}
 
-	public void setPhonenumbertype(Phonenumbertype phonenumbertype) {
-		this.phonenumbertype = phonenumbertype;
+	public void setPhoneNumberType(PhoneNumberType phoneNumberType) {
+		this.phoneNumberType = phoneNumberType;
 	}
 
 }

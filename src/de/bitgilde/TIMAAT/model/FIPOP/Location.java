@@ -1,12 +1,11 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -23,21 +22,24 @@ public class Location implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="created_by_user_account_id")
-	// private UserAccount created_by_user_account_id;
-	private int created_by_user_account_id;
+	@Column(name="created_at")
+	private Timestamp createdAt;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="last_edited_by_user_account_id")
-	// private UserAccount last_edited_by_user_account_id;
-	private int last_edited_by_user_account_id;
+	@Column(name="last_edited_at")
+	private Timestamp lastEditedAt;
 
-	private Timestamp created_at;
-
-	private Timestamp last_edited_at;
+	//bi-directional many-to-many association to Annotation
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_location"
+		, joinColumns={
+			@JoinColumn(name="location_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		)
+	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to City
 	@OneToOne(mappedBy="location")
@@ -56,29 +58,35 @@ public class Location implements Serializable {
 	@OneToMany(mappedBy="location")
 	private List<Event> events;
 
-	//bi-directional many-to-many association to Annotation
-	@ManyToMany
-	@JoinTable(
-		name="annotation_has_location"
-		, joinColumns={
-			@JoinColumn(name="LocationID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="AnnotationID")
-			}
-		)
-	private List<Annotation> annotations;
+	//bi-directional many-to-one association to Location
+	@ManyToOne
+	@JoinColumn(name="parent_location_id")
+	private Location location;
 
-	//bi-directional many-to-one association to Locationtype
+	//bi-directional many-to-one association to Location
+	@OneToMany(mappedBy="location")
+	private List<Location> locations;
+
+	//bi-directional many-to-one association to LocationType
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name="LocationTypeID")
-	private Locationtype locationtype;
+	@JoinColumn(name="location_type_id")
+	private LocationType locationType;
 
-	//bi-directional many-to-one association to Locationtranslation
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="created_by_user_account_id")
+	private UserAccount createdByUserAccount;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="last_edited_by_user_account_id")
+	private UserAccount lastEditedByUserAccount;
+
+	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
 	@JsonIgnore
-	private List<Locationtranslation> locationtranslations;
+	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="location1")
@@ -112,11 +120,35 @@ public class Location implements Serializable {
 	}
 
 	public String getName() {
-		return this.locationtranslations.get(0).getName(); // TODO get correct list item
+		return this.locationTranslations.get(0).getName(); // TODO get correct list item
 	}
 
 	public void setName(String name) {
-		this.locationtranslations.get(0).setName(name); // TODO get correct list item
+		this.locationTranslations.get(0).setName(name); // TODO get correct list item
+	}
+
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.lastEditedAt;
+	}
+
+	public void setLastEditedAt(Timestamp lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
+	}
+
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
+	}
+
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
 	}
 
 	public City getCity() {
@@ -165,90 +197,80 @@ public class Location implements Serializable {
 		return event;
 	}
 
-	public int getCreatedByUserAccountID() {
-		return this.created_by_user_account_id;
+	public Location getLocation() {
+		return this.location;
 	}
 
-	public void setCreatedByUserAccountID(int created_by_user_account_id) {
-		this.created_by_user_account_id = created_by_user_account_id;
-	}
-	
-	public int getLastEditedByUserAccountID() {
-		return this.last_edited_by_user_account_id;
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
-		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
+	public List<Location> getLocations() {
+		return this.locations;
 	}
 
-	// public UserAccount getCreatedByUserAccountID() {
-	// 	return this.created_by_user_account_id;
-	// }
-
-	// public void setCreatedByUserAccountID(UserAccount created_by_user_account_id) {
-	// 	this.created_by_user_account_id = created_by_user_account_id;
-	// }
-	
-	// public UserAccount getLastEditedByUserAccountID() {
-	// 	return this.last_edited_by_user_account_id;
-	// }
-
-	// public void setLastEditedByUserAccountID(UserAccount last_edited_by_user_account_id) {
-	// 	this.last_edited_by_user_account_id = last_edited_by_user_account_id;
-	// }
-
-	public Timestamp getCreatedAt() {
-		return this.created_at;
+	public void setLocations(List<Location> locations) {
+		this.locations = locations;
 	}
 
-	public void setCreatedAt(Timestamp created_at) {
-		this.created_at = created_at;
+	public Location addLocation(Location location) {
+		getLocations().add(location);
+		location.setLocation(this);
+
+		return location;
 	}
 
-	public Timestamp getLastEditedAt() {
-		return this.last_edited_at;
+	public Location removeLocation(Location location) {
+		getLocations().remove(location);
+		location.setLocation(null);
+
+		return location;
 	}
 
-	public void setLastEditedAt(Timestamp last_edited_at) {
-		this.last_edited_at = last_edited_at;
+	public LocationType getLocationType() {
+		return this.locationType;
 	}
 
-	public List<Annotation> getAnnotations() {
-		return this.annotations;
+	public void setLocationType(LocationType locationType) {
+		this.locationType = locationType;
 	}
 
-	public void setAnnotations(List<Annotation> annotations) {
-		this.annotations = annotations;
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
 	}
 
-	public Locationtype getLocationtype() {
-		return this.locationtype;
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
 	}
 
-	public void setLocationtype(Locationtype locationtype) {
-		this.locationtype = locationtype;
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
 	}
 
-	public List<Locationtranslation> getLocationtranslations() {
-		return this.locationtranslations;
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
 
-	public void setLocationtranslations(List<Locationtranslation> locationtranslations) {
-		this.locationtranslations = locationtranslations;
+	public List<LocationTranslation> getLocationTranslations() {
+		return this.locationTranslations;
 	}
 
-	public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
-		getLocationtranslations().add(locationtranslation);
-		locationtranslation.setLocation(this);
-
-		return locationtranslation;
+	public void setLocationTranslations(List<LocationTranslation> locationTranslations) {
+		this.locationTranslations = locationTranslations;
 	}
 
-	public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
-		getLocationtranslations().remove(locationtranslation);
-		locationtranslation.setLocation(null);
+	public LocationTranslation addLocationTranslation(LocationTranslation locationTranslation) {
+		getLocationTranslations().add(locationTranslation);
+		locationTranslation.setLocation(this);
 
-		return locationtranslation;
+		return locationTranslation;
+	}
+
+	public LocationTranslation removeLocationTranslation(LocationTranslation locationTranslation) {
+		getLocationTranslations().remove(locationTranslation);
+		locationTranslation.setLocation(null);
+
+		return locationTranslation;
 	}
 
 	public List<Person> getPersons1() {

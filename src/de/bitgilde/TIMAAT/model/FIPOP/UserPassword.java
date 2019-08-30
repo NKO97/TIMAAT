@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the UserPassword database table.
+ * The persistent class for the user_password database table.
  * 
  */
 @Entity
@@ -40,9 +40,9 @@ public class UserPassword implements Serializable {
 	@JoinColumn(name="user_password_hash_type_id")
 	private UserPasswordHashType userPasswordHashType;
 
-	//bi-directional many-to-one association to UserPasswordOldHashes
+	//bi-directional many-to-one association to UserPasswordOldHashe
 	@OneToMany(mappedBy="userPassword")
-	private List<UserPasswordOldHashes> userPasswordOldHashes;
+	private List<UserPasswordOldHash> UserPasswordOldHash;
 
 	public UserPassword() {
 	}
@@ -109,26 +109,26 @@ public class UserPassword implements Serializable {
 		this.userPasswordHashType = userPasswordHashType;
 	}
 
-	public List<UserPasswordOldHashes> getUserPasswordOldHashes() {
-		return this.userPasswordOldHashes;
+	public List<UserPasswordOldHash> getUserPasswordOldHash() {
+		return this.UserPasswordOldHash;
 	}
 
-	public void setUserPasswordOldHashes(List<UserPasswordOldHashes> userPasswordOldHashes) {
-		this.userPasswordOldHashes = userPasswordOldHashes;
+	public void setUserPasswordOldHash(List<UserPasswordOldHash> UserPasswordOldHash) {
+		this.UserPasswordOldHash = UserPasswordOldHash;
 	}
 
-	public UserPasswordOldHashes addUserPasswordOldHashe(UserPasswordOldHashes userPasswordOldHashe) {
-		getUserPasswordOldHashes().add(userPasswordOldHashe);
-		userPasswordOldHashe.setUserPassword(this);
+	public UserPasswordOldHash addUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
+		getUserPasswordOldHash().add(UserPasswordOldHash);
+		UserPasswordOldHash.setUserPassword(this);
 
-		return userPasswordOldHashe;
+		return UserPasswordOldHash;
 	}
 
-	public UserPasswordOldHashes removeUserPasswordOldHashe(UserPasswordOldHashes userPasswordOldHashe) {
-		getUserPasswordOldHashes().remove(userPasswordOldHashe);
-		userPasswordOldHashe.setUserPassword(null);
+	public UserPasswordOldHash removeUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
+		getUserPasswordOldHash().remove(UserPasswordOldHash);
+		UserPasswordOldHash.setUserPassword(null);
 
-		return userPasswordOldHashe;
+		return UserPasswordOldHash;
 	}
 
 }

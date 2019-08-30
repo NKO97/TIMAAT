@@ -75,7 +75,7 @@ public class AnalysislistEndpoint {
 		// update log metadata
 		newList.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newList.setUserAccount(em.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
+			newList.setCreatedByUserAccount(em.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();
@@ -94,7 +94,7 @@ public class AnalysislistEndpoint {
 		em.refresh(m);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newList.getUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
+		UserLogManager.getLogger().addLogEntry(newList.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
 		
 		return Response.ok().entity(newList).build();
 	}
@@ -229,9 +229,9 @@ public class AnalysislistEndpoint {
 		if ( updatedSegment == null ) return Response.notModified().build();
 		    	
     	// update analysislist
-		if ( updatedSegment.getName() != null ) seg.setName(updatedSegment.getName());
-		if ( updatedSegment.getStartTime() > -1 ) seg.setStartTime(updatedSegment.getStartTime());
-		if ( updatedSegment.getEndTime() > -1 ) seg.setEndTime(updatedSegment.getEndTime());
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getName() != null ) seg.getAnalysisSegmentTranslations().get(0).setName(updatedSegment.getAnalysisSegmentTranslations().get(0).getName());
+		if ( updatedSegment.getSegmentStartTime() != null ) seg.setSegmentStartTime(updatedSegment.getSegmentStartTime());
+		if ( updatedSegment.getSegmentEndTime() != null ) seg.setSegmentEndTime(updatedSegment.getSegmentEndTime());
 				
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
@@ -241,7 +241,7 @@ public class AnalysislistEndpoint {
 		em.refresh(seg);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTMODIFIED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTEDITED);
 
 		return Response.ok().entity(seg).build();
 	}

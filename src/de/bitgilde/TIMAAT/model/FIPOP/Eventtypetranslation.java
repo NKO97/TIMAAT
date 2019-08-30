@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the eventtypetranslation database table.
+ * The persistent class for the event_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Eventtypetranslation.findAll", query="SELECT e FROM Eventtypetranslation e")
-public class Eventtypetranslation implements Serializable {
+@Table(name="event_type_translation")
+@NamedQuery(name="EventTypeTranslation.findAll", query="SELECT e FROM EventTypeTranslation e")
+public class EventTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Eventtypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Eventtype
+	//bi-directional many-to-one association to EventType
 	@ManyToOne
-	@JoinColumn(name="EventTypeID")
-	private Eventtype eventtype;
+	@JoinColumn(name="event_type_id")
+	private EventType eventType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Eventtypetranslation() {
+	public EventTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +47,12 @@ public class Eventtypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Eventtype getEventtype() {
-		return this.eventtype;
+	public EventType getEventType() {
+		return this.eventType;
 	}
 
-	public void setEventtype(Eventtype eventtype) {
-		this.eventtype = eventtype;
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
 	public Language getLanguage() {

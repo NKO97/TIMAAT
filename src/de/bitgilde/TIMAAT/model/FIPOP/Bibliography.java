@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the Bibliography database table.
+ * The persistent class for the bibliography database table.
  * 
  */
 @Entity
@@ -22,6 +22,7 @@ public class Bibliography implements Serializable {
 
 	private String creator;
 
+	@Column(name="last_modified")
 	private String lastModified;
 
 	private String note;

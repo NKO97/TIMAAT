@@ -537,42 +537,42 @@
 <!--  ------------------------------------------------------------------------------------------------------------------------------------------  -->
 
       <div class="container-fluid timaat-component" id="timaat-component-settings">     
-<div class="modal fade" id="timaat-settings-tagset-delete" tabindex="-1" role="dialog" aria-labelledby="tagsetDeleteLabel" aria-hidden="true">
+<div class="modal fade" id="timaat-settings-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tagsetDeleteLabel">Tagset löschen</h5>
+        <h5 class="modal-title" id="categorysetDeleteLabel">CategorySet löschen</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Möchten Sie das ausgewählte Tagset löschen?
+        Möchten Sie das ausgewählte CategorySet löschen?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-        <button type="button" class="btn btn-danger" id="timaat-tagset-delete-submit">Tagset löschen</button>
+        <button type="button" class="btn btn-danger" id="timaat-categoryset-delete-submit">CategorySet löschen</button>
       </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="timaat-settings-tagset-meta" tabindex="-1" role="dialog" aria-labelledby="tagsettMetaLabel" aria-hidden="true">
+<div class="modal fade" id="timaat-settings-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorysettMetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tagsetMetaLabel">Tagset hinzufügen</h5>
+        <h5 class="modal-title" id="categorysetMetaLabel">CategorySet hinzufügen</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
 		<div class="input-group mb-3">
-			<input type="text" class="form-control" id="timaat-tagset-meta-title" placeholder="Titel" aria-label="Titel">
+			<input type="text" class="form-control" id="timaat-categoryset-meta-title" placeholder="Titel" aria-label="Titel">
 		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-        <button type="button" class="btn btn-primary" id="timaat-tagset-meta-submit" disabled>Hinzufügen</button>
+        <button type="button" class="btn btn-primary" id="timaat-categoryset-meta-submit" disabled>Hinzufügen</button>
       </div>
     </div>
   </div>
@@ -592,12 +592,12 @@
                 <div class="row timaat-settings-ui" style="padding-top: 1em;">
 		<div class="col-lg-4">
                     <div class="card">
-                        <div class="card-header">Tagsets
-                        <button type="button" id="timaat-tagset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
+                        <div class="card-header">CategorySets
+                        <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                         </div>
-                    	<div class="timaat-tagset-list-wrapper" style="max-height: 480px;min-height: 100px">
-				    		<div id="timaat-tagset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
-				    		<ul id="timaat-tagset-list" class="list-group list-group-flush"></ul>
+                    	<div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
+				    		<div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...</div>
+				    		<ul id="timaat-categoryset-list" class="list-group list-group-flush"></ul>
 		    			</div>
                     </div>
         </div>		
