@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the sextranslation database table.
+ * The persistent class for the sex_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Sextranslation.findAll", query="SELECT s FROM Sextranslation s")
-public class Sextranslation implements Serializable {
+@Table(name="sex_translation")
+@NamedQuery(name="SexTranslation.findAll", query="SELECT s FROM SexTranslation s")
+public class SexTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,13 @@ public class Sextranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
 	//bi-directional many-to-one association to Sex
 	@ManyToOne
-	@JoinColumn(name="SexID")
 	private Sex sex;
 
-	public Sextranslation() {
+	public SexTranslation() {
 	}
 
 	public int getId() {

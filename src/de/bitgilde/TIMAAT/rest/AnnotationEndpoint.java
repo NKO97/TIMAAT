@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
@@ -51,11 +52,11 @@ public class AnnotationEndpoint {
 	@Secured
 	public Response getAnnotation(@PathParam("id") int id) {
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Annotation m = em.find(Annotation.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, id);
+    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
     	    	
-		return Response.ok().entity(m).build();
+		return Response.ok().entity(annotation).build();
 	}
 	
 
@@ -69,9 +70,9 @@ public class AnnotationEndpoint {
 		Annotation newAnno = null;
 
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Medium m = em.find(Medium.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Medium medium = entityManager.find(Medium.class, id);
+    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		
     	// parse JSON data
 		try {
@@ -82,14 +83,13 @@ public class AnnotationEndpoint {
 		if ( newAnno == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newAnno.setId(0);
-		newAnno.getSVG().get(0).setId(0);
-		newAnno.setMedium(m);
+		newAnno.getSelectorSvgs().get(0).setId(0);
 		
 		// get analysis list id for medium
 		@SuppressWarnings("unchecked")
-		List<MediumAnalysisList> malList = em.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
-		.setParameter("medium", m)
-		.setParameter("listId", newAnno.getAnalysisListID()).getResultList();
+		List<MediumAnalysisList> malList = entityManager.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
+		.setParameter("medium", medium)
+		.setParameter("listId", newAnno.getMediumAnalysisList().getId()).getResultList();
 		if ( malList.size() < 1 ) Response.status(Status.NOT_FOUND).build();
 		newAnno.setMediumAnalysisList(malList.get(0));
 
@@ -97,8 +97,8 @@ public class AnnotationEndpoint {
 		newAnno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newAnno.setCreatedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
-			newAnno.setLastEditedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+			newAnno.getCreatedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
+			newAnno.getLastEditedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -106,29 +106,29 @@ public class AnnotationEndpoint {
 		newAnno.setAnalysisContentAudio(null);
 		newAnno.setAnalysisContentVisual(null);
 		newAnno.setAnalysisContent(null);
-		newAnno.setSegmentSelectorType(em.find(SegmentSelectorType.class, 1)); // TODO
+		newAnno.setSegmentSelectorType(entityManager.find(SegmentSelectorType.class, 1)); // TODO
 		
-		SelectorSvg newSVG = newAnno.getSVG().get(0);
-		newAnno.getSVG().remove(0);
+		SelectorSvg newSVG = newAnno.getSelectorSvgs().get(0);
+		newAnno.getSelectorSvgs().remove(0);
 		
 		// persist annotation and polygons
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		em.persist(newAnno);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(newAnno);
 		newSVG.setAnnotation(newAnno);
-		em.persist(newSVG);
-		newAnno.addSVG(newSVG);
-		em.persist(newAnno);
+		entityManager.persist(newSVG);
+		newAnno.addSelectorSvg(newSVG);
+		entityManager.persist(newAnno);
 		malList.get(0).getAnnotations().add(newAnno);
-		em.persist(malList.get(0));
-		em.flush();
-		tx.commit();
-		em.refresh(newAnno);
-		em.refresh(malList.get(0));
-		em.refresh(newSVG);
+		entityManager.persist(malList.get(0));
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(newAnno);
+		entityManager.refresh(malList.get(0));
+		entityManager.refresh(newSVG);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedBy_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONCREATED);
+		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		return Response.ok().entity(newAnno).build();
 	}
@@ -144,9 +144,9 @@ public class AnnotationEndpoint {
 		Annotation updatedAnno = null;
 
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Annotation m = em.find(Annotation.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, id);
+    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		
     	// parse JSON data
 		try {
@@ -157,40 +157,40 @@ public class AnnotationEndpoint {
 		if ( updatedAnno == null ) return Response.notModified().build();
 		    	
     	// update annotation
-		if ( updatedAnno.getTitle() != null ) m.setTitle(updatedAnno.getTitle());
-		if ( updatedAnno.getComment() != null ) m.setComment(updatedAnno.getComment());
-		if ( updatedAnno.getStartTime() >= 0 ) m.setStartTime(updatedAnno.getStartTime());
-		if ( updatedAnno.getEndTime() >= 0 ) m.setEndTime(updatedAnno.getEndTime());
+		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
+		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
+		if ( updatedAnno.getSequenceStartTime() >= 0 ) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
+		if ( updatedAnno.getSequenceEndTime() >= 0 ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
 
-		if ( updatedAnno.getSVG() != null 
-			 && (updatedAnno.getSVG().size() > 0) 
-			 && updatedAnno.getSVG().get(0).getColor() != null ) m.getSVG().get(0).setColor(updatedAnno.getSVG().get(0).getColor());
-		if ( updatedAnno.getSVG() != null 
-				 && (updatedAnno.getSVG().size() > 0) 
-				 && updatedAnno.getSVG().get(0).getStrokeWidth() > 0 ) m.getSVG().get(0).setStrokeWidth(updatedAnno.getSVG().get(0).getStrokeWidth());
-		if ( updatedAnno.getSVG() != null 
-				 && (updatedAnno.getSVG().size() > 0) 
-				 && updatedAnno.getSVG().get(0).getSvgData() != null ) m.getSVG().get(0).setSvgData(updatedAnno.getSVG().get(0).getSvgData());
+		if ( updatedAnno.getSelectorSvgs() != null 
+			 && (updatedAnno.getSelectorSvgs().size() > 0) 
+			 && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null ) annotation.getSelectorSvgs().get(0).setColorRgba(updatedAnno.getSelectorSvgs().get(0).getColorRgba());
+		if ( updatedAnno.getSelectorSvgs() != null 
+				 && (updatedAnno.getSelectorSvgs().size() > 0) 
+				 && updatedAnno.getSelectorSvgs().get(0).getStrokeWidth() > 0 ) annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
+		if ( updatedAnno.getSelectorSvgs() != null 
+				 && (updatedAnno.getSelectorSvgs().size() > 0) 
+				 && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null ) annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
 
 		// update log metadata
-		m.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			m.setLastEditedBy_UserAccountID((int) crc.getProperty("TIMAAT.userID"));
+			annotation.getLastEditedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 		
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		em.merge(m);
-		em.persist(m);
-		tx.commit();
-		em.refresh(m);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(annotation);
+		entityManager.persist(annotation);
+		entityTransaction.commit();
+		entityManager.refresh(annotation);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(m.getLastEditedBy_UserAccountID(), UserLogManager.LogEvents.ANNOTATIONEDITED);
+		UserLogManager.getLogger().addLogEntry(annotation.getLastEditedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONEDITED);
 
-		return Response.ok().entity(m).build();
+		return Response.ok().entity(annotation).build();
 	}
 
 	@DELETE
@@ -199,18 +199,18 @@ public class AnnotationEndpoint {
 	@Secured
 	public Response deleteAnnotation(@PathParam("id") int id) {
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Annotation m = em.find(Annotation.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, id);
+    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		MediumAnalysisList mal = m.getMediumAnalysisList();
-		mal.removeAnnotation(m);
-		em.persist(mal);
-		em.remove(m);
-		tx.commit();
-		em.refresh(mal);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		MediumAnalysisList mal = annotation.getMediumAnalysisList();
+		mal.removeAnnotation(annotation);
+		entityManager.persist(mal);
+		entityManager.remove(annotation);
+		entityTransaction.commit();
+		entityManager.refresh(mal);
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
@@ -221,85 +221,85 @@ public class AnnotationEndpoint {
 	@SuppressWarnings("unchecked")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
+	@Path("{id}/category/{name}")
 	@Secured
-	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+	public Response addCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {
 		
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Annotation anno = em.find(Annotation.class, id);
-    	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, id);
+    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	// check if tag exists    	
-    	Tag tag = null;
-    	List<Tag> tags = null;
+    	// check if category exists    	
+    	Category category = null;
+    	List<Category> categorys = null;
     	try {
-        	tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
-        			.setParameter("name", tagName)
+        	categorys = (List<Category>) entityManager.createQuery("SELECT t from Category t WHERE t.name=:name")
+        			.setParameter("name", categoryName)
         			.getResultList();
     	} catch(Exception e) {};
     	
-    	// find tag case sensitive
-    	for ( Tag listTag : tags )
-    		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;
+    	// find category case sensitive
+    	for ( Category listCategory : categorys )
+    		if ( listCategory.getName().compareTo(categoryName) == 0 ) category = listCategory;
     	
-    	// create tag if it doesn't exist yet
-    	if ( tag == null ) {
-    		tag = new Tag();
-    		tag.setName(tagName);
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(tag);
+    	// create category if it doesn't exist yet
+    	if ( category == null ) {
+    		category = new Category();
+    		category.setName(categoryName);
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		entityManager.persist(category);
+    		entityTransaction.commit();
+    		entityManager.refresh(category);
     	}
     	
-    	// check if Annotation already has tag
-    	if ( !anno.getTags().contains(tag) ) {
-        	// attach tag to annotation and vice versa    	
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
-        	anno.getTags().add(tag);
-    		tag.getAnnotations().add(anno);
-    		em.merge(tag);
-    		em.merge(anno);
-    		em.persist(anno);
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(anno);
+    	// check if Annotation already has category
+    	if ( !annotation.getCategories().contains(category) ) {
+        	// attach category to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+				annotation.getCategories().add(category);
+    		category.getAnnotations().add(annotation);
+    		entityManager.merge(category);
+    		entityManager.merge(annotation);
+    		entityManager.persist(annotation);
+    		entityManager.persist(category);
+    		entityTransaction.commit();
+    		entityManager.refresh(annotation);
     	}
  	
-		return Response.ok().entity(tag).build();
+		return Response.ok().entity(category).build();
 	}
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
+	@Path("{id}/category/{name}")
 	@Secured
-	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+	public Response removeCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {
 		
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Annotation anno = em.find(Annotation.class, id);
-    	if ( anno == null ) return Response.status(Status.NOT_FOUND).build();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, id);
+    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
     	
-    	// check if Annotation already has tag
-    	Tag tag = null;
-    	for ( Tag annotag:anno.getTags() ) {
-    		if ( annotag.getName().compareTo(tagName) == 0 ) tag = annotag;
+    	// check if Annotation already has category
+    	Category category = null;
+    	for ( Category annocategory:annotation.getCategories()) {
+    		if ( annocategory.getName().compareTo(categoryName) == 0 ) category = annocategory;
     	}
-    	if ( tag != null ) {
-        	// attach tag to annotation and vice versa    	
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
-        	anno.getTags().remove(tag);
-    		tag.getAnnotations().remove(anno);
-    		em.merge(tag);
-    		em.merge(anno);
-    		em.persist(anno);
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(anno);
+    	if ( category != null ) {
+        // attach category to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+				annotation.getCategories().remove(category);
+    		category.getAnnotations().remove(annotation);
+    		entityManager.merge(category);
+    		entityManager.merge(annotation);
+    		entityManager.persist(annotation);
+    		entityManager.persist(category);
+    		entityTransaction.commit();
+    		entityManager.refresh(annotation);
     	}
  	
 		return Response.ok().build();

@@ -2,6 +2,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -17,46 +18,13 @@ public class ActorHasRole implements Serializable {
 	@EmbeddedId
 	private ActorHasRolePK id;
 
-	//bi-directional many-to-one association to Actor
-	// @ManyToOne
-	// @JoinColumn(name="ActorID")
-	// private Actor actor;
-
-	// //bi-directional many-to-many association to Event
-	// @ManyToMany(mappedBy="actorHasRoles")
-	// private List<Event> events;
-
-	// //bi-directional many-to-many association to Medium
-	// @ManyToMany(mappedBy="actorHasRoles")
-	// private List<Medium> mediums;
-
 	//bi-directional many-to-many association to Event
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="event_has_actor_with_role"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="Actor_has_Role_ActorID", referencedColumnName="ActorID"),
-	// 		@JoinColumn(name="Actor_has_Role_RoleID", referencedColumnName="RoleID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="EventID")
-	// 		}
-	// 	)
-	// private List<Event> events;
+	@ManyToMany(mappedBy="actorHasRoles")
+	private List<Event> events;
 
 	//bi-directional many-to-many association to Medium
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="medium_has_actor_with_role"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="Actor_has_Role_ActorID", referencedColumnName="ActorID"),
-	// 		@JoinColumn(name="Actor_has_Role_RoleID", referencedColumnName="RoleID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="MediumID")
-	// 		}
-	// 	)
-	// private List<Medium> mediums;
+	@ManyToMany(mappedBy="actorHasRoles")
+	private List<Medium> mediums;
 
 	public ActorHasRole() {
 	}
@@ -69,28 +37,20 @@ public class ActorHasRole implements Serializable {
 		this.id = id;
 	}
 
-	// public Actor getActor() {
-	// 	return this.actor;
-	// }
+	public List<Event> getEvents() {
+		return this.events;
+	}
 
-	// public void setActor(Actor actor) {
-	// 	this.actor = actor;
-	// }
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
 
-	// public List<Event> getEvents() {
-	// 	return this.events;
-	// }
+	public List<Medium> getMediums() {
+		return this.mediums;
+	}
 
-	// public void setEvents(List<Event> events) {
-	// 	this.events = events;
-	// }
-
-	// public List<Medium> getMediums() {
-	// 	return this.mediums;
-	// }
-
-	// public void setMediums(List<Medium> mediums) {
-	// 	this.mediums = mediums;
-	// }
+	public void setMediums(List<Medium> mediums) {
+		this.mediums = mediums;
+	}
 
 }

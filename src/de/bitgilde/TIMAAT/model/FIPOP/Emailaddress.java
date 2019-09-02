@@ -6,12 +6,13 @@ import java.util.List;
 
 
 /**
- * The persistent class for the emailaddress database table.
+ * The persistent class for the email_address database table.
  * 
  */
 @Entity
-@NamedQuery(name="Emailaddress.findAll", query="SELECT e FROM Emailaddress e")
-public class Emailaddress implements Serializable {
+@Table(name="email_address")
+@NamedQuery(name="EmailAddress.findAll", query="SELECT e FROM EmailAddress e")
+public class EmailAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,15 +20,15 @@ public class Emailaddress implements Serializable {
 
 	private String email;
 
-	//bi-directional many-to-one association to ActorHasEmailaddress
-	@OneToMany(mappedBy="emailaddress")
-	private List<ActorHasEmailaddress> actorHasEmailaddresses;
+	//bi-directional many-to-one association to ActorHasEmailAddress
+	@OneToMany(mappedBy="emailAddress")
+	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
-	//bi-directional many-to-one association to Siocuseraccount
-	// @OneToMany(mappedBy="emailaddress")
-	// private List<Siocuseraccount> siocuseraccounts;
+	//bi-directional many-to-one association to SiocUserAccount
+	// @OneToMany(mappedBy="emailAddress")
+	// private List<SiocUserAccount> siocUserAccounts;
 
-	public Emailaddress() {
+	public EmailAddress() {
 	}
 
 	public int getId() {
@@ -46,48 +47,48 @@ public class Emailaddress implements Serializable {
 		this.email = email;
 	}
 
-	public List<ActorHasEmailaddress> getActorHasEmailaddresses() {
-		return this.actorHasEmailaddresses;
+	public List<ActorHasEmailAddress> getActorHasEmailAddresses() {
+		return this.actorHasEmailAddresses;
 	}
 
-	public void setActorHasEmailaddresses(List<ActorHasEmailaddress> actorHasEmailaddresses) {
-		this.actorHasEmailaddresses = actorHasEmailaddresses;
+	public void setActorHasEmailAddresses(List<ActorHasEmailAddress> actorHasEmailAddresses) {
+		this.actorHasEmailAddresses = actorHasEmailAddresses;
 	}
 
-	public ActorHasEmailaddress addActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().add(actorHasEmailaddress);
-		actorHasEmailaddress.setEmailaddress(this);
+	public ActorHasEmailAddress addActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().add(actorHasEmailAddress);
+		actorHasEmailAddress.setEmailAddress(this);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
 	}
 
-	public ActorHasEmailaddress removeActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().remove(actorHasEmailaddress);
-		actorHasEmailaddress.setEmailaddress(null);
+	public ActorHasEmailAddress removeActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().remove(actorHasEmailAddress);
+		actorHasEmailAddress.setEmailAddress(null);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
 	}
 
-	// public List<Siocuseraccount> getSiocuseraccounts() {
-	// 	return this.siocuseraccounts;
+	// public List<SiocUserAccount> getSiocUserAccounts() {
+	// 	return this.siocUserAccounts;
 	// }
 
-	// public void setSiocuseraccounts(List<Siocuseraccount> siocuseraccounts) {
-	// 	this.siocuseraccounts = siocuseraccounts;
+	// public void setSiocUserAccounts(List<SiocUserAccount> siocUserAccounts) {
+	// 	this.siocUserAccounts = siocUserAccounts;
 	// }
 
-	// public Siocuseraccount addSiocuseraccount(Siocuseraccount siocuseraccount) {
-	// 	getSiocuseraccounts().add(siocuseraccount);
-	// 	siocuseraccount.setEmailaddress(this);
+	// public SiocUserAccount addSiocUserAccount(SiocUserAccount siocUserAccount) {
+	// 	getSiocUserAccounts().add(siocUserAccount);
+	// 	siocUserAccount.setEmailAddress(this);
 
-	// 	return siocuseraccount;
+	// 	return siocUserAccount;
 	// }
 
-	// public Siocuseraccount removeSiocuseraccount(Siocuseraccount siocuseraccount) {
-	// 	getSiocuseraccounts().remove(siocuseraccount);
-	// 	siocuseraccount.setEmailaddress(null);
+	// public SiocUserAccount removeSiocUserAccount(SiocUserAccount siocUserAccount) {
+	// 	getSiocUserAccounts().remove(siocUserAccount);
+	// 	siocUserAccount.setEmailAddress(null);
 
-	// 	return siocuseraccount;
+	// 	return siocUserAccount;
 	// }
 
 }

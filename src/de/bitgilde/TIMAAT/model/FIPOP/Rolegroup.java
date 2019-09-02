@@ -6,12 +6,13 @@ import java.util.List;
 
 
 /**
- * The persistent class for the rolegroup database table.
+ * The persistent class for the role_group database table.
  * 
  */
 @Entity
-@NamedQuery(name="Rolegroup.findAll", query="SELECT r FROM Rolegroup r")
-public class Rolegroup implements Serializable {
+@Table(name="role_group")
+@NamedQuery(name="RoleGroup.findAll", query="SELECT r FROM RoleGroup r")
+public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,21 +21,21 @@ public class Rolegroup implements Serializable {
 	//bi-directional many-to-many association to Role
 	@ManyToMany
 	@JoinTable(
-		name="rolegroup_has_role"
+		name="role_group_has_role"
 		, joinColumns={
-			@JoinColumn(name="RoleGroupID")
+			@JoinColumn(name="role_group_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="RoleID")
+			@JoinColumn(name="role_id")
 			}
 		)
 	private List<Role> roles;
 
-	//bi-directional many-to-one association to Rolegrouptranslation
-	@OneToMany(mappedBy="rolegroup")
-	private List<Rolegrouptranslation> rolegrouptranslations;
+	//bi-directional many-to-one association to RoleGroupTranslation
+	@OneToMany(mappedBy="roleGroup")
+	private List<RoleGroupTranslation> roleGroupTranslations;
 
-	public Rolegroup() {
+	public RoleGroup() {
 	}
 
 	public int getId() {
@@ -53,26 +54,26 @@ public class Rolegroup implements Serializable {
 		this.roles = roles;
 	}
 
-	public List<Rolegrouptranslation> getRolegrouptranslations() {
-		return this.rolegrouptranslations;
+	public List<RoleGroupTranslation> getRoleGroupTranslations() {
+		return this.roleGroupTranslations;
 	}
 
-	public void setRolegrouptranslations(List<Rolegrouptranslation> rolegrouptranslations) {
-		this.rolegrouptranslations = rolegrouptranslations;
+	public void setRoleGroupTranslations(List<RoleGroupTranslation> roleGroupTranslations) {
+		this.roleGroupTranslations = roleGroupTranslations;
 	}
 
-	public Rolegrouptranslation addRolegrouptranslation(Rolegrouptranslation rolegrouptranslation) {
-		getRolegrouptranslations().add(rolegrouptranslation);
-		rolegrouptranslation.setRolegroup(this);
+	public RoleGroupTranslation addRoleGroupTranslation(RoleGroupTranslation roleGroupTranslation) {
+		getRoleGroupTranslations().add(roleGroupTranslation);
+		roleGroupTranslation.setRoleGroup(this);
 
-		return rolegrouptranslation;
+		return roleGroupTranslation;
 	}
 
-	public Rolegrouptranslation removeRolegrouptranslation(Rolegrouptranslation rolegrouptranslation) {
-		getRolegrouptranslations().remove(rolegrouptranslation);
-		rolegrouptranslation.setRolegroup(null);
+	public RoleGroupTranslation removeRoleGroupTranslation(RoleGroupTranslation roleGroupTranslation) {
+		getRoleGroupTranslations().remove(roleGroupTranslation);
+		roleGroupTranslation.setRoleGroup(null);
 
-		return rolegrouptranslation;
+		return roleGroupTranslation;
 	}
 
 }

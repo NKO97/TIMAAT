@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actortypetranslation database table.
+ * The persistent class for the actor_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actortypetranslation.findAll", query="SELECT a FROM Actortypetranslation a")
-public class Actortypetranslation implements Serializable {
+@Table(name="actor_type_translation")
+@NamedQuery(name="ActorTypeTranslation.findAll", query="SELECT a FROM ActorTypeTranslation a")
+public class ActorTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Actortypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Actortype
+	//bi-directional many-to-one association to ActorType
 	@ManyToOne
-	@JoinColumn(name="ActorTypeID")
-	private Actortype actortype;
+	@JoinColumn(name="actor_type_id")
+	private ActorType actorType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Actortypetranslation() {
+	public ActorTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +47,12 @@ public class Actortypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Actortype getActortype() {
-		return this.actortype;
+	public ActorType getActorType() {
+		return this.actorType;
 	}
 
-	public void setActortype(Actortype actortype) {
-		this.actortype = actortype;
+	public void setActorType(ActorType actorType) {
+		this.actorType = actorType;
 	}
 
 	public Language getLanguage() {

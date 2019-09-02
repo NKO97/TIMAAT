@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the Uuid database table.
+ * The persistent class for the uuid database table.
  * 
  */
 @Entity

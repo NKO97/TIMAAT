@@ -5,11 +5,11 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the ReferenceDataFieldRequirements database table.
+ * The persistent class for the reference_data_field_requirements database table.
  * 
  */
 @Entity
-@Table(name="ReferenceDataFieldRequirements")
+@Table(name="reference_data_field_requirements")
 @NamedQuery(name="ReferenceDataFieldRequirement.findAll", query="SELECT r FROM ReferenceDataFieldRequirement r")
 public class ReferenceDataFieldRequirement implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,20 +17,22 @@ public class ReferenceDataFieldRequirement implements Serializable {
 	@EmbeddedId
 	private ReferenceDataFieldRequirementPK id;
 
+	@Column(name="is_not_standard_style")
 	private byte isNotStandardStyle;
 
+	@Column(name="is_optional")
 	private byte isOptional;
 
+	@Column(name="is_required")
 	private byte isRequired;
 
 	//bi-directional many-to-one association to Reference
 	@ManyToOne
-	@JoinColumn(name="ReferenceID")
 	private Reference reference;
 
 	//bi-directional many-to-one association to ReferenceEntryType
 	@ManyToOne
-	@JoinColumn(name="ReferenceEntryTypeID")
+	@JoinColumn(name="reference_entry_type_id")
 	private ReferenceEntryType referenceEntryType;
 
 	public ReferenceDataFieldRequirement() {

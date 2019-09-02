@@ -6,26 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the phonenumbertype database table.
+ * The persistent class for the phone_number_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Phonenumbertype.findAll", query="SELECT p FROM Phonenumbertype p")
-public class Phonenumbertype implements Serializable {
+@Table(name="phone_number_type")
+@NamedQuery(name="PhoneNumberType.findAll", query="SELECT p FROM PhoneNumberType p")
+public class PhoneNumberType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to Phonenumber
-	@OneToMany(mappedBy="phonenumbertype")
-	private List<Phonenumber> phonenumbers;
+	//bi-directional many-to-one association to PhoneNumber
+	@OneToMany(mappedBy="phoneNumberType")
+	private List<PhoneNumber> phoneNumbers;
 
-	//bi-directional many-to-one association to Phonenumbertypetranslation
-	@OneToMany(mappedBy="phonenumbertype")
-	private List<Phonenumbertypetranslation> phonenumbertypetranslations;
+	//bi-directional many-to-one association to PhoneNumberTypeTranslation
+	@OneToMany(mappedBy="phoneNumberType")
+	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
-	public Phonenumbertype() {
+	public PhoneNumberType() {
 	}
 
 	public int getId() {
@@ -36,48 +37,48 @@ public class Phonenumbertype implements Serializable {
 		this.id = id;
 	}
 
-	public List<Phonenumber> getPhonenumbers() {
-		return this.phonenumbers;
+	public List<PhoneNumber> getPhoneNumbers() {
+		return this.phoneNumbers;
 	}
 
-	public void setPhonenumbers(List<Phonenumber> phonenumbers) {
-		this.phonenumbers = phonenumbers;
+	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
 	}
 
-	public Phonenumber addPhonenumber(Phonenumber phonenumber) {
-		getPhonenumbers().add(phonenumber);
-		phonenumber.setPhonenumbertype(this);
+	public PhoneNumber addPhoneNumber(PhoneNumber phoneNumber) {
+		getPhoneNumbers().add(phoneNumber);
+		phoneNumber.setPhoneNumberType(this);
 
-		return phonenumber;
+		return phoneNumber;
 	}
 
-	public Phonenumber removePhonenumber(Phonenumber phonenumber) {
-		getPhonenumbers().remove(phonenumber);
-		phonenumber.setPhonenumbertype(null);
+	public PhoneNumber removePhoneNumber(PhoneNumber phoneNumber) {
+		getPhoneNumbers().remove(phoneNumber);
+		phoneNumber.setPhoneNumberType(null);
 
-		return phonenumber;
+		return phoneNumber;
 	}
 
-	public List<Phonenumbertypetranslation> getPhonenumbertypetranslations() {
-		return this.phonenumbertypetranslations;
+	public List<PhoneNumberTypeTranslation> getPhoneNumberTypeTranslations() {
+		return this.phoneNumberTypeTranslations;
 	}
 
-	public void setPhonenumbertypetranslations(List<Phonenumbertypetranslation> phonenumbertypetranslations) {
-		this.phonenumbertypetranslations = phonenumbertypetranslations;
+	public void setPhoneNumberTypeTranslations(List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations) {
+		this.phoneNumberTypeTranslations = phoneNumberTypeTranslations;
 	}
 
-	public Phonenumbertypetranslation addPhonenumbertypetranslation(Phonenumbertypetranslation phonenumbertypetranslation) {
-		getPhonenumbertypetranslations().add(phonenumbertypetranslation);
-		phonenumbertypetranslation.setPhonenumbertype(this);
+	public PhoneNumberTypeTranslation addPhoneNumberTypeTranslation(PhoneNumberTypeTranslation phoneNumberTypeTranslation) {
+		getPhoneNumberTypeTranslations().add(phoneNumberTypeTranslation);
+		phoneNumberTypeTranslation.setPhoneNumberType(this);
 
-		return phonenumbertypetranslation;
+		return phoneNumberTypeTranslation;
 	}
 
-	public Phonenumbertypetranslation removePhonenumbertypetranslation(Phonenumbertypetranslation phonenumbertypetranslation) {
-		getPhonenumbertypetranslations().remove(phonenumbertypetranslation);
-		phonenumbertypetranslation.setPhonenumbertype(null);
+	public PhoneNumberTypeTranslation removePhoneNumberTypeTranslation(PhoneNumberTypeTranslation phoneNumberTypeTranslation) {
+		getPhoneNumberTypeTranslations().remove(phoneNumberTypeTranslation);
+		phoneNumberTypeTranslation.setPhoneNumberType(null);
 
-		return phonenumbertypetranslation;
+		return phoneNumberTypeTranslation;
 	}
 
 }

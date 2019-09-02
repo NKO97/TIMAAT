@@ -3,36 +3,34 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 /**
- * The persistent class for the UserPasswordOldHashes database table.
+ * The persistent class for the user_password_old_hashes database table.
  * 
  */
 @Entity
-@Table(name="UserPasswordOldHashes")
-@NamedQuery(name="UserPasswordOldHashes.findAll", query="SELECT u FROM UserPasswordOldHashes u")
-public class UserPasswordOldHashes implements Serializable {
+@Table(name="user_password_old_hashes")
+@NamedQuery(name="UserPasswordOldHash.findAll", query="SELECT u FROM UserPasswordOldHash u")
+public class UserPasswordOldHash implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="key_stretching_iterations")
 	private int keyStretchingIterations;
 
 	private String salt;
 
+	@Column(name="stretched_hash_encrypted")
 	private String stretchedHashEncrypted;
 
 	//bi-directional many-to-one association to UserPassword
 	@ManyToOne
-	@JsonIgnore
-	@JoinColumn(name="UserPasswordID")
+	@JoinColumn(name="user_password_id")
 	private UserPassword userPassword;
 
-	public UserPasswordOldHashes() {
+	public UserPasswordOldHash() {
 	}
 
 	public int getId() {

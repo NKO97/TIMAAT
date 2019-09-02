@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the addresstypetranslation database table.
+ * The persistent class for the address_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Addresstypetranslation.findAll", query="SELECT a FROM Addresstypetranslation a")
-public class Addresstypetranslation implements Serializable {
+@Table(name="address_type_translation")
+@NamedQuery(name="AddressTypeTranslation.findAll", query="SELECT a FROM AddressTypeTranslation a")
+public class AddressTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Addresstypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Addresstype
+	//bi-directional many-to-one association to AddressType
 	@ManyToOne
-	@JoinColumn(name="AddressTypeID")
-	private Addresstype addresstype;
+	@JoinColumn(name="address_type_id")
+	private AddressType addressType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Addresstypetranslation() {
+	public AddressTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +47,12 @@ public class Addresstypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Addresstype getAddresstype() {
-		return this.addresstype;
+	public AddressType getAddressType() {
+		return this.addressType;
 	}
 
-	public void setAddresstype(Addresstype addresstype) {
-		this.addresstype = addresstype;
+	public void setAddressType(AddressType addressType) {
+		this.addressType = addressType;
 	}
 
 	public Language getLanguage() {

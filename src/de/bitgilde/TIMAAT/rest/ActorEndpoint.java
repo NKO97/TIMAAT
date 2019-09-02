@@ -98,8 +98,8 @@ public class ActorEndpoint {
 		// newActor.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		// newActor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newActor.setCreatedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newActor.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newActor.getCreatedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newActor.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();	
@@ -112,7 +112,7 @@ public class ActorEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(newActor);		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newActor.getCreatedByUserAccountID(), UserLogManager.LogEvents.ACTORCREATED);
+		UserLogManager.getLogger().addLogEntry(newActor.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORCREATED);
 		return Response.ok().entity(newActor).build();
 	}
 
@@ -136,11 +136,11 @@ public class ActorEndpoint {
 		if ( updatedActor == null ) return Response.notModified().build();		    	
     	// update actor
     // if ( updatedActor.getName() != null ) actor.setName(updatedActor.getName());
-    if ( updatedActor.getActornames() != null ) actor.setActornames(updatedActor.getActornames()); // TODO get the actual name instead of a list of names
+    if ( updatedActor.getActorNames() != null ) actor.setActorNames(updatedActor.getActorNames()); // TODO get the actual name instead of a list of names
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			actor.setLastEditedByUserAccountID((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			actor.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		

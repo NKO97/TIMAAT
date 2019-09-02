@@ -12,25 +12,29 @@ public class ActorHasRolePK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int actorID;
+	@Column(name="actor_id") //, insertable=false, updatable=false) // TODO check why this has to be commented out to work
+	private int actorId;
 
-	@Column(insertable=false, updatable=false)
-	private int roleID;
+	@Column(name="role_id") //, insertable=false, updatable=false) // TODO check why this has to be commented out to work
+	private int roleId;
 
 	public ActorHasRolePK() {
 	}
-	public int getActorID() {
-		return this.actorID;
+	// public ActorHasRolePK(int actorId, int roleId) {
+	// 	this.actorId = actorId;
+	// 	this.roleId = roleId;
+	// }
+	public int getActorId() {
+		return this.actorId;
 	}
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
+	public void setActorId(int actorId) {
+		this.actorId = actorId;
 	}
-	public int getRoleID() {
-		return this.roleID;
+	public int getRoleId() {
+		return this.roleId;
 	}
-	public void setRoleID(int roleID) {
-		this.roleID = roleID;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 
 	public boolean equals(Object other) {
@@ -42,15 +46,15 @@ public class ActorHasRolePK implements Serializable {
 		}
 		ActorHasRolePK castOther = (ActorHasRolePK)other;
 		return 
-			(this.actorID == castOther.actorID)
-			&& (this.roleID == castOther.roleID);
+			(this.actorId == castOther.actorId)
+			&& (this.roleId == castOther.roleId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.actorID;
-		hash = hash * prime + this.roleID;
+		hash = hash * prime + this.actorId;
+		hash = hash * prime + this.roleId;
 		
 		return hash;
 	}

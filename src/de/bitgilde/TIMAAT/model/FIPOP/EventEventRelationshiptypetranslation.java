@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the event_event_relationshiptypetranslation database table.
+ * The persistent class for the event_event_relationship_type_translation database table.
  * 
  */
 @Entity
-@Table(name="event_event_relationshiptypetranslation")
-@NamedQuery(name="EventEventRelationshiptypetranslation.findAll", query="SELECT e FROM EventEventRelationshiptypetranslation e")
-public class EventEventRelationshiptypetranslation implements Serializable {
+@Table(name="event_event_relationship_type_translation")
+@NamedQuery(name="EventEventRelationshipTypeTranslation.findAll", query="SELECT e FROM EventEventRelationshipTypeTranslation e")
+public class EventEventRelationshipTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,17 +19,16 @@ public class EventEventRelationshiptypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to EventEventRelationshiptype
+	//bi-directional many-to-one association to EventEventRelationshipType
 	@ManyToOne
-	@JoinColumn(name="Event_Event_RelationshipTypeID")
-	private EventEventRelationshiptype eventEventRelationshiptype;
+	@JoinColumn(name="event_event_relationship_type_id")
+	private EventEventRelationshipType eventEventRelationshipType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public EventEventRelationshiptypetranslation() {
+	public EventEventRelationshipTypeTranslation() {
 	}
 
 	public int getId() {
@@ -48,12 +47,12 @@ public class EventEventRelationshiptypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public EventEventRelationshiptype getEventEventRelationshiptype() {
-		return this.eventEventRelationshiptype;
+	public EventEventRelationshipType getEventEventRelationshipType() {
+		return this.eventEventRelationshipType;
 	}
 
-	public void setEventEventRelationshiptype(EventEventRelationshiptype eventEventRelationshiptype) {
-		this.eventEventRelationshiptype = eventEventRelationshiptype;
+	public void setEventEventRelationshipType(EventEventRelationshipType eventEventRelationshipType) {
+		this.eventEventRelationshipType = eventEventRelationshipType;
 	}
 
 	public Language getLanguage() {

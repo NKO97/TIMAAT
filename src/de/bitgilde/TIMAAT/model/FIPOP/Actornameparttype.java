@@ -6,28 +6,30 @@ import java.util.List;
 
 
 /**
- * The persistent class for the actornameparttype database table.
+ * The persistent class for the actor_name_part_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actornameparttype.findAll", query="SELECT a FROM Actornameparttype a")
-public class Actornameparttype implements Serializable {
+@Table(name="actor_name_part_type")
+@NamedQuery(name="ActorNamePartType.findAll", query="SELECT a FROM ActorNamePartType a")
+public class ActorNamePartType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
+	@Column(name="display_position")
 	private byte displayPosition;
 
-	//bi-directional many-to-one association to Actornamepart
-	@OneToMany(mappedBy="actornameparttype")
-	private List<Actornamepart> actornameparts;
+	//bi-directional many-to-one association to ActorNamePart
+	@OneToMany(mappedBy="actorNamePartType")
+	private List<ActorNamePart> actorNameParts;
 
-	//bi-directional many-to-one association to Actornameparttypetranslation
-	@OneToMany(mappedBy="actornameparttype")
-	private List<Actornameparttypetranslation> actornameparttypetranslations;
+	//bi-directional many-to-one association to ActorNamePartTypeTranslation
+	@OneToMany(mappedBy="actorNamePartType")
+	private List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations;
 
-	public Actornameparttype() {
+	public ActorNamePartType() {
 	}
 
 	public int getId() {
@@ -46,48 +48,48 @@ public class Actornameparttype implements Serializable {
 		this.displayPosition = displayPosition;
 	}
 
-	public List<Actornamepart> getActornameparts() {
-		return this.actornameparts;
+	public List<ActorNamePart> getActorNameParts() {
+		return this.actorNameParts;
 	}
 
-	public void setActornameparts(List<Actornamepart> actornameparts) {
-		this.actornameparts = actornameparts;
+	public void setActorNameParts(List<ActorNamePart> actorNameParts) {
+		this.actorNameParts = actorNameParts;
 	}
 
-	public Actornamepart addActornamepart(Actornamepart actornamepart) {
-		getActornameparts().add(actornamepart);
-		actornamepart.setActornameparttype(this);
+	public ActorNamePart addActorNamePart(ActorNamePart actorNamePart) {
+		getActorNameParts().add(actorNamePart);
+		actorNamePart.setActorNamePartType(this);
 
-		return actornamepart;
+		return actorNamePart;
 	}
 
-	public Actornamepart removeActornamepart(Actornamepart actornamepart) {
-		getActornameparts().remove(actornamepart);
-		actornamepart.setActornameparttype(null);
+	public ActorNamePart removeActorNamePart(ActorNamePart actorNamePart) {
+		getActorNameParts().remove(actorNamePart);
+		actorNamePart.setActorNamePartType(null);
 
-		return actornamepart;
+		return actorNamePart;
 	}
 
-	public List<Actornameparttypetranslation> getActornameparttypetranslations() {
-		return this.actornameparttypetranslations;
+	public List<ActorNamePartTypeTranslation> getActorNamePartTypeTranslations() {
+		return this.actorNamePartTypeTranslations;
 	}
 
-	public void setActornameparttypetranslations(List<Actornameparttypetranslation> actornameparttypetranslations) {
-		this.actornameparttypetranslations = actornameparttypetranslations;
+	public void setActorNamePartTypeTranslations(List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations) {
+		this.actorNamePartTypeTranslations = actorNamePartTypeTranslations;
 	}
 
-	public Actornameparttypetranslation addActornameparttypetranslation(Actornameparttypetranslation actornameparttypetranslation) {
-		getActornameparttypetranslations().add(actornameparttypetranslation);
-		actornameparttypetranslation.setActornameparttype(this);
+	public ActorNamePartTypeTranslation addActorNamePartTypeTranslation(ActorNamePartTypeTranslation actorNamePartTypeTranslation) {
+		getActorNamePartTypeTranslations().add(actorNamePartTypeTranslation);
+		actorNamePartTypeTranslation.setActorNamePartType(this);
 
-		return actornameparttypetranslation;
+		return actorNamePartTypeTranslation;
 	}
 
-	public Actornameparttypetranslation removeActornameparttypetranslation(Actornameparttypetranslation actornameparttypetranslation) {
-		getActornameparttypetranslations().remove(actornameparttypetranslation);
-		actornameparttypetranslation.setActornameparttype(null);
+	public ActorNamePartTypeTranslation removeActorNamePartTypeTranslation(ActorNamePartTypeTranslation actorNamePartTypeTranslation) {
+		getActorNamePartTypeTranslations().remove(actorNamePartTypeTranslation);
+		actorNamePartTypeTranslation.setActorNamePartType(null);
 
-		return actornameparttypetranslation;
+		return actorNamePartTypeTranslation;
 	}
 
 }

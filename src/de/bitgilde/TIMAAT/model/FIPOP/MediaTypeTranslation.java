@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actortypetranslaton database table.
+ * The persistent class for the media_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actortypetranslaton.findAll", query="SELECT a FROM Actortypetranslaton a")
-public class Actortypetranslaton implements Serializable {
+@Table(name="media_type_translation")
+@NamedQuery(name="MediaTypeTranslation.findAll", query="SELECT m FROM MediaTypeTranslation m")
+public class MediaTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Actortypetranslaton implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Actortype
-	@ManyToOne
-	@JoinColumn(name="ActorTypeID")
-	private Actortype actortype;
-
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Actortypetranslaton() {
+	//bi-directional many-to-one association to MediaType
+	@ManyToOne
+	@JoinColumn(name="media_type_id")
+	private MediaType mediaType;
+
+	public MediaTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,20 +47,20 @@ public class Actortypetranslaton implements Serializable {
 		this.type = type;
 	}
 
-	public Actortype getActortype() {
-		return this.actortype;
-	}
-
-	public void setActortype(Actortype actortype) {
-		this.actortype = actortype;
-	}
-
 	public Language getLanguage() {
 		return this.language;
 	}
 
 	public void setLanguage(Language language) {
 		this.language = language;
+	}
+
+	public MediaType getMediaType() {
+		return this.mediaType;
+	}
+
+	public void setMediaType(MediaType mediaType) {
+		this.mediaType = mediaType;
 	}
 
 }

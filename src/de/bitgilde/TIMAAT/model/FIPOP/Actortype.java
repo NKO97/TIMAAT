@@ -6,12 +6,13 @@ import java.util.List;
 
 
 /**
- * The persistent class for the actortype database table.
+ * The persistent class for the actor_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actortype.findAll", query="SELECT a FROM Actortype a")
-public class Actortype implements Serializable {
+@Table(name="actor_type")
+@NamedQuery(name="ActorType.findAll", query="SELECT a FROM ActorType a")
+public class ActorType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,21 +21,21 @@ public class Actortype implements Serializable {
 	//bi-directional many-to-many association to Actor
 	@ManyToMany
 	@JoinTable(
-		name="actor_has_actortype"
+		name="actor_has_actor_type"
 		, joinColumns={
-			@JoinColumn(name="ActorTypeID")
+			@JoinColumn(name="actor_type_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="ActorID")
+			@JoinColumn(name="actor_id")
 			}
 		)
 	private List<Actor> actors;
 
-	//bi-directional many-to-one association to Actortypetranslation
-	@OneToMany(mappedBy="actortype")
-	private List<Actortypetranslation> actortypetranslations;
+	//bi-directional many-to-one association to ActorTypeTranslation
+	@OneToMany(mappedBy="actorType")
+	private List<ActorTypeTranslation> actorTypeTranslations;
 
-	public Actortype() {
+	public ActorType() {
 	}
 
 	public int getId() {
@@ -53,26 +54,26 @@ public class Actortype implements Serializable {
 		this.actors = actors;
 	}
 
-	public List<Actortypetranslation> getActortypetranslations() {
-		return this.actortypetranslations;
+	public List<ActorTypeTranslation> getActorTypeTranslations() {
+		return this.actorTypeTranslations;
 	}
 
-	public void setActortypetranslations(List<Actortypetranslation> actortypetranslations) {
-		this.actortypetranslations = actortypetranslations;
+	public void setActorTypeTranslations(List<ActorTypeTranslation> actorTypeTranslations) {
+		this.actorTypeTranslations = actorTypeTranslations;
 	}
 
-	public Actortypetranslation addActortypetranslation(Actortypetranslation actortypetranslation) {
-		getActortypetranslations().add(actortypetranslation);
-		actortypetranslation.setActortype(this);
+	public ActorTypeTranslation addActorTypeTranslation(ActorTypeTranslation actorTypeTranslation) {
+		getActorTypeTranslations().add(actorTypeTranslation);
+		actorTypeTranslation.setActorType(this);
 
-		return actortypetranslation;
+		return actorTypeTranslation;
 	}
 
-	public Actortypetranslation removeActortypetranslation(Actortypetranslation actortypetranslation) {
-		getActortypetranslations().remove(actortypetranslation);
-		actortypetranslation.setActortype(null);
+	public ActorTypeTranslation removeActorTypeTranslation(ActorTypeTranslation actorTypeTranslation) {
+		getActorTypeTranslations().remove(actorTypeTranslation);
+		actorTypeTranslation.setActorType(null);
 
-		return actortypetranslation;
+		return actorTypeTranslation;
 	}
 
 }

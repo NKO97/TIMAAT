@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the IRI database table.
+ * The persistent class for the iri database table.
  * 
  */
 @Entity

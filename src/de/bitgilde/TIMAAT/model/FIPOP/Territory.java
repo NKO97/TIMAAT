@@ -29,17 +29,17 @@ public class Territory implements Serializable {
 	@JoinTable(
 		name="territory_has_location"
 		, joinColumns={
-			@JoinColumn(name="TerritoryID")
+			@JoinColumn(name="territory_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="LocationID")
+			@JoinColumn(name="location_id")
 			}
 		)
 	private List<Location> locations;
 
-	//bi-directional many-to-one association to Territorytranslation
+	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="territory")
-	private List<Territorytranslation> territorytranslations;
+	private List<TerritoryTranslation> territoryTranslations;
 
 	public Territory() {
 	}
@@ -76,26 +76,26 @@ public class Territory implements Serializable {
 		this.locations = locations;
 	}
 
-	public List<Territorytranslation> getTerritorytranslations() {
-		return this.territorytranslations;
+	public List<TerritoryTranslation> getTerritoryTranslations() {
+		return this.territoryTranslations;
 	}
 
-	public void setTerritorytranslations(List<Territorytranslation> territorytranslations) {
-		this.territorytranslations = territorytranslations;
+	public void setTerritoryTranslations(List<TerritoryTranslation> territoryTranslations) {
+		this.territoryTranslations = territoryTranslations;
 	}
 
-	public Territorytranslation addTerritorytranslation(Territorytranslation territorytranslation) {
-		getTerritorytranslations().add(territorytranslation);
-		territorytranslation.setTerritory(this);
+	public TerritoryTranslation addTerritoryTranslation(TerritoryTranslation territoryTranslation) {
+		getTerritoryTranslations().add(territoryTranslation);
+		territoryTranslation.setTerritory(this);
 
-		return territorytranslation;
+		return territoryTranslation;
 	}
 
-	public Territorytranslation removeTerritorytranslation(Territorytranslation territorytranslation) {
-		getTerritorytranslations().remove(territorytranslation);
-		territorytranslation.setTerritory(null);
+	public TerritoryTranslation removeTerritoryTranslation(TerritoryTranslation territoryTranslation) {
+		getTerritoryTranslations().remove(territoryTranslation);
+		territoryTranslation.setTerritory(null);
 
-		return territorytranslation;
+		return territoryTranslation;
 	}
 
 }

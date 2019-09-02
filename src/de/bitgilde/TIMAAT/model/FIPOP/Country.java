@@ -1,8 +1,6 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,74 +18,76 @@ public class Country implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private int locationID;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="location_id")
+	private int locationId;
 
+	@Column(name="country_calling_code")
 	private String countryCallingCode;
 
-	private String dst;
+	@Column(name="daylight_saving_time")
+	private String daylightSavingTime;
 
+	@Column(name="international_dialing_prefix")
 	private String internationalDialingPrefix;
 
+	@Column(name="time_zone")
 	private String timeZone;
 
+	@Column(name="trunk_prefix")
 	private String trunkPrefix;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
 	// @OneToMany(mappedBy="country")
 	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
 
+	//bi-directional one-to-one association to Location
+	@OneToOne
+	@PrimaryKeyJoinColumn(name="location_id")
+	private Location location;
+
 	//bi-directional many-to-many association to Citizenship
 	@ManyToMany
 	@JoinTable(
 		name="country_has_citizenship"
 		, joinColumns={
-			@JoinColumn(name="Country_LocationID")
+			@JoinColumn(name="country_location_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="CitizenshipID")
+			@JoinColumn(name="citizenship_id")
 			}
 		)
 	private List<Citizenship> citizenships;
 
-	//bi-directional one-to-one association to Location
-	@OneToOne
-	// @JsonIgnore
-	@PrimaryKeyJoinColumn(name="LocationID")
-	private Location location;
-
-	//bi-directional many-to-one association to Phonenumber
+	//bi-directional many-to-one association to PhoneNumber
 	@OneToMany(mappedBy="country")
-	private List<Phonenumber> phonenumbers;
-
-	//bi-directional many-to-one association to Province
-	@OneToMany(mappedBy="country")
-	private List<Province> provinces;
+	private List<PhoneNumber> phoneNumbers;
 
 	public Country() {
 	}
 
-	public int getLocationID() {
-		return this.locationID;
+	public int getLocationId() {
+		return this.locationId;
 	}
 
-	public void setLocationID(int locationID) {
-		this.locationID = locationID;
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
 	}
 
-	public int getId() {
+	public int getId() { // TODO not necessary with getLocationId?
 		return this.getLocation().getId();
 	}
 
-	public void setId(int id) {
+	public void setId(int id) { // TODO not necessary with setLocationId?
 		this.getLocation().setId(id);
 	}
 
 	public String getName() {
-		return this.getLocation().getLocationtranslations().get(0).getName(); // TODO get correct list item
+		return this.getLocation().getLocationTranslations().get(0).getName(); // TODO get correct list item
 	}
 
 	public void setName(String name) {
-		this.getLocation().getLocationtranslations().get(0).setName(name); // TODO get correct list item
+		this.getLocation().getLocationTranslations().get(0).setName(name); // TODO get correct list item
 	}
 
 	public String getCountryCallingCode() {
@@ -98,12 +98,12 @@ public class Country implements Serializable {
 		this.countryCallingCode = countryCallingCode;
 	}
 
-	public String getDst() {
-		return this.dst;
+	public String getDaylightSavingTime() {
+		return this.daylightSavingTime;
 	}
 
-	public void setDst(String dst) {
-		this.dst = dst;
+	public void setDaylightSavingTime(String daylightSavingTime) {
+		this.daylightSavingTime = daylightSavingTime;
 	}
 
 	public String getInternationalDialingPrefix() {
@@ -130,38 +130,6 @@ public class Country implements Serializable {
 		this.trunkPrefix = trunkPrefix;
 	}
 
-	public int getCreatedByUserAccountID() {
-		return this.getLocation().getCreatedByUserAccountID();
-	}
-
-	public void setCreatedByUserAccountID(int created_by_user_account_id) {
-		this.getLocation().setCreatedByUserAccountID(created_by_user_account_id);
-	}
-	
-	public int getLastEditedByUserAccountID() {
-		return this.getLocation().getLastEditedByUserAccountID();
-	}
-
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
-		this.getLocation().setLastEditedByUserAccountID(last_edited_by_user_account_id);
-	}
-
-	public Timestamp getCreatedAt() {
-		return this.location.getCreatedAt();
-	}
-
-	public void setCreatedAt(Timestamp created_at) {
-		this.getLocation().setCreatedAt(created_at);
-	}
-
-	public Timestamp getLastEditedAt() {
-		return this.location.getLastEditedAt();
-	}
-
-	public void setLastEditedAt(Timestamp last_edited_at) {
-		this.getLocation().setLastEditedAt(last_edited_at);
-	}
-
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {
 	// 	return this.actorIsLocatedInCountries;
 	// }
@@ -184,14 +152,6 @@ public class Country implements Serializable {
 	// 	return actorIsLocatedInCountry;
 	// }
 
-	public List<Citizenship> getCitizenships() {
-		return this.citizenships;
-	}
-
-	public void setCitizenships(List<Citizenship> citizenships) {
-		this.citizenships = citizenships;
-	}
-
 	public Location getLocation() {
 		return this.location;
 	}
@@ -200,68 +160,54 @@ public class Country implements Serializable {
 		this.location = location;
 	}
 
-	public List<Phonenumber> getPhonenumbers() {
-		return this.phonenumbers;
+	public List<Citizenship> getCitizenships() {
+		return this.citizenships;
 	}
 
-	public void setPhonenumbers(List<Phonenumber> phonenumbers) {
-		this.phonenumbers = phonenumbers;
+	public void setCitizenships(List<Citizenship> citizenships) {
+		this.citizenships = citizenships;
 	}
 
-	public Phonenumber addPhonenumber(Phonenumber phonenumber) {
-		getPhonenumbers().add(phonenumber);
-		phonenumber.setCountry(this);
-
-		return phonenumber;
+	public List<PhoneNumber> getPhoneNumbers() {
+		return this.phoneNumbers;
 	}
 
-	public Phonenumber removePhonenumber(Phonenumber phonenumber) {
-		getPhonenumbers().remove(phonenumber);
-		phonenumber.setCountry(null);
-
-		return phonenumber;
+	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
 	}
 
-	public List<Province> getProvinces() {
-		return this.provinces;
+	public PhoneNumber addPhoneNumber(PhoneNumber phoneNumber) {
+		getPhoneNumbers().add(phoneNumber);
+		phoneNumber.setCountry(this);
+
+		return phoneNumber;
 	}
 
-	public void setProvinces(List<Province> provinces) {
-		this.provinces = provinces;
+	public PhoneNumber removePhoneNumber(PhoneNumber phoneNumber) {
+		getPhoneNumbers().remove(phoneNumber);
+		phoneNumber.setCountry(null);
+
+		return phoneNumber;
 	}
 
-	public Province addProvince(Province province) {
-		getProvinces().add(province);
-		province.setCountry(this);
-
-		return province;
+	public List<LocationTranslation> getLocationTranslations() {
+		return this.getLocation().getLocationTranslations();
 	}
 
-	public Province removeProvince(Province province) {
-		getProvinces().remove(province);
-		province.setCountry(null);
-
-		return province;
+	public void setLocationTranslations(List<LocationTranslation> locationTranslations) {
+		this.getLocation().setLocationTranslations(locationTranslations);
 	}
 
-	public List<Locationtranslation> getLocationtranslations() {
-		return this.getLocation().getLocationtranslations();
+	public LocationTranslation addLocationTranslation(LocationTranslation locationTranslation) {
+		getLocation().getLocationTranslations().add(locationTranslation);
+		// locationTranslation.setLocation(this);
+		getLocation().getLocationTranslations().get(0).setLocation(this.getLocation()); // TODO verify
+		return locationTranslation;
 	}
 
-	public void setLocationtranslations(List<Locationtranslation> locationtranslations) {
-		this.getLocation().setLocationtranslations(locationtranslations);
-	}
-
-	public Locationtranslation addLocationtranslation(Locationtranslation locationtranslation) {
-		getLocation().getLocationtranslations().add(locationtranslation);
-		// locationtranslation.setLocation(this);
-		getLocation().getLocationtranslations().get(0).setLocation(this.getLocation()); // TODO verify
-		return locationtranslation;
-	}
-
-	public Locationtranslation removeLocationtranslation(Locationtranslation locationtranslation) {
-		getLocationtranslations().remove(locationtranslation);
-		return locationtranslation;
+	public LocationTranslation removeLocationTranslation(LocationTranslation locationTranslation) {
+		getLocationTranslations().remove(locationTranslation);
+		return locationTranslation;
 	}
 
 }

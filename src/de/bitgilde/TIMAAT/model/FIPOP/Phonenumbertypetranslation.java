@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the phonenumbertypetranslation database table.
+ * The persistent class for the phone_number_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Phonenumbertypetranslation.findAll", query="SELECT p FROM Phonenumbertypetranslation p")
-public class Phonenumbertypetranslation implements Serializable {
+@Table(name="phone_number_type_translation")
+@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT p FROM PhoneNumberTypeTranslation p")
+public class PhoneNumberTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,14 @@ public class Phonenumbertypetranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	//bi-directional many-to-one association to Phonenumbertype
+	//bi-directional many-to-one association to PhoneNumberType
 	@ManyToOne
-	@JoinColumn(name="PhoneNumberTypeID")
-	private Phonenumbertype phonenumbertype;
+	@JoinColumn(name="phone_number_type_id")
+	private PhoneNumberType phoneNumberType;
 
-	public Phonenumbertypetranslation() {
+	public PhoneNumberTypeTranslation() {
 	}
 
 	public int getId() {
@@ -55,12 +55,12 @@ public class Phonenumbertypetranslation implements Serializable {
 		this.language = language;
 	}
 
-	public Phonenumbertype getPhonenumbertype() {
-		return this.phonenumbertype;
+	public PhoneNumberType getPhoneNumberType() {
+		return this.phoneNumberType;
 	}
 
-	public void setPhonenumbertype(Phonenumbertype phonenumbertype) {
-		this.phonenumbertype = phonenumbertype;
+	public void setPhoneNumberType(PhoneNumberType phoneNumberType) {
+		this.phoneNumberType = phoneNumberType;
 	}
 
 }

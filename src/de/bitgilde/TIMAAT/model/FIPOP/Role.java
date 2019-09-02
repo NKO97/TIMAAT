@@ -18,37 +18,37 @@ public class Role implements Serializable {
 	private int id;
 
 	//bi-directional many-to-many association to Actor
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="actor_has_role"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="RoleID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="ActorID")
-	// 		}
-	// 	)
-	// private List<Actor> actors;
+	@ManyToMany
+	@JoinTable(
+		name="actor_has_role"
+		, joinColumns={
+			@JoinColumn(name="role_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="actor_id")
+			}
+		)
+	private List<Actor> actors;
 
-	//bi-directional many-to-many association to Rolegroup
+	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
-	private List<Rolegroup> rolegroups;
+	private List<RoleGroup> roleGroups;
 
-	//bi-directional many-to-one association to Roletranslation
+	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="role")
-	private List<Roletranslation> roletranslations;
+	private List<RoleTranslation> roleTranslations;
 
-	//bi-directional many-to-one association to SioccontainerHasRoleRoleid
+	//bi-directional many-to-one association to SiocContainerHasRoleInArea
 	// @OneToMany(mappedBy="role")
-	// private List<SioccontainerHasRoleRoleid> sioccontainerHasRoleRoleids;
+	// private List<SiocContainerHasRoleInArea> siocContainerHasRoleInAreas;
 
-	//bi-directional many-to-one association to SioccontainerHasSiocuseraccount
+	//bi-directional many-to-one association to SiocContainerHasSiocUserAccount
 	// @OneToMany(mappedBy="role")
-	// private List<SioccontainerHasSiocuseraccount> sioccontainerHasSiocuseraccounts;
+	// private List<SiocContainerHasSiocUserAccount> siocContainerHasSiocUserAccounts;
 
-	//bi-directional many-to-one association to SiocsiteHasSiocuseraccount
+	//bi-directional many-to-one association to SiocSiteHasSiocUserAccount
 	// @OneToMany(mappedBy="role")
-	// private List<SiocsiteHasSiocuseraccount> siocsiteHasSiocuseraccounts;
+	// private List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts;
 
 	public Role() {
 	}
@@ -61,108 +61,108 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	// public List<Actor> getActors() {
-	// 	return this.actors;
-	// }
-
-	// public void setActors(List<Actor> actors) {
-	// 	this.actors = actors;
-	// }
-
-	public List<Rolegroup> getRolegroups() {
-		return this.rolegroups;
+	public List<Actor> getActors() {
+		return this.actors;
 	}
 
-	public void setRolegroups(List<Rolegroup> rolegroups) {
-		this.rolegroups = rolegroups;
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
 	}
 
-	public List<Roletranslation> getRoletranslations() {
-		return this.roletranslations;
+	public List<RoleGroup> getRoleGroups() {
+		return this.roleGroups;
 	}
 
-	public void setRoletranslations(List<Roletranslation> roletranslations) {
-		this.roletranslations = roletranslations;
+	public void setRoleGroups(List<RoleGroup> roleGroups) {
+		this.roleGroups = roleGroups;
 	}
 
-	public Roletranslation addRoletranslation(Roletranslation roletranslation) {
-		getRoletranslations().add(roletranslation);
-		roletranslation.setRole(this);
-
-		return roletranslation;
+	public List<RoleTranslation> getRoleTranslations() {
+		return this.roleTranslations;
 	}
 
-	public Roletranslation removeRoletranslation(Roletranslation roletranslation) {
-		getRoletranslations().remove(roletranslation);
-		roletranslation.setRole(null);
-
-		return roletranslation;
+	public void setRoleTranslations(List<RoleTranslation> roleTranslations) {
+		this.roleTranslations = roleTranslations;
 	}
 
-	// public List<SioccontainerHasRoleRoleid> getSioccontainerHasRoleRoleids() {
-	// 	return this.sioccontainerHasRoleRoleids;
+	public RoleTranslation addRoleTranslation(RoleTranslation roleTranslation) {
+		getRoleTranslations().add(roleTranslation);
+		roleTranslation.setRole(this);
+
+		return roleTranslation;
+	}
+
+	public RoleTranslation removeRoleTranslation(RoleTranslation roleTranslation) {
+		getRoleTranslations().remove(roleTranslation);
+		roleTranslation.setRole(null);
+
+		return roleTranslation;
+	}
+
+	// public List<SiocContainerHasRoleInArea> getSiocContainerHasRoleInAreas() {
+	// 	return this.siocContainerHasRoleInAreas;
 	// }
 
-	// public void setSioccontainerHasRoleRoleids(List<SioccontainerHasRoleRoleid> sioccontainerHasRoleRoleids) {
-	// 	this.sioccontainerHasRoleRoleids = sioccontainerHasRoleRoleids;
+	// public void setSiocContainerHasRoleInAreas(List<SiocContainerHasRoleInArea> siocContainerHasRoleInAreas) {
+	// 	this.siocContainerHasRoleInAreas = siocContainerHasRoleInAreas;
 	// }
 
-	// public SioccontainerHasRoleRoleid addSioccontainerHasRoleRoleid(SioccontainerHasRoleRoleid sioccontainerHasRoleRoleid) {
-	// 	getSioccontainerHasRoleRoleids().add(sioccontainerHasRoleRoleid);
-	// 	sioccontainerHasRoleRoleid.setRole(this);
+	// public SiocContainerHasRoleInArea addSiocContainerHasRoleInArea(SiocContainerHasRoleInArea siocContainerHasRoleInArea) {
+	// 	getSiocContainerHasRoleInAreas().add(siocContainerHasRoleInArea);
+	// 	siocContainerHasRoleInArea.setRole(this);
 
-	// 	return sioccontainerHasRoleRoleid;
+	// 	return siocContainerHasRoleInArea;
 	// }
 
-	// public SioccontainerHasRoleRoleid removeSioccontainerHasRoleRoleid(SioccontainerHasRoleRoleid sioccontainerHasRoleRoleid) {
-	// 	getSioccontainerHasRoleRoleids().remove(sioccontainerHasRoleRoleid);
-	// 	sioccontainerHasRoleRoleid.setRole(null);
+	// public SiocContainerHasRoleInArea removeSiocContainerHasRoleInArea(SiocContainerHasRoleInArea siocContainerHasRoleInArea) {
+	// 	getSiocContainerHasRoleInAreas().remove(siocContainerHasRoleInArea);
+	// 	siocContainerHasRoleInArea.setRole(null);
 
-	// 	return sioccontainerHasRoleRoleid;
+	// 	return siocContainerHasRoleInArea;
 	// }
 
-	// public List<SioccontainerHasSiocuseraccount> getSioccontainerHasSiocuseraccounts() {
-	// 	return this.sioccontainerHasSiocuseraccounts;
+	// public List<SiocContainerHasSiocUserAccount> getSiocContainerHasSiocUserAccounts() {
+	// 	return this.siocContainerHasSiocUserAccounts;
 	// }
 
-	// public void setSioccontainerHasSiocuseraccounts(List<SioccontainerHasSiocuseraccount> sioccontainerHasSiocuseraccounts) {
-	// 	this.sioccontainerHasSiocuseraccounts = sioccontainerHasSiocuseraccounts;
+	// public void setSiocContainerHasSiocUserAccounts(List<SiocContainerHasSiocUserAccount> siocContainerHasSiocUserAccounts) {
+	// 	this.siocContainerHasSiocUserAccounts = siocContainerHasSiocUserAccounts;
 	// }
 
-	// public SioccontainerHasSiocuseraccount addSioccontainerHasSiocuseraccount(SioccontainerHasSiocuseraccount sioccontainerHasSiocuseraccount) {
-	// 	getSioccontainerHasSiocuseraccounts().add(sioccontainerHasSiocuseraccount);
-	// 	sioccontainerHasSiocuseraccount.setRole(this);
+	// public SiocContainerHasSiocUserAccount addSiocContainerHasSiocUserAccount(SiocContainerHasSiocUserAccount siocContainerHasSiocUserAccount) {
+	// 	getSiocContainerHasSiocUserAccounts().add(siocContainerHasSiocUserAccount);
+	// 	siocContainerHasSiocUserAccount.setRole(this);
 
-	// 	return sioccontainerHasSiocuseraccount;
+	// 	return siocContainerHasSiocUserAccount;
 	// }
 
-	// public SioccontainerHasSiocuseraccount removeSioccontainerHasSiocuseraccount(SioccontainerHasSiocuseraccount sioccontainerHasSiocuseraccount) {
-	// 	getSioccontainerHasSiocuseraccounts().remove(sioccontainerHasSiocuseraccount);
-	// 	sioccontainerHasSiocuseraccount.setRole(null);
+	// public SiocContainerHasSiocUserAccount removeSiocContainerHasSiocUserAccount(SiocContainerHasSiocUserAccount siocContainerHasSiocUserAccount) {
+	// 	getSiocContainerHasSiocUserAccounts().remove(siocContainerHasSiocUserAccount);
+	// 	siocContainerHasSiocUserAccount.setRole(null);
 
-	// 	return sioccontainerHasSiocuseraccount;
+	// 	return siocContainerHasSiocUserAccount;
 	// }
 
-	// public List<SiocsiteHasSiocuseraccount> getSiocsiteHasSiocuseraccounts() {
-	// 	return this.siocsiteHasSiocuseraccounts;
+	// public List<SiocSiteHasSiocUserAccount> getSiocSiteHasSiocUserAccounts() {
+	// 	return this.siocSiteHasSiocUserAccounts;
 	// }
 
-	// public void setSiocsiteHasSiocuseraccounts(List<SiocsiteHasSiocuseraccount> siocsiteHasSiocuseraccounts) {
-	// 	this.siocsiteHasSiocuseraccounts = siocsiteHasSiocuseraccounts;
+	// public void setSiocSiteHasSiocUserAccounts(List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts) {
+	// 	this.siocSiteHasSiocUserAccounts = siocSiteHasSiocUserAccounts;
 	// }
 
-	// public SiocsiteHasSiocuseraccount addSiocsiteHasSiocuseraccount(SiocsiteHasSiocuseraccount siocsiteHasSiocuseraccount) {
-	// 	getSiocsiteHasSiocuseraccounts().add(siocsiteHasSiocuseraccount);
-	// 	siocsiteHasSiocuseraccount.setRole(this);
+	// public SiocSiteHasSiocUserAccount addSiocSiteHasSiocUserAccount(SiocSiteHasSiocUserAccount siocSiteHasSiocUserAccount) {
+	// 	getSiocSiteHasSiocUserAccounts().add(siocSiteHasSiocUserAccount);
+	// 	siocSiteHasSiocUserAccount.setRole(this);
 
-	// 	return siocsiteHasSiocuseraccount;
+	// 	return siocSiteHasSiocUserAccount;
 	// }
 
-	// public SiocsiteHasSiocuseraccount removeSiocsiteHasSiocuseraccount(SiocsiteHasSiocuseraccount siocsiteHasSiocuseraccount) {
-	// 	getSiocsiteHasSiocuseraccounts().remove(siocsiteHasSiocuseraccount);
-	// 	siocsiteHasSiocuseraccount.setRole(null);
+	// public SiocSiteHasSiocUserAccount removeSiocSiteHasSiocUserAccount(SiocSiteHasSiocUserAccount siocSiteHasSiocUserAccount) {
+	// 	getSiocSiteHasSiocUserAccounts().remove(siocSiteHasSiocUserAccount);
+	// 	siocSiteHasSiocUserAccount.setRole(null);
 
-	// 	return siocsiteHasSiocuseraccount;
+	// 	return siocSiteHasSiocUserAccount;
 	// }
 
 }

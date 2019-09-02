@@ -19,18 +19,18 @@ public class ActorRelatesToActor implements Serializable {
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="ActorID")
+	@JoinColumn(name="actor_id")
 	private Actor actor1;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="Relates_to_ActorID")
+	@JoinColumn(name="relates_to_actor_id")
 	private Actor actor2;
 
-	//bi-directional many-to-one association to ActorActorRelationshiptype
+	//bi-directional many-to-one association to ActorActorRelationshipType
 	@ManyToOne
-	@JoinColumn(name="Actor_Actor_RelationshipTypeID")
-	private ActorActorRelationshiptype actorActorRelationshiptype;
+	@JoinColumn(name="actor_actor_relationship_type_id")
+	private ActorActorRelationshipType actorActorRelationshipType;
 
 	public ActorRelatesToActor() {
 	}
@@ -59,12 +59,12 @@ public class ActorRelatesToActor implements Serializable {
 		this.actor2 = actor2;
 	}
 
-	public ActorActorRelationshiptype getActorActorRelationshiptype() {
-		return this.actorActorRelationshiptype;
+	public ActorActorRelationshipType getActorActorRelationshipType() {
+		return this.actorActorRelationshipType;
 	}
 
-	public void setActorActorRelationshiptype(ActorActorRelationshiptype actorActorRelationshiptype) {
-		this.actorActorRelationshiptype = actorActorRelationshiptype;
+	public void setActorActorRelationshipType(ActorActorRelationshipType actorActorRelationshipType) {
+		this.actorActorRelationshipType = actorActorRelationshipType;
 	}
 
 }

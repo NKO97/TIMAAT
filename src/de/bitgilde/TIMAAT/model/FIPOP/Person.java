@@ -16,75 +16,75 @@ public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private int actorID;
+	@Column(name="actor_id")
+	private int actorId;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="date_of_birth")
 	private Date dateOfBirth;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="day_of_death")
 	private Date dayOfDeath;
 
-	private String specialFeatures;
-
-	//bi-directional many-to-one association to Lineupmember
+	//bi-directional many-to-one association to LineupMember
 	// @OneToMany(mappedBy="person")
-	// private List<Lineupmember> lineupmembers;
+	// private List<LineupMember> lineupMembers;
 
-	//bi-directional many-to-one association to Academictitle
+	//bi-directional many-to-one association to AcademicTitle
 	@ManyToOne
-	@JoinColumn(name="AcademicTitleID")
-	private Academictitle academictitle;
+	@JoinColumn(name="academic_title_id")
+	private AcademicTitle academicTitle;
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="ActorID")
+	@PrimaryKeyJoinColumn(name="actor_id")
 	private Actor actor;
+
+	//bi-directional many-to-one association to Location
+	@ManyToOne
+	@JoinColumn(name="place_of_birth_location_id")
+	private Location location1;
+
+	//bi-directional many-to-one association to Location
+	@ManyToOne
+	@JoinColumn(name="place_of_death_location_id")
+	private Location location2;
+
+	//bi-directional many-to-one association to Sex
+	@ManyToOne
+	private Sex sex;
 
 	//bi-directional many-to-many association to Citizenship
 	@ManyToMany
 	@JoinTable(
 		name="person_has_citizenship"
 		, joinColumns={
-			@JoinColumn(name="Person_ActorID")
+			@JoinColumn(name="person_actor_id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="CitizenshipID")
+			@JoinColumn(name="citizenship_id")
 			}
 		)
 	private List<Citizenship> citizenships;
-
-	//bi-directional many-to-one association to Location
-	@ManyToOne
-	@JoinColumn(name="PlaceOfBirth_LocationID")
-	private Location location1;
-
-	//bi-directional many-to-one association to Location
-	@ManyToOne
-	@JoinColumn(name="PlaceOfDeath_LocationID")
-	private Location location2;
-
-	//bi-directional many-to-one association to Sex
-	@ManyToOne
-	@JoinColumn(name="SexID")
-	private Sex sex;
 
 	//bi-directional many-to-one association to PersonIsMemberOfCollective
 	@OneToMany(mappedBy="person")
 	private List<PersonIsMemberOfCollective> personIsMemberOfCollectives;
 
-	//bi-directional many-to-one association to Persontranslation
+	//bi-directional many-to-one association to PersonTranslation
 	@OneToMany(mappedBy="person")
-	private List<Persontranslation> persontranslations;
+	private List<PersonTranslation> personTranslations;
 
 	public Person() {
 	}
 
-	public int getActorID() {
-		return this.actorID;
+	public int getActorId() {
+		return this.actorId;
 	}
 
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
+	public void setActorId(int actorId) {
+		this.actorId = actorId;
 	}
 
 	public Date getDateOfBirth() {
@@ -103,42 +103,34 @@ public class Person implements Serializable {
 		this.dayOfDeath = dayOfDeath;
 	}
 
-	public String getSpecialFeatures() {
-		return this.specialFeatures;
+	// public List<LineupMember> getLineupMembers() {
+	// 	return this.lineupMembers;
+	// }
+
+	// public void setLineupMembers(List<LineupMember> lineupMembers) {
+	// 	this.lineupMembers = lineupMembers;
+	// }
+
+	// public LineupMember addLineupMember(LineupMember lineupMember) {
+	// 	getLineupMembers().add(lineupMember);
+	// 	lineupMember.setPerson(this);
+
+	// 	return lineupMember;
+	// }
+
+	// public LineupMember removeLineupMember(LineupMember lineupMember) {
+	// 	getLineupMembers().remove(lineupMember);
+	// 	lineupMember.setPerson(null);
+
+	// 	return lineupMember;
+	// }
+
+	public AcademicTitle getAcademicTitle() {
+		return this.academicTitle;
 	}
 
-	public void setSpecialFeatures(String specialFeatures) {
-		this.specialFeatures = specialFeatures;
-	}
-
-	// public List<Lineupmember> getLineupmembers() {
-	// 	return this.lineupmembers;
-	// }
-
-	// public void setLineupmembers(List<Lineupmember> lineupmembers) {
-	// 	this.lineupmembers = lineupmembers;
-	// }
-
-	// public Lineupmember addLineupmember(Lineupmember lineupmember) {
-	// 	getLineupmembers().add(lineupmember);
-	// 	lineupmember.setPerson(this);
-
-	// 	return lineupmember;
-	// }
-
-	// public Lineupmember removeLineupmember(Lineupmember lineupmember) {
-	// 	getLineupmembers().remove(lineupmember);
-	// 	lineupmember.setPerson(null);
-
-	// 	return lineupmember;
-	// }
-
-	public Academictitle getAcademictitle() {
-		return this.academictitle;
-	}
-
-	public void setAcademictitle(Academictitle academictitle) {
-		this.academictitle = academictitle;
+	public void setAcademicTitle(AcademicTitle academicTitle) {
+		this.academicTitle = academicTitle;
 	}
 
 	public Actor getActor() {
@@ -147,14 +139,6 @@ public class Person implements Serializable {
 
 	public void setActor(Actor actor) {
 		this.actor = actor;
-	}
-
-	public List<Citizenship> getCitizenships() {
-		return this.citizenships;
-	}
-
-	public void setCitizenships(List<Citizenship> citizenships) {
-		this.citizenships = citizenships;
 	}
 
 	public Location getLocation1() {
@@ -181,6 +165,14 @@ public class Person implements Serializable {
 		this.sex = sex;
 	}
 
+	public List<Citizenship> getCitizenships() {
+		return this.citizenships;
+	}
+
+	public void setCitizenships(List<Citizenship> citizenships) {
+		this.citizenships = citizenships;
+	}
+
 	public List<PersonIsMemberOfCollective> getPersonIsMemberOfCollectives() {
 		return this.personIsMemberOfCollectives;
 	}
@@ -203,26 +195,26 @@ public class Person implements Serializable {
 		return personIsMemberOfCollective;
 	}
 
-	public List<Persontranslation> getPersontranslations() {
-		return this.persontranslations;
+	public List<PersonTranslation> getPersonTranslations() {
+		return this.personTranslations;
 	}
 
-	public void setPersontranslations(List<Persontranslation> persontranslations) {
-		this.persontranslations = persontranslations;
+	public void setPersonTranslations(List<PersonTranslation> personTranslations) {
+		this.personTranslations = personTranslations;
 	}
 
-	public Persontranslation addPersontranslation(Persontranslation persontranslation) {
-		getPersontranslations().add(persontranslation);
-		persontranslation.setPerson(this);
+	public PersonTranslation addPersonTranslation(PersonTranslation personTranslation) {
+		getPersonTranslations().add(personTranslation);
+		personTranslation.setPerson(this);
 
-		return persontranslation;
+		return personTranslation;
 	}
 
-	public Persontranslation removePersontranslation(Persontranslation persontranslation) {
-		getPersontranslations().remove(persontranslation);
-		persontranslation.setPerson(null);
+	public PersonTranslation removePersonTranslation(PersonTranslation personTranslation) {
+		getPersonTranslations().remove(personTranslation);
+		personTranslation.setPerson(null);
 
-		return persontranslation;
+		return personTranslation;
 	}
 
 }

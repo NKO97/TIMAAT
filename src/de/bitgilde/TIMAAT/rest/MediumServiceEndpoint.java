@@ -42,6 +42,7 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.VideoInformation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
@@ -162,7 +163,7 @@ public class MediumServiceEndpoint{
 	@Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)  
     @Produces(MediaType.APPLICATION_JSON)
-	@Secured	
+	@Secured
 	public Response createMedium( @FormDataParam("file") InputStream uploadedInputStream,  
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
@@ -183,79 +184,81 @@ public class MediumServiceEndpoint{
 			 System.out.println( "You successfully uploaded !" );
 
              
-/*             
-             int read = 0;  
-             byte[] bytes = new byte[1024];  
-             
-             while ((read = uploadedInputStream.read(bytes)) != -1) {  
-                 out.write(bytes, 0, read);  
-                 out.flush();  
-             }  
-             out.close();
-             */
-             
-             // persist medium
-             
-             EntityManager em = TIMAATApp.emf.createEntityManager();
-             // TODO load from config
-             de.bitgilde.TIMAAT.model.FIPOP.MediaType mt = em.find(de.bitgilde.TIMAAT.model.FIPOP.MediaType.class, 1);
-             Language lang = em.find(Language.class, 1);
-             
-             Title title = new Title();
-             title.setLanguage(lang);
-             title.setTitle(fileDetail.getFileName().substring(0, fileDetail.getFileName().length()-4));
-             
-             newMedium = new Medium();
-             newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-             newMedium.setMediaType(mt);
-             newMedium.setReference(null);
-             newMedium.setSource(null);
-             newMedium.setPropagandaType(null);
-             MediumVideo videoInfo = new MediumVideo();
-             // TODO generate AudioCodec Data
-             videoInfo.setAudioCodecInformationID(1);
+			/*             
+			int read = 0;  
+			byte[] bytes = new byte[1024];  
+			
+			while ((read = uploadedInputStream.read(bytes)) != -1) {  
+					out.write(bytes, 0, read);  
+					out.flush();  
+			}  
+			out.close();
+			*/
+			
+			// persist medium
+			
+			EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+			// TODO load from config
+			de.bitgilde.TIMAAT.model.FIPOP.MediaType mt = entityManager.find(de.bitgilde.TIMAAT.model.FIPOP.MediaType.class, 6);
+			Language lang = entityManager.find(Language.class, 1);
+			
+			Title title = new Title();
+			title.setLanguage(lang);
+			title.setTitle(fileDetail.getFileName().substring(0, fileDetail.getFileName().length()-4));
+			
+			newMedium = new Medium();
+			newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
+			newMedium.setMediaType(mt);
+			newMedium.setReference(null);
+			newMedium.setSource(null);
+			newMedium.setPropagandaType(null);
 
-             // get data from ffmpeg
-             VideoInformation info = getVideoFileInfo(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-             videoInfo.setWidth(info.getWidth());
-             videoInfo.setHeight(info.getHeight());
-             videoInfo.setFrameRate(info.getFramerate());
-             videoInfo.setVideoCodec("");
-             videoInfo.setLength(info.getDuration());
-                                         
-             EntityTransaction tx = em.getTransaction();
-             tx.begin();
-             em.persist(title);
-             newMedium.setPrimaryTitle(title);
-             newMedium.setMediumVideo(videoInfo);
-             em.persist(newMedium);
-             em.flush();
-             tx.commit();
-             em.refresh(newMedium);
+			// TODO MediumVideo needs to be created separatedly from Medium
+			MediumVideo videoInfo = new MediumVideo();
+			// TODO generate AudioCodec Data
+			videoInfo.getAudioCodecInformation().setId(1);
 
-             // rename file with medium
-             File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-             tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
-             newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
-             tx = em.getTransaction();
-             tx.begin();
-             em.persist(newMedium);
-             em.flush();
-             tx.commit();
-             em.refresh(newMedium);
-             
-             createThumbnails(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
-             
-             // start transcoding video
-             newMedium.setStatus("transcoding");
-             newMedium.setViewToken(issueFileToken(newMedium.getId()));
-             TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
-             videoTranscoder.start();
-             
-     		// add log entry
-     		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
+			// get data from ffmpeg
+			VideoInformation info = getVideoFileInfo(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
+			videoInfo.setWidth(info.getWidth());
+			videoInfo.setHeight(info.getHeight());
+			videoInfo.setFrameRate(info.getFramerate());
+			videoInfo.setVideoCodec("");
+			videoInfo.setLength(info.getDuration());
+																	
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.persist(title);
+			newMedium.setTitle(title);
+			newMedium.setMediumVideo(videoInfo);
+			entityManager.persist(newMedium);
+			entityManager.flush();
+			entityTransaction.commit();
+			entityManager.refresh(newMedium);
 
-         } catch (IOException e) {e.printStackTrace();}  
+			// rename file with medium
+			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
+			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
+			newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.persist(newMedium);
+			entityManager.flush();
+			entityTransaction.commit();
+			entityManager.refresh(newMedium);
+			
+			createThumbnails(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
+			
+			// start transcoding video
+			newMedium.setStatus("transcoding");
+			newMedium.setViewToken(issueFileToken(newMedium.getId()));
+			TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
+			videoTranscoder.start();
+						
+			// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
+
+		} catch (IOException e) {e.printStackTrace();}  
 
 		return Response.ok().entity(newMedium).build();
 	}
@@ -330,13 +333,13 @@ public class MediumServiceEndpoint{
 	@Secured
 	public Response getAnnotationLists(@PathParam("id") int id) {
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
     	// find medium
-    	Medium m = em.find(Medium.class, id);
+    	Medium m = entityManager.find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
     	
-    	em.refresh(m);
+    	entityManager.refresh(m);
     	
     	return Response.ok(m.getMediumAnalysisLists()).build();    	
 	}
@@ -349,15 +352,15 @@ public class MediumServiceEndpoint{
 	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Medium medium = em.find(Medium.class, id);
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Medium medium = entityManager.find(Medium.class, id);
     	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
     	// check if tag exists    	
     	Tag tag = null;
     	List<Tag> tags = null;
     	try {
-        	tags = (List<Tag>) em.createQuery("SELECT t from Tag t WHERE t.name=:name")
+        	tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE t.name=:name")
         			.setParameter("name", tagName)
         			.getResultList();
     	} catch(Exception e) {};
@@ -370,26 +373,26 @@ public class MediumServiceEndpoint{
     	if ( tag == null ) {
     		tag = new Tag();
     		tag.setName(tagName);
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(tag);
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(tag);
     	}
     	
     	// check if Annotation already has tag
     	if ( !medium.getTags().contains(tag) ) {
         	// attach tag to annotation and vice versa    	
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
     		medium.getTags().add(tag);
     		tag.getMediums().add(medium);
-    		em.merge(tag);
-    		em.merge(medium);
-    		em.persist(medium);
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(medium);
+    		entityManager.merge(tag);
+    		entityManager.merge(medium);
+    		entityManager.persist(medium);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(medium);
     	}
  	
 		return Response.ok().entity(tag).build();
@@ -402,8 +405,8 @@ public class MediumServiceEndpoint{
 	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
 		
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	Medium medium = em.find(Medium.class, id);
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Medium medium = entityManager.find(Medium.class, id);
     	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
     	
     	// check if Annotation already has tag
@@ -413,22 +416,105 @@ public class MediumServiceEndpoint{
     	}
     	if ( tag != null ) {
         	// attach tag to annotation and vice versa    	
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
     		medium.getTags().remove(tag);
     		tag.getMediums().remove(medium);
-    		em.merge(tag);
-    		em.merge(medium);
-    		em.persist(medium);
-    		em.persist(tag);
-    		tx.commit();
-    		em.refresh(medium);
+    		entityManager.merge(tag);
+    		entityManager.merge(medium);
+    		entityManager.persist(medium);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(medium);
     	}
  	
 		return Response.ok().build();
 	}
 
+	@SuppressWarnings("unchecked")
+	@POST
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/category/{name}")
+	@Secured
+	public Response addCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// check if category exists    	
+		Category category = null;
+		List<Category> categories = null;
+		try {
+			categories = (List<Category>) entityManager.createQuery("SELECT t from Category t WHERE t.name=:name")
+				.setParameter("name", categoryName)
+				.getResultList();
+		} catch(Exception e) {};
+		
+		// find category case sensitive
+		for ( Category listCategory : categories )
+			if ( listCategory.getName().compareTo(categoryName) == 0 ) category = listCategory;
+		
+		// create category if it doesn't exist yet
+		if ( category == null ) {
+			category = new Category();
+			category.setName(categoryName);
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.persist(category);
+			entityTransaction.commit();
+			entityManager.refresh(category);
+		}
+		
+		// check if Annotation already has category
+		if ( !medium.getCategories().contains(category) ) {
+				// attach category to annotation and vice versa    	
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			medium.getCategories().add(category);
+			category.getMediums().add(medium);
+			entityManager.merge(category);
+			entityManager.merge(medium);
+			entityManager.persist(medium);
+			entityManager.persist(category);
+			entityTransaction.commit();
+			entityManager.refresh(medium);
+		}
+ 	
+		return Response.ok().entity(category).build();
+	}
 	
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/category/{name}")
+	@Secured
+	public Response removeCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {
+		
+    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Medium medium = entityManager.find(Medium.class, id);
+    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+    	// check if Annotation already has category
+    	Category category = null;
+    	for ( Category mediumcategory:medium.getCategories() ) {
+    		if ( mediumcategory.getName().compareTo(categoryName) == 0 ) category = mediumcategory;
+    	}
+    	if ( category != null ) {
+        	// attach category to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		medium.getCategories().remove(category);
+    		category.getMediums().remove(medium);
+    		entityManager.merge(category);
+    		entityManager.merge(medium);
+    		entityManager.persist(medium);
+    		entityManager.persist(category);
+    		entityTransaction.commit();
+    		entityManager.refresh(medium);
+    	}
+ 	
+		return Response.ok().build();
+	}
 
 	private Response downloadFile(String fileName, HttpHeaders headers) {     
 		Response response = null;

@@ -5,41 +5,40 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actor_has_emailaddress database table.
+ * The persistent class for the actor_has_email_address database table.
  * 
  */
 @Entity
-@Table(name="actor_has_emailaddress")
-@NamedQuery(name="ActorHasEmailaddress.findAll", query="SELECT a FROM ActorHasEmailaddress a")
-public class ActorHasEmailaddress implements Serializable {
+@Table(name="actor_has_email_address")
+@NamedQuery(name="ActorHasEmailAddress.findAll", query="SELECT a FROM ActorHasEmailAddress a")
+public class ActorHasEmailAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private ActorHasEmailaddressPK id;
+	private ActorHasEmailAddressPK id;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="ActorID")
 	private Actor actor;
 
-	//bi-directional many-to-one association to Emailaddress
+	//bi-directional many-to-one association to EmailAddress
 	@ManyToOne
-	@JoinColumn(name="EmailAddressID")
-	private Emailaddress emailaddress;
+	@JoinColumn(name="email_address_id")
+	private EmailAddress emailAddress;
 
-	//bi-directional many-to-one association to Emailaddresstype
+	//bi-directional many-to-one association to EmailAddressType
 	@ManyToOne
-	@JoinColumn(name="EmailAddressTypeID")
-	private Emailaddresstype emailaddresstype;
+	@JoinColumn(name="email_address_type_id")
+	private EmailAddressType emailAddressType;
 
-	public ActorHasEmailaddress() {
+	public ActorHasEmailAddress() {
 	}
 
-	public ActorHasEmailaddressPK getId() {
+	public ActorHasEmailAddressPK getId() {
 		return this.id;
 	}
 
-	public void setId(ActorHasEmailaddressPK id) {
+	public void setId(ActorHasEmailAddressPK id) {
 		this.id = id;
 	}
 
@@ -51,20 +50,20 @@ public class ActorHasEmailaddress implements Serializable {
 		this.actor = actor;
 	}
 
-	public Emailaddress getEmailaddress() {
-		return this.emailaddress;
+	public EmailAddress getEmailAddress() {
+		return this.emailAddress;
 	}
 
-	public void setEmailaddress(Emailaddress emailaddress) {
-		this.emailaddress = emailaddress;
+	public void setEmailAddress(EmailAddress emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
-	public Emailaddresstype getEmailaddresstype() {
-		return this.emailaddresstype;
+	public EmailAddressType getEmailAddressType() {
+		return this.emailAddressType;
 	}
 
-	public void setEmailaddresstype(Emailaddresstype emailaddresstype) {
-		this.emailaddresstype = emailaddresstype;
+	public void setEmailAddressType(EmailAddressType emailAddressType) {
+		this.emailAddressType = emailAddressType;
 	}
 
 }

@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actor_actor_relationshiptypetranslation database table.
+ * The persistent class for the actor_actor_relationship_type_translation database table.
  * 
  */
 @Entity
-@Table(name="actor_actor_relationshiptypetranslation")
-@NamedQuery(name="ActorActorRelationshiptypetranslation.findAll", query="SELECT a FROM ActorActorRelationshiptypetranslation a")
-public class ActorActorRelationshiptypetranslation implements Serializable {
+@Table(name="actor_actor_relationship_type_translation")
+@NamedQuery(name="ActorActorRelationshipTypeTranslation.findAll", query="SELECT a FROM ActorActorRelationshipTypeTranslation a")
+public class ActorActorRelationshipTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,17 +19,16 @@ public class ActorActorRelationshiptypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to ActorActorRelationshiptype
+	//bi-directional many-to-one association to ActorActorRelationshipType
 	@ManyToOne
-	@JoinColumn(name="Actor_Actor_RelationshipTypeID")
-	private ActorActorRelationshiptype actorActorRelationshiptype;
+	@JoinColumn(name="actor_actor_relationship_type_id")
+	private ActorActorRelationshipType actorActorRelationshipType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public ActorActorRelationshiptypetranslation() {
+	public ActorActorRelationshipTypeTranslation() {
 	}
 
 	public int getId() {
@@ -48,12 +47,12 @@ public class ActorActorRelationshiptypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public ActorActorRelationshiptype getActorActorRelationshiptype() {
-		return this.actorActorRelationshiptype;
+	public ActorActorRelationshipType getActorActorRelationshipType() {
+		return this.actorActorRelationshipType;
 	}
 
-	public void setActorActorRelationshiptype(ActorActorRelationshiptype actorActorRelationshiptype) {
-		this.actorActorRelationshiptype = actorActorRelationshiptype;
+	public void setActorActorRelationshipType(ActorActorRelationshipType actorActorRelationshipType) {
+		this.actorActorRelationshipType = actorActorRelationshipType;
 	}
 
 	public Language getLanguage() {

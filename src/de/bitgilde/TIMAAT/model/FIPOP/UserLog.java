@@ -6,10 +6,11 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the UserLog database table.
+ * The persistent class for the user_log database table.
  * 
  */
 @Entity
+@Table(name="user_log")
 @NamedQuery(name="UserLog.findAll", query="SELECT u FROM UserLog u")
 public class UserLog implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,16 +20,17 @@ public class UserLog implements Serializable {
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="date_time")
 	private Date dateTime;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
-	@JoinColumn(name="UserAccountID")
+	@JoinColumn(name="user_account_id")
 	private UserAccount userAccount;
 
 	//bi-directional many-to-one association to UserLogEventType
 	@ManyToOne
-	@JoinColumn(name="UserLogEventTypeID")
+	@JoinColumn(name="user_log_event_type_id")
 	private UserLogEventType userLogEventType;
 
 	public UserLog() {

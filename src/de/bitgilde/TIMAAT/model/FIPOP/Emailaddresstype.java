@@ -6,26 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the emailaddresstype database table.
+ * The persistent class for the email_address_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Emailaddresstype.findAll", query="SELECT e FROM Emailaddresstype e")
-public class Emailaddresstype implements Serializable {
+@Table(name="email_address_type")
+@NamedQuery(name="EmailAddressType.findAll", query="SELECT e FROM EmailAddressType e")
+public class EmailAddressType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to ActorHasEmailaddress
-	@OneToMany(mappedBy="emailaddresstype")
-	private List<ActorHasEmailaddress> actorHasEmailaddresses;
+	//bi-directional many-to-one association to ActorHasEmailAddress
+	@OneToMany(mappedBy="emailAddressType")
+	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
-	//bi-directional many-to-one association to Emailaddresstypetranslation
-	@OneToMany(mappedBy="emailaddresstype")
-	private List<Emailaddresstypetranslation> emailaddresstypetranslations;
+	//bi-directional many-to-one association to EmailAddressTypeTranslation
+	@OneToMany(mappedBy="emailAddressType")
+	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
-	public Emailaddresstype() {
+	public EmailAddressType() {
 	}
 
 	public int getId() {
@@ -36,48 +37,48 @@ public class Emailaddresstype implements Serializable {
 		this.id = id;
 	}
 
-	public List<ActorHasEmailaddress> getActorHasEmailaddresses() {
-		return this.actorHasEmailaddresses;
+	public List<ActorHasEmailAddress> getActorHasEmailAddresses() {
+		return this.actorHasEmailAddresses;
 	}
 
-	public void setActorHasEmailaddresses(List<ActorHasEmailaddress> actorHasEmailaddresses) {
-		this.actorHasEmailaddresses = actorHasEmailaddresses;
+	public void setActorHasEmailAddresses(List<ActorHasEmailAddress> actorHasEmailAddresses) {
+		this.actorHasEmailAddresses = actorHasEmailAddresses;
 	}
 
-	public ActorHasEmailaddress addActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().add(actorHasEmailaddress);
-		actorHasEmailaddress.setEmailaddresstype(this);
+	public ActorHasEmailAddress addActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().add(actorHasEmailAddress);
+		actorHasEmailAddress.setEmailAddressType(this);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
 	}
 
-	public ActorHasEmailaddress removeActorHasEmailaddress(ActorHasEmailaddress actorHasEmailaddress) {
-		getActorHasEmailaddresses().remove(actorHasEmailaddress);
-		actorHasEmailaddress.setEmailaddresstype(null);
+	public ActorHasEmailAddress removeActorHasEmailAddress(ActorHasEmailAddress actorHasEmailAddress) {
+		getActorHasEmailAddresses().remove(actorHasEmailAddress);
+		actorHasEmailAddress.setEmailAddressType(null);
 
-		return actorHasEmailaddress;
+		return actorHasEmailAddress;
 	}
 
-	public List<Emailaddresstypetranslation> getEmailaddresstypetranslations() {
-		return this.emailaddresstypetranslations;
+	public List<EmailAddressTypeTranslation> getEmailAddressTypeTranslations() {
+		return this.emailAddressTypeTranslations;
 	}
 
-	public void setEmailaddresstypetranslations(List<Emailaddresstypetranslation> emailaddresstypetranslations) {
-		this.emailaddresstypetranslations = emailaddresstypetranslations;
+	public void setEmailAddressTypeTranslations(List<EmailAddressTypeTranslation> emailAddressTypeTranslations) {
+		this.emailAddressTypeTranslations = emailAddressTypeTranslations;
 	}
 
-	public Emailaddresstypetranslation addEmailaddresstypetranslation(Emailaddresstypetranslation emailaddresstypetranslation) {
-		getEmailaddresstypetranslations().add(emailaddresstypetranslation);
-		emailaddresstypetranslation.setEmailaddresstype(this);
+	public EmailAddressTypeTranslation addEmailAddressTypeTranslation(EmailAddressTypeTranslation emailAddressTypeTranslation) {
+		getEmailAddressTypeTranslations().add(emailAddressTypeTranslation);
+		emailAddressTypeTranslation.setEmailAddressType(this);
 
-		return emailaddresstypetranslation;
+		return emailAddressTypeTranslation;
 	}
 
-	public Emailaddresstypetranslation removeEmailaddresstypetranslation(Emailaddresstypetranslation emailaddresstypetranslation) {
-		getEmailaddresstypetranslations().remove(emailaddresstypetranslation);
-		emailaddresstypetranslation.setEmailaddresstype(null);
+	public EmailAddressTypeTranslation removeEmailAddressTypeTranslation(EmailAddressTypeTranslation emailAddressTypeTranslation) {
+		getEmailAddressTypeTranslations().remove(emailAddressTypeTranslation);
+		emailAddressTypeTranslation.setEmailAddressType(null);
 
-		return emailaddresstypetranslation;
+		return emailAddressTypeTranslation;
 	}
 
 }

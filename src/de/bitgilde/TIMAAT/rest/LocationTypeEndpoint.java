@@ -29,8 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Location;
-import de.bitgilde.TIMAAT.model.FIPOP.Locationtranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.Locationtype;
+import de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LocationType;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -56,7 +56,7 @@ public class LocationTypeEndpoint {
 	public Response getLocationtypeList() {
 		System.out.println("LocationTypeEndpoint getLocationTypeList");		
 		@SuppressWarnings("unchecked")
-		List<Locationtype> locationtypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("Locationtype.findAll").getResultList();
+		List<LocationType> locationtypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("Locationtype.findAll").getResultList();
 		return Response.ok().entity(locationtypeList).build();
   }
   

@@ -6,27 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the medium_event_relationshiptype database table.
+ * The persistent class for the medium_event_relationship_type database table.
  * 
  */
 @Entity
-@Table(name="medium_event_relationshiptype")
-@NamedQuery(name="MediumEventRelationshiptype.findAll", query="SELECT m FROM MediumEventRelationshiptype m")
-public class MediumEventRelationshiptype implements Serializable {
+@Table(name="medium_event_relationship_type")
+@NamedQuery(name="MediumEventRelationshipType.findAll", query="SELECT m FROM MediumEventRelationshipType m")
+public class MediumEventRelationshipType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to MediumEventRelationshiptypeTranslation
-	@OneToMany(mappedBy="mediumEventRelationshiptype")
-	private List<MediumEventRelationshiptypeTranslation> mediumEventRelationshiptypeTranslations;
+	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
+	@OneToMany(mappedBy="mediumEventRelationshipType")
+	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
-	@OneToMany(mappedBy="mediumEventRelationshiptype")
+	@OneToMany(mappedBy="mediumEventRelationshipType")
 	private List<MediumRelatesToEvent> mediumRelatesToEvents;
 
-	public MediumEventRelationshiptype() {
+	public MediumEventRelationshipType() {
 	}
 
 	public int getId() {
@@ -37,26 +37,26 @@ public class MediumEventRelationshiptype implements Serializable {
 		this.id = id;
 	}
 
-	public List<MediumEventRelationshiptypeTranslation> getMediumEventRelationshiptypeTranslations() {
-		return this.mediumEventRelationshiptypeTranslations;
+	public List<MediumEventRelationshipTypeTranslation> getMediumEventRelationshipTypeTranslations() {
+		return this.mediumEventRelationshipTypeTranslations;
 	}
 
-	public void setMediumEventRelationshiptypeTranslations(List<MediumEventRelationshiptypeTranslation> mediumEventRelationshiptypeTranslations) {
-		this.mediumEventRelationshiptypeTranslations = mediumEventRelationshiptypeTranslations;
+	public void setMediumEventRelationshipTypeTranslations(List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations) {
+		this.mediumEventRelationshipTypeTranslations = mediumEventRelationshipTypeTranslations;
 	}
 
-	public MediumEventRelationshiptypeTranslation addMediumEventRelationshiptypeTranslation(MediumEventRelationshiptypeTranslation mediumEventRelationshiptypeTranslation) {
-		getMediumEventRelationshiptypeTranslations().add(mediumEventRelationshiptypeTranslation);
-		mediumEventRelationshiptypeTranslation.setMediumEventRelationshiptype(this);
+	public MediumEventRelationshipTypeTranslation addMediumEventRelationshipTypeTranslation(MediumEventRelationshipTypeTranslation mediumEventRelationshipTypeTranslation) {
+		getMediumEventRelationshipTypeTranslations().add(mediumEventRelationshipTypeTranslation);
+		mediumEventRelationshipTypeTranslation.setMediumEventRelationshipType(this);
 
-		return mediumEventRelationshiptypeTranslation;
+		return mediumEventRelationshipTypeTranslation;
 	}
 
-	public MediumEventRelationshiptypeTranslation removeMediumEventRelationshiptypeTranslation(MediumEventRelationshiptypeTranslation mediumEventRelationshiptypeTranslation) {
-		getMediumEventRelationshiptypeTranslations().remove(mediumEventRelationshiptypeTranslation);
-		mediumEventRelationshiptypeTranslation.setMediumEventRelationshiptype(null);
+	public MediumEventRelationshipTypeTranslation removeMediumEventRelationshipTypeTranslation(MediumEventRelationshipTypeTranslation mediumEventRelationshipTypeTranslation) {
+		getMediumEventRelationshipTypeTranslations().remove(mediumEventRelationshipTypeTranslation);
+		mediumEventRelationshipTypeTranslation.setMediumEventRelationshipType(null);
 
-		return mediumEventRelationshiptypeTranslation;
+		return mediumEventRelationshipTypeTranslation;
 	}
 
 	public List<MediumRelatesToEvent> getMediumRelatesToEvents() {
@@ -69,14 +69,14 @@ public class MediumEventRelationshiptype implements Serializable {
 
 	public MediumRelatesToEvent addMediumRelatesToEvent(MediumRelatesToEvent mediumRelatesToEvent) {
 		getMediumRelatesToEvents().add(mediumRelatesToEvent);
-		mediumRelatesToEvent.setMediumEventRelationshiptype(this);
+		mediumRelatesToEvent.setMediumEventRelationshipType(this);
 
 		return mediumRelatesToEvent;
 	}
 
 	public MediumRelatesToEvent removeMediumRelatesToEvent(MediumRelatesToEvent mediumRelatesToEvent) {
 		getMediumRelatesToEvents().remove(mediumRelatesToEvent);
-		mediumRelatesToEvent.setMediumEventRelationshiptype(null);
+		mediumRelatesToEvent.setMediumEventRelationshipType(null);
 
 		return mediumRelatesToEvent;
 	}

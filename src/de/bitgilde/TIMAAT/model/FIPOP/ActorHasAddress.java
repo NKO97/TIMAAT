@@ -19,25 +19,25 @@ public class ActorHasAddress implements Serializable {
 	private ActorHasAddressPK id;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="used_since")
 	private Date usedSince;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="used_until")
 	private Date usedUntil;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="ActorID")
 	private Actor actor;
 
 	//bi-directional many-to-one association to Address
 	@ManyToOne
-	@JoinColumn(name="AddressID")
 	private Address address;
 
-	//bi-directional many-to-one association to Addresstype
+	//bi-directional many-to-one association to AddressType
 	@ManyToOne
-	@JoinColumn(name="AddressTypeID")
-	private Addresstype addresstype;
+	@JoinColumn(name="address_type_id")
+	private AddressType addressType;
 
 	public ActorHasAddress() {
 	}
@@ -82,12 +82,12 @@ public class ActorHasAddress implements Serializable {
 		this.address = address;
 	}
 
-	public Addresstype getAddresstype() {
-		return this.addresstype;
+	public AddressType getAddressType() {
+		return this.addressType;
 	}
 
-	public void setAddresstype(Addresstype addresstype) {
-		this.addresstype = addresstype;
+	public void setAddressType(AddressType addressType) {
+		this.addressType = addressType;
 	}
 
 }

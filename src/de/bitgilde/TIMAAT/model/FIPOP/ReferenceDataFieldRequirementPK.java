@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the ReferenceDataFieldRequirements database table.
+ * The primary key class for the reference_data_field_requirements database table.
  * 
  */
 @Embeddable
@@ -12,25 +12,25 @@ public class ReferenceDataFieldRequirementPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int referenceEntryTypeID;
+	@Column(name="reference_entry_type_id", insertable=false, updatable=false)
+	private int referenceEntryTypeId;
 
-	@Column(insertable=false, updatable=false)
-	private int referenceID;
+	@Column(name="reference_id", insertable=false, updatable=false)
+	private int referenceId;
 
 	public ReferenceDataFieldRequirementPK() {
 	}
-	public int getReferenceEntryTypeID() {
-		return this.referenceEntryTypeID;
+	public int getReferenceEntryTypeId() {
+		return this.referenceEntryTypeId;
 	}
-	public void setReferenceEntryTypeID(int referenceEntryTypeID) {
-		this.referenceEntryTypeID = referenceEntryTypeID;
+	public void setReferenceEntryTypeId(int referenceEntryTypeId) {
+		this.referenceEntryTypeId = referenceEntryTypeId;
 	}
-	public int getReferenceID() {
-		return this.referenceID;
+	public int getReferenceId() {
+		return this.referenceId;
 	}
-	public void setReferenceID(int referenceID) {
-		this.referenceID = referenceID;
+	public void setReferenceId(int referenceId) {
+		this.referenceId = referenceId;
 	}
 
 	public boolean equals(Object other) {
@@ -42,15 +42,15 @@ public class ReferenceDataFieldRequirementPK implements Serializable {
 		}
 		ReferenceDataFieldRequirementPK castOther = (ReferenceDataFieldRequirementPK)other;
 		return 
-			(this.referenceEntryTypeID == castOther.referenceEntryTypeID)
-			&& (this.referenceID == castOther.referenceID);
+			(this.referenceEntryTypeId == castOther.referenceEntryTypeId)
+			&& (this.referenceId == castOther.referenceId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.referenceEntryTypeID;
-		hash = hash * prime + this.referenceID;
+		hash = hash * prime + this.referenceEntryTypeId;
+		hash = hash * prime + this.referenceId;
 		
 		return hash;
 	}

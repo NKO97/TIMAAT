@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the actornamepart database table.
+ * The persistent class for the actor_name_part database table.
  * 
  */
 @Entity
-@NamedQuery(name="Actornamepart.findAll", query="SELECT a FROM Actornamepart a")
-public class Actornamepart implements Serializable {
+@Table(name="actor_name_part")
+@NamedQuery(name="ActorNamePart.findAll", query="SELECT a FROM ActorNamePart a")
+public class ActorNamePart implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,17 @@ public class Actornamepart implements Serializable {
 
 	private String name;
 
-	//bi-directional many-to-one association to Actorname
+	//bi-directional many-to-one association to ActorName
 	@ManyToOne
-	@JoinColumn(name="ActorNameID")
-	private Actorname actorname;
+	@JoinColumn(name="actor_name_id")
+	private ActorName actorName;
 
-	//bi-directional many-to-one association to Actornameparttype
+	//bi-directional many-to-one association to ActorNamePartType
 	@ManyToOne
-	@JoinColumn(name="ActorNamePartTypeID")
-	private Actornameparttype actornameparttype;
+	@JoinColumn(name="actor_name_part_type_id")
+	private ActorNamePartType actorNamePartType;
 
-	public Actornamepart() {
+	public ActorNamePart() {
 	}
 
 	public int getId() {
@@ -47,20 +48,20 @@ public class Actornamepart implements Serializable {
 		this.name = name;
 	}
 
-	public Actorname getActorname() {
-		return this.actorname;
+	public ActorName getActorName() {
+		return this.actorName;
 	}
 
-	public void setActorname(Actorname actorname) {
-		this.actorname = actorname;
+	public void setActorName(ActorName actorName) {
+		this.actorName = actorName;
 	}
 
-	public Actornameparttype getActornameparttype() {
-		return this.actornameparttype;
+	public ActorNamePartType getActorNamePartType() {
+		return this.actorNamePartType;
 	}
 
-	public void setActornameparttype(Actornameparttype actornameparttype) {
-		this.actornameparttype = actornameparttype;
+	public void setActorNamePartType(ActorNamePartType actorNamePartType) {
+		this.actorNamePartType = actorNamePartType;
 	}
 
 }

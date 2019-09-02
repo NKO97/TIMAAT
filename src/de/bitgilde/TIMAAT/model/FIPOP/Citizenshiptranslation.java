@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the citizenshiptranslation database table.
+ * The persistent class for the citizenship_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Citizenshiptranslation.findAll", query="SELECT c FROM Citizenshiptranslation c")
-public class Citizenshiptranslation implements Serializable {
+@Table(name="citizenship_translation")
+@NamedQuery(name="CitizenshipTranslation.findAll", query="SELECT c FROM CitizenshipTranslation c")
+public class CitizenshipTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,15 +21,13 @@ public class Citizenshiptranslation implements Serializable {
 
 	//bi-directional many-to-one association to Citizenship
 	@ManyToOne
-	@JoinColumn(name="CitizenshipID")
 	private Citizenship citizenship;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Citizenshiptranslation() {
+	public CitizenshipTranslation() {
 	}
 
 	public int getId() {

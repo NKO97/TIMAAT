@@ -7,12 +7,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
- * The persistent class for the locationtranslation database table.
+ * The persistent class for the location_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Locationtranslation.findAll", query="SELECT l FROM Locationtranslation l")
-public class Locationtranslation implements Serializable {
+@Table(name="location_translation")
+@NamedQuery(name="LocationTranslation.findAll", query="SELECT l FROM LocationTranslation l")
+public class LocationTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,16 +24,15 @@ public class Locationtranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
 	@JsonIgnore // to prevent infinite recursion ( TODO check why that happens)
-	@JoinColumn(name="LocationID")
+	@JoinColumn(name="location_id")
 	private Location location;
 
-	public Locationtranslation() {
+	public LocationTranslation() {
 	}
 
 	public int getId() {

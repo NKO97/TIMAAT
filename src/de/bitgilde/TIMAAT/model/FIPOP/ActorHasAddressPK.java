@@ -12,25 +12,25 @@ public class ActorHasAddressPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int actorID;
+	@Column(name="actor_id", insertable=false, updatable=false)
+	private int actorId;
 
-	@Column(insertable=false, updatable=false)
-	private int addressID;
+	@Column(name="address_id", insertable=false, updatable=false)
+	private int addressId;
 
 	public ActorHasAddressPK() {
 	}
-	public int getActorID() {
-		return this.actorID;
+	public int getActorId() {
+		return this.actorId;
 	}
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
+	public void setActorId(int actorId) {
+		this.actorId = actorId;
 	}
-	public int getAddressID() {
-		return this.addressID;
+	public int getAddressId() {
+		return this.addressId;
 	}
-	public void setAddressID(int addressID) {
-		this.addressID = addressID;
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
 
 	public boolean equals(Object other) {
@@ -42,15 +42,15 @@ public class ActorHasAddressPK implements Serializable {
 		}
 		ActorHasAddressPK castOther = (ActorHasAddressPK)other;
 		return 
-			(this.actorID == castOther.actorID)
-			&& (this.addressID == castOther.addressID);
+			(this.actorId == castOther.actorId)
+			&& (this.addressId == castOther.addressId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.actorID;
-		hash = hash * prime + this.addressID;
+		hash = hash * prime + this.actorId;
+		hash = hash * prime + this.addressId;
 		
 		return hash;
 	}

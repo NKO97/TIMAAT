@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Country;
 import de.bitgilde.TIMAAT.model.FIPOP.Location;
-import de.bitgilde.TIMAAT.model.FIPOP.Locationtranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -197,10 +197,10 @@ public class CountryEndpoint {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		// remove all associated translations
-		for (Locationtranslation locationTranslation : location.getLocationtranslations()) entityManager.remove(locationTranslation);
-		while (location.getLocationtranslations().size() > 0) {
-			// System.out.println("LocationEndpoint: try to delete location translation with id: "+ location.getLocationtranslations().get(0).getId());
-			location.removeLocationtranslation(location.getLocationtranslations().get(0));
+		for (LocationTranslation locationTranslation : location.getLocationTranslations()) entityManager.remove(locationTranslation);
+		while (location.getLocationTranslations().size() > 0) {
+			// System.out.println("LocationEndpoint: try to delete location translation with id: "+ location.getLocationTranslations().get(0).getId());
+			location.removeLocationTranslation(location.getLocationTranslations().get(0));
 		}
 		entityManager.remove(country);
 		entityManager.remove(country.getLocation()); // remove country, then corresponding location

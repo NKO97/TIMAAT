@@ -3,16 +3,15 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 /**
- * The persistent class for the eventtranslation database table.
+ * The persistent class for the event_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Eventtranslation.findAll", query="SELECT e FROM Eventtranslation e")
-public class Eventtranslation implements Serializable {
+@Table(name="event_translation")
+@NamedQuery(name="EventTranslation.findAll", query="SELECT e FROM EventTranslation e")
+public class EventTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -25,16 +24,13 @@ public class Eventtranslation implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
-	@JsonIgnore // to prevent infinite recursion ( TODO check why that happens)
-	@JoinColumn(name="EventID")
 	private Event event;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Eventtranslation() {
+	public EventTranslation() {
 	}
 
 	public int getId() {

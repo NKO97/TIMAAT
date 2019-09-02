@@ -6,27 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the actor_actor_relationshiptype database table.
+ * The persistent class for the actor_actor_relationship_type database table.
  * 
  */
 @Entity
-@Table(name="actor_actor_relationshiptype")
-@NamedQuery(name="ActorActorRelationshiptype.findAll", query="SELECT a FROM ActorActorRelationshiptype a")
-public class ActorActorRelationshiptype implements Serializable {
+@Table(name="actor_actor_relationship_type")
+@NamedQuery(name="ActorActorRelationshipType.findAll", query="SELECT a FROM ActorActorRelationshipType a")
+public class ActorActorRelationshipType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to ActorActorRelationshiptypetranslation
-	@OneToMany(mappedBy="actorActorRelationshiptype")
-	private List<ActorActorRelationshiptypetranslation> actorActorRelationshiptypetranslations;
+	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
+	@OneToMany(mappedBy="actorActorRelationshipType")
+	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
-	@OneToMany(mappedBy="actorActorRelationshiptype")
+	@OneToMany(mappedBy="actorActorRelationshipType")
 	private List<ActorRelatesToActor> actorRelatesToActors;
 
-	public ActorActorRelationshiptype() {
+	public ActorActorRelationshipType() {
 	}
 
 	public int getId() {
@@ -37,26 +37,26 @@ public class ActorActorRelationshiptype implements Serializable {
 		this.id = id;
 	}
 
-	public List<ActorActorRelationshiptypetranslation> getActorActorRelationshiptypetranslations() {
-		return this.actorActorRelationshiptypetranslations;
+	public List<ActorActorRelationshipTypeTranslation> getActorActorRelationshipTypeTranslations() {
+		return this.actorActorRelationshipTypeTranslations;
 	}
 
-	public void setActorActorRelationshiptypetranslations(List<ActorActorRelationshiptypetranslation> actorActorRelationshiptypetranslations) {
-		this.actorActorRelationshiptypetranslations = actorActorRelationshiptypetranslations;
+	public void setActorActorRelationshipTypeTranslations(List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations) {
+		this.actorActorRelationshipTypeTranslations = actorActorRelationshipTypeTranslations;
 	}
 
-	public ActorActorRelationshiptypetranslation addActorActorRelationshiptypetranslation(ActorActorRelationshiptypetranslation actorActorRelationshiptypetranslation) {
-		getActorActorRelationshiptypetranslations().add(actorActorRelationshiptypetranslation);
-		actorActorRelationshiptypetranslation.setActorActorRelationshiptype(this);
+	public ActorActorRelationshipTypeTranslation addActorActorRelationshipTypeTranslation(ActorActorRelationshipTypeTranslation actorActorRelationshipTypeTranslation) {
+		getActorActorRelationshipTypeTranslations().add(actorActorRelationshipTypeTranslation);
+		actorActorRelationshipTypeTranslation.setActorActorRelationshipType(this);
 
-		return actorActorRelationshiptypetranslation;
+		return actorActorRelationshipTypeTranslation;
 	}
 
-	public ActorActorRelationshiptypetranslation removeActorActorRelationshiptypetranslation(ActorActorRelationshiptypetranslation actorActorRelationshiptypetranslation) {
-		getActorActorRelationshiptypetranslations().remove(actorActorRelationshiptypetranslation);
-		actorActorRelationshiptypetranslation.setActorActorRelationshiptype(null);
+	public ActorActorRelationshipTypeTranslation removeActorActorRelationshipTypeTranslation(ActorActorRelationshipTypeTranslation actorActorRelationshipTypeTranslation) {
+		getActorActorRelationshipTypeTranslations().remove(actorActorRelationshipTypeTranslation);
+		actorActorRelationshipTypeTranslation.setActorActorRelationshipType(null);
 
-		return actorActorRelationshiptypetranslation;
+		return actorActorRelationshipTypeTranslation;
 	}
 
 	public List<ActorRelatesToActor> getActorRelatesToActors() {
@@ -69,14 +69,14 @@ public class ActorActorRelationshiptype implements Serializable {
 
 	public ActorRelatesToActor addActorRelatesToActor(ActorRelatesToActor actorRelatesToActor) {
 		getActorRelatesToActors().add(actorRelatesToActor);
-		actorRelatesToActor.setActorActorRelationshiptype(this);
+		actorRelatesToActor.setActorActorRelationshipType(this);
 
 		return actorRelatesToActor;
 	}
 
 	public ActorRelatesToActor removeActorRelatesToActor(ActorRelatesToActor actorRelatesToActor) {
 		getActorRelatesToActors().remove(actorRelatesToActor);
-		actorRelatesToActor.setActorActorRelationshiptype(null);
+		actorRelatesToActor.setActorActorRelationshipType(null);
 
 		return actorRelatesToActor;
 	}

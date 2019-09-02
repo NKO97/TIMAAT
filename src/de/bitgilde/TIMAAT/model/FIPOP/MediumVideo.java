@@ -5,66 +5,78 @@ import javax.persistence.*;
 
 // import model.AudioCodecInformation;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
 
 
 /**
  * The persistent class for the MediumVideo database table.
  * 
  */
-@Embeddable
+@Entity
+// @Embeddable
+@Table(name="medium_video")
 @NamedQuery(name="MediumVideo.findAll", query="SELECT m FROM MediumVideo m")
 public class MediumVideo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private int audioCodecInformationID;
+	@Id
+	@PrimaryKeyJoinColumn(name="medium_id")
+	@Column(name="medium_id")
+	private int mediumId;
+
+	@JoinColumn(name="audio_codec_information_id")
+	private AudioCodecInformation audioCodecInformation;
 
 	private String brand;
 
+	@Column(name="data_rate")
 	private int dataRate;
 
+	@Column(name="frame_rate")
 	private int frameRate;
 
 	private int height;
 
-	private int isEpisode;
-
-	private Integer episodeInformationID;
+	@Column(name="is_episode")
+	private byte isEpisode;
 
 	private Timestamp length;
 
+	@Column(name="total_bitrate")
 	private int totalBitrate;
 
+	@Column(name="video_codec")
 	private String videoCodec;
 
 	private int width;
 
+	//bi-directional one-to-one association to EpisodeInformation
+	@OneToOne(mappedBy="mediumVideo")
+	private EpisodeInformation episodeInformation;
+
+	//bi-directional one-to-one association to Medium
+	@OneToOne
+	@PrimaryKeyJoinColumn(name="medium_id")
+	private Medium medium;
 
 	public MediumVideo() {
 	}
 
-	// //bi-directional many-to-one association to AudioCodecInformation
-	// @ManyToOne
-	// @JoinColumn(name="audioCodec_InformationId")
-	// private AudioCodecInformation audioCodecInformation;
-
-	public int getAudioCodecInformationID() {
-		return this.audioCodecInformationID;
+	public int getMediumId() {
+		return this.mediumId;
 	}
 
-	public void setAudioCodecInformationID(int audioCodecInformationID) {
-		this.audioCodecInformationID = audioCodecInformationID;
+	public void setMediumId(int mediumId) {
+		this.mediumId = mediumId;
 	}
 	    
-    // public AudioCodecInformation getAudioCodecInformation() {
-	// 	return this.audioCodecInformation;
-	// }
+  public AudioCodecInformation getAudioCodecInformation() {
+		return this.audioCodecInformation;
+	}
 
-	// public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
-	// 	this.audioCodecInformation = audioCodecInformation;
-    // }
+	public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
+		this.audioCodecInformation = audioCodecInformation;
+  }
 
 	public String getBrand() {
 		return this.brand;
@@ -80,14 +92,6 @@ public class MediumVideo implements Serializable {
 
 	public void setDataRate(int dataRate) {
 		this.dataRate = dataRate;
-	}
-
-	public Integer getEpisodeInformationID() {
-		return null; // TODO Placeholder
-	}
-
-	public void setEpisodeInformationID(Integer episodeInformationID) {
-		this.episodeInformationID = episodeInformationID;
 	}
 
 	public int getFrameRate() {
@@ -106,11 +110,11 @@ public class MediumVideo implements Serializable {
 		this.height = height;
 	}
 
-	public int getIsEpisode() {
+	public byte getIsEpisode() {
 		return this.isEpisode;
 	}
 
-	public void setIsEpisode(int isEpisode) {
+	public void setIsEpisode(byte isEpisode) {
 		this.isEpisode = isEpisode;
 	}
 
@@ -144,6 +148,22 @@ public class MediumVideo implements Serializable {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public EpisodeInformation getEpisodeInformation() {
+		return this.episodeInformation;
+	}
+	
+	public void setEpisodeInformation(EpisodeInformation episodeInformation) {
+		this.episodeInformation = episodeInformation;
+	}
+
+	public Medium getMedium() {
+		return this.medium;
+	}
+
+	public void setMedium(Medium medium) {
+		this.medium = medium;
 	}
 
 }

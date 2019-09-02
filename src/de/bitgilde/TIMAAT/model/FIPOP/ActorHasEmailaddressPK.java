@@ -4,53 +4,53 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the actor_has_emailaddress database table.
+ * The primary key class for the actor_has_email_address database table.
  * 
  */
 @Embeddable
-public class ActorHasEmailaddressPK implements Serializable {
+public class ActorHasEmailAddressPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
-	private int actorID;
+	@Column(name="actor_id", insertable=false, updatable=false)
+	private int actorId;
 
-	@Column(insertable=false, updatable=false)
-	private int emailAddressID;
+	@Column(name="email_address_id", insertable=false, updatable=false)
+	private int emailAddressId;
 
-	public ActorHasEmailaddressPK() {
+	public ActorHasEmailAddressPK() {
 	}
-	public int getActorID() {
-		return this.actorID;
+	public int getActorId() {
+		return this.actorId;
 	}
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
+	public void setActorId(int actorId) {
+		this.actorId = actorId;
 	}
-	public int getEmailAddressID() {
-		return this.emailAddressID;
+	public int getEmailAddressId() {
+		return this.emailAddressId;
 	}
-	public void setEmailAddressID(int emailAddressID) {
-		this.emailAddressID = emailAddressID;
+	public void setEmailAddressId(int emailAddressId) {
+		this.emailAddressId = emailAddressId;
 	}
 
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof ActorHasEmailaddressPK)) {
+		if (!(other instanceof ActorHasEmailAddressPK)) {
 			return false;
 		}
-		ActorHasEmailaddressPK castOther = (ActorHasEmailaddressPK)other;
+		ActorHasEmailAddressPK castOther = (ActorHasEmailAddressPK)other;
 		return 
-			(this.actorID == castOther.actorID)
-			&& (this.emailAddressID == castOther.emailAddressID);
+			(this.actorId == castOther.actorId)
+			&& (this.emailAddressId == castOther.emailAddressId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.actorID;
-		hash = hash * prime + this.emailAddressID;
+		hash = hash * prime + this.actorId;
+		hash = hash * prime + this.emailAddressId;
 		
 		return hash;
 	}

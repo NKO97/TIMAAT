@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the Source database table.
+ * The persistent class for the source database table.
  * 
  */
 @Entity
@@ -19,24 +19,21 @@ public class Source implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private Timestamp sourceLastAccessed;
+	@Column(name="is_still_available")
+	private byte isStillAvailable;
 
-	private byte sourceStillAvailable;
+	@Column(name="last_accessed")
+	private Timestamp lastAccessed;
 
 	@Lob
-	private String sourceURL;
+	private String url;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="source")
 	private List<Medium> mediums;
 
-	//bi-directional many-to-one association to Actor
-	@Column(name="ActorID")
-	private int actorID;
-
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
-	@JoinColumn(name="MediumID")
 	private Medium medium;
 
 	public Source() {
@@ -50,28 +47,28 @@ public class Source implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getSourceLastAccessed() {
-		return this.sourceLastAccessed;
+	public byte getIsStillAvailable() {
+		return this.isStillAvailable;
 	}
 
-	public void setSourceLastAccessed(Timestamp sourceLastAccessed) {
-		this.sourceLastAccessed = sourceLastAccessed;
+	public void setIsStillAvailable(byte isStillAvailable) {
+		this.isStillAvailable = isStillAvailable;
 	}
 
-	public byte getSourceStillAvailable() {
-		return this.sourceStillAvailable;
+	public Timestamp getLastAccessed() {
+		return this.lastAccessed;
 	}
 
-	public void setSourceStillAvailable(byte sourceStillAvailable) {
-		this.sourceStillAvailable = sourceStillAvailable;
+	public void setLastAccessed(Timestamp lastAccessed) {
+		this.lastAccessed = lastAccessed;
 	}
 
-	public String getSourceURL() {
-		return this.sourceURL;
+	public String getUrl() {
+		return this.url;
 	}
 
-	public void setSourceURL(String sourceURL) {
-		this.sourceURL = sourceURL;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public List<Medium> getMediums() {
@@ -94,14 +91,6 @@ public class Source implements Serializable {
 		medium.setSource(null);
 
 		return medium;
-	}
-
-	public int getActorID() {
-		return this.actorID;
-	}
-
-	public void setActorID(int actorID) {
-		this.actorID = actorID;
 	}
 
 	public Medium getMedium() {

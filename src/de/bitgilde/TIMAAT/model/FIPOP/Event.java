@@ -1,10 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
 import javax.persistence.*;
 import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -22,81 +21,71 @@ public class Event implements Serializable {
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="begins_at_date")
 	private Date beginsAtDate;
 
+	@Column(name="created_at")
+	private Timestamp createdAt;
+
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="ends_at_date")
 	private Date endsAtDate;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="created_by_user_account_id")
-	// private UserAccount created_by_user_account_id;
-	private int created_by_user_account_id;
+	@Column(name="last_edited_at")
+	private Timestamp lastEditedAt;
 
-	//bi-directional many-to-one association to UserAccount
-	// @ManyToOne
-	// @JoinColumn(name="last_Edited_by_user_account_id")
-	// private UserAccount last_edited_by_user_account_id;
-	private int last_edited_by_user_account_id;
-
-	private Timestamp created_at;
-
-	private Timestamp last_edited_at;
-
-	//bi-directional many-to-many association to ActorHasRole
-	// @ManyToMany(mappedBy="events")
-	// private List<ActorHasRole> actorHasRoles;
-
-	// //bi-directional many-to-many association to ActorHasRole
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="event_has_actor_with_role"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="EventID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="actor_has_role_ActorID", referencedColumnName="ActorID"),
-	// 		@JoinColumn(name="actor_has_role_RoleID", referencedColumnName="RoleID")
-	// 		}
-	// 	)
-	// private List<ActorHasRole> actorHasRoles;
-
-	// //bi-directional many-to-many association to Annotation
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="annotation_has_event"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="EventID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="AnnotationID")
-	// 		}
-	// 	)
-	// private List<Annotation> annotations;
-
-	// //bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="events", cascade=CascadeType.PERSIST)
-	private List<Tag> tags;
-	
-	//bi-directional many-to-many association to Tag
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="Event_has_Tag"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="Event_ID")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="Tag_ID")
-	// 		}
-	// 	)
-	// private List<Tag> tags;
+	//bi-directional many-to-many association to Annotation
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_event"
+		, joinColumns={
+			@JoinColumn(name="event_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		)
+	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
-	// @JoinColumn(name="LocationID")
 	private Location location;
 
-	// private int locationID;
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="created_by_user_account_id")
+	private UserAccount createdByUserAccount;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="last_edited_by_user_account_id")
+	private UserAccount lastEditedByUserAccount;
+
+	//bi-directional many-to-many association to ActorHasRole
+	@ManyToMany
+	@JoinTable(
+		name="event_has_actor_with_role"
+		, joinColumns={
+			@JoinColumn(name="event_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="actor_has_role_actor_id", referencedColumnName="actor_id"),
+			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
+			}
+		)
+	private List<ActorHasRole> actorHasRoles;
+
+	//bi-directional many-to-many association to EventDomain
+	@ManyToMany(mappedBy="events")
+	private List<EventDomain> eventDomains;
+
+	//bi-directional many-to-many association to EventType
+	@ManyToMany(mappedBy="events")
+	private List<EventType> eventTypes;
+
+	//bi-directional many-to-many association to Tag
+	@ManyToMany(mappedBy="events", cascade=CascadeType.PERSIST)
+	private List<Tag> tags;
 
 	//bi-directional many-to-one association to EventRelatesToEvent
 	@OneToMany(mappedBy="event1")
@@ -106,17 +95,9 @@ public class Event implements Serializable {
 	@OneToMany(mappedBy="event2")
 	private List<EventRelatesToEvent> eventRelatesToEvents2;
 
-	//bi-directional many-to-many association to Eventdomain
-	@ManyToMany(mappedBy="events")
-	private List<Eventdomain> eventdomains;
-
-	//bi-directional many-to-one association to Eventtranslation
+	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="event")
-	private List<Eventtranslation> eventtranslations;
-
-	//bi-directional many-to-many association to Eventtype
-	@ManyToMany(mappedBy="events")
-	private List<Eventtype> eventtypes;
+	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="event")
@@ -141,6 +122,14 @@ public class Event implements Serializable {
 		this.beginsAtDate = beginsAtDate;
 	}
 
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	public Date getEndsAtDate() {
 		return this.endsAtDate;
 	}
@@ -149,69 +138,21 @@ public class Event implements Serializable {
 		this.endsAtDate = endsAtDate;
 	}
 
-	// public UserAccount getCreatedByUserAccount() {
-	// 	return this.created_by_user_account;
-	// }
-
-	// public void setCreatedByUserAccount(UserAccount created_by_user_account) {
-	// 	this.created_by_user_account = created_by_user_account;
-	// }
-	
-	// public UserAccount getLastEditedByUserAccount() {
-	// 	return this.last_edited_by_user_account;
-	// }
-
-	// public void setLastEditedByUserAccount(UserAccount last_edited_by_user_account) {
-	// 	this.last_edited_by_user_account = last_edited_by_user_account;
-	// }
-
-	public int getCreatedByUserAccountID() {
-		return this.created_by_user_account_id;
-	}
-
-	public void setCreatedByUserAccountID(int created_by_user_account_id) {
-		this.created_by_user_account_id = created_by_user_account_id;
-	}
-	
-	public int getLastEditedByUserAccountID() {
-		return this.last_edited_by_user_account_id;
-	}
-
-	public void setLastEditedByUserAccountID(int last_edited_by_user_account_id) {
-		this.last_edited_by_user_account_id = last_edited_by_user_account_id;
-	}
-
-	public Timestamp getCreatedAt() {
-		return this.created_at;
-	}
-
-	public void setCreatedAt(Timestamp created_at) {
-		this.created_at = created_at;
-	}
-
 	public Timestamp getLastEditedAt() {
-		return this.last_edited_at;
+		return this.lastEditedAt;
 	}
 
-	public void setLastEditedAt(Timestamp last_edited_at) {
-		this.last_edited_at = last_edited_at;
+	public void setLastEditedAt(Timestamp lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
 	}
 
-	// public List<ActorHasRole> getActorHasRoles() {
-	// 	return this.actorHasRoles;
-	// }
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
+	}
 
-	// public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
-	// 	this.actorHasRoles = actorHasRoles;
-	// }
-
-	// public List<Annotation> getAnnotations() {
-	// 	return this.annotations;
-	// }
-
-	// public void setAnnotations(List<Annotation> annotations) {
-	// 	this.annotations = annotations;
-	// }
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
+	}
 
 	public Location getLocation() {
 		return this.location;
@@ -221,13 +162,53 @@ public class Event implements Serializable {
 		this.location = location;
 	}
 
-	// public int getLocationID() {
-	// 	return this.locationID;
-	// }
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
+	}
 
-	// public void setLocationID(int locationID) {
-	// 	this.locationID = locationID;
-	// }
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
+	}
+
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
+	}
+
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public List<ActorHasRole> getActorHasRoles() {
+		return this.actorHasRoles;
+	}
+
+	public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
+		this.actorHasRoles = actorHasRoles;
+	}
+
+	public List<EventDomain> getEventDomains() {
+		return this.eventDomains;
+	}
+
+	public void setEventDomains(List<EventDomain> eventDomains) {
+		this.eventDomains = eventDomains;
+	}
+
+	public List<EventType> getEventTypes() {
+		return this.eventTypes;
+	}
+
+	public void setEventTypes(List<EventType> eventTypes) {
+		this.eventTypes = eventTypes;
+	}
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
 	public List<EventRelatesToEvent> getEventRelatesToEvents1() {
 		return this.eventRelatesToEvents1;
@@ -273,40 +254,26 @@ public class Event implements Serializable {
 		return eventRelatesToEvents2;
 	}
 
-	public List<Eventdomain> getEventdomains() {
-		return this.eventdomains;
+	public List<EventTranslation> getEventTranslations() {
+		return this.eventTranslations;
 	}
 
-	public void setEventdomains(List<Eventdomain> eventdomains) {
-		this.eventdomains = eventdomains;
+	public void setEventTranslations(List<EventTranslation> eventTranslations) {
+		this.eventTranslations = eventTranslations;
 	}
 
-	public List<Eventtranslation> getEventtranslations() {
-		return this.eventtranslations;
+	public EventTranslation addEventTranslation(EventTranslation eventTranslation) {
+		getEventTranslations().add(eventTranslation);
+		eventTranslation.setEvent(this);
+
+		return eventTranslation;
 	}
 
-	public void setEventtranslations(List<Eventtranslation> eventtranslations) {
-		this.eventtranslations = eventtranslations;
-	}
+	public EventTranslation removeEventTranslation(EventTranslation eventTranslation) {
+		getEventTranslations().remove(eventTranslation);
+		// eventTranslation.setEvent(null);
 
-	public Eventtranslation addEventtranslation(Eventtranslation eventtranslation) {
-		getEventtranslations().add(eventtranslation);
-		eventtranslation.setEvent(this);
-
-		return eventtranslation;
-	}
-
-	public Eventtranslation removeEventtranslation(Eventtranslation eventtranslation) {
-		getEventtranslations().remove(eventtranslation);
-		return eventtranslation;
-	}
-
-	public List<Eventtype> getEventtypes() {
-		return this.eventtypes;
-	}
-
-	public void setEventtypes(List<Eventtype> eventtypes) {
-		this.eventtypes = eventtypes;
+		return eventTranslation;
 	}
 
 	public List<MediumRelatesToEvent> getMediumRelatesToEvents() {
@@ -329,14 +296,6 @@ public class Event implements Serializable {
 		mediumRelatesToEvent.setEvent(null);
 
 		return mediumRelatesToEvent;
-	}
-
-	public List<Tag> getTags() {
-		return this.tags;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
 	}
 
 }

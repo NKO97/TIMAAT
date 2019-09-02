@@ -2,16 +2,18 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.List;
 
 
 /**
- * The persistent class for the academictitle database table.
+ * The persistent class for the academic_title database table.
  * 
  */
 @Entity
-@NamedQuery(name="Academictitle.findAll", query="SELECT a FROM Academictitle a")
-public class Academictitle implements Serializable {
+@Table(name="academic_title")
+@NamedQuery(name="AcademicTitle.findAll", query="SELECT a FROM AcademicTitle a")
+public class AcademicTitle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,10 +22,10 @@ public class Academictitle implements Serializable {
 	private String title;
 
 	//bi-directional many-to-one association to Person
-	@OneToMany(mappedBy="academictitle")
+	@OneToMany(mappedBy="academicTitle")
 	private List<Person> persons;
 
-	public Academictitle() {
+	public AcademicTitle() {
 	}
 
 	public int getId() {
@@ -52,14 +54,14 @@ public class Academictitle implements Serializable {
 
 	public Person addPerson(Person person) {
 		getPersons().add(person);
-		person.setAcademictitle(this);
+		person.setAcademicTitle(this);
 
 		return person;
 	}
 
 	public Person removePerson(Person person) {
 		getPersons().remove(person);
-		person.setAcademictitle(null);
+		person.setAcademicTitle(null);
 
 		return person;
 	}

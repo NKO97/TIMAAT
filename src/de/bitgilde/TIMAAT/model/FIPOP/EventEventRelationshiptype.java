@@ -6,27 +6,27 @@ import java.util.List;
 
 
 /**
- * The persistent class for the event_event_relationshiptype database table.
+ * The persistent class for the event_event_relationship_type database table.
  * 
  */
 @Entity
-@Table(name="event_event_relationshiptype")
-@NamedQuery(name="EventEventRelationshiptype.findAll", query="SELECT e FROM EventEventRelationshiptype e")
-public class EventEventRelationshiptype implements Serializable {
+@Table(name="event_event_relationship_type")
+@NamedQuery(name="EventEventRelationshipType.findAll", query="SELECT e FROM EventEventRelationshipType e")
+public class EventEventRelationshipType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to EventEventRelationshiptypetranslation
-	@OneToMany(mappedBy="eventEventRelationshiptype")
-	private List<EventEventRelationshiptypetranslation> eventEventRelationshiptypetranslations;
+	//bi-directional many-to-one association to EventEventRelationshipTypeTranslation
+	@OneToMany(mappedBy="eventEventRelationshipType")
+	private List<EventEventRelationshipTypeTranslation> eventEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to EventRelatesToEvent
-	@OneToMany(mappedBy="eventEventRelationshiptype")
+	@OneToMany(mappedBy="eventEventRelationshipType")
 	private List<EventRelatesToEvent> eventRelatesToEvents;
 
-	public EventEventRelationshiptype() {
+	public EventEventRelationshipType() {
 	}
 
 	public int getId() {
@@ -37,26 +37,26 @@ public class EventEventRelationshiptype implements Serializable {
 		this.id = id;
 	}
 
-	public List<EventEventRelationshiptypetranslation> getEventEventRelationshiptypetranslations() {
-		return this.eventEventRelationshiptypetranslations;
+	public List<EventEventRelationshipTypeTranslation> getEventEventRelationshipTypeTranslations() {
+		return this.eventEventRelationshipTypeTranslations;
 	}
 
-	public void setEventEventRelationshiptypetranslations(List<EventEventRelationshiptypetranslation> eventEventRelationshiptypetranslations) {
-		this.eventEventRelationshiptypetranslations = eventEventRelationshiptypetranslations;
+	public void setEventEventRelationshipTypeTranslations(List<EventEventRelationshipTypeTranslation> eventEventRelationshipTypeTranslations) {
+		this.eventEventRelationshipTypeTranslations = eventEventRelationshipTypeTranslations;
 	}
 
-	public EventEventRelationshiptypetranslation addEventEventRelationshiptypetranslation(EventEventRelationshiptypetranslation eventEventRelationshiptypetranslation) {
-		getEventEventRelationshiptypetranslations().add(eventEventRelationshiptypetranslation);
-		eventEventRelationshiptypetranslation.setEventEventRelationshiptype(this);
+	public EventEventRelationshipTypeTranslation addEventEventRelationshipTypeTranslation(EventEventRelationshipTypeTranslation eventEventRelationshipTypeTranslation) {
+		getEventEventRelationshipTypeTranslations().add(eventEventRelationshipTypeTranslation);
+		eventEventRelationshipTypeTranslation.setEventEventRelationshipType(this);
 
-		return eventEventRelationshiptypetranslation;
+		return eventEventRelationshipTypeTranslation;
 	}
 
-	public EventEventRelationshiptypetranslation removeEventEventRelationshiptypetranslation(EventEventRelationshiptypetranslation eventEventRelationshiptypetranslation) {
-		getEventEventRelationshiptypetranslations().remove(eventEventRelationshiptypetranslation);
-		eventEventRelationshiptypetranslation.setEventEventRelationshiptype(null);
+	public EventEventRelationshipTypeTranslation removeEventEventRelationshipTypeTranslation(EventEventRelationshipTypeTranslation eventEventRelationshipTypeTranslation) {
+		getEventEventRelationshipTypeTranslations().remove(eventEventRelationshipTypeTranslation);
+		// eventEventRelationshipTypeTranslation.setEventEventRelationshipType(null);
 
-		return eventEventRelationshiptypetranslation;
+		return eventEventRelationshipTypeTranslation;
 	}
 
 	public List<EventRelatesToEvent> getEventRelatesToEvents() {
@@ -69,14 +69,14 @@ public class EventEventRelationshiptype implements Serializable {
 
 	public EventRelatesToEvent addEventRelatesToEvent(EventRelatesToEvent eventRelatesToEvent) {
 		getEventRelatesToEvents().add(eventRelatesToEvent);
-		eventRelatesToEvent.setEventEventRelationshiptype(this);
+		eventRelatesToEvent.setEventEventRelationshipType(this);
 
 		return eventRelatesToEvent;
 	}
 
 	public EventRelatesToEvent removeEventRelatesToEvent(EventRelatesToEvent eventRelatesToEvent) {
 		getEventRelatesToEvents().remove(eventRelatesToEvent);
-		eventRelatesToEvent.setEventEventRelationshiptype(null);
+		// eventRelatesToEvent.setEventEventRelationshipType(null);
 
 		return eventRelatesToEvent;
 	}

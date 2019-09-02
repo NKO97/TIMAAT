@@ -166,7 +166,7 @@ body.timaat-login-modal-open #wrapper {
 }
 
 #timaat-annotation-list li, 
-#timaat-tagset-list li, 
+#timaat-categoryset-list li, 
 #timaat-event-list li, 
 #timaat-location-list li,
 #timaat-country-list li,
@@ -175,7 +175,7 @@ body.timaat-login-modal-open #wrapper {
 	font-size: 90%;
 }
 #timaat-annotation-list li:hover, 
-#timaat-tagset-list li:hover, 
+#timaat-categoryset-list li:hover, 
 #timaat-event-list li:hover, 
 #timaat-location-list li:hover, 
 #timaat-country-list li:hover, 
@@ -183,7 +183,7 @@ body.timaat-login-modal-open #wrapper {
 	background-color: #e5e5e5;
 }
 .timaat-annotation-list-selected, 
-.timaat-tagset-list-selected, 
+.timaat-categoryset-list-selected, 
 .timaat-event-list-selected, 
 .timaat-location-list-selected,
 .timaat-country-list-selected,
@@ -191,7 +191,7 @@ body.timaat-login-modal-open #wrapper {
 	background-color: #c9e2ff;
 }
 .timaat-annotation-list-selected:hover,
-.timaat-tagset-list-selected:hover,
+.timaat-categoryset-list-selected:hover,
 .timaat-event-list-selected:hover,
 .timaat-location-list-selected:hover,
 .timaat-country-list-selected:hover,
@@ -199,7 +199,7 @@ body.timaat-login-modal-open #wrapper {
 	background-color: #c9e2ff !important;
 }
 
-.timaat-tagset-chooser,
+.timaat-categoryset-chooser,
 .timaat-event-chooser,
 .timaat-location-chooser,
 .timaat-country-chooser,
@@ -207,7 +207,7 @@ body.timaat-login-modal-open #wrapper {
 	margin-top: 0.5em;
 }
 
-.timaat-tagset-remove,
+.timaat-categoryset-remove,
 .timaat-event-remove,
 .timaat-location-remove,
 .timaat-country-remove,

@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the eventdomain_translation database table.
+ * The persistent class for the event_domain_translation database table.
  * 
  */
 @Entity
-@Table(name="eventdomain_translation")
-@NamedQuery(name="EventdomainTranslation.findAll", query="SELECT e FROM EventdomainTranslation e")
-public class EventdomainTranslation implements Serializable {
+@Table(name="event_domain_translation")
+@NamedQuery(name="EventDomainTranslation.findAll", query="SELECT e FROM EventDomainTranslation e")
+public class EventDomainTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,17 +19,16 @@ public class EventdomainTranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Eventdomain
+	//bi-directional many-to-one association to EventDomain
 	@ManyToOne
-	@JoinColumn(name="EventDomainID")
-	private Eventdomain eventdomain;
+	@JoinColumn(name="event_domain_id")
+	private EventDomain eventDomain;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public EventdomainTranslation() {
+	public EventDomainTranslation() {
 	}
 
 	public int getId() {
@@ -48,12 +47,12 @@ public class EventdomainTranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Eventdomain getEventdomain() {
-		return this.eventdomain;
+	public EventDomain getEventDomain() {
+		return this.eventDomain;
 	}
 
-	public void setEventdomain(Eventdomain eventdomain) {
-		this.eventdomain = eventdomain;
+	public void setEventDomain(EventDomain eventDomain) {
+		this.eventDomain = eventDomain;
 	}
 
 	public Language getLanguage() {

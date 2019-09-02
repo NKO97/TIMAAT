@@ -9,12 +9,13 @@ import java.util.List;
 
 
 /**
- * The persistent class for the locationtype database table.
+ * The persistent class for the location_type database table.
  * 
  */
 @Entity
-@NamedQuery(name="Locationtype.findAll", query="SELECT l FROM Locationtype l")
-public class Locationtype implements Serializable {
+@Table(name="location_type")
+@NamedQuery(name="LocationType.findAll", query="SELECT l FROM LocationType l")
+public class LocationType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -26,11 +27,11 @@ public class Locationtype implements Serializable {
 	@OneToMany(mappedBy="locationtype")
 	private List<Location> locations;
 
-	//bi-directional many-to-one association to Locationtypetranslation
-	@OneToMany(mappedBy="locationtype")
-	private List<Locationtypetranslation> locationtypetranslations;
+	//bi-directional many-to-one association to LocationTypeTranslation
+	@OneToMany(mappedBy="locationType")
+	private List<LocationTypeTranslation> locationTypeTranslations;
 
-	public Locationtype() {
+	public LocationType() {
 	}
 
 	public int getId() {
@@ -51,38 +52,38 @@ public class Locationtype implements Serializable {
 
 	public Location addLocation(Location location) {
 		getLocations().add(location);
-		location.setLocationtype(this);
+		location.setLocationType(this);
 
 		return location;
 	}
 
 	public Location removeLocation(Location location) {
 		getLocations().remove(location);
-		location.setLocationtype(null);
+		location.setLocationType(null);
 
 		return location;
 	}
 
-	public List<Locationtypetranslation> getLocationtypetranslations() {
-		return this.locationtypetranslations;
+	public List<LocationTypeTranslation> getLocationTypeTranslations() {
+		return this.locationTypeTranslations;
 	}
 
-	public void setLocationtypetranslations(List<Locationtypetranslation> locationtypetranslations) {
-		this.locationtypetranslations = locationtypetranslations;
+	public void setLocationTypeTranslations(List<LocationTypeTranslation> locationTypeTranslations) {
+		this.locationTypeTranslations = locationTypeTranslations;
 	}
 
-	public Locationtypetranslation addLocationtypetranslation(Locationtypetranslation locationtypetranslation) {
-		getLocationtypetranslations().add(locationtypetranslation);
-		locationtypetranslation.setLocationtype(this);
+	public LocationTypeTranslation addLocationTypeTranslation(LocationTypeTranslation locationTypeTranslation) {
+		getLocationTypeTranslations().add(locationTypeTranslation);
+		locationTypeTranslation.setLocationType(this);
 
-		return locationtypetranslation;
+		return locationTypeTranslation;
 	}
 
-	public Locationtypetranslation removeLocationtypetranslation(Locationtypetranslation locationtypetranslation) {
-		getLocationtypetranslations().remove(locationtypetranslation);
-		locationtypetranslation.setLocationtype(null);
+	public LocationTypeTranslation removeLocationTypeTranslation(LocationTypeTranslation locationTypeTranslation) {
+		getLocationTypeTranslations().remove(locationTypeTranslation);
+		locationTypeTranslation.setLocationType(null);
 
-		return locationtypetranslation;
+		return locationTypeTranslation;
 	}
 
 }

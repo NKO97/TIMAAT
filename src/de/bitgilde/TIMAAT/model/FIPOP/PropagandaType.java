@@ -6,10 +6,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the PropagandaType database table.
+ * The persistent class for the propaganda_type database table.
  * 
  */
 @Entity
+@Table(name="propaganda_type")
 @NamedQuery(name="PropagandaType.findAll", query="SELECT p FROM PropagandaType p")
 public class PropagandaType implements Serializable {
 	private static final long serialVersionUID = 1L;

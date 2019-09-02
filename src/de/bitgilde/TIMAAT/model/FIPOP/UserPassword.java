@@ -9,10 +9,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the UserPassword database table.
+ * The persistent class for the user_password database table.
  * 
  */
 @Entity
+@Table(name="user_password")
 @NamedQuery(name="UserPassword.findAll", query="SELECT u FROM UserPassword u")
 public class UserPassword implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,10 +22,12 @@ public class UserPassword implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="key_stretching_iterations")
 	private int keyStretchingIterations;
 
 	private String salt;
 
+	@Column(name="stretched_hash_encrypted")
 	private String stretchedHashEncrypted;
 
 	//bi-directional many-to-one association to UserAccount
@@ -34,12 +37,12 @@ public class UserPassword implements Serializable {
 
 	//bi-directional many-to-one association to UserPasswordHashType
 	@ManyToOne
-	@JoinColumn(name="UserPasswordHashType_ID")
+	@JoinColumn(name="user_password_hash_type_id")
 	private UserPasswordHashType userPasswordHashType;
 
-	//bi-directional many-to-one association to UserPasswordOldHashes
+	//bi-directional many-to-one association to UserPasswordOldHashe
 	@OneToMany(mappedBy="userPassword")
-	private List<UserPasswordOldHashes> userPasswordOldHashes;
+	private List<UserPasswordOldHash> UserPasswordOldHash;
 
 	public UserPassword() {
 	}
@@ -106,26 +109,26 @@ public class UserPassword implements Serializable {
 		this.userPasswordHashType = userPasswordHashType;
 	}
 
-	public List<UserPasswordOldHashes> getUserPasswordOldHashes() {
-		return this.userPasswordOldHashes;
+	public List<UserPasswordOldHash> getUserPasswordOldHash() {
+		return this.UserPasswordOldHash;
 	}
 
-	public void setUserPasswordOldHashes(List<UserPasswordOldHashes> userPasswordOldHashes) {
-		this.userPasswordOldHashes = userPasswordOldHashes;
+	public void setUserPasswordOldHash(List<UserPasswordOldHash> UserPasswordOldHash) {
+		this.UserPasswordOldHash = UserPasswordOldHash;
 	}
 
-	public UserPasswordOldHashes addUserPasswordOldHashe(UserPasswordOldHashes userPasswordOldHashe) {
-		getUserPasswordOldHashes().add(userPasswordOldHashe);
-		userPasswordOldHashe.setUserPassword(this);
+	public UserPasswordOldHash addUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
+		getUserPasswordOldHash().add(UserPasswordOldHash);
+		UserPasswordOldHash.setUserPassword(this);
 
-		return userPasswordOldHashe;
+		return UserPasswordOldHash;
 	}
 
-	public UserPasswordOldHashes removeUserPasswordOldHashe(UserPasswordOldHashes userPasswordOldHashe) {
-		getUserPasswordOldHashes().remove(userPasswordOldHashe);
-		userPasswordOldHashe.setUserPassword(null);
+	public UserPasswordOldHash removeUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
+		getUserPasswordOldHash().remove(UserPasswordOldHash);
+		UserPasswordOldHash.setUserPassword(null);
 
-		return userPasswordOldHashe;
+		return UserPasswordOldHash;
 	}
 
 }

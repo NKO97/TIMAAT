@@ -5,12 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the emailaddresstypetranslation database table.
+ * The persistent class for the email_address_type_translation database table.
  * 
  */
 @Entity
-@NamedQuery(name="Emailaddresstypetranslation.findAll", query="SELECT e FROM Emailaddresstypetranslation e")
-public class Emailaddresstypetranslation implements Serializable {
+@Table(name="email_address_type_translation")
+@NamedQuery(name="EmailAddressTypeTranslation.findAll", query="SELECT e FROM EmailAddressTypeTranslation e")
+public class EmailAddressTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -18,17 +19,16 @@ public class Emailaddresstypetranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to Emailaddresstype
+	//bi-directional many-to-one association to EmailAddressType
 	@ManyToOne
-	@JoinColumn(name="EmailAddressTypeID")
-	private Emailaddresstype emailaddresstype;
+	@JoinColumn(name="email_address_type_id")
+	private EmailAddressType emailAddressType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JoinColumn(name="LanguageID")
 	private Language language;
 
-	public Emailaddresstypetranslation() {
+	public EmailAddressTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +47,12 @@ public class Emailaddresstypetranslation implements Serializable {
 		this.type = type;
 	}
 
-	public Emailaddresstype getEmailaddresstype() {
-		return this.emailaddresstype;
+	public EmailAddressType getEmailAddressType() {
+		return this.emailAddressType;
 	}
 
-	public void setEmailaddresstype(Emailaddresstype emailaddresstype) {
-		this.emailaddresstype = emailaddresstype;
+	public void setEmailAddressType(EmailAddressType emailAddressType) {
+		this.emailAddressType = emailAddressType;
 	}
 
 	public Language getLanguage() {

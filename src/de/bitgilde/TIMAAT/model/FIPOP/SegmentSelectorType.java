@@ -6,10 +6,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the SegmentSelectorType database table.
+ * The persistent class for the segment_selector_type database table.
  * 
  */
 @Entity
+@Table(name="segment_selector_type")
 @NamedQuery(name="SegmentSelectorType.findAll", query="SELECT s FROM SegmentSelectorType s")
 public class SegmentSelectorType implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,11 +19,14 @@ public class SegmentSelectorType implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String type;
-
+	// TODO get type from translations
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="segmentSelectorType")
 	private List<Annotation> annotations;
+
+	//bi-directional many-to-one association to SegmentSelectorTypeTranslation
+	@OneToMany(mappedBy="segmentSelectorType")
+	private List<SegmentSelectorTypeTranslation> segmentSelectorTypeTranslations;
 
 	public SegmentSelectorType() {
 	}
@@ -33,14 +37,6 @@ public class SegmentSelectorType implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public List<Annotation> getAnnotations() {
@@ -63,6 +59,28 @@ public class SegmentSelectorType implements Serializable {
 		annotation.setSegmentSelectorType(null);
 
 		return annotation;
+	}
+
+	public List<SegmentSelectorTypeTranslation> getSegmentSelectorTypeTranslations() {
+		return this.segmentSelectorTypeTranslations;
+	}
+
+	public void setSegmentSelectorTypeTranslations(List<SegmentSelectorTypeTranslation> segmentSelectorTypeTranslations) {
+		this.segmentSelectorTypeTranslations = segmentSelectorTypeTranslations;
+	}
+
+	public SegmentSelectorTypeTranslation addSegmentSelectorTypeTranslation(SegmentSelectorTypeTranslation segmentSelectorTypeTranslation) {
+		getSegmentSelectorTypeTranslations().add(segmentSelectorTypeTranslation);
+		segmentSelectorTypeTranslation.setSegmentSelectorType(this);
+
+		return segmentSelectorTypeTranslation;
+	}
+
+	public SegmentSelectorTypeTranslation removeSegmentSelectorTypeTranslation(SegmentSelectorTypeTranslation segmentSelectorTypeTranslation) {
+		getSegmentSelectorTypeTranslations().remove(segmentSelectorTypeTranslation);
+		segmentSelectorTypeTranslation.setSegmentSelectorType(null);
+
+		return segmentSelectorTypeTranslation;
 	}
 
 }
