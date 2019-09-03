@@ -24,7 +24,7 @@ public class LocationType implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@JsonIgnore
-	@OneToMany(mappedBy="locationtype")
+	@OneToMany(mappedBy="locationType")
 	private List<Location> locations;
 
 	//bi-directional many-to-one association to LocationTypeTranslation

@@ -32,6 +32,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Location;
 import de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.LocationType;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -109,7 +110,6 @@ public class LocationEndpoint {
 		ObjectMapper mapper = new ObjectMapper();
 		Location newLocation = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-  	// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// parse JSON data
 		try {
 			newLocation = mapper.readValue(jsonData, Location.class);
@@ -121,25 +121,27 @@ public class LocationEndpoint {
 			System.out.println("LocationEndpoint: createLocation - newLocation == 0");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("LocationEndpoint: determine location tpye: " + newLocation.getLocationtype().getId());
-		// Locationtype loctype = entityManager.find(Locationtype.class, newLocation.getLocationtype().getId());
+		System.out.println("LocationEndpoint: createLocation - determine location type: " + newLocation.getLocationType().getId());
+		// LocationType loctype = entityManager.find(LocationType.class, newLocation.getLocationType().getId());
 		// if (loctype == null) return Response.status(Status.NOT_FOUND).build();
 		// sanitize object data
 		newLocation.setId(0);
-		// newLocation.setLocationtype(loctype);
-		// Locationtype locationtype = entityManager.find(Locationtype.class, id);
-		// newLocation.setLocationtype(locationtype);
+		// newLocation.setLocationType(loctype);
+		// LocationType locationType = entityManager.find(LocationType.class, id);
+		// newLocation.setLocationType(locationType);
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newLocation.setCreatedAt(creationDate);
 		newLocation.setLastEditedAt(creationDate);
+		System.out.println("LocationEndpoint: createLocation - set created by and last edited by");
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newLocation.getCreatedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newLocation.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newLocation.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+			newLocation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
+		System.out.println("LocationEndpoint: createLocation - persist location: ");
 		// persist location
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -161,7 +163,7 @@ public class LocationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateLocation(@PathParam("id") int id, String jsonData) {
-		System.out.println("LocationEndpoint: updateLocation");
+		System.out.println("LocationEndpoint: UPDATE LOCATION - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Location updatedLocation = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -171,6 +173,7 @@ public class LocationEndpoint {
 		try {
 			updatedLocation = mapper.readValue(jsonData, Location.class);
 		} catch (IOException e) {
+			System.out.println("LocationEndpoint: UPDATE LOCATION - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedLocation == null ) return Response.notModified().build();		    	
@@ -191,6 +194,7 @@ public class LocationEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.LOCATIONEDITED);
+		System.out.println("LocationEndpoint: UPDATE LOCATION - update complete");
 		return Response.ok().entity(location).build();
 	}
 
@@ -275,7 +279,7 @@ public class LocationEndpoint {
 	@Secured
 	@Path("{location}/translation/{id}")
 	public Response updateLocationTranslation(@PathParam("location") int locationid, @PathParam("id") int id, String jsonData) {
-		System.out.println("LocationEndpoint: updateLocationTranslation");
+		System.out.println("LocationEndpoint: updateLocationTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		LocationTranslation updatedTranslation = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -308,7 +312,7 @@ public class LocationEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{location}/translation/{id}")
 	@Secured
-	public Response deleteLocationTranslation(@PathParam("location") int locationid, @PathParam("id") int id) {		
+	public Response deleteLocationTranslation(@PathParam("location") int locationId, @PathParam("id") int id) {		
 		System.out.println("LocationEndpoint: deleteLocationTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		LocationTranslation locationTranslation = entityManager.find(LocationTranslation.class, id);
@@ -349,8 +353,7 @@ public class LocationEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
-		// System.out.println("LocationEndpoint: createCountry: set locationID" + locationid);
-		// newCountry.setLocationID(locationid);
+		// newCountry.setLocationId(locationId);
 		// newCountry.setLocation(location);
 		// update log metadata
 		// Not necessary, a country will always be created in conjunction with a location
@@ -385,8 +388,8 @@ public class LocationEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("country/{id}")
 	@Secured
-	public Response updateCountry(@PathParam("location") int locationid, @PathParam("id") int id, String jsonData) {
-		System.out.println("LocationEndpoint: updateCountry - jsonData: " + jsonData);
+	public Response updateCountry(@PathParam("id") int id, String jsonData) {
+		System.out.println("LocationEndpoint: UPDATE COUNTRY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Country updatedCountry = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -398,9 +401,9 @@ public class LocationEndpoint {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedCountry == null ) return Response.notModified().build();		    	
+		if ( updatedCountry == null ) return Response.notModified().build();    	
 		// update country
-		System.out.println("LocationEndpoint updateCountry - country.id:"+country.getId());		
+		// System.out.println("LocationEndpoint: UPDATE COUNTRY - country.id:"+country.getId());		
 		if ( updatedCountry.getInternationalDialingPrefix() != null ) country.setInternationalDialingPrefix(updatedCountry.getInternationalDialingPrefix());
 		if ( updatedCountry.getTrunkPrefix() != null ) country.setTrunkPrefix(updatedCountry.getTrunkPrefix());
 		if ( updatedCountry.getCountryCallingCode() != null ) country.setCountryCallingCode(updatedCountry.getCountryCallingCode());
@@ -420,11 +423,11 @@ public class LocationEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(country);
 
-		System.out.println("LocationEndpoint updateCountry - only logging remains");	
+		// System.out.println("LocationEndpoint: UPDATE COUNTRY - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.COUNTRYEDITED);
-		System.out.println("LocationEndpoint updateCountry - all clear!");	
+		System.out.println("LocationEndpoint: UPDATE COUNTRY - update complete");	
 		return Response.ok().entity(country).build();
 	}
 }

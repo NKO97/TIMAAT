@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the phone_number_type_translation database table.
@@ -25,6 +27,7 @@ public class PhoneNumberTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to PhoneNumberType
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="phone_number_type_id")
 	private PhoneNumberType phoneNumberType;
 

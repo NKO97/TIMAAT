@@ -48,66 +48,82 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
 	// @OneToMany(mappedBy="createdByUserAccount")
+	// @JsonIgnore
 	// private List<AnnotationTextualBody> annotationTextualBodies1;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
+	// @JsonIgnore
 	// private List<AnnotationTextualBody> annotationTextualBodies2;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<CategorySet> categorySets1;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<CategorySet> categorySets2;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Event> events1;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Event> events2;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Location> locations1;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Location> locations2;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @OneToMany(mappedBy="createdByUserAccount")
+	// @JsonIgnore
 	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists1;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
+	// @JsonIgnore
 	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists2;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Medium> mediums2;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<MediumAnalysisList> mediumAnalysisLists1;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<MediumAnalysisList> mediumAnalysisLists2;
 
 	//bi-directional many-to-one association to UserAccessToken
@@ -156,10 +172,12 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to WorksAnalysisList
 	// @OneToMany(mappedBy="createdByUserAccount")
+	// @JsonIgnore
 	// private List<WorksAnalysisList> worksAnalysisLists1;
 
 	//bi-directional many-to-one association to WorksAnalysisList
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
+	// @JsonIgnore
 	// private List<WorksAnalysisList> worksAnalysisLists2;
 
 	public UserAccount() {

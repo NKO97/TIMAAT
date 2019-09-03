@@ -56,8 +56,24 @@ public class LocationTypeEndpoint {
 	public Response getLocationtypeList() {
 		System.out.println("LocationTypeEndpoint getLocationTypeList");		
 		@SuppressWarnings("unchecked")
-		List<LocationType> locationtypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("Locationtype.findAll").getResultList();
-		return Response.ok().entity(locationtypeList).build();
-  }
+		List<LocationType> locationTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList();
+		return Response.ok().entity(locationTypeList).build();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("all")
+	public Response getAllLocationTypess() {
+		System.out.println("LocationTypeEndpoint: getAllLocations");
+		List<LocationType> locationTypes = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		try {
+			locationTypes = (List<LocationType>) entityManager.createQuery("SELECT l from LocationType l")
+						.getResultList();
+		} catch(Exception e) {};	  	
+		return Response.ok().entity(locationTypes).build();
+	}
   
 }

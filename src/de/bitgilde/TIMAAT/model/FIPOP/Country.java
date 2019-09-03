@@ -18,9 +18,13 @@ public class Country implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="location_id")
 	private int locationId;
+
+	//bi-directional one-to-one association to Location
+	@OneToOne
+	@PrimaryKeyJoinColumn(name="location_id")
+	private Location location;
 
 	@Column(name="country_calling_code")
 	private String countryCallingCode;
@@ -41,13 +45,9 @@ public class Country implements Serializable {
 	// @OneToMany(mappedBy="country")
 	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
 
-	//bi-directional one-to-one association to Location
-	@OneToOne
-	@PrimaryKeyJoinColumn(name="location_id")
-	private Location location;
-
 	//bi-directional many-to-many association to Citizenship
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="country_has_citizenship"
 		, joinColumns={
@@ -61,6 +61,7 @@ public class Country implements Serializable {
 
 	//bi-directional many-to-one association to PhoneNumber
 	@OneToMany(mappedBy="country")
+	@JsonIgnore
 	private List<PhoneNumber> phoneNumbers;
 
 	public Country() {

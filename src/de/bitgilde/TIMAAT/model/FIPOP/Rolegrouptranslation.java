@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the role_group_translation database table.
@@ -25,6 +27,7 @@ public class RoleGroupTranslation implements Serializable {
 
 	//bi-directional many-to-one association to RoleGroup
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="role_group_id")
 	private RoleGroup roleGroup;
 

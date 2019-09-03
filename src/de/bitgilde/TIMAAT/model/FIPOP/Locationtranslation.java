@@ -28,7 +28,7 @@ public class LocationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
-	@JsonIgnore // to prevent infinite recursion ( TODO check why that happens)
+	@JsonIgnore
 	@JoinColumn(name="location_id")
 	private Location location;
 

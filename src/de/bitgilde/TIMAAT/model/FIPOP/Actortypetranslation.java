@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the actor_type_translation database table.
@@ -21,6 +23,7 @@ public class ActorTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to ActorType
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="actor_type_id")
 	private ActorType actorType;
 

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the citizenship_translation database table.
@@ -21,6 +23,7 @@ public class CitizenshipTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Citizenship
 	@ManyToOne
+	@JsonIgnore
 	private Citizenship citizenship;
 
 	//bi-directional many-to-one association to Language

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the actor_name_part database table.
@@ -15,12 +17,14 @@ public class ActorNamePart implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
 
 	//bi-directional many-to-one association to ActorName
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="actor_name_id")
 	private ActorName actorName;
 
