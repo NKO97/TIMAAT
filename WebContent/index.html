@@ -844,10 +844,10 @@
       <!-- Nav bar tabs -->
       <ul class="nav nav-pills" id="locations-tabs" role="tablist">
         <li class="nav-item active">
-          <a class="nav-link" id="locations-tab" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Orte</a>
+          <a class="nav-link" id="locations-tab" onclick="TIMAAT.Datasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Orte</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="countries-tab" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="far fa-object-group"></i> Länder</a>
+          <a class="nav-link" id="countries-tab"  onclick="TIMAAT.Datasets.loadCountries()" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="far fa-object-group"></i> Länder</a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="#territories"><i class="far fa-object-group"></i> Territorien</a>

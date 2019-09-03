@@ -183,34 +183,34 @@ public class CountryEndpoint {
 	// 	return Response.ok().entity(country).build();
 	// }
 
-	@DELETE
-		@Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	@Secured
-	public Response deleteCountry(@PathParam("id") int id) {  
-		System.out.println("CountryEndpoint: deleteCountry with id: "+ id);
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Location location = entityManager.find(Location.class, id);
-		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
-		Country country = entityManager.find(Country.class, id);
-		if ( country == null ) return Response.status(Status.NOT_FOUND).build();		
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		// remove all associated translations
-		for (LocationTranslation locationTranslation : location.getLocationTranslations()) entityManager.remove(locationTranslation);
-		while (location.getLocationTranslations().size() > 0) {
-			// System.out.println("LocationEndpoint: try to delete location translation with id: "+ location.getLocationTranslations().get(0).getId());
-			location.removeLocationTranslation(location.getLocationTranslations().get(0));
-		}
-		entityManager.remove(country);
-		entityManager.remove(country.getLocation()); // remove country, then corresponding location
-		entityTransaction.commit();
-		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.COUNTRYDELETED);
-		System.out.println("CountryEndpoint: deleteCountry - country deleted");  
-		return Response.ok().build();
-	}
+	// @DELETE
+	// 	@Produces(MediaType.APPLICATION_JSON)
+	// @Path("{id}")
+	// @Secured
+	// public Response deleteCountry(@PathParam("id") int id) {  
+	// 	System.out.println("CountryEndpoint: deleteCountry with id: "+ id);
+	// 	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+	// 	Location location = entityManager.find(Location.class, id);
+	// 	if ( location == null ) return Response.status(Status.NOT_FOUND).build();
+	// 	Country country = entityManager.find(Country.class, id);
+	// 	if ( country == null ) return Response.status(Status.NOT_FOUND).build();		
+	// 	EntityTransaction entityTransaction = entityManager.getTransaction();
+	// 	entityTransaction.begin();
+	// 	// remove all associated translations
+	// 	for (LocationTranslation locationTranslation : location.getLocationTranslations()) entityManager.remove(locationTranslation);
+	// 	while (location.getLocationTranslations().size() > 0) {
+	// 		// System.out.println("LocationEndpoint: try to delete location translation with id: "+ location.getLocationTranslations().get(0).getId());
+	// 		location.removeLocationTranslation(location.getLocationTranslations().get(0));
+	// 	}
+	// 	entityManager.remove(country);
+	// 	entityManager.remove(country.getLocation()); // remove country, then corresponding location
+	// 	entityTransaction.commit();
+	// 	// add log entry
+	// 	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+	// 																					UserLogManager.LogEvents.COUNTRYDELETED);
+	// 	System.out.println("CountryEndpoint: deleteCountry - country deleted");  
+	// 	return Response.ok().build();
+	// }
 	
 /** 
  * CountryEndpoint should not need create/update/deleteCountryTranslation methods
