@@ -102,6 +102,18 @@ public class MediumServiceEndpoint{
     	
 		return Response.ok().entity(mlist).build();
 	}
+
+	
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("video/list")
+	public Response getVideoList() {    	
+    @SuppressWarnings("unchecked")
+		List<MediumVideo> mediumVideoList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList();   	
+		return Response.ok().entity(mediumVideoList).build();
+	}
+	
 	
 	@HEAD
 	@Path("{id}/download")
@@ -656,26 +668,26 @@ public class MediumServiceEndpoint{
 		}
 	}
 	
-    private String issueFileToken(int mediumID) {
-    	Key key = new TIMAATKeyGenerator().generateKey();
-        String token = Jwts.builder()
-        		.claim("file", mediumID)
-                .setIssuer(uriInfo.getAbsolutePath().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-		return token;
-    }
+	private String issueFileToken(int mediumID) {
+		Key key = new TIMAATKeyGenerator().generateKey();
+			String token = Jwts.builder()
+					.claim("file", mediumID)
+							.setIssuer(uriInfo.getAbsolutePath().toString())
+							.setIssuedAt(new Date())
+							.setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
+							.signWith(key, SignatureAlgorithm.HS512)
+							.compact();
+	return token;
+	}
 	
-    private int validateFileToken(String token) throws Exception {
-        // Check if the token was issued by the server and if it's not expired
-        // Throw an Exception if the token is invalid
+	private int validateFileToken(String token) throws Exception {
+			// Check if the token was issued by the server and if it's not expired
+			// Throw an Exception if the token is invalid
 
-    	Key key = new TIMAATKeyGenerator().generateKey();
-    	int mediumID = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("file", Integer.class);
-		
-		return mediumID;
-    }
+		Key key = new TIMAATKeyGenerator().generateKey();
+		int mediumID = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("file", Integer.class);
+	
+	return mediumID;
+	}
 	
 }
