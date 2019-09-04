@@ -673,7 +673,7 @@
   <!---------------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-media">
           <!-- delete medium -->
-          <div class="modal fade" id="timaat-datasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -693,7 +693,7 @@
               </div>
           </div>
           <!-- add Medium -->
-          <div class="modal fade" id="timaat-datasets-medium-meta" tabindex="-1" role="dialog" aria-labelledby="mediumMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-mediadatasets-medium-meta" tabindex="-1" role="dialog" aria-labelledby="mediumMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -732,7 +732,7 @@
             </div>
           </div>
           <!-- delete video -->
-          <div class="modal fade" id="timaat-datasets-video-delete" tabindex="-1" role="dialog" aria-labelledby="videoDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-mediadatasets-video-delete" tabindex="-1" role="dialog" aria-labelledby="videoDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -752,7 +752,7 @@
             </div>
           </div>
           <!-- add video -->
-          <div class="modal fade" id="timaat-datasets-video-meta" tabindex="-1" role="dialog" aria-labelledby="videoMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-mediadatasets-video-meta" tabindex="-1" role="dialog" aria-labelledby="videoMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -787,10 +787,10 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="media-tab" onclick="TIMAAT.Datasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Medien</a>
+                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Medien</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videos-tab"  onclick="TIMAAT.Datasets.loadVideos()" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-film"></i> Videos</a>
+                  <a class="nav-link" id="videos-tab"  onclick="TIMAAT.MediaDatasets.loadVideos()" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-film"></i> Videos</a>
                 </li>
               </ul>  
               <div class="tab-content" id="mediaTabContent">
@@ -844,7 +844,7 @@
   <!---------------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-actors">
           <!-- delete actor -->
-          <div class="modal fade" id="timaat-datasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-actordatasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -864,7 +864,7 @@
             </div>
           </div>
           <!-- add Actor -->
-          <div class="modal fade" id="timaat-datasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-actordatasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -938,7 +938,7 @@
   <!---------------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-locations">
           <!-- delete location -->
-          <div class="modal fade" id="timaat-datasets-location-delete" tabindex="-1" role="dialog" aria-labelledby="locationDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-locationdatasets-location-delete" tabindex="-1" role="dialog" aria-labelledby="locationDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -958,7 +958,7 @@
               </div>
           </div>
           <!-- add Location -->
-          <div class="modal fade" id="timaat-datasets-location-meta" tabindex="-1" role="dialog" aria-labelledby="locationMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-locationdatasets-location-meta" tabindex="-1" role="dialog" aria-labelledby="locationMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -995,7 +995,7 @@
             </div>
           </div>
           <!-- delete country -->
-          <div class="modal fade" id="timaat-datasets-country-delete" tabindex="-1" role="dialog" aria-labelledby="countryDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-locationdatasets-country-delete" tabindex="-1" role="dialog" aria-labelledby="countryDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1015,7 +1015,7 @@
             </div>
           </div>
           <!-- add country -->
-          <div class="modal fade" id="timaat-datasets-country-meta" tabindex="-1" role="dialog" aria-labelledby="countryMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-locationdatasets-country-meta" tabindex="-1" role="dialog" aria-labelledby="countryMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1074,10 +1074,10 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="locations-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="locations-tab" onclick="TIMAAT.Datasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Orte</a>
+                  <a class="nav-link" id="locations-tab" onclick="TIMAAT.LocationDatasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Orte</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="countries-tab"  onclick="TIMAAT.Datasets.loadCountries()" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Länder</a>
+                  <a class="nav-link" id="countries-tab"  onclick="TIMAAT.LocationDatasets.loadCountries()" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Länder</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territorien</a>
@@ -1133,7 +1133,7 @@
   <!---------------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-events">
           <!-- delete event -->
-          <div class="modal fade" id="timaat-datasets-event-delete" tabindex="-1" role="dialog" aria-labelledby="eventDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-eventdatasets-event-delete" tabindex="-1" role="dialog" aria-labelledby="eventDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1153,7 +1153,7 @@
             </div>
           </div>
           <!-- add Event -->
-          <div class="modal fade" id="timaat-datasets-event-meta" tabindex="-1" role="dialog" aria-labelledby="eventMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-eventdatasets-event-meta" tabindex="-1" role="dialog" aria-labelledby="eventMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">

@@ -65,12 +65,34 @@ public class LocationEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("country/{id}")
+	public Response getCountry(@PathParam("id") int id) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Country country = entityManager.find(Country.class, id);
+		if ( country == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+	return Response.ok().entity(country).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("list")
 	public Response getLocationList() {
 		System.out.println("LocationEndpoint getLocationList");		
 		@SuppressWarnings("unchecked")
 		List<Location> locationList = TIMAATApp.emf.createEntityManager().createNamedQuery("Location.findAll").getResultList();
 		return Response.ok().entity(locationList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("locationtype/list")
+	public Response getLocationtypeList() {
+		System.out.println("LocationEndpoint getLocationTypeList");		
+		@SuppressWarnings("unchecked")
+		List<LocationType> locationTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList();
+		return Response.ok().entity(locationTypeList).build();
 	}
 	
 	@GET
@@ -99,7 +121,38 @@ public class LocationEndpoint {
 		} catch(Exception e) {};	  	
 		return Response.ok().entity(locations).build();
 	}
+
+	@SuppressWarnings("unchecked")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("locationtype/all")
+	public Response getAllLocationTypess() {
+		System.out.println("LocationEndpoint: getAllLocations");
+		List<LocationType> locationTypes = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		try {
+			locationTypes = (List<LocationType>) entityManager.createQuery("SELECT l from LocationType l")
+						.getResultList();
+		} catch(Exception e) {};	  	
+		return Response.ok().entity(locationTypes).build();
+	}
 	
+	@SuppressWarnings("unchecked")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("country/all")
+	public Response getAllCountries() {
+		List<Country> countries = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		try {
+			countries = (List<Country>) entityManager.createQuery("SELECT c from Country c")
+				.getResultList();
+		} catch(Exception e) {};	 	
+		return Response.ok().entity(countries).build();
+	}
+
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

@@ -56,6 +56,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
+* @author Mirko Scherf <mscherf@uni-mainz.de>
 */
 
 @Service
@@ -103,6 +104,16 @@ public class MediumServiceEndpoint{
 		return Response.ok().entity(mlist).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("mediatype/list")
+	public Response getMediatypeList() {
+		System.out.println("MediumEndpoint getMediaTypeList");		
+		@SuppressWarnings("unchecked")
+		List<MediaType> mediaTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList();
+		return Response.ok().entity(mediaTypeList).build();
+	}
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -113,7 +124,6 @@ public class MediumServiceEndpoint{
 		List<MediumVideo> mediumVideoList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList();   	
 		return Response.ok().entity(mediumVideoList).build();
 	}
-	
 	
 	@HEAD
 	@Path("{id}/download")
@@ -169,8 +179,7 @@ public class MediumServiceEndpoint{
 		
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4", headers);
 	}
-	
-	
+
 	@POST
 	@Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)  
@@ -274,8 +283,7 @@ public class MediumServiceEndpoint{
 
 		return Response.ok().entity(newMedium).build();
 	}
-	
-	
+
 	@GET
 	@Path("{id}/status")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -331,9 +339,7 @@ public class MediumServiceEndpoint{
 			return Response.ok().entity(thumbnail).build();
 		}
 	}
-	
 
-	
 	/**
 	 * Gets list of annotations for medium (video)
 	 * @param id
