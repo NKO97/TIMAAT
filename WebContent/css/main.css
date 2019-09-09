@@ -170,7 +170,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-event-list li, 
 #timaat-location-list li,
 #timaat-country-list li,
-#timaat-media-list li,
+#timaat-medium-list li,
 #timaat-video-list li,
 #timaat-actor-list li {
 	cursor: pointer;
@@ -181,7 +181,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-event-list li:hover,
 #timaat-location-list li:hover,
 #timaat-country-list li:hover,
-#timaat-media-list li:hover,
+#timaat-medium-list li:hover,
 #timaat-video-list li:hover,
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
@@ -191,7 +191,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-event-list-selected, 
 .timaat-location-list-selected,
 .timaat-country-list-selected,
-.timaat-media-list-selected,
+.timaat-medium-list-selected,
 .timaat-video-list-selected,
 .timaat-ctor-list-selected {
 	background-color: #c9e2ff;
@@ -201,7 +201,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-event-list-selected:hover,
 .timaat-location-list-selected:hover,
 .timaat-country-list-selected:hover,
-.timaat-media-list-selected:hover,
+.timaat-medium-list-selected:hover,
 .timaat-video-list-selected:hover,
 .timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
@@ -211,7 +211,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-event-chooser,
 .timaat-location-chooser,
 .timaat-country-chooser,
-.timaat-media-chooser,
+.timaat-medium-chooser,
 .timaat-video-chooser,
 .timaat-actor-chooser {
 	margin-top: 0.5em;
@@ -221,7 +221,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-event-remove,
 .timaat-location-remove,
 .timaat-country-remove,
-.timaat-media-remove,
+.timaat-medium-remove,
 .timaat-video-remove,
 .timaat-actor-remove {
 	margin-right: 1em;

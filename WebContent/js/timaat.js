@@ -174,9 +174,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdBy_UserAccountID+'">[ID '+anno.model.createdBy_UserAccountID+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(anno.model.created)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+anno.model.lastEditedBy_UserAccountID+'">[ID '+anno.model.lastEditedBy_UserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdByUserAccount.id+'">[ID '+anno.model.createdByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+anno.model.lastEditedByUserAccount.id+'">[ID '+anno.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -603,9 +603,9 @@ const TIMAAT = {
 			// });
 			// this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 			// 	$('.timaat-user-log-details').html(
-			// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+categoryset.model.createdByUserAccountID+'">[ID '+categoryset.model.createdByUserAccountID+']</span></b><br>\
+			// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+categoryset.model.createdByUserAccount.id+'">[ID '+categoryset.model.createdByUserAccount.id+']</span></b><br>\
 			// 			 '+TIMAAT.Util.formatDate(categoryset.model.createdAt)+'<br>\
-			// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+categoryset.model.lastEditedByUserAccountID+'">[ID '+categoryset.model.lastEditedByUserAccountID+']</span></b><br>\
+			// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+categoryset.model.lastEditedByUserAccount.id+'">[ID '+categoryset.model.lastEditedByUserAccount.id+']</span></b><br>\
 			// 			 '+TIMAAT.Util.formatDate(categoryset.model.lastEditedAt)+'<br>'
 			// 	);
 			// 	$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -860,7 +860,7 @@ const TIMAAT = {
 		
 		setVideoList: function(videos) {
     	// console.log("TCL: setVideoList: function(videos)");
-    	console.log("TCL: videos", videos);
+    	console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
 			// clear video UI list
@@ -912,10 +912,9 @@ const TIMAAT = {
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
-			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 			videoelement.appendTo('#timaat-video-list');
-
-			videoelement.find('.title').html(video.primaryTitle.title);
+			videoelement.find('.title').html(video.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
 		
 			if ( video.status != 'ready' ) videoelement.find('.timaat-video-transcoding').show();
@@ -2725,7 +2724,7 @@ const TIMAAT = {
 
 		async createCountry(locationModel, countryModel) {
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+locationModel.id,
 					type:"POST",
 					data: JSON.stringify(countryModel),
@@ -2882,6 +2881,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+      	console.log("TCL: listMedia -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -2901,6 +2901,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+      	console.log("TCL: listVideos -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -2910,25 +2911,32 @@ const TIMAAT = {
 		},
 
 		async createMedium(mediumModel) {
-			// console.log("TCL: createMedium -> mediumModel", mediumModel);
-			var newMedium = {
+			console.log("TCL: async createMedium -> mediumModel", mediumModel);
+			var newMediumModel = {
 				id: 0,
+				remark: mediumModel.remark,
+				releaseDate: mediumModel.releaseDate,
+				copyright: mediumModel.copyright,
 				mediaType: {
 					id: mediumModel.mediaType.id,
-				}
+				},
+				title: {
+					id: mediumModel.title.id,
+				},
 			};
+      console.log("TCL: createMedium -> newMediumModel", newMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
 					type:"POST",
-					data: JSON.stringify(newMedium),
+					data: JSON.stringify(newMediumModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(mediumData) {
-					// console.log("TCL: createMedium -> mediumData", mediumData);
+					console.log("TCL: createMedium -> mediumData", mediumData);
 					resolve(mediumData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
@@ -2938,6 +2946,7 @@ const TIMAAT = {
 			});
 		},
 
+		// not yet needed (no translation data or translation table available at the moment)
 		async createMediumTranslation(model, modelTranslation) {
 			// console.log("TCL: createMediumTranslation -> model, modelTranslation", model, modelTranslation);			
 			return new Promise(resolve => {
@@ -2962,9 +2971,9 @@ const TIMAAT = {
 		},
 
 		async createVideo(mediumModel, videoModel) {
-			// console.log("TCL: [1] createVideo -> mediumModel, videoModel", mediumModel, videoModel);
+			// console.log("TCL: async createVideo -> mediumModel, videoModel", mediumModel, videoModel);
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+mediumModel.id,
 					type:"POST",
 					data: JSON.stringify(videoModel),
@@ -2974,7 +2983,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(videoData) {
-					// console.log("TCL: createVideo -> videoData", videoData);
+					console.log("TCL: createVideo -> videoData", videoData);
 						resolve(videoData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -2984,8 +2993,31 @@ const TIMAAT = {
 			});
 		},
 
+		async createTitle(title) {
+			console.log("TCL: async createtitle -> title", title);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+					type:"POST",
+					data: JSON.stringify(title),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(titleData) {
+					console.log("TCL: createTitle -> titleData", titleData);
+						resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
 		async updateMedium(mediumModel) {
-			// console.log("TCL: MediaService async updateMedium -> mediumModel", mediumModel);
+			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
@@ -2997,7 +3029,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-				// console.log("TCL: MediaService async updateMedium -> updateData", updateData);
+				console.log("TCL: async updateMedium -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -3008,6 +3040,7 @@ const TIMAAT = {
 			});
 		},
 
+		// not yet needed (no translation data or translation table available at the moment)
 		async updateMediumTranslation(medium) {
 			// console.log("TCL: MediaService async updateMediumTranslation -> medium", medium);
 			var updatedMediumTranslation = {
@@ -3037,7 +3070,7 @@ const TIMAAT = {
 		},
 
 		async updateVideo(videoModel) {
-			// console.log("TCL: async updateVideo -> videoModel", videoModel);
+			console.log("TCL: async updateVideo -> videoModel", videoModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+videoModel.mediumId,
@@ -3049,7 +3082,31 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					// console.log("TCL: async updateVideo -> updateData", updateData);
+					console.log("TCL: async updateVideo -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateTitle(title) {
+			console.log("TCL: async updateTitle -> title", title);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+					type:"PATCH",
+					data: JSON.stringify(title),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateTitle -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -3061,7 +3118,7 @@ const TIMAAT = {
 		},
 
 		removeMedium(medium) {
-			// console.log("TCL: removeMedium -> medium", medium);
+			console.log("TCL: removeMedium -> medium", medium);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.model.id,
 				type:"DELETE",
@@ -3078,7 +3135,7 @@ const TIMAAT = {
 		},
 
 		removeVideo(video) {
-			// console.log("TCL: removeVideo -> video", video);
+			console.log("TCL: removeVideo -> video", video);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+video.model.mediumId,
 				type:"DELETE",
@@ -3092,7 +3149,25 @@ const TIMAAT = {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
-		},		
+		},
+
+		// obsolete through On Delete: Cascade in medium
+		// removeTitle(title) {
+		// 	console.log("TCL: removeTitle -> title", title);
+		// 	$.ajax({
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+		// 		type:"DELETE",
+		// 		contentType:"application/json; charset=utf-8",
+		// 		beforeSend: function (xhr) {
+		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 		},
+		// 	}).done(function(data) {
+		// 	})
+		// 	.fail(function(e) {
+		// 		console.log( "error", e );
+		// 		console.log( e.responseText );
+		// 	});
+		// },	
 
 	},
 
@@ -3129,7 +3204,7 @@ const TIMAAT = {
 				// tags: []
 				// actorTranslation: [{
 				// 	id: 0,
-				// 	languageID: list,
+				// 	languageId: list,
 				// 	name: name,
 				// 	description: description
 				// }]
@@ -3605,7 +3680,7 @@ const TIMAAT = {
 		},
 
 		initEvents: function() {
-			console.log("TCL: EventDatasets: initEvents: function()");
+			// console.log("TCL: EventDatasets: initEvents: function()");
 			// attach tag editor
 			$('#timaat-event-tags').popover({
 				placement: 'right',
@@ -3695,9 +3770,9 @@ const TIMAAT = {
 				$('#eventMetaLabel').html(heading);
 				$('#timaat-event-meta-submit').html(submit);
 				$("#timaat-event-meta-name").val(name).trigger('input');
-				$("#timaat-event-meta-start").val(beginsAtDate); // 1212-12-12
+				$("#timaat-event-meta-start").val(Date(beginsAtDate)); // 1212-12-12
         console.log("TCL: initEvents -> beginsAtDate", beginsAtDate);
-				$("#timaat-event-meta-end").val(endsAtDate); // 1212-12-12
+				$("#timaat-event-meta-end").val(Date(endsAtDate)); // 1212-12-12
 				$("#timaat-event-meta-description").val(description);
 			});
 			// Submit event data
@@ -4000,7 +4075,7 @@ const TIMAAT = {
 				var locationType = modal.data('locationType');				
 				var heading = (locationType) ? "LocationType bearbeiten" : "LocationType hinzufügen";
 				var submit = (locationType) ? "Speichern" : "Hinzufügen";
-				var type = (locationType) ? locationType.model.type : 1;
+				var type = (locationType) ? locationType.model.type : 0;
 				// setup UI
 				$('#locationTypeMetaLabel').html(heading);
 				$('#timaat-location-type-meta-submit').html(submit);
@@ -4020,7 +4095,7 @@ const TIMAAT = {
 				} else { // create new locationType
 					var model = {
 						id: 0,
-						locationTranslations: [],
+						locationTypeTranslations: [],
 					};
 					var modelTranslation = {
 						id: 0,
@@ -4062,7 +4137,7 @@ const TIMAAT = {
 				var heading = (location) ? "Location bearbeiten" : "Location hinzufügen";
 				var submit = (location) ? "Speichern" : "Hinzufügen";
 				var name = (location) ? location.model.locationTranslations[0].name : ""; // name of the location
-				var typeId = (location) ? location.model.locationType.id : 1;
+				var typeId = (location) ? location.model.locationType.id : "";
 				// setup UI
 				$('#locationMetaLabel').html(heading);
 				$('#timaat-location-meta-submit').html(submit);
@@ -4095,7 +4170,9 @@ const TIMAAT = {
 						id: 0,
 						name: name,
 					};
-					TIMAAT.LocationDatasets.createLocation(model, modelTranslation, TIMAAT.LocationDatasets._locationAdded);
+					// no callback should be required anymore
+					// TIMAAT.LocationDatasets.createLocation(model, modelTranslation, TIMAAT.LocationDatasets._locationAdded);
+					TIMAAT.LocationDatasets.createLocation(model, modelTranslation);
 				}
 				modal.modal('hide');
 			});
@@ -4157,6 +4234,7 @@ const TIMAAT = {
 				var countryCallingCode = $("#timaat-country-meta-ccc").val();
 				var timeZone = $("#timaat-country-meta-tz").val();
 				var daylightSavingTime = $("#timaat-country-meta-dst").val();
+
 				if (country) {
 					console.log("TCL: initCountries -> country", country);
 					country.model.location.locationTranslations[0].name = name;
@@ -4169,7 +4247,7 @@ const TIMAAT = {
 					TIMAAT.LocationDatasets.updateCountry(country);
 				} else {
 					var model = {
-						locationId: 0,						
+						locationId: 0,
 						internationalDialingPrefix: internationalDialingPrefix,
 						trunkPrefix: trunkPrefix,
 						countryCallingCode: countryCallingCode,
@@ -4265,7 +4343,10 @@ const TIMAAT = {
 			$('#timaat-country-list').empty();
 			// setup model
 			var locs = Array();
-			countries.forEach(function(country) { if ( country.id > 0 ) locs.push(new TIMAAT.Country(country)); });
+			countries.forEach(function(country) { 
+				if ( country.id > 0 )
+					locs.push(new TIMAAT.Country(country));
+			});
 			TIMAAT.LocationDatasets.countries = locs;
 			TIMAAT.LocationDatasets.countries.model = countries;
 		},
@@ -4307,16 +4388,21 @@ const TIMAAT = {
 			try {
 				// create location
 				var newLocationModel = await TIMAAT.LocationService.createLocation(locationModel);
+
 				// create location translation with location id
 				await TIMAAT.LocationService.createLocationTranslation(newLocationModel, locationModelTranslation);
 				newLocationModel.locationTranslations[0] = locationModelTranslation;
+
 				// create country with location id
 				countryModel.locationId = newLocationModel.id;
 				var newCountryModel = await TIMAAT.LocationService.createCountry(newLocationModel, countryModel);
+
 				// push new location to dataset model
 				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
-				// push new country to dataset model?
+
+				// push new country to dataset model
 				await TIMAAT.LocationDatasets._countryAdded(newCountryModel);
+
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -4367,7 +4453,7 @@ const TIMAAT = {
 			country.updateUI();
 		},
 
-		_locationAdded: function(location) {
+		_locationAdded: async function(location) {
 			// console.log("TCL: _locationAdded: function(location)");
 			// console.log("TCL: location", location);
 			TIMAAT.LocationDatasets.locations.model.push(location);
@@ -4375,7 +4461,7 @@ const TIMAAT = {
 			// return location;
 		},
 		
-		_countryAdded: function(country) {
+		_countryAdded: async function(country) {
 			// console.log("TCL: _countryAdded: function(country)");
 			TIMAAT.LocationDatasets.countries.model.push(country);
 			TIMAAT.LocationDatasets.countries.push(new TIMAAT.Country(country));
@@ -4413,55 +4499,69 @@ const TIMAAT = {
 		},
 
 		initMediaTypes: function() {
-			// console.log("TCL: MediaDatasets: initMediumTypes: function()");		
-			// delete mediumType functionality
+			// console.log("TCL: MediaDatasets: initMediaTypes: function()");		
+			// delete mediaType functionality
 			$('#timaat-media-type-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-medium-type-delete');
-				var mediumType = modal.data('mediumType');
-				if (mediumType) TIMAAT.MediaDatasets._mediumTypeRemoved(mediumType);
+				var mediaType = modal.data('mediaType');
+				if (mediaType) TIMAAT.MediaDatasets._mediaTypeRemoved(mediaType);
 				modal.modal('hide');
 			});
-			// add mediumType button
-			$('#timaat-media-type-add').attr('onclick','TIMAAT.MediaDatasets.addMediumType()');
-			// add/edit mediumType functionality
+			// add mediaType button
+			$('#timaat-media-type-add').attr('onclick','TIMAAT.MediaDatasets.addMediaType()');
+			// add/edit mediaType functionality
 			$('#timaat-mediadatasets-medium-type-meta').on('show.bs.modal', function (ev) {
-				// Create/Edit mediumType window setup
+				// Create/Edit mediaType window setup
 				var modal = $(this);
-				var mediumType = modal.data('mediumType');				
-				var heading = (mediumType) ? "MediumType bearbeiten" : "MediumType hinzufügen";
-				var submit = (mediumType) ? "Speichern" : "Hinzufügen";
-				var type = (mediumType) ? mediumType.model.type : 1;
-
+				var mediaType = modal.data('mediaType');				
+				var heading = (mediaType) ? "MediaType bearbeiten" : "MediaType hinzufügen";
+				var submit = (mediaType) ? "Speichern" : "Hinzufügen";
+				var type = (mediaType) ? mediaType.model.type : 0;
+				var hasVisual = (mediaType) ? mediaType.model.hasVisual : false;
+				var hasAudio = (mediaType) ? mediaType.model.hasAudio : false;
+				var hasContent = (mediaType) ? mediaType.model.hasContent : false;
 				// setup UI
-				$('#mediumTypeMetaLabel').html(heading);
+				$('#mediaTypeMetaLabel').html(heading);
 				$('#timaat-media-type-meta-submit').html(submit);
 				$("#timaat-media-type-meta-name").val(type).trigger('input');
+				$("#timaat-media-type-meta-hasvisual").val(hasVisual);
+				$("#timaat-media-type-meta-hasaudio").val(hasAudio);
+				$("#timaat-media-type-meta-hascontent").val(hasContent);
 			});
-			// Submit mediumType data
+			// Submit mediaType data
 			$('#timaat-media-type-meta-submit').click(function(ev) {
-				// Create/Edit mediumType window submitted data validation
+				// Create/Edit mediaType window submitted data validation
 				var modal = $('#timaat-mediadatasets-medium-type-meta');
-				var mediumType = modal.data('mediumType');
+				var mediaType = modal.data('mediaType');
 				var type = $("#timaat-media-type-meta-name").val();
-				if (mediumType) {
-					mediumType.model.medium.mediumTypeTranslations[0].type = type;
-					mediumType.updateUI();
-					TIMAAT.MediaService.updateMediumType(mediumType);
-					TIMAAT.MediaService.updateMediumTypeTranslation(mediumType);
-				} else { // create new mediumType
+				var hasVisual = $("#timaat-media-type-meta-has-visual").val();
+				var hasAudio = $("#timaat-media-type-meta-has-audio").val();
+				var hasContent = $("#timaat-media-type-meta-has-content").val();
+				if (mediaType) {
+					mediaType.model.medium.mediaTypeTranslations[0].type = type;
+					mediaType.model.hasVisual = hasVisual;
+					mediaType.model.hasAudio = hasAudio;
+					mediaType.model.hasContent = hasContent;
+					mediaType.updateUI();
+					TIMAAT.MediaService.updateMediaType(mediaType);
+					TIMAAT.MediaService.updateMediaTypeTranslation(mediaType);
+				} else { // create new mediaType
 					var model = {
 						id: 0,
-						mediumTranslations: [],
+						hasVisual: hasVisual,
+						hasAudio: hasAudio,
+						hasContent: hasContent,
+						mediaTypeTranslations: [],
 					};
 					var modelTranslation = {
 						id: 0,
 						type: type,
 					}
-					TIMAAT.MediaService.createMediumType(model, modelTranslation, TIMAAT.MediaDatasets._mediumTypeAdded); // TODO add mediumType parameters
+					TIMAAT.MediaService.createMediaType(model, modelTranslation, TIMAAT.MediaDatasets._mediaTypeAdded); // TODO add mediaType parameters
 				}
 				modal.modal('hide');
 			});
-			// validate mediumType data	
+			// validate mediaType data	
 			// TODO validate all required fields				
 			$('#timaat-media-type-meta-name').on('input', function(ev) {
 				if ( $("#timaat-media-type-meta-name").val().length > 0 ) {
@@ -4492,49 +4592,79 @@ const TIMAAT = {
 				var medium = modal.data('medium');				
 				var heading = (medium) ? "Medium bearbeiten" : "Medium hinzufügen";
 				var submit = (medium) ? "Speichern" : "Hinzufügen";
-				var name = (medium) ? medium.model.mediumTranslations[0].name : ""; // name of the medium
-				var typeId = (medium) ? medium.model.mediumType.id : 1;
+				var primaryTitle = (medium) ? medium.model.title.name : "";
+				var primaryTitleLanguageId = (medium) ? medium.model.title.language.id : "";
+				var typeId = (medium) ? medium.model.mediaType.id : "";
+				var remark = (medium) ? medium.model.remark : "";
+				var copyright = (medium) ? medium.model.copyright : "";
+				var releaseDate = (medium) ? medium.model.releaseDate : 0;
 
 				// setup UI
 				$('#mediumMetaLabel').html(heading);
 				$('#timaat-medium-meta-submit').html(submit);
-				$("#timaat-medium-meta-name").val(name).trigger('input');
+				$("#timaat-medium-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-medium-meta-title-language-id").val(primaryTitleLanguageId);
 				$("#timaat-medium-meta-medium-type-id").val(typeId);
+				$("#timaat-medium-meta-remark").val(remark);
+				$("#timaat-medium-meta-copyright").val(copyright);
+				$("#timaat-medium-meta-releasedate").val(releaseDate);
 			});
+
 			// Submit medium data
 			$('#timaat-medium-meta-submit').click(function(ev) {
 				// Create/Edit medium window submitted data validation
 				var modal = $('#timaat-mediadatasets-medium-meta');
 				var medium = modal.data('medium');
-				var name = $("#timaat-medium-meta-name").val();
+				var primaryTitle = $("#timaat-medium-meta-title").val();
+				var languageSelector = document.getElementById("timaat-medium-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
 				var typeSelector = document.getElementById("timaat-medium-meta-medium-type-id");
 				var typeId = Number(typeSelector.options[typeSelector.selectedIndex].value);
+				var remark = $("#timaat-medium-meta-remark").val();
+				var copyright = $("#timaat-medium-meta-copyright").val();
+				var releaseDate = $("#timaat-medium-meta-releaseDate").val();
 				if (medium) {
-					medium.model.mediumTranslations[0].name = name;
-					medium.model.mediumType.id = typeId;
+          console.log("TCL: medium", medium);
+					medium.model.remark = remark;
+					medium.model.copyright = copyright;
+					medium.model.releaseDate = releaseDate;
+					medium.model.title.name = primaryTitle;
+					medium.model.title.language.id = primaryTitleLanguageId;
+					medium.model.mediaType.id = typeId;
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);   
 				} else { // create new medium
 					var model = {
 						id: 0,
-						mediumType: {
+						remark: remark,
+						copyright: copyright,
+						releaseDate: releaseDate,
+						mediaType: {
 							id: typeId,
 						},
-						mediumTranslations: [],
+						// mediumTranslations: [],
 					};
-          console.log("TCL: model", model);
-					var modelTranslation = {
+					var title = {
 						id: 0,
-						name: name,
+						language: {
+							id: primaryTitleLanguageId,							
+						},
+						name: primaryTitle,
 					};
-					TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
+					// var modelTranslation = {
+					// 	id: 0,
+					// 	name: name,
+					// };
+					// Medium has no translation table at the moment
+					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
+					TIMAAT.MediaDatasets.createMedium(model, title);
 				}
 				modal.modal('hide');
 			});
 			// validate medium data
 			// TODO validate all required fields				
-			$('#timaat-medium-meta-name').on('input', function(ev) {
-				if ( $("#timaat-medium-meta-name").val().length > 0) {
+			$('#timaat-medium-meta-title').on('input', function(ev) {
+				if ( $("#timaat-medium-meta-title").val().length > 0) {
 					$('#timaat-medium-meta-submit').prop("disabled", false);
 					$('#timaat-medium-meta-submit').removeAttr("disabled");
 				} else {
@@ -4562,46 +4692,129 @@ const TIMAAT = {
 				var video = modal.data('video');				
 				var heading = (video) ? "Video bearbeiten" : "Video hinzufügen";
 				var submit = (video) ? "Speichern" : "Hinzufügen";
-				var name = (video) ? video.model.medium.mediumTranslations[0].name : "";
+				// video data
+				var brand = (video) ? video.model.brand : "";
+				var length = (video) ? video.model.length : 0;
+				var videoCodec = (video) ? video.model.videoCodec : "";
+				var width = (video) ? video.model.width : "";
+				var height = (video) ? video.model.height : "";
+				var frameRate = (video) ? video.model.frameRate : "";
+				var dataRate = (video) ? video.model.dataRate : "";
+				var totalBitrate = (video) ? video.model.totalBitrate : "";
+				var isEpisode = (video) ? video.model.isEpisode : 0;
+				// medium data
+				var primaryTitle = (video) ? video.model.medium.title.name : "";
+				var primaryTitleLanguageId = (video) ? video.model.medium.title.language.id : "";
+				var remark = (video) ? video.model.medium.remark : "";
+				var copyright = (video) ? video.model.medium.copyright : "";
+				var releaseDate = (video) ? video.model.medium.releaseDate : 0;
+
 				// setup UI
 				$('#videoMetaLabel').html(heading);
 				$('#timaat-video-meta-submit').html(submit);
-				$("#timaat-video-meta-name").val(name).trigger('input');
+				$("#timaat-video-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-video-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-video-meta-remark").val(remark);
+				$("#timaat-video-meta-copyright").val(copyright);
+				$("#timaat-video-meta-releasedate").val(releaseDate);
+				$("#timaat-video-meta-brand").val(brand);
+				$("#timaat-video-meta-length").val(length);
+				$("#timaat-video-meta-videocodec").val(videoCodec);
+				$("#timaat-video-meta-width").val(width);
+				$("#timaat-video-meta-height").val(height);
+				$("#timaat-video-meta-framerate").val(frameRate);
+				$("#timaat-video-meta-datarate").val(dataRate);
+				$("#timaat-video-meta-totalbitrate").val(totalBitrate);
+				$("#timaat-video-meta-isepisode").val(isEpisode);
 			});
+
 			// Submit video data
 			$('#timaat-video-meta-submit').click(function(ev) {
 				// Create/Edit video window submitted data validation
 				var modal = $('#timaat-mediadatasets-video-meta');
 				var video = modal.data('video');
-				var name = $("#timaat-video-meta-name").val();
+				var primaryTitle = $("#timaat-video-meta-title").val();
+				var languageSelector = document.getElementById("timaat-video-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var brand = $("#timaat-video-meta-brand").val();
+				var length = $("#timaat-video-meta-length").val();
+				var videoCodec = $("#timaat-video-meta-videocodec").val();
+				var width = $("#timaat-video-meta-width").val();
+				var height = $("#timaat-video-meta-height").val();
+				var frameRate = $("#timaat-video-meta-framerate").val();
+				var dataRate = $("#timaat-video-meta-dataRate").val();
+				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
+				var isEpisodeSelector = $("#timaat-video-meta-isepisode").val();
+				var isEpisode = Number(isEpisodeSelector);
+				var remark = $("#timaat-video-meta-remark").val();
+				var copyright = $("#timaat-video-meta-copyright").val();
+				var releaseDate = $("#timaat-video-meta-releaseDate").val();
+
 				if (video) {
           console.log("TCL: initVideos -> video", video);
-					video.model.medium.mediumTranslations[0].name = name;
+					video.model.medium.title.name = primaryTitle;
+					video.model.medium.title.language.id = primaryTitleLanguageId;
+					video.model.brand = brand;
+					video.model.length = length;
+					video.model.videoCodec = videoCodec;
+					video.model.width = width;
+					video.model.height = height;
+					video.model.frameRate = frameRate;
+					video.model.dataRate = dataRate;
+					video.model.totalBitrate = totalBitrate;
+					video.model.isEpisode = isEpisode;
+					video.model.medium.remark = remark;
+					video.model.medium.copyright = copyright;
+					video.model.medium.releaseDate = releaseDate;
 					video.updateUI();
 					TIMAAT.MediaDatasets.updateVideo(video);
         } else {
 					var model = {
-						mediumId: 0,						
+						mediumId: 0,
+						audioCodecInformation: { // TODO get correct audio information
+							id: 1,
+						},
+						brand: brand,
+						length: length,
+						videoCodec: videoCodec,
+						width: width,
+						height: height,
+						frameRate: frameRate,
+						dataRate: dataRate,
+						totalBitrate: totalBitrate,
+						isEpisode: isEpisode,
 					};
 					var medium = {
 							id: 0,
-							mediumType: {
-								id: 1 // 1 = Video. TODO check clause to find proper id
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 6 // 6 = Video. TODO check clause to find proper id
 							},
-						mediumTranslations: [],
+						// mediumTranslations: [],
 					};
-					var mediumTranslation = {
-							id: 0,
-							name: name,
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
 					};
-					TIMAAT.MediaDatasets.createVideo(medium, mediumTranslation, model);
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };
+					// There are no translation data for video or medium at the moment
+					// TIMAAT.MediaDatasets.createVideo(medium, mediumTranslation, model);
+					TIMAAT.MediaDatasets.createVideo(model, medium, title);
 				}
 				modal.modal('hide');
 			});
 			// validate video data
 			// TODO validate all required fields
-			$('#timaat-video-meta-name').on('input', function(ev) {
-				if ( $("#timaat-video-meta-name").val().length > 0 ) {
+			$('#timaat-video-meta-title').on('input', function(ev) {
+				if ( $("#timaat-video-meta-title").val().length > 0 ) {
 					$('#timaat-video-meta-submit').prop("disabled", false);
 					$('#timaat-video-meta-submit').removeAttr("disabled");
 				} else {
@@ -4646,7 +4859,7 @@ const TIMAAT = {
 		},
 
 		setMediumLists: function(media) {
-    	console.log("TCL: media", media);
+    	console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
 			$('#timaat-medium-list-loader').remove();
 			// clear old UI list
@@ -4659,14 +4872,17 @@ const TIMAAT = {
 		},
 
 		setVideoLists: function(videos) {
-			console.log("TCL: videos", videos);
+			console.log("TCL: setVideoLists -> videos", videos);
 				if ( !videos ) return;
 				$('#timaat-video-list-loader').remove();
 				// clear old UI list
 				$('#timaat-video-list').empty();
 				// setup model
 				var vids = Array();
-				videos.forEach(function(video) { if ( video.id > 0 ) vids.push(new TIMAAT.Video(video)); });
+				videos.forEach(function(video) { 
+					if ( video.id > 0 )
+						vids.push(new TIMAAT.Video(video)); 
+				});
 				TIMAAT.MediaDatasets.videos = vids;
 				TIMAAT.MediaDatasets.videos.model = videos;
 		},
@@ -4683,101 +4899,158 @@ const TIMAAT = {
 				$('#timaat-mediadatasets-video-meta').modal('show');
 		},
 
-		createMedium: async function(mediumModel, mediumModelTranslation) {
-		// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
-		// This routine can be used to create empty media of a certain type
-    // console.log("TCL: createMedium -> mediumModel, mediumModelTranslation", mediumModel, mediumModelTranslation);
+		createMedium: async function(mediumModel, title) {
+			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
+			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
+			// This routine can be used to create empty media of a certain type
+			console.log("TCL: createMedium: async function -> mediumModel, title", mediumModel, title);
 			try {
+				// create title
+				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				console.log("TCL: newTitle", newTitle);
+				
 				// create medium
-				var newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+				var newMediumModel = mediumModel;
+				newMediumModel.title = newTitle;
+        console.log("TCL: newMediumModel", newMediumModel);
+				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+
 				// create medium translation with medium id
-				var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-				newMediumModel.mediumTranslations[0] = newTranslationData;
-				// create video/city/etc depending on video type
+				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+				// newMediumModel.mediumTranslations[0] = newTranslationData;
+				// create video/image/etc depending on video type
 				// TODO switch (mediumModel.mediaType)
+
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			// medium.updateUI();
 		},
 
-		createVideo: async function(mediumModel, mediumModelTranslation, videoModel) {
-	    // console.log("TCL: createVideo -> mediumModel, mediumModelTranslation, videoModel", mediumModel, mediumModelTranslation, videoModel);
+		createVideo: async function(videoModel, mediumModel, title) {
+			// createVideo: async function(mediumModel, mediumModelTranslation, videoModel) { // video has no translation table at the moment
+			console.log("TCL: createVideo: async function-> videoModel, mediumModel, title", videoModel, mediumModel, title);
 			try {
+				// create title
+				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				// console.log("TCL: newTitle", newTitle);
+				
 				// create medium
-				var newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+				var newMediumModel = mediumModel;
+				newMediumModel.title = newTitle;
+				newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+				// console.log("TCL: newMediumModel", newMediumModel);
+				
 				// create medium translation with medium id
-				await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-				newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
 				// create video with medium id
 				videoModel.mediumId = newMediumModel.id;
+        // console.log("TCL: videoModel", videoModel);
 				var newVideoModel = await TIMAAT.MediaService.createVideo(newMediumModel, videoModel);
+				// console.log("TCL: newVideoModel", newVideoModel);
+				
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
-				// push new video to dataset model?
+
+				// push new video to dataset model
 				await TIMAAT.MediaDatasets._videoAdded(newVideoModel);
+
 			} catch(error) {
-				console.log( "error: ", error);
+				console.log( "error: ", error.responseText);
 			};
-			// medium.updateUI();
+			// video.updateUI();
 		},
 
 		updateMedium: async function(medium) {
-		// console.log("TCL: updateMedium async function -> medium at beginning of update process: ", medium);
+		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
 			try {
+				// update title
+				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
+				medium.model.title = tempTitle;
 				// update data that is part of medium (includes updating last edited by/at)
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
+				console.log("TCL: updateMedium: async function -> tempMediumModel", tempMediumModel);
+				
 				medium.model.mediaType.id = tempMediumModel.mediaType.id;
+				medium.model.releaseDate = tempMediumModel.releaseDate;
+				medium.model.copyright = tempMediumModel.copyright;
+				medium.model.remark = tempMediumModel.remark;
+
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			try {
-				// update data that is part of  medium translation
-				// medium.mediumTranslation[0] = await	TIMAAT.MediaService.updateMediumTranslation(medium);
-				var tempMediumTranslation = await	TIMAAT.MediaService.updateMediumTranslation(medium);
-				medium.model.mediumTranslations[0].name = tempMediumTranslation.name;			
-			} catch(error) {
-				console.log( "error: ", error);
-			};
+			// try { // medium has no translation at the moment
+			// 	// update data that is part of  medium translation
+			// 	// medium.mediumTranslation[0] = await	TIMAAT.MediaService.updateMediumTranslation(medium);
+			// 	var tempMediumTranslation = await	TIMAAT.MediaService.updateMediumTranslation(medium);
+			// 	medium.model.mediumTranslations[0].name = tempMediumTranslation.name;			
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
+			// medium.updateUI();
 		},
 
 		updateVideo: async function(video) {
-			// console.log("TCL: updateVideo async function -> video at beginning of update process: ", video);
+			console.log("TCL: updateVideo async function -> video at beginning of update process: ", video);
 			try {
+				// update title
+				var tempTitle = await TIMAAT.MediaService.updateTitle(video.model.medium.title);
+				video.model.medium.title = tempTitle;
+        console.log("TCL: tempTitle", tempTitle);
+
 				// update data that is part of video
 				var tempVideoModel = await TIMAAT.MediaService.updateVideo(video.model);
-				video.model.internationalDialingPrefix = tempVideoModel.internationalDialingPrefix;
-				video.model.trunkPrefix = tempVideoModel.trunkPrefix;
-				video.model.videoCallingCode = tempVideoModel.videoCallingCode;
-				video.model.timeZone = tempVideoModel.timeZone;
-				video.model.daylightSavingTime = tempVideoModel.daylightSavingTime;
+        console.log("TCL: tempVideoModel", tempVideoModel);
+
+				// TODO is this actually needed?
+				video.model.brand = tempVideoModel.brand;
+				video.model.length = tempVideoModel.length;
+				video.model.videoCodec = tempVideoModel.videoCodec;
+				video.model.width = tempVideoModel.width;
+				video.model.height = tempVideoModel.height;
+				video.model.frameRate = tempVideoModel.frameRate;
+				video.model.dataRate = tempVideoModel.dataRate;
+				video.model.totalBitrate = tempVideoModel.totalBitrate;
+				video.model.isEpisode = tempVideoModel.isEpisode;
+				video.model.medium.title.name = tempVideoModel.medium.title.name;
+				video.model.medium.title.language.id = tempVideoModel.medium.title.language.id;
+        console.log("TCL: video", video);
+
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
 				// update data that is part of medium and its translation
-				var videoMedium = video.model.medium;
-				var videoMediumModel = {
-					model: videoMedium,
-				};
-				await TIMAAT.MediaDatasets.updateMedium(videoMediumModel);
+				var videoMediumModel = video.model.medium;
+        // console.log("TCL: video", video);
+        // console.log("TCL: videoMedium", videoMedium);
+				// var videoMediumModel = {
+				// 	model: videoMedium,
+				// };
+        console.log("TCL: videoMediumModel", videoMediumModel);
+				var tempVideoModelUpdate = await TIMAAT.MediaService.updateMedium(videoMediumModel);
+        console.log("TCL: tempVideoModelUpdate", tempVideoModelUpdate);
+				video.model.medium.releaseDate = tempVideoModelUpdate.releaseDate;
+				video.model.medium.copyright = tempVideoModelUpdate.copyright;
+				video.model.medium.remark = tempVideoModelUpdate.remark;
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			video.updateUI();
 		},
 
-		_mediumAdded: function(medium) {
-    	// console.log("TCL: _mediumAdded: function(medium)");
+		_mediumAdded: async function(medium) {
+    	console.log("TCL: _mediumAdded: function(medium)");
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
-			// return medium;
 		},
 
-		_videoAdded: function(video) {
-    	// console.log("TCL: _videoAdded: function(video)");
+		_videoAdded: async function(video) {
+    	console.log("TCL: _videoAdded: function(video)");
 			TIMAAT.MediaDatasets.videos.model.push(video);
 			TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(video));
 		},
@@ -4806,16 +5079,16 @@ const TIMAAT = {
 			// setup model
 			this.model = model;
 			// create and style list view element
-			var deleteMedium = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-medium-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteMedium = '';
+			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-medium-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteMediumButton = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteMedium +
+				+ deleteMediumButton +
 				'<span class="timaat-medium-list-name"></span>' +
 				'<br> \
 				<span class="timaat-medium-list-medium-type-id"></span> \
 				<div class="timaat-medium-list-count text-muted float-left"></div> \
 				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
-		</li>'
+				</li>'
 			);
 			$('#timaat-medium-list').append(this.listView);
 			this.updateUI();      
@@ -4834,11 +5107,11 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-			console.log("TCL: Medium -> constructor -> Display Bearbeitungslog");
+			// console.log("TCL: Medium -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+medium.model.createdByUserAccountID+'">[ID '+medium.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+medium.model.createdByUserAccount.id+'">[ID '+medium.model.createdByUserAccount.id+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
-						<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+medium.model.lastEditedByUserAccountID+'">[ID '+medium.model.lastEditedByUserAccountID+']</span></b><br>\
+						<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+medium.model.lastEditedByUserAccount.id+'">[ID '+medium.model.lastEditedByUserAccount.id+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -4874,7 +5147,7 @@ const TIMAAT = {
 		updateUI() {
 			// console.log("TCL: Medium -> updateUI -> updateUI() -> model", this.model);
 			// title
-			var name = this.model.mediumTranslations[0].name;
+			var name = this.model.title.name;
 			var type = this.model.mediaType.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-medium-list-name').text(name);
@@ -4892,6 +5165,7 @@ const TIMAAT = {
 			index = TIMAAT.MediaDatasets.media.model.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.media.model.splice(index, 1);
 		}
+
 	},
 
 	// ------------------------------------------------------------------------------------------------------------------------
@@ -4930,9 +5204,9 @@ const TIMAAT = {
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+MediaType.model.createdByUserAccountID+'">[ID '+MediaType.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+MediaType.model.createdByUserAccount.id+'">[ID '+MediaType.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(MediaType.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+MediaType.model.lastEditedByUserAccountID+'">[ID '+MediaType.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+MediaType.model.lastEditedByUserAccount.id+'">[ID '+MediaType.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(MediaType.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -4943,12 +5217,6 @@ const TIMAAT = {
 				ev.stopPropagation();
 			});
 			// attach MediaType handlers
-			// $(this.listView).click(this, function(ev) {
-				// ev.stopPropagation();
-				// show tag editor - trigger popup
-				// TIMAAT.UI.hidePopups();				
-				// MediaType.listView.find('.timaat-media-type-list-tags').popover('show');
-			// });
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
@@ -4993,15 +5261,17 @@ const TIMAAT = {
 			// setup model
 			this.model = model;
 			// create and style list view element
-			var deleteVideo = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteVideo = '';
-			this.listView = $('<li class="list-group-item"> '
-				+ deleteVideo +
-				'<span class="timaat-video-list-name"></span>' +
-				'<br> \
-				<div class="timaat-video-list-count text-muted float-left"></div> \
-				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
-			</li>'
+			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteVideoButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteVideoButton +
+					'<span class="timaat-video-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-video-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
 			);
 			$('#timaat-video-list').append(this.listView);
 			this.updateUI();      
@@ -5020,12 +5290,11 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-			console.log("TCL: Video -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+video.model.createdByUserAccountID+'">[ID '+video.model.createdByUserAccountID+']</span></b><br>\
-							'+TIMAAT.Util.formatDate(video.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+video.model.lastEditedByUserAccountID+'">[ID '+video.model.lastEditedByUserAccountID+']</span></b><br>\
-							'+TIMAAT.Util.formatDate(video.model.lastEditedAt)+'<br>'
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+video.model.medium.createdByUserAccount.id+'">[ID '+video.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(video.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+video.model.medium.lastEditedByUserAccount.id+'">[ID '+video.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(video.model.medium.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 			});
@@ -5034,7 +5303,6 @@ const TIMAAT = {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
-
 			// attach video handlers
 			$(this.listView).click(this, function(ev) {
 				ev.stopPropagation();
@@ -5061,7 +5329,7 @@ const TIMAAT = {
 		updateUI() {
 			// console.log("TCL: Video -> updateUI -> updateUI()");
 			// title
-			var name = this.model.medium.mediumTranslations[0].name;
+			var name = this.model.medium.title.name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-video-list-name').text(name);
 		}
@@ -5128,9 +5396,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 			console.log("TCL: Actor -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccountID+'">[ID '+actor.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actor.model.lastEditedByUserAccountID+'">[ID '+actor.model.lastEditedByUserAccountID+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actor.model.lastEditedByUserAccount.id+'">[ID '+actor.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -5268,9 +5536,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Location -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccountID+'">[ID '+location.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccountID+'">[ID '+location.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccount.id+'">[ID '+location.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(location.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -5363,9 +5631,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       // console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationType.model.createdByUserAccountID+'">[ID '+locationType.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationType.model.createdByUserAccount.id+'">[ID '+locationType.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(locationType.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+locationType.model.lastEditedByUserAccountID+'">[ID '+locationType.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+locationType.model.lastEditedByUserAccount.id+'">[ID '+locationType.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(locationType.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -5376,12 +5644,6 @@ const TIMAAT = {
 				ev.stopPropagation();
 			});
 			// attach locationType handlers
-			// $(this.listView).click(this, function(ev) {
-				// ev.stopPropagation();
-				// show tag editor - trigger popup
-				// TIMAAT.UI.hidePopups();				
-				// locationType.listView.find('.timaat-location-type-list-tags').popover('show');
-			// });
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
@@ -5426,15 +5688,15 @@ const TIMAAT = {
 			// setup model
 			this.model = model;
 			// create and style list view element
-			var deleteCountry = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-country-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteCountry = '';
-			this.listView = $('<li class="list-group-item"> '
-				+ deleteCountry +
+			var deleteCountryButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-country-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteCountryButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteCountryButton +
 				'<span class="timaat-country-list-name"></span>' +
-				'<br> \
-				<div class="timaat-country-list-count text-muted float-left"></div> \
-				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
-			</li>'
+				'<br>' +
+				'<div class="timaat-country-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
 			);
 			$('#timaat-country-list').append(this.listView);
 			this.updateUI();      
@@ -5453,11 +5715,10 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-			console.log("TCL: Country -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.createdByUserAccountID+'">[ID '+country.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.createdByUserAccount.id+'">[ID '+country.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.lastEditedByUserAccountID+'">[ID '+country.model.lastEditedByUserAccountID+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.lastEditedByUserAccount.id+'">[ID '+country.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -5562,9 +5823,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Event -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccountID+'">[ID '+event.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccount.id+'">[ID '+event.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccountID+'">[ID '+event.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccount.id+'">[ID '+event.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(event.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -5677,7 +5938,7 @@ const TIMAAT = {
 		component: null,
 		
 		init: function() {
-    	console.log("TCL: UI: init: function()");
+    	// console.log("TCL: UI: init: function()");
 			$('[data-toggle="popover"]').popover();
 			
 			// init components
@@ -5686,7 +5947,7 @@ const TIMAAT = {
 			TIMAAT.Settings.init();
 			TIMAAT.Datasets.init();
 			
-			TIMAAT.UI.showComponent('videochooser');	    
+			TIMAAT.UI.showComponent('media');
 			$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
 			if ( TIMAAT.Service.state != 1 ) {
@@ -5806,7 +6067,7 @@ const TIMAAT = {
 					    $('#timaat-login-modal').modal('hide');
 					    $('#timaat-user-info').html(e.accountName);
 							
-					    TIMAAT.VideoChooser.loadVideos();
+					    // TIMAAT.VideoChooser.loadVideos(); // TODO re-enable and differentiate between medium and video
 							TIMAAT.Settings.loadCategorySets();
 							TIMAAT.Datasets.load();
 					  })

@@ -93,10 +93,26 @@ public class Medium implements Serializable {
 	private Source source;
 
 	//bi-directional many-to-one association to Title
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="primary_title_title_id")
 	private Title title;
 
+	//bi-directional many-to-one association to Work
+	// @ManyToOne
+	// @JoinColumn(name="works_id")
+	// private Work work;
+
+	//bi-directional many-to-one association to MediumAnalysisList
+	@OneToMany(mappedBy="medium")
+	private List<MediumAnalysisList> mediumAnalysisLists;
+
+	//bi-directional one-to-one association to MediumAudio
+	// @OneToOne(mappedBy="medium")
+	// private MediumAudio mediumAudio;
+
+	//bi-directional one-to-one association to MediumDocument
+	// @OneToOne(mappedBy="medium")
+	// private MediumDocument mediumDocument;
 
 	// TOOD replace with proper medium_video table data
 	// new
@@ -115,28 +131,11 @@ public class Medium implements Serializable {
 	// @AttributeOverride(name="width", column=@Column(table="MediumVideo")),
 	// })
 	// private MediumVideo mediumVideo;
-	
-	// Original Code
+
 	//bi-directional one-to-one association to MediumVideo
 	@OneToOne(mappedBy="medium")
+	@JsonIgnore
 	private MediumVideo mediumVideo;
-
-	//bi-directional many-to-one association to Work
-	// @ManyToOne
-	// @JoinColumn(name="works_id")
-	// private Work work;
-
-	//bi-directional many-to-one association to MediumAnalysisList
-	@OneToMany(mappedBy="medium")
-	private List<MediumAnalysisList> mediumAnalysisLists;
-
-	//bi-directional one-to-one association to MediumAudio
-	// @OneToOne(mappedBy="medium")
-	// private MediumAudio mediumAudio;
-
-	//bi-directional one-to-one association to MediumDocument
-	// @OneToOne(mappedBy="medium")
-	// private MediumDocument mediumDocument;
 
 	//bi-directional many-to-many association to ActorHasRole
 	@ManyToMany
@@ -308,7 +307,6 @@ public class Medium implements Serializable {
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
-
 
 	public Date getReleaseDate() {
 		return this.releaseDate;

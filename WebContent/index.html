@@ -125,7 +125,7 @@
         </div>
       </div>
     </div>
-  <!--
+    <!--
     <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"  aria-hidden="true" style="display: none;">
       <div id="timaat-login-box" class="modal-dialog modal-sm modal-dialog-centered">
         <div class="timaat-loginmodal-container modal-content">
@@ -145,7 +145,7 @@
         </div>
       </div>
     </div>
-  -->
+    -->
     <div id="wrapper" class="toggled">
       <!-- Navigation -->
       <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -284,24 +284,25 @@
         </div>
       </nav>
       <div id="page-wrapper">
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-videochooser">
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-header bg-info text-white">
-                  <strong>Verfügbare Videos</strong>
+                  <strong>Verfügbare Videos (currently disabled)</strong>
                 </div>
-                <div class="card-body" id="timaat-video-list">                      
+                <!-- <div class="card-body" id="timaat-video-list">                      
                   <div class="d-flex alert alert-secondary justify-content-center" role="alert">
                     <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>				
           </div>
         </div>
       
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
 
         <div class="container-fluid timaat-component" id="timaat-component-videoplayer">
           <div class="modal fade" id="timaat-videoplayer-analysislist-delete" tabindex="-1" role="dialog" aria-labelledby="analysislistDeleteLabel" aria-hidden="true">
@@ -590,7 +591,7 @@
         </div>
         <!-- /.container-fluid -->
 
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
 
         <div class="container-fluid timaat-component" id="timaat-component-settings">     
           <div class="modal fade" id="timaat-settings-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
@@ -668,9 +669,9 @@
           </div>
         </div>
 
-  <!---------------------------------------------------------------------------->
-  <!-- Media                                                                  -->
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
+        <!-- Media                                                          -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-media">
           <!-- delete medium -->
           <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
@@ -704,25 +705,55 @@
                 </div>
                 <div class="modal-body">
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="timaat-medium-meta-name" placeholder="Name" aria-label="Name">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärtitel</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-medium-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
-                </div>
-                <div class="modal-body">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärtitelsprache</span>
+                    </div>
+                    <select required class="custom-select" id="timaat-medium-meta-title-language-id" aria-label="Primary Title Language">
+                      <option value="" disabled selected>Choose Title Language...</option>
+                      <option value="1">default-untranslated</option>
+                      <option value="2">English</option>
+                      <option value="3">German</option>
+                    </select>
+                  </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Type</span>
                     </div>
-                    <select class="custom-select" id="timaat-medium-meta-medium-type-id" aria-label="Medium Type">
-                      <option selected>Choose Medium Type...</option>
-                      <option value="1">Video</option>
-                      <option value="2">Image</option>
-                      <option value="3">Audio</option>
-                      <option value="4">Text</option>
-                      <option value="5">Document</option>
-                      <option value="6">Videogame</option>
-                      <option value="7">Software</option>
+                    <select required class="custom-select" id="timaat-medium-meta-medium-type-id" aria-label="Medium Type">
+                      <option value="" disabled selected>Choose Medium Type...</option>
+                      <option value="1">Audio</option>
+                      <option value="2">Document</option>
+                      <option value="3">Image</option>                      
+                      <option value="4">Software</option>
+                      <option value="5">Text</option>                      
+                      <option value="6">Video</option>
+                      <option value="7">Videogame</option>
                     </select>
                   </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Erscheinungsdatum</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-medium-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Copyright</span>
+                      </div>
+                      <input type="text" class="form-control" id="timaat-medium-meta-copyright" placeholder="[Copyright]" aria-label="Copyright">
+                    </div>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Bemerkung</span>
+                      </div>
+                      <input type="text" class="form-control" id="timaat-medium-meta-remark" placeholder="[Remark]" aria-label="Remark">
+                    </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -764,15 +795,92 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Name</span>
+                      <span class="input-group-text">Primärtitel</span>
                     </div>
-                    <input type="text" class="form-control" id="timaat-video-meta-name" placeholder="[Name]" aria-label="Name">
+                    <input type="text" class="form-control" id="timaat-video-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primary Title</span>
+                      <span class="input-group-text">Primärtitelsprache</span>
                     </div>
-                    <input type="text" class="form-control" id="timaat-video-meta-primary-title" placeholder="[Primary Title]" aria-label="Primary Title">
+                    <select required class="custom-select" id="timaat-video-meta-title-language-id" aria-label="Primary Title Language">
+                      <option value="" disabled selected>Choose Title Language...</option>
+                      <option value="1">default-untranslated</option>
+                      <option value="2">English</option>
+                      <option value="3">German</option>
+                    </select>
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Erscheinungsdatum</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-video-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Länge</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-length" placeholder="[Length]" aria-label="Length">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Video Codec</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-videocodec" placeholder="[Video Codec]" aria-label="Video Codec">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Videobreite</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-width" placeholder="[Width]" aria-label="Width">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Videohöhe</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-height" placeholder="[Height]" aria-label="Height">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Framerate</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-framerate" placeholder="[Frame Rate]" aria-label="Frame Rate">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Datarate</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-datarate" placeholder="[Data Rate]" aria-label="Data Rate">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Total Bitrate</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-totalbitrate" placeholder="[Total Bitrate]" aria-label="Total Bitrate">
+                  </div>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Marke</span>
+                      </div>
+                      <input type="text" class="form-control" id="timaat-video-meta-brand" placeholder="[Brand]" aria-label="Brand">
+                    </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Episode?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-video-meta-isepisode" aria-label="Is Episode?">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Copyright</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-copyright" placeholder="[Copyright]" aria-label="Copyright">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Bemerkung</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-remark" placeholder="[Remark]" aria-label="Remark">
                   </div>
                 </div>  
                 <div class="modal-footer">
@@ -839,9 +947,9 @@
           </div>
         </div>
 
-  <!---------------------------------------------------------------------------->
-  <!-- Actors                                                                 -->
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
+        <!-- Actors                                                         -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-actors">
           <!-- delete actor -->
           <div class="modal fade" id="timaat-actordatasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
@@ -933,9 +1041,9 @@
             </div>
           </div>
         </div>
-  <!---------------------------------------------------------------------------->
-  <!-- Locations                                                              -->
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
+        <!-- Locations                                                      -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-locations">
           <!-- delete location -->
           <div class="modal fade" id="timaat-locationdatasets-location-delete" tabindex="-1" role="dialog" aria-labelledby="locationDeleteLabel" aria-hidden="true">
@@ -977,8 +1085,8 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Type</span>
                     </div>
-                    <select class="custom-select" id="timaat-location-meta-location-type-id" aria-label="Location Type">
-                      <option selected>Choose Location Type...</option>
+                    <select required class="custom-select" id="timaat-location-meta-location-type-id" aria-label="Location Type">
+                      <option value="" disabled selected>Choose Location Type...</option>
                       <option value="1">Country</option>
                       <option value="2">Province</option>
                       <option value="3">County</option>
@@ -1128,9 +1236,9 @@
             </div>
           </div>
         </div>
-  <!---------------------------------------------------------------------------->
-  <!-- Events                                                                 -->
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
+        <!-- Events                                                         -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-events">
           <!-- delete event -->
           <div class="modal fade" id="timaat-eventdatasets-event-delete" tabindex="-1" role="dialog" aria-labelledby="eventDeleteLabel" aria-hidden="true">
@@ -1228,7 +1336,7 @@
             </div>
           </div>
         </div>
-  <!---------------------------------------------------------------------------->
+        <!-------------------------------------------------------------------->
       </div>
       <!-- /#page-wrapper -->
     </div>
@@ -1237,5 +1345,6 @@
       <div class="arrow" style="left:49px;">
       </div><img class="popover-body" style="width:128px;"src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
+
   </body>
 </html>

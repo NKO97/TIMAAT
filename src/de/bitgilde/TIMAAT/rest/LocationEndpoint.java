@@ -292,18 +292,12 @@ public class LocationEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
-		// System.out.println("LocationEndpoint: createLocationTranslation - translation exists");
 		// sanitize object data
-		// System.out.println("newTranslation.setId(0);");
 		newTranslation.setId(0);
-		// System.out.println("newTranslation.setLocation(location);" + location);
-		newTranslation.setLocation(location); // TODO check if valid
+		newTranslation.setLocation(location);
 		Language language = entityManager.find(Language.class, 1); // TODO get proper language id
-		// System.out.println("newTranslation.setLanguage(language);" + language);
 		newTranslation.setLanguage(language);
-		// System.out.println("location.addLocationTranslation(newTranslation); " + newTranslation);
 		location.addLocationTranslation(newTranslation);
-		// System.out.println("so far so good? start persistence");
 		// persist locationTranslation and location
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();

@@ -37,8 +37,8 @@ public class MediumVideo implements Serializable {
 
 	private int height;
 
-	@Column(name="is_episode")
-	private byte isEpisode;
+	@Column(name="is_episode", columnDefinition = "BOOLEAN")
+	private Boolean isEpisode;
 
 	private Timestamp length;
 
@@ -69,7 +69,23 @@ public class MediumVideo implements Serializable {
 	public void setMediumId(int mediumId) {
 		this.mediumId = mediumId;
 	}
-	    
+
+	public int getId() { // TODO not necessary with getMediumId?
+		return this.getMedium().getId();
+	}
+
+	public void setId(int id) { // TODO not necessary with setMediumId?
+		this.getMedium().setId(id);
+	}
+
+	// public Title getTitle() {
+	// 	return this.getMedium().getTitle();
+	// }
+
+	// public void setTitle(Title title) {
+	// 	this.getMedium().setTitle(title);
+	// }
+
   public AudioCodecInformation getAudioCodecInformation() {
 		return this.audioCodecInformation;
 	}
@@ -110,11 +126,11 @@ public class MediumVideo implements Serializable {
 		this.height = height;
 	}
 
-	public byte getIsEpisode() {
+	public Boolean getIsEpisode() {
 		return this.isEpisode;
 	}
 
-	public void setIsEpisode(byte isEpisode) {
+	public void setIsEpisode(Boolean isEpisode) {
 		this.isEpisode = isEpisode;
 	}
 
