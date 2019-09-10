@@ -102,9 +102,10 @@
     <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="text-muted d-flex justify-content-end mr-1">v0.Sprint-4b1</div>
-            <div class="modal-header">
-              <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
+          <div class="text-muted d-flex justify-content-end mr-1">v0.Sprint-5b1 (2019-09-10)            
+          </div>
+          <div class="modal-header">
+            <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
           </div>
           <div class="modal-body text-center">
             <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
@@ -900,7 +901,7 @@
                 <li class="nav-item">
                   <a class="nav-link" id="videos-tab"  onclick="TIMAAT.MediaDatasets.loadVideos()" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-film"></i> Videos</a>
                 </li>
-              </ul>  
+              </ul>
               <div class="tab-content" id="mediaTabContent">
                 <!-- Media UI -->
                 <div class="tab-pane fade show active" id="media" role="tabpanel" aria-labelledby="media-tab">
@@ -1346,5 +1347,11 @@
       </div><img class="popover-body" style="width:128px;"src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
 
+
+    <script>
+      $('#timaat-login-modal').on('shown.bs.modal', function() {
+        $('#timaat-login-user').focus();
+      });
+    </script>
   </body>
 </html>
