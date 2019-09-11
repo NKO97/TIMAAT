@@ -480,10 +480,10 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<VoiceTypeTranslation> voiceTypeTranslations;
 
-	//bi-directional many-to-one association to WorksAnalysisListTranslation
+	//bi-directional many-to-one association to WorkAnalysisListTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
-	// private List<WorksAnalysisListTranslation> worksAnalysisListTranslations;
+	// private List<WorkAnalysisListTranslation> workAnalysisListTranslations;
 
 	//bi-directional many-to-one association to ZelizerBeeseVoiceOfTheVisualTranslation
 	// @OneToMany(mappedBy="language")
@@ -2519,26 +2519,26 @@ public class Language implements Serializable {
 	// 	return voiceTypeTranslation;
 	// }
 
-	// public List<WorksAnalysisListTranslation> getWorksAnalysisListTranslations() {
-	// 	return this.worksAnalysisListTranslations;
+	// public List<WorkAnalysisListTranslation> getWorkAnalysisListTranslations() {
+	// 	return this.workAnalysisListTranslations;
 	// }
 
-	// public void setWorksAnalysisListTranslations(List<WorksAnalysisListTranslation> worksAnalysisListTranslations) {
-	// 	this.worksAnalysisListTranslations = worksAnalysisListTranslations;
+	// public void setWorkAnalysisListTranslations(List<WorkAnalysisListTranslation> workAnalysisListTranslations) {
+	// 	this.workAnalysisListTranslations = workAnalysisListTranslations;
 	// }
 
-	// public WorksAnalysisListTranslation addWorksAnalysisListTranslation(WorksAnalysisListTranslation worksAnalysisListTranslation) {
-	// 	getWorksAnalysisListTranslations().add(worksAnalysisListTranslation);
-	// 	worksAnalysisListTranslation.setLanguage(this);
+	// public WorkAnalysisListTranslation addWorkAnalysisListTranslation(WorkAnalysisListTranslation workAnalysisListTranslation) {
+	// 	getWorkAnalysisListTranslations().add(workAnalysisListTranslation);
+	// 	workAnalysisListTranslation.setLanguage(this);
 
-	// 	return worksAnalysisListTranslation;
+	// 	return workAnalysisListTranslation;
 	// }
 
-	// public WorksAnalysisListTranslation removeWorksAnalysisListTranslation(WorksAnalysisListTranslation worksAnalysisListTranslation) {
-	// 	getWorksAnalysisListTranslations().remove(worksAnalysisListTranslation);
-	// 	worksAnalysisListTranslation.setLanguage(null);
+	// public WorkAnalysisListTranslation removeWorkAnalysisListTranslation(WorkAnalysisListTranslation workAnalysisListTranslation) {
+	// 	getWorkAnalysisListTranslations().remove(workAnalysisListTranslation);
+	// 	workAnalysisListTranslation.setLanguage(null);
 
-	// 	return worksAnalysisListTranslation;
+	// 	return workAnalysisListTranslation;
 	// }
 
 	// public List<ZelizerBeeseVoiceOfTheVisualTranslation> getZelizerBeeseVoiceOfTheVisualTranslations() {

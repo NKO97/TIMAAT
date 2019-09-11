@@ -99,7 +99,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to Work
 	// @ManyToOne
-	// @JoinColumn(name="works_id")
+	// @JoinColumn(name="work_id")
 	// private Work work;
 
 	//bi-directional many-to-one association to MediumAnalysisList
