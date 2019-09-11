@@ -20,7 +20,6 @@ public class MediumVideo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@PrimaryKeyJoinColumn(name="medium_id")
 	@Column(name="medium_id")
 	private int mediumId;
 
@@ -70,21 +69,13 @@ public class MediumVideo implements Serializable {
 		this.mediumId = mediumId;
 	}
 
-	public int getId() { // TODO not necessary with getMediumId?
+	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents video list from being displayed=)
 		return this.getMedium().getId();
 	}
 
 	public void setId(int id) { // TODO not necessary with setMediumId?
 		this.getMedium().setId(id);
 	}
-
-	// public Title getTitle() {
-	// 	return this.getMedium().getTitle();
-	// }
-
-	// public void setTitle(Title title) {
-	// 	this.getMedium().setTitle(title);
-	// }
 
   public AudioCodecInformation getAudioCodecInformation() {
 		return this.audioCodecInformation;
@@ -134,11 +125,11 @@ public class MediumVideo implements Serializable {
 		this.isEpisode = isEpisode;
 	}
 
-	public float getLength() {
+	public float getLength() { // TODO why float?
 		return this.length.getTime()/1000f;
 	}
 
-	public void setLength(float length) {
+	public void setLength(float length) { // TODO why float?
 		this.length = new Timestamp((long)(length*1000f));
 	}
 

@@ -24,9 +24,9 @@ public class AnalysisContentAudio implements Serializable {
 	// private List<AnalysisAmbientSound> analysisAmbientSounds;
 
 	//bi-directional many-to-one association to MediumText
-	// @ManyToOne
-	// @JoinColumn(name="medium_text_medium_id")
-	// private MediumText mediumText;
+	@ManyToOne
+	@JoinColumn(name="medium_text_medium_id")
+	private MediumText mediumText;
 
 	//bi-directional many-to-many association to LineupMember
 	// @ManyToMany(mappedBy="analysisContentAudios")
@@ -81,13 +81,13 @@ public class AnalysisContentAudio implements Serializable {
 	// 	return analysisAmbientSound;
 	// }
 
-	// public MediumText getMediumText() {
-	// 	return this.mediumText;
-	// }
+	public MediumText getMediumText() {
+		return this.mediumText;
+	}
 
-	// public void setMediumText(MediumText mediumText) {
-	// 	this.mediumText = mediumText;
-	// }
+	public void setMediumText(MediumText mediumText) {
+		this.mediumText = mediumText;
+	}
 
 	// public List<LineupMember> getLineupMembers() {
 	// 	return this.lineupMembers;

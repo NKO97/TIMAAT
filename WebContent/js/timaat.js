@@ -2889,10 +2889,10 @@ const TIMAAT = {
 			});			
 		},
 
-		listVideos(callback) {
+		listMediumSubtype(mediumSubtype, callback) {
 			// console.log("TCL: listVideos -> callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/list",
 				type:"GET",
 				// data: JSON.stringify(mediaType),
 				contentType:"application/json; charset=utf-8",
@@ -2906,8 +2906,7 @@ const TIMAAT = {
 			})
 			.fail(function(e) {
 				console.log( "error", e );
-			});
-			
+			});			
 		},
 
 		async createMedium(mediumModel) {
@@ -2970,21 +2969,21 @@ const TIMAAT = {
 			});
 		},
 
-		async createVideo(mediumModel, videoModel) {
-			// console.log("TCL: async createVideo -> mediumModel, videoModel", mediumModel, videoModel);
+		async createMediumSubtype(mediumSubtype, mediumModel, subtypeModel) {
+			// console.log("TCL: async createVideo -> mediumModel, subtypeModel", mediumModel, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+mediumModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+mediumModel.id,
 					type:"POST",
-					data: JSON.stringify(videoModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
-				}).done(function(videoData) {
-					console.log("TCL: createVideo -> videoData", videoData);
-						resolve(videoData);
+				}).done(function(subtypeData) {
+					console.log("TCL: createVideo -> subtypeData", subtypeData);
+						resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -3069,13 +3068,13 @@ const TIMAAT = {
 			});
 		},
 
-		async updateVideo(videoModel) {
-			console.log("TCL: async updateVideo -> videoModel", videoModel);
+		async updateMediumSubtype(mediumSubtype, subtypeModel) {
+			console.log("TCL: async updateVideo -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+videoModel.mediumId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
 					type:"PATCH",
-					data: JSON.stringify(videoModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -3134,10 +3133,10 @@ const TIMAAT = {
 			});
 		},
 
-		removeVideo(video) {
-			console.log("TCL: removeVideo -> video", video);
+		removeMediumSubtype(mediumSubtype, subtype) {
+			console.log("TCL: removeSubtype -> subtype", subtype);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+video.model.mediumId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtype.model.mediumId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -3150,24 +3149,6 @@ const TIMAAT = {
 				console.log( e.responseText );
 			});
 		},
-
-		// obsolete through On Delete: Cascade in medium
-		// removeTitle(title) {
-		// 	console.log("TCL: removeTitle -> title", title);
-		// 	$.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
-		// 		type:"DELETE",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});
-		// },	
 
 	},
 
@@ -4490,12 +4471,24 @@ const TIMAAT = {
 	MediaDatasets: {
 		media: null,
 		mediaTypes: null,
+		audios: null,
+		documents: null,
+		images: null,
+		softwares: null,
+		texts: null,
 		videos: null,
+		videogames: null,	
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
 			TIMAAT.MediaDatasets.initMediaTypes();
+			// TIMAAT.MediaDatasets.initAudios();
+			// TIMAAT.MediaDatasets.initDocuments();
+			// TIMAAT.MediaDatasets.initImages();
+			// TIMAAT.MediaDatasets.initSoftwares();
+			// TIMAAT.MediaDatasets.initTexts();
 			TIMAAT.MediaDatasets.initVideos();
+			// TIMAAT.MediaDatasets.initVideogames();
 		},
 
 		initMediaTypes: function() {
@@ -4622,9 +4615,10 @@ const TIMAAT = {
 				var typeId = Number(typeSelector.options[typeSelector.selectedIndex].value);
 				var remark = $("#timaat-medium-meta-remark").val();
 				var copyright = $("#timaat-medium-meta-copyright").val();
-				var releaseDate = $("#timaat-medium-meta-releaseDate").val();
+				var releaseDate = $("#timaat-medium-meta-releasedate").val();
+
 				if (medium) {
-          console.log("TCL: medium", medium);
+          // console.log("TCL: medium", medium);
 					medium.model.remark = remark;
 					medium.model.copyright = copyright;
 					medium.model.releaseDate = releaseDate;
@@ -4680,11 +4674,11 @@ const TIMAAT = {
 			$('#timaat-video-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-video-delete');
 				var video = modal.data('video');
-				if (video) TIMAAT.MediaDatasets._videoRemoved(video);
+				if (video) TIMAAT.MediaDatasets._mediumSubtypeRemoved("video", video);
 				modal.modal('hide');
 			});
 			// add video button
-			$('#timaat-video-add').attr('onclick','TIMAAT.MediaDatasets.addVideo()');
+			$('#timaat-video-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("video")');
 			// add/edit video functionality
 			$('#timaat-mediadatasets-video-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit video window setup
@@ -4694,7 +4688,7 @@ const TIMAAT = {
 				var submit = (video) ? "Speichern" : "Hinzufügen";
 				// video data
 				var brand = (video) ? video.model.brand : "";
-				var length = (video) ? video.model.length : 0;
+				var length = (video) ? video.model.length : "";
 				var videoCodec = (video) ? video.model.videoCodec : "";
 				var width = (video) ? video.model.width : "";
 				var height = (video) ? video.model.height : "";
@@ -4742,16 +4736,16 @@ const TIMAAT = {
 				var width = $("#timaat-video-meta-width").val();
 				var height = $("#timaat-video-meta-height").val();
 				var frameRate = $("#timaat-video-meta-framerate").val();
-				var dataRate = $("#timaat-video-meta-dataRate").val();
+				var dataRate = $("#timaat-video-meta-datarate").val();
 				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
 				var isEpisodeSelector = $("#timaat-video-meta-isepisode").val();
 				var isEpisode = Number(isEpisodeSelector);
 				var remark = $("#timaat-video-meta-remark").val();
 				var copyright = $("#timaat-video-meta-copyright").val();
-				var releaseDate = $("#timaat-video-meta-releaseDate").val();
+				var releaseDate = $("#timaat-video-meta-releasedate").val();
 
 				if (video) {
-          console.log("TCL: initVideos -> video", video);
+          // console.log("TCL: initVideos -> video", video);
 					video.model.medium.title.name = primaryTitle;
 					video.model.medium.title.language.id = primaryTitleLanguageId;
 					video.model.brand = brand;
@@ -4767,7 +4761,7 @@ const TIMAAT = {
 					video.model.medium.copyright = copyright;
 					video.model.medium.releaseDate = releaseDate;
 					video.updateUI();
-					TIMAAT.MediaDatasets.updateVideo(video);
+					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
         } else {
 					var model = {
 						mediumId: 0,
@@ -4807,7 +4801,7 @@ const TIMAAT = {
 					// };
 					// There are no translation data for video or medium at the moment
 					// TIMAAT.MediaDatasets.createVideo(medium, mediumTranslation, model);
-					TIMAAT.MediaDatasets.createVideo(model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title);
 				}
 				modal.modal('hide');
 			});
@@ -4827,7 +4821,14 @@ const TIMAAT = {
 		load: function() {
 			TIMAAT.MediaDatasets.loadMedia();
 			TIMAAT.MediaDatasets.loadMediaTypes();
-			TIMAAT.MediaDatasets.loadVideos();
+			TIMAAT.MediaDatasets.loadAllMediumSubtypes();
+			// TIMAAT.MediaDatasets.loadAudios();
+			// TIMAAT.MediaDatasets.loadDocuments();
+			// TIMAAT.MediaDatasets.loadImages();
+			// TIMAAT.MediaDatasets.loadSoftwares();
+			// TIMAAT.MediaDatasets.loadTexts();
+			// TIMAAT.MediaDatasets.loadVideos();
+			// TIMAAT.MediaDatasets.loadVideogames();
 		},
 
 		loadMediaTypes: function() {
@@ -4839,10 +4840,42 @@ const TIMAAT = {
     	// console.log("TCL: loadMedia: function()");
 			TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumLists);
 		},
-		
-		loadVideos: function() {
-    	// console.log("TCL: loadVideos: function()");
-			TIMAAT.MediaService.listVideos(TIMAAT.MediaDatasets.setVideoLists);
+
+		loadMediumSubtype: function(mediumSubtype) {
+			switch (mediumSubtype) {
+				case "audio":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioLists);
+					break;
+				case "document":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentLists);
+					break;
+				case "image":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageLists);
+					break;
+				case "software":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareLists);
+					break;
+				case "text":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextLists);
+					break;
+				case "video":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoLists);
+					break;
+				case "videogame":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameLists);
+					break;
+			};
+			// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameLists);
+		},
+
+		loadAllMediumSubtypes: function() {
+			TIMAAT.MediaService.listMediumSubtype("audio", TIMAAT.MediaDatasets.setAudioLists);
+			TIMAAT.MediaService.listMediumSubtype("document", TIMAAT.MediaDatasets.setDocumentLists);
+			TIMAAT.MediaService.listMediumSubtype("image", TIMAAT.MediaDatasets.setImageLists);
+			TIMAAT.MediaService.listMediumSubtype("software", TIMAAT.MediaDatasets.setSoftwareLists);
+			TIMAAT.MediaService.listMediumSubtype("text", TIMAAT.MediaDatasets.setTextLists);
+			TIMAAT.MediaService.listMediumSubtype("video", TIMAAT.MediaDatasets.setVideoLists);
+			TIMAAT.MediaService.listMediumSubtype("videogame", TIMAAT.MediaDatasets.setVideogameLists);
 		},
 
 		setMediaTypeLists: function(mediaTypes) {
@@ -4871,6 +4904,119 @@ const TIMAAT = {
 			TIMAAT.MediaDatasets.media.model = media;
 		},
 
+		// will probably not work this way
+		// setMediumSubtypeLists: function(mediumSubtype, mediumSubtypeDatasets) {
+    // console.log("TCL: mediumSubtype, mediumSubtypeDatasets", mediumSubtype, mediumSubtypeDatasets);
+		// 	if ( !mediumSubtypeDatasets ) return;
+		// 	switch (mediumSubtype) {
+		// 		case "audio":
+		// 			$('#timaat-audio-list-loader').remove();
+		// 			// clear old UI list
+		// 			$('#timaat-audio-list').empty();
+		// 			// setup model
+		// 			var auds = Array();
+		// 			audios.forEach(function(audio) { 
+		// 				if ( audio.id > 0 )
+		// 					auds.push(new TIMAAT.Audio(audio)); 
+		// 			});
+		// 			TIMAAT.MediaDatasets.audios = auds;
+		// 			TIMAAT.MediaDatasets.audios.model = audios;
+		// 			break;
+		// 		case "document":
+		// 			break;
+		// 		case "image":
+		// 			break;
+		// 		case "software":
+		// 			break;
+		// 		case "text":
+		// 			break;
+		// 		case "video":
+		// 			break;
+		// 		case "videogame":
+		// 			break;
+		// 	};
+		// },
+
+		setAudioLists: function(audios) {
+			console.log("TCL: setAudioLists -> audios", audios);
+				if ( !audios ) return;
+				$('#timaat-audio-list-loader').remove();
+				// clear old UI list
+				$('#timaat-audio-list').empty();
+				// setup model
+				var auds = Array();
+				audios.forEach(function(audio) { 
+					if ( audio.id > 0 )
+						auds.push(new TIMAAT.Audio(audio)); 
+				});
+				TIMAAT.MediaDatasets.audios = auds;
+				TIMAAT.MediaDatasets.audios.model = audios;
+		},
+
+		setDocumentLists: function(documents) {
+			console.log("TCL: setDocumentLists -> documents", documents);
+				if ( !documents ) return;
+				$('#timaat-document-list-loader').remove();
+				// clear old UI list
+				$('#timaat-document-list').empty();
+				// setup model
+				var docs = Array();
+				documents.forEach(function(document) { 
+					if ( document.id > 0 )
+						docs.push(new TIMAAT.Document(document)); 
+				});
+				TIMAAT.MediaDatasets.documents = docs;
+				TIMAAT.MediaDatasets.documents.model = documents;
+		},
+
+		setImageLists: function(images) {
+			console.log("TCL: setImageLists -> images", images);
+				if ( !images ) return;
+				$('#timaat-image-list-loader').remove();
+				// clear old UI list
+				$('#timaat-image-list').empty();
+				// setup model
+				var imgs = Array();
+				images.forEach(function(image) { 
+					if ( image.id > 0 )
+						imgs.push(new TIMAAT.Image(image)); 
+				});
+				TIMAAT.MediaDatasets.images = imgs;
+				TIMAAT.MediaDatasets.images.model = images;
+		},
+
+		setSoftwareLists: function(softwares) {
+			console.log("TCL: setSoftwareLists -> softwares", softwares);
+				if ( !softwares ) return;
+				$('#timaat-software-list-loader').remove();
+				// clear old UI list
+				$('#timaat-software-list').empty();
+				// setup model
+				var softws = Array();
+				softwares.forEach(function(software) { 
+					if ( software.id > 0 )
+						softws.push(new TIMAAT.Software(software)); 
+				});
+				TIMAAT.MediaDatasets.softwares = softws;
+				TIMAAT.MediaDatasets.softwares.model = softwares;
+		},
+
+		setTextLists: function(texts) {
+			console.log("TCL: setTextLists -> texts", texts);
+				if ( !texts ) return;
+				$('#timaat-text-list-loader').remove();
+				// clear old UI list
+				$('#timaat-text-list').empty();
+				// setup model
+				var txts = Array();
+				texts.forEach(function(text) { 
+					if ( text.id > 0 )
+						txts.push(new TIMAAT.Text(text)); 
+				});
+				TIMAAT.MediaDatasets.texts = txts;
+				TIMAAT.MediaDatasets.texts.model = texts;
+		},
+		
 		setVideoLists: function(videos) {
 			console.log("TCL: setVideoLists -> videos", videos);
 				if ( !videos ) return;
@@ -4886,18 +5032,95 @@ const TIMAAT = {
 				TIMAAT.MediaDatasets.videos = vids;
 				TIMAAT.MediaDatasets.videos.model = videos;
 		},
+
+		setVideogameLists: function(videogames) {
+			console.log("TCL: setVideogameLists -> videogames", videogames);
+				if ( !videogames ) return;
+				$('#timaat-videogame-list-loader').remove();
+				// clear old UI list
+				$('#timaat-videogame-list').empty();
+				// setup model
+				var vdgms = Array();
+				videogames.forEach(function(videogame) { 
+					if ( videogame.id > 0 )
+						vdgms.push(new TIMAAT.Videogame(videogame)); 
+				});
+				TIMAAT.MediaDatasets.videogames = vdgms;
+				TIMAAT.MediaDatasets.videogames.model = videogames;
+		},
 		
 		addMedium: function() {	
-    // console.log("TCL: addMedium: function()");
 			$('#timaat-mediadatasets-medium-meta').data('medium', null);
 			$('#timaat-mediadatasets-medium-meta').modal('show');
 		},
 
-		addVideo: function() {	
-			// console.log("TCL: addVideo: function()");
-				$('#timaat-mediadatasets-video-meta').data('video', null);
-				$('#timaat-mediadatasets-video-meta').modal('show');
+		addMediumSubtype: function(mediumSubtype) {
+			switch (mediumSubtype) {
+				case "audio":
+					$('#timaat-mediadatasets-audio-meta').data('audio', null);
+					$('#timaat-mediadatasets-audio-meta').modal('show');
+					break;
+				case "document":
+					$('#timaat-mediadatasets-document-meta').data('document', null);
+					$('#timaat-mediadatasets-document-meta').modal('show');
+					break;
+				case "image":
+					$('#timaat-mediadatasets-image-meta').data('image', null);
+					$('#timaat-mediadatasets-image-meta').modal('show');
+					break;
+				case "software":
+					$('#timaat-mediadatasets-software-meta').data('software', null);
+					$('#timaat-mediadatasets-software-meta').modal('show');
+					break;
+				case "text":
+					$('#timaat-mediadatasets-text-meta').data('text', null);
+					$('#timaat-mediadatasets-text-meta').modal('show');
+					break;
+				case "video":
+					$('#timaat-mediadatasets-video-meta').data('video', null);
+					$('#timaat-mediadatasets-video-meta').modal('show');
+					break;
+				case "videogame":
+					$('#timaat-mediadatasets-videogame-meta').data('videogame', null);
+					$('#timaat-mediadatasets-videogame-meta').modal('show');
+					break;
+			}
 		},
+
+		// addAudio: function() {	
+		// 	$('#timaat-mediadatasets-audio-meta').data('audio', null);
+		// 	$('#timaat-mediadatasets-audio-meta').modal('show');
+		// },
+
+		// addDocument: function() {	
+		// 	$('#timaat-mediadatasets-document-meta').data('document', null);
+		// 	$('#timaat-mediadatasets-document-meta').modal('show');
+		// },
+
+		// addImage: function() {	
+		// 	$('#timaat-mediadatasets-image-meta').data('image', null);
+		// 	$('#timaat-mediadatasets-image-meta').modal('show');
+		// },
+
+		// addSoftware: function() {	
+		// 	$('#timaat-mediadatasets-software-meta').data('software', null);
+		// 	$('#timaat-mediadatasets-software-meta').modal('show');
+		// },
+
+		// addText: function() {	
+		// 	$('#timaat-mediadatasets-text-meta').data('text', null);
+		// 	$('#timaat-mediadatasets-text-meta').modal('show');
+		// },
+
+		// addVideogame: function() {	
+		// 	$('#timaat-mediadatasets-videogame-meta').data('videogame', null);
+		// 	$('#timaat-mediadatasets-videogame-meta').modal('show');
+		// },
+
+		// addVideo: function() {	
+		// 	$('#timaat-mediadatasets-video-meta').data('video', null);
+		// 	$('#timaat-mediadatasets-video-meta').modal('show');
+		// },
 
 		createMedium: async function(mediumModel, title) {
 			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
@@ -4907,12 +5130,12 @@ const TIMAAT = {
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-				console.log("TCL: newTitle", newTitle);
+				// console.log("TCL: newTitle", newTitle);
 				
 				// create medium
 				var newMediumModel = mediumModel;
 				newMediumModel.title = newTitle;
-        console.log("TCL: newMediumModel", newMediumModel);
+        // console.log("TCL: newMediumModel", newMediumModel);
 				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
 
 				// create medium translation with medium id
@@ -4927,12 +5150,47 @@ const TIMAAT = {
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			// medium.updateUI();
 		},
 
-		createVideo: async function(videoModel, mediumModel, title) {
-			// createVideo: async function(mediumModel, mediumModelTranslation, videoModel) { // video has no translation table at the moment
-			console.log("TCL: createVideo: async function-> videoModel, mediumModel, title", videoModel, mediumModel, title);
+		// createVideo: async function(videoModel, mediumModel, title) {
+		// 	// createVideo: async function(mediumModel, mediumModelTranslation, videoModel) { // video has no translation table at the moment
+		// 	console.log("TCL: createVideo: async function-> videoModel, mediumModel, title", videoModel, mediumModel, title);
+		// 	try {
+		// 		// create title
+		// 		var newTitle = await TIMAAT.MediaService.createTitle(title);
+		// 		// console.log("TCL: newTitle", newTitle);
+				
+		// 		// create medium
+		// 		var newMediumModel = mediumModel;
+		// 		newMediumModel.title = newTitle;
+		// 		newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+		// 		// console.log("TCL: newMediumModel", newMediumModel);
+				
+		// 		// create medium translation with medium id
+		// 		// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+		// 		// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+		// 		// create video with medium id
+		// 		videoModel.mediumId = newMediumModel.id;
+    //     // console.log("TCL: videoModel", videoModel);
+		// 		// var newVideoModel = await TIMAAT.MediaService.createVideo(newMediumModel, videoModel);
+		// 		var newVideoModel = await TIMAAT.MediaService.createMediumSubtype("video", newMediumModel, videoModel);
+		// 		// console.log("TCL: newVideoModel", newVideoModel);
+				
+		// 		// push new medium to dataset model
+		// 		await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+
+		// 		// push new video to dataset model
+		// 		await TIMAAT.MediaDatasets._videoAdded(newVideoModel);
+
+		// 	} catch(error) {
+		// 		console.log( "error: ", error.responseText);
+		// 	};
+		// 	// video.updateUI();
+		// },
+
+		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title) {
+			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
+			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
@@ -4941,28 +5199,28 @@ const TIMAAT = {
 				// create medium
 				var newMediumModel = mediumModel;
 				newMediumModel.title = newTitle;
-				newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
 				// console.log("TCL: newMediumModel", newMediumModel);
+
+				// push new medium to dataset model
+				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
 				
 				// create medium translation with medium id
 				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
 				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
-				// create video with medium id
-				videoModel.mediumId = newMediumModel.id;
-        // console.log("TCL: videoModel", videoModel);
-				var newVideoModel = await TIMAAT.MediaService.createVideo(newMediumModel, videoModel);
-				// console.log("TCL: newVideoModel", newVideoModel);
-				
-				// push new medium to dataset model
-				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+				// create mediumSubtype with medium id
+				mediumSubtypeModel.mediumId = newMediumModel.id;
+        // console.log("TCL: mediumSubtypeModel", mediumSubtypeModel);
+				// var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(newMediumModel, mediumSubtypeModel);
+				var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
+				// console.log("TCL: newMediumSubtypeModel", newMediumSubtypeModel);
 
-				// push new video to dataset model
-				await TIMAAT.MediaDatasets._videoAdded(newVideoModel);
+				// push new mediumSubtype to dataset model
+				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
 
 			} catch(error) {
 				console.log( "error: ", error.responseText);
 			};
-			// video.updateUI();
 		},
 
 		updateMedium: async function(medium) {
@@ -4971,15 +5229,9 @@ const TIMAAT = {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
 				medium.model.title = tempTitle;
+
 				// update data that is part of medium (includes updating last edited by/at)
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
-				console.log("TCL: updateMedium: async function -> tempMediumModel", tempMediumModel);
-				
-				medium.model.mediaType.id = tempMediumModel.mediaType.id;
-				medium.model.releaseDate = tempMediumModel.releaseDate;
-				medium.model.copyright = tempMediumModel.copyright;
-				medium.model.remark = tempMediumModel.remark;
-
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -4994,67 +5246,73 @@ const TIMAAT = {
 			// medium.updateUI();
 		},
 
-		updateVideo: async function(video) {
-			console.log("TCL: updateVideo async function -> video at beginning of update process: ", video);
+		updateMediumSubtype: async function(mediumSubtype, mediumSubtypeData) {
+			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
 			try {
 				// update title
-				var tempTitle = await TIMAAT.MediaService.updateTitle(video.model.medium.title);
-				video.model.medium.title = tempTitle;
-        console.log("TCL: tempTitle", tempTitle);
+				var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
+				mediumSubtypeData.model.medium.title = tempTitle;
 
-				// update data that is part of video
-				var tempVideoModel = await TIMAAT.MediaService.updateVideo(video.model);
-        console.log("TCL: tempVideoModel", tempVideoModel);
-
-				// TODO is this actually needed?
-				video.model.brand = tempVideoModel.brand;
-				video.model.length = tempVideoModel.length;
-				video.model.videoCodec = tempVideoModel.videoCodec;
-				video.model.width = tempVideoModel.width;
-				video.model.height = tempVideoModel.height;
-				video.model.frameRate = tempVideoModel.frameRate;
-				video.model.dataRate = tempVideoModel.dataRate;
-				video.model.totalBitrate = tempVideoModel.totalBitrate;
-				video.model.isEpisode = tempVideoModel.isEpisode;
-				video.model.medium.title.name = tempVideoModel.medium.title.name;
-				video.model.medium.title.language.id = tempVideoModel.medium.title.language.id;
-        console.log("TCL: video", video);
-
+				// update data that is part of mediumSubtypeData
+				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
 				// update data that is part of medium and its translation
-				var videoMediumModel = video.model.medium;
-        // console.log("TCL: video", video);
-        // console.log("TCL: videoMedium", videoMedium);
-				// var videoMediumModel = {
-				// 	model: videoMedium,
-				// };
-        console.log("TCL: videoMediumModel", videoMediumModel);
-				var tempVideoModelUpdate = await TIMAAT.MediaService.updateMedium(videoMediumModel);
-        console.log("TCL: tempVideoModelUpdate", tempVideoModelUpdate);
-				video.model.medium.releaseDate = tempVideoModelUpdate.releaseDate;
-				video.model.medium.copyright = tempVideoModelUpdate.copyright;
-				video.model.medium.remark = tempVideoModelUpdate.remark;
+				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
+				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			video.updateUI();
 		},
 
 		_mediumAdded: async function(medium) {
-    	console.log("TCL: _mediumAdded: function(medium)");
+    	// console.log("TCL: _mediumAdded: function(medium)");
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
 		},
 
-		_videoAdded: async function(video) {
-    	console.log("TCL: _videoAdded: function(video)");
-			TIMAAT.MediaDatasets.videos.model.push(video);
-			TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(video));
-		},
+		// _videoAdded: async function(video) {
+    // 	console.log("TCL: _videoAdded: function(video)");
+		// 	TIMAAT.MediaDatasets.videos.model.push(video);
+		// 	TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(video));
+		// },
 
+		_mediumSubtypeAdded: async function(mediumSubtype, mediumSubtypeData) {
+			// console.log("TCL: _mediumSubtypeAdded: function(mediumSubtype, mediumSubtypeData)");
+			switch (mediumSubtype) {
+				case "audio":
+					TIMAAT.MediaDatasets.audios.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.audios.push(new TIMAAT.Audio(mediumSubtypeData));
+					break;
+				case "document":
+					TIMAAT.MediaDatasets.documents.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.documents.push(new TIMAAT.Document(mediumSubtypeData));
+					break;
+				case "image":
+					TIMAAT.MediaDatasets.images.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.images.push(new TIMAAT.Image(mediumSubtypeData));
+					break;
+				case "software":
+					TIMAAT.MediaDatasets.softwares.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.softwares.push(new TIMAAT.Software(mediumSubtypeData));
+					break;
+				case "text":
+					TIMAAT.MediaDatasets.texts.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.texts.push(new TIMAAT.Text(mediumSubtypeData));
+					break;
+				case "video":
+					TIMAAT.MediaDatasets.videos.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(mediumSubtypeData));
+					break;
+				case "videogame":
+					TIMAAT.MediaDatasets.videogames.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.videogames.push(new TIMAAT.Videogame(mediumSubtypeData));
+					break;
+			}
+		},
+		
 		_mediumRemoved: function(medium) {
     	// console.log("TCL: _mediumRemoved: function(medium)");
 			// sync to server
@@ -5062,12 +5320,12 @@ const TIMAAT = {
 			medium.remove();
 		},
 
-		_videoRemoved: function(video) {
-   		// console.log("TCL: _videoRemoved: function(video)");
+		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
+			// console.log("TCL: _videoRemoved: function(video)");
 			// sync to server
-			TIMAAT.MediaService.removeVideo(video);
-			video.remove();
-		},
+		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData)
+		 mediumSubtypeData.remove();
+	 },
 
 	},
 
@@ -5253,6 +5511,482 @@ const TIMAAT = {
 			if (index > -1) TIMAAT.MediaDatasets.mediaTypes.model.splice(index, 1);
 		}
 	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Audio: class Audio {
+		constructor(model) {
+			// console.log("TCL: Audio -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteAudioButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-audio-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteAudioButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteAudioButton +
+					'<span class="timaat-audio-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-audio-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-audio-list').append(this.listView);
+			this.updateUI();      
+			var audio = this; // save audio for system audios
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+audio.model.medium.createdByUserAccount.id+'">[ID '+audio.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(audio.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+audio.model.medium.lastEditedByUserAccount.id+'">[ID '+audio.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(audio.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach audio handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// audio.listView.find('.timaat-audio-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-audio-meta').data('audio', audio);
+				$('#timaat-mediadatasets-audio-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-audio-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-audio-delete').data('audio', audio);
+				$('#timaat-mediadatasets-audio-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Audio -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-audio-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Audio -> remove -> remove()");
+			// remove audio from UI
+			this.listView.remove(); // TODO remove tags from audio_has_tags
+			// remove from audio list
+			var index = TIMAAT.MediaDatasets.audios.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.audios.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.audios.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.audios.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Document: class Document {
+		constructor(model) {
+			// console.log("TCL: Document -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteDocumentButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-document-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteDocumentButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteDocumentButton +
+					'<span class="timaat-document-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-document-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-document-list').append(this.listView);
+			this.updateUI();      
+			var document = this; // save document for system documents
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+document.model.medium.createdByUserAccount.id+'">[ID '+document.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(document.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+document.model.medium.lastEditedByUserAccount.id+'">[ID '+document.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(document.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach document handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// document.listView.find('.timaat-document-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-document-meta').data('document', document);
+				$('#timaat-mediadatasets-document-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-document-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-document-delete').data('document', document);
+				$('#timaat-mediadatasets-document-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Document -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-document-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Document -> remove -> remove()");
+			// remove document from UI
+			this.listView.remove(); // TODO remove tags from document_has_tags
+			// remove from document list
+			var index = TIMAAT.MediaDatasets.documents.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.documents.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.documents.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.documents.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Image: class Image {
+		constructor(model) {
+			// console.log("TCL: Image -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-image-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteImageButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteImageButton +
+					'<span class="timaat-image-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-image-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-image-list').append(this.listView);
+			this.updateUI();      
+			var image = this; // save image for system images
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+image.model.medium.createdByUserAccount.id+'">[ID '+image.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(image.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+image.model.medium.lastEditedByUserAccount.id+'">[ID '+image.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(image.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach image handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// image.listView.find('.timaat-image-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-image-meta').data('image', image);
+				$('#timaat-mediadatasets-image-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-image-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-image-delete').data('image', image);
+				$('#timaat-mediadatasets-image-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Image -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-image-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Image -> remove -> remove()");
+			// remove image from UI
+			this.listView.remove(); // TODO remove tags from image_has_tags
+			// remove from image list
+			var index = TIMAAT.MediaDatasets.images.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.images.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.images.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.images.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Software: class Software {
+		constructor(model) {
+			// console.log("TCL: Software -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-software-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteSoftwareButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteSoftwareButton +
+					'<span class="timaat-software-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-software-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-software-list').append(this.listView);
+			this.updateUI();      
+			var software = this; // save software for system softwares
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+software.model.medium.createdByUserAccount.id+'">[ID '+software.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(software.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+software.model.medium.lastEditedByUserAccount.id+'">[ID '+software.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(software.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach software handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// software.listView.find('.timaat-software-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-software-meta').data('software', software);
+				$('#timaat-mediadatasets-software-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-software-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-software-delete').data('software', software);
+				$('#timaat-mediadatasets-software-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Software -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-software-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Software -> remove -> remove()");
+			// remove software from UI
+			this.listView.remove(); // TODO remove tags from software_has_tags
+			// remove from software list
+			var index = TIMAAT.MediaDatasets.softwares.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.softwares.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.softwares.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.softwares.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Text: class Text {
+		constructor(model) {
+			// console.log("TCL: Text -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteTextButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-text-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteTextButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteTextButton +
+					'<span class="timaat-text-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-text-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-text-list').append(this.listView);
+			this.updateUI();      
+			var text = this; // save text for system texts
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+text.model.medium.createdByUserAccount.id+'">[ID '+text.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(text.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+text.model.medium.lastEditedByUserAccount.id+'">[ID '+text.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(text.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach text handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// text.listView.find('.timaat-text-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-text-meta').data('text', text);
+				$('#timaat-mediadatasets-text-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-text-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-text-delete').data('text', text);
+				$('#timaat-mediadatasets-text-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Text -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-text-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Text -> remove -> remove()");
+			// remove text from UI
+			this.listView.remove(); // TODO remove tags from text_has_tags
+			// remove from text list
+			var index = TIMAAT.MediaDatasets.texts.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.texts.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.texts.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.texts.model.splice(index, 1);
+		}
+
+	},
+
 	// ------------------------------------------------------------------------------------------------------------------------
 
 	Video: class Video {
@@ -5348,6 +6082,102 @@ const TIMAAT = {
 
 	},
 
+		// ------------------------------------------------------------------------------------------------------------------------
+
+	Videogame: class Videogame {
+		constructor(model) {
+			// console.log("TCL: Videogame -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-videogame-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteVideogameButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteVideogameButton +
+					'<span class="timaat-videogame-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-videogame-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-videogame-list').append(this.listView);
+			this.updateUI();      
+			var videogame = this; // save videogame for system videogames
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+videogame.model.medium.createdByUserAccount.id+'">[ID '+videogame.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(videogame.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+videogame.model.medium.lastEditedByUserAccount.id+'">[ID '+videogame.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(videogame.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach videogame handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// videogame.listView.find('.timaat-videogame-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-videogame-meta').data('videogame', videogame);
+				$('#timaat-mediadatasets-videogame-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-videogame-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-videogame-delete').data('videogame', videogame);
+				$('#timaat-mediadatasets-videogame-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Videogame -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-videogame-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Videogame -> remove -> remove()");
+			// remove videogame from UI
+			this.listView.remove(); // TODO remove tags from videogame_has_tags
+			// remove from videogame list
+			var index = TIMAAT.MediaDatasets.videogames.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videogames.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.videogames.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videogames.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------------------------------
 
 	Actor: class Actor {

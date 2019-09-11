@@ -107,12 +107,14 @@ public class Medium implements Serializable {
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional one-to-one association to MediumAudio
-	// @OneToOne(mappedBy="medium")
-	// private MediumAudio mediumAudio;
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumAudio mediumAudio;
 
 	//bi-directional one-to-one association to MediumDocument
-	// @OneToOne(mappedBy="medium")
-	// private MediumDocument mediumDocument;
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumDocument mediumDocument;
 
 	// TOOD replace with proper medium_video table data
 	// new
@@ -198,8 +200,9 @@ public class Medium implements Serializable {
 	private List<Title> titles;
 
 	//bi-directional one-to-one association to MediumImage
-	// @OneToOne(mappedBy="medium")
-	// private MediumImage mediumImage;
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumImage mediumImage;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="medium")
@@ -214,12 +217,14 @@ public class Medium implements Serializable {
 	// private List<MediumRelatesToMedium> mediumRelatesToMediums2;
 
 	//bi-directional one-to-one association to MediumSoftware
-	// @OneToOne(mappedBy="medium")
-	// private MediumSoftware mediumSoftware;
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumSoftware mediumSoftware;
 
 	//bi-directional one-to-one association to MediumText
-	// @OneToOne(mappedBy="medium")
-	// private MediumText mediumText;
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumText mediumText;
 
 	//bi-directional many-to-one association to MusicalNotation
 	// @OneToMany(mappedBy="medium")
@@ -423,21 +428,21 @@ public class Medium implements Serializable {
 		return mediumAnalysisList;
 	}
 
-	// public MediumAudio getMediumAudio() {
-	// 	return this.mediumAudio;
-	// }
+	public MediumAudio getMediumAudio() {
+		return this.mediumAudio;
+	}
 
-	// public void setMediumAudio(MediumAudio mediumAudio) {
-	// 	this.mediumAudio = mediumAudio;
-	// }
+	public void setMediumAudio(MediumAudio mediumAudio) {
+		this.mediumAudio = mediumAudio;
+	}
 
-	// public MediumDocument getMediumDocument() {
-	// 	return this.mediumDocument;
-	// }
+	public MediumDocument getMediumDocument() {
+		return this.mediumDocument;
+	}
 
-	// public void setMediumDocument(MediumDocument mediumDocument) {
-	// 	this.mediumDocument = mediumDocument;
-	// }
+	public void setMediumDocument(MediumDocument mediumDocument) {
+		this.mediumDocument = mediumDocument;
+	}
 
 	public List<ActorHasRole> getActorHasRoles() {
 		return this.actorHasRoles;
@@ -517,13 +522,13 @@ public class Medium implements Serializable {
 		this.titles = titles;
 	}
 
-	// public MediumImage getMediumImage() {
-	// 	return this.mediumImage;
-	// }
+	public MediumImage getMediumImage() {
+		return this.mediumImage;
+	}
 
-	// public void setMediumImage(MediumImage mediumImage) {
-	// 	this.mediumImage = mediumImage;
-	// }
+	public void setMediumImage(MediumImage mediumImage) {
+		this.mediumImage = mediumImage;
+	}
 
 	public List<MediumRelatesToEvent> getMediumRelatesToEvents() {
 		return this.mediumRelatesToEvents;
@@ -591,21 +596,21 @@ public class Medium implements Serializable {
 	// 	return mediumRelatesToMediums2;
 	// }
 
-	// public MediumSoftware getMediumSoftware() {
-	// 	return this.mediumSoftware;
-	// }
+	public MediumSoftware getMediumSoftware() {
+		return this.mediumSoftware;
+	}
 
-	// public void setMediumSoftware(MediumSoftware mediumSoftware) {
-	// 	this.mediumSoftware = mediumSoftware;
-	// }
+	public void setMediumSoftware(MediumSoftware mediumSoftware) {
+		this.mediumSoftware = mediumSoftware;
+	}
 
-	// public MediumText getMediumText() {
-	// 	return this.mediumText;
-	// }
+	public MediumText getMediumText() {
+		return this.mediumText;
+	}
 
-	// public void setMediumText(MediumText mediumText) {
-	// 	this.mediumText = mediumText;
-	// }
+	public void setMediumText(MediumText mediumText) {
+		this.mediumText = mediumText;
+	}
 
 	// public List<MusicalNotation> getMusicalNotations() {
 	// 	return this.musicalNotations;

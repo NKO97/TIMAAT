@@ -59,6 +59,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageGallery</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Iri</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
@@ -70,11 +71,19 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Medium</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAudio</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumDocument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEvent</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEventPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumText</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideo</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImage</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImagePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Person</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollective</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollectivePK</class>
@@ -82,6 +91,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Platform</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Province</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Reference</class>		
