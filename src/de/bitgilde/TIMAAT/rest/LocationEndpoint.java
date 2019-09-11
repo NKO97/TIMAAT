@@ -78,7 +78,6 @@ public class LocationEndpoint {
 	@Secured
 	@Path("list")
 	public Response getLocationList() {
-		System.out.println("LocationEndpoint getLocationList");		
 		@SuppressWarnings("unchecked")
 		List<Location> locationList = TIMAATApp.emf.createEntityManager().createNamedQuery("Location.findAll").getResultList();
 		return Response.ok().entity(locationList).build();
@@ -89,7 +88,6 @@ public class LocationEndpoint {
 	@Secured
 	@Path("locationtype/list")
 	public Response getLocationtypeList() {
-		System.out.println("LocationEndpoint getLocationTypeList");		
 		@SuppressWarnings("unchecked")
 		List<LocationType> locationTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList();
 		return Response.ok().entity(locationTypeList).build();
@@ -100,7 +98,6 @@ public class LocationEndpoint {
 	@Secured
 	@Path("country/list")
 	public Response getCountryList() {
-		System.out.println("LocationEndpoint getCountryList");		
 		@SuppressWarnings("unchecked")
 		List<Country> countryList = TIMAATApp.emf.createEntityManager().createNamedQuery("Country.findAll").getResultList();
 		return Response.ok().entity(countryList).build();

@@ -381,7 +381,7 @@ public class MediumServiceEndpoint{
 		
 		// update audio
 		// System.out.println("MediumEndpoint: UPDATE AUDIO - audio.id:"+audio.getMediumId());
-		if ( updatedAudio.getLength().getTime() > 0) audio.setLength(updatedAudio.getLength());
+		if ( updatedAudio.getLength() > 0) audio.setLength(updatedAudio.getLength());
 		if ( updatedAudio.getAudioCodecInformation() != null ) audio.setAudioCodecInformation(updatedAudio.getAudioCodecInformation());
 		
 		// update log metadata
@@ -1031,7 +1031,7 @@ public class MediumServiceEndpoint{
 		if ( updatedVideogame == null ) return Response.notModified().build();
 
 		// update videogame
-		// System.out.println("MediumEndpoint: UPDATE VIDEOGAME - videogame.id:"+videogame.getId());	
+		// System.out.println("MediumEndpoint: UPDATE VIDEOGAME - videogame.id:"+videogame.getMediumId());	
 		if ( updatedVideogame.getBrand() != null ) videogame.setBrand(updatedVideogame.getBrand());
 		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode()); 
 

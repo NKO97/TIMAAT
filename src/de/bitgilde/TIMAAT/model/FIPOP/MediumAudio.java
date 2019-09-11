@@ -1,8 +1,10 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Set;
 
 
@@ -47,12 +49,20 @@ public class MediumAudio implements Serializable {
 		this.mediumId = mediumId;
 	}
 
-	public Time getLength() {
-		return this.length;
+	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents audio list from being displayed=)
+		return this.getMedium().getId();
 	}
 
-	public void setLength(Time length) {
-		this.length = length;
+	public void setId(int id) { // TODO not necessary with setMediumId?
+		this.getMedium().setId(id);
+	}
+
+	public float getLength() { // TODO why float?
+		return this.length.getTime()/1000f;
+	}
+
+	public void setLength(float length) { // TODO why float?
+		this.length = new Time((long)(length*1000f));
 	}
 
 	// public Set<MediaCollectionAlbumHasMediumAudio> getMediaCollectionAlbumHasMediumAudios() {
