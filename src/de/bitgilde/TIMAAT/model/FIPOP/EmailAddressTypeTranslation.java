@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the email_address_type_translation database table.
@@ -21,6 +23,7 @@ public class EmailAddressTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to EmailAddressType
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="email_address_type_id")
 	private EmailAddressType emailAddressType;
 

@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -18,14 +21,16 @@ public class Title implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String title;
+	private String name;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="title")
+	@JsonIgnore
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="medium_has_title"
 		, joinColumns={
@@ -55,11 +60,12 @@ public class Title implements Serializable {
 	// private List<Nasheed> nasheeds2;
 
 	//bi-directional many-to-one association to Language
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	private Language language;
 
 	//bi-directional many-to-many association to Title
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="title_has_title_translation"
 		, joinColumns={
@@ -73,10 +79,12 @@ public class Title implements Serializable {
 
 	//bi-directional many-to-many association to Title
 	@ManyToMany(mappedBy="titles1")
+	@JsonIgnore
 	private List<Title> titles2;
 
 	//bi-directional many-to-many association to Title
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="title_translation_has_title_translation_alternative"
 		, joinColumns={
@@ -90,6 +98,7 @@ public class Title implements Serializable {
 
 	//bi-directional many-to-many association to Title
 	@ManyToMany(mappedBy="titles3")
+	@JsonIgnore
 	private List<Title> titles4;
 
 	public Title() {
@@ -103,12 +112,12 @@ public class Title implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return this.title;
+	public String getName() {
+		return this.name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public List<Medium> getMediums1() {

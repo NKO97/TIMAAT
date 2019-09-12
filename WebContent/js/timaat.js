@@ -117,7 +117,7 @@ const TIMAAT = {
 	  
 	},	
 	
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 	
 	Annotation: class Annotation {
 		constructor(model) {
@@ -174,9 +174,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdBy_UserAccountID+'">[ID '+anno.model.createdBy_UserAccountID+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(anno.model.created)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+anno.model.lastEditedBy_UserAccountID+'">[ID '+anno.model.lastEditedBy_UserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdByUserAccount.id+'">[ID '+anno.model.createdByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+anno.model.lastEditedByUserAccount.id+'">[ID '+anno.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -552,7 +552,7 @@ const TIMAAT = {
 		
 	},
 	
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 	
 	CategorySet: class CategorySet {
 		constructor(model) {
@@ -603,9 +603,9 @@ const TIMAAT = {
 			// });
 			// this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 			// 	$('.timaat-user-log-details').html(
-			// 			'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+categoryset.model.createdByUserAccountID+'">[ID '+categoryset.model.createdByUserAccountID+']</span></b><br>\
+			// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+categoryset.model.createdByUserAccount.id+'">[ID '+categoryset.model.createdByUserAccount.id+']</span></b><br>\
 			// 			 '+TIMAAT.Util.formatDate(categoryset.model.createdAt)+'<br>\
-			// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+categoryset.model.lastEditedByUserAccountID+'">[ID '+categoryset.model.lastEditedByUserAccountID+']</span></b><br>\
+			// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+categoryset.model.lastEditedByUserAccount.id+'">[ID '+categoryset.model.lastEditedByUserAccount.id+']</span></b><br>\
 			// 			 '+TIMAAT.Util.formatDate(categoryset.model.lastEditedAt)+'<br>'
 			// 	);
 			// 	$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -714,7 +714,7 @@ const TIMAAT = {
 		
 	},	
 	
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 	
 	AnalysisSegment: class AnalysisSegment {
 		constructor(model) {
@@ -811,7 +811,7 @@ const TIMAAT = {
 
 	},
 	
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 	
 	VideoChooser: {
 		
@@ -860,7 +860,7 @@ const TIMAAT = {
 		
 		setVideoList: function(videos) {
     	// console.log("TCL: setVideoList: function(videos)");
-    	console.log("TCL: videos", videos);
+    	console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
 			// clear video UI list
@@ -912,10 +912,9 @@ const TIMAAT = {
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
-			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 			videoelement.appendTo('#timaat-video-list');
-
-			videoelement.find('.title').html(video.primaryTitle.title);
+			videoelement.find('.title').html(video.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
 		
 			if ( video.status != 'ready' ) videoelement.find('.timaat-video-transcoding').show();
@@ -949,7 +948,7 @@ const TIMAAT = {
 		
 	},	
 
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 	
 	VideoPlayer: {
 		duration: 1,
@@ -973,7 +972,7 @@ const TIMAAT = {
 			L.control.custom({
 			    position: 'topleft',
 			    content : '<button id="timaat-videoplayer-annotation-quickadd-button" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button" class="btn btn-light">'+
-			              '    <i class="far fa-bookmark"></i>'+
+			              '    <i class="fas fa-bookmark"></i>'+
 			              '</button>',
 			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
 			    style   :
@@ -1290,7 +1289,7 @@ const TIMAAT = {
 					return;
 				}
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+TIMAAT.VideoPlayer.curList.userAccountID+'">[ID '+TIMAAT.VideoPlayer.curList.userAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+TIMAAT.VideoPlayer.curList.userAccountID+'">[ID '+TIMAAT.VideoPlayer.curList.userAccountID+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(TIMAAT.VideoPlayer.curList.createdAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"mir")});
@@ -2055,7 +2054,6 @@ const TIMAAT = {
 			}
 			// update annotation UI
 		},
-
 		
 		_annotationAdded: function(annotation) {
     	console.log("TCL: _annotationAdded: function(annotation)");
@@ -2102,7 +2100,7 @@ const TIMAAT = {
 
 	},	
 
-	// ------------------------
+	// ------------------------------------------------------------------------------------------------------------------------
 
 	Service: {
 		state: 0,
@@ -2616,10 +2614,553 @@ const TIMAAT = {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
+		},	
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	LocationService: {
+
+		listLocationTypes(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/locationtype/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
 		},
 
+		listLocations(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
+		},
+
+		listCountries(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});
+			
+		},
+
+		async createLocation(locationModel) {
+			var newLocation = {
+				id: 0,
+				locationType: {
+					id: locationModel.locationType.id,
+				}
+			};
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationModel.id,
+					type:"POST",
+					data: JSON.stringify(newLocation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(locationData) {
+					resolve(locationData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createLocationTranslation(model, modelTranslation) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+model.id+"/translation/"+modelTranslation.id,
+					type:"POST",
+					data: JSON.stringify(modelTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createCountry(locationModel, countryModel) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+locationModel.id,
+					type:"POST",
+					data: JSON.stringify(countryModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(countryData) {
+						resolve(countryData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateLocation(locationModel) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationModel.id,
+					type:"PATCH",
+					data: JSON.stringify(locationModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateLocationTranslation(location) {
+			var updatedLocationTranslation = {
+				id: location.model.locationTranslations[0].id, // TODO get the correct translation_id
+				name: location.model.locationTranslations[0].name,
+			};
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+location.model.id+"/translation/"+updatedLocationTranslation.id,
+					type:"PATCH",
+					data: JSON.stringify(updatedLocationTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateCountry(countryModel) {
+			console.log("TCL: async updateCountry -> countryModel", countryModel);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+countryModel.locationId,
+					type:"PATCH",
+					data: JSON.stringify(countryModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+				console.log("TCL: async updateCountry -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		removeLocation(location) {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+location.model.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+		removeCountry(country) {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+country.model.locationId,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},	
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	MediaService: {
+
+		listMediaTypes(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/mediatype/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
+		},
+
+		listMedia(callback) {
+			// console.log("TCL: listMedia -> callback", callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	console.log("TCL: listMedia -> data", data);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
+		},
+
+		listMediumSubtype(mediumSubtype, callback) {
+			// console.log("TCL: listVideos -> callback", callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/list",
+				type:"GET",
+				// data: JSON.stringify(mediaType),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
+		},
+
+		async createMedium(mediumModel) {
+			console.log("TCL: async createMedium -> mediumModel", mediumModel);
+			var newMediumModel = {
+				id: 0,
+				remark: mediumModel.remark,
+				releaseDate: mediumModel.releaseDate,
+				copyright: mediumModel.copyright,
+				mediaType: {
+					id: mediumModel.mediaType.id,
+				},
+				// work: {
+				// 	id: mediumModel.work.id,
+				// },
+				title: {
+					id: mediumModel.title.id,
+				},
+			};
+      console.log("TCL: createMedium -> newMediumModel", newMediumModel);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
+					type:"POST",
+					data: JSON.stringify(newMediumModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(mediumData) {
+					console.log("TCL: createMedium -> mediumData", mediumData);
+					resolve(mediumData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		// not yet needed (no translation data or translation table available at the moment)
+		async createMediumTranslation(model, modelTranslation) {
+			// console.log("TCL: createMediumTranslation -> model, modelTranslation", model, modelTranslation);			
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+model.id+"/translation/"+modelTranslation.id,
+					type:"POST",
+					data: JSON.stringify(modelTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+					// console.log("TCL: createMediumTranslation -> translationData", translationData);
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createMediumSubtype(mediumSubtype, mediumModel, subtypeModel) {
+      console.log("TCL: createMediumSubtype -> mediumSubtype, mediumModel, subtypeModel", mediumSubtype, mediumModel, subtypeModel);			
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+mediumModel.id,
+					type:"POST",
+					data: JSON.stringify(subtypeModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(subtypeData) {
+					console.log("TCL: createVideo -> subtypeData", subtypeData);
+						resolve(subtypeData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createTitle(title) {
+			console.log("TCL: async createtitle -> title", title);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+					type:"POST",
+					data: JSON.stringify(title),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(titleData) {
+					console.log("TCL: createTitle -> titleData", titleData);
+						resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateMedium(mediumModel) {
+			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
+					type:"PATCH",
+					data: JSON.stringify(mediumModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+				console.log("TCL: async updateMedium -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		// not yet needed (no translation data or translation table available at the moment)
+		async updateMediumTranslation(medium) {
+			// console.log("TCL: MediaService async updateMediumTranslation -> medium", medium);
+			var updatedMediumTranslation = {
+				id: medium.model.mediumTranslations[0].id, // TODO get the correct translation_id
+				name: medium.model.mediumTranslations[0].name,
+			};
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.model.id+"/translation/"+updatedMediumTranslation.id,
+					type:"PATCH",
+					data: JSON.stringify(updatedMediumTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+				// console.log("TCL: updateMediumTranslation -> translationData", translationData);
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateMediumSubtype(mediumSubtype, subtypeModel) {
+    console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);		
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
+					type:"PATCH",
+					data: JSON.stringify(subtypeModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateVideo -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateTitle(title) {
+			console.log("TCL: async updateTitle -> title", title);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+					type:"PATCH",
+					data: JSON.stringify(title),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateTitle -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		removeMedium(medium) {
+			console.log("TCL: removeMedium -> medium", medium);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.model.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+		removeMediumSubtype(mediumSubtype, subtype) {
+      console.log("TCL: removeMediumSubtype -> mediumSubtype, subtype", mediumSubtype, subtype);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtype.model.mediumId,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	ActorService: {
+
 		listActors(callback) {
-      // console.log("TCL: listActors -> callback", callback);
+			// console.log("TCL: listActors -> callback", callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/list",
 				type:"GET",
@@ -2640,17 +3181,17 @@ const TIMAAT = {
 		createActor(name, callback) {
 		// createActor(name, callback) {
 			// console.log("TCL: createActor -> name:", name);
-      // console.log("TCL: createActor -> callback", callback);
-			var model = { 	
-				id: 0,         
+			// console.log("TCL: createActor -> callback", callback);
+			var model = {
+				id: 0,
 				name: name, // TODO change to actorTranslation
 				// tags: []
 				// actorTranslation: [{
 				// 	id: 0,
-				// 	languageID: list,
+				// 	languageId: list,
 				// 	name: name,
 				// 	description: description
-				// }]				
+				// }]
 			};
 			jQuery.ajax({
 				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+model.id,
@@ -2669,7 +3210,7 @@ const TIMAAT = {
 			.fail(function(e) {
 				console.log( "error", e );
 				console.log( e.responseText );
-			});			
+			});		
 		},
 
 		updateActor(actor) {
@@ -2679,8 +3220,8 @@ const TIMAAT = {
 				name: actor.model.name,
 			// 	// tags: []
 			};
-      console.log("TCL: updateActor -> ac", ac);
-			// console.log("TCL: updateActor -> locationID", actor.model.locationID);
+			console.log("TCL: updateActor -> ac", ac);
+			// console.log("TCL: updateActor -> locationId", actor.model.locationId);
 			// var thisActor = actor;
 			jQuery.ajax({
 				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+thisActor.model.id,
@@ -2693,7 +3234,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      console.log("TCL: updateActor -> data", data);
+			console.log("TCL: updateActor -> data", data);
 				// thisActor.model = data;
 				// ac.model = data;
 				actor.model.id = data.id;
@@ -2708,7 +3249,7 @@ const TIMAAT = {
 		},
 
 		removeActor(actor) {
-      // console.log("TCL: removeActor -> actor", actor);
+			// console.log("TCL: removeActor -> actor", actor);
 			var ac = actor;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+ac.model.id,
@@ -2723,304 +3264,16 @@ const TIMAAT = {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
-		},
+		},	
 
-		// addActorTag(actor, tagname, callback) {
-    //   console.log("TCL: addActorTag -> actor.id", actor.id);
-    //   console.log("TCL: addActorTag -> actor, tagname, callback", actor, tagname, callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actor.id+"/tag/"+tagname,
-		// 		type:"POST",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		// TIMAAT.Service.updateCategorySets(tagname);
-		// 		callback(data);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
+	},
 
-		// removeActorTag(actor, tagname, callback) {
-    //   console.log("TCL: removeActorTag -> actor.id", actor.id);
-    //   console.log("TCL: removeActorTag -> actor, tagname, callback", actor, tagname, callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actor.id+"/tag/"+tagname,
-		// 		type:"DELETE",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		// TIMAAT.Service.updateCategorySets(tagname);
-		// 		callback(tagname);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
+	// ------------------------------------------------------------------------------------------------------------------------
 
-		listLocations(callback) {
-      // console.log("TCL: listLocations -> callback", callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/list",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-			});
-			
-		},
-
-		createLocation(name, type, callback) {
-    console.log("TCL: createLocation -> createLocation(name, type, callback)", createLocation(name, type, callback));
-			var model = { 	
-				id: 0,   
-				type: type,
-				name: name, // TODO change to proper locationTranslation		
-			};
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+model.id,
-				type:"POST",
-				data: JSON.stringify(model),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// callback(new TIMAAT.Location(data));
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});			
-		},
-
-		updateLocation(location) {
-			console.log("TCL: updateLocation -> location", location);
-			var loc = {
-				id: location.model.id,
-				type: location.model.type,
-				name: location.model.name,
-			};
-      console.log("TCL: updateLocation -> loc", loc);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+loc.id,
-				type:"PATCH",
-				data: JSON.stringify(loc),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-      console.log("TCL: updateLocation -> data", data);
-				// thisLocation.model = data;
-				// loc.model = data;
-				location.model.id = data.id;
-				location.model.type = data.type;
-				location.model.title = data.title;
-				console.log("TCL: updateLocation -> location.updateUI()");
-				location.updateUI(); 
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
-		removeLocation(location) {
-      console.log("TCL: removeLocation -> location", location);
-			var loc = location;
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+loc.model.id,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
-		// addLocationTag(location, tagname, callback) {
-    //   console.log("TCL: addLocationTag -> location.id", location.id);
-    //   console.log("TCL: addLocationTag -> location, tagname, callback", location, tagname, callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+location.id+"/tag/"+tagname,
-		// 		type:"POST",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		// TIMAAT.Service.updateCategorySets(tagname);
-		// 		callback(data);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
-
-		// removeLocationTag(location, tagname, callback) {
-    //   console.log("TCL: removeLocationTag -> location.id", location.id);
-    //   console.log("TCL: removeLocationTag -> location, tagname, callback", location, tagname, callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+location.id+"/tag/"+tagname,
-		// 		type:"DELETE",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		// TIMAAT.Service.updateCategorySets(tagname);
-		// 		callback(tagname);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
-
-		listCountries(callback) {
-      // console.log("TCL: listCountries -> callback", callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/list",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-			});
-			
-		},
-
-		createCountry(name, idp, tp, ccc, tz, dst, callback) {
-			console.log("TCL: createCountry -> name:", name);
-      console.log("TCL: createCountry -> callback", callback);
-			var model = { 	
-				locationID: 0,         
-				name: name, // TODO change to countryTranslation
-				internationalDialingPrefix: idp,
-				trunkPrefix: tp,
-				countryCallingCode: ccc,
-				timeZone: tz,
-				dst: dst,
-				// countryTranslation: [{
-				// 	id: 0,
-				// 	languageID: list,
-				// 	name: name,
-				// 	description: description
-				// }]				
-			};
-			jQuery.ajax({
-				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/"+model.id,
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/"+model.locationID,
-				type:"POST",
-				data: JSON.stringify(model),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// callback(new TIMAAT.Country(data));
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});			
-		},
-
-		updateCountry(country) {
-			console.log("TCL: updateCountry -> country", country);
-			var loc = {
-				locationID: country.model.locationID,
-				name: country.model.name,
-				internationalDialingPrefix: country.model.internationalDialingPrefix,
-				trunkPrefix: country.model.trunkPrefix,
-				countryCallingCode: country.model.countryCallingCode,
-				timeZone: country.model.timeZone,
-				dst: country.model.dst,
-			};
-      console.log("TCL: updateCountry -> loc", loc);
-			// var thisCountry = country;
-			jQuery.ajax({
-				// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/"+thisCountry.model.id,
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/"+loc.locationID,
-				type:"PATCH",
-				data: JSON.stringify(loc),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-      console.log("TCL: updateCountry -> data", data);
-				// thisCountry.model = data;
-				// loc.model = data;
-				country.model.locationID = data.locationID;
-				country.model.name = data.name;
-				country.model.internationalDialingPrefix= data.internationalDialingPrefix;
-				country.model.trunkPrefix = data.trunkPrefix;
-				country.model.countryCallingCode = data.countryCallingCode;
-				country.model.timeZone = data.timeZone;
-				country.model.dst = data.dst;
-				console.log("TCL: updateCountry -> country.updateUI()");
-				country.updateUI(); 
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
-		removeCountry(country) {
-      console.log("TCL: removeCountry -> country", country);
-			var loc = country;
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/country/"+loc.model.locationID,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
+	EventService: {
 
 		listEvents(callback) {
-      // console.log("TCL: listEvents -> callback", callback);
+			// console.log("TCL: listEvents -> callback", callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/list",
 				type:"GET",
@@ -3040,7 +3293,7 @@ const TIMAAT = {
 		createEvent(model, modelTranslation, callback) {
 			console.log("TCL: [1] createEvent -> model", model);
 			var event = model;
-      console.log("TCL: [1a] createEvent -> event", event);			
+			console.log("TCL: [1a] createEvent -> event", event);			
 			// create Event
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id,
@@ -3054,7 +3307,7 @@ const TIMAAT = {
 			}).done(function(data) {
 				// console.log("TCL: [2] createEvent done -> data", data);
 				event.id = data.id;
-        // console.log("TCL: [2a] createEvent -> event", event);
+				// console.log("TCL: [2a] createEvent -> event", event);
 				jQuery.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+data.id+"/translation/"+modelTranslation.id,
 					type:"POST",
@@ -3080,27 +3333,6 @@ const TIMAAT = {
 			});
 		},
 
-		createEventTranslation(model, modelTranslation, callback) {
-			// create Event translation
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+model.id+"/translation/"+modelTranslation.id,
-				type:"POST",
-				data: JSON.stringify(modelTranslation),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-      	// console.log("TCL: [5] createEventTranslation .done() -> data", data);
-				model.eventTranslations[0] = data;
-				callback(model);
-			}).fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
 		updateEvent(event) {
 			console.log("TCL: updateEvent -> event", event);
 			var updatedEvent = {
@@ -3110,7 +3342,7 @@ const TIMAAT = {
 				beginsAtDate: event.model.beginsAtDate,
 				endsAtDate: event.model.endsAtDate,
 			};
-      console.log("TCL: updateEvent -> updatedEvent:", updatedEvent);
+			console.log("TCL: updateEvent -> updatedEvent:", updatedEvent);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+updatedEvent.id,
 				type:"PATCH",
@@ -3121,7 +3353,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      console.log("TCL: updateEvent -> data", data);
+			console.log("TCL: updateEvent -> data", data);
 				event.model.id = data.id;
 				event.model.beginsAtDate = data.beginsAtDate;
 				event.model.endsAtDate = data.endsAtDate;
@@ -3131,7 +3363,7 @@ const TIMAAT = {
 				// console.log("TCL: update event translation", event);
 				// TIMAAT.Service.updateEventTranslation(event);
 				// console.log("TCL: updateEvent -> event.updateUI()");
-				// event.updateUI(); 
+				event.updateUI();
 			})
 			.fail(function(e) {
 				console.log( "error", e );
@@ -3144,11 +3376,11 @@ const TIMAAT = {
 			console.log("TCL: updateEventTranslation -> event.model.id", event.model.id);
 			// update event translation
 			var updatedEventTranslation = {
-				id: event.model.eventTranslations[0].id, // TODO get the correct translationID
+				id: event.model.eventTranslations[0].id, // TODO get the correct translation_id
 				name: event.model.eventTranslations[0].name,
 				description: event.model.eventTranslations[0].description,
 			};
-      console.log("TCL: updateEventTranslation -> updatedEventTranslation", updatedEventTranslation);
+			console.log("TCL: updateEventTranslation -> updatedEventTranslation", updatedEventTranslation);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.model.id+"/translation/"+updatedEventTranslation.id,
 				type:"PATCH",
@@ -3159,7 +3391,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(translationData) {
-      console.log("TCL: updateEventTranslation -> translationData", translationData);
+			console.log("TCL: updateEventTranslation -> translationData", translationData);
 				event.model.eventTranslations[0].id = translationData.id;
 				event.model.eventTranslations[0].name = translationData.name;
 				event.model.eventTranslations[0].description = translationData.description;
@@ -3173,10 +3405,9 @@ const TIMAAT = {
 		},
 
 		removeEvent(event) {
-      console.log("TCL: removeEvent -> event", event);
-			var ev = event;
+			console.log("TCL: removeEvent -> event", event);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.model.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -3191,10 +3422,9 @@ const TIMAAT = {
 		},
 
 		removeEventTranslation(event) {
-      console.log("TCL: removeEventTranslation -> event", event);
-			var ev = event;
+			console.log("TCL: removeEventTranslation -> event", event);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+ev.model.id+"/translation/"+ev.model.eventTranslations[0].id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.model.id+"/translation/"+event.model.eventTranslations[0].id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -3208,10 +3438,9 @@ const TIMAAT = {
 			});
 		},
 
-		// not needed?
 		addEventTag(event, tagname, callback) {
-      console.log("TCL: addEventTag -> event.id", event.id);
-      console.log("TCL: addEventTag -> event, tagname, callback", event, tagname, callback);
+			console.log("TCL: addEventTag -> event.id", event.id);
+			console.log("TCL: addEventTag -> event, tagname, callback", event, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.id+"/tag/"+tagname,
 				type:"POST",
@@ -3230,10 +3459,9 @@ const TIMAAT = {
 			});			
 		},
 
-		// not needed?
 		removeEventTag(event, tagname, callback) {
-      console.log("TCL: removeEventTag -> event.id", event.id);
-      console.log("TCL: removeEventTag -> event, tagname, callback", event, tagname, callback);
+			console.log("TCL: removeEventTag -> event.id", event.id);
+			console.log("TCL: removeEventTag -> event, tagname, callback", event, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.id+"/tag/"+tagname,
 				type:"DELETE",
@@ -3248,11 +3476,10 @@ const TIMAAT = {
 				console.log( "error", e );
 				console.log( e.responseText );
 			});			
-		},
-		
+		},		
 
 	},
-	
+
 	// ------------------------------------------------------------------------------------------------------------------------
 	    
 	Settings: {
@@ -3406,256 +3633,38 @@ const TIMAAT = {
 	// ------------------------------------------------------------------------------------------------------------------------
 		
 	Datasets: {
-		events: null,
-		actors: null,
-		locations: null,
 
 		init: function() {
-			TIMAAT.Datasets.initActors();
-			TIMAAT.Datasets.initLocations();
-			TIMAAT.Datasets.initEvents();
-			TIMAAT.Datasets.initCountries();      
+			TIMAAT.ActorDatasets.init();
+			TIMAAT.EventDatasets.init();
+			TIMAAT.LocationDatasets.init();   
+			TIMAAT.MediaDatasets.init();
 		},
 
-		initActors: function() {
-			// console.log("TCL: Datasets: initActors: function()");
-			// attach tag editor
-			$('#timaat-actor-tags').popover({
-				placement: 'right',
-				title: 'Actor Tags bearbeiten (datasets init function)',
-				trigger: 'click',
-				html: true,
-				content: `<div class="input-group">
-										<input class="form-control timaat-tag-input" type="text" value="">
-									</div>`,
-				container: 'body',
-				boundary: 'viewport',				
-			});
-			$('#timaat-actor-tags').on('inserted.bs.popover', function () {
-				var tags = "";
-				if ( actor == null ) {
-					$('.timaat-tag-input').html('Kein Actor geladen');
-					return;
-				} else {
-					$('.timaat-tag-input').html('');					
-				}
-				actor.tags.forEach(function(item) { tags += ','+item.name });
-				tags = tags.substring(1);
-				$('.timaat-tag-input').val(tags);
-			    $('.timaat-tag-input').tagsInput({
-			    	placeholder: 'Actor Tag hinzufügen (datasets init function)',
-			    	onAddTag: function(taginput,tag) {
-			    		TIMAAT.Service.addActorTag(actor, tag, function(newtag) {
-			    			TIMAAT.VideoPlayer.model.video.tags.push(newtag);
-			    		});
-			    	},
-			    	onRemoveTag: function(taginput,tag) {
-			    		TIMAAT.Service.removeActorTag(actor, tag, function(tagname) {
-			    			// find tag in model
-			    			var found = -1;
-			    			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
-			    				if ( item.name == tagname ) found = index;
-			    			});
-			    			if (found > -1) TIMAAT.VideoPlayer.model.video.splice(found, 1);
-			    		});
-			    	},
-			    	onChange: function() {
-			    		if ( this.length == 1) $('#'+this[0].id+'_tag').focus();
-			    	}
-			    });
-			});
-			$('#timaat-actor-tags').on('hidden.bs.popover', function () { 
-			});
-			// delete actor functionality
-			$('#timaat-actor-delete-submit').click(function(ev) {
-				var modal = $('#timaat-datasets-actor-delete');
-				var actor = modal.data('actor');
-				if (actor) TIMAAT.Datasets._actorRemoved(actor);
-				modal.modal('hide');
-			});
-			// add actor button
-			$('#timaat-actor-add').attr('onclick','TIMAAT.Datasets.addActor()');
-			// add/edit actor functionality
-			$('#timaat-datasets-actor-meta').on('show.bs.modal', function (ev) {
-				console.log("TCL: Create/Edit actor window setup");
-				var modal = $(this);
-				var actor = modal.data('actor');
-				var heading = (actor) ? "Actor bearbeiten" : "Actor hinzufügen";
-				var submit = (actor) ? "Speichern" : "Hinzufügen";
-				var title = (actor) ? actor.model.name : "";
-
-				// setup UI
-				$('#actorMetaLabel').html(heading);
-				$('#timaat-actor-meta-submit').html(submit);
-				$("#timaat-actor-meta-title").val(title).trigger('input');
-			});
-			// Submit actor data
-			$('#timaat-actor-meta-submit').click(function(ev) {
-				console.log("TCL: Create/Edit actor window submitted data validation");
-				var modal = $('#timaat-datasets-actor-meta');
-				var actor = modal.data('actor');
-				var title = $("#timaat-actor-meta-title").val();
-				if (actor) {
-					actor.model.name = title;
-					// console.log("TCL: actor.updateUI() - Datasets:init:function()");
-					// console.log("TCL: Take values from form:")
-					// console.log("TCL: $(\"#timaat-actor-meta-title\").val():", $("#timaat-actor-meta-title").val());
-					actor.updateUI();
-					TIMAAT.Service.updateActor(actor);
-				} else {
-					TIMAAT.Service.createActor(title, TIMAAT.Datasets._actorAdded); // TODO add actor parameters
-				}
-				modal.modal('hide');
-			});
-			//  validate actor data
-			$('#timaat-actor-meta-title').on('input', function(ev) {
-				console.log("TCL: allow saving only if data is valid");
-				// console.log("TCL: $(\"#timaat-actor-meta-title\").val():", $("#timaat-actor-meta-title").val());
-				if ( $("#timaat-actor-meta-title").val().length > 0 ) {
-					$('#timaat-actor-meta-submit').prop("disabled", false);
-					$('#timaat-actor-meta-submit').removeAttr("disabled");
-				} else {
-					$('#timaat-actor-meta-submit').prop("disabled", true);
-					$('#timaat-actor-meta-submit').attr("disabled");
-				}
-			});
+		load: function() {
+			TIMAAT.ActorDatasets.load();
+			TIMAAT.EventDatasets.load();
+			TIMAAT.LocationDatasets.load();   
+			TIMAAT.MediaDatasets.load();
 		},
 
-		initLocations: function() {
-			console.log("TCL: Datasets: initLocations: function()");		
-			// delete location functionality
-			$('#timaat-location-delete-submit').click(function(ev) {
-				var modal = $('#timaat-datasets-location-delete');
-				var location = modal.data('location');
-				if (location) TIMAAT.Datasets._locationRemoved(location);
-				modal.modal('hide');
-			});
-			// add location button
-			$('#timaat-location-add').attr('onclick','TIMAAT.Datasets.addLocation()');
-			// add/edit location functionality
-			$('#timaat-datasets-location-meta').on('show.bs.modal', function (ev) {
-				console.log("TCL: Create/Edit location window setup");
-				var modal = $(this);
-				var location = modal.data('location');				
-				var heading = (location) ? "Location bearbeiten" : "Location hinzufügen";
-				var submit = (location) ? "Speichern" : "Hinzufügen";
-				var title = (location) ? location.model.name : "";
+	},
+	
+	// ------------------------------------------------------------------------------------------------------------------------
+		
+	EventDatasets: {
+		events: null,
 
-				// setup UI
-				$('#locationMetaLabel').html(heading);
-				$('#timaat-location-meta-submit').html(submit);
-				$("#timaat-location-meta-name").val(title).trigger('input');		
-			});
-			// Submit location data
-			$('#timaat-location-meta-submit').click(function(ev) {
-				// console.log("TCL: Create/Edit location window submitted data validation");
-				var modal = $('#timaat-datasets-location-meta');
-				var location = modal.data('location');
-				var name = $("#timaat-location-meta-name").val();
-				// var locationType =$("timaat-location-meta-locationtype").val();	
-				if (location) {
-					location.model.name = name;		
-					// location.model.locationTypeID = locationTypeID;
-					// console.log("TCL: location.updateUI() - Datasets:init:function()");
-					// console.log("TCL: Take values from form:")
-					// console.log("TCL: $(\"#timaat-location-meta-name\").val():", $("#timaat-location-meta-name").val());
-					location.updateUI();
-					TIMAAT.Service.updateLocation(location);
-				} else {
-					TIMAAT.Service.createLocation(name, TIMAAT.Datasets._locationAdded); // TODO add location parameters
-				}
-				modal.modal('hide');
-			});
-			//  validate location data					
-			$('#timaat-location-meta-name').on('input', function(ev) {
-				// console.log("TCL: allow saving only if data is valid");
-				// console.log("TCL: $(\"#timaat-location-meta-name\").val():", $("#timaat-location-meta-name").val());
-				if ( $("#timaat-location-meta-name").val().length > 0 ) {
-					$('#timaat-location-meta-submit').prop("disabled", false);
-					$('#timaat-location-meta-submit').removeAttr("disabled");
-				} else {
-					$('#timaat-location-meta-submit').prop("disabled", true);
-					$('#timaat-location-meta-submit').attr("disabled");
-				}
-			});
+		init: function() {
+			TIMAAT.EventDatasets.initEvents();
 		},
 
-		initCountries: function() {
-			console.log("TCL: Datasets: initCountries: function()");		
-			// delete country functionality
-			$('#timaat-country-delete-submit').click(function(ev) {
-				var modal = $('#timaat-datasets-country-delete');
-				var country = modal.data('country');
-				if (country) TIMAAT.Datasets._countryRemoved(country);
-				modal.modal('hide');
-			});
-			// add country button
-			$('#timaat-country-add').attr('onclick','TIMAAT.Datasets.addCountry()');
-			// add/edit country functionality
-			$('#timaat-datasets-country-meta').on('show.bs.modal', function (ev) {
-				console.log("TCL: Create/Edit country window setup");
-				var modal = $(this);
-				var country = modal.data('country');				
-				var heading = (country) ? "Country bearbeiten" : "Country hinzufügen";
-				var submit = (country) ? "Speichern" : "Hinzufügen";
-				var name = (country) ? country.model.name : "";
-				var internationalDialingPrefix = (country) ? country.model.internationalDialingPrefix : "";
-				var trunkPrefix = (country) ? country.model.trunkPrefix : "";
-				var countryCallingCode = (country) ? country.model.countryCallingCode : "";
-				var timeZone = (country) ? country.model.timeZone : "";
-				var dst = (country) ? country.model.dst : "";	
-				// setup UI
-				$('#countryMetaLabel').html(heading);
-				$('#timaat-country-meta-submit').html(submit);
-				$("#timaat-country-meta-name").val(name).trigger('input');
-				$("#timaat-country-meta-idp").val(internationalDialingPrefix);
-				$("#timaat-country-meta-tp").val(trunkPrefix);
-				$("#timaat-country-meta-ccc").val(countryCallingCode);
-				$("#timaat-country-meta-tz").val(timeZone);
-				$("#timaat-country-meta-dst").val(dst);
-			});
-			// Submit country data
-			$('#timaat-country-meta-submit').click(function(ev) {
-				console.log("TCL: Create/Edit country window submitted data validation");
-				var modal = $('#timaat-datasets-country-meta');
-				var country = modal.data('country');
-				var name = $("#timaat-country-meta-name").val();
-				var internationalDialingPrefix = $("#timaat-country-meta-idp").val();
-				var trunkPrefix = $("#timaat-country-meta-tp").val();
-				var countryCallingCode = $("#timaat-country-meta-ccc").val();
-				var timeZone = $("#timaat-country-meta-tz").val();
-				var dst = $("#timaat-country-meta-dst").val();
-				// var locationType =$("timaat-country-meta-locationtype").val();	
-				if (country) {
-					country.model.name = name;
-					country.model.internationalDialingPrefix = internationalDialingPrefix;
-					country.model.trunkPrefix = trunkPrefix;
-					country.model.countryCallingCode = countryCallingCode;
-					country.model.timeZone = timeZone;
-					country.model.dst = dst;
-					// country.model.locationType = locationType;
-					country.updateUI();
-					TIMAAT.Service.updateCountry(country);
-				} else {
-					TIMAAT.Service.createCountry(name, internationalDialingPrefix, trunkPrefix, countryCallingCode, timeZone, dst, TIMAAT.Datasets._countryAdded);
-				}
-				modal.modal('hide');
-			});
-			//  validate country data
-			$('#timaat-country-meta-name').on('input', function(ev) {
-				console.log("TCL: allow saving only if data is valid");
-				if ( $("#timaat-country-meta-name").val().length > 0 ) {
-					$('#timaat-country-meta-submit').prop("disabled", false);
-					$('#timaat-country-meta-submit').removeAttr("disabled");
-				} else {
-					$('#timaat-country-meta-submit').prop("disabled", true);
-					$('#timaat-country-meta-submit').attr("disabled");
-				}
-			});
+		load: function() {
+			TIMAAT.EventDatasets.loadEvents();
 		},
 
 		initEvents: function() {
-			console.log("TCL: Datasets: initEvents: function()");
+			// console.log("TCL: EventDatasets: initEvents: function()");
 			// attach tag editor
 			$('#timaat-event-tags').popover({
 				placement: 'right',
@@ -3682,12 +3691,12 @@ const TIMAAT = {
 			    $('.timaat-tag-input').tagsInput({
 			    	placeholder: 'Event Tag hinzufügen (datasets init function)',
 			    	onAddTag: function(taginput,tag) {
-			    		TIMAAT.Service.addEventTag(event, tag, function(newtag) {
+			    		TIMAAT.EventService.addEventTag(event, tag, function(newtag) {
 			    			TIMAAT.VideoPlayer.model.video.tags.push(newtag);
 			    		});
 			    	},
 			    	onRemoveTag: function(taginput,tag) {
-			    		TIMAAT.Service.removeEventTag(event, tag, function(tagname) {
+			    		TIMAAT.EventService.removeEventTag(event, tag, function(tagname) {
 			    			// find tag in model
 			    			var found = -1;
 			    			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
@@ -3705,15 +3714,15 @@ const TIMAAT = {
 			});
 			// delete event functionality
 			$('#timaat-event-delete-submit').click(function(ev) {
-				var modal = $('#timaat-datasets-event-delete');
+				var modal = $('#timaat-eventdatasets-event-delete');
 				var event = modal.data('event');
-				if (event) TIMAAT.Datasets._eventRemoved(event);
+				if (event) TIMAAT.EventDatasets._eventRemoved(event);
 				modal.modal('hide');
 			});
 			// add event button
-			$('#timaat-event-add').attr('onclick','TIMAAT.Datasets.addEvent()');
+			$('#timaat-event-add').attr('onclick','TIMAAT.EventDatasets.addEvent()');
 			// add/edit event functionality
-			$('#timaat-datasets-event-meta').on('show.bs.modal', function (ev) {
+			$('#timaat-eventdatasets-event-meta').on('show.bs.modal', function (ev) {
 				// console.log("TCL: Create/Edit event window setup");
 				var modal = $(this);
 				var event = modal.data('event');				
@@ -3745,13 +3754,14 @@ const TIMAAT = {
 				$('#eventMetaLabel').html(heading);
 				$('#timaat-event-meta-submit').html(submit);
 				$("#timaat-event-meta-name").val(name).trigger('input');
-				$("#timaat-event-meta-start").val(beginsAtDate); // 1212-12-12
-				$("#timaat-event-meta-end").val(endsAtDate); // 1212-12-12
+				$("#timaat-event-meta-start").val(Date(beginsAtDate)); // 1212-12-12
+        console.log("TCL: initEvents -> beginsAtDate", beginsAtDate);
+				$("#timaat-event-meta-end").val(Date(endsAtDate)); // 1212-12-12
 				$("#timaat-event-meta-description").val(description);
 			});
 			// Submit event data
 			$('#timaat-event-meta-submit').click(function(ev) {
-				var modal = $('#timaat-datasets-event-meta');
+				var modal = $('#timaat-eventdatasets-event-meta');
 				var event = modal.data('event');
 				var name = $("#timaat-event-meta-name").val();
 				var description = $("#timaat-event-meta-description").val();
@@ -3766,8 +3776,8 @@ const TIMAAT = {
 					event.model.endsAtDate = endsAtDate;
 					event.updateUI(); // shouldn't be necessary as it will be called in the updateEvent(event) function again
 					console.log("TCL: update event", event);
-					TIMAAT.Service.updateEvent(event);
-					TIMAAT.Service.updateEventTranslation(event);
+					TIMAAT.EventService.updateEvent(event);
+					TIMAAT.EventService.updateEventTranslation(event);
 				} else { // create new event
 					var model = {
 						id: 0,
@@ -3781,7 +3791,7 @@ const TIMAAT = {
 						name: name,
 						description: description,
 					};
-					TIMAAT.Service.createEvent(model, modelTranslation, TIMAAT.Datasets._eventAdded);
+					TIMAAT.EventService.createEvent(model, modelTranslation, TIMAAT.EventDatasets._eventAdded);
 				}
 				modal.modal('hide');
 			});
@@ -3816,10 +3826,169 @@ const TIMAAT = {
 			// });
 		},
 
+		loadEvents: function() {
+    	// console.log("TCL: loadEvents: function()");
+			// load events
+			TIMAAT.EventService.listEvents(TIMAAT.EventDatasets.setEventLists);
+		},
+		
+		setEventLists: function(events) {
+    	// console.log("TCL: setEventLists: function(events)");
+    	console.log("TCL: events: ", events);
+			if ( !events ) return;
+			$('#timaat-event-list-loader').remove();
+			// clear old UI list
+			$('#timaat-event-list').empty();
+			// setup model
+			var evs = Array();
+			events.forEach(function(event) { if ( event.id > 0 ) evs.push(new TIMAAT.Event(event)); });
+			TIMAAT.EventDatasets.events = evs;
+			TIMAAT.EventDatasets.events.model = events;			
+		},
+		
+		addEvent: function() {	
+    // console.log("TCL: addEvent: function()");
+			$('#timaat-eventdatasets-event-meta').data('event', null);
+			$('#timaat-eventdatasets-event-meta').modal('show');
+		},
+
+		_eventAdded: function(event) {
+    	// console.log("TCL: _eventAdded: function(event)");
+			TIMAAT.EventDatasets.events.model.push(event);
+			TIMAAT.EventDatasets.events.push(new TIMAAT.Event(event));
+			return event;
+		},
+
+		_eventRemoved: function(event) {
+    console.log("TCL: _eventRemoved: function(event)");
+    console.log("TCL: event", event);
+			// sync to server
+			TIMAAT.EventService.removeEvent(event);			
+			event.remove();	
+			// if ( TIMAAT.VideoPlayer.curEvent == event ) TIMAAT.VideoPlayer.setEvent(null);		
+		}
+	},
+	
+	// ------------------------------------------------------------------------------------------------------------------------
+		
+	ActorDatasets: {
+		actors: null,
+
+		init: function() {   
+			TIMAAT.ActorDatasets.initActors();
+		},
+
+		load: function() {
+			TIMAAT.ActorDatasets.loadActors();
+		},
+
+		initActors: function() {
+			// console.log("TCL: ActorDatasets: initActors: function()");
+			// attach tag editor
+			$('#timaat-actor-tags').popover({
+				placement: 'right',
+				title: 'Actor Tags bearbeiten (datasets init function)',
+				trigger: 'click',
+				html: true,
+				content: `<div class="input-group">
+										<input class="form-control timaat-tag-input" type="text" value="">
+									</div>`,
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			$('#timaat-actor-tags').on('inserted.bs.popover', function () {
+				var tags = "";
+				if ( actor == null ) {
+					$('.timaat-tag-input').html('Kein Actor geladen');
+					return;
+				} else {
+					$('.timaat-tag-input').html('');					
+				}
+				actor.tags.forEach(function(item) { tags += ','+item.name });
+				tags = tags.substring(1);
+				$('.timaat-tag-input').val(tags);
+			    $('.timaat-tag-input').tagsInput({
+			    	placeholder: 'Actor Tag hinzufügen (datasets init function)',
+			    	onAddTag: function(taginput,tag) {
+			    		TIMAAT.ActorService.addActorTag(actor, tag, function(newtag) {
+			    			TIMAAT.VideoPlayer.model.video.tags.push(newtag);
+			    		});
+			    	},
+			    	onRemoveTag: function(taginput,tag) {
+			    		TIMAAT.ActorService.removeActorTag(actor, tag, function(tagname) {
+			    			// find tag in model
+			    			var found = -1;
+			    			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
+			    				if ( item.name == tagname ) found = index;
+			    			});
+			    			if (found > -1) TIMAAT.VideoPlayer.model.video.splice(found, 1);
+			    		});
+			    	},
+			    	onChange: function() {
+			    		if ( this.length == 1) $('#'+this[0].id+'_tag').focus();
+			    	}
+			    });
+			});
+			$('#timaat-actor-tags').on('hidden.bs.popover', function () { 
+			});
+			// delete actor functionality
+			$('#timaat-actor-delete-submit').click(function(ev) {
+				var modal = $('#timaat-actordatasets-actor-delete');
+				var actor = modal.data('actor');
+				if (actor) TIMAAT.ActorDatasets._actorRemoved(actor);
+				modal.modal('hide');
+			});
+			// add actor button
+			$('#timaat-actor-add').attr('onclick','TIMAAT.ActorDatasets.addActor()');
+			// add/edit actor functionality
+			$('#timaat-actordatasets-actor-meta').on('show.bs.modal', function (ev) {
+				// console.log("TCL: Create/Edit actor window setup");
+				var modal = $(this);
+				var actor = modal.data('actor');
+				var heading = (actor) ? "Actor bearbeiten" : "Actor hinzufügen";
+				var submit = (actor) ? "Speichern" : "Hinzufügen";
+				var title = (actor) ? actor.model.name : "";
+
+				// setup UI
+				$('#actorMetaLabel').html(heading);
+				$('#timaat-actor-meta-submit').html(submit);
+				$("#timaat-actor-meta-title").val(title).trigger('input');
+			});
+			// Submit actor data
+			$('#timaat-actor-meta-submit').click(function(ev) {
+				// console.log("TCL: Create/Edit actor window submitted data validation");
+				var modal = $('#timaat-actordatasets-actor-meta');
+				var actor = modal.data('actor');
+				var title = $("#timaat-actor-meta-title").val();
+				if (actor) {
+					actor.model.name = title;
+					// console.log("TCL: actor.updateUI() - ActorDatasets:init:function()");
+					// console.log("TCL: Take values from form:")
+					// console.log("TCL: $(\"#timaat-actor-meta-title\").val():", $("#timaat-actor-meta-title").val());
+					actor.updateUI();
+					TIMAAT.ActorService.updateActor(actor);
+				} else {
+					TIMAAT.ActorService.createActor(title, TIMAAT.ActorDatasets._actorAdded); // TODO add actor parameters
+				}
+				modal.modal('hide');
+			});
+			//  validate actor data
+			$('#timaat-actor-meta-title').on('input', function(ev) {
+				// console.log("TCL: allow saving only if data is valid");
+				if ( $("#timaat-actor-meta-title").val().length > 0 ) {
+					$('#timaat-actor-meta-submit').prop("disabled", false);
+					$('#timaat-actor-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-actor-meta-submit').prop("disabled", true);
+					$('#timaat-actor-meta-submit').attr("disabled");
+				}
+			});
+		},
+
 		loadActors: function() {
     	// console.log("TCL: loadActors: function()");
 			// load actors
-			TIMAAT.Service.listActors(TIMAAT.Datasets.setActorLists);
+			TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorLists);
 		},
 		
 		setActorLists: function(actors) {
@@ -3832,41 +4001,312 @@ const TIMAAT = {
 			// setup model
 			var acts = Array();
 			actors.forEach(function(actor) { if ( actor.id > 0 ) acts.push(new TIMAAT.Actor(actor)); });
-			TIMAAT.Datasets.actors = acts;
-			TIMAAT.Datasets.actors.model = actors;			
+			TIMAAT.ActorDatasets.actors = acts;
+			TIMAAT.ActorDatasets.actors.model = actors;			
 		},
 		
 		addActor: function() {	
     console.log("TCL: addActor: function()");
-			$('#timaat-datasets-actor-meta').data('actor', null);
-			$('#timaat-datasets-actor-meta').modal('show');
+			$('#timaat-actordatasets-actor-meta').data('actor', null);
+			$('#timaat-actordatasets-actor-meta').modal('show');
 		},
 
 		_actorAdded: function(actor) {
     	console.log("TCL: _actorAdded: function(actor)");
     	console.log("TCL: actor", actor);
-			TIMAAT.Datasets.actors.model.push(actor);
-			TIMAAT.Datasets.actors.push(new TIMAAT.Actor(actor));
+			TIMAAT.ActorDatasets.actors.model.push(actor);
+			TIMAAT.ActorDatasets.actors.push(new TIMAAT.Actor(actor));
 		},
 
 		_actorRemoved: function(actor) {
     console.log("TCL: _actorRemoved: function(actor)");
     console.log("TCL: actor", actor);
 			// sync to server
-			TIMAAT.Service.removeActor(actor);			
+			TIMAAT.ActorService.removeActor(actor);			
 			actor.remove();	
 			// if ( TIMAAT.VideoPlayer.curActor == actor ) TIMAAT.VideoPlayer.setActor(null);		
 		},
 
-		loadLocations: function() {
-    	// console.log("TCL: loadLocations: function()");
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+	
+	LocationDatasets: {
+		locations: null,
+		locationTypes: null,
+		countries: null,
+
+		init: function() {
+			TIMAAT.LocationDatasets.initLocations();
+			TIMAAT.LocationDatasets.initLocationTypes();
+			TIMAAT.LocationDatasets.initCountries();   
+		},
+		
+		initLocationTypes: function() {
+			// delete locationType functionality
+			$('#timaat-location-type-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-location-type-delete');
+				var locationType = modal.data('locationType');
+				if (locationType) TIMAAT.LocationDatasets._locationTypeRemoved(locationType);
+				modal.modal('hide');
+			});
+			// add locationType button
+			$('#timaat-location-type-add').attr('onclick','TIMAAT.LocationDatasets.addLocationType()');
+			// add/edit locationType functionality
+			$('#timaat-locationdatasets-location-type-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit locationType window setup
+				var modal = $(this);
+				var locationType = modal.data('locationType');				
+				var heading = (locationType) ? "LocationType bearbeiten" : "LocationType hinzufügen";
+				var submit = (locationType) ? "Speichern" : "Hinzufügen";
+				var type = (locationType) ? locationType.model.type : 0;
+				// setup UI
+				$('#locationTypeMetaLabel').html(heading);
+				$('#timaat-location-type-meta-submit').html(submit);
+				$("#timaat-location-type-meta-name").val(type).trigger('input');
+			});
+			// Submit locationType data
+			$('#timaat-location-type-meta-submit').click(function(ev) {
+				// Create/Edit locationType window submitted data validation;
+				var modal = $('#timaat-locationdatasets-location-type-meta');
+				var locationType = modal.data('locationType');
+				var type = $("#timaat-location-type-meta-name").val();
+				if (locationType) {
+					locationType.model.location.locationTypeTranslations[0].type = type;
+					locationType.updateUI();
+					TIMAAT.LocationService.updateLocationType(locationType);
+					TIMAAT.LocationService.updateLocationTypeTranslation(locationType);
+				} else { // create new locationType
+					var model = {
+						id: 0,
+						locationTypeTranslations: [],
+					};
+					var modelTranslation = {
+						id: 0,
+						type: type,
+					}
+					TIMAAT.LocationService.createLocationType(model, modelTranslation, TIMAAT.LocationDatasets._locationTypeAdded); // TODO add locationType parameters
+				}
+				modal.modal('hide');
+			});
+			// validate locationType data		
+			// TODO validate all required fields			
+			$('#timaat-location-type-meta-name').on('input', function(ev) {
+				if ( $("#timaat-location-type-meta-name").val().length > 0 ) {
+					$('#timaat-location-type-meta-submit').prop("disabled", false);
+					$('#timaat-location-type-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-location-type-meta-submit').prop("disabled", true);
+					$('#timaat-location-type-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initLocations: function() {
+			// console.log("TCL: LocationDatasets: initLocations: function()");		
+			// delete location functionality
+			$('#timaat-location-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-location-delete');
+				var location = modal.data('location');
+				if (location) TIMAAT.LocationDatasets._locationRemoved(location);
+				modal.modal('hide');
+			});
+			// add location button
+			$('#timaat-location-add').attr('onclick','TIMAAT.LocationDatasets.addLocation()');
+			// add/edit location functionality
+			$('#timaat-locationdatasets-location-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit location window setup
+				var modal = $(this);
+				var location = modal.data('location');				
+				var heading = (location) ? "Location bearbeiten" : "Location hinzufügen";
+				var submit = (location) ? "Speichern" : "Hinzufügen";
+				var name = (location) ? location.model.locationTranslations[0].name : ""; // name of the location
+				var typeId = (location) ? location.model.locationType.id : "";
+				// setup UI
+				$('#locationMetaLabel').html(heading);
+				$('#timaat-location-meta-submit').html(submit);
+				$("#timaat-location-meta-name").val(name).trigger('input');
+				$("#timaat-location-meta-location-type-id").val(typeId);
+			});
+			// Submit location data
+			$('#timaat-location-meta-submit').click(function(ev) {
+				// Create/Edit location window submitted data validation
+				var modal = $('#timaat-locationdatasets-location-meta');
+				var location = modal.data('location');
+				var name = $("#timaat-location-meta-name").val();
+				var typeSelector = document.getElementById("timaat-location-meta-location-type-id");
+				var typeId = Number(typeSelector.options[typeSelector.selectedIndex].value);
+				if (location) {
+					location.model.locationTranslations[0].name = name;
+					location.model.locationType.id = typeId;
+					location.updateUI();
+					TIMAAT.LocationDatasets.updateLocation(location);   
+				} else { // create new location
+					var model = {
+						id: 0,
+						locationType: {
+							id: typeId,
+						},
+						locationTranslations: [],
+					};
+					console.log("TCL: model", model);
+					var modelTranslation = {
+						id: 0,
+						name: name,
+					};
+					// no callback should be required anymore
+					// TIMAAT.LocationDatasets.createLocation(model, modelTranslation, TIMAAT.LocationDatasets._locationAdded);
+					TIMAAT.LocationDatasets.createLocation(model, modelTranslation);
+				}
+				modal.modal('hide');
+			});
+			// validate location data	
+			// TODO: validate all required fields
+			$('#timaat-location-meta-name').on('input', function(ev) {
+				if ( $("#timaat-location-meta-name").val().length > 0) {
+					$('#timaat-location-meta-submit').prop("disabled", false);
+					$('#timaat-location-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-location-meta-submit').prop("disabled", true);
+					$('#timaat-location-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initCountries: function() {
+			// console.log("TCL: LocationDatasets: initCountries: function()");		
+			// delete country functionality
+			$('#timaat-country-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-country-delete');
+				var country = modal.data('country');
+				if (country) TIMAAT.LocationDatasets._countryRemoved(country);
+				modal.modal('hide');
+			});
+			// add country button
+			$('#timaat-country-add').attr('onclick','TIMAAT.LocationDatasets.addCountry()');
+			// add/edit country functionality
+			$('#timaat-locationdatasets-country-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit country window setup
+				var modal = $(this);
+				var country = modal.data('country');				
+				var heading = (country) ? "Country bearbeiten" : "Country hinzufügen";
+				var submit = (country) ? "Speichern" : "Hinzufügen";
+				var name = (country) ? country.model.location.locationTranslations[0].name : "";
+				var internationalDialingPrefix = (country) ? country.model.internationalDialingPrefix : "";
+				var trunkPrefix = (country) ? country.model.trunkPrefix : "";
+				var countryCallingCode = (country) ? country.model.countryCallingCode : "";
+				var timeZone = (country) ? country.model.timeZone : "";
+				var daylightSavingTime = (country) ? country.model.daylightSavingTime : "";	
+				// setup UI
+				$('#countryMetaLabel').html(heading);
+				$('#timaat-country-meta-submit').html(submit);
+				$("#timaat-country-meta-name").val(name).trigger('input');
+				$("#timaat-country-meta-idp").val(internationalDialingPrefix);
+				$("#timaat-country-meta-tp").val(trunkPrefix);
+				$("#timaat-country-meta-ccc").val(countryCallingCode);
+				$("#timaat-country-meta-tz").val(timeZone);
+				$("#timaat-country-meta-dst").val(daylightSavingTime);
+			});
+			// Submit country data
+			$('#timaat-country-meta-submit').click(function(ev) {
+				// Create/Edit country window submitted data validation
+				var modal = $('#timaat-locationdatasets-country-meta');
+				var country = modal.data('country');
+				var name = $("#timaat-country-meta-name").val();
+				var internationalDialingPrefix = $("#timaat-country-meta-idp").val();
+				var trunkPrefix = $("#timaat-country-meta-tp").val();
+				var countryCallingCode = $("#timaat-country-meta-ccc").val();
+				var timeZone = $("#timaat-country-meta-tz").val();
+				var daylightSavingTime = $("#timaat-country-meta-dst").val();
+
+				if (country) {
+					console.log("TCL: initCountries -> country", country);
+					country.model.location.locationTranslations[0].name = name;
+					country.model.internationalDialingPrefix = internationalDialingPrefix;
+					country.model.trunkPrefix = trunkPrefix;
+					country.model.countryCallingCode = countryCallingCode;
+					country.model.timeZone = timeZone;
+					country.model.daylightSavingTime = daylightSavingTime;
+					country.updateUI();
+					TIMAAT.LocationDatasets.updateCountry(country);
+				} else {
+					var model = {
+						locationId: 0,
+						internationalDialingPrefix: internationalDialingPrefix,
+						trunkPrefix: trunkPrefix,
+						countryCallingCode: countryCallingCode,
+						timeZone: timeZone,
+						daylightSavingTime: daylightSavingTime,
+					};
+					var location = {
+							id: 0,
+							locationType: {
+								id: 1 // 1 = Country. TODO check clause to find proper id
+							},
+						locationTranslations: [],
+					};
+					var locationTranslation = {
+							id: 0,
+							name: name,
+					};
+					TIMAAT.LocationDatasets.createCountry(location, locationTranslation, model);
+				}
+				modal.modal('hide');
+			});
+			// validate country data
+			// TODO validate all required fields
+			$('#timaat-country-meta-name').on('input', function(ev) {
+				if ( $("#timaat-country-meta-name").val().length > 0 ) {
+					$('#timaat-country-meta-submit').prop("disabled", false);
+					$('#timaat-country-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-country-meta-submit').prop("disabled", true);
+					$('#timaat-country-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		load: function() {
+			TIMAAT.LocationDatasets.loadLocations();
+			TIMAAT.LocationDatasets.loadLocationTypes();
+			TIMAAT.LocationDatasets.loadCountries();   
+		},
+
+		loadLocationTypes: function() {
+			// console.log("TCL: loadLocationTypes: function()");
 			// load locations
-			TIMAAT.Service.listLocations(TIMAAT.Datasets.setLocationLists);
+			TIMAAT.LocationService.listLocationTypes(TIMAAT.LocationDatasets.setLocationTypeLists);
+		},
+
+		loadLocations: function() {
+			// console.log("TCL: loadLocations: function()");
+			// load locations
+			TIMAAT.LocationService.listLocations(TIMAAT.LocationDatasets.setLocationLists);
+		},
+
+		loadCountries: function() {
+			// console.log("TCL: loadCountries: function()");
+			// load countries
+			TIMAAT.LocationService.listCountries(TIMAAT.LocationDatasets.setCountryLists);
+		},
+
+		setLocationTypeLists: function(locationTypes) {
+			// console.log("TCL: setLocationTypeLists: function(locationTypes)");
+			console.log("TCL: locationTypes", locationTypes);
+			if ( !locationTypes ) return;
+			$('#timaat-location-type-list-loader').remove();
+			// clear old UI list
+			$('#timaat-location-type-list').empty();
+			// setup model
+			var locTypes = Array();
+			locationTypes.forEach(function(locationType) { if ( locationType.id > 0 ) locTypes.push(new TIMAAT.LocationType(locationType)); });
+			TIMAAT.LocationDatasets.locationTypes = locTypes;
+			TIMAAT.LocationDatasets.locationTypes.model = locationTypes;
 		},
 		
 		setLocationLists: function(locations) {
-    // console.log("TCL: setLocationLists: function(locations)");
-    console.log("TCL: locations", locations);
+			// console.log("TCL: setLocationLists: function(locations)");
+			console.log("TCL: locations", locations);
 			if ( !locations ) return;
 			$('#timaat-location-list-loader').remove();
 			// clear old UI list
@@ -3874,119 +4314,2560 @@ const TIMAAT = {
 			// setup model
 			var locs = Array();
 			locations.forEach(function(location) { if ( location.id > 0 ) locs.push(new TIMAAT.Location(location)); });
-			TIMAAT.Datasets.locations = locs;
-			TIMAAT.Datasets.locations.model = locations;
-		},
-		
-		addLocation: function() {	
-    console.log("TCL: addLocation: function()");
-			$('#timaat-datasets-location-meta').data('location', null);
-			$('#timaat-datasets-location-meta').modal('show');
-		},
-
-		_locationAdded: function(location) {
-    	console.log("TCL: _locationAdded: function(location)");
-    	console.log("TCL: location", location);
-			TIMAAT.Datasets.locations.model.push(location);
-			TIMAAT.Datasets.locations.push(new TIMAAT.Location(location));
-		},
-
-		_locationRemoved: function(location) {
-    console.log("TCL: _locationRemoved: function(location)");
-    console.log("TCL: location", location);
-			// sync to server
-			TIMAAT.Service.removeLocation(location);			
-			location.remove();	
-			// if ( TIMAAT.VideoPlayer.curLocation == location ) TIMAAT.VideoPlayer.setLocation(null);		
-		},
-
-		loadCountries: function() {
-    	// console.log("TCL: loadCountries: function()");
-			// load countries
-			TIMAAT.Service.listCountries(TIMAAT.Datasets.setCountryLists);
+			TIMAAT.LocationDatasets.locations = locs;
+			TIMAAT.LocationDatasets.locations.model = locations;
 		},
 		
 		setCountryLists: function(countries) {
-    // console.log("TCL: setCountryLists: function(countries)");
-    console.log("TCL: countries", countries);
+			// console.log("TCL: setCountryLists: function(countries)");
+			console.log("TCL: countries", countries);
 			if ( !countries ) return;
 			$('#timaat-country-list-loader').remove();
 			// clear old UI list
 			$('#timaat-country-list').empty();
 			// setup model
 			var locs = Array();
-			countries.forEach(function(country) { if ( country.id > 0 ) locs.push(new TIMAAT.Country(country)); });
-			TIMAAT.Datasets.countries = locs;
-			TIMAAT.Datasets.countries.model = countries;
-		},
-		
-		addCountry: function() {	
-    console.log("TCL: addCountry: function()");
-			$('#timaat-datasets-country-meta').data('country', null);
-			$('#timaat-datasets-country-meta').modal('show');
+			countries.forEach(function(country) { 
+				if ( country.id > 0 )
+					locs.push(new TIMAAT.Country(country));
+			});
+			TIMAAT.LocationDatasets.countries = locs;
+			TIMAAT.LocationDatasets.countries.model = countries;
 		},
 
-		_countryAdded: function(country) {
-    	console.log("TCL: _countryAdded: function(country)");
-    	console.log("TCL: country", country);
-			TIMAAT.Datasets.countries.model.push(country);
-			TIMAAT.Datasets.countries.push(new TIMAAT.Country(country));
+		addLocation: function() {	
+		// console.log("TCL: addLocation: function()");
+		$('#timaat-locationdatasets-location-meta').data('location', null);
+		$('#timaat-locationdatasets-location-meta').modal('show');
+		},
+
+		addCountry: function() {	
+			// console.log("TCL: addCountry: function()");
+			$('#timaat-locationdatasets-country-meta').data('country', null);
+			$('#timaat-locationdatasets-country-meta').modal('show');
+		},
+	
+		createLocation: async function(locationModel, locationModelTranslation) {
+		// NO LOCATION SHOULD BE CREATED DIRECTLY. CREATE COUNTRY, CITY, ETC. INSTEAD
+		// This routine can be used to create empty locations of a certain type
+		// console.log("TCL: createLocation -> locationModel, locationModelTranslation", locationModel, locationModelTranslation);
+			try {
+				// create location
+				var newLocationModel = await TIMAAT.LocationService.createLocation(locationModel);
+				// create location translation with location id
+				var newTranslationData = await TIMAAT.LocationService.createLocationTranslation(newLocationModel, locationModelTranslation);
+				newLocationModel.locationTranslations[0] = newTranslationData;
+				// create country/city/etc depending on country type
+				// TODO switch (locationModel.locationType)
+				// push new location to dataset model
+				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			// location.updateUI();
+		},
+
+		createCountry: async function(locationModel, locationModelTranslation, countryModel) {
+			// console.log("TCL: createCountry -> locationModel, locationModelTranslation, countryModel", locationModel, locationModelTranslation, countryModel);
+			try {
+				// create location
+				var newLocationModel = await TIMAAT.LocationService.createLocation(locationModel);
+
+				// create location translation with location id
+				await TIMAAT.LocationService.createLocationTranslation(newLocationModel, locationModelTranslation);
+				newLocationModel.locationTranslations[0] = locationModelTranslation;
+
+				// create country with location id
+				countryModel.locationId = newLocationModel.id;
+				var newCountryModel = await TIMAAT.LocationService.createCountry(newLocationModel, countryModel);
+
+				// push new location to dataset model
+				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
+
+				// push new country to dataset model
+				await TIMAAT.LocationDatasets._countryAdded(newCountryModel);
+
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			// location.updateUI();
+		},
+
+		updateLocation: async function(location) {
+		// console.log("TCL: updateLocation async function -> location at beginning of update process: ", location);
+			try {
+				// update data that is part of location (includes updating last edited by/at)
+				var tempLocationModel = await TIMAAT.LocationService.updateLocation(location.model);
+				location.model.locationType.id = tempLocationModel.locationType.id;
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// update data that is part of  location translation
+				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(location);
+				location.model.locationTranslations[0].name = tempLocationTranslation.name;			
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+		},
+
+		updateCountry: async function(country) {
+			// console.log("TCL: updateCountry async function -> country at beginning of update process: ", country);
+			try {
+				// update data that is part of country
+				var tempCountryModel = await TIMAAT.LocationService.updateCountry(country.model);
+				country.model.internationalDialingPrefix = tempCountryModel.internationalDialingPrefix;
+				country.model.trunkPrefix = tempCountryModel.trunkPrefix;
+				country.model.countryCallingCode = tempCountryModel.countryCallingCode;
+				country.model.timeZone = tempCountryModel.timeZone;
+				country.model.daylightSavingTime = tempCountryModel.daylightSavingTime;
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// update data that is part of location and its translation
+				var countryLocation = country.model.location;
+				var countryLocationModel = {
+					model: countryLocation,
+				};
+				await TIMAAT.LocationDatasets.updateLocation(countryLocationModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			country.updateUI();
+		},
+
+		_locationAdded: async function(location) {
+			// console.log("TCL: _locationAdded: function(location)");
+			// console.log("TCL: location", location);
+			TIMAAT.LocationDatasets.locations.model.push(location);
+			TIMAAT.LocationDatasets.locations.push(new TIMAAT.Location(location));
+			// return location;
+		},
+		
+		_countryAdded: async function(country) {
+			// console.log("TCL: _countryAdded: function(country)");
+			TIMAAT.LocationDatasets.countries.model.push(country);
+			TIMAAT.LocationDatasets.countries.push(new TIMAAT.Country(country));
+		},
+
+		_locationRemoved: function(location) {
+			// console.log("TCL: _locationRemoved: function(location)");
+			// console.log("TCL: location", location);
+			// sync to server
+			TIMAAT.LocationService.removeLocation(location);
+			location.remove();
 		},
 
 		_countryRemoved: function(country) {
-    console.log("TCL: _countryRemoved: function(country)");
-    console.log("TCL: country", country);
+			//  console.log("TCL: _countryRemoved: function(country)");
+			//  console.log("TCL: country", country);
 			// sync to server
-			TIMAAT.Service.removeCountry(country);			
-			country.remove();	
-			// if ( TIMAAT.VideoPlayer.curCountry == country ) TIMAAT.VideoPlayer.setCountry(null);		
+			TIMAAT.LocationService.removeCountry(country);
+			country.remove();
 		},
 
-		loadEvents: function() {
-    	// console.log("TCL: loadEvents: function()");
-			// load events
-			TIMAAT.Service.listEvents(TIMAAT.Datasets.setEventLists);
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+		
+	MediaDatasets: {
+		media: null,
+		mediaTypes: null,
+		audios: null,
+		documents: null,
+		images: null,
+		softwares: null,
+		texts: null,
+		videos: null,
+		videogames: null,	
+
+		init: function() {
+			TIMAAT.MediaDatasets.initMedia();
+			TIMAAT.MediaDatasets.initMediaTypes();
+			TIMAAT.MediaDatasets.initAudios();
+			TIMAAT.MediaDatasets.initDocuments();
+			TIMAAT.MediaDatasets.initImages();
+			TIMAAT.MediaDatasets.initSoftwares();
+			TIMAAT.MediaDatasets.initTexts();
+			TIMAAT.MediaDatasets.initVideos();
+			TIMAAT.MediaDatasets.initVideogames();
+		},
+
+		initMediaTypes: function() {
+			// console.log("TCL: MediaDatasets: initMediaTypes: function()");		
+			// delete mediaType functionality
+			$('#timaat-media-type-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-medium-type-delete');
+				var mediaType = modal.data('mediaType');
+				if (mediaType) TIMAAT.MediaDatasets._mediaTypeRemoved(mediaType);
+				modal.modal('hide');
+			});
+			// add mediaType button
+			$('#timaat-media-type-add').attr('onclick','TIMAAT.MediaDatasets.addMediaType()');
+			// add/edit mediaType functionality
+			$('#timaat-mediadatasets-medium-type-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit mediaType window setup
+				var modal = $(this);
+				var mediaType = modal.data('mediaType');				
+				var heading = (mediaType) ? "MediaType bearbeiten" : "MediaType hinzufügen";
+				var submit = (mediaType) ? "Speichern" : "Hinzufügen";
+				var type = (mediaType) ? mediaType.model.type : 0;
+				var hasVisual = (mediaType) ? mediaType.model.hasVisual : false;
+				var hasAudio = (mediaType) ? mediaType.model.hasAudio : false;
+				var hasContent = (mediaType) ? mediaType.model.hasContent : false;
+				// setup UI
+				$('#mediaTypeMetaLabel').html(heading);
+				$('#timaat-media-type-meta-submit').html(submit);
+				$("#timaat-media-type-meta-name").val(type).trigger('input');
+				$("#timaat-media-type-meta-hasvisual").val(hasVisual);
+				$("#timaat-media-type-meta-hasaudio").val(hasAudio);
+				$("#timaat-media-type-meta-hascontent").val(hasContent);
+			});
+			// Submit mediaType data
+			$('#timaat-media-type-meta-submit').click(function(ev) {
+				// Create/Edit mediaType window submitted data validation
+				var modal = $('#timaat-mediadatasets-medium-type-meta');
+				var mediaType = modal.data('mediaType');
+				var type = $("#timaat-media-type-meta-name").val();
+				var hasVisual = $("#timaat-media-type-meta-has-visual").val();
+				var hasAudio = $("#timaat-media-type-meta-has-audio").val();
+				var hasContent = $("#timaat-media-type-meta-has-content").val();
+				if (mediaType) {
+					mediaType.model.medium.mediaTypeTranslations[0].type = type;
+					mediaType.model.hasVisual = hasVisual;
+					mediaType.model.hasAudio = hasAudio;
+					mediaType.model.hasContent = hasContent;
+					mediaType.updateUI();
+					TIMAAT.MediaService.updateMediaType(mediaType);
+					TIMAAT.MediaService.updateMediaTypeTranslation(mediaType);
+				} else { // create new mediaType
+					var model = {
+						id: 0,
+						hasVisual: hasVisual,
+						hasAudio: hasAudio,
+						hasContent: hasContent,
+						mediaTypeTranslations: [],
+					};
+					var modelTranslation = {
+						id: 0,
+						type: type,
+					}
+					TIMAAT.MediaService.createMediaType(model, modelTranslation, TIMAAT.MediaDatasets._mediaTypeAdded); // TODO add mediaType parameters
+				}
+				modal.modal('hide');
+			});
+			// validate mediaType data	
+			// TODO validate all required fields				
+			$('#timaat-media-type-meta-name').on('input', function(ev) {
+				if ( $("#timaat-media-type-meta-name").val().length > 0 ) {
+					$('#timaat-media-type-meta-submit').prop("disabled", false);
+					$('#timaat-media-type-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-media-type-meta-submit').prop("disabled", true);
+					$('#timaat-media-type-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initMedia: function() {
+			// console.log("TCL: MediaDatasets: initMedia: function()");		
+			// delete medium functionality
+			$('#timaat-medium-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-medium-delete');
+				var medium = modal.data('medium');
+				if (medium) TIMAAT.MediaDatasets._mediumRemoved(medium);
+				modal.modal('hide');
+			});
+			// add medium button
+			$('#timaat-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium()');
+			// add/edit medium functionality
+			$('#timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit medium window setup
+				var modal = $(this);
+				var medium = modal.data('medium');				
+				var heading = (medium) ? "Medium bearbeiten" : "Medium hinzufügen";
+				var submit = (medium) ? "Speichern" : "Hinzufügen";
+				var primaryTitle = (medium) ? medium.model.title.name : "";
+				var primaryTitleLanguageId = (medium) ? medium.model.title.language.id : "";
+				var typeId = (medium) ? medium.model.mediaType.id : "";
+				var remark = (medium) ? medium.model.remark : "";
+				var copyright = (medium) ? medium.model.copyright : "";
+				var releaseDate = (medium) ? medium.model.releaseDate : 0;
+
+				// setup UI
+				$('#mediumMetaLabel').html(heading);
+				$('#timaat-medium-meta-submit').html(submit);
+				$("#timaat-medium-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-medium-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-medium-meta-medium-type-id").val(typeId);
+				$("#timaat-medium-meta-remark").val(remark);
+				$("#timaat-medium-meta-copyright").val(copyright);
+				$("#timaat-medium-meta-releasedate").val(releaseDate);
+			});
+
+			// Submit medium data
+			$('#timaat-medium-meta-submit').click(function(ev) {
+				// Create/Edit medium window submitted data validation
+				var modal = $('#timaat-mediadatasets-medium-meta');
+				var medium = modal.data('medium');
+				var primaryTitle = $("#timaat-medium-meta-title").val();
+				var languageSelector = document.getElementById("timaat-medium-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var typeSelector = document.getElementById("timaat-medium-meta-medium-type-id");
+				var typeId = Number(typeSelector.options[typeSelector.selectedIndex].value);
+				var remark = $("#timaat-medium-meta-remark").val();
+				var copyright = $("#timaat-medium-meta-copyright").val();
+				var releaseDate = $("#timaat-medium-meta-releasedate").val();
+
+				if (medium) {
+          // console.log("TCL: medium", medium);
+					medium.model.remark = remark;
+					medium.model.copyright = copyright;
+					medium.model.releaseDate = releaseDate;
+					medium.model.title.name = primaryTitle;
+					medium.model.title.language.id = primaryTitleLanguageId;
+					medium.model.mediaType.id = typeId;
+					medium.updateUI();
+					TIMAAT.MediaDatasets.updateMedium(medium);   
+				} else { // create new medium
+					var model = {
+						id: 0,
+						remark: remark,
+						copyright: copyright,
+						releaseDate: releaseDate,
+						mediaType: {
+							id: typeId,
+						},
+						// work: {
+						// 	id: 1,  // TODO implement work
+						// },
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,							
+						},
+						name: primaryTitle,
+					};
+					// var modelTranslation = {
+					// 	id: 0,
+					// 	name: name,
+					// };
+					// Medium has no translation table at the moment
+					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
+					TIMAAT.MediaDatasets.createMedium(model, title);
+				}
+				modal.modal('hide');
+			});
+			// validate medium data
+			// TODO validate all required fields				
+			$('#timaat-medium-meta-title').on('input', function(ev) {
+				if ( $("#timaat-medium-meta-title").val().length > 0) {
+					$('#timaat-medium-meta-submit').prop("disabled", false);
+					$('#timaat-medium-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-medium-meta-submit').prop("disabled", true);
+					$('#timaat-medium-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initAudios: function() {
+			// console.log("TCL: MediaDatasets: initAudios: function()");		
+			// delete audio functionality
+			$('#timaat-audio-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-audio-delete');
+				var audio = modal.data('audio');
+				if (audio) TIMAAT.MediaDatasets._mediumSubtypeRemoved("audio", audio);
+				modal.modal('hide');
+			});
+			// add audio button
+			$('#timaat-audio-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("audio")');
+			// add/edit audio functionality
+			$('#timaat-mediadatasets-audio-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit audio window setup
+				var modal = $(this);
+				var audio = modal.data('audio');				
+				var heading = (audio) ? "Audio bearbeiten" : "Audio hinzufügen";
+				var submit = (audio) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (audio) ? audio.model.medium.title.name : "";
+				var primaryTitleLanguageId = (audio) ? audio.model.medium.title.language.id : "";
+				var remark = (audio) ? audio.model.medium.remark : "";
+				var copyright = (audio) ? audio.model.medium.copyright : "";
+				var releaseDate = (audio) ? audio.model.medium.releaseDate : 0;
+				// audio data
+				var length = (audio) ? TIMAAT.Util.formatTime(audio.model.length, false) :  TIMAAT.Util.formatTime(0, false) ;
+				// TODO: audiocodecinformation
+
+				// setup UI
+				$('#audioMetaLabel').html(heading);
+				$('#timaat-audio-meta-submit').html(submit);
+				// medium data
+				$("#timaat-audio-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-audio-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-audio-meta-remark").val(remark);
+				$("#timaat-audio-meta-copyright").val(copyright);
+				$("#timaat-audio-meta-releasedate").val(releaseDate);
+				// audio data
+				$("#timaat-audio-meta-length").val(length);
+				// TODO: audiocodecinformation
+			});
+
+			// Submit audio data
+			$('#timaat-audio-meta-submit').click(function(ev) {
+				// Create/Edit audio window submitted data validation
+				var modal = $('#timaat-mediadatasets-audio-meta');
+				var audio = modal.data('audio');
+				// medium data
+				var primaryTitle = $("#timaat-audio-meta-title").val();
+				var languageSelector = document.getElementById("timaat-audio-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-audio-meta-remark").val();
+				var copyright = $("#timaat-audio-meta-copyright").val();
+				var releaseDate = $("#timaat-audio-meta-releasedate").val();
+				// audio data
+				var length = TIMAAT.Util.parseTime($("#timaat-audio-meta-length").val());
+				// TODO: audiocodecinformation
+
+				if (audio) {
+					// medium data
+					audio.model.medium.title.name = primaryTitle;
+					audio.model.medium.title.language.id = primaryTitleLanguageId;
+					audio.model.medium.remark = remark;
+					audio.model.medium.copyright = copyright;
+					audio.model.medium.releaseDate = releaseDate;
+					// audio data
+					audio.model.length = length;
+					// TODO: audiocodecinformation
+
+					audio.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("audio", audio);
+				} else {
+					var model = {
+						mediumId: 0,
+						audioCodecInformation: { // TODO get correct audio information
+							id: 1,
+						},
+						length: length,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 1 // 1 = Audio. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for audio or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };					
+					TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate audio data
+			// TODO validate all required fields
+			$('#timaat-audio-meta-title').on('input', function(ev) {
+				if ( $("#timaat-audio-meta-title").val().length > 0 ) {
+					$('#timaat-audio-meta-submit').prop("disabled", false);
+					$('#timaat-audio-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-audio-meta-submit').prop("disabled", true);
+					$('#timaat-audio-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initDocuments: function() {
+			// console.log("TCL: MediaDatasets: initDocuments: function()");		
+			// delete document functionality
+			$('#timaat-document-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-document-delete');
+				var mediumDocument = modal.data('document');
+				if (mediumDocument) TIMAAT.MediaDatasets._mediumSubtypeRemoved("document", mediumDocument);
+				modal.modal('hide');
+			});
+			// add document button
+			$('#timaat-document-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("document")');
+			// add/edit document functionality
+			$('#timaat-mediadatasets-document-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit document window setup
+				var modal = $(this);
+				var mediumDocument = modal.data('document');				
+				var heading = (mediumDocument) ? "Dokument bearbeiten" : "Dokument hinzufügen";
+				var submit = (mediumDocument) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (mediumDocument) ? mediumDocument.model.medium.title.name : "";
+				var primaryTitleLanguageId = (mediumDocument) ? mediumDocument.model.medium.title.language.id : "";
+				var remark = (mediumDocument) ? mediumDocument.model.medium.remark : "";
+				var copyright = (mediumDocument) ? mediumDocument.model.medium.copyright : "";
+				var releaseDate = (mediumDocument) ? mediumDocument.model.medium.releaseDate : 0;
+				// document data
+				// currently empty
+
+				// setup UI
+				$('#documentMetaLabel').html(heading);
+				$('#timaat-document-meta-submit').html(submit);
+				// medium data
+				$("#timaat-document-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-document-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-document-meta-remark").val(remark);
+				$("#timaat-document-meta-copyright").val(copyright);
+				$("#timaat-document-meta-releasedate").val(releaseDate);
+				// document data
+				// currently empty
+			});
+
+			// Submit document data
+			$('#timaat-document-meta-submit').click(function(ev) {
+				// Create/Edit document window submitted data validation
+				var modal = $('#timaat-mediadatasets-document-meta');
+				var mediumDocument = modal.data('document');
+				// medium data
+				var primaryTitle = $("#timaat-document-meta-title").val();
+				var languageSelector = document.getElementById("timaat-document-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-document-meta-remark").val();
+				var copyright = $("#timaat-document-meta-copyright").val();
+				var releaseDate = $("#timaat-document-meta-releasedate").val();
+				// document data
+				// currently empty
+
+				if (mediumDocument) {
+          // medium data
+					mediumDocument.model.medium.title.name = primaryTitle;
+					mediumDocument.model.medium.title.language.id = primaryTitleLanguageId;
+					mediumDocument.model.medium.remark = remark;
+					mediumDocument.model.medium.copyright = copyright;
+					mediumDocument.model.medium.releaseDate = releaseDate;
+					// document data
+					// currently empty
+
+					mediumDocument.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("document", mediumDocument);
+        } else {
+					var model = {
+						mediumId: 0,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 2 // 2 = Document. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for document or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };					
+					TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate document data
+			// TODO validate all required fields
+			$('#timaat-document-meta-title').on('input', function(ev) {
+				if ( $("#timaat-document-meta-title").val().length > 0 ) {
+					$('#timaat-document-meta-submit').prop("disabled", false);
+					$('#timaat-document-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-document-meta-submit').prop("disabled", true);
+					$('#timaat-document-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initImages: function() {
+			// console.log("TCL: MediaDatasets: initImages: function()");		
+			// delete image functionality
+			$('#timaat-image-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-image-delete');
+				var image = modal.data('image');
+				if (image) TIMAAT.MediaDatasets._mediumSubtypeRemoved("image", image);
+				modal.modal('hide');
+			});
+			// add image button
+			$('#timaat-image-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("image")');
+			// add/edit image functionality
+			$('#timaat-mediadatasets-image-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit image window setup
+				var modal = $(this);
+				var image = modal.data('image');				
+				var heading = (image) ? "Image bearbeiten" : "Image hinzufügen";
+				var submit = (image) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (image) ? image.model.medium.title.name : "";
+				var primaryTitleLanguageId = (image) ? image.model.medium.title.language.id : "";
+				var remark = (image) ? image.model.medium.remark : "";
+				var copyright = (image) ? image.model.medium.copyright : "";
+				var releaseDate = (image) ? image.model.medium.releaseDate : 0;
+				// image data
+				var width = (image) ? image.model.width : "";
+				var height = (image) ? image.model.height : "";
+				var bitDepth = (image) ? image.model.bitDepth : "";
+
+				// setup UI
+				$('#imageMetaLabel').html(heading);
+				$('#timaat-image-meta-submit').html(submit);
+				// medium data
+				$("#timaat-image-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-image-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-image-meta-remark").val(remark);
+				$("#timaat-image-meta-copyright").val(copyright);
+				$("#timaat-image-meta-releasedate").val(releaseDate);
+				// image data
+				$("#timaat-image-meta-width").val(width);
+				$("#timaat-image-meta-height").val(height);
+				$("#timaat-image-meta-bitdepth").val(bitDepth);
+			});
+
+			// Submit image data
+			$('#timaat-image-meta-submit').click(function(ev) {
+				// Create/Edit image window submitted data validation
+				var modal = $('#timaat-mediadatasets-image-meta');
+				var image = modal.data('image');
+				// medium data
+				var primaryTitle = $("#timaat-image-meta-title").val();
+				var languageSelector = document.getElementById("timaat-image-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-image-meta-remark").val();
+				var copyright = $("#timaat-image-meta-copyright").val();
+				var releaseDate = $("#timaat-image-meta-releasedate").val();
+				// image data
+				var width = $("#timaat-image-meta-width").val();
+				var height = $("#timaat-image-meta-height").val();
+				var bitDepth = $("#timaat-image-meta-bitdepth").val();
+
+				if (image) {
+          // medium data
+					image.model.medium.title.name = primaryTitle;
+					image.model.medium.title.language.id = primaryTitleLanguageId;
+					image.model.medium.remark = remark;
+					image.model.medium.copyright = copyright;
+					image.model.medium.releaseDate = releaseDate;
+					// image data
+					image.model.width = width;
+					image.model.height = height;
+					image.model.bitDepth = bitDepth;
+					
+					image.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("image", image);
+        } else {
+					var model = {
+						mediumId: 0,
+						width: width,
+						height: height,
+						bitDepth: bitDepth,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 3 // 3 = Image. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for image or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };					
+					TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate image data
+			// TODO validate all required fields
+			$('#timaat-image-meta-title').on('input', function(ev) {
+				if ( $("#timaat-image-meta-title").val().length > 0 ) {
+					$('#timaat-image-meta-submit').prop("disabled", false);
+					$('#timaat-image-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-image-meta-submit').prop("disabled", true);
+					$('#timaat-image-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initSoftwares: function() {
+			// console.log("TCL: MediaDatasets: initSoftwares: function()");		
+			// delete software functionality
+			$('#timaat-software-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-software-delete');
+				var software = modal.data('software');
+				if (software) TIMAAT.MediaDatasets._mediumSubtypeRemoved("software", software);
+				modal.modal('hide');
+			});
+			// add software button
+			$('#timaat-software-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("software")');
+			// add/edit software functionality
+			$('#timaat-mediadatasets-software-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit software window setup
+				var modal = $(this);
+				var software = modal.data('software');				
+				var heading = (software) ? "Software bearbeiten" : "Software hinzufügen";
+				var submit = (software) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (software) ? software.model.medium.title.name : "";
+				var primaryTitleLanguageId = (software) ? software.model.medium.title.language.id : "";
+				var remark = (software) ? software.model.medium.remark : "";
+				var copyright = (software) ? software.model.medium.copyright : "";
+				var releaseDate = (software) ? software.model.medium.releaseDate : 0;
+				// software data
+				var version = (software) ? software.model.version : "";
+
+				// setup UI
+				$('#softwareMetaLabel').html(heading);
+				$('#timaat-software-meta-submit').html(submit);
+				// medium data
+				$("#timaat-software-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-software-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-software-meta-remark").val(remark);
+				$("#timaat-software-meta-copyright").val(copyright);
+				$("#timaat-software-meta-releasedate").val(releaseDate);
+				// software data
+				$("#timaat-software-meta-version").val(version);
+			});
+
+			// Submit software data
+			$('#timaat-software-meta-submit').click(function(ev) {
+				// Create/Edit software window submitted data validation
+				var modal = $('#timaat-mediadatasets-software-meta');
+				var software = modal.data('software');
+				// medium data
+				var primaryTitle = $("#timaat-software-meta-title").val();
+				var languageSelector = document.getElementById("timaat-software-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-software-meta-remark").val();
+				var copyright = $("#timaat-software-meta-copyright").val();
+				var releaseDate = $("#timaat-software-meta-releasedate").val();
+				// software data
+				var version = $("#timaat-software-meta-version").val();
+
+				if (software) {
+          // medium data
+					software.model.medium.title.name = primaryTitle;
+					software.model.medium.title.language.id = primaryTitleLanguageId;
+					software.model.medium.remark = remark;
+					software.model.medium.copyright = copyright;
+					software.model.medium.releaseDate = releaseDate;
+					// software data
+					software.model.version = version;
+					
+					software.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("software", software);
+        } else {
+					var model = {
+						mediumId: 0,
+						version: version,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 4 // 4 = Software. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for software or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };					
+					TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate software data
+			// TODO validate all required fields
+			$('#timaat-software-meta-title').on('input', function(ev) {
+				if ( $("#timaat-software-meta-title").val().length > 0 ) {
+					$('#timaat-software-meta-submit').prop("disabled", false);
+					$('#timaat-software-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-software-meta-submit').prop("disabled", true);
+					$('#timaat-software-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initTexts: function() {
+			// console.log("TCL: MediaDatasets: initTexts: function()");		
+			// delete text functionality
+			$('#timaat-text-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-text-delete');
+				var text = modal.data('text');
+				if (text) TIMAAT.MediaDatasets._mediumSubtypeRemoved("text", text);
+				modal.modal('hide');
+			});
+			// add text button
+			$('#timaat-text-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("text")');
+			// add/edit text functionality
+			$('#timaat-mediadatasets-text-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit text window setup
+				var modal = $(this);
+				var text = modal.data('text');				
+				var heading = (text) ? "Text bearbeiten" : "Text hinzufügen";
+				var submit = (text) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (text) ? text.model.medium.title.name : "";
+				var primaryTitleLanguageId = (text) ? text.model.medium.title.language.id : "";
+				var remark = (text) ? text.model.medium.remark : "";
+				var copyright = (text) ? text.model.medium.copyright : "";
+				var releaseDate = (text) ? text.model.medium.releaseDate : 0;
+				// text data
+				var content = (text) ? text.model.content : "";
+
+				// setup UI
+				$('#textMetaLabel').html(heading);
+				$('#timaat-text-meta-submit').html(submit);
+				// medium data
+				$("#timaat-text-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-text-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-text-meta-remark").val(remark);
+				$("#timaat-text-meta-copyright").val(copyright);
+				$("#timaat-text-meta-releasedate").val(releaseDate);
+				// text data
+				$("#timaat-text-meta-content").val(content);
+			});
+
+			// Submit text data
+			$('#timaat-text-meta-submit').click(function(ev) {
+				// Create/Edit text window submitted data validation
+				var modal = $('#timaat-mediadatasets-text-meta');
+				var text = modal.data('text');
+				// medium data
+				var primaryTitle = $("#timaat-text-meta-title").val();
+				var languageSelector = document.getElementById("timaat-text-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-text-meta-remark").val();
+				var copyright = $("#timaat-text-meta-copyright").val();
+				var releaseDate = $("#timaat-text-meta-releasedate").val();
+				// text data
+				var content = $("#timaat-text-meta-content").val();
+
+				if (text) {
+          // medium data
+					text.model.medium.title.name = primaryTitle;
+					text.model.medium.title.language.id = primaryTitleLanguageId;
+					text.model.medium.remark = remark;
+					text.model.medium.copyright = copyright;
+					text.model.medium.releaseDate = releaseDate;
+					// text data
+					text.model.content = content;
+					
+					text.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("text", text);
+        } else {
+					var model = {
+						mediumId: 0,
+						content: content,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 5 // 5 = Text. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };
+					// There are no translation data for text or medium at the moment
+					TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate text data
+			// TODO validate all required fields
+			$('#timaat-text-meta-title').on('input', function(ev) {
+				if ( $("#timaat-text-meta-title").val().length > 0 ) {
+					$('#timaat-text-meta-submit').prop("disabled", false);
+					$('#timaat-text-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-text-meta-submit').prop("disabled", true);
+					$('#timaat-text-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initVideos: function() {
+			// console.log("TCL: MediaDatasets: initVideos: function()");		
+			// delete video functionality
+			$('#timaat-video-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-video-delete');
+				var video = modal.data('video');
+				if (video) TIMAAT.MediaDatasets._mediumSubtypeRemoved("video", video);
+				modal.modal('hide');
+			});
+			// add video button
+			$('#timaat-video-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("video")');
+			// add/edit video functionality
+			$('#timaat-mediadatasets-video-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit video window setup
+				var modal = $(this);
+				var video = modal.data('video');				
+				var heading = (video) ? "Video bearbeiten" : "Video hinzufügen";
+				var submit = (video) ? "Speichern" : "Hinzufügen";
+				// medium data
+				var primaryTitle = (video) ? video.model.medium.title.name : "";
+				var primaryTitleLanguageId = (video) ? video.model.medium.title.language.id : "";
+				var remark = (video) ? video.model.medium.remark : "";
+				var copyright = (video) ? video.model.medium.copyright : "";
+				var releaseDate = (video) ? video.model.medium.releaseDate : 0;
+				// video data
+				var brand = (video) ? video.model.brand : "";
+				var length = (video) ? video.model.length : "";
+				var videoCodec = (video) ? video.model.videoCodec : "";
+				var width = (video) ? video.model.width : "";
+				var height = (video) ? video.model.height : "";
+				var frameRate = (video) ? video.model.frameRate : "";
+				var dataRate = (video) ? video.model.dataRate : "";
+				var totalBitrate = (video) ? video.model.totalBitrate : "";
+				var isEpisode = (video) ? video.model.isEpisode : 0;
+
+				// setup UI
+				$('#videoMetaLabel').html(heading);
+				$('#timaat-video-meta-submit').html(submit);
+				// medium data
+				$("#timaat-video-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-video-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-video-meta-remark").val(remark);
+				$("#timaat-video-meta-copyright").val(copyright);
+				$("#timaat-video-meta-releasedate").val(releaseDate);
+				// video data
+				$("#timaat-video-meta-brand").val(brand);
+				$("#timaat-video-meta-length").val(length);
+				$("#timaat-video-meta-videocodec").val(videoCodec);
+				$("#timaat-video-meta-width").val(width);
+				$("#timaat-video-meta-height").val(height);
+				$("#timaat-video-meta-framerate").val(frameRate);
+				$("#timaat-video-meta-datarate").val(dataRate);
+				$("#timaat-video-meta-totalbitrate").val(totalBitrate);
+				$("#timaat-video-meta-isepisode").val(isEpisode);
+			});
+
+			// Submit video data
+			$('#timaat-video-meta-submit').click(function(ev) {
+				// Create/Edit video window submitted data validation
+				var modal = $('#timaat-mediadatasets-video-meta');
+				var video = modal.data('video');
+				// medium data
+				var primaryTitle = $("#timaat-video-meta-title").val();
+				var languageSelector = document.getElementById("timaat-video-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-video-meta-remark").val();
+				var copyright = $("#timaat-video-meta-copyright").val();
+				var releaseDate = $("#timaat-video-meta-releasedate").val();
+				// video data
+				var brand = $("#timaat-video-meta-brand").val();
+				var length = $("#timaat-video-meta-length").val();
+				var videoCodec = $("#timaat-video-meta-videocodec").val();
+				var width = $("#timaat-video-meta-width").val();
+				var height = $("#timaat-video-meta-height").val();
+				var frameRate = $("#timaat-video-meta-framerate").val();
+				var dataRate = $("#timaat-video-meta-datarate").val();
+				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
+				var isEpisodeSelector = $("#timaat-video-meta-isepisode").val();
+				var isEpisode = Number(isEpisodeSelector);
+
+				if (video) {
+          // medium data
+					video.model.medium.title.name = primaryTitle;
+					video.model.medium.title.language.id = primaryTitleLanguageId;
+					video.model.medium.remark = remark;
+					video.model.medium.copyright = copyright;
+					video.model.medium.releaseDate = releaseDate;
+					// video data
+					video.model.brand = brand;
+					video.model.length = length;
+					video.model.videoCodec = videoCodec;
+					video.model.width = width;
+					video.model.height = height;
+					video.model.frameRate = frameRate;
+					video.model.dataRate = dataRate;
+					video.model.totalBitrate = totalBitrate;
+					video.model.isEpisode = isEpisode;
+					
+					video.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
+        } else {
+					var model = {
+						mediumId: 0,
+						audioCodecInformation: { // TODO get correct audio information
+							id: 1,
+						},
+						brand: brand,
+						length: length,
+						videoCodec: videoCodec,
+						width: width,
+						height: height,
+						frameRate: frameRate,
+						dataRate: dataRate,
+						totalBitrate: totalBitrate,
+						isEpisode: isEpisode,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 6 // 6 = Video. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for video or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };					
+					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate video data
+			// TODO validate all required fields
+			$('#timaat-video-meta-title').on('input', function(ev) {
+				if ( $("#timaat-video-meta-title").val().length > 0 ) {
+					$('#timaat-video-meta-submit').prop("disabled", false);
+					$('#timaat-video-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-video-meta-submit').prop("disabled", true);
+					$('#timaat-video-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initVideogames: function() {
+			// console.log("TCL: MediaDatasets: initVideogames: function()");		
+			// delete videogame functionality
+			$('#timaat-videogame-delete-submit').click(function(ev) {
+				var modal = $('#timaat-mediadatasets-videogame-delete');
+				var videogame = modal.data('videogame');
+				if (videogame) TIMAAT.MediaDatasets._mediumSubtypeRemoved("videogame", videogame);
+				modal.modal('hide');
+			});
+			// add videogame button
+			$('#timaat-videogame-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("videogame")');
+			// add/edit videogame functionality
+			$('#timaat-mediadatasets-videogame-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit videogame window setup
+				var modal = $(this);
+				var videogame = modal.data('videogame');				
+				var heading = (videogame) ? "Videogame bearbeiten" : "Videogame hinzufügen";
+				var submit = (videogame) ? "Speichern" : "Hinzufügen";
+				// videogame data
+				var brand = (videogame) ? videogame.model.brand : "";
+				var length = (videogame) ? videogame.model.length : "";
+				var isEpisode = (videogame) ? videogame.model.isEpisode : 0;
+				// medium data
+				var primaryTitle = (videogame) ? videogame.model.medium.title.name : "";
+				var primaryTitleLanguageId = (videogame) ? videogame.model.medium.title.language.id : "";
+				var remark = (videogame) ? videogame.model.medium.remark : "";
+				var copyright = (videogame) ? videogame.model.medium.copyright : "";
+				var releaseDate = (videogame) ? videogame.model.medium.releaseDate : 0;
+
+				// setup UI
+				$('#videogameMetaLabel').html(heading);
+				$('#timaat-videogame-meta-submit').html(submit);
+				$("#timaat-videogame-meta-title").val(primaryTitle).trigger('input');
+				$("#timaat-videogame-meta-title-language-id").val(primaryTitleLanguageId);
+				$("#timaat-videogame-meta-remark").val(remark);
+				$("#timaat-videogame-meta-copyright").val(copyright);
+				$("#timaat-videogame-meta-releasedate").val(releaseDate);
+				$("#timaat-videogame-meta-brand").val(brand);
+				$("#timaat-videogame-meta-isepisode").val(isEpisode);
+			});
+
+			// Submit videogame data
+			$('#timaat-videogame-meta-submit').click(function(ev) {
+				// Create/Edit videogame window submitted data validation
+				var modal = $('#timaat-mediadatasets-videogame-meta');
+				var videogame = modal.data('videogame');
+				// medium data
+				var primaryTitle = $("#timaat-videogame-meta-title").val();
+				var languageSelector = document.getElementById("timaat-videogame-meta-title-language-id");
+				var primaryTitleLanguageId = Number(languageSelector.options[languageSelector.selectedIndex].value);
+				var remark = $("#timaat-videogame-meta-remark").val();
+				var copyright = $("#timaat-videogame-meta-copyright").val();
+				var releaseDate = $("#timaat-videogame-meta-releasedate").val();
+				// videogame data
+				var brand = $("#timaat-videogame-meta-brand").val();
+				var isEpisodeSelector = $("#timaat-videogame-meta-isepisode").val();
+				var isEpisode = Number(isEpisodeSelector);
+
+				if (videogame) {
+          // medium data
+					videogame.model.medium.title.name = primaryTitle;
+					videogame.model.medium.title.language.id = primaryTitleLanguageId;
+					videogame.model.medium.remark = remark;
+					videogame.model.medium.copyright = copyright;
+					videogame.model.medium.releaseDate = releaseDate;
+					// videogame data
+					videogame.model.brand = brand;
+					videogame.model.isEpisode = isEpisode;
+					videogame.updateUI();
+					TIMAAT.MediaDatasets.updateMediumSubtype("videogame", videogame);
+        } else {
+					var model = {
+						mediumId: 0,
+						brand: brand,
+						isEpisode: isEpisode,
+					};
+					var medium = {
+							id: 0,
+							remark: remark,
+							copyright: copyright,
+							releaseDate: releaseDate,
+							mediaType: {
+								id: 7 // 7 = Videogame. TODO check clause to find proper id
+							},
+						// mediumTranslations: [],
+					};
+					var title = {
+						id: 0,
+						language: {
+							id: primaryTitleLanguageId,
+						},
+						name: primaryTitle,
+					};
+					// There are no translation data for video or medium at the moment
+					// var mediumTranslation = {
+					// 		id: 0,
+					// 		name: name,
+					// };
+					TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title);
+				}
+				modal.modal('hide');
+			});
+			// validate videogame data
+			// TODO validate all required fields
+			$('#timaat-videogame-meta-title').on('input', function(ev) {
+				if ( $("#timaat-videogame-meta-title").val().length > 0 ) {
+					$('#timaat-videogame-meta-submit').prop("disabled", false);
+					$('#timaat-videogame-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-videogame-meta-submit').prop("disabled", true);
+					$('#timaat-videogame-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		load: function() {
+			TIMAAT.MediaDatasets.loadMedia();
+			TIMAAT.MediaDatasets.loadMediaTypes();
+			TIMAAT.MediaDatasets.loadAllMediumSubtypes();
+		},
+
+		loadMediaTypes: function() {
+    	// console.log("TCL: loadMediaTypes: function()");
+			TIMAAT.MediaService.listMediaTypes(TIMAAT.MediaDatasets.setMediaTypeLists);
 		},
 		
-		setEventLists: function(events) {
-    	// console.log("TCL: setEventLists: function(events)");
-    	console.log("TCL: events: ", events);
-			if ( !events ) return;
-			$('#timaat-event-list-loader').remove();
+		loadMedia: function() {
+    	// console.log("TCL: loadMedia: function()");
+			TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumLists);
+		},
 
+		loadMediumSubtype: function(mediumSubtype) {
+			switch (mediumSubtype) {
+				case "audio":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioLists);
+					break;
+				case "document":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentLists);
+					break;
+				case "image":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageLists);
+					break;
+				case "software":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareLists);
+					break;
+				case "text":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextLists);
+					break;
+				case "video":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoLists);
+					break;
+				case "videogame":
+					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameLists);
+					break;
+			};
+		},
+
+		loadAllMediumSubtypes: function() {
+			TIMAAT.MediaService.listMediumSubtype("audio", TIMAAT.MediaDatasets.setAudioLists);
+			TIMAAT.MediaService.listMediumSubtype("document", TIMAAT.MediaDatasets.setDocumentLists);
+			TIMAAT.MediaService.listMediumSubtype("image", TIMAAT.MediaDatasets.setImageLists);
+			TIMAAT.MediaService.listMediumSubtype("software", TIMAAT.MediaDatasets.setSoftwareLists);
+			TIMAAT.MediaService.listMediumSubtype("text", TIMAAT.MediaDatasets.setTextLists);
+			TIMAAT.MediaService.listMediumSubtype("video", TIMAAT.MediaDatasets.setVideoLists);
+			TIMAAT.MediaService.listMediumSubtype("videogame", TIMAAT.MediaDatasets.setVideogameLists);
+		},
+
+		setMediaTypeLists: function(mediaTypes) {
+			console.log("TCL: mediaTypes", mediaTypes);
+			if ( !mediaTypes ) return;
+			$('#timaat-media-type-list-loader').remove();
 			// clear old UI list
-			$('#timaat-event-list').empty();
-
+			$('#timaat-media-type-list').empty();
 			// setup model
-			var evs = Array();
-			events.forEach(function(event) { if ( event.id > 0 ) evs.push(new TIMAAT.Event(event)); });
-			TIMAAT.Datasets.events = evs;
-			TIMAAT.Datasets.events.model = events;			
+			var medTypes = Array();
+			mediaTypes.forEach(function(mediaType) { if ( mediaType.id > 0 ) medTypes.push(new TIMAAT.MediaType(mediaType)); });
+			TIMAAT.MediaDatasets.mediaTypes = medTypes;
+			TIMAAT.MediaDatasets.mediaTypes.model = mediaTypes;
+		},
+
+		setMediumLists: function(media) {
+    	console.log("TCL: setMediumLists -> media", media);
+			if ( !media ) return;
+			$('#timaat-medium-list-loader').remove();
+			// clear old UI list
+			$('#timaat-medium-list').empty();
+			// setup model
+			var meds = Array();
+			media.forEach(function(medium) { if ( medium.id > 0 ) meds.push(new TIMAAT.Medium(medium)); });
+			TIMAAT.MediaDatasets.media = meds;
+			TIMAAT.MediaDatasets.media.model = media;
+		},
+
+		// will probably not work this way
+		// setMediumSubtypeLists: function(mediumSubtype, mediumSubtypeDatasets) {
+    // console.log("TCL: mediumSubtype, mediumSubtypeDatasets", mediumSubtype, mediumSubtypeDatasets);
+		// 	if ( !mediumSubtypeDatasets ) return;
+		// 	switch (mediumSubtype) {
+		// 		case "audio":
+		// 			$('#timaat-audio-list-loader').remove();
+		// 			// clear old UI list
+		// 			$('#timaat-audio-list').empty();
+		// 			// setup model
+		// 			var auds = Array();
+		// 			audios.forEach(function(audio) { 
+		// 				if ( audio.id > 0 )
+		// 					auds.push(new TIMAAT.Audio(audio)); 
+		// 			});
+		// 			TIMAAT.MediaDatasets.audios = auds;
+		// 			TIMAAT.MediaDatasets.audios.model = audios;
+		// 			break;
+		// 		case "document":
+		// 			break;
+		// 		case "image":
+		// 			break;
+		// 		case "software":
+		// 			break;
+		// 		case "text":
+		// 			break;
+		// 		case "video":
+		// 			break;
+		// 		case "videogame":
+		// 			break;
+		// 	};
+		// },
+
+		setAudioLists: function(audios) {
+			console.log("TCL: setAudioLists -> audios", audios);
+				if ( !audios ) return;
+				$('#timaat-audio-list-loader').remove();
+				// clear old UI list
+				$('#timaat-audio-list').empty();
+				// setup model
+				var auds = Array();
+				audios.forEach(function(audio) { 
+					if ( audio.id > 0 )
+						auds.push(new TIMAAT.Audio(audio)); 
+				});
+				TIMAAT.MediaDatasets.audios = auds;
+				TIMAAT.MediaDatasets.audios.model = audios;
+		},
+
+		setDocumentLists: function(documents) {
+			console.log("TCL: setDocumentLists -> documents", documents);
+				if ( !documents ) return;
+				$('#timaat-document-list-loader').remove();
+				// clear old UI list
+				$('#timaat-document-list').empty();
+				// setup model
+				var docs = Array();
+				documents.forEach(function(document) { 
+					if ( document.id > 0 )
+						docs.push(new TIMAAT.Document(document)); 
+				});
+				TIMAAT.MediaDatasets.documents = docs;
+				TIMAAT.MediaDatasets.documents.model = documents;
+		},
+
+		setImageLists: function(images) {
+			console.log("TCL: setImageLists -> images", images);
+				if ( !images ) return;
+				$('#timaat-image-list-loader').remove();
+				// clear old UI list
+				$('#timaat-image-list').empty();
+				// setup model
+				var imgs = Array();
+				images.forEach(function(image) { 
+					if ( image.id > 0 )
+						imgs.push(new TIMAAT.Image(image)); 
+				});
+				TIMAAT.MediaDatasets.images = imgs;
+				TIMAAT.MediaDatasets.images.model = images;
+		},
+
+		setSoftwareLists: function(softwares) {
+			console.log("TCL: setSoftwareLists -> softwares", softwares);
+				if ( !softwares ) return;
+				$('#timaat-software-list-loader').remove();
+				// clear old UI list
+				$('#timaat-software-list').empty();
+				// setup model
+				var softws = Array();
+				softwares.forEach(function(software) { 
+					if ( software.id > 0 )
+						softws.push(new TIMAAT.Software(software)); 
+				});
+				TIMAAT.MediaDatasets.softwares = softws;
+				TIMAAT.MediaDatasets.softwares.model = softwares;
+		},
+
+		setTextLists: function(texts) {
+			console.log("TCL: setTextLists -> texts", texts);
+				if ( !texts ) return;
+				$('#timaat-text-list-loader').remove();
+				// clear old UI list
+				$('#timaat-text-list').empty();
+				// setup model
+				var txts = Array();
+				texts.forEach(function(text) { 
+					if ( text.id > 0 )
+						txts.push(new TIMAAT.Text(text)); 
+				});
+				TIMAAT.MediaDatasets.texts = txts;
+				TIMAAT.MediaDatasets.texts.model = texts;
 		},
 		
-		addEvent: function() {	
-    // console.log("TCL: addEvent: function()");
-			$('#timaat-datasets-event-meta').data('event', null);
-			$('#timaat-datasets-event-meta').modal('show');
+		setVideoLists: function(videos) {
+			console.log("TCL: setVideoLists -> videos", videos);
+				if ( !videos ) return;
+				$('#timaat-video-list-loader').remove();
+				// clear old UI list
+				$('#timaat-video-list').empty();
+				// setup model
+				var vids = Array();
+				videos.forEach(function(video) { 
+					if ( video.id > 0 )
+						vids.push(new TIMAAT.Video(video)); 
+				});
+				TIMAAT.MediaDatasets.videos = vids;
+				TIMAAT.MediaDatasets.videos.model = videos;
 		},
 
-		_eventAdded: function(event) {
-    	// console.log("TCL: _eventAdded: function(event)");
-			TIMAAT.Datasets.events.model.push(event);
-			TIMAAT.Datasets.events.push(new TIMAAT.Event(event));
-			return event;
+		setVideogameLists: function(videogames) {
+			console.log("TCL: setVideogameLists -> videogames", videogames);
+				if ( !videogames ) return;
+				$('#timaat-videogame-list-loader').remove();
+				// clear old UI list
+				$('#timaat-videogame-list').empty();
+				// setup model
+				var vdgms = Array();
+				videogames.forEach(function(videogame) { 
+					if ( videogame.id > 0 )
+						vdgms.push(new TIMAAT.Videogame(videogame)); 
+				});
+				TIMAAT.MediaDatasets.videogames = vdgms;
+				TIMAAT.MediaDatasets.videogames.model = videogames;
+		},
+		
+		addMedium: function() {	
+			$('#timaat-mediadatasets-medium-meta').data('medium', null);
+			$('#timaat-mediadatasets-medium-meta').modal('show');
 		},
 
-		_eventRemoved: function(event) {
-    console.log("TCL: _eventRemoved: function(event)");
-    console.log("TCL: event", event);
+		addMediumSubtype: function(mediumSubtype) {
+    console.log("TCL: addMediumSubtype -> mediumSubtype", mediumSubtype);
+			switch (mediumSubtype) {
+				case "audio":
+					$('#timaat-mediadatasets-audio-meta').data('audio', null);
+					$('#timaat-mediadatasets-audio-meta').modal('show');
+					break;
+				case "document":
+					$('#timaat-mediadatasets-document-meta').data('document', null);
+					$('#timaat-mediadatasets-document-meta').modal('show');
+					break;
+				case "image":
+					$('#timaat-mediadatasets-image-meta').data('image', null);
+					$('#timaat-mediadatasets-image-meta').modal('show');
+					break;
+				case "software":
+					$('#timaat-mediadatasets-software-meta').data('software', null);
+					$('#timaat-mediadatasets-software-meta').modal('show');
+					break;
+				case "text":
+					$('#timaat-mediadatasets-text-meta').data('text', null);
+					$('#timaat-mediadatasets-text-meta').modal('show');
+					break;
+				case "video":
+					$('#timaat-mediadatasets-video-meta').data('video', null);
+					$('#timaat-mediadatasets-video-meta').modal('show');
+					break;
+				case "videogame":
+					$('#timaat-mediadatasets-videogame-meta').data('videogame', null);
+					$('#timaat-mediadatasets-videogame-meta').modal('show');
+					break;
+			}
+		},
+
+		// addAudio: function() {	
+		// 	$('#timaat-mediadatasets-audio-meta').data('audio', null);
+		// 	$('#timaat-mediadatasets-audio-meta').modal('show');
+		// },
+
+		// addDocument: function() {	
+		// 	$('#timaat-mediadatasets-document-meta').data('document', null);
+		// 	$('#timaat-mediadatasets-document-meta').modal('show');
+		// },
+
+		// addImage: function() {	
+		// 	$('#timaat-mediadatasets-image-meta').data('image', null);
+		// 	$('#timaat-mediadatasets-image-meta').modal('show');
+		// },
+
+		// addSoftware: function() {	
+		// 	$('#timaat-mediadatasets-software-meta').data('software', null);
+		// 	$('#timaat-mediadatasets-software-meta').modal('show');
+		// },
+
+		// addText: function() {	
+		// 	$('#timaat-mediadatasets-text-meta').data('text', null);
+		// 	$('#timaat-mediadatasets-text-meta').modal('show');
+		// },
+
+		// addVideogame: function() {	
+		// 	$('#timaat-mediadatasets-videogame-meta').data('videogame', null);
+		// 	$('#timaat-mediadatasets-videogame-meta').modal('show');
+		// },
+
+		// addVideo: function() {	
+		// 	$('#timaat-mediadatasets-video-meta').data('video', null);
+		// 	$('#timaat-mediadatasets-video-meta').modal('show');
+		// },
+
+		createMedium: async function(mediumModel, title) {
+			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
+			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
+			// This routine can be used to create empty media of a certain type
+			console.log("TCL: createMedium: async function -> mediumModel, title", mediumModel, title);
+			try {
+				// create title
+				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				// console.log("TCL: newTitle", newTitle);
+				
+				// create medium
+				var newMediumModel = mediumModel;
+				newMediumModel.title = newTitle;
+        // console.log("TCL: newMediumModel", newMediumModel);
+				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+
+				// create medium translation with medium id
+				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+				// newMediumModel.mediumTranslations[0] = newTranslationData;
+				// create video/image/etc depending on video type
+				// TODO switch (mediumModel.mediaType)
+
+				// push new medium to dataset model
+				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+		},
+
+		// createVideo: async function(videoModel, mediumModel, title) {
+		// 	// createVideo: async function(mediumModel, mediumModelTranslation, videoModel) { // video has no translation table at the moment
+		// 	console.log("TCL: createVideo: async function-> videoModel, mediumModel, title", videoModel, mediumModel, title);
+		// 	try {
+		// 		// create title
+		// 		var newTitle = await TIMAAT.MediaService.createTitle(title);
+		// 		// console.log("TCL: newTitle", newTitle);
+				
+		// 		// create medium
+		// 		var newMediumModel = mediumModel;
+		// 		newMediumModel.title = newTitle;
+		// 		newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
+		// 		// console.log("TCL: newMediumModel", newMediumModel);
+				
+		// 		// create medium translation with medium id
+		// 		// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+		// 		// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+		// 		// create video with medium id
+		// 		videoModel.mediumId = newMediumModel.id;
+    //     // console.log("TCL: videoModel", videoModel);
+		// 		// var newVideoModel = await TIMAAT.MediaService.createVideo(newMediumModel, videoModel);
+		// 		var newVideoModel = await TIMAAT.MediaService.createMediumSubtype("video", newMediumModel, videoModel);
+		// 		// console.log("TCL: newVideoModel", newVideoModel);
+				
+		// 		// push new medium to dataset model
+		// 		await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+
+		// 		// push new video to dataset model
+		// 		await TIMAAT.MediaDatasets._videoAdded(newVideoModel);
+
+		// 	} catch(error) {
+		// 		console.log( "error: ", error.responseText);
+		// 	};
+		// 	// video.updateUI();
+		// },
+
+		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title) {
+			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
+			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
+			try {
+				// create title
+				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				// console.log("TCL: newTitle", newTitle);
+				
+				// create medium
+				var newMediumModel = mediumModel;
+				newMediumModel.title = newTitle;
+				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+				// console.log("TCL: newMediumModel", newMediumModel);
+
+				// push new medium to dataset model
+				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+				
+				// create medium translation with medium id
+				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+				// create mediumSubtype with medium id
+				mediumSubtypeModel.mediumId = newMediumModel.id;
+        // console.log("TCL: mediumSubtypeModel", mediumSubtypeModel);
+				// var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(newMediumModel, mediumSubtypeModel);
+				var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
+				// console.log("TCL: newMediumSubtypeModel", newMediumSubtypeModel);
+
+				// push new mediumSubtype to dataset model
+				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
+
+			} catch(error) {
+				console.log( "error: ", error.responseText);
+			};
+		},
+
+		updateMedium: async function(medium) {
+		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
+			try {
+				// update title
+				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
+				medium.model.title = tempTitle;
+
+				// update data that is part of medium (includes updating last edited by/at)
+				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			// try { // medium has no translation at the moment
+			// 	// update data that is part of  medium translation
+			// 	// medium.mediumTranslation[0] = await	TIMAAT.MediaService.updateMediumTranslation(medium);
+			// 	var tempMediumTranslation = await	TIMAAT.MediaService.updateMediumTranslation(medium);
+			// 	medium.model.mediumTranslations[0].name = tempMediumTranslation.name;			
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
+			// medium.updateUI();
+		},
+
+		updateMediumSubtype: async function(mediumSubtype, mediumSubtypeData) {
+			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
+			try {
+				// update title
+				var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
+				mediumSubtypeData.model.medium.title = tempTitle;
+
+				// update data that is part of mediumSubtypeData
+				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// update data that is part of medium and its translation
+				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
+				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+		},
+
+		_mediumAdded: async function(medium) {
+    	// console.log("TCL: _mediumAdded: function(medium)");
+			TIMAAT.MediaDatasets.media.model.push(medium);
+			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
+		},
+
+		// _videoAdded: async function(video) {
+    // 	console.log("TCL: _videoAdded: function(video)");
+		// 	TIMAAT.MediaDatasets.videos.model.push(video);
+		// 	TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(video));
+		// },
+
+		_mediumSubtypeAdded: async function(mediumSubtype, mediumSubtypeData) {
+			// console.log("TCL: _mediumSubtypeAdded: function(mediumSubtype, mediumSubtypeData)");
+			switch (mediumSubtype) {
+				case "audio":
+					TIMAAT.MediaDatasets.audios.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.audios.push(new TIMAAT.Audio(mediumSubtypeData));
+					break;
+				case "document":
+					TIMAAT.MediaDatasets.documents.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.documents.push(new TIMAAT.Document(mediumSubtypeData));
+					break;
+				case "image":
+					TIMAAT.MediaDatasets.images.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.images.push(new TIMAAT.Image(mediumSubtypeData));
+					break;
+				case "software":
+					TIMAAT.MediaDatasets.softwares.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.softwares.push(new TIMAAT.Software(mediumSubtypeData));
+					break;
+				case "text":
+					TIMAAT.MediaDatasets.texts.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.texts.push(new TIMAAT.Text(mediumSubtypeData));
+					break;
+				case "video":
+					TIMAAT.MediaDatasets.videos.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.videos.push(new TIMAAT.Video(mediumSubtypeData));
+					break;
+				case "videogame":
+					TIMAAT.MediaDatasets.videogames.model.push(mediumSubtypeData);
+					TIMAAT.MediaDatasets.videogames.push(new TIMAAT.Videogame(mediumSubtypeData));
+					break;
+			}
+		},
+		
+		_mediumRemoved: function(medium) {
+    	// console.log("TCL: _mediumRemoved: function(medium)");
 			// sync to server
-			TIMAAT.Service.removeEvent(event);			
-			event.remove();	
-			// if ( TIMAAT.VideoPlayer.curEvent == event ) TIMAAT.VideoPlayer.setEvent(null);		
+			TIMAAT.MediaService.removeMedium(medium);
+			medium.remove();
+		},
+
+		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
+			// console.log("TCL: _videoRemoved: function(video)");
+			// sync to server
+		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData)
+		 mediumSubtypeData.remove();
+	 },
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Medium: class Medium {
+		constructor(model) {
+			// console.log("TCL: Medium -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-medium-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteMediumButton = '';
+			this.listView = $('<li class="list-group-item"> '
+				+ deleteMediumButton +
+				'<span class="timaat-medium-list-name"></span>' +
+				'<br> \
+				<span class="timaat-medium-list-medium-type-id"></span> \
+				<div class="timaat-medium-list-count text-muted float-left"></div> \
+				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
+				</li>'
+			);
+			$('#timaat-medium-list').append(this.listView);
+			this.updateUI();      
+			var medium = this; // save medium for system media
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			// console.log("TCL: Medium -> constructor -> Display Bearbeitungslog");
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+medium.model.createdByUserAccount.id+'">[ID '+medium.model.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
+						<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+medium.model.lastEditedByUserAccount.id+'">[ID '+medium.model.lastEditedByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach medium handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// medium.listView.find('.timaat-medium-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-medium-meta').data('medium', medium);
+				$('#timaat-mediadatasets-medium-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-medium-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-medium-delete').data('medium', medium);
+				$('#timaat-mediadatasets-medium-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Medium -> updateUI -> updateUI() -> model", this.model);
+			// title
+			var name = this.model.title.name;
+			var type = this.model.mediaType.mediaTypeTranslations[0].type;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-medium-list-name').text(name);
+			this.listView.find('.timaat-medium-list-medium-type-id').html(type);
+		}
+
+		remove() {
+			// console.log("TCL: Medium -> remove -> remove()");
+			// remove medium from UI
+			this.listView.remove(); // TODO remove tags from medium_has_tags
+			// remove from medium list
+			var index = TIMAAT.MediaDatasets.media.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.media.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.media.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.media.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	MediaType: class MediaType {
+		constructor(model) {
+      // console.log("TCL: MediaType -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// model.ui = this;
+			// create and style list view element
+			var deleteMediaType = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-media-type-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteMediaType = '';
+			this.listView = $('<li class="list-group-item"> '
+				+ deleteMediaType +
+				'<span class="timaat-media-type-list-type"></span>' +
+				'<br> \
+				<div class="timaat-media-type-list-count text-muted float-left"></div> \
+		 </li>'
+			);
+			$('#timaat-medium-type-list').append(this.listView);
+			this.updateUI();      
+			var MediaType = this; // save MediaType for system MediaTypes
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+MediaType.model.createdByUserAccount.id+'">[ID '+MediaType.model.createdByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(MediaType.model.createdAt)+'<br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+MediaType.model.lastEditedByUserAccount.id+'">[ID '+MediaType.model.lastEditedByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(MediaType.model.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach MediaType handlers
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-medium-type-meta').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-medium-type-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-media-type-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-medium-type-delete').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-medium-type-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: MediaType -> updateUI -> updateUI() -> model", this.model);
+			// title
+			var type = this.model.mediaTypeTranslations[0].type;
+			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			this.listView.find('.timaat-media-type-list-name').text(type);
+		}
+
+		remove() {
+      console.log("TCL: MediaType -> remove -> remove()");
+			// remove MediaType from UI
+			this.listView.remove(); // TODO remove tags from medium_type_has_tags
+			// remove from MediaType list
+			var index = TIMAAT.MediaDatasets.mediaTypes.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.mediaTypes.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.mediaTypes.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.mediaTypes.model.splice(index, 1);
 		}
 	},
 
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Audio: class Audio {
+		constructor(model) {
+			// console.log("TCL: Audio -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteAudioButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-audio-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteAudioButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteAudioButton +
+					'<span class="timaat-audio-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-audio-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-audio-list').append(this.listView);
+			this.updateUI();      
+			var audio = this; // save audio for system audios
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+audio.model.medium.createdByUserAccount.id+'">[ID '+audio.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(audio.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+audio.model.medium.lastEditedByUserAccount.id+'">[ID '+audio.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(audio.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach audio handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// audio.listView.find('.timaat-audio-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-audio-meta').data('audio', audio);
+				$('#timaat-mediadatasets-audio-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-audio-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-audio-delete').data('audio', audio);
+				$('#timaat-mediadatasets-audio-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Audio -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-audio-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Audio -> remove -> remove()");
+			// remove audio from UI
+			this.listView.remove(); // TODO remove tags from audio_has_tags
+			// remove from audio list
+			var index = TIMAAT.MediaDatasets.audios.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.audios.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.audios.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.audios.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Document: class Document {
+		constructor(model) {
+			// console.log("TCL: Document -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteDocumentButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-document-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteDocumentButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteDocumentButton +
+					'<span class="timaat-document-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-document-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-document-list').append(this.listView);
+			this.updateUI();      
+			var mediumDocument = this; // save document for system events
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+mediumDocument.model.medium.createdByUserAccount.id+'">[ID '+mediumDocument.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(mediumDocument.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+mediumDocument.model.medium.lastEditedByUserAccount.id+'">[ID '+mediumDocument.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(mediumDocument.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach document handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// mediumDocument.listView.find('.timaat-document-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-document-meta').data('document', mediumDocument);
+				$('#timaat-mediadatasets-document-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-document-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-document-delete').data('document', mediumDocument);
+				$('#timaat-mediadatasets-document-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Document -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-document-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Document -> remove -> remove()");
+			// remove document from UI
+			this.listView.remove(); // TODO remove tags from document_has_tags
+			// remove from document list
+			var index = TIMAAT.MediaDatasets.documents.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.documents.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.documents.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.documents.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Image: class Image {
+		constructor(model) {
+			// console.log("TCL: Image -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-image-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteImageButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteImageButton +
+					'<span class="timaat-image-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-image-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-image-list').append(this.listView);
+			this.updateUI();      
+			var image = this; // save image for system images
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+image.model.medium.createdByUserAccount.id+'">[ID '+image.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(image.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+image.model.medium.lastEditedByUserAccount.id+'">[ID '+image.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(image.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach image handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// image.listView.find('.timaat-image-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-image-meta').data('image', image);
+				$('#timaat-mediadatasets-image-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-image-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-image-delete').data('image', image);
+				$('#timaat-mediadatasets-image-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Image -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-image-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Image -> remove -> remove()");
+			// remove image from UI
+			this.listView.remove(); // TODO remove tags from image_has_tags
+			// remove from image list
+			var index = TIMAAT.MediaDatasets.images.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.images.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.images.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.images.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Software: class Software {
+		constructor(model) {
+			// console.log("TCL: Software -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-software-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteSoftwareButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteSoftwareButton +
+					'<span class="timaat-software-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-software-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-software-list').append(this.listView);
+			this.updateUI();      
+			var software = this; // save software for system softwares
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+software.model.medium.createdByUserAccount.id+'">[ID '+software.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(software.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+software.model.medium.lastEditedByUserAccount.id+'">[ID '+software.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(software.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach software handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// software.listView.find('.timaat-software-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-software-meta').data('software', software);
+				$('#timaat-mediadatasets-software-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-software-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-software-delete').data('software', software);
+				$('#timaat-mediadatasets-software-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Software -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-software-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Software -> remove -> remove()");
+			// remove software from UI
+			this.listView.remove(); // TODO remove tags from software_has_tags
+			// remove from software list
+			var index = TIMAAT.MediaDatasets.softwares.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.softwares.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.softwares.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.softwares.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Text: class Text {
+		constructor(model) {
+			// console.log("TCL: Text -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteTextButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-text-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteTextButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteTextButton +
+					'<span class="timaat-text-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-text-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-text-list').append(this.listView);
+			this.updateUI();      
+			var text = this; // save text for system texts
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+text.model.medium.createdByUserAccount.id+'">[ID '+text.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(text.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+text.model.medium.lastEditedByUserAccount.id+'">[ID '+text.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(text.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach text handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// text.listView.find('.timaat-text-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-text-meta').data('text', text);
+				$('#timaat-mediadatasets-text-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-text-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-text-delete').data('text', text);
+				$('#timaat-mediadatasets-text-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Text -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-text-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Text -> remove -> remove()");
+			// remove text from UI
+			this.listView.remove(); // TODO remove tags from text_has_tags
+			// remove from text list
+			var index = TIMAAT.MediaDatasets.texts.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.texts.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.texts.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.texts.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Video: class Video {
+		constructor(model) {
+			// console.log("TCL: Video -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteVideoButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteVideoButton +
+					'<span class="timaat-video-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-video-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-video-list').append(this.listView);
+			this.updateUI();      
+			var video = this; // save video for system videos
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+video.model.medium.createdByUserAccount.id+'">[ID '+video.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(video.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+video.model.medium.lastEditedByUserAccount.id+'">[ID '+video.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(video.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach video handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// video.listView.find('.timaat-video-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-video-meta').data('video', video);
+				$('#timaat-mediadatasets-video-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-video-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-video-delete').data('video', video);
+				$('#timaat-mediadatasets-video-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Video -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-video-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Video -> remove -> remove()");
+			// remove video from UI
+			this.listView.remove(); // TODO remove tags from video_has_tags
+			// remove from video list
+			var index = TIMAAT.MediaDatasets.videos.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videos.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.videos.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
+		}
+
+	},
+
+		// ------------------------------------------------------------------------------------------------------------------------
+
+	Videogame: class Videogame {
+		constructor(model) {
+			// console.log("TCL: Videogame -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-videogame-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteVideogameButton = '';
+			this.listView = $(
+				'<li class="list-group-item"> ' +	
+					deleteVideogameButton +
+					'<span class="timaat-videogame-list-name"></span>' +
+					'<br>' +
+					'<div class="timaat-videogame-list-count text-muted float-left"></div>' +
+					'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">' +
+					'<i class="fas fa-user"></i></div>' +
+				'</li>'
+			);
+			$('#timaat-videogame-list').append(this.listView);
+			this.updateUI();      
+			var videogame = this; // save videogame for system videogames
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+videogame.model.medium.createdByUserAccount.id+'">[ID '+videogame.model.medium.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(videogame.model.medium.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+videogame.model.medium.lastEditedByUserAccount.id+'">[ID '+videogame.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(videogame.model.medium.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach videogame handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// videogame.listView.find('.timaat-videogame-list-tags').popover('show');
+			});
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-mediadatasets-videogame-meta').data('videogame', videogame);
+				$('#timaat-mediadatasets-videogame-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-videogame-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-mediadatasets-videogame-delete').data('videogame', videogame);
+				$('#timaat-mediadatasets-videogame-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Videogame -> updateUI -> updateUI()");
+			// title
+			var name = this.model.medium.title.name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-videogame-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Videogame -> remove -> remove()");
+			// remove videogame from UI
+			this.listView.remove(); // TODO remove tags from videogame_has_tags
+			// remove from videogame list
+			var index = TIMAAT.MediaDatasets.videogames.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videogames.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.MediaDatasets.videogames.model.indexOf(this);
+			if (index > -1) TIMAAT.MediaDatasets.videogames.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------------------------------
 
 	Actor: class Actor {
@@ -3994,7 +6875,7 @@ const TIMAAT = {
 			// console.log("TCL: Actor -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			model.ui = this;
+			// model.ui = this;
 			// create and style list view element
 			var deleteActor = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-actor-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteActor = '';
@@ -4035,9 +6916,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 			console.log("TCL: Actor -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccountID+'">[ID '+actor.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actor.model.lastEditedByUserAccountID+'">[ID '+actor.model.lastEditedByUserAccountID+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actor.model.lastEditedByUserAccount.id+'">[ID '+actor.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -4094,15 +6975,15 @@ const TIMAAT = {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-datasets-actor-meta').data('actor', actor);
-				$('#timaat-datasets-actor-meta').modal('show');			
+				$('#timaat-actordatasets-actor-meta').data('actor', actor);
+				$('#timaat-actordatasets-actor-meta').modal('show');			
 			});			
 			// remove handler
 			this.listView.find('.timaat-actor-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-datasets-actor-delete').data('actor', actor);
-				$('#timaat-datasets-actor-delete').modal('show');
+				$('#timaat-actordatasets-actor-delete').data('actor', actor);
+				$('#timaat-actordatasets-actor-delete').modal('show');
 			});
 		}
 
@@ -4129,11 +7010,11 @@ const TIMAAT = {
 			// remove actor from UI
 			this.listView.remove(); // TODO remove tags from actor_has_tags
 			// remove from categoryset list
-			var index = TIMAAT.Datasets.actors.indexOf(this);
-			// if (index > -1) TIMAAT.Datasets.actors.splice(index, 1);
+			var index = TIMAAT.ActorDatasets.actors.indexOf(this);
+			// if (index > -1) TIMAAT.ActorDatasets.actors.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.Datasets.actors.model.indexOf(this);
-			if (index > -1) TIMAAT.Datasets.actors.model.splice(index, 1);
+			index = TIMAAT.ActorDatasets.actors.model.indexOf(this);
+			if (index > -1) TIMAAT.ActorDatasets.actors.model.splice(index, 1);
 		}	
 	},
 
@@ -4144,31 +7025,21 @@ const TIMAAT = {
       // console.log("TCL: Location -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			model.ui = this;
 			// create and style list view element
 			var deleteLocation = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-location-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteLocation = '';
 			this.listView = $('<li class="list-group-item"> '
 				+ deleteLocation +
-				'<span class="timaat-location-list-title"></span>' +
+				'<span class="timaat-location-list-name"></span>' +
 				'<br> \
+				<span class="timaat-location-list-location-type-id"></span> \
 				<div class="timaat-location-list-count text-muted float-left"></div> \
 				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
 		 </li>'
 			);
 			$('#timaat-location-list').append(this.listView);
-			// console.log("TCL: Location -> constructor -> this.updateUI()");
 			this.updateUI();      
-			var location = this; // save location for system locations
-			// this.listView.find('.timaat-location-list-tags').popover({
-			// 	placement: 'right',
-			// 	title: 'Tags bearbeiten',
-			// 	trigger: 'manual',
-			// 	html: true,
-			// 	content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
-			// 	container: 'body',
-			// 	boundary: 'viewport',				
-			// });
+			var location = this; // save location for system events
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -4185,55 +7056,18 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Location -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccountID+'">[ID '+location.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccountID+'">[ID '+location.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccount.id+'">[ID '+location.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(location.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 			});
-			// attach tag editor
-			// this.listView.find('.timaat-location-list-tags').on('inserted.bs.popover', function () {
-			// 	var tags = "";
-			// 	location.model.tags.forEach(function(item) { tags += ','+item.name });
-			// 	tags = tags.substring(1);
-			// 	$('.timaat-tag-input').val(tags);
-			//     $('.timaat-tag-input').tagsInput({
-			//     	placeholder: 'Tag hinzufügen',
-			//     	onAddTag: function(taginput,tag) {
-			//     		TIMAAT.Service.addTag(location, tag, function(newtag) { // TODO addTag?
-			// 					location.model.tags.push(newtag);
-			// 					// console.log("TCL: Location -> constructor -> location.updateUI() - onAddTag");
-			//     			location.updateUI();                
-			//     		});
-			//     	},
-			//     	onRemoveTag: function(taginput,tag) {
-			//     		TIMAAT.Service.removeTag(location, tag, function(tagname) { // TODO removeTag?
-			//     			// find tag in model
-			//     			var found = -1;
-			//     			location.model.tags.forEach(function(item, index) {
-			//     				if ( item.name == tagname ) found = index;
-			//     			});
-			// 				if (found > -1) location.model.tags.splice(found, 1);
-			// 					console.log("TCL: Location -> constructor -> location.updateUI() - onRemoveTag");
-			//     			location.updateUI();                
-			//     		});
-			//     	},
-			//     	onChange: function() {
-			//     		if ( this.length == 1) $('#'+this[0].id+'_tag').focus();
-			//     	}
-			//     });
-			// });
-			// console.log("TCL: Location -> constructor -> location.updateUI()");
-			// this.listView.find('.timaat-location-list-tags').on('hidden.bs.popover', function () { location.updateUI(); });
-			// this.listView.find('.timaat-location-list-tags').dblclick(function(ev) {ev.stopPropagation();});
-
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
-
 			// attach location handlers
 			$(this.listView).click(this, function(ev) {
 				ev.stopPropagation();
@@ -4245,73 +7079,62 @@ const TIMAAT = {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-datasets-location-meta').data('location', location);
-				$('#timaat-datasets-location-meta').modal('show');			
+				$('#timaat-locationdatasets-location-meta').data('location', location);
+				$('#timaat-locationdatasets-location-meta').modal('show');			
 			});			
 			// remove handler
 			this.listView.find('.timaat-location-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-datasets-location-delete').data('location', location);
-				$('#timaat-datasets-location-delete').modal('show');
+				$('#timaat-locationdatasets-location-delete').data('location', location);
+				$('#timaat-locationdatasets-location-delete').modal('show');
 			});
 		}
 
 		updateUI() {
-			console.log("TCL: Location -> updateUI -> updateUI()");
+			// console.log("TCL: Location -> updateUI -> updateUI() -> model", this.model);
 			// title
-			var name = this.model.name;
+			var name = this.model.locationTranslations[0].name;
+			var type = this.model.locationType.locationTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-location-list-title').text(name);
-			// tag count
-			// var count = this.model.tags.length + " Tags";
-			// if ( this.model.tags.length == 0 ) count = "keine Tags";
-			// if ( this.model.tags.length == 1 ) count = "ein Tag";
-			// this.listView.find('.timaat-location-list-count').text(count);
-			// tags
-			// this.listView.find('.timaat-location-list-tags i').attr('title', this.model.tags.length+" Tags");			
-			// if (this.model.tags.length == 0) this.listView.find('.timaat-location-list-tags i').attr('class','fas fa-tag timaat-no-tags');
-			// else if (this.model.tags.length == 1) this.listView.find('.timaat-location-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "ein Tag");
-			// else this.listView.find('.timaat-location-list-tags i').attr('class','fas fa-tags text-dark');		
+			this.listView.find('.timaat-location-list-name').text(name);
+			this.listView.find('.timaat-location-list-location-type-id').html(type);
 		}
 
 		remove() {
-      console.log("TCL: Location -> remove -> remove()");
+      // console.log("TCL: Location -> remove -> remove()");
 			// remove location from UI
 			this.listView.remove(); // TODO remove tags from location_has_tags
-			// remove from categoryset list
-			var index = TIMAAT.Datasets.locations.indexOf(this);
-			// if (index > -1) TIMAAT.Datasets.locations.splice(index, 1);
+			// remove from location list
+			var index = TIMAAT.LocationDatasets.locations.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.locations.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.Datasets.locations.model.indexOf(this);
-			if (index > -1) TIMAAT.Datasets.locations.model.splice(index, 1);
+			index = TIMAAT.LocationDatasets.locations.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.locations.model.splice(index, 1);
 		}
 	},
 
 	// ------------------------------------------------------------------------------------------------------------------------
 
-	Country: class Country {
+	LocationType: class LocationType {
 		constructor(model) {
-			// console.log("TCL: Country -> constructor -> model", model)
+      // console.log("TCL: LocationType -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			model.ui = this;
+			// model.ui = this;
 			// create and style list view element
-			var deleteCountry = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-country-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteCountry = '';
+			var deleteLocationType = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-location-type-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteLocationType = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteCountry +
-				'<span class="timaat-country-list-name"></span>' +
+				+ deleteLocationType +
+				'<span class="timaat-location-type-list-type"></span>' +
 				'<br> \
-				<div class="timaat-country-list-count text-muted float-left"></div> \
-				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
-			</li>'
+				<div class="timaat-location-type-list-count text-muted float-left"></div> \
+		 </li>'
 			);
-			$('#timaat-country-list').append(this.listView);
-			// console.log("TCL: Country -> constructor -> this.updateUI()");
+			$('#timaat-location-type-list').append(this.listView);
 			this.updateUI();      
-			var country = this; // save country for system countries
-
+			var locationType = this; // save locationType for system locationTypes
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -4326,16 +7149,100 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-			console.log("TCL: Country -> constructor -> Display Bearbeitungslog");
+      // console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.createdByUserAccountID+'">[ID '+country.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationType.model.createdByUserAccount.id+'">[ID '+locationType.model.createdByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(locationType.model.createdAt)+'<br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+locationType.model.lastEditedByUserAccount.id+'">[ID '+locationType.model.lastEditedByUserAccount.id+']</span></b><br>\
+						 '+TIMAAT.Util.formatDate(locationType.model.lastEditedAt)+'<br>'
+				);
+				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+			});
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+			// attach locationType handlers
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-locationdatasets-location-type-meta').data('locationType', locationType);
+				$('#timaat-locationdatasets-location-type-meta').modal('show');			
+			});			
+			// remove handler
+			this.listView.find('.timaat-location-type-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-locationdatasets-location-type-delete').data('locationType', locationType);
+				$('#timaat-locationdatasets-location-type-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Locationtype -> updateUI -> updateUI() -> model", this.model);
+			// title
+			var type = this.model.locationTypeTranslations[0].type;
+			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			this.listView.find('.timaat-location-type-list-name').text(type);
+		}
+
+		remove() {
+      // console.log("TCL: Locationtype -> remove -> remove()");
+			// remove locationType from UI
+			this.listView.remove(); // TODO remove tags from location_type_has_tags
+			// remove from locationType list
+			var index = TIMAAT.LocationDatasets.locationTypes.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.locationTypes.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.LocationDatasets.locationTypes.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.locationTypes.model.splice(index, 1);
+		}
+	},
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Country: class Country {
+		constructor(model) {
+			// console.log("TCL: Country -> constructor -> model", model)
+			// setup model
+			this.model = model;
+			// create and style list view element
+			var deleteCountryButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-country-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteCountryButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteCountryButton +
+				'<span class="timaat-country-list-name"></span>' +
+				'<br>' +
+				'<div class="timaat-country-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
+			);
+			$('#timaat-country-list').append(this.listView);
+			this.updateUI();      
+			var country = this; // save country for system events
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.createdByUserAccount.id+'">[ID '+country.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.lastEditedByUserAccountID+'">[ID '+country.model.lastEditedByUserAccountID+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.lastEditedByUserAccount.id+'">[ID '+country.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 			});
-
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -4353,37 +7260,38 @@ const TIMAAT = {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-datasets-country-meta').data('country', country);
-				$('#timaat-datasets-country-meta').modal('show');			
+				$('#timaat-locationdatasets-country-meta').data('country', country);
+				$('#timaat-locationdatasets-country-meta').modal('show');			
 			});			
 			// remove handler
 			this.listView.find('.timaat-country-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-datasets-country-delete').data('country', country);
-				$('#timaat-datasets-country-delete').modal('show');
+				$('#timaat-locationdatasets-country-delete').data('country', country);
+				$('#timaat-locationdatasets-country-delete').modal('show');
 			});
 		}
 
 		updateUI() {
-			console.log("TCL: Country -> updateUI -> updateUI()");
+			// console.log("TCL: Country -> updateUI -> updateUI()");
 			// title
-			var name = this.model.name;
+			var name = this.model.location.locationTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-country-list-name').text(name);	
+			this.listView.find('.timaat-country-list-name').text(name);
 		}
 
 		remove() {
-			console.log("TCL: Country -> remove -> remove()");
+			// console.log("TCL: Country -> remove -> remove()");
 			// remove country from UI
 			this.listView.remove(); // TODO remove tags from country_has_tags
-			// remove from categoryset list
-			var index = TIMAAT.Datasets.countrys.indexOf(this);
-			// if (index > -1) TIMAAT.Datasets.countrys.splice(index, 1);
+			// remove from country list
+			var index = TIMAAT.LocationDatasets.countries.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.countries.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.Datasets.countrys.model.indexOf(this);
-			if (index > -1) TIMAAT.Datasets.countrys.model.splice(index, 1);
+			index = TIMAAT.LocationDatasets.countries.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.countries.model.splice(index, 1);
 		}
+
 	},
 
 	// ------------------------------------------------------------------------------------------------------------------------
@@ -4393,7 +7301,7 @@ const TIMAAT = {
       // console.log("TCL: Event -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			model.ui = this;
+			// model.ui = this;
 			// create and style list view element
 			var deleteEvent = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-event-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteEvent = '';
@@ -4435,9 +7343,9 @@ const TIMAAT = {
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
       console.log("TCL: Event -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="far fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccountID+'">[ID '+event.model.createdByUserAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccount.id+'">[ID '+event.model.createdByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccountID+'">[ID '+event.model.lastEditedByUserAccountID+']</span></b><br>\
+						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccount.id+'">[ID '+event.model.lastEditedByUserAccount.id+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(event.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
@@ -4494,15 +7402,15 @@ const TIMAAT = {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-datasets-event-meta').data('event', event);
-				$('#timaat-datasets-event-meta').modal('show');			
+				$('#timaat-eventdatasets-event-meta').data('event', event);
+				$('#timaat-eventdatasets-event-meta').modal('show');			
 			});			
 			// remove handler
 			this.listView.find('.timaat-event-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-datasets-event-delete').data('event', event);
-				$('#timaat-datasets-event-delete').modal('show');
+				$('#timaat-eventdatasets-event-delete').data('event', event);
+				$('#timaat-eventdatasets-event-delete').modal('show');
 			});
 		}
 
@@ -4535,12 +7443,12 @@ const TIMAAT = {
       console.log("TCL: Event -> remove -> remove()");
 			// remove event from UI
 			this.listView.remove(); // TODO remove tags from event_has_tags
-			// remove from categoryset list
-			var index = TIMAAT.Datasets.events.indexOf(this);
-			// if (index > -1) TIMAAT.Datasets.events.splice(index, 1);
+			// remove from event list
+			var index = TIMAAT.EventDatasets.events.indexOf(this);
+			if (index > -1) TIMAAT.EventDatasets.events.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.Datasets.events.model.indexOf(this);
-			if (index > -1) TIMAAT.Datasets.events.model.splice(index, 1);
+			index = TIMAAT.EventDatasets.events.model.indexOf(this);
+			if (index > -1) TIMAAT.EventDatasets.events.model.splice(index, 1);
 		}
 	},
 
@@ -4550,7 +7458,7 @@ const TIMAAT = {
 		component: null,
 		
 		init: function() {
-    	console.log("TCL: UI: init: function()");
+    	// console.log("TCL: UI: init: function()");
 			$('[data-toggle="popover"]').popover();
 			
 			// init components
@@ -4559,12 +7467,12 @@ const TIMAAT = {
 			TIMAAT.Settings.init();
 			TIMAAT.Datasets.init();
 			
-			TIMAAT.UI.showComponent('videochooser');	    
+			TIMAAT.UI.showComponent('media');
 			$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
 			if ( TIMAAT.Service.state != 1 ) {
 				$('body').addClass('timaat-login-modal-open');
-				$('#timaat-login-modal').modal('show');				
+				$('#timaat-login-modal').modal('show');
 			}
 			
 			// init tag popover functionality
@@ -4574,7 +7482,7 @@ const TIMAAT = {
 		                (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false
 		            }
 		        });
-		    });	  
+		    });
 		    
 		    // init user log popover functionality
 		    $('#timaat-user-log-list').popover({
@@ -4600,7 +7508,7 @@ const TIMAAT = {
 			    		case 'mediumCreated':
 			    		case 'analysislistCreated':			    			
 			    		case 'annotationCreated':
-			    			icon = 'far fa-plus-square';
+			    			icon = 'fas fa-plus-square';
 			    			break;
 			    		case 'mediumEdited':
 			    		case 'analysislistEdited':			    			
@@ -4610,7 +7518,7 @@ const TIMAAT = {
 			    		case 'mediumDeleted':
 			    		case 'analysislistDeleted':			    			
 			    		case 'annotationDeleted':
-			    			icon = 'far fa-trash-alt';
+			    			icon = 'fas fa-trash-alt';
 			    			break;
 			    		}
 
@@ -4679,12 +7587,9 @@ const TIMAAT = {
 					    $('#timaat-login-modal').modal('hide');
 					    $('#timaat-user-info').html(e.accountName);
 							
-					    TIMAAT.VideoChooser.loadVideos();
+					    // TIMAAT.VideoChooser.loadVideos(); // TODO re-enable and differentiate between medium and video
 							TIMAAT.Settings.loadCategorySets();
-							TIMAAT.Datasets.loadEvents(); // TODO Move 
-							TIMAAT.Datasets.loadActors();
-							TIMAAT.Datasets.loadLocations();
-							TIMAAT.Datasets.loadCountries();			    
+							TIMAAT.Datasets.load();
 					  })
 					  .fail(function(e) {
        				console.log("TCL: processLogin fail: e", e);

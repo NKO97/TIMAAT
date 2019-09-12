@@ -3,15 +3,17 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
- * The persistent class for the phone_number_type_translation database table.
+ * The persistent class for the sex_translation database table.
  * 
  */
 @Entity
-@Table(name="phone_number_type_translation")
-@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT p FROM PhoneNumberTypeTranslation p")
-public class PhoneNumberTypeTranslation implements Serializable {
+@Table(name="sex_translation")
+@NamedQuery(name="SexTranslation.findAll", query="SELECT s FROM SexTranslation s")
+public class SexTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,12 +25,12 @@ public class PhoneNumberTypeTranslation implements Serializable {
 	@ManyToOne
 	private Language language;
 
-	//bi-directional many-to-one association to PhoneNumberType
+	//bi-directional many-to-one association to Sex
 	@ManyToOne
-	@JoinColumn(name="phone_number_type_id")
-	private PhoneNumberType phoneNumberType;
+	@JsonIgnore
+	private Sex sex;
 
-	public PhoneNumberTypeTranslation() {
+	public SexTranslation() {
 	}
 
 	public int getId() {
@@ -55,12 +57,12 @@ public class PhoneNumberTypeTranslation implements Serializable {
 		this.language = language;
 	}
 
-	public PhoneNumberType getPhoneNumberType() {
-		return this.phoneNumberType;
+	public Sex getSex() {
+		return this.sex;
 	}
 
-	public void setPhoneNumberType(PhoneNumberType phoneNumberType) {
-		this.phoneNumberType = phoneNumberType;
+	public void setSex(Sex sex) {
+		this.sex = sex;
 	}
 
 }

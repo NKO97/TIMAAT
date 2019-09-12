@@ -3,31 +3,36 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
- * The persistent class for the citizenship_translation database table.
+ * The persistent class for the location_translation database table.
  * 
  */
 @Entity
-@Table(name="citizenship_translation")
-@NamedQuery(name="CitizenshipTranslation.findAll", query="SELECT c FROM CitizenshipTranslation c")
-public class CitizenshipTranslation implements Serializable {
+@Table(name="location_translation")
+@NamedQuery(name="LocationTranslation.findAll", query="SELECT l FROM LocationTranslation l")
+public class LocationTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
-
-	//bi-directional many-to-one association to Citizenship
-	@ManyToOne
-	private Citizenship citizenship;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
 	private Language language;
 
-	public CitizenshipTranslation() {
+	//bi-directional many-to-one association to Location
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name="location_id")
+	private Location location;
+
+	public LocationTranslation() {
 	}
 
 	public int getId() {
@@ -46,20 +51,20 @@ public class CitizenshipTranslation implements Serializable {
 		this.name = name;
 	}
 
-	public Citizenship getCitizenship() {
-		return this.citizenship;
-	}
-
-	public void setCitizenship(Citizenship citizenship) {
-		this.citizenship = citizenship;
-	}
-
 	public Language getLanguage() {
 		return this.language;
 	}
 
 	public void setLanguage(Language language) {
 		this.language = language;
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 }

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the svg_shape_type_translation database table.
@@ -25,6 +27,7 @@ public class SvgShapeTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to SvgShapeType
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="svg_shape_type_id")
 	private SvgShapeType svgShapeType;
 

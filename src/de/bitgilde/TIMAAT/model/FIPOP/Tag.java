@@ -85,13 +85,13 @@ public class Tag implements Serializable {
 		)
 	private List<Medium> mediums;
 
-	//bi-directional many-to-many association to WorksAnalysisList
+	//bi-directional many-to-many association to WorkAnalysisList
 	// @ManyToMany(mappedBy="tags")
-	// private List<WorksAnalysisList> worksAnalysisLists;
+	// private List<WorkAnalysisList> workAnalysisLists;
 
 	//bi-directional many-to-many association to Work
 	// @ManyToMany(mappedBy="tags")
-	// private List<Work> works;
+	// private List<Work> work;
 
 	public Tag() {
 	}
@@ -152,20 +152,20 @@ public class Tag implements Serializable {
 		this.mediums = mediums;
 	}
 
-	// public List<WorksAnalysisList> getWorksAnalysisLists() {
-	// 	return this.worksAnalysisLists;
+	// public List<WorkAnalysisList> getWorkAnalysisLists() {
+	// 	return this.workAnalysisLists;
 	// }
 
-	// public void setWorksAnalysisLists(List<WorksAnalysisList> worksAnalysisLists) {
-	// 	this.worksAnalysisLists = worksAnalysisLists;
+	// public void setWorkAnalysisLists(List<WorkAnalysisList> workAnalysisLists) {
+	// 	this.workAnalysisLists = workAnalysisLists;
 	// }
 
-	// public List<Work> getWorks() {
-	// 	return this.works;
+	// public List<Work> getWork() {
+	// 	return this.work;
 	// }
 
-	// public void setWorks(List<Work> works) {
-	// 	this.works = works;
+	// public void setWork(List<Work> work) {
+	// 	this.work = work;
 	// }
 
 }

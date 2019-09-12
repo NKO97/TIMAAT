@@ -3,15 +3,17 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
- * The persistent class for the actor_type_translation database table.
+ * The persistent class for the address_type_translation database table.
  * 
  */
 @Entity
-@Table(name="actor_type_translation")
-@NamedQuery(name="ActorTypeTranslation.findAll", query="SELECT a FROM ActorTypeTranslation a")
-public class ActorTypeTranslation implements Serializable {
+@Table(name="address_type_translation")
+@NamedQuery(name="AddressTypeTranslation.findAll", query="SELECT a FROM AddressTypeTranslation a")
+public class AddressTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,16 +21,17 @@ public class ActorTypeTranslation implements Serializable {
 
 	private String type;
 
-	//bi-directional many-to-one association to ActorType
+	//bi-directional many-to-one association to AddressType
 	@ManyToOne
-	@JoinColumn(name="actor_type_id")
-	private ActorType actorType;
+	@JsonIgnore
+	@JoinColumn(name="address_type_id")
+	private AddressType addressType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
 	private Language language;
 
-	public ActorTypeTranslation() {
+	public AddressTypeTranslation() {
 	}
 
 	public int getId() {
@@ -47,12 +50,12 @@ public class ActorTypeTranslation implements Serializable {
 		this.type = type;
 	}
 
-	public ActorType getActorType() {
-		return this.actorType;
+	public AddressType getAddressType() {
+		return this.addressType;
 	}
 
-	public void setActorType(ActorType actorType) {
-		this.actorType = actorType;
+	public void setAddressType(AddressType addressType) {
+		this.addressType = addressType;
 	}
 
 	public Language getLanguage() {

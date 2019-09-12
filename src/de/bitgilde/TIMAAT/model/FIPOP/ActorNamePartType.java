@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -16,6 +19,7 @@ public class ActorNamePartType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="display_position")
@@ -23,6 +27,7 @@ public class ActorNamePartType implements Serializable {
 
 	//bi-directional many-to-one association to ActorNamePart
 	@OneToMany(mappedBy="actorNamePartType")
+	@JsonIgnore
 	private List<ActorNamePart> actorNameParts;
 
 	//bi-directional many-to-one association to ActorNamePartTypeTranslation

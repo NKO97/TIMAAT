@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+// import model.AudioCodecInformation;
+
 import java.sql.Timestamp;
 
 
@@ -18,7 +20,6 @@ public class MediumVideo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@PrimaryKeyJoinColumn(name="medium_id")
 	@Column(name="medium_id")
 	private int mediumId;
 
@@ -35,8 +36,8 @@ public class MediumVideo implements Serializable {
 
 	private int height;
 
-	@Column(name="is_episode")
-	private byte isEpisode;
+	@Column(name="is_episode", columnDefinition = "BOOLEAN")
+	private Boolean isEpisode;
 
 	private Timestamp length;
 
@@ -67,7 +68,15 @@ public class MediumVideo implements Serializable {
 	public void setMediumId(int mediumId) {
 		this.mediumId = mediumId;
 	}
-	    
+
+	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents video list from being displayed=)
+		return this.getMedium().getId();
+	}
+
+	public void setId(int id) { // TODO not necessary with setMediumId?
+		this.getMedium().setId(id);
+	}
+
   public AudioCodecInformation getAudioCodecInformation() {
 		return this.audioCodecInformation;
 	}
@@ -108,19 +117,19 @@ public class MediumVideo implements Serializable {
 		this.height = height;
 	}
 
-	public byte getIsEpisode() {
+	public Boolean getIsEpisode() {
 		return this.isEpisode;
 	}
 
-	public void setIsEpisode(byte isEpisode) {
+	public void setIsEpisode(Boolean isEpisode) {
 		this.isEpisode = isEpisode;
 	}
 
-	public float getLength() {
+	public float getLength() { // TODO why float?
 		return this.length.getTime()/1000f;
 	}
 
-	public void setLength(float length) {
+	public void setLength(float length) { // TODO why float?
 		this.length = new Timestamp((long)(length*1000f));
 	}
 

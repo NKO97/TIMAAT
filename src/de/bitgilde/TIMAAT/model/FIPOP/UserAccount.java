@@ -48,66 +48,82 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
 	// @OneToMany(mappedBy="createdByUserAccount")
+	// @JsonIgnore
 	// private List<AnnotationTextualBody> annotationTextualBodies1;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
+	// @JsonIgnore
 	// private List<AnnotationTextualBody> annotationTextualBodies2;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<CategorySet> categorySets1;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<CategorySet> categorySets2;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Event> events1;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Event> events2;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Location> locations1;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Location> locations2;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @OneToMany(mappedBy="createdByUserAccount")
+	// @JsonIgnore
 	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists1;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
+	// @JsonIgnore
 	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists2;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<Medium> mediums2;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
 	private List<MediumAnalysisList> mediumAnalysisLists1;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
 	private List<MediumAnalysisList> mediumAnalysisLists2;
 
 	//bi-directional many-to-one association to UserAccessToken
@@ -145,22 +161,24 @@ public class UserAccount implements Serializable {
 	// @OneToMany(mappedBy="userAccount")
 	// private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
-	//bi-directional many-to-one association to UserAccountHasWorksAnalysisList
+	//bi-directional many-to-one association to UserAccountHasWorkAnalysisList
 	// @OneToMany(mappedBy="userAccount")
-	// private List<UserAccountHasWorksAnalysisList> userAccountHasWorksAnalysisLists;
+	// private List<UserAccountHasWorkAnalysisList> userAccountHasWorkAnalysisLists;
 
 	//bi-directional many-to-one association to UserLog
 	@JsonIgnore
 	@OneToMany(mappedBy="userAccount")
 	private List<UserLog> userLogs;
 
-	//bi-directional many-to-one association to WorksAnalysisList
+	//bi-directional many-to-one association to WorkAnalysisList
 	// @OneToMany(mappedBy="createdByUserAccount")
-	// private List<WorksAnalysisList> worksAnalysisLists1;
+	// @JsonIgnore
+	// private List<WorkAnalysisList> workAnalysisLists1;
 
-	//bi-directional many-to-one association to WorksAnalysisList
+	//bi-directional many-to-one association to WorkAnalysisList
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
-	// private List<WorksAnalysisList> worksAnalysisLists2;
+	// @JsonIgnore
+	// private List<WorkAnalysisList> workAnalysisLists2;
 
 	public UserAccount() {
 	}
@@ -685,26 +703,26 @@ public class UserAccount implements Serializable {
 	// 	return userAccountHasMediumAnalysisList;
 	// }
 
-	// public List<UserAccountHasWorksAnalysisList> getUserAccountHasWorksAnalysisLists() {
-	// 	return this.userAccountHasWorksAnalysisLists;
+	// public List<UserAccountHasWorkAnalysisList> getUserAccountHasWorkAnalysisLists() {
+	// 	return this.userAccountHasWorkAnalysisLists;
 	// }
 
-	// public void setUserAccountHasWorksAnalysisLists(List<UserAccountHasWorksAnalysisList> userAccountHasWorksAnalysisLists) {
-	// 	this.userAccountHasWorksAnalysisLists = userAccountHasWorksAnalysisLists;
+	// public void setUserAccountHasWorkAnalysisLists(List<UserAccountHasWorkAnalysisList> userAccountHasWorkAnalysisLists) {
+	// 	this.userAccountHasWorkAnalysisLists = userAccountHasWorkAnalysisLists;
 	// }
 
-	// public UserAccountHasWorksAnalysisList addUserAccountHasWorksAnalysisList(UserAccountHasWorksAnalysisList userAccountHasWorksAnalysisList) {
-	// 	getUserAccountHasWorksAnalysisLists().add(userAccountHasWorksAnalysisList);
-	// 	userAccountHasWorksAnalysisList.setUserAccount(this);
+	// public UserAccountHasWorkAnalysisList addUserAccountHasWorkAnalysisList(UserAccountHasWorkAnalysisList userAccountHasWorkAnalysisList) {
+	// 	getUserAccountHasWorkAnalysisLists().add(userAccountHasWorkAnalysisList);
+	// 	userAccountHasWorkAnalysisList.setUserAccount(this);
 
-	// 	return userAccountHasWorksAnalysisList;
+	// 	return userAccountHasWorkAnalysisList;
 	// }
 
-	// public UserAccountHasWorksAnalysisList removeUserAccountHasWorksAnalysisList(UserAccountHasWorksAnalysisList userAccountHasWorksAnalysisList) {
-	// 	getUserAccountHasWorksAnalysisLists().remove(userAccountHasWorksAnalysisList);
-	// 	userAccountHasWorksAnalysisList.setUserAccount(null);
+	// public UserAccountHasWorkAnalysisList removeUserAccountHasWorkAnalysisList(UserAccountHasWorkAnalysisList userAccountHasWorkAnalysisList) {
+	// 	getUserAccountHasWorkAnalysisLists().remove(userAccountHasWorkAnalysisList);
+	// 	userAccountHasWorkAnalysisList.setUserAccount(null);
 
-	// 	return userAccountHasWorksAnalysisList;
+	// 	return userAccountHasWorkAnalysisList;
 	// }
 
 	public List<UserLog> getUserLogs() {
@@ -729,48 +747,48 @@ public class UserAccount implements Serializable {
 		return userLog;
 	}
 
-	// public List<WorksAnalysisList> getWorksAnalysisLists1() {
-	// 	return this.worksAnalysisLists1;
+	// public List<WorkAnalysisList> getWorkAnalysisLists1() {
+	// 	return this.workAnalysisLists1;
 	// }
 
-	// public void setWorksAnalysisLists1(List<WorksAnalysisList> worksAnalysisLists1) {
-	// 	this.worksAnalysisLists1 = worksAnalysisLists1;
+	// public void setWorkAnalysisLists1(List<WorkAnalysisList> workAnalysisLists1) {
+	// 	this.workAnalysisLists1 = workAnalysisLists1;
 	// }
 
-	// public WorksAnalysisList addWorksAnalysisLists1(WorksAnalysisList worksAnalysisLists1) {
-	// 	getWorksAnalysisLists1().add(worksAnalysisLists1);
-	// 	worksAnalysisLists1.setCreatedByUserAccount(this);
+	// public WorkAnalysisList addWorkAnalysisLists1(WorkAnalysisList workAnalysisLists1) {
+	// 	getWorkAnalysisLists1().add(workAnalysisLists1);
+	// 	workAnalysisLists1.setCreatedByUserAccount(this);
 
-	// 	return worksAnalysisLists1;
+	// 	return workAnalysisLists1;
 	// }
 
-	// public WorksAnalysisList removeWorksAnalysisLists1(WorksAnalysisList worksAnalysisLists1) {
-	// 	getWorksAnalysisLists1().remove(worksAnalysisLists1);
-	// 	worksAnalysisLists1.setCreatedByUserAccount(null);
+	// public WorkAnalysisList removeWorkAnalysisLists1(WorkAnalysisList workAnalysisLists1) {
+	// 	getWorkAnalysisLists1().remove(workAnalysisLists1);
+	// 	workAnalysisLists1.setCreatedByUserAccount(null);
 
-	// 	return worksAnalysisLists1;
+	// 	return workAnalysisLists1;
 	// }
 
-	// public List<WorksAnalysisList> getWorksAnalysisLists2() {
-	// 	return this.worksAnalysisLists2;
+	// public List<WorkAnalysisList> getWorkAnalysisLists2() {
+	// 	return this.workAnalysisLists2;
 	// }
 
-	// public void setWorksAnalysisLists2(List<WorksAnalysisList> worksAnalysisLists2) {
-	// 	this.worksAnalysisLists2 = worksAnalysisLists2;
+	// public void setWorkAnalysisLists2(List<WorkAnalysisList> workAnalysisLists2) {
+	// 	this.workAnalysisLists2 = workAnalysisLists2;
 	// }
 
-	// public WorksAnalysisList addWorksAnalysisLists2(WorksAnalysisList worksAnalysisLists2) {
-	// 	getWorksAnalysisLists2().add(worksAnalysisLists2);
-	// 	worksAnalysisLists2.setLastEditedByUserAccount(this);
+	// public WorkAnalysisList addWorkAnalysisLists2(WorkAnalysisList workAnalysisLists2) {
+	// 	getWorkAnalysisLists2().add(workAnalysisLists2);
+	// 	workAnalysisLists2.setLastEditedByUserAccount(this);
 
-	// 	return worksAnalysisLists2;
+	// 	return workAnalysisLists2;
 	// }
 
-	// public WorksAnalysisList removeWorksAnalysisLists2(WorksAnalysisList worksAnalysisLists2) {
-	// 	getWorksAnalysisLists2().remove(worksAnalysisLists2);
-	// 	worksAnalysisLists2.setLastEditedByUserAccount(null);
+	// public WorkAnalysisList removeWorkAnalysisLists2(WorkAnalysisList workAnalysisLists2) {
+	// 	getWorkAnalysisLists2().remove(workAnalysisLists2);
+	// 	workAnalysisLists2.setLastEditedByUserAccount(null);
 
-	// 	return worksAnalysisLists2;
+	// 	return workAnalysisLists2;
 	// }
 
 }

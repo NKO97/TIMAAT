@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -19,14 +22,14 @@ public class MediaType implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="has_audio")
-	private boolean hasAudio;
+	@Column(name="has_audio", columnDefinition = "BOOLEAN")
+	private Boolean hasAudio;
 
-	@Column(name="has_content")
-	private boolean hasContent;
+	@Column(name="has_content", columnDefinition = "BOOLEAN")
+	private Boolean hasContent;
 
-	@Column(name="has_visual")
-	private boolean hasVisual;
+	@Column(name="has_visual", columnDefinition = "BOOLEAN")
+	private Boolean hasVisual;
 
 	//bi-directional many-to-one association to GenreGroup
 	// @OneToMany(mappedBy="mediaType")
@@ -38,6 +41,7 @@ public class MediaType implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="mediaType")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	public MediaType() {
@@ -51,27 +55,27 @@ public class MediaType implements Serializable {
 		this.id = id;
 	}
 
-	public boolean getHasAudio() {
+	public Boolean getHasAudio() {
 		return this.hasAudio;
 	}
 
-	public void setHasAudio(boolean hasAudio) {
+	public void setHasAudio(Boolean hasAudio) {
 		this.hasAudio = hasAudio;
 	}
 
-	public boolean getHasContent() {
+	public Boolean getHasContent() {
 		return this.hasContent;
 	}
 
-	public void setHasContent(boolean hasContent) {
+	public void setHasContent(Boolean hasContent) {
 		this.hasContent = hasContent;
 	}
 
-	public boolean getHasVisual() {
+	public Boolean getHasVisual() {
 		return this.hasVisual;
 	}
 
-	public void setHasVisual(boolean hasVisual) {
+	public void setHasVisual(Boolean hasVisual) {
 		this.hasVisual = hasVisual;
 	}
 

@@ -42,15 +42,17 @@ public class Location implements Serializable {
 	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to City
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private City city;
 
 	//bi-directional one-to-one association to Country
-	@OneToOne(mappedBy="location")
 	@JsonIgnore
+	@OneToOne(mappedBy="location")
 	private Country country;
 
 	//bi-directional one-to-one association to County
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private County county;
 
@@ -60,16 +62,18 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
+	@JsonIgnore // TODO might have to be removed once location hierarchy is developed
 	@JoinColumn(name="parent_location_id")
 	private Location location;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="location")
+	@JsonIgnore // TODO might have to be removed once location hierarchy is developed
 	private List<Location> locations;
 
 	//bi-directional many-to-one association to LocationType
 	@ManyToOne
-	@JsonIgnore
+	// @JsonIgnore
 	@JoinColumn(name="location_type_id")
 	private LocationType locationType;
 
@@ -85,7 +89,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
-	@JsonIgnore
+	// @JsonIgnore
 	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to Person
@@ -97,10 +101,12 @@ public class Location implements Serializable {
 	private List<Person> persons2;
 
 	//bi-directional one-to-one association to Province
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Province province;
 
 	//bi-directional one-to-one association to Street
+	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Street street;
 
@@ -119,13 +125,13 @@ public class Location implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return this.locationTranslations.get(0).getName(); // TODO get correct list item
-	}
+	// public String getName() {
+	// 	return this.locationTranslations.get(0).getName(); // TODO get correct list item
+	// }
 
-	public void setName(String name) {
-		this.locationTranslations.get(0).setName(name); // TODO get correct list item
-	}
+	// public void setName(String name) {
+	// 	this.locationTranslations.get(0).setName(name); // TODO get correct list item
+	// }
 
 	public Timestamp getCreatedAt() {
 		return this.createdAt;
