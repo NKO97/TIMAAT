@@ -89,8 +89,7 @@ public class MediumServiceEndpoint{
 	@Secured
 	@Path("list")
 	public Response getMediaList() {
-		// System.out.println("MediumEndpoint: getMediaList");	
-    	
+		// System.out.println("MediumEndpoint: getMediaList");		
     	@SuppressWarnings("unchecked")
 		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
     	
@@ -201,6 +200,7 @@ public class MediumServiceEndpoint{
 		ObjectMapper mapper = new ObjectMapper();
 		Medium newMedium = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
 		// parse JSON data
 		try {
 			newMedium = mapper.readValue(jsonData, Medium.class);
@@ -217,6 +217,7 @@ public class MediumServiceEndpoint{
 		newMedium.setId(0);
 		Title title = entityManager.find(Title.class, newMedium.getTitle().getId());
 		newMedium.setTitle(title);
+
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newMedium.setCreatedAt(creationDate);
@@ -228,6 +229,7 @@ public class MediumServiceEndpoint{
 			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
+
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -251,6 +253,7 @@ public class MediumServiceEndpoint{
 		entityTransaction.commit();
 		entityManager.refresh(newMedium);
 		entityManager.refresh(title);
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newMedium.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.MEDIUMCREATED);
 		System.out.println("MediumEndpoint: createMedium - done");
@@ -268,6 +271,7 @@ public class MediumServiceEndpoint{
 		Medium updatedMedium = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
+
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
 		// parse JSON data
 		try {
@@ -276,10 +280,12 @@ public class MediumServiceEndpoint{
 			System.out.println("MediumEndpoint: UPDATE MEDIUM - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedMedium == null ) return Response.notModified().build();		    	
+		if ( updatedMedium == null ) return Response.notModified().build();	
+
 		// update medium
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
+
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -287,12 +293,15 @@ public class MediumServiceEndpoint{
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
+
+		// persist medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(medium);
 		entityManager.persist(medium);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.MEDIUMEDITED);
@@ -308,6 +317,7 @@ public class MediumServiceEndpoint{
 		System.out.println("MediumEndpoint: deleteMedium");	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
+
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -331,6 +341,7 @@ public class MediumServiceEndpoint{
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio newAudio = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
 		// parse JSON data
 		try {
 			newAudio = mapper.readValue(jsonData, MediumAudio.class);
@@ -344,8 +355,10 @@ public class MediumServiceEndpoint{
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
+
 		// update log metadata
 		// Not necessary, a audio will always be created in conjunction with a medium
+
 		// persist audio
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -864,10 +877,12 @@ public class MediumServiceEndpoint{
 	@Path("video/{id}")
 	@Secured
 	public Response createVideo(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumEndpoint: createVideo jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumVideo newVideo = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
 		// parse JSON data
 		try {
 			newVideo = mapper.readValue(jsonData, MediumVideo.class);
@@ -880,9 +895,12 @@ public class MediumServiceEndpoint{
 			System.out.println("MediumEndpoint: createVideo: newVideo == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+
 		// sanitize object data
+
 		// update log metadata
 		// Not necessary, a video will always be created in conjunction with a medium
+
 		// persist video
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -890,10 +908,13 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newVideo);
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
 		System.out.println("MediumEndpoint: video created with id "+newVideo.getMediumId());
+
 		return Response.ok().entity(newVideo).build();
+
 	}
 
 	@PATCH
@@ -902,21 +923,24 @@ public class MediumServiceEndpoint{
 	@Path("video/{id}")
 	@Secured
 	public Response updateVideo(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumEndpoint: UPDATE VIDEO - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumVideo updatedVideo = null;    	
+		MediumVideo updatedVideo = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumVideo video = entityManager.find(MediumVideo.class, id);
-		if ( video == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( video == null ) return Response.status(Status.NOT_FOUND).build();
+
 		// parse JSON data
 		try {
 			updatedVideo = mapper.readValue(jsonData, MediumVideo.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedVideo == null ) return Response.notModified().build();    	
+		if ( updatedVideo == null ) return Response.notModified().build();
+
 		// update video
-		// System.out.println("MediumEndpoint: UPDATE VIDEO - video.id:"+video.getMediumId());	
 		if ( updatedVideo.getBrand() != null ) video.setBrand(updatedVideo.getBrand());
 		if ( updatedVideo.getLength() > 0 ) video.setLength(updatedVideo.getLength());
 		if ( updatedVideo.getVideoCodec() != null ) video.setVideoCodec(updatedVideo.getVideoCodec());
@@ -925,14 +949,17 @@ public class MediumServiceEndpoint{
 		if ( updatedVideo.getFrameRate() > 0 ) video.setFrameRate(updatedVideo.getFrameRate()); 
 		if ( updatedVideo.getDataRate() > 0 ) video.setDataRate(updatedVideo.getDataRate());
 		if ( updatedVideo.getTotalBitrate() > 0 ) video.setTotalBitrate(updatedVideo.getTotalBitrate());
-		if ( updatedVideo.getIsEpisode() != null ) video.setIsEpisode(updatedVideo.getIsEpisode()); 	
+		if ( updatedVideo.getIsEpisode() != null ) video.setIsEpisode(updatedVideo.getIsEpisode());
+
 		// update log metadata
 		video.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			video.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
+
+		// persist video
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(video);
@@ -940,36 +967,43 @@ public class MediumServiceEndpoint{
 		entityTransaction.commit();
 		entityManager.refresh(video);
 
-		// System.out.println("MediumEndpoint: UPDATE VIDEO - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.VIDEOEDITED);
-		System.out.println("MediumEndpoint: UPDATE VIDEO - update complete");	
+		System.out.println("MediumEndpoint: UPDATE VIDEO - update complete");
+
 		return Response.ok().entity(video).build();
+
 	}
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("video/{id}")
 	@Secured
-	public Response deleteVideo(@PathParam("id") int id) {  
+	public Response deleteVideo(@PathParam("id") int id) {
+
 		System.out.println("VideoEndpoint: deleteVideo with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumVideo video = entityManager.find(MediumVideo.class, id);
-		if ( video == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( video == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// persist video
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(video);
 		entityManager.remove(video.getMedium().getTitle());
 		entityManager.remove(video.getMedium()); // remove video, then corresponding medium
 		entityTransaction.commit();
+		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.VIDEODELETED);
-		System.out.println("VideoEndpoint: deleteVideo - video deleted");  
+		System.out.println("VideoEndpoint: deleteVideo - video deleted");
+
 		return Response.ok().build();
+
 	}
 
 	@POST
