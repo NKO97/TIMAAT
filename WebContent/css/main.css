@@ -165,6 +165,10 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
+#timaat-mediadatasets-medium-form {
+	display:none;
+}
+
 #timaat-annotation-list li, 
 #timaat-categoryset-list li, 
 #timaat-event-list li, 
@@ -473,6 +477,14 @@ a.dropdown-item {
 .tagsinput div input:-moz-placeholder{color:#ccc;opacity:1}
 .tagsinput div input::-moz-placeholder{color:#ccc;opacity:1}
 .tagsinput div input:-ms-input-placeholder{color:#ccc;opacity:1}
+
+.form {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #aeb8c1;
+	border-radius: 5px;
+	padding: 5px;
+}
 
 .form-control input[type=text], input[type=date] {
 	color: #000000;

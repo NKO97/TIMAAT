@@ -709,13 +709,13 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Primärtitel</span>
                     </div>
-                    <input type="text" class="form-control" id="timaat-medium-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
+                    <input type="text" class="form-control" id="timaat-medium-meta-title" name="primaryTitle" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Primärtitelsprache</span>
                     </div>
-                    <select class="custom-select" id="timaat-medium-meta-title-language-id" aria-label="Primary Title Language">
+                    <select class="custom-select" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId" aria-label="Primary Title Language">
                       <option value="" disabled selected hidden>Choose Title Language...</option>
                       <option value="1">default-untranslated</option>
                       <option value="2">English</option>
@@ -726,7 +726,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Type</span>
                     </div>
-                    <select class="custom-select" id="timaat-medium-meta-medium-type-id" aria-label="Medium Type">
+                    <select class="custom-select" id="timaat-medium-meta-medium-type-id" name="typeId" aria-label="Medium Type">
                       <option value="" disabled selected hidden>Choose Medium Type...</option>
                       <option value="1">Audio</option>
                       <option value="2">Document</option>
@@ -741,24 +741,24 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
-                    <input type="date" class="form-control" id="timaat-medium-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                    <input type="date" class="form-control" id="timaat-medium-meta-releasedate" name="releaseDate" placeholder="[Release Date]" aria-label="Release Date">
                   </div>
                   <div class="input-group mb-3">
                       <div class="input-group-prepend">
                         <span class="input-group-text">Copyright</span>
                       </div>
-                      <input type="text" class="form-control" id="timaat-medium-meta-copyright" placeholder="[Copyright]" aria-label="Copyright">
+                      <input type="text" class="form-control" id="timaat-medium-meta-copyright" name="copyright" placeholder="[Copyright]" aria-label="Copyright">
                     </div>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
                         <span class="input-group-text">Bemerkung</span>
                       </div>
-                      <input type="text" class="form-control" id="timaat-medium-meta-remark" placeholder="[Remark]" aria-label="Remark">
+                      <input type="text" class="form-control" id="timaat-medium-meta-remark" name="remark" placeholder="[Remark]" aria-label="Remark">
                     </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-medium-meta-submit" disabled>Hinzufügen</button>
+                  <button type="button" class="btn btn-secondary" name="timaat-medium-meta-dismiss" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-primary" id="timaat-medium-meta-submit" name="timaat-medium-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
             </div>
@@ -1422,7 +1422,7 @@
                 <!-- Media UI -->
                 <div class="tab-pane fade show active" id="media" role="tabpanel" aria-labelledby="media-tab">
                   <div class="row ui" style="padding-top: 1em;">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                       <div class="card">
                         <div class="card-header">Medien
                           <button type="button" id="timaat-medium-add" class="btn btn-outline btn-success btn-sm float-right">
@@ -1436,6 +1436,50 @@
                           <ul id="timaat-medium-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
+                    </div>
+                    <div class="col-lg-8">
+                      <form class="form" id="timaat-mediadatasets-medium-form" name="timaat-mediadatasets-medium-form">
+                        <div class="form-group">
+                          <label for="timaat-media-meta-title">Primary Title</label>
+                          <input type="text" class="form-control" id="timaat-media-meta-title" name="primaryTitle" aria-describedby="PrimaryTitle" placeholder="Enter primary title">
+                        </div>
+                        <div class="form-group">
+                          <label for="timaat-medium-meta-title-language-id">Title Language</label>
+                          <select class="form-control" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId">
+                            <option value="" hidden>Choose Title Language...</option>
+                            <option value="1">default-untranslated</option>
+                            <option value="2">English</option>
+                            <option value="3">German</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="timaat-medium-meta-medium-type-id">Medium Type</label>
+                          <select class="form-control" id="timaat-medium-meta-medium-type-id" name="typeId">
+                            <option value="" hidden>Choose Medium Type...</option>
+                            <option value="1">Audio</option>
+                            <option value="2">Document</option>
+                            <option value="3">Image</option>                      
+                            <option value="4">Software</option>
+                            <option value="5">Text</option>                      
+                            <option value="6">Video</option>
+                            <option value="7">Videogame</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="timaat-media-meta-releasedate">Release Date</label>
+                          <input type="date" class="form-control" id="timaat-media-meta-releasedate" name="releaseDate" aria-describedby="ReleaseDate" placeholder="Enter release date">
+                        </div>
+                        <div class="form-group">
+                          <label for="timaat-media-meta-copyright">Copyright</label>
+                          <input type="text" class="form-control" id="timaat-media-meta-copyright" name="copyright" aria-describedby="Copyright" placeholder="Enter copyright information">
+                        </div>
+                        <div class="form-group">
+                          <label for="timaat-media-meta-remark">Remark</label>
+                          <textarea class="form-control" id="timaat-media-meta-remark" name="remark" aria-describedby="Remark" placeholder="Enter remarks"></textarea>
+                        </div>
+                          <button type="button" class="btn btn-primary" id="timaat-medium-meta-submit" name="submit" type="submit">Hinzufügen</button>
+                          <button type="button" class="btn btn-secondary" id="timaat-medium-meta-dismiss" name="dismiss">Abbruch</button>                          
+                      </form>
                     </div>
                   </div>
                 </div>
