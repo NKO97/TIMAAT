@@ -716,7 +716,7 @@
                       <span class="input-group-text">Primärtitelsprache</span>
                     </div>
                     <select class="custom-select" id="timaat-medium-meta-title-language-id" aria-label="Primary Title Language">
-                      <option value="" disabled selected>Choose Title Language...</option>
+                      <option value="" disabled selected hidden>Choose Title Language...</option>
                       <option value="1">default-untranslated</option>
                       <option value="2">English</option>
                       <option value="3">German</option>
@@ -727,7 +727,7 @@
                       <span class="input-group-text">Type</span>
                     </div>
                     <select class="custom-select" id="timaat-medium-meta-medium-type-id" aria-label="Medium Type">
-                      <option value="" disabled selected>Choose Medium Type...</option>
+                      <option value="" disabled selected hidden>Choose Medium Type...</option>
                       <option value="1">Audio</option>
                       <option value="2">Document</option>
                       <option value="3">Image</option>                      
@@ -1714,23 +1714,21 @@
                 </div>
                 <div class="modal-body">
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="timaat-location-meta-name" placeholder="Name" aria-label="Name">
+                    <input type="text" class="form-control" id="timaat-location-meta-name" placeholder="[Name]" aria-label="Name">
                   </div>
                 </div>
-                <div class="modal-body">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Type</span>
-                    </div>
-                    <select class="custom-select" id="timaat-location-meta-location-type-id" aria-label="Location Type">
-                      <option value="" disabled selected>Choose Location Type...</option>
-                      <option value="1">Country</option>
-                      <option value="2">Province</option>
-                      <option value="3">County</option>
-                      <option value="4">City</option>
-                      <option value="5">Street</option>
-                    </select>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Type</span>
                   </div>
+                  <select class="custom-select" id="timaat-location-meta-locationtype-id" aria-label="Location Type">
+                    <option value="" disabled selected hidden>Choose Location Type...</option>
+                    <option value="1">Country</option>
+                    <option value="2">Province</option>
+                    <option value="3">County</option>
+                    <option value="4">City</option>
+                    <option value="5">Street</option>
+                  </select>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -1814,15 +1812,207 @@
               </div>
             </div>
           </div>
+          <!-- delete province -->
+          <div class="modal fade" id="timaat-locationdatasets-province-delete" tabindex="-1" role="dialog" aria-labelledby="provinceDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="provinceDeleteLabel">Provinz löschen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Möchten Sie die ausgewählte Provinz löschen?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-danger" id="timaat-province-delete-submit">Provinz löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- add province -->
+          <div class="modal fade" id="timaat-locationdatasets-province-meta" tabindex="-1" role="dialog" aria-labelledby="provinceMetaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="provinceMetaLabel">Provinz hinzufügen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-province-meta-name" placeholder="[Name]" aria-label="Name">
+                  </div>
+                </div>  
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-primary" id="timaat-province-meta-submit" disabled>Hinzufügen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- delete county -->
+          <div class="modal fade" id="timaat-locationdatasets-county-delete" tabindex="-1" role="dialog" aria-labelledby="countyDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="countyDeleteLabel">Landkreis löschen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Möchten Sie den ausgewählten Landkreis löschen?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-danger" id="timaat-county-delete-submit">Landkreis löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- add county -->
+          <div class="modal fade" id="timaat-locationdatasets-county-meta" tabindex="-1" role="dialog" aria-labelledby="countyMetaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="countyMetaLabel">Provinz hinzufügen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-county-meta-name" placeholder="[Name]" aria-label="Name">
+                  </div>
+                </div>  
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-primary" id="timaat-county-meta-submit" disabled>Hinzufügen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- delete city -->
+          <div class="modal fade" id="timaat-locationdatasets-city-delete" tabindex="-1" role="dialog" aria-labelledby="cityDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cityDeleteLabel">Stadt löschen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Möchten Sie die ausgewählte Stadt löschen?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-danger" id="timaat-city-delete-submit">Stadt löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- add city -->
+          <div class="modal fade" id="timaat-locationdatasets-city-meta" tabindex="-1" role="dialog" aria-labelledby="cityMetaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cityMetaLabel">Stadt hinzufügen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-city-meta-name" placeholder="[Name]" aria-label="Name">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-primary" id="timaat-city-meta-submit" disabled>Hinzufügen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- delete street -->
+          <div class="modal fade" id="timaat-locationdatasets-street-delete" tabindex="-1" role="dialog" aria-labelledby="streetDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="streetDeleteLabel">Straße löschen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Möchten Sie die ausgewählte Straße löschen?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-danger" id="timaat-street-delete-submit">Straße löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- add street -->
+          <div class="modal fade" id="timaat-locationdatasets-street-meta" tabindex="-1" role="dialog" aria-labelledby="streetMetaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="streetMetaLabel">Land hinzufügen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-street-meta-name" placeholder="[Name]" aria-label="Name">
+                  </div>
+                </div>  
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-primary" id="timaat-street-meta-submit" disabled>Hinzufügen</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="locations-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="locations-tab" onclick="TIMAAT.LocationDatasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Orte</a>
+                  <a class="nav-link" id="locations-tab" onclick="TIMAAT.LocationDatasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Locations</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="countries-tab"  onclick="TIMAAT.LocationDatasets.loadCountries()" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Länder</a>
+                  <a class="nav-link" id="countries-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('country')" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Countries</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="provinces-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('province')" data-toggle="tab" href="#provinces" role="tab" aria-controls="provinces" aria-selected="false"><i class="fas fa-map"></i> Provinces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="counties-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('county')" data-toggle="tab" href="#counties" role="tab" aria-controls="counties" aria-selected="false"><i class="fas fa-map-marker"></i> Counties</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="cities-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('city')" data-toggle="tab" href="#cities" role="tab" aria-controls="cities" aria-selected="false"><i class="fas fa-city"></i> Cities</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="streets-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('street')" data-toggle="tab" href="#streets" role="tab" aria-controls="streets" aria-selected="false"><i class="fas fa-road"></i> Streets</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territorien</a>
@@ -1864,6 +2054,86 @@
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
                           <ul id="timaat-country-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Provinces UI -->
+                <div class="tab-pane fade" id="provinces" role="tabpanel" aria-labelledby="provinces-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <div class="col-lg-6">
+                      <div class="card">
+                        <div class="card-header">Länder
+                          <button type="button" id="timaat-province-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-province-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-province-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-province-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Counties UI -->
+                <div class="tab-pane fade" id="counties" role="tabpanel" aria-labelledby="counties-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <div class="col-lg-6">
+                      <div class="card">
+                        <div class="card-header">Länder
+                          <button type="button" id="timaat-county-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-county-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-county-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-county-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Cities UI -->
+                <div class="tab-pane fade" id="cities" role="tabpanel" aria-labelledby="cities-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <div class="col-lg-6">
+                      <div class="card">
+                        <div class="card-header">Länder
+                          <button type="button" id="timaat-city-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-city-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-city-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-city-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Streets UI -->
+                <div class="tab-pane fade" id="streets" role="tabpanel" aria-labelledby="streets-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <div class="col-lg-6">
+                      <div class="card">
+                        <div class="card-header">Länder
+                          <button type="button" id="timaat-street-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-street-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-street-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-street-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
                     </div>

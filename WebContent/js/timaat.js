@@ -2656,9 +2656,9 @@ const TIMAAT = {
 			});			
 		},
 
-		listCountries(callback) {
+		listLocationSubtype(locationSubtype, callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -2675,7 +2675,7 @@ const TIMAAT = {
 		},
 
 		async createLocation(locationModel) {
-			var newLocation = {
+			var newLocationModel = {
 				id: 0,
 				locationType: {
 					id: locationModel.locationType.id,
@@ -2685,7 +2685,7 @@ const TIMAAT = {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationModel.id,
 					type:"POST",
-					data: JSON.stringify(newLocation),
+					data: JSON.stringify(newLocationModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -2722,19 +2722,19 @@ const TIMAAT = {
 			});
 		},
 
-		async createCountry(locationModel, countryModel) {
+		async createLocationSubtype(locationSubtype, locationModel, subtypeModel) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+locationModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/"+locationModel.id,
 					type:"POST",
-					data: JSON.stringify(countryModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
-				}).done(function(countryData) {
-						resolve(countryData);
+				}).done(function(subtypeData) {
+						resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -2744,6 +2744,7 @@ const TIMAAT = {
 		},
 
 		async updateLocation(locationModel) {
+      console.log("TCL: updateLocation -> locationModel", locationModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationModel.id,
@@ -2765,16 +2766,17 @@ const TIMAAT = {
 			});
 		},
 
-		async updateLocationTranslation(location) {
-			var updatedLocationTranslation = {
-				id: location.model.locationTranslations[0].id, // TODO get the correct translation_id
-				name: location.model.locationTranslations[0].name,
-			};
+		async updateLocationTranslation(locationId, locationTranslation) {
+      console.log("TCL: async updateLocationTranslation -> locationId, updatedLocationTranslation", locationId, locationTranslation);
+			// var updatedLocationTranslation = {
+			// 	id: location.model.locationTranslations[0].id, // TODO get the correct translation_id
+			// 	name: location.model.locationTranslations[0].name,
+			// };
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+location.model.id+"/translation/"+updatedLocationTranslation.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationId+"/translation/"+locationTranslation.id,
 					type:"PATCH",
-					data: JSON.stringify(updatedLocationTranslation),
+					data: JSON.stringify(locationTranslation),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -2791,20 +2793,20 @@ const TIMAAT = {
 			});
 		},
 
-		async updateCountry(countryModel) {
-			console.log("TCL: async updateCountry -> countryModel", countryModel);
+		async updateLocationSubtype(locationSubtype, subtypeModel) {
+			console.log("TCL: async updateLocationSubtype -> locationSubtype, subtypeModel", locationSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+countryModel.locationId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/"+subtypeModel.locationId,
 					type:"PATCH",
-					data: JSON.stringify(countryModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-				console.log("TCL: async updateCountry -> updateData", updateData);
+				console.log("TCL: async updateLocationSubtype -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -2831,9 +2833,9 @@ const TIMAAT = {
 			});
 		},
 
-		removeCountry(country) {
+		removeSubtype(locationSubtype, subtype) {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/country/"+country.model.locationId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/"+subtype.model.locationId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -2901,7 +2903,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
+      	// console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -2986,7 +2988,7 @@ const TIMAAT = {
 					},
 				}).done(function(subtypeData) {
 					console.log("TCL: createVideo -> subtypeData", subtypeData);
-						resolve(subtypeData);
+					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -3009,7 +3011,7 @@ const TIMAAT = {
 					},
 				}).done(function(titleData) {
 					console.log("TCL: createTitle -> titleData", titleData);
-						resolve(titleData);
+					resolve(titleData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -3031,7 +3033,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-				console.log("TCL: async updateMedium -> updateData", updateData);
+					console.log("TCL: async updateMedium -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -3084,7 +3086,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateVideo -> updateData", updateData);
+					console.log("TCL: async updateMediumSubtype -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -4035,25 +4037,33 @@ const TIMAAT = {
 		locations: null,
 		locationTypes: null,
 		countries: null,
+		provinces: null,
+		counties: null,
+		cities: null,
+		streets: null,
 
 		init: function() {
 			TIMAAT.LocationDatasets.initLocations();
 			TIMAAT.LocationDatasets.initLocationTypes();
-			TIMAAT.LocationDatasets.initCountries();   
+			TIMAAT.LocationDatasets.initCountries();
+			TIMAAT.LocationDatasets.initProvinces();
+			TIMAAT.LocationDatasets.initCounties();
+			TIMAAT.LocationDatasets.initCities();
+			TIMAAT.LocationDatasets.initStreets();
 		},
 		
 		initLocationTypes: function() {
 			// delete locationType functionality
-			$('#timaat-location-type-delete-submit').click(function(ev) {
-				var modal = $('#timaat-locationdatasets-location-type-delete');
+			$('#timaat-locationtype-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-locationtype-delete');
 				var locationType = modal.data('locationType');
 				if (locationType) TIMAAT.LocationDatasets._locationTypeRemoved(locationType);
 				modal.modal('hide');
 			});
 			// add locationType button
-			$('#timaat-location-type-add').attr('onclick','TIMAAT.LocationDatasets.addLocationType()');
+			$('#timaat-locationtype-add').attr('onclick','TIMAAT.LocationDatasets.addLocationType()');
 			// add/edit locationType functionality
-			$('#timaat-locationdatasets-location-type-meta').on('show.bs.modal', function (ev) {
+			$('#timaat-locationdatasets-locationtype-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit locationType window setup
 				var modal = $(this);
 				var locationType = modal.data('locationType');				
@@ -4062,15 +4072,16 @@ const TIMAAT = {
 				var type = (locationType) ? locationType.model.type : 0;
 				// setup UI
 				$('#locationTypeMetaLabel').html(heading);
-				$('#timaat-location-type-meta-submit').html(submit);
-				$("#timaat-location-type-meta-name").val(type).trigger('input');
+				$('#timaat-locationtype-meta-submit').html(submit);
+				$("#timaat-locationtype-meta-name").val(type).trigger('input');
 			});
 			// Submit locationType data
-			$('#timaat-location-type-meta-submit').click(function(ev) {
+			$('#timaat-locationtype-meta-submit').click(function(ev) {
 				// Create/Edit locationType window submitted data validation;
-				var modal = $('#timaat-locationdatasets-location-type-meta');
+				var modal = $('#timaat-locationdatasets-locationtype-meta');
 				var locationType = modal.data('locationType');
-				var type = $("#timaat-location-type-meta-name").val();
+				var type = $("#timaat-locationtype-meta-name").val();
+
 				if (locationType) {
 					locationType.model.location.locationTypeTranslations[0].type = type;
 					locationType.updateUI();
@@ -4091,13 +4102,13 @@ const TIMAAT = {
 			});
 			// validate locationType data		
 			// TODO validate all required fields			
-			$('#timaat-location-type-meta-name').on('input', function(ev) {
-				if ( $("#timaat-location-type-meta-name").val().length > 0 ) {
-					$('#timaat-location-type-meta-submit').prop("disabled", false);
-					$('#timaat-location-type-meta-submit').removeAttr("disabled");
+			$('#timaat-locationtype-meta-name').on('input', function(ev) {
+				if ( $("#timaat-locationtype-meta-name").val().length > 0 ) {
+					$('#timaat-locationtype-meta-submit').prop("disabled", false);
+					$('#timaat-locationtype-meta-submit').removeAttr("disabled");
 				} else {
-					$('#timaat-location-type-meta-submit').prop("disabled", true);
-					$('#timaat-location-type-meta-submit').attr("disabled");
+					$('#timaat-locationtype-meta-submit').prop("disabled", true);
+					$('#timaat-locationtype-meta-submit').attr("disabled");
 				}
 			});
 		},
@@ -4120,22 +4131,25 @@ const TIMAAT = {
 				var location = modal.data('location');				
 				var heading = (location) ? "Location bearbeiten" : "Location hinzufügen";
 				var submit = (location) ? "Speichern" : "Hinzufügen";
-				var name = (location) ? location.model.locationTranslations[0].name : ""; // name of the location
+				var name = (location) ? location.model.locationTranslations[0].name : "";
 				var typeId = (location) ? location.model.locationType.id : "";
+
 				// setup UI
 				$('#locationMetaLabel').html(heading);
 				$('#timaat-location-meta-submit').html(submit);
 				$("#timaat-location-meta-name").val(name).trigger('input');
-				$("#timaat-location-meta-location-type-id").val(typeId);
+				$("#timaat-location-meta-locationtype-id").val(typeId);
 			});
+
 			// Submit location data
 			$('#timaat-location-meta-submit').click(function(ev) {
 				// Create/Edit location window submitted data validation
 				var modal = $('#timaat-locationdatasets-location-meta');
 				var location = modal.data('location');
 				var name = $("#timaat-location-meta-name").val();
-				var typeSelector = document.getElementById("timaat-location-meta-location-type-id");
+				var typeSelector = document.getElementById("timaat-location-meta-locationtype-id");
 				var typeId = Number(typeSelector.options[typeSelector.selectedIndex].value);
+
 				if (location) {
 					location.model.locationTranslations[0].name = name;
 					location.model.locationType.id = typeId;
@@ -4182,37 +4196,47 @@ const TIMAAT = {
 				if (country) TIMAAT.LocationDatasets._countryRemoved(country);
 				modal.modal('hide');
 			});
+
 			// add country button
-			$('#timaat-country-add').attr('onclick','TIMAAT.LocationDatasets.addCountry()');
+			$('#timaat-country-add').attr('onclick','TIMAAT.LocationDatasets.addLocationSubtype("country")');
+
 			// add/edit country functionality
 			$('#timaat-locationdatasets-country-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit country window setup
 				var modal = $(this);
-				var country = modal.data('country');				
+				var country = modal.data('country');
 				var heading = (country) ? "Country bearbeiten" : "Country hinzufügen";
 				var submit = (country) ? "Speichern" : "Hinzufügen";
+				// location data
 				var name = (country) ? country.model.location.locationTranslations[0].name : "";
+				// country data
 				var internationalDialingPrefix = (country) ? country.model.internationalDialingPrefix : "";
 				var trunkPrefix = (country) ? country.model.trunkPrefix : "";
 				var countryCallingCode = (country) ? country.model.countryCallingCode : "";
 				var timeZone = (country) ? country.model.timeZone : "";
-				var daylightSavingTime = (country) ? country.model.daylightSavingTime : "";	
+				var daylightSavingTime = (country) ? country.model.daylightSavingTime : "";
+
 				// setup UI
 				$('#countryMetaLabel').html(heading);
 				$('#timaat-country-meta-submit').html(submit);
+				// location data
 				$("#timaat-country-meta-name").val(name).trigger('input');
+				// country data
 				$("#timaat-country-meta-idp").val(internationalDialingPrefix);
 				$("#timaat-country-meta-tp").val(trunkPrefix);
 				$("#timaat-country-meta-ccc").val(countryCallingCode);
 				$("#timaat-country-meta-tz").val(timeZone);
 				$("#timaat-country-meta-dst").val(daylightSavingTime);
 			});
+
 			// Submit country data
 			$('#timaat-country-meta-submit').click(function(ev) {
 				// Create/Edit country window submitted data validation
 				var modal = $('#timaat-locationdatasets-country-meta');
 				var country = modal.data('country');
+				// location data
 				var name = $("#timaat-country-meta-name").val();
+				// country data
 				var internationalDialingPrefix = $("#timaat-country-meta-idp").val();
 				var trunkPrefix = $("#timaat-country-meta-tp").val();
 				var countryCallingCode = $("#timaat-country-meta-ccc").val();
@@ -4220,15 +4244,17 @@ const TIMAAT = {
 				var daylightSavingTime = $("#timaat-country-meta-dst").val();
 
 				if (country) {
-					console.log("TCL: initCountries -> country", country);
+					// location data
 					country.model.location.locationTranslations[0].name = name;
+					// country data
 					country.model.internationalDialingPrefix = internationalDialingPrefix;
 					country.model.trunkPrefix = trunkPrefix;
 					country.model.countryCallingCode = countryCallingCode;
 					country.model.timeZone = timeZone;
 					country.model.daylightSavingTime = daylightSavingTime;
+
 					country.updateUI();
-					TIMAAT.LocationDatasets.updateCountry(country);
+					TIMAAT.LocationDatasets.updateLocationSubtype("country", country);
 				} else {
 					var model = {
 						locationId: 0,
@@ -4249,7 +4275,7 @@ const TIMAAT = {
 							id: 0,
 							name: name,
 					};
-					TIMAAT.LocationDatasets.createCountry(location, locationTranslation, model);
+					TIMAAT.LocationDatasets.createLocationSubtype("country", model, location, locationTranslation);
 				}
 				modal.modal('hide');
 			});
@@ -4266,10 +4292,330 @@ const TIMAAT = {
 			});
 		},
 
+		initProvinces: function() {
+			// console.log("TCL: LocationDatasets: initProvinces: function()");		
+			// delete province functionality
+			$('#timaat-province-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-province-delete');
+				var province = modal.data('province');
+				if (province) TIMAAT.LocationDatasets._provinceRemoved(province);
+				modal.modal('hide');
+			});
+
+			// add province button
+			$('#timaat-province-add').attr('onclick','TIMAAT.LocationDatasets.addLocationSubtype("province")');
+
+			// add/edit province functionality
+			$('#timaat-locationdatasets-province-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit province window setup
+				var modal = $(this);
+				var province = modal.data('province');
+				var heading = (province) ? "Province bearbeiten" : "Province hinzufügen";
+				var submit = (province) ? "Speichern" : "Hinzufügen";
+				// location data
+				var name = (province) ? province.model.location.locationTranslations[0].name : "";
+				// province data
+
+				// setup UI
+				$('#provinceMetaLabel').html(heading);
+				$('#timaat-province-meta-submit').html(submit);
+				// location data
+				$("#timaat-province-meta-name").val(name).trigger('input');
+				// province data
+			});
+
+			// Submit province data
+			$('#timaat-province-meta-submit').click(function(ev) {
+				// Create/Edit province window submitted data validation
+				var modal = $('#timaat-locationdatasets-province-meta');
+				var province = modal.data('province');
+				// location data
+				var name = $("#timaat-province-meta-name").val();
+				// province data
+
+				if (province) {
+					// location data
+					province.model.location.locationTranslations[0].name = name;
+					// province data
+
+					province.updateUI();
+					TIMAAT.LocationDatasets.updateLocationSubtype("province", province);
+				} else {
+					var model = {
+						locationId: 0,
+					};
+					var location = {
+							id: 0,
+							locationType: {
+								id: 2 // 2 = Province. TODO check clause to find proper id
+							},
+						locationTranslations: [],
+					};
+					var locationTranslation = {
+							id: 0,
+							name: name,
+					};
+					TIMAAT.LocationDatasets.createLocationSubtype("province", model, location, locationTranslation);
+				}
+				modal.modal('hide');
+			});
+			// validate province data
+			// TODO validate all required fields
+			$('#timaat-province-meta-name').on('input', function(ev) {
+				if ( $("#timaat-province-meta-name").val().length > 0 ) {
+					$('#timaat-province-meta-submit').prop("disabled", false);
+					$('#timaat-province-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-province-meta-submit').prop("disabled", true);
+					$('#timaat-province-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initCounties: function() {
+			// console.log("TCL: LocationDatasets: initCounties: function()");		
+			// delete county functionality
+			$('#timaat-county-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-county-delete');
+				var county = modal.data('county');
+				if (county) TIMAAT.LocationDatasets._countyRemoved(county);
+				modal.modal('hide');
+			});
+
+			// add county button
+			$('#timaat-county-add').attr('onclick','TIMAAT.LocationDatasets.addLocationSubtype("county")');
+
+			// add/edit county functionality
+			$('#timaat-locationdatasets-county-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit county window setup
+				var modal = $(this);
+				var county = modal.data('county');
+				var heading = (county) ? "County bearbeiten" : "County hinzufügen";
+				var submit = (county) ? "Speichern" : "Hinzufügen";
+				// location data
+				var name = (county) ? county.model.location.locationTranslations[0].name : "";
+				// county data
+
+				// setup UI
+				$('#countyMetaLabel').html(heading);
+				$('#timaat-county-meta-submit').html(submit);
+				// location data
+				$("#timaat-county-meta-name").val(name).trigger('input');
+				// county data
+			});
+
+			// Submit county data
+			$('#timaat-county-meta-submit').click(function(ev) {
+				// Create/Edit county window submitted data validation
+				var modal = $('#timaat-locationdatasets-county-meta');
+				var county = modal.data('county');
+				// location data
+				var name = $("#timaat-county-meta-name").val();
+				// county data
+
+				if (county) {
+					// location data
+					county.model.location.locationTranslations[0].name = name;
+					// county data
+
+					county.updateUI();
+					TIMAAT.LocationDatasets.updateLocationSubtype("county", county);
+				} else {
+					var model = {
+						locationId: 0,
+					};
+					var location = {
+							id: 0,
+							locationType: {
+								id: 3 // 3 = County. TODO check clause to find proper id
+							},
+						locationTranslations: [],
+					};
+					var locationTranslation = {
+							id: 0,
+							name: name,
+					};
+					TIMAAT.LocationDatasets.createLocationSubtype("county", model, location, locationTranslation);
+				}
+				modal.modal('hide');
+			});
+			// validate county data
+			// TODO validate all required fields
+			$('#timaat-county-meta-name').on('input', function(ev) {
+				if ( $("#timaat-county-meta-name").val().length > 0 ) {
+					$('#timaat-county-meta-submit').prop("disabled", false);
+					$('#timaat-county-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-county-meta-submit').prop("disabled", true);
+					$('#timaat-county-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initCities: function() {
+			// console.log("TCL: LocationDatasets: initCities: function()");		
+			// delete city functionality
+			$('#timaat-city-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-city-delete');
+				var city = modal.data('city');
+				if (city) TIMAAT.LocationDatasets._cityRemoved(city);
+				modal.modal('hide');
+			});
+
+			// add city button
+			$('#timaat-city-add').attr('onclick','TIMAAT.LocationDatasets.addLocationSubtype("city")');
+
+			// add/edit city functionality
+			$('#timaat-locationdatasets-city-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit city window setup
+				var modal = $(this);
+				var city = modal.data('city');
+				var heading = (city) ? "City bearbeiten" : "City hinzufügen";
+				var submit = (city) ? "Speichern" : "Hinzufügen";
+				// location data
+				var name = (city) ? city.model.location.locationTranslations[0].name : "";
+				// city data
+
+				// setup UI
+				$('#cityMetaLabel').html(heading);
+				$('#timaat-city-meta-submit').html(submit);
+				// location data
+				$("#timaat-city-meta-name").val(name).trigger('input');
+				// city data
+			});
+
+			// Submit city data
+			$('#timaat-city-meta-submit').click(function(ev) {
+				// Create/Edit city window submitted data validation
+				var modal = $('#timaat-locationdatasets-city-meta');
+				var city = modal.data('city');
+				// location data
+				var name = $("#timaat-city-meta-name").val();
+				// city data
+
+				if (city) {
+					// location data
+					city.model.location.locationTranslations[0].name = name;
+					// city data
+
+					city.updateUI();
+					TIMAAT.LocationDatasets.updateLocationSubtype("city", city);
+				} else {
+					var model = {
+						locationId: 0,
+					};
+					var location = {
+							id: 0,
+							locationType: {
+								id: 4 // 4 = City. TODO check clause to find proper id
+							},
+						locationTranslations: [],
+					};
+					var locationTranslation = {
+							id: 0,
+							name: name,
+					};
+					TIMAAT.LocationDatasets.createLocationSubtype("city", model, location, locationTranslation);
+				}
+				modal.modal('hide');
+			});
+			// validate city data
+			// TODO validate all required fields
+			$('#timaat-city-meta-name').on('input', function(ev) {
+				if ( $("#timaat-city-meta-name").val().length > 0 ) {
+					$('#timaat-city-meta-submit').prop("disabled", false);
+					$('#timaat-city-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-city-meta-submit').prop("disabled", true);
+					$('#timaat-city-meta-submit').attr("disabled");
+				}
+			});
+		},
+
+		initStreets: function() {
+			// console.log("TCL: LocationDatasets: initStreets: function()");		
+			// delete street functionality
+			$('#timaat-street-delete-submit').click(function(ev) {
+				var modal = $('#timaat-locationdatasets-street-delete');
+				var street = modal.data('street');
+				if (street) TIMAAT.LocationDatasets._streetRemoved(street);
+				modal.modal('hide');
+			});
+
+			// add street button
+			$('#timaat-street-add').attr('onclick','TIMAAT.LocationDatasets.addLocationSubtype("street")');
+
+			// add/edit street functionality
+			$('#timaat-locationdatasets-street-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit street window setup
+				var modal = $(this);
+				var street = modal.data('street');
+				var heading = (street) ? "Street bearbeiten" : "Street hinzufügen";
+				var submit = (street) ? "Speichern" : "Hinzufügen";
+				// location data
+				var name = (street) ? street.model.location.locationTranslations[0].name : "";
+				// street data
+
+				// setup UI
+				$('#streetMetaLabel').html(heading);
+				$('#timaat-street-meta-submit').html(submit);
+				// location data
+				$("#timaat-street-meta-name").val(name).trigger('input');
+				// street data
+			});
+
+			// Submit street data
+			$('#timaat-street-meta-submit').click(function(ev) {
+				// Create/Edit street window submitted data validation
+				var modal = $('#timaat-locationdatasets-street-meta');
+				var street = modal.data('street');
+				// location data
+				var name = $("#timaat-street-meta-name").val();
+				// street data
+
+				if (street) {
+					// location data
+					street.model.location.locationTranslations[0].name = name;
+					// street data
+
+					street.updateUI();
+					TIMAAT.LocationDatasets.updateLocationSubtype("street", street);
+				} else {
+					var model = {
+						locationId: 0,
+					};
+					var location = {
+							id: 0,
+							locationType: {
+								id: 5 // 5 = Street. TODO check clause to find proper id
+							},
+						locationTranslations: [],
+					};
+					var locationTranslation = {
+							id: 0,
+							name: name,
+					};
+					TIMAAT.LocationDatasets.createLocationSubtype("street", model, location, locationTranslation);
+				}
+				modal.modal('hide');
+			});
+			// validate street data
+			// TODO validate all required fields
+			$('#timaat-street-meta-name').on('input', function(ev) {
+				if ( $("#timaat-street-meta-name").val().length > 0 ) {
+					$('#timaat-street-meta-submit').prop("disabled", false);
+					$('#timaat-street-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-street-meta-submit').prop("disabled", true);
+					$('#timaat-street-meta-submit').attr("disabled");
+				}
+			});
+		},
+
 		load: function() {
 			TIMAAT.LocationDatasets.loadLocations();
 			TIMAAT.LocationDatasets.loadLocationTypes();
-			TIMAAT.LocationDatasets.loadCountries();   
+			TIMAAT.LocationDatasets.loadAllLocationSubtypes();   
 		},
 
 		loadLocationTypes: function() {
@@ -4284,19 +4630,40 @@ const TIMAAT = {
 			TIMAAT.LocationService.listLocations(TIMAAT.LocationDatasets.setLocationLists);
 		},
 
-		loadCountries: function() {
-			// console.log("TCL: loadCountries: function()");
-			// load countries
-			TIMAAT.LocationService.listCountries(TIMAAT.LocationDatasets.setCountryLists);
+		loadLocationSubtype: function(locationSubtype) {
+			switch (locationSubtype) {
+				case "country":
+					TIMAAT.LocationService.listLocationSubtype(locationSubtype, TIMAAT.LocationDatasets.setCountryLists);
+					break;
+				case "province":
+					TIMAAT.LocationService.listLocationSubtype(locationSubtype, TIMAAT.LocationDatasets.setProvinceLists);
+					break;
+				case "county":
+					TIMAAT.LocationService.listLocationSubtype(locationSubtype, TIMAAT.LocationDatasets.setCountyLists);
+					break;
+				case "city":
+					TIMAAT.LocationService.listLocationSubtype(locationSubtype, TIMAAT.LocationDatasets.setCityLists);
+					break;
+				case "street":
+					TIMAAT.LocationService.listLocationSubtype(locationSubtype, TIMAAT.LocationDatasets.setStreetLists);
+					break;
+			};
+		},
+
+		loadAllLocationSubtypes: function() {
+			TIMAAT.LocationService.listLocationSubtype("country", TIMAAT.LocationDatasets.setCountryLists);
+			TIMAAT.LocationService.listLocationSubtype("province", TIMAAT.LocationDatasets.setProvinceLists);
+			TIMAAT.LocationService.listLocationSubtype("county", TIMAAT.LocationDatasets.setCountyLists);
+			TIMAAT.LocationService.listLocationSubtype("city", TIMAAT.LocationDatasets.setCityLists);
+			TIMAAT.LocationService.listLocationSubtype("street", TIMAAT.LocationDatasets.setStreetLists);
 		},
 
 		setLocationTypeLists: function(locationTypes) {
-			// console.log("TCL: setLocationTypeLists: function(locationTypes)");
 			console.log("TCL: locationTypes", locationTypes);
 			if ( !locationTypes ) return;
-			$('#timaat-location-type-list-loader').remove();
+			$('#timaat-locationtype-list-loader').remove();
 			// clear old UI list
-			$('#timaat-location-type-list').empty();
+			$('#timaat-locationtype-list').empty();
 			// setup model
 			var locTypes = Array();
 			locationTypes.forEach(function(locationType) { if ( locationType.id > 0 ) locTypes.push(new TIMAAT.LocationType(locationType)); });
@@ -4305,7 +4672,6 @@ const TIMAAT = {
 		},
 		
 		setLocationLists: function(locations) {
-			// console.log("TCL: setLocationLists: function(locations)");
 			console.log("TCL: locations", locations);
 			if ( !locations ) return;
 			$('#timaat-location-list-loader').remove();
@@ -4335,16 +4701,103 @@ const TIMAAT = {
 			TIMAAT.LocationDatasets.countries.model = countries;
 		},
 
-		addLocation: function() {	
-		// console.log("TCL: addLocation: function()");
-		$('#timaat-locationdatasets-location-meta').data('location', null);
-		$('#timaat-locationdatasets-location-meta').modal('show');
+		setProvinceLists: function(provinces) {
+			// console.log("TCL: setProvinceLists: function(provinces)");
+			console.log("TCL: provinces", provinces);
+			if ( !provinces ) return;
+			$('#timaat-province-list-loader').remove();
+			// clear old UI list
+			$('#timaat-province-list').empty();
+			// setup model
+			var locs = Array();
+			provinces.forEach(function(province) { 
+				if ( province.id > 0 )
+					locs.push(new TIMAAT.Province(province));
+			});
+			TIMAAT.LocationDatasets.provinces = locs;
+			TIMAAT.LocationDatasets.provinces.model = provinces;
 		},
 
-		addCountry: function() {	
-			// console.log("TCL: addCountry: function()");
-			$('#timaat-locationdatasets-country-meta').data('country', null);
-			$('#timaat-locationdatasets-country-meta').modal('show');
+		setCountyLists: function(counties) {
+			// console.log("TCL: setCountyLists: function(counties)");
+			console.log("TCL: counties", counties);
+			if ( !counties ) return;
+			$('#timaat-county-list-loader').remove();
+			// clear old UI list
+			$('#timaat-county-list').empty();
+			// setup model
+			var locs = Array();
+			counties.forEach(function(county) { 
+				if ( county.id > 0 )
+					locs.push(new TIMAAT.County(county));
+			});
+			TIMAAT.LocationDatasets.counties = locs;
+			TIMAAT.LocationDatasets.counties.model = counties;
+		},
+
+		setCityLists: function(cities) {
+			// console.log("TCL: setCityLists: function(cities)");
+			console.log("TCL: cities", cities);
+			if ( !cities ) return;
+			$('#timaat-city-list-loader').remove();
+			// clear old UI list
+			$('#timaat-city-list').empty();
+			// setup model
+			var locs = Array();
+			cities.forEach(function(city) { 
+				if ( city.id > 0 )
+					locs.push(new TIMAAT.City(city));
+			});
+			TIMAAT.LocationDatasets.cities = locs;
+			TIMAAT.LocationDatasets.cities.model = cities;
+		},
+
+		setStreetLists: function(streets) {
+			// console.log("TCL: setStreetLists: function(streets)");
+			console.log("TCL: streets", streets);
+			if ( !streets ) return;
+			$('#timaat-street-list-loader').remove();
+			// clear old UI list
+			$('#timaat-street-list').empty();
+			// setup model
+			var locs = Array();
+			streets.forEach(function(street) { 
+				if ( street.id > 0 )
+					locs.push(new TIMAAT.Street(street));
+			});
+			TIMAAT.LocationDatasets.streets = locs;
+			TIMAAT.LocationDatasets.streets.model = streets;
+		},
+
+		addLocation: function() {	
+			// console.log("TCL: addLocation: function()");
+			$('#timaat-locationdatasets-location-meta').data('location', null);
+			$('#timaat-locationdatasets-location-meta').modal('show');
+		},
+
+		addLocationSubtype: function(locationSubtype) {	
+			switch (locationSubtype) {
+				case "country":
+					$('#timaat-locationdatasets-country-meta').data('country', null);
+					$('#timaat-locationdatasets-country-meta').modal('show');
+					break;
+				case "province":
+					$('#timaat-locationdatasets-province-meta').data('province', null);
+					$('#timaat-locationdatasets-province-meta').modal('show');
+					break;
+				case "county":
+					$('#timaat-locationdatasets-county-meta').data('county', null);
+					$('#timaat-locationdatasets-county-meta').modal('show');
+					break;
+				case "city":
+					$('#timaat-locationdatasets-city-meta').data('city', null);
+					$('#timaat-locationdatasets-city-meta').modal('show');
+					break;
+				case "street":
+					$('#timaat-locationdatasets-street-meta').data('street', null);
+					$('#timaat-locationdatasets-street-meta').modal('show');
+					break;
+			}
 		},
 	
 		createLocation: async function(locationModel, locationModelTranslation) {
@@ -4354,11 +4807,14 @@ const TIMAAT = {
 			try {
 				// create location
 				var newLocationModel = await TIMAAT.LocationService.createLocation(locationModel);
+
 				// create location translation with location id
 				var newTranslationData = await TIMAAT.LocationService.createLocationTranslation(newLocationModel, locationModelTranslation);
 				newLocationModel.locationTranslations[0] = newTranslationData;
+
 				// create country/city/etc depending on country type
 				// TODO switch (locationModel.locationType)
+
 				// push new location to dataset model
 				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
 			} catch(error) {
@@ -4367,8 +4823,8 @@ const TIMAAT = {
 			// location.updateUI();
 		},
 
-		createCountry: async function(locationModel, locationModelTranslation, countryModel) {
-			// console.log("TCL: createCountry -> locationModel, locationModelTranslation, countryModel", locationModel, locationModelTranslation, countryModel);
+		createLocationSubtype: async function(locationSubtype, locationSubtypeModel, locationModel, locationModelTranslation) {
+			// console.log("TCL: createLocationSubtype -> locationModel, locationModelTranslation, locationSubtypeModel", locationModel, locationModelTranslation, locationSubtypeModel);
 			try {
 				// create location
 				var newLocationModel = await TIMAAT.LocationService.createLocation(locationModel);
@@ -4377,15 +4833,15 @@ const TIMAAT = {
 				await TIMAAT.LocationService.createLocationTranslation(newLocationModel, locationModelTranslation);
 				newLocationModel.locationTranslations[0] = locationModelTranslation;
 
-				// create country with location id
-				countryModel.locationId = newLocationModel.id;
-				var newCountryModel = await TIMAAT.LocationService.createCountry(newLocationModel, countryModel);
-
 				// push new location to dataset model
 				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
 
-				// push new country to dataset model
-				await TIMAAT.LocationDatasets._countryAdded(newCountryModel);
+				// create locationSubtype with location id
+				locationSubtypeModel.locationId = newLocationModel.id;
+				var newLocationSubtypeModel = await TIMAAT.LocationService.createLocationSubtype(locationSubtype, newLocationModel, locationSubtypeModel);
+
+				// push new locationSubtype to dataset model
+				await TIMAAT.LocationDatasets._locationSubtypeAdded(locationSubtype, newLocationSubtypeModel);
 
 			} catch(error) {
 				console.log( "error: ", error);
@@ -4394,7 +4850,7 @@ const TIMAAT = {
 		},
 
 		updateLocation: async function(location) {
-		// console.log("TCL: updateLocation async function -> location at beginning of update process: ", location);
+		console.log("TCL: updateLocation async function -> location at beginning of update process: ", location);
 			try {
 				// update data that is part of location (includes updating last edited by/at)
 				var tempLocationModel = await TIMAAT.LocationService.updateLocation(location.model);
@@ -4402,39 +4858,41 @@ const TIMAAT = {
 			} catch(error) {
 				console.log( "error: ", error);
 			};
+
 			try {
-				// update data that is part of  location translation
-				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(location);
-				location.model.locationTranslations[0].name = tempLocationTranslation.name;			
+				// update data that is part of location translation
+				// TODO: send request for each translation or for all translations
+				console.log("TCL: location", location);
+				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(location.model.id, location.model.locationTranslations[0]);
+				// location.model.locationTranslations[0].name = tempLocationTranslation.name;			
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 		},
 
-		updateCountry: async function(country) {
-			// console.log("TCL: updateCountry async function -> country at beginning of update process: ", country);
+		updateLocationSubtype: async function(locationSubtype, locationSubtypeData) {
+			console.log("TCL: updateLocationSubtype async function -> locationSubtype, locationSubtypeData at beginning of update process: ", locationSubtype, locationSubtypeData);
 			try {
-				// update data that is part of country
-				var tempCountryModel = await TIMAAT.LocationService.updateCountry(country.model);
-				country.model.internationalDialingPrefix = tempCountryModel.internationalDialingPrefix;
-				country.model.trunkPrefix = tempCountryModel.trunkPrefix;
-				country.model.countryCallingCode = tempCountryModel.countryCallingCode;
-				country.model.timeZone = tempCountryModel.timeZone;
-				country.model.daylightSavingTime = tempCountryModel.daylightSavingTime;
+				// update data that is part of locationSubtype
+				var tempLocationSubtypeModel = await TIMAAT.LocationService.updateLocationSubtype(locationSubtype, locationSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
+
 			};
 			try {
 				// update data that is part of location and its translation
-				var countryLocation = country.model.location;
-				var countryLocationModel = {
-					model: countryLocation,
-				};
-				await TIMAAT.LocationDatasets.updateLocation(countryLocationModel);
+				var locationSubtypeLocationModel = locationSubtypeData.model.location;
+        console.log("TCL: locationSubtypeLocationModel", locationSubtypeLocationModel);
+				var tempLocationSubtypeModelUpdate = await TIMAAT.LocationService.updateLocation(locationSubtypeLocationModel);
+
+				// update data that is part of location translation
+				// var locationSubtypeLocation = locationSubtypeData.location;
+				console.log("TCL: locationSubtypeData", locationSubtypeData);
+				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(locationSubtypeData.model.id, locationSubtypeData.model.location.locationTranslations[0]);
+				// location.model.locationTranslations[0].name = tempLocationTranslation.name;			
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			country.updateUI();
 		},
 
 		_locationAdded: async function(location) {
@@ -4445,10 +4903,30 @@ const TIMAAT = {
 			// return location;
 		},
 		
-		_countryAdded: async function(country) {
+		_locationSubtypeAdded: async function(locationSubtype, locationSubtypeData) {
 			// console.log("TCL: _countryAdded: function(country)");
-			TIMAAT.LocationDatasets.countries.model.push(country);
-			TIMAAT.LocationDatasets.countries.push(new TIMAAT.Country(country));
+			switch (locationSubtype) {
+				case "country":
+					TIMAAT.LocationDatasets.countries.model.push(locationSubtypeData);
+					TIMAAT.LocationDatasets.countries.push(new TIMAAT.Country(locationSubtypeData));
+					break;
+				case "province":
+					TIMAAT.LocationDatasets.provinces.model.push(locationSubtypeData);
+					TIMAAT.LocationDatasets.provinces.push(new TIMAAT.Province(locationSubtypeData));
+					break;
+				case "county":
+					TIMAAT.LocationDatasets.counties.model.push(locationSubtypeData);
+					TIMAAT.LocationDatasets.counties.push(new TIMAAT.County(locationSubtypeData));
+					break;
+				case "city":
+					TIMAAT.LocationDatasets.cities.model.push(locationSubtypeData);
+					TIMAAT.LocationDatasets.cities.push(new TIMAAT.City(locationSubtypeData));
+					break;
+				case "street":
+					TIMAAT.LocationDatasets.streets.model.push(locationSubtypeData);
+					TIMAAT.LocationDatasets.streets.push(new TIMAAT.Street(locationSubtypeData));
+					break;
+			};
 		},
 
 		_locationRemoved: function(location) {
@@ -4459,12 +4937,11 @@ const TIMAAT = {
 			location.remove();
 		},
 
-		_countryRemoved: function(country) {
-			//  console.log("TCL: _countryRemoved: function(country)");
-			//  console.log("TCL: country", country);
+		_locationSubtypeRemoved: function(locationSubtype, locationSubtypeData) {
+			// console.log("TCL: _videoRemoved: function(video)");
 			// sync to server
-			TIMAAT.LocationService.removeCountry(country);
-			country.remove();
+		 TIMAAT.LocationService.removeLocationSubtype(locationSubtype, locationSubtypeData)
+		 locationSubtypeData.remove();
 		},
 
 	},
@@ -4497,14 +4974,14 @@ const TIMAAT = {
 		initMediaTypes: function() {
 			// console.log("TCL: MediaDatasets: initMediaTypes: function()");		
 			// delete mediaType functionality
-			$('#timaat-media-type-delete-submit').click(function(ev) {
+			$('#timaat-mediatype-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-medium-type-delete');
 				var mediaType = modal.data('mediaType');
 				if (mediaType) TIMAAT.MediaDatasets._mediaTypeRemoved(mediaType);
 				modal.modal('hide');
 			});
 			// add mediaType button
-			$('#timaat-media-type-add').attr('onclick','TIMAAT.MediaDatasets.addMediaType()');
+			$('#timaat-mediatype-add').attr('onclick','TIMAAT.MediaDatasets.addMediaType()');
 			// add/edit mediaType functionality
 			$('#timaat-mediadatasets-medium-type-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit mediaType window setup
@@ -4518,21 +4995,22 @@ const TIMAAT = {
 				var hasContent = (mediaType) ? mediaType.model.hasContent : false;
 				// setup UI
 				$('#mediaTypeMetaLabel').html(heading);
-				$('#timaat-media-type-meta-submit').html(submit);
-				$("#timaat-media-type-meta-name").val(type).trigger('input');
-				$("#timaat-media-type-meta-hasvisual").val(hasVisual);
-				$("#timaat-media-type-meta-hasaudio").val(hasAudio);
-				$("#timaat-media-type-meta-hascontent").val(hasContent);
+				$('#timaat-mediatype-meta-submit').html(submit);
+				$("#timaat-mediatype-meta-name").val(type).trigger('input');
+				$("#timaat-mediatype-meta-hasvisual").val(hasVisual);
+				$("#timaat-mediatype-meta-hasaudio").val(hasAudio);
+				$("#timaat-mediatype-meta-hascontent").val(hasContent);
 			});
 			// Submit mediaType data
-			$('#timaat-media-type-meta-submit').click(function(ev) {
+			$('#timaat-mediatype-meta-submit').click(function(ev) {
 				// Create/Edit mediaType window submitted data validation
 				var modal = $('#timaat-mediadatasets-medium-type-meta');
 				var mediaType = modal.data('mediaType');
-				var type = $("#timaat-media-type-meta-name").val();
-				var hasVisual = $("#timaat-media-type-meta-has-visual").val();
-				var hasAudio = $("#timaat-media-type-meta-has-audio").val();
-				var hasContent = $("#timaat-media-type-meta-has-content").val();
+				var type = $("#timaat-mediatype-meta-name").val();
+				var hasVisual = $("#timaat-mediatype-meta-has-visual").val();
+				var hasAudio = $("#timaat-mediatype-meta-has-audio").val();
+				var hasContent = $("#timaat-mediatype-meta-has-content").val();
+
 				if (mediaType) {
 					mediaType.model.medium.mediaTypeTranslations[0].type = type;
 					mediaType.model.hasVisual = hasVisual;
@@ -4559,13 +5037,13 @@ const TIMAAT = {
 			});
 			// validate mediaType data	
 			// TODO validate all required fields				
-			$('#timaat-media-type-meta-name').on('input', function(ev) {
-				if ( $("#timaat-media-type-meta-name").val().length > 0 ) {
-					$('#timaat-media-type-meta-submit').prop("disabled", false);
-					$('#timaat-media-type-meta-submit').removeAttr("disabled");
+			$('#timaat-mediatype-meta-name').on('input', function(ev) {
+				if ( $("#timaat-mediatype-meta-name").val().length > 0 ) {
+					$('#timaat-mediatype-meta-submit').prop("disabled", false);
+					$('#timaat-mediatype-meta-submit').removeAttr("disabled");
 				} else {
-					$('#timaat-media-type-meta-submit').prop("disabled", true);
-					$('#timaat-media-type-meta-submit').attr("disabled");
+					$('#timaat-mediatype-meta-submit').prop("disabled", true);
+					$('#timaat-mediatype-meta-submit').attr("disabled");
 				}
 			});
 		},
@@ -4683,8 +5161,10 @@ const TIMAAT = {
 				if (audio) TIMAAT.MediaDatasets._mediumSubtypeRemoved("audio", audio);
 				modal.modal('hide');
 			});
+
 			// add audio button
 			$('#timaat-audio-add').attr('onclick','TIMAAT.MediaDatasets.addMediumSubtype("audio")');
+
 			// add/edit audio functionality
 			$('#timaat-mediadatasets-audio-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit audio window setup
@@ -5570,9 +6050,9 @@ const TIMAAT = {
 		setMediaTypeLists: function(mediaTypes) {
 			console.log("TCL: mediaTypes", mediaTypes);
 			if ( !mediaTypes ) return;
-			$('#timaat-media-type-list-loader').remove();
+			$('#timaat-mediatype-list-loader').remove();
 			// clear old UI list
-			$('#timaat-media-type-list').empty();
+			$('#timaat-mediatype-list').empty();
 			// setup model
 			var medTypes = Array();
 			mediaTypes.forEach(function(mediaType) { if ( mediaType.id > 0 ) medTypes.push(new TIMAAT.MediaType(mediaType)); });
@@ -5777,41 +6257,6 @@ const TIMAAT = {
 			}
 		},
 
-		// addAudio: function() {	
-		// 	$('#timaat-mediadatasets-audio-meta').data('audio', null);
-		// 	$('#timaat-mediadatasets-audio-meta').modal('show');
-		// },
-
-		// addDocument: function() {	
-		// 	$('#timaat-mediadatasets-document-meta').data('document', null);
-		// 	$('#timaat-mediadatasets-document-meta').modal('show');
-		// },
-
-		// addImage: function() {	
-		// 	$('#timaat-mediadatasets-image-meta').data('image', null);
-		// 	$('#timaat-mediadatasets-image-meta').modal('show');
-		// },
-
-		// addSoftware: function() {	
-		// 	$('#timaat-mediadatasets-software-meta').data('software', null);
-		// 	$('#timaat-mediadatasets-software-meta').modal('show');
-		// },
-
-		// addText: function() {	
-		// 	$('#timaat-mediadatasets-text-meta').data('text', null);
-		// 	$('#timaat-mediadatasets-text-meta').modal('show');
-		// },
-
-		// addVideogame: function() {	
-		// 	$('#timaat-mediadatasets-videogame-meta').data('videogame', null);
-		// 	$('#timaat-mediadatasets-videogame-meta').modal('show');
-		// },
-
-		// addVideo: function() {	
-		// 	$('#timaat-mediadatasets-video-meta').data('video', null);
-		// 	$('#timaat-mediadatasets-video-meta').modal('show');
-		// },
-
 		createMedium: async function(mediumModel, title) {
 			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
 			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
@@ -5831,6 +6276,7 @@ const TIMAAT = {
 				// create medium translation with medium id
 				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
 				// newMediumModel.mediumTranslations[0] = newTranslationData;
+				
 				// create video/image/etc depending on video type
 				// TODO switch (mediumModel.mediaType)
 
@@ -5842,55 +6288,17 @@ const TIMAAT = {
 			};
 		},
 
-		// createVideo: async function(videoModel, mediumModel, title) {
-		// 	// createVideo: async function(mediumModel, mediumModelTranslation, videoModel) { // video has no translation table at the moment
-		// 	console.log("TCL: createVideo: async function-> videoModel, mediumModel, title", videoModel, mediumModel, title);
-		// 	try {
-		// 		// create title
-		// 		var newTitle = await TIMAAT.MediaService.createTitle(title);
-		// 		// console.log("TCL: newTitle", newTitle);
-				
-		// 		// create medium
-		// 		var newMediumModel = mediumModel;
-		// 		newMediumModel.title = newTitle;
-		// 		newMediumModel = await TIMAAT.MediaService.createMedium(mediumModel);
-		// 		// console.log("TCL: newMediumModel", newMediumModel);
-				
-		// 		// create medium translation with medium id
-		// 		// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-		// 		// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
-		// 		// create video with medium id
-		// 		videoModel.mediumId = newMediumModel.id;
-    //     // console.log("TCL: videoModel", videoModel);
-		// 		// var newVideoModel = await TIMAAT.MediaService.createVideo(newMediumModel, videoModel);
-		// 		var newVideoModel = await TIMAAT.MediaService.createMediumSubtype("video", newMediumModel, videoModel);
-		// 		// console.log("TCL: newVideoModel", newVideoModel);
-				
-		// 		// push new medium to dataset model
-		// 		await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
-
-		// 		// push new video to dataset model
-		// 		await TIMAAT.MediaDatasets._videoAdded(newVideoModel);
-
-		// 	} catch(error) {
-		// 		console.log( "error: ", error.responseText);
-		// 	};
-		// 	// video.updateUI();
-		// },
-
 		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title) {
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
 			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-				// console.log("TCL: newTitle", newTitle);
 				
 				// create medium
 				var newMediumModel = mediumModel;
 				newMediumModel.title = newTitle;
 				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
-				// console.log("TCL: newMediumModel", newMediumModel);
 
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
@@ -5898,18 +6306,16 @@ const TIMAAT = {
 				// create medium translation with medium id
 				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
 				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+
 				// create mediumSubtype with medium id
 				mediumSubtypeModel.mediumId = newMediumModel.id;
-        // console.log("TCL: mediumSubtypeModel", mediumSubtypeModel);
-				// var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(newMediumModel, mediumSubtypeModel);
 				var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
-				// console.log("TCL: newMediumSubtypeModel", newMediumSubtypeModel);
 
 				// push new mediumSubtype to dataset model
 				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
 
 			} catch(error) {
-				console.log( "error: ", error.responseText);
+				console.log( "error: ", error);
 			};
 		},
 
@@ -5942,12 +6348,17 @@ const TIMAAT = {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
 				mediumSubtypeData.model.medium.title = tempTitle;
+			} catch(error) {
+				console.log( "error: ", error);
+			};
 
+			try {
 				// update data that is part of mediumSubtypeData
 				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
+
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
@@ -6026,6 +6437,7 @@ const TIMAAT = {
 			// console.log("TCL: Medium -> constructor -> model", model)
 			// setup model
 			this.model = model;
+
 			// create and style list view element
 			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-medium-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteMediumButton = '';
@@ -6038,9 +6450,11 @@ const TIMAAT = {
 				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
 				</li>'
 			);
+
 			$('#timaat-medium-list').append(this.listView);
 			this.updateUI();      
 			var medium = this; // save medium for system media
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -6051,24 +6465,35 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-			// console.log("TCL: Medium -> constructor -> Display Bearbeitungslog");
-				$('.timaat-user-log-details').html(
+				if (medium.model.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+medium.model.createdByUserAccount.id+'">[ID '+medium.model.createdByUserAccount.id+']</span></b><br>\
-						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
-						<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+medium.model.lastEditedByUserAccount.id+'">[ID '+medium.model.lastEditedByUserAccount.id+']</span></b><br>\
-						'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+medium.model.createdByUserAccount.id+'">[ID '+medium.model.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+medium.model.lastEditedByUserAccount.id+'">[ID '+medium.model.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
+
 			// attach medium handlers
 			$(this.listView).click(this, function(ev) {
 				ev.stopPropagation();
@@ -6076,13 +6501,15 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();				
 				// medium.listView.find('.timaat-medium-list-tags').popover('show');
 			});
+
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
 				$('#timaat-mediadatasets-medium-meta').data('medium', medium);
 				$('#timaat-mediadatasets-medium-meta').modal('show');			
-			});			
+			});
+
 			// remove handler
 			this.listView.find('.timaat-medium-remove').click(this, function(ev) {
 				ev.stopPropagation();
@@ -6124,19 +6551,22 @@ const TIMAAT = {
 			// setup model
 			this.model = model;
 			// model.ui = this;
+
 			// create and style list view element
-			var deleteMediaType = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-media-type-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteMediaType = '';
+			var deleteMediaTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediatype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteMediaTypeButton = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteMediaType +
-				'<span class="timaat-media-type-list-type"></span>' +
+				+ deleteMediaTypeButton +
+				'<span class="timaat-mediatype-list-type"></span>' +
 				'<br> \
-				<div class="timaat-media-type-list-count text-muted float-left"></div> \
-		 </li>'
+				<div class="timaat-mediatype-list-count text-muted float-left"></div> \
+				</li>'
 			);
+
 			$('#timaat-medium-type-list').append(this.listView);
 			this.updateUI();      
 			var MediaType = this; // save MediaType for system MediaTypes
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -6147,23 +6577,35 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+MediaType.model.createdByUserAccount.id+'">[ID '+MediaType.model.createdByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(MediaType.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+MediaType.model.lastEditedByUserAccount.id+'">[ID '+MediaType.model.lastEditedByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(MediaType.model.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				if (mediaType.model.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+mediaType.model.createdByUserAccount.id+'">[ID '+mediaType.model.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+mediaType.model.createdByUserAccount.id+'">[ID '+mediaType.model.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+mediaType.model.lastEditedByUserAccount.id+'">[ID '+mediaType.model.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(mediaType.model.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
+
 			// attach MediaType handlers
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
@@ -6171,9 +6613,10 @@ const TIMAAT = {
 				// show metadata editor
 				$('#timaat-mediadatasets-medium-type-meta').data('MediaType', MediaType);
 				$('#timaat-mediadatasets-medium-type-meta').modal('show');			
-			});			
+			});
+
 			// remove handler
-			this.listView.find('.timaat-media-type-remove').click(this, function(ev) {
+			this.listView.find('.timaat-mediatype-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-medium-type-delete').data('MediaType', MediaType);
@@ -6186,7 +6629,7 @@ const TIMAAT = {
 			// title
 			var type = this.model.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
-			this.listView.find('.timaat-media-type-list-name').text(type);
+			this.listView.find('.timaat-mediatype-list-name').text(type);
 		}
 
 		remove() {
@@ -6209,6 +6652,7 @@ const TIMAAT = {
 			// console.log("TCL: Audio -> constructor -> model", model)
 			// setup model
 			this.model = model;
+
 			// create and style list view element
 			var deleteAudioButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-audio-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteAudioButton = '';
@@ -6222,9 +6666,11 @@ const TIMAAT = {
 					'<i class="fas fa-user"></i></div>' +
 				'</li>'
 			);
+
 			$('#timaat-audio-list').append(this.listView);
 			this.updateUI();      
 			var audio = this; // save audio for system audios
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -6235,23 +6681,35 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (audio.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+audio.model.medium.createdByUserAccount.id+'">[ID '+audio.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(audio.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+audio.model.medium.createdByUserAccount.id+'">[ID '+audio.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(audio.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+audio.model.medium.lastEditedByUserAccount.id+'">[ID '+audio.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(audio.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
+
 			// attach audio handlers
 			$(this.listView).click(this, function(ev) {
 				ev.stopPropagation();
@@ -6259,13 +6717,15 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();				
 				// audio.listView.find('.timaat-audio-list-tags').popover('show');
 			});
+
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
 				$('#timaat-mediadatasets-audio-meta').data('audio', audio);
 				$('#timaat-mediadatasets-audio-meta').modal('show');			
-			});			
+			});
+
 			// remove handler
 			this.listView.find('.timaat-audio-remove').click(this, function(ev) {
 				ev.stopPropagation();
@@ -6334,14 +6794,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (mediumDocument.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+mediumDocument.model.medium.createdByUserAccount.id+'">[ID '+mediumDocument.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(mediumDocument.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+mediumDocument.model.medium.createdByUserAccount.id+'">[ID '+mediumDocument.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediumDocument.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+mediumDocument.model.medium.lastEditedByUserAccount.id+'">[ID '+mediumDocument.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediumDocument.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -6429,14 +6898,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (image.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+image.model.medium.createdByUserAccount.id+'">[ID '+image.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(image.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+image.model.medium.createdByUserAccount.id+'">[ID '+image.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(image.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+image.model.medium.lastEditedByUserAccount.id+'">[ID '+image.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(image.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -6524,14 +7002,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (software.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+software.model.medium.createdByUserAccount.id+'">[ID '+software.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(software.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+software.model.medium.createdByUserAccount.id+'">[ID '+software.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(software.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+software.model.medium.lastEditedByUserAccount.id+'">[ID '+software.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(software.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -6619,14 +7106,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (text.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+text.model.medium.createdByUserAccount.id+'">[ID '+text.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(text.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+text.model.medium.createdByUserAccount.id+'">[ID '+text.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(text.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+text.model.medium.lastEditedByUserAccount.id+'">[ID '+text.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(text.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -6714,14 +7210,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (video.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+video.model.medium.createdByUserAccount.id+'">[ID '+video.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(video.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+video.model.medium.createdByUserAccount.id+'">[ID '+video.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(video.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+video.model.medium.lastEditedByUserAccount.id+'">[ID '+video.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(video.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -6809,14 +7314,23 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
+				if (videogame.model.medium.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+videogame.model.medium.createdByUserAccount.id+'">[ID '+videogame.model.medium.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(videogame.model.medium.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+videogame.model.medium.createdByUserAccount.id+'">[ID '+videogame.model.medium.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(videogame.model.medium.createdAt)+'<br>\
 							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+videogame.model.medium.lastEditedByUserAccount.id+'">[ID '+videogame.model.medium.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(videogame.model.medium.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -7025,21 +7539,24 @@ const TIMAAT = {
       // console.log("TCL: Location -> constructor -> model", model)
 			// setup model
 			this.model = model;
+
 			// create and style list view element
-			var deleteLocation = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-location-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteLocation = '';
+			var deleteLocationButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-location-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteLocationButton = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteLocation +
+				+ deleteLocationButton +
 				'<span class="timaat-location-list-name"></span>' +
 				'<br> \
-				<span class="timaat-location-list-location-type-id"></span> \
+				<span class="timaat-location-list-locationtype-id"></span> \
 				<div class="timaat-location-list-count text-muted float-left"></div> \
 				<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
 		 </li>'
 			);
+
 			$('#timaat-location-list').append(this.listView);
 			this.updateUI();      
 			var location = this; // save location for system events
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -7050,24 +7567,36 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-      console.log("TCL: Location -> constructor -> Display Bearbeitungslog");
-				$('.timaat-user-log-details').html(
+				console.log("TCL: Location -> constructor -> location", location);
+				if (location.model.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccount.id+'">[ID '+location.model.lastEditedByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(location.model.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+						'+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+location.model.lastEditedByUserAccount.id+'">[ID '+location.model.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(location.model.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
+
 			// attach location handlers
 			$(this.listView).click(this, function(ev) {
 				ev.stopPropagation();
@@ -7075,13 +7604,15 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();				
 				// location.listView.find('.timaat-location-list-tags').popover('show');
 			});
+
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
 				$('#timaat-locationdatasets-location-meta').data('location', location);
 				$('#timaat-locationdatasets-location-meta').modal('show');			
-			});			
+			});		
+
 			// remove handler
 			this.listView.find('.timaat-location-remove').click(this, function(ev) {
 				ev.stopPropagation();
@@ -7098,7 +7629,7 @@ const TIMAAT = {
 			var type = this.model.locationType.locationTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-location-list-name').text(name);
-			this.listView.find('.timaat-location-list-location-type-id').html(type);
+			this.listView.find('.timaat-location-list-locationtype-id').html(type);
 		}
 
 		remove() {
@@ -7122,19 +7653,22 @@ const TIMAAT = {
 			// setup model
 			this.model = model;
 			// model.ui = this;
+
 			// create and style list view element
-			var deleteLocationType = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-location-type-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteLocationType = '';
+			var deleteLocationTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-locationtype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteLocationTypeButton = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteLocationType +
-				'<span class="timaat-location-type-list-type"></span>' +
+				+ deleteLocationTypeButton +
+				'<span class="timaat-locationtype-list-type"></span>' +
 				'<br> \
-				<div class="timaat-location-type-list-count text-muted float-left"></div> \
-		 </li>'
+				<div class="timaat-locationtype-list-count text-muted float-left"></div> \
+				</li>'
 			);
-			$('#timaat-location-type-list').append(this.listView);
+
+			$('#timaat-locationtype-list').append(this.listView);
 			this.updateUI();      
 			var locationType = this; // save locationType for system locationTypes
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -7145,38 +7679,51 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-      // console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
-				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationType.model.createdByUserAccount.id+'">[ID '+locationType.model.createdByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(locationType.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+locationType.model.lastEditedByUserAccount.id+'">[ID '+locationType.model.lastEditedByUserAccount.id+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(locationType.model.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				// console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
+				if (locationtype.model.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationtype.model.createdByUserAccount.id+'">[ID '+locationtype.model.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+locationtype.model.createdByUserAccount.id+'">[ID '+locationtype.model.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+locationtype.model.lastEditedByUserAccount.id+'">[ID '+locationtype.model.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(locationtype.model.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
+
 			// attach locationType handlers
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-locationdatasets-location-type-meta').data('locationType', locationType);
-				$('#timaat-locationdatasets-location-type-meta').modal('show');			
-			});			
+				$('#timaat-locationdatasets-locationtype-meta').data('locationType', locationType);
+				$('#timaat-locationdatasets-locationtype-meta').modal('show');			
+			});
+
 			// remove handler
-			this.listView.find('.timaat-location-type-remove').click(this, function(ev) {
+			this.listView.find('.timaat-locationtype-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-locationdatasets-location-type-delete').data('locationType', locationType);
-				$('#timaat-locationdatasets-location-type-delete').modal('show');
+				$('#timaat-locationdatasets-locationtype-delete').data('locationType', locationType);
+				$('#timaat-locationdatasets-locationtype-delete').modal('show');
 			});
 		}
 
@@ -7185,7 +7732,7 @@ const TIMAAT = {
 			// title
 			var type = this.model.locationTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
-			this.listView.find('.timaat-location-type-list-name').text(type);
+			this.listView.find('.timaat-locationtype-list-name').text(type);
 		}
 
 		remove() {
@@ -7200,6 +7747,7 @@ const TIMAAT = {
 			if (index > -1) TIMAAT.LocationDatasets.locationTypes.model.splice(index, 1);
 		}
 	},
+
 	// ------------------------------------------------------------------------------------------------------------------------
 
 	Country: class Country {
@@ -7207,6 +7755,7 @@ const TIMAAT = {
 			// console.log("TCL: Country -> constructor -> model", model)
 			// setup model
 			this.model = model;
+
 			// create and style list view element
 			var deleteCountryButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-country-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteCountryButton = '';
@@ -7218,9 +7767,11 @@ const TIMAAT = {
 				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
 			'</li>'
 			);
+
 			$('#timaat-country-list').append(this.listView);
 			this.updateUI();      
 			var country = this; // save country for system events
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -7231,18 +7782,30 @@ const TIMAAT = {
 				container: 'body',
 				boundary: 'viewport',				
 			});
+
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
+
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.createdByUserAccount.id+'">[ID '+country.model.createdByUserAccount.id+']</span></b><br>\
-							'+TIMAAT.Util.formatDate(country.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.lastEditedByUserAccount.id+'">[ID '+country.model.lastEditedByUserAccount.id+']</span></b><br>\
-							'+TIMAAT.Util.formatDate(country.model.lastEditedAt)+'<br>'
-				);
-				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				console.log("TCL: Country -> constructor -> country", country);
+				if (country.model.location.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.location.location.location.createdByUserAccount.id+'">[ID '+country.model.location.location.location.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+country.model.location.location.location.createdByUserAccount.id+'">[ID '+country.model.location.location.location.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+country.model.location.location.location.lastEditedByUserAccount.id+'">[ID '+country.model.location.location.location.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(country.model.location.location.location.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
 			});
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').click(function(ev) {
 				ev.preventDefault();
@@ -7256,13 +7819,15 @@ const TIMAAT = {
 				TIMAAT.UI.hidePopups();				
 				// country.listView.find('.timaat-country-list-tags').popover('show');
 			});
+
 			$(this.listView).dblclick(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
 				$('#timaat-locationdatasets-country-meta').data('country', country);
 				$('#timaat-locationdatasets-country-meta').modal('show');			
-			});			
+			});
+
 			// remove handler
 			this.listView.find('.timaat-country-remove').click(this, function(ev) {
 				ev.stopPropagation();
@@ -7294,6 +7859,447 @@ const TIMAAT = {
 
 	},
 
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Province: class Province {
+		constructor(model) {
+			// console.log("TCL: Province -> constructor -> model", model)
+			// setup model
+			this.model = model;
+
+			// create and style list view element
+			var deleteProvinceButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-province-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteProvinceButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteProvinceButton +
+				'<span class="timaat-province-list-name"></span>' +
+				'<br>' +
+				'<div class="timaat-province-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
+			);
+
+			$('#timaat-province-list').append(this.listView);
+			this.updateUI();      
+			var province = this; // save province for system events
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				if (province.model.location.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+province.model.location.createdByUserAccount.id+'">[ID '+province.model.location.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(province.model.location.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+province.model.location.createdByUserAccount.id+'">[ID '+province.model.location.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(province.model.location.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+province.model.location.lastEditedByUserAccount.id+'">[ID '+province.model.location.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(province.model.location.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
+			});
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+
+			// attach province handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// province.listView.find('.timaat-province-list-tags').popover('show');
+			});
+
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-locationdatasets-province-meta').data('province', province);
+				$('#timaat-locationdatasets-province-meta').modal('show');			
+			});
+
+			// remove handler
+			this.listView.find('.timaat-province-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-locationdatasets-province-delete').data('province', province);
+				$('#timaat-locationdatasets-province-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Province -> updateUI -> updateUI()");
+			// title
+			var name = this.model.location.locationTranslations[0].name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-province-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Province -> remove -> remove()");
+			// remove province from UI
+			this.listView.remove(); // TODO remove tags from province_has_tags
+			// remove from province list
+			var index = TIMAAT.LocationDatasets.provinces.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.provinces.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.LocationDatasets.provinces.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.provinces.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	County: class County {
+		constructor(model) {
+			// console.log("TCL: County -> constructor -> model", model)
+			// setup model
+			this.model = model;
+
+			// create and style list view element
+			var deleteCountyButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-county-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteCountyButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteCountyButton +
+				'<span class="timaat-county-list-name"></span>' +
+				'<br>' +
+				'<div class="timaat-county-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
+			);
+
+			$('#timaat-county-list').append(this.listView);
+			this.updateUI();      
+			var county = this; // save county for system events
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				if (county.model.location.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+county.model.location.createdByUserAccount.id+'">[ID '+county.model.location.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+county.model.location.createdByUserAccount.id+'">[ID '+county.model.location.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+county.model.location.lastEditedByUserAccount.id+'">[ID '+county.model.location.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(county.model.location.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
+			});
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+
+			// attach county handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// county.listView.find('.timaat-county-list-tags').popover('show');
+			});
+
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-locationdatasets-county-meta').data('county', county);
+				$('#timaat-locationdatasets-county-meta').modal('show');			
+			});
+
+			// remove handler
+			this.listView.find('.timaat-county-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-locationdatasets-county-delete').data('county', county);
+				$('#timaat-locationdatasets-county-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: County -> updateUI -> updateUI()");
+			// title
+			var name = this.model.location.locationTranslations[0].name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-county-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: County -> remove -> remove()");
+			// remove county from UI
+			this.listView.remove(); // TODO remove tags from county_has_tags
+			// remove from county list
+			var index = TIMAAT.LocationDatasets.counties.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.counties.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.LocationDatasets.counties.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.counties.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	City: class City {
+		constructor(model) {
+			// console.log("TCL: City -> constructor -> model", model)
+			// setup model
+			this.model = model;
+
+			// create and style list view element
+			var deleteCityButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-city-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteCityButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteCityButton +
+				'<span class="timaat-city-list-name"></span>' +
+				'<br>' +
+				'<div class="timaat-city-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
+			);
+
+			$('#timaat-city-list').append(this.listView);
+			this.updateUI();      
+			var city = this; // save city for system events
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				if (city.model.location.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+city.model.location.createdByUserAccount.id+'">[ID '+city.model.location.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+city.model.location.createdByUserAccount.id+'">[ID '+city.model.location.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+city.model.location.lastEditedByUserAccount.id+'">[ID '+city.model.location.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(city.model.location.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
+			});
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+
+			// attach city handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// city.listView.find('.timaat-city-list-tags').popover('show');
+			});
+
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-locationdatasets-city-meta').data('city', city);
+				$('#timaat-locationdatasets-city-meta').modal('show');			
+			});
+
+			// remove handler
+			this.listView.find('.timaat-city-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-locationdatasets-city-delete').data('city', city);
+				$('#timaat-locationdatasets-city-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: City -> updateUI -> updateUI()");
+			// title
+			var name = this.model.location.locationTranslations[0].name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-city-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: City -> remove -> remove()");
+			// remove city from UI
+			this.listView.remove(); // TODO remove tags from city_has_tags
+			// remove from city list
+			var index = TIMAAT.LocationDatasets.cities.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.cities.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.LocationDatasets.cities.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.cities.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
+
+	Street: class Street {
+		constructor(model) {
+			// console.log("TCL: Street -> constructor -> model", model)
+			// setup model
+			this.model = model;
+
+			// create and style list view element
+			var deleteStreetButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-street-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteStreetButton = '';
+			this.listView = $('<li class="list-group-item"> ' +
+				deleteStreetButton +
+				'<span class="timaat-street-list-name"></span>' +
+				'<br>' +
+				'<div class="timaat-street-list-count text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+			'</li>'
+			);
+
+			$('#timaat-street-list').append(this.listView);
+			this.updateUI();      
+			var street = this; // save street for system events
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').popover({
+				placement: 'right',
+				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				trigger: 'click',
+				html: true,
+				content: '<div class="timaat-user-log-details">Lade...</div>',
+				container: 'body',
+				boundary: 'viewport',				
+			});
+
+			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+				TIMAAT.UI.hidePopups();
+			});
+
+			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+				if (street.model.location.lastEditedAt == null) {
+					$('.timaat-user-log-details').html(
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+street.model.location.createdByUserAccount.id+'">[ID '+street.model.location.createdByUserAccount.id+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				} else {
+					$('.timaat-user-log-details').html(
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+street.model.location.createdByUserAccount.id+'">[ID '+street.model.location.createdByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+street.model.location.lastEditedByUserAccount.id+'">[ID '+street.model.location.lastEditedByUserAccount.id+']</span></b><br>\
+							'+TIMAAT.Util.formatDate(street.model.location.lastEditedAt)+'<br>'
+					);
+					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				}
+			});
+
+			// attach user log info
+			this.listView.find('.timaat-user-log').click(function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+			});
+
+			// attach street handlers
+			$(this.listView).click(this, function(ev) {
+				ev.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();				
+				// street.listView.find('.timaat-street-list-tags').popover('show');
+			});
+
+			$(this.listView).dblclick(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				// show metadata editor
+				$('#timaat-locationdatasets-street-meta').data('street', street);
+				$('#timaat-locationdatasets-street-meta').modal('show');			
+			});
+
+			// remove handler
+			this.listView.find('.timaat-street-remove').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();				
+				$('#timaat-locationdatasets-street-delete').data('street', street);
+				$('#timaat-locationdatasets-street-delete').modal('show');
+			});
+		}
+
+		updateUI() {
+			// console.log("TCL: Street -> updateUI -> updateUI()");
+			// title
+			var name = this.model.location.locationTranslations[0].name;
+			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			this.listView.find('.timaat-street-list-name').text(name);
+		}
+
+		remove() {
+			// console.log("TCL: Street -> remove -> remove()");
+			// remove street from UI
+			this.listView.remove(); // TODO remove tags from street_has_tags
+			// remove from street list
+			var index = TIMAAT.LocationDatasets.streets.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.streets.splice(index, 1);
+			// remove from model list
+			index = TIMAAT.LocationDatasets.streets.model.indexOf(this);
+			if (index > -1) TIMAAT.LocationDatasets.streets.model.splice(index, 1);
+		}
+
+	},
+
+	// ------------------------------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------------------------------
 
 	Event: class Event {
