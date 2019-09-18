@@ -941,7 +941,6 @@ public class MediumServiceEndpoint{
 		if ( updatedVideo == null ) return Response.notModified().build();
 
 		// update video
-		if ( updatedVideo.getBrand() != null ) video.setBrand(updatedVideo.getBrand());
 		if ( updatedVideo.getLength() > 0 ) video.setLength(updatedVideo.getLength());
 		if ( updatedVideo.getVideoCodec() != null ) video.setVideoCodec(updatedVideo.getVideoCodec());
 		if ( updatedVideo.getWidth() > 0 ) video.setWidth(updatedVideo.getWidth());
@@ -1066,7 +1065,6 @@ public class MediumServiceEndpoint{
 
 		// update videogame
 		// System.out.println("MediumEndpoint: UPDATE VIDEOGAME - videogame.id:"+videogame.getMediumId());	
-		if ( updatedVideogame.getBrand() != null ) videogame.setBrand(updatedVideogame.getBrand());
 		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode()); 
 
 		// update log metadata
