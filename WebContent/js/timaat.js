@@ -2624,7 +2624,7 @@ const TIMAAT = {
 
 		listLocationTypes(callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/locationtype/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/locationtype/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
