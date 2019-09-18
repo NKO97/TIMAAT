@@ -23,8 +23,6 @@ public class MediumVideogame implements Serializable {
 	@PrimaryKeyJoinColumn(name="medium_id")
 	private Medium medium;
 
-	private String brand;
-
 	@Column(name="is_episode", columnDefinition = "BOOLEAN")
 	private Boolean isEpisode;
 	
@@ -53,14 +51,6 @@ public class MediumVideogame implements Serializable {
 
 	public void setId(int id) { // TODO not necessary with setMediumId?
 		this.getMedium().setId(id);
-	}
-
-	public String getBrand() {
-		return this.brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
 	}
 
 	public Boolean getIsEpisode() {
