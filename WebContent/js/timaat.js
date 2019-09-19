@@ -4193,7 +4193,7 @@ const TIMAAT = {
 			$('#timaat-country-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-country-delete');
 				var country = modal.data('country');
-				if (country) TIMAAT.LocationDatasets._countryRemoved(country);
+				if (country) TIMAAT.LocationDatasets._locationSubtypeRemoved("country", country);
 				modal.modal('hide');
 			});
 
@@ -4298,7 +4298,7 @@ const TIMAAT = {
 			$('#timaat-province-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-province-delete');
 				var province = modal.data('province');
-				if (province) TIMAAT.LocationDatasets._provinceRemoved(province);
+				if (province) TIMAAT.LocationDatasets._locationSubtypeRemoved("province", province);
 				modal.modal('hide');
 			});
 
@@ -4378,7 +4378,7 @@ const TIMAAT = {
 			$('#timaat-county-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-county-delete');
 				var county = modal.data('county');
-				if (county) TIMAAT.LocationDatasets._countyRemoved(county);
+				if (county) TIMAAT.LocationDatasets._locationSubtypeRemoved("county", county);
 				modal.modal('hide');
 			});
 
@@ -4458,7 +4458,7 @@ const TIMAAT = {
 			$('#timaat-city-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-city-delete');
 				var city = modal.data('city');
-				if (city) TIMAAT.LocationDatasets._cityRemoved(city);
+				if (city) TIMAAT.LocationDatasets._locationSubtypeRemoved("city", city);
 				modal.modal('hide');
 			});
 
@@ -4538,7 +4538,7 @@ const TIMAAT = {
 			$('#timaat-street-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-street-delete');
 				var street = modal.data('street');
-				if (street) TIMAAT.LocationDatasets._streetRemoved(street);
+				if (street) TIMAAT.LocationDatasets._locationSubtypeRemoved("street", street);
 				modal.modal('hide');
 			});
 
