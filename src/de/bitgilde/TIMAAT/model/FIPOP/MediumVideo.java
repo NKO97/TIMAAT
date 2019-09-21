@@ -26,8 +26,6 @@ public class MediumVideo implements Serializable {
 	@JoinColumn(name="audio_codec_information_id")
 	private AudioCodecInformation audioCodecInformation;
 
-	private String brand;
-
 	@Column(name="data_rate")
 	private int dataRate;
 
@@ -84,14 +82,6 @@ public class MediumVideo implements Serializable {
 	public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
 		this.audioCodecInformation = audioCodecInformation;
   }
-
-	public String getBrand() {
-		return this.brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
 
 	public int getDataRate() {
 		return this.dataRate;

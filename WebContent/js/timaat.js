@@ -2624,7 +2624,7 @@ const TIMAAT = {
 
 		listLocationTypes(callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/locationtype/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/locationtype/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -4193,7 +4193,7 @@ const TIMAAT = {
 			$('#timaat-country-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-country-delete');
 				var country = modal.data('country');
-				if (country) TIMAAT.LocationDatasets._countryRemoved(country);
+				if (country) TIMAAT.LocationDatasets._locationSubtypeRemoved("country", country);
 				modal.modal('hide');
 			});
 
@@ -4298,7 +4298,7 @@ const TIMAAT = {
 			$('#timaat-province-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-province-delete');
 				var province = modal.data('province');
-				if (province) TIMAAT.LocationDatasets._provinceRemoved(province);
+				if (province) TIMAAT.LocationDatasets._locationSubtypeRemoved("province", province);
 				modal.modal('hide');
 			});
 
@@ -4378,7 +4378,7 @@ const TIMAAT = {
 			$('#timaat-county-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-county-delete');
 				var county = modal.data('county');
-				if (county) TIMAAT.LocationDatasets._countyRemoved(county);
+				if (county) TIMAAT.LocationDatasets._locationSubtypeRemoved("county", county);
 				modal.modal('hide');
 			});
 
@@ -4458,7 +4458,7 @@ const TIMAAT = {
 			$('#timaat-city-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-city-delete');
 				var city = modal.data('city');
-				if (city) TIMAAT.LocationDatasets._cityRemoved(city);
+				if (city) TIMAAT.LocationDatasets._locationSubtypeRemoved("city", city);
 				modal.modal('hide');
 			});
 
@@ -4538,7 +4538,7 @@ const TIMAAT = {
 			$('#timaat-street-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-street-delete');
 				var street = modal.data('street');
-				if (street) TIMAAT.LocationDatasets._streetRemoved(street);
+				if (street) TIMAAT.LocationDatasets._locationSubtypeRemoved("street", street);
 				modal.modal('hide');
 			});
 
@@ -5750,7 +5750,6 @@ const TIMAAT = {
 				var copyright = (video) ? video.model.medium.copyright : "";
 				var releaseDate = (video) ? video.model.medium.releaseDate : 0;
 				// video data
-				var brand = (video) ? video.model.brand : "";
 				var length = (video) ? video.model.length : "";
 				var videoCodec = (video) ? video.model.videoCodec : "";
 				var width = (video) ? video.model.width : "";
@@ -5770,7 +5769,6 @@ const TIMAAT = {
 				$("#timaat-video-meta-copyright").val(copyright);
 				$("#timaat-video-meta-releasedate").val(releaseDate);
 				// video data
-				$("#timaat-video-meta-brand").val(brand);
 				$("#timaat-video-meta-length").val(length);
 				$("#timaat-video-meta-videocodec").val(videoCodec);
 				$("#timaat-video-meta-width").val(width);
@@ -5794,7 +5792,6 @@ const TIMAAT = {
 				var copyright = $("#timaat-video-meta-copyright").val();
 				var releaseDate = $("#timaat-video-meta-releasedate").val();
 				// video data
-				var brand = $("#timaat-video-meta-brand").val();
 				var length = $("#timaat-video-meta-length").val();
 				var videoCodec = $("#timaat-video-meta-videocodec").val();
 				var width = $("#timaat-video-meta-width").val();
@@ -5813,7 +5810,6 @@ const TIMAAT = {
 					video.model.medium.copyright = copyright;
 					video.model.medium.releaseDate = releaseDate;
 					// video data
-					video.model.brand = brand;
 					video.model.length = length;
 					video.model.videoCodec = videoCodec;
 					video.model.width = width;
@@ -5831,7 +5827,6 @@ const TIMAAT = {
 						audioCodecInformation: { // TODO get correct audio information
 							id: 1,
 						},
-						brand: brand,
 						length: length,
 						videoCodec: videoCodec,
 						width: width,
@@ -5899,7 +5894,6 @@ const TIMAAT = {
 				var heading = (videogame) ? "Videogame bearbeiten" : "Videogame hinzufügen";
 				var submit = (videogame) ? "Speichern" : "Hinzufügen";
 				// videogame data
-				var brand = (videogame) ? videogame.model.brand : "";
 				var length = (videogame) ? videogame.model.length : "";
 				var isEpisode = (videogame) ? videogame.model.isEpisode : 0;
 				// medium data
@@ -5917,7 +5911,6 @@ const TIMAAT = {
 				$("#timaat-videogame-meta-remark").val(remark);
 				$("#timaat-videogame-meta-copyright").val(copyright);
 				$("#timaat-videogame-meta-releasedate").val(releaseDate);
-				$("#timaat-videogame-meta-brand").val(brand);
 				$("#timaat-videogame-meta-isepisode").val(isEpisode);
 			});
 
@@ -5934,7 +5927,6 @@ const TIMAAT = {
 				var copyright = $("#timaat-videogame-meta-copyright").val();
 				var releaseDate = $("#timaat-videogame-meta-releasedate").val();
 				// videogame data
-				var brand = $("#timaat-videogame-meta-brand").val();
 				var isEpisodeSelector = $("#timaat-videogame-meta-isepisode").val();
 				var isEpisode = Number(isEpisodeSelector);
 
@@ -5946,14 +5938,12 @@ const TIMAAT = {
 					videogame.model.medium.copyright = copyright;
 					videogame.model.medium.releaseDate = releaseDate;
 					// videogame data
-					videogame.model.brand = brand;
 					videogame.model.isEpisode = isEpisode;
 					videogame.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype("videogame", videogame);
         } else {
 					var model = {
 						mediumId: 0,
-						brand: brand,
 						isEpisode: isEpisode,
 					};
 					var medium = {

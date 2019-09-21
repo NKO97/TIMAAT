@@ -72,7 +72,7 @@ public class LocationEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("locationtype/list")
-	public Response getLocationtypeList() {
+	public Response getLocationTypeList() {
 
 		@SuppressWarnings("unchecked")
 		List<LocationType> locationTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList();

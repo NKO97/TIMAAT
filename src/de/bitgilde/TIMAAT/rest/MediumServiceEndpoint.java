@@ -941,7 +941,6 @@ public class MediumServiceEndpoint{
 		if ( updatedVideo == null ) return Response.notModified().build();
 
 		// update video
-		if ( updatedVideo.getBrand() != null ) video.setBrand(updatedVideo.getBrand());
 		if ( updatedVideo.getLength() > 0 ) video.setLength(updatedVideo.getLength());
 		if ( updatedVideo.getVideoCodec() != null ) video.setVideoCodec(updatedVideo.getVideoCodec());
 		if ( updatedVideo.getWidth() > 0 ) video.setWidth(updatedVideo.getWidth());
@@ -1066,7 +1065,6 @@ public class MediumServiceEndpoint{
 
 		// update videogame
 		// System.out.println("MediumEndpoint: UPDATE VIDEOGAME - videogame.id:"+videogame.getMediumId());	
-		if ( updatedVideogame.getBrand() != null ) videogame.setBrand(updatedVideogame.getBrand());
 		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode()); 
 
 		// update log metadata
@@ -1120,11 +1118,12 @@ public class MediumServiceEndpoint{
 	@Path("title/{id}")
 	@Secured
 	public Response createTitle(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumEndpoint: createTitle jsonData: "+jsonData);
+
+		System.out.println("MediumEndpoint: createTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		// Medium medium = entityManager.find(Medium.class, mediumid);
+		
 		// parse JSON data
 		try {
 			newTitle = mapper.readValue(jsonData, Title.class);
@@ -1137,12 +1136,15 @@ public class MediumServiceEndpoint{
 			System.out.println("MediumEndpoint: createTitle: newTitle == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+		// System.out.println("MediumEndpoint: createTitle: language id: "+newTitle.getLanguage().getId());
 		// sanitize object data
-		Language language = entityManager.find(Language.class, 1); // TODO get proper language id
+		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
 		newTitle.setLanguage(language);
+
 		// update log metadata
 		// Not necessary, a title will always be created in conjunction with a medium
 		System.out.println("MediumEndpoint: createTitle: persist title");
+
 		// persist title
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1153,9 +1155,11 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
 		System.out.println("MediumEndpoint: createTitle: add log entry");	
+
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
 		System.out.println("MediumEndpoint: title created with id "+newTitle.getId());
+
 		return Response.ok().entity(newTitle).build();
 	}
 
@@ -1179,8 +1183,10 @@ public class MediumServiceEndpoint{
 		}
 		if ( updatedTitle == null ) return Response.notModified().build();    	
 		// update title
-		// System.out.println("MediumEndpoint: UPDATE TITLE - title.id:"+title.getId());	
+		// System.out.println("MediumEndpoint: UPDATE TITLE - title.id:"+title.getId());
+		// System.out.println("MediumEndpoint: UPDATE TITLE - language id:"+updatedTitle.getLanguage().getId());	
 		if ( updatedTitle.getName() != null ) title.setName(updatedTitle.getName());
+		if ( updatedTitle.getLanguage() != null ) title.setLanguage(updatedTitle.getLanguage());
 
 		// update log metadata
 		// log metadata will be updated with the corresponding medium

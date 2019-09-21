@@ -121,7 +121,6 @@ public class Medium implements Serializable {
 	// @Embedded
 	// @AttributeOverrides({
 	// 		@AttributeOverride(name="audio_codec_information_id", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="brand", column=@Column(table="MediumVideo")),
 	// 		@AttributeOverride(name="data_rate", column=@Column(table="MediumVideo")),
 	// 		@AttributeOverride(name="episode_information_id", column=@Column(table="MediumVideo")),
 	// 		@AttributeOverride(name="frame_rate", column=@Column(table="MediumVideo")),
