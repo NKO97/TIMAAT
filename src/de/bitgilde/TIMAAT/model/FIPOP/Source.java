@@ -64,7 +64,6 @@ public class Source implements Serializable {
 		this.isPrimarySource = isPrimarySource;
 	}
 
-
 	public Boolean getIsStillAvailable() {
 		return this.isStillAvailable;
 	}

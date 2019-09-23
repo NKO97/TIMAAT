@@ -95,9 +95,9 @@ public class MediumServiceEndpoint{
 		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
     	
     	for (Medium m : mlist ) {
-    		m.setStatus(videoStatus(m.getId()));
-        	m.setViewToken(issueFileToken(m.getId()));
-        	m.setMediumAnalysisLists(null);
+				m.setStatus(videoStatus(m.getId()));
+				m.setViewToken(issueFileToken(m.getId()));
+				m.setMediumAnalysisLists(null);
     	}
     	
 		return Response.ok().entity(mlist).build();
