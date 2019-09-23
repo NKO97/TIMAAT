@@ -809,7 +809,7 @@
           </div>
           <!-- add audio -->
           <div class="modal fade" id="timaat-mediadatasets-audio-meta" tabindex="-1" role="dialog" aria-labelledby="audioMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="audioMetaLabel">Audio hinzufügen</h5>
@@ -820,13 +820,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-audio-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-audio-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -844,6 +844,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-audio-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-audio-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-audio-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-audio-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-audio-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -899,7 +919,7 @@
           </div>
           <!-- add document -->
           <div class="modal fade" id="timaat-mediadatasets-document-meta" tabindex="-1" role="dialog" aria-labelledby="documentMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="documentMetaLabel">Document hinzufügen</h5>
@@ -910,13 +930,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-document-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-document-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -934,6 +954,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-document-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-document-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-document-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-document-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-document-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -977,7 +1017,7 @@
           </div>
           <!-- add image -->
           <div class="modal fade" id="timaat-mediadatasets-image-meta" tabindex="-1" role="dialog" aria-labelledby="imageMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="imageMetaLabel">Image hinzufügen</h5>
@@ -988,13 +1028,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-image-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-image-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -1012,6 +1052,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-image-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-image-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-image-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-image-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-image-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -1073,7 +1133,7 @@
           </div>
           <!-- add software -->
           <div class="modal fade" id="timaat-mediadatasets-software-meta" tabindex="-1" role="dialog" aria-labelledby="softwareMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="softwareMetaLabel">Software hinzufügen</h5>
@@ -1084,13 +1144,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-software-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-software-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -1108,6 +1168,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-software-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-software-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-software-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-software-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-software-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -1157,7 +1237,7 @@
           </div>
           <!-- add text -->
           <div class="modal fade" id="timaat-mediadatasets-text-meta" tabindex="-1" role="dialog" aria-labelledby="textMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="textMetaLabel">Text hinzufügen</h5>
@@ -1168,13 +1248,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-text-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-text-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -1195,6 +1275,26 @@
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-text-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-text-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-text-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-text-meta-source-isstillavailable" aria-label="Is Source Still Available">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
                       <span class="input-group-text">Copyright</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-text-meta-copyright" placeholder="[Copyright]" aria-label="Copyright">
@@ -1206,11 +1306,11 @@
                     <textarea type="text" class="form-control" id="timaat-text-meta-remark" placeholder="[Remark]" aria-label="Remark"></textarea>
                   </div>
                   <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Inhalt</span>
-                      </div>
-                      <input type="text" class="form-control" id="timaat-text-meta-content" placeholder="[Content]" aria-label="Content">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Inhalt</span>
                     </div>
+                    <input type="text" class="form-control" id="timaat-text-meta-content" placeholder="[Content]" aria-label="Content">
+                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -1241,7 +1341,7 @@
           </div>
           <!-- add video -->
           <div class="modal fade" id="timaat-mediadatasets-video-meta" tabindex="-1" role="dialog" aria-labelledby="videoMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="videoMetaLabel">Video hinzufügen</h5>
@@ -1252,13 +1352,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-video-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-video-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -1276,6 +1376,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-video-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-video-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-video-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-video-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-video-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -1367,7 +1487,7 @@
           </div>
           <!-- add videogame -->
           <div class="modal fade" id="timaat-mediadatasets-videogame-meta" tabindex="-1" role="dialog" aria-labelledby="videogameMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="videogameMetaLabel">Videogame hinzufügen</h5>
@@ -1378,13 +1498,13 @@
                 <div class="modal-body">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitel</span>
+                      <span class="input-group-text">Primärtitel*</span>
                     </div>
                     <input type="text" class="form-control" id="timaat-videogame-meta-title" placeholder="[Primary Title]" aria-label="Primary Title">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Primärtitelsprache</span>
+                      <span class="input-group-text">Primärtitelsprache*</span>
                     </div>
                     <select class="custom-select" id="timaat-videogame-meta-title-language-id" aria-label="Primary Title Language">
                       <option value="" disabled selected>Choose Title Language...</option>
@@ -1402,6 +1522,26 @@
                       <span class="input-group-text">Erscheinungsdatum</span>
                     </div>
                     <input type="date" class="form-control" id="timaat-videogame-meta-releasedate" placeholder="[Release Date]" aria-label="Release Date">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Quelle (URL)</span>
+                    </div>
+                    <input type="text" class="form-control" id="timaat-videogame-meta-source-url" placeholder="[Source URL]" aria-label="Source URL">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle?</span>
+                    </div>
+                    <input type="checkbox" checked class="form-control" id="timaat-videogame-meta-source-isprimarysource" aria-label="Is This The Primary Source">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle (letzter Zugriff)</span>
+                    </div>
+                    <input type="date" class="form-control" id="timaat-videogame-meta-source-lastaccessed" placeholder="[Source Last Accessed]" aria-label="Source Last Accessed">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Primärquelle verfügbar?</span>
+                    </div>
+                    <input type="checkbox" class="form-control" id="timaat-videogame-meta-source-isstillavailable" aria-label="Is Source Still Available">
                   </div>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">

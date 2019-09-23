@@ -2987,7 +2987,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(subtypeData) {
-					console.log("TCL: createVideo -> subtypeData", subtypeData);
+					console.log("TCL: createMediumSubtype subtypeData", subtypeData);
 					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -5135,10 +5135,18 @@ const TIMAAT = {
 				$("#timaat-medium-meta-remark").val(remark);
 				$("#timaat-medium-meta-copyright").val(copyright);
 				$("#timaat-medium-meta-releasedate").val(releaseDate);
-				$("#timaat-medium-meta-source-isprimarysource").val(sourceIsPrimarySource);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-medium-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-medium-meta-source-isprimarysource").prop('checked', false);
+				}
 				$("#timaat-medium-meta-source-url").val(sourceUrl);
 				$("#timaat-medium-meta-source-lastaccessed").val(sourceLastAccessed);
-				$("#timaat-medium-meta-source-isstillavailable").val(sourceIsStillAvailable);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-medium-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
+				}
 			});
 
 			// Submit medium data
@@ -5171,6 +5179,7 @@ const TIMAAT = {
 					medium.model.sources[0].url = sourceUrl;
 					medium.model.sources[0].lastAccessed = sourceLastAccessed;
 					medium.model.sources[0].isStillAvailable = sourceIsStillAvailable;
+
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);   
 				} else { // create new medium
@@ -5199,7 +5208,7 @@ const TIMAAT = {
 						medium: {
 							id: 0,
 						},
-						isPrimarySource: sourceIsPrimarySource,
+						isPrimarySource: sourceIsPrimarySource,            
 						url: sourceUrl,
 						lastAccessed: sourceLastAccessed,
 						isStillAvailable: sourceIsStillAvailable,
@@ -5253,6 +5262,10 @@ const TIMAAT = {
 				var remark = (audio) ? audio.model.medium.remark : "";
 				var copyright = (audio) ? audio.model.medium.copyright : "";
 				var releaseDate = (audio) ? audio.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (audio) ? audio.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (audio) ? audio.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (audio) ? audio.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (audio) ? audio.model.medium.sources[0].isStillAvailable : false;
 				// audio data
 				var length = (audio) ? TIMAAT.Util.formatTime(audio.model.length, false) :  TIMAAT.Util.formatTime(0, false) ;
 				// TODO: audiocodecinformation
@@ -5266,6 +5279,18 @@ const TIMAAT = {
 				$("#timaat-audio-meta-remark").val(remark);
 				$("#timaat-audio-meta-copyright").val(copyright);
 				$("#timaat-audio-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-audio-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-audio-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-audio-meta-source-url").val(sourceUrl);
+				$("#timaat-audio-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-audio-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-audio-meta-source-isstillavailable").prop('checked', false);
+				}
 				// audio data
 				$("#timaat-audio-meta-length").val(length);
 				// TODO: audiocodecinformation
@@ -5283,6 +5308,10 @@ const TIMAAT = {
 				var remark = $("#timaat-audio-meta-remark").val();
 				var copyright = $("#timaat-audio-meta-copyright").val();
 				var releaseDate = $("#timaat-audio-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-audio-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-audio-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-audio-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-audio-meta-source-isstillavailable").is(":checked") ? true : false;
 				// audio data
 				var length = TIMAAT.Util.parseTime($("#timaat-audio-meta-length").val());
 				// TODO: audiocodecinformation
@@ -5294,6 +5323,10 @@ const TIMAAT = {
 					audio.model.medium.remark = remark;
 					audio.model.medium.copyright = copyright;
 					audio.model.medium.releaseDate = releaseDate;
+					audio.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					audio.model.medium.sources[0].url = sourceUrl;
+					audio.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					audio.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// audio data
 					audio.model.length = length;
 					// TODO: audiocodecinformation
@@ -5325,12 +5358,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for audio or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5371,6 +5414,10 @@ const TIMAAT = {
 				var remark = (mediumDocument) ? mediumDocument.model.medium.remark : "";
 				var copyright = (mediumDocument) ? mediumDocument.model.medium.copyright : "";
 				var releaseDate = (mediumDocument) ? mediumDocument.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (mediumDocument) ? mediumDocument.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (mediumDocument) ? mediumDocument.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (mediumDocument) ? mediumDocument.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (mediumDocument) ? mediumDocument.model.medium.sources[0].isStillAvailable : false;
 				// document data
 				// currently empty
 
@@ -5383,6 +5430,18 @@ const TIMAAT = {
 				$("#timaat-document-meta-remark").val(remark);
 				$("#timaat-document-meta-copyright").val(copyright);
 				$("#timaat-document-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-document-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-document-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-document-meta-source-url").val(sourceUrl);
+				$("#timaat-document-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-document-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-document-meta-source-isstillavailable").prop('checked', false);
+				}
 				// document data
 				// currently empty
 			});
@@ -5399,6 +5458,10 @@ const TIMAAT = {
 				var remark = $("#timaat-document-meta-remark").val();
 				var copyright = $("#timaat-document-meta-copyright").val();
 				var releaseDate = $("#timaat-document-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-document-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-document-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-document-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-document-meta-source-isstillavailable").is(":checked") ? true : false;
 				// document data
 				// currently empty
 
@@ -5409,6 +5472,10 @@ const TIMAAT = {
 					mediumDocument.model.medium.remark = remark;
 					mediumDocument.model.medium.copyright = copyright;
 					mediumDocument.model.medium.releaseDate = releaseDate;
+					mediumDocument.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					mediumDocument.model.medium.sources[0].url = sourceUrl;
+					mediumDocument.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					mediumDocument.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// document data
 					// currently empty
 
@@ -5435,12 +5502,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for document or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5481,6 +5558,10 @@ const TIMAAT = {
 				var remark = (image) ? image.model.medium.remark : "";
 				var copyright = (image) ? image.model.medium.copyright : "";
 				var releaseDate = (image) ? image.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (image) ? image.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (image) ? image.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (image) ? image.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (image) ? image.model.medium.sources[0].isStillAvailable : false;
 				// image data
 				var width = (image) ? image.model.width : "";
 				var height = (image) ? image.model.height : "";
@@ -5495,6 +5576,18 @@ const TIMAAT = {
 				$("#timaat-image-meta-remark").val(remark);
 				$("#timaat-image-meta-copyright").val(copyright);
 				$("#timaat-image-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-image-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-image-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-image-meta-source-url").val(sourceUrl);
+				$("#timaat-image-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-image-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-image-meta-source-isstillavailable").prop('checked', false);
+				}			
 				// image data
 				$("#timaat-image-meta-width").val(width);
 				$("#timaat-image-meta-height").val(height);
@@ -5513,6 +5606,10 @@ const TIMAAT = {
 				var remark = $("#timaat-image-meta-remark").val();
 				var copyright = $("#timaat-image-meta-copyright").val();
 				var releaseDate = $("#timaat-image-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-image-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-image-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-image-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-image-meta-source-isstillavailable").is(":checked") ? true : false;
 				// image data
 				var width = $("#timaat-image-meta-width").val();
 				var height = $("#timaat-image-meta-height").val();
@@ -5525,6 +5622,10 @@ const TIMAAT = {
 					image.model.medium.remark = remark;
 					image.model.medium.copyright = copyright;
 					image.model.medium.releaseDate = releaseDate;
+					image.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					image.model.medium.sources[0].url = sourceUrl;
+					image.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					image.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// image data
 					image.model.width = width;
 					image.model.height = height;
@@ -5556,12 +5657,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for image or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5602,6 +5713,10 @@ const TIMAAT = {
 				var remark = (software) ? software.model.medium.remark : "";
 				var copyright = (software) ? software.model.medium.copyright : "";
 				var releaseDate = (software) ? software.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (software) ? software.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (software) ? software.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (software) ? software.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (software) ? software.model.medium.sources[0].isStillAvailable : false;
 				// software data
 				var version = (software) ? software.model.version : "";
 
@@ -5614,6 +5729,18 @@ const TIMAAT = {
 				$("#timaat-software-meta-remark").val(remark);
 				$("#timaat-software-meta-copyright").val(copyright);
 				$("#timaat-software-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-software-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-software-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-software-meta-source-url").val(sourceUrl);
+				$("#timaat-software-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-software-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-software-meta-source-isstillavailable").prop('checked', false);
+				}
 				// software data
 				$("#timaat-software-meta-version").val(version);
 			});
@@ -5630,6 +5757,10 @@ const TIMAAT = {
 				var remark = $("#timaat-software-meta-remark").val();
 				var copyright = $("#timaat-software-meta-copyright").val();
 				var releaseDate = $("#timaat-software-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-software-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-software-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-software-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-software-meta-source-isstillavailable").is(":checked") ? true : false;
 				// software data
 				var version = $("#timaat-software-meta-version").val();
 
@@ -5640,6 +5771,10 @@ const TIMAAT = {
 					software.model.medium.remark = remark;
 					software.model.medium.copyright = copyright;
 					software.model.medium.releaseDate = releaseDate;
+					software.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					software.model.medium.sources[0].url = sourceUrl;
+					software.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					software.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// software data
 					software.model.version = version;
 					
@@ -5667,12 +5802,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for software or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5713,6 +5858,10 @@ const TIMAAT = {
 				var remark = (text) ? text.model.medium.remark : "";
 				var copyright = (text) ? text.model.medium.copyright : "";
 				var releaseDate = (text) ? text.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (text) ? text.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (text) ? text.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (text) ? text.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (text) ? text.model.medium.sources[0].isStillAvailable : false;
 				// text data
 				var content = (text) ? text.model.content : "";
 
@@ -5725,6 +5874,18 @@ const TIMAAT = {
 				$("#timaat-text-meta-remark").val(remark);
 				$("#timaat-text-meta-copyright").val(copyright);
 				$("#timaat-text-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-text-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-text-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-text-meta-source-url").val(sourceUrl);
+				$("#timaat-text-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-text-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-text-meta-source-isstillavailable").prop('checked', false);
+				}
 				// text data
 				$("#timaat-text-meta-content").val(content);
 			});
@@ -5741,6 +5902,10 @@ const TIMAAT = {
 				var remark = $("#timaat-text-meta-remark").val();
 				var copyright = $("#timaat-text-meta-copyright").val();
 				var releaseDate = $("#timaat-text-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-text-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-text-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-text-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-text-meta-source-isstillavailable").is(":checked") ? true : false;
 				// text data
 				var content = $("#timaat-text-meta-content").val();
 
@@ -5751,6 +5916,10 @@ const TIMAAT = {
 					text.model.medium.remark = remark;
 					text.model.medium.copyright = copyright;
 					text.model.medium.releaseDate = releaseDate;
+					text.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					text.model.medium.sources[0].url = sourceUrl;
+					text.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					text.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// text data
 					text.model.content = content;
 					
@@ -5778,12 +5947,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };
 					// There are no translation data for text or medium at the moment
-					TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5824,6 +6003,10 @@ const TIMAAT = {
 				var remark = (video) ? video.model.medium.remark : "";
 				var copyright = (video) ? video.model.medium.copyright : "";
 				var releaseDate = (video) ? video.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (video) ? video.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (video) ? video.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (video) ? video.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (video) ? video.model.medium.sources[0].isStillAvailable : false;
 				// video data
 				var length = (video) ? video.model.length : "";
 				var videoCodec = (video) ? video.model.videoCodec : "";
@@ -5843,6 +6026,18 @@ const TIMAAT = {
 				$("#timaat-video-meta-remark").val(remark);
 				$("#timaat-video-meta-copyright").val(copyright);
 				$("#timaat-video-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-video-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-video-meta-source-url").val(sourceUrl);
+				$("#timaat-video-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-video-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-source-isstillavailable").prop('checked', false);
+				}
 				// video data
 				$("#timaat-video-meta-length").val(length);
 				$("#timaat-video-meta-videocodec").val(videoCodec);
@@ -5851,7 +6046,11 @@ const TIMAAT = {
 				$("#timaat-video-meta-framerate").val(frameRate);
 				$("#timaat-video-meta-datarate").val(dataRate);
 				$("#timaat-video-meta-totalbitrate").val(totalBitrate);
-				$("#timaat-video-meta-isepisode").val(isEpisode);
+				if (isEpisode ) {
+					$("#timaat-video-meta-isepisode").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-isepisode").prop('checked', false);
+				}
 			});
 
 			// Submit video data
@@ -5875,6 +6074,10 @@ const TIMAAT = {
 				var dataRate = $("#timaat-video-meta-datarate").val();
 				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
 				var isEpisode = $("#timaat-video-meta-isepisode").is(":checked") ? true : false;
+				var sourceIsPrimarySource = $("#timaat-video-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-video-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-video-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-video-meta-source-isstillavailable").is(":checked") ? true : false;
 
 				if (video) {
           // medium data
@@ -5883,6 +6086,10 @@ const TIMAAT = {
 					video.model.medium.remark = remark;
 					video.model.medium.copyright = copyright;
 					video.model.medium.releaseDate = releaseDate;
+					video.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					video.model.medium.sources[0].url = sourceUrl;
+					video.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					video.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// video data
 					video.model.length = length;
 					video.model.videoCodec = videoCodec;
@@ -5927,12 +6134,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for video or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5968,14 +6185,17 @@ const TIMAAT = {
 				var heading = (videogame) ? "Videogame bearbeiten" : "Videogame hinzufügen";
 				var submit = (videogame) ? "Speichern" : "Hinzufügen";
 				// videogame data
-				var length = (videogame) ? videogame.model.length : "";
-				var isEpisode = (videogame) ? videogame.model.isEpisode : 0;
+				var isEpisode = (videogame) ? videogame.model.isEpisode : false;
 				// medium data
 				var primaryTitle = (videogame) ? videogame.model.medium.title.name : "";
 				var primaryTitleLanguageId = (videogame) ? videogame.model.medium.title.language.id : "";
 				var remark = (videogame) ? videogame.model.medium.remark : "";
 				var copyright = (videogame) ? videogame.model.medium.copyright : "";
 				var releaseDate = (videogame) ? videogame.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (videogame) ? videogame.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (videogame) ? videogame.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (videogame) ? videogame.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (videogame) ? videogame.model.medium.sources[0].isStillAvailable : false;
 
 				// setup UI
 				$('#videogameMetaLabel').html(heading);
@@ -5985,7 +6205,24 @@ const TIMAAT = {
 				$("#timaat-videogame-meta-remark").val(remark);
 				$("#timaat-videogame-meta-copyright").val(copyright);
 				$("#timaat-videogame-meta-releasedate").val(releaseDate);
-				$("#timaat-videogame-meta-isepisode").val(isEpisode);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-videogame-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-videogame-meta-source-url").val(sourceUrl);
+				$("#timaat-videogame-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-videogame-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-source-isstillavailable").prop('checked', false);
+				}
+				// videogame data
+				if (isEpisode ) {
+					$("#timaat-videogame-meta-isepisode").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-isepisode").prop('checked', false);
+				}
 			});
 
 			// Submit videogame data
@@ -6000,6 +6237,10 @@ const TIMAAT = {
 				var remark = $("#timaat-videogame-meta-remark").val();
 				var copyright = $("#timaat-videogame-meta-copyright").val();
 				var releaseDate = $("#timaat-videogame-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-videogame-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-videogame-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-videogame-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-videogame-meta-source-isstillavailable").is(":checked") ? true : false;
 				// videogame data
 				var isEpisode = $("#timaat-videogame-meta-isepisode").is(":checked") ? true : false;
 
@@ -6010,8 +6251,13 @@ const TIMAAT = {
 					videogame.model.medium.remark = remark;
 					videogame.model.medium.copyright = copyright;
 					videogame.model.medium.releaseDate = releaseDate;
+					videogame.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					videogame.model.medium.sources[0].url = sourceUrl;
+					videogame.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					videogame.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// videogame data
 					videogame.model.isEpisode = isEpisode;
+
 					videogame.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype("videogame", videogame);
         } else {
@@ -6036,12 +6282,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for video or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };
-					TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -6355,7 +6611,7 @@ const TIMAAT = {
 			};
 		},
 
-		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title) {
+		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title, source) {
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
 			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
 			try {
@@ -6363,9 +6619,15 @@ const TIMAAT = {
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
 				
 				// create medium
-				var newMediumModel = mediumModel;
-				newMediumModel.title = newTitle;
-				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+				var tempMediumModel = mediumModel;
+				tempMediumModel.title = newTitle;
+				tempMediumModel.source = source;
+				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+
+				// update source (createMedium created an empty source)
+				source.id = newMediumModel.sources[0].id;
+				var updatedSource = await TIMAAT.MediaService.updateSource(source);
+				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
 
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
@@ -6423,6 +6685,13 @@ const TIMAAT = {
 			};
 
 			try {
+				// update source
+				var tempSource = await TIMAAT.MediaService.updateSource(mediumSubtypeData.model.medium.sources[0]);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+
+			try {
 				// update data that is part of mediumSubtypeData
 				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
 			} catch(error) {
@@ -6432,7 +6701,7 @@ const TIMAAT = {
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
-				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);
+				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
 			} catch(error) {
 				console.log( "error: ", error);
 			};
