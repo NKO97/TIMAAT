@@ -385,7 +385,7 @@ public class LocationEndpoint {
 		// sanitize object data
 		newTranslation.setId(0);
 		newTranslation.setLocation(location);
-		Language language = entityManager.find(Language.class, 1); // TODO get proper language id
+		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		newTranslation.setLanguage(language);
 		location.addLocationTranslation(newTranslation);
 

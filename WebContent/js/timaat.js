@@ -2998,7 +2998,7 @@ const TIMAAT = {
 		},
 
 		async createTitle(title) {
-			console.log("TCL: async createtitle -> title", title);
+			console.log("TCL: async createTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -3012,6 +3012,29 @@ const TIMAAT = {
 				}).done(function(titleData) {
 					console.log("TCL: createTitle -> titleData", titleData);
 					resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createSource(source) {
+			console.log("TCL: async createSource -> source", source);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
+					type:"POST",
+					data: JSON.stringify(source),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(sourceData) {
+					console.log("TCL: createSource -> sourceData", sourceData);
+					resolve(sourceData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -3111,6 +3134,30 @@ const TIMAAT = {
 					},
 				}).done(function(updateData) {
 					console.log("TCL: async updateTitle -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateSource(source) {
+			console.log("TCL: async updateSource -> source", source);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
+					type:"PATCH",
+					data: JSON.stringify(source),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateSource -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -5049,7 +5096,7 @@ const TIMAAT = {
 		},
 
 		initMedia: function() {
-			// console.log("TCL: MediaDatasets: initMedia: function()");		
+			// console.log("TCL: MediaDatasets: initMedia: function()");
 			// delete medium functionality
 			$('#timaat-medium-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-medium-delete');
@@ -5057,13 +5104,15 @@ const TIMAAT = {
 				if (medium) TIMAAT.MediaDatasets._mediumRemoved(medium);
 				modal.modal('hide');
 			});
+
 			// add medium button
 			$('#timaat-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium()');
 			// add/edit medium functionality
-			$('#timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev) {
+
+			$('#timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev) {				
 				// Create/Edit medium window setup
 				var modal = $(this);
-				var medium = modal.data('medium');				
+				var medium = modal.data('medium');
 				var heading = (medium) ? "Medium bearbeiten" : "Medium hinzufügen";
 				var submit = (medium) ? "Speichern" : "Hinzufügen";
 				var primaryTitle = (medium) ? medium.model.title.name : "";
@@ -5071,7 +5120,11 @@ const TIMAAT = {
 				var typeId = (medium) ? medium.model.mediaType.id : "";
 				var remark = (medium) ? medium.model.remark : "";
 				var copyright = (medium) ? medium.model.copyright : "";
-				var releaseDate = (medium) ? medium.model.releaseDate : 0;
+				var releaseDate = (medium) ? medium.model.releaseDate : 0;      
+				var sourceIsPrimarySource = (medium) ? medium.model.sources[0].isPrimarySource : true;
+				var sourceUrl = (medium) ? medium.model.sources[0].url : "";
+				var sourceLastAccessed = (medium) ? medium.model.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (medium) ? medium.model.sources[0].isStillAvailable : false;
 
 				// setup UI
 				$('#mediumMetaLabel').html(heading);
@@ -5082,6 +5135,10 @@ const TIMAAT = {
 				$("#timaat-medium-meta-remark").val(remark);
 				$("#timaat-medium-meta-copyright").val(copyright);
 				$("#timaat-medium-meta-releasedate").val(releaseDate);
+				$("#timaat-medium-meta-source-isprimarysource").val(sourceIsPrimarySource);
+				$("#timaat-medium-meta-source-url").val(sourceUrl);
+				$("#timaat-medium-meta-source-lastaccessed").val(sourceLastAccessed);
+				$("#timaat-medium-meta-source-isstillavailable").val(sourceIsStillAvailable);
 			});
 
 			// Submit medium data
@@ -5097,6 +5154,10 @@ const TIMAAT = {
 				var remark = $("#timaat-medium-meta-remark").val();
 				var copyright = $("#timaat-medium-meta-copyright").val();
 				var releaseDate = $("#timaat-medium-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-medium-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-medium-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-medium-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-medium-meta-source-isstillavailable").is(":checked") ? true : false;
 
 				if (medium) {
           // console.log("TCL: medium", medium);
@@ -5106,6 +5167,10 @@ const TIMAAT = {
 					medium.model.title.name = primaryTitle;
 					medium.model.title.language.id = primaryTitleLanguageId;
 					medium.model.mediaType.id = typeId;
+					medium.model.sources[0].isPrimarySource = sourceIsPrimarySource;
+					medium.model.sources[0].url = sourceUrl;
+					medium.model.sources[0].lastAccessed = sourceLastAccessed;
+					medium.model.sources[0].isStillAvailable = sourceIsStillAvailable;
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);   
 				} else { // create new medium
@@ -5125,9 +5190,19 @@ const TIMAAT = {
 					var title = {
 						id: 0,
 						language: {
-							id: primaryTitleLanguageId,							
+							id: primaryTitleLanguageId,
 						},
 						name: primaryTitle,
+					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
 					};
 					// var modelTranslation = {
 					// 	id: 0,
@@ -5135,7 +5210,7 @@ const TIMAAT = {
 					// };
 					// Medium has no translation table at the moment
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
-					TIMAAT.MediaDatasets.createMedium(model, title);
+						TIMAAT.MediaDatasets.createMedium(model, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5757,7 +5832,7 @@ const TIMAAT = {
 				var frameRate = (video) ? video.model.frameRate : "";
 				var dataRate = (video) ? video.model.dataRate : "";
 				var totalBitrate = (video) ? video.model.totalBitrate : "";
-				var isEpisode = (video) ? video.model.isEpisode : 0;
+				var isEpisode = (video) ? video.model.isEpisode : false;
 
 				// setup UI
 				$('#videoMetaLabel').html(heading);
@@ -5799,8 +5874,7 @@ const TIMAAT = {
 				var frameRate = $("#timaat-video-meta-framerate").val();
 				var dataRate = $("#timaat-video-meta-datarate").val();
 				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
-				var isEpisodeSelector = $("#timaat-video-meta-isepisode").val();
-				var isEpisode = Number(isEpisodeSelector);
+				var isEpisode = $("#timaat-video-meta-isepisode").is(":checked") ? true : false;
 
 				if (video) {
           // medium data
@@ -5927,8 +6001,7 @@ const TIMAAT = {
 				var copyright = $("#timaat-videogame-meta-copyright").val();
 				var releaseDate = $("#timaat-videogame-meta-releasedate").val();
 				// videogame data
-				var isEpisodeSelector = $("#timaat-videogame-meta-isepisode").val();
-				var isEpisode = Number(isEpisodeSelector);
+				var isEpisode = $("#timaat-videogame-meta-isepisode").is(":checked") ? true : false;
 
 				if (videogame) {
           // medium data
@@ -6247,21 +6320,25 @@ const TIMAAT = {
 			}
 		},
 
-		createMedium: async function(mediumModel, title) {
+		createMedium: async function(mediumModel, title, source) {
 			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
 			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
 			// This routine can be used to create empty media of a certain type
-			console.log("TCL: createMedium: async function -> mediumModel, title", mediumModel, title);
+			console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-				// console.log("TCL: newTitle", newTitle);
 				
 				// create medium
-				var newMediumModel = mediumModel;
-				newMediumModel.title = newTitle;
-        // console.log("TCL: newMediumModel", newMediumModel);
-				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+				var tempMediumModel = mediumModel;
+				tempMediumModel.title = newTitle;
+				tempMediumModel.source = source;
+				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+
+				// update source (createMedium created an empty source)
+				source.id = newMediumModel.sources[0].id;
+				var updatedSource = await TIMAAT.MediaService.updateSource(source);
+				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
 
 				// create medium translation with medium id
 				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
@@ -6315,6 +6392,9 @@ const TIMAAT = {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
 				medium.model.title = tempTitle;
+
+				// update source
+				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
 
 				// update data that is part of medium (includes updating last edited by/at)
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);

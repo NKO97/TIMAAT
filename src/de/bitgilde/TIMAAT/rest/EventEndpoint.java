@@ -245,7 +245,7 @@ public class EventEndpoint {
 		newTranslation.setId(0);
 		// System.out.println("newTranslation.setEvent(event);" + event);
 		newTranslation.setEvent(event); // TODO check if valid
-		Language language = entityManager.find(Language.class, 1); // TODO get proper language id
+		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		// System.out.println("newTranslation.setLanguage(language);" + language);
 		newTranslation.setLanguage(language);
 		// System.out.println("event.addEventTranslation(newTranslation); " + newTranslation);

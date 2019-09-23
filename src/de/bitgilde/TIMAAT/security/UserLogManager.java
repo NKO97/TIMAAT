@@ -88,7 +88,10 @@ public class UserLogManager {
 			CITYDELETED(67),
 			STREETCREATED(68),
 			STREETEDITED(69),
-			STREETDELETED(70);
+			STREETDELETED(70),
+			SOURCECREATED(71),
+			SOURCEEDITED(72),
+			SOURCEDELETED(73);
 		
 
 	    private final int value;
