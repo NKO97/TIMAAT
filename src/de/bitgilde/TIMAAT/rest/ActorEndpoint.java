@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
@@ -98,8 +99,8 @@ public class ActorEndpoint {
 		// newActor.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		// newActor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newActor.getCreatedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
-			newActor.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			newActor.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+			newActor.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();	
@@ -140,7 +141,7 @@ public class ActorEndpoint {
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			actor.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			actor.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		

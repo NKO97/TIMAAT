@@ -49,14 +49,6 @@ public class MediumAudio implements Serializable {
 		this.mediumId = mediumId;
 	}
 
-	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents audio list from being displayed=)
-		return this.getMedium().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setMediumId?
-		this.getMedium().setId(id);
-	}
-
 	public float getLength() { // TODO why float?
 		return this.length.getTime()/1000f;
 	}

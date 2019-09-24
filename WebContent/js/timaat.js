@@ -833,7 +833,7 @@ const TIMAAT = {
     // console.log("TCL: video", video);
 			video.poll = window.setInterval(function() {
 				jQuery.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.id+'/status',
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.mediumId+'/status',
 					type:"GET",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
@@ -912,7 +912,7 @@ const TIMAAT = {
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
-			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			videoelement.appendTo('#timaat-video-list');
 			videoelement.find('.title').html(video.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
@@ -930,16 +930,16 @@ const TIMAAT = {
 				// setup video in player
 				TIMAAT.VideoPlayer.setupVideo(video);
 				// load video annotations from server
-				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				TIMAAT.Service.getAnalysisLists(video.mediumId, TIMAAT.VideoPlayer.setupAnalysisLists);
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
 				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.mediumVideo.length);
 				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 			});
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			});
 			
 			if ( video.status == "transcoding" ) TIMAAT.VideoChooser.updateVideoStatus(video);
@@ -1272,7 +1272,7 @@ const TIMAAT = {
 				var preview = $('#timaat-video-seek-bar-preview');
 				$('#timaat-video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
 				$('#timaat-video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
-				preview.find('img').attr('src', "/TIMAAT/api/medium/"+TIMAAT.VideoPlayer.model.video.id+"/thumbnail?token="+token+"&time="+time);
+				preview.find('img').attr('src', "/TIMAAT/api/medium/"+TIMAAT.VideoPlayer.model.video.mediumId+"/thumbnail?token="+token+"&time="+time);
 			});
 			
 			$('#timaat-user-log-analysislist').popover({
@@ -1343,7 +1343,7 @@ const TIMAAT = {
 					TIMAAT.VideoPlayer.curList.text = comment;					
 					TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
 				} else {
-					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
+					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.mediumId, TIMAAT.VideoPlayer._analysislistAdded);
 				}
 				modal.modal('hide');
 			});
@@ -1635,7 +1635,7 @@ const TIMAAT = {
 			$('.timaat-videoplayer-ui').show();
 			$('#timaat-videoplayer-video-title').html(video.primaryTitle.title);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
-    	var videoUrl = '/TIMAAT/api/medium/'+this.model.video.id+'/download'+'?token='+video.viewToken;
+    	var videoUrl = '/TIMAAT/api/medium/'+this.model.video.mediumId+'/download'+'?token='+video.viewToken;
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
 			map.setMaxBounds(this.videoBounds);
 			map.fitBounds(this.videoBounds);
@@ -2311,7 +2311,7 @@ const TIMAAT = {
 					}]
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.mediumId,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -2883,7 +2883,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	console.log("TCL: listMedia -> data", data);
+      	// console.log("TCL: listMedia -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -2987,7 +2987,7 @@ const TIMAAT = {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(subtypeData) {
-					console.log("TCL: createVideo -> subtypeData", subtypeData);
+					console.log("TCL: createMediumSubtype subtypeData", subtypeData);
 					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -2998,7 +2998,7 @@ const TIMAAT = {
 		},
 
 		async createTitle(title) {
-			console.log("TCL: async createtitle -> title", title);
+			console.log("TCL: async createTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -3012,6 +3012,29 @@ const TIMAAT = {
 				}).done(function(titleData) {
 					console.log("TCL: createTitle -> titleData", titleData);
 					resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createSource(source) {
+			console.log("TCL: async createSource -> source", source);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
+					type:"POST",
+					data: JSON.stringify(source),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(sourceData) {
+					console.log("TCL: createSource -> sourceData", sourceData);
+					resolve(sourceData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -3074,7 +3097,7 @@ const TIMAAT = {
 		},
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-    console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);		
+		console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
@@ -3111,6 +3134,30 @@ const TIMAAT = {
 					},
 				}).done(function(updateData) {
 					console.log("TCL: async updateTitle -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateSource(source) {
+			console.log("TCL: async updateSource -> source", source);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
+					type:"PATCH",
+					data: JSON.stringify(source),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateSource -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -4193,7 +4240,7 @@ const TIMAAT = {
 			$('#timaat-country-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-country-delete');
 				var country = modal.data('country');
-				if (country) TIMAAT.LocationDatasets._countryRemoved(country);
+				if (country) TIMAAT.LocationDatasets._locationSubtypeRemoved("country", country);
 				modal.modal('hide');
 			});
 
@@ -4298,7 +4345,7 @@ const TIMAAT = {
 			$('#timaat-province-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-province-delete');
 				var province = modal.data('province');
-				if (province) TIMAAT.LocationDatasets._provinceRemoved(province);
+				if (province) TIMAAT.LocationDatasets._locationSubtypeRemoved("province", province);
 				modal.modal('hide');
 			});
 
@@ -4378,7 +4425,7 @@ const TIMAAT = {
 			$('#timaat-county-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-county-delete');
 				var county = modal.data('county');
-				if (county) TIMAAT.LocationDatasets._countyRemoved(county);
+				if (county) TIMAAT.LocationDatasets._locationSubtypeRemoved("county", county);
 				modal.modal('hide');
 			});
 
@@ -4458,7 +4505,7 @@ const TIMAAT = {
 			$('#timaat-city-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-city-delete');
 				var city = modal.data('city');
-				if (city) TIMAAT.LocationDatasets._cityRemoved(city);
+				if (city) TIMAAT.LocationDatasets._locationSubtypeRemoved("city", city);
 				modal.modal('hide');
 			});
 
@@ -4538,7 +4585,7 @@ const TIMAAT = {
 			$('#timaat-street-delete-submit').click(function(ev) {
 				var modal = $('#timaat-locationdatasets-street-delete');
 				var street = modal.data('street');
-				if (street) TIMAAT.LocationDatasets._streetRemoved(street);
+				if (street) TIMAAT.LocationDatasets._locationSubtypeRemoved("street", street);
 				modal.modal('hide');
 			});
 
@@ -4938,7 +4985,7 @@ const TIMAAT = {
 		},
 
 		_locationSubtypeRemoved: function(locationSubtype, locationSubtypeData) {
-			// console.log("TCL: _videoRemoved: function(video)");
+			// console.log("TCL: _locationSubtypeRemoved: function(locationSubtype, locationSubtypeData)");
 			// sync to server
 		 TIMAAT.LocationService.removeLocationSubtype(locationSubtype, locationSubtypeData)
 		 locationSubtypeData.remove();
@@ -5066,14 +5113,11 @@ const TIMAAT = {
 			$('#timaat-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium()');
 
 			// add/edit medium functionality
-			$('#timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev) {
-	      console.log("TCL: $(' initMedia: #timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev)");
+
+			$('#timaat-mediadatasets-medium-meta').on('show.bs.modal', function (ev) {				
 				// Create/Edit medium window setup
 				var modal = $(this);
-        console.log("TCL: this", this);
-        console.log("TCL: initMedia: modal", modal);
 				var medium = modal.data('medium');
-        console.log("TCL: initMedia: medium", medium);
 				var heading = (medium) ? "Medium bearbeiten" : "Medium hinzufügen";
 				var submit = (medium) ? "Speichern" : "Hinzufügen";
 				var primaryTitle = (medium) ? medium.model.title.name : "";
@@ -5081,7 +5125,11 @@ const TIMAAT = {
 				var typeId = (medium) ? medium.model.mediaType.id : "";
 				var remark = (medium) ? medium.model.remark : "";
 				var copyright = (medium) ? medium.model.copyright : "";
-				var releaseDate = (medium) ? medium.model.releaseDate : 0;
+				var releaseDate = (medium) ? medium.model.releaseDate : 0;      
+				var sourceIsPrimarySource = (medium) ? medium.model.sources[0].isPrimarySource : true;
+				var sourceUrl = (medium) ? medium.model.sources[0].url : "";
+				var sourceLastAccessed = (medium) ? medium.model.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (medium) ? medium.model.sources[0].isStillAvailable : false;
 
 				// setup UI
 				$('#mediumMetaLabel').html(heading);
@@ -5093,7 +5141,6 @@ const TIMAAT = {
 				$("#timaat-medium-meta-copyright").val(copyright);
 				$("#timaat-medium-meta-releasedate").val(releaseDate);
 
-
 				// var formData = $('#timaat-mediadatasets-medium-form').serializeArray();
 				// console.log("TCL: initMedia: formData", formData);
 				// var formDataObject = {};
@@ -5101,6 +5148,18 @@ const TIMAAT = {
 				// 	formDataObject[field.name] = field.value;
 				// });
 				// console.log("TCL: initMedia: formDataObject", formDataObject);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-medium-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-medium-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-medium-meta-source-url").val(sourceUrl);
+				$("#timaat-medium-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-medium-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
+				}
 			});
 
 			$('#timaat-medium-edit').attr('onclick','TIMAAT.MediaDatasets.editMedium($(this).data("medium"))');
@@ -5202,6 +5261,10 @@ const TIMAAT = {
 				var remark = $("#timaat-medium-meta-remark").val();
 				var copyright = $("#timaat-medium-meta-copyright").val();
 				var releaseDate = $("#timaat-medium-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-medium-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-medium-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-medium-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-medium-meta-source-isstillavailable").is(":checked") ? true : false;
 
 				if (medium) {
           // console.log("TCL: medium", medium);
@@ -5211,6 +5274,11 @@ const TIMAAT = {
 					medium.model.title.name = primaryTitle;
 					medium.model.title.language.id = primaryTitleLanguageId;
 					medium.model.mediaType.id = typeId;
+					medium.model.sources[0].isPrimarySource = sourceIsPrimarySource;
+					medium.model.sources[0].url = sourceUrl;
+					medium.model.sources[0].lastAccessed = sourceLastAccessed;
+					medium.model.sources[0].isStillAvailable = sourceIsStillAvailable;
+
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);   
 				} else { // create new medium
@@ -5230,9 +5298,19 @@ const TIMAAT = {
 					var title = {
 						id: 0,
 						language: {
-							id: primaryTitleLanguageId,							
+							id: primaryTitleLanguageId,
 						},
 						name: primaryTitle,
+					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,            
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
 					};
 					// var modelTranslation = {
 					// 	id: 0,
@@ -5240,7 +5318,7 @@ const TIMAAT = {
 					// };
 					// Medium has no translation table at the moment
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
-					TIMAAT.MediaDatasets.createMedium(model, title);
+						TIMAAT.MediaDatasets.createMedium(model, title, source);
 				}
 				modal.modal('hide');
 				$('#timaat-mediadatasets-medium-form').hide();
@@ -5323,6 +5401,10 @@ const TIMAAT = {
 				var remark = (audio) ? audio.model.medium.remark : "";
 				var copyright = (audio) ? audio.model.medium.copyright : "";
 				var releaseDate = (audio) ? audio.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (audio) ? audio.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (audio) ? audio.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (audio) ? audio.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (audio) ? audio.model.medium.sources[0].isStillAvailable : false;
 				// audio data
 				var length = (audio) ? TIMAAT.Util.formatTime(audio.model.length, false) :  TIMAAT.Util.formatTime(0, false) ;
 				// TODO: audiocodecinformation
@@ -5336,6 +5418,18 @@ const TIMAAT = {
 				$("#timaat-audio-meta-remark").val(remark);
 				$("#timaat-audio-meta-copyright").val(copyright);
 				$("#timaat-audio-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-audio-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-audio-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-audio-meta-source-url").val(sourceUrl);
+				$("#timaat-audio-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-audio-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-audio-meta-source-isstillavailable").prop('checked', false);
+				}
 				// audio data
 				$("#timaat-audio-meta-length").val(length);
 				// TODO: audiocodecinformation
@@ -5353,6 +5447,10 @@ const TIMAAT = {
 				var remark = $("#timaat-audio-meta-remark").val();
 				var copyright = $("#timaat-audio-meta-copyright").val();
 				var releaseDate = $("#timaat-audio-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-audio-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-audio-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-audio-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-audio-meta-source-isstillavailable").is(":checked") ? true : false;
 				// audio data
 				var length = TIMAAT.Util.parseTime($("#timaat-audio-meta-length").val());
 				// TODO: audiocodecinformation
@@ -5364,6 +5462,10 @@ const TIMAAT = {
 					audio.model.medium.remark = remark;
 					audio.model.medium.copyright = copyright;
 					audio.model.medium.releaseDate = releaseDate;
+					audio.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					audio.model.medium.sources[0].url = sourceUrl;
+					audio.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					audio.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// audio data
 					audio.model.length = length;
 					// TODO: audiocodecinformation
@@ -5395,12 +5497,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for audio or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5441,6 +5553,10 @@ const TIMAAT = {
 				var remark = (mediumDocument) ? mediumDocument.model.medium.remark : "";
 				var copyright = (mediumDocument) ? mediumDocument.model.medium.copyright : "";
 				var releaseDate = (mediumDocument) ? mediumDocument.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (mediumDocument) ? mediumDocument.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (mediumDocument) ? mediumDocument.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (mediumDocument) ? mediumDocument.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (mediumDocument) ? mediumDocument.model.medium.sources[0].isStillAvailable : false;
 				// document data
 				// currently empty
 
@@ -5453,6 +5569,18 @@ const TIMAAT = {
 				$("#timaat-document-meta-remark").val(remark);
 				$("#timaat-document-meta-copyright").val(copyright);
 				$("#timaat-document-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-document-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-document-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-document-meta-source-url").val(sourceUrl);
+				$("#timaat-document-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-document-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-document-meta-source-isstillavailable").prop('checked', false);
+				}
 				// document data
 				// currently empty
 			});
@@ -5469,6 +5597,10 @@ const TIMAAT = {
 				var remark = $("#timaat-document-meta-remark").val();
 				var copyright = $("#timaat-document-meta-copyright").val();
 				var releaseDate = $("#timaat-document-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-document-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-document-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-document-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-document-meta-source-isstillavailable").is(":checked") ? true : false;
 				// document data
 				// currently empty
 
@@ -5479,6 +5611,10 @@ const TIMAAT = {
 					mediumDocument.model.medium.remark = remark;
 					mediumDocument.model.medium.copyright = copyright;
 					mediumDocument.model.medium.releaseDate = releaseDate;
+					mediumDocument.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					mediumDocument.model.medium.sources[0].url = sourceUrl;
+					mediumDocument.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					mediumDocument.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// document data
 					// currently empty
 
@@ -5505,12 +5641,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for document or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5551,6 +5697,10 @@ const TIMAAT = {
 				var remark = (image) ? image.model.medium.remark : "";
 				var copyright = (image) ? image.model.medium.copyright : "";
 				var releaseDate = (image) ? image.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (image) ? image.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (image) ? image.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (image) ? image.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (image) ? image.model.medium.sources[0].isStillAvailable : false;
 				// image data
 				var width = (image) ? image.model.width : "";
 				var height = (image) ? image.model.height : "";
@@ -5565,6 +5715,18 @@ const TIMAAT = {
 				$("#timaat-image-meta-remark").val(remark);
 				$("#timaat-image-meta-copyright").val(copyright);
 				$("#timaat-image-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-image-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-image-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-image-meta-source-url").val(sourceUrl);
+				$("#timaat-image-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-image-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-image-meta-source-isstillavailable").prop('checked', false);
+				}			
 				// image data
 				$("#timaat-image-meta-width").val(width);
 				$("#timaat-image-meta-height").val(height);
@@ -5583,6 +5745,10 @@ const TIMAAT = {
 				var remark = $("#timaat-image-meta-remark").val();
 				var copyright = $("#timaat-image-meta-copyright").val();
 				var releaseDate = $("#timaat-image-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-image-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-image-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-image-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-image-meta-source-isstillavailable").is(":checked") ? true : false;
 				// image data
 				var width = $("#timaat-image-meta-width").val();
 				var height = $("#timaat-image-meta-height").val();
@@ -5595,6 +5761,10 @@ const TIMAAT = {
 					image.model.medium.remark = remark;
 					image.model.medium.copyright = copyright;
 					image.model.medium.releaseDate = releaseDate;
+					image.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					image.model.medium.sources[0].url = sourceUrl;
+					image.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					image.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// image data
 					image.model.width = width;
 					image.model.height = height;
@@ -5626,12 +5796,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for image or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5672,6 +5852,10 @@ const TIMAAT = {
 				var remark = (software) ? software.model.medium.remark : "";
 				var copyright = (software) ? software.model.medium.copyright : "";
 				var releaseDate = (software) ? software.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (software) ? software.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (software) ? software.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (software) ? software.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (software) ? software.model.medium.sources[0].isStillAvailable : false;
 				// software data
 				var version = (software) ? software.model.version : "";
 
@@ -5684,6 +5868,18 @@ const TIMAAT = {
 				$("#timaat-software-meta-remark").val(remark);
 				$("#timaat-software-meta-copyright").val(copyright);
 				$("#timaat-software-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-software-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-software-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-software-meta-source-url").val(sourceUrl);
+				$("#timaat-software-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-software-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-software-meta-source-isstillavailable").prop('checked', false);
+				}
 				// software data
 				$("#timaat-software-meta-version").val(version);
 			});
@@ -5700,6 +5896,10 @@ const TIMAAT = {
 				var remark = $("#timaat-software-meta-remark").val();
 				var copyright = $("#timaat-software-meta-copyright").val();
 				var releaseDate = $("#timaat-software-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-software-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-software-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-software-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-software-meta-source-isstillavailable").is(":checked") ? true : false;
 				// software data
 				var version = $("#timaat-software-meta-version").val();
 
@@ -5710,6 +5910,10 @@ const TIMAAT = {
 					software.model.medium.remark = remark;
 					software.model.medium.copyright = copyright;
 					software.model.medium.releaseDate = releaseDate;
+					software.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					software.model.medium.sources[0].url = sourceUrl;
+					software.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					software.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// software data
 					software.model.version = version;
 					
@@ -5737,12 +5941,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for software or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5783,6 +5997,10 @@ const TIMAAT = {
 				var remark = (text) ? text.model.medium.remark : "";
 				var copyright = (text) ? text.model.medium.copyright : "";
 				var releaseDate = (text) ? text.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (text) ? text.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (text) ? text.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (text) ? text.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (text) ? text.model.medium.sources[0].isStillAvailable : false;
 				// text data
 				var content = (text) ? text.model.content : "";
 
@@ -5795,6 +6013,18 @@ const TIMAAT = {
 				$("#timaat-text-meta-remark").val(remark);
 				$("#timaat-text-meta-copyright").val(copyright);
 				$("#timaat-text-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-text-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-text-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-text-meta-source-url").val(sourceUrl);
+				$("#timaat-text-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-text-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-text-meta-source-isstillavailable").prop('checked', false);
+				}
 				// text data
 				$("#timaat-text-meta-content").val(content);
 			});
@@ -5811,6 +6041,10 @@ const TIMAAT = {
 				var remark = $("#timaat-text-meta-remark").val();
 				var copyright = $("#timaat-text-meta-copyright").val();
 				var releaseDate = $("#timaat-text-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-text-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-text-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-text-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-text-meta-source-isstillavailable").is(":checked") ? true : false;
 				// text data
 				var content = $("#timaat-text-meta-content").val();
 
@@ -5821,6 +6055,10 @@ const TIMAAT = {
 					text.model.medium.remark = remark;
 					text.model.medium.copyright = copyright;
 					text.model.medium.releaseDate = releaseDate;
+					text.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					text.model.medium.sources[0].url = sourceUrl;
+					text.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					text.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// text data
 					text.model.content = content;
 					
@@ -5848,12 +6086,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };
 					// There are no translation data for text or medium at the moment
-					TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -5896,8 +6144,11 @@ const TIMAAT = {
 				var remark = (video) ? video.model.medium.remark : "";
 				var copyright = (video) ? video.model.medium.copyright : "";
 				var releaseDate = (video) ? video.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (video) ? video.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (video) ? video.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (video) ? video.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (video) ? video.model.medium.sources[0].isStillAvailable : false;
 				// video data
-				var brand = (video) ? video.model.brand : "";
 				var length = (video) ? video.model.length : "";
 				var videoCodec = (video) ? video.model.videoCodec : "";
 				var width = (video) ? video.model.width : "";
@@ -5905,7 +6156,7 @@ const TIMAAT = {
 				var frameRate = (video) ? video.model.frameRate : "";
 				var dataRate = (video) ? video.model.dataRate : "";
 				var totalBitrate = (video) ? video.model.totalBitrate : "";
-				var isEpisode = (video) ? video.model.isEpisode : 0;
+				var isEpisode = (video) ? video.model.isEpisode : false;
 
 				// setup UI
 				$('#videoMetaLabel').html(heading);
@@ -5916,8 +6167,19 @@ const TIMAAT = {
 				$("#timaat-video-meta-remark").val(remark);
 				$("#timaat-video-meta-copyright").val(copyright);
 				$("#timaat-video-meta-releasedate").val(releaseDate);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-video-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-video-meta-source-url").val(sourceUrl);
+				$("#timaat-video-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-video-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-source-isstillavailable").prop('checked', false);
+				}
 				// video data
-				$("#timaat-video-meta-brand").val(brand);
 				$("#timaat-video-meta-length").val(length);
 				$("#timaat-video-meta-videocodec").val(videoCodec);
 				$("#timaat-video-meta-width").val(width);
@@ -5925,7 +6187,11 @@ const TIMAAT = {
 				$("#timaat-video-meta-framerate").val(frameRate);
 				$("#timaat-video-meta-datarate").val(dataRate);
 				$("#timaat-video-meta-totalbitrate").val(totalBitrate);
-				$("#timaat-video-meta-isepisode").val(isEpisode);
+				if (isEpisode ) {
+					$("#timaat-video-meta-isepisode").prop('checked', true);
+				} else {
+					$("#timaat-video-meta-isepisode").prop('checked', false);
+				}
 			});
 
 			// Submit video data
@@ -5941,7 +6207,6 @@ const TIMAAT = {
 				var copyright = $("#timaat-video-meta-copyright").val();
 				var releaseDate = $("#timaat-video-meta-releasedate").val();
 				// video data
-				var brand = $("#timaat-video-meta-brand").val();
 				var length = $("#timaat-video-meta-length").val();
 				var videoCodec = $("#timaat-video-meta-videocodec").val();
 				var width = $("#timaat-video-meta-width").val();
@@ -5949,8 +6214,11 @@ const TIMAAT = {
 				var frameRate = $("#timaat-video-meta-framerate").val();
 				var dataRate = $("#timaat-video-meta-datarate").val();
 				var totalBitrate = $("#timaat-video-meta-totalbitrate").val();
-				var isEpisodeSelector = $("#timaat-video-meta-isepisode").val();
-				var isEpisode = Number(isEpisodeSelector);
+				var isEpisode = $("#timaat-video-meta-isepisode").is(":checked") ? true : false;
+				var sourceIsPrimarySource = $("#timaat-video-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-video-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-video-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-video-meta-source-isstillavailable").is(":checked") ? true : false;
 
 				if (video) {
           // medium data
@@ -5959,8 +6227,11 @@ const TIMAAT = {
 					video.model.medium.remark = remark;
 					video.model.medium.copyright = copyright;
 					video.model.medium.releaseDate = releaseDate;
+					video.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					video.model.medium.sources[0].url = sourceUrl;
+					video.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					video.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// video data
-					video.model.brand = brand;
 					video.model.length = length;
 					video.model.videoCodec = videoCodec;
 					video.model.width = width;
@@ -5971,6 +6242,7 @@ const TIMAAT = {
 					video.model.isEpisode = isEpisode;
 					
 					video.updateUI();
+					console.log("TCL: initVideos - video: ", video);
 					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
         } else {
 					var model = {
@@ -5978,7 +6250,6 @@ const TIMAAT = {
 						audioCodecInformation: { // TODO get correct audio information
 							id: 1,
 						},
-						brand: brand,
 						length: length,
 						videoCodec: videoCodec,
 						width: width,
@@ -6005,12 +6276,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
 					// There are no translation data for video or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -6046,15 +6327,17 @@ const TIMAAT = {
 				var heading = (videogame) ? "Videogame bearbeiten" : "Videogame hinzufügen";
 				var submit = (videogame) ? "Speichern" : "Hinzufügen";
 				// videogame data
-				var brand = (videogame) ? videogame.model.brand : "";
-				var length = (videogame) ? videogame.model.length : "";
-				var isEpisode = (videogame) ? videogame.model.isEpisode : 0;
+				var isEpisode = (videogame) ? videogame.model.isEpisode : false;
 				// medium data
 				var primaryTitle = (videogame) ? videogame.model.medium.title.name : "";
 				var primaryTitleLanguageId = (videogame) ? videogame.model.medium.title.language.id : "";
 				var remark = (videogame) ? videogame.model.medium.remark : "";
 				var copyright = (videogame) ? videogame.model.medium.copyright : "";
 				var releaseDate = (videogame) ? videogame.model.medium.releaseDate : 0;
+				var sourceIsPrimarySource = (videogame) ? videogame.model.medium.sources[0].isPrimarySource : true;
+				var sourceUrl = (videogame) ? videogame.model.medium.sources[0].url : "";
+				var sourceLastAccessed = (videogame) ? videogame.model.medium.sources[0].lastAccessed : "";
+				var sourceIsStillAvailable = (videogame) ? videogame.model.medium.sources[0].isStillAvailable : false;
 
 				// setup UI
 				$('#videogameMetaLabel').html(heading);
@@ -6064,8 +6347,24 @@ const TIMAAT = {
 				$("#timaat-videogame-meta-remark").val(remark);
 				$("#timaat-videogame-meta-copyright").val(copyright);
 				$("#timaat-videogame-meta-releasedate").val(releaseDate);
-				$("#timaat-videogame-meta-brand").val(brand);
-				$("#timaat-videogame-meta-isepisode").val(isEpisode);
+				if (sourceIsPrimarySource) { 
+					$("#timaat-videogame-meta-source-isprimarysource").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-source-isprimarysource").prop('checked', false);
+				}
+				$("#timaat-videogame-meta-source-url").val(sourceUrl);
+				$("#timaat-videogame-meta-source-lastaccessed").val(sourceLastAccessed);
+				if (sourceIsStillAvailable) { 
+					$("#timaat-videogame-meta-source-isstillavailable").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-source-isstillavailable").prop('checked', false);
+				}
+				// videogame data
+				if (isEpisode ) {
+					$("#timaat-videogame-meta-isepisode").prop('checked', true);
+				} else {
+					$("#timaat-videogame-meta-isepisode").prop('checked', false);
+				}
 			});
 
 			// Submit videogame data
@@ -6080,10 +6379,12 @@ const TIMAAT = {
 				var remark = $("#timaat-videogame-meta-remark").val();
 				var copyright = $("#timaat-videogame-meta-copyright").val();
 				var releaseDate = $("#timaat-videogame-meta-releasedate").val();
+				var sourceIsPrimarySource = $("#timaat-videogame-meta-source-isprimarysource").is(":checked") ? true : false;
+				var sourceUrl = $("#timaat-videogame-meta-source-url").val();
+				var sourceLastAccessed = $("#timaat-videogame-meta-source-lastaccessed").val();
+				var sourceIsStillAvailable = $("#timaat-videogame-meta-source-isstillavailable").is(":checked") ? true : false;
 				// videogame data
-				var brand = $("#timaat-videogame-meta-brand").val();
-				var isEpisodeSelector = $("#timaat-videogame-meta-isepisode").val();
-				var isEpisode = Number(isEpisodeSelector);
+				var isEpisode = $("#timaat-videogame-meta-isepisode").is(":checked") ? true : false;
 
 				if (videogame) {
           // medium data
@@ -6092,15 +6393,18 @@ const TIMAAT = {
 					videogame.model.medium.remark = remark;
 					videogame.model.medium.copyright = copyright;
 					videogame.model.medium.releaseDate = releaseDate;
+					videogame.model.medium.sources[0].isPrimarySource = sourceIsPrimarySource;
+					videogame.model.medium.sources[0].url = sourceUrl;
+					videogame.model.medium.sources[0].lastAccessed = sourceLastAccessed;
+					videogame.model.medium.sources[0].isStillAvailable = sourceIsStillAvailable;
 					// videogame data
-					videogame.model.brand = brand;
 					videogame.model.isEpisode = isEpisode;
+
 					videogame.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype("videogame", videogame);
         } else {
 					var model = {
 						mediumId: 0,
-						brand: brand,
 						isEpisode: isEpisode,
 					};
 					var medium = {
@@ -6120,12 +6424,22 @@ const TIMAAT = {
 						},
 						name: primaryTitle,
 					};
-					// There are no translation data for video or medium at the moment
+					var source = {
+						id: 0,
+						medium: {
+							id: 0,
+						},
+						isPrimarySource: sourceIsPrimarySource,
+						url: sourceUrl,
+						lastAccessed: sourceLastAccessed,
+						isStillAvailable: sourceIsStillAvailable,
+					};
+					// There are no translation data for videogame or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };
-					TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title);
+					TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title, source);
 				}
 				modal.modal('hide');
 			});
@@ -6342,7 +6656,7 @@ const TIMAAT = {
 				// setup model
 				var vids = Array();
 				videos.forEach(function(video) { 
-					if ( video.id > 0 )
+					if ( video.mediumId > 0 )
 						vids.push(new TIMAAT.Video(video)); 
 				});
 				TIMAAT.MediaDatasets.videos = vids;
@@ -6414,21 +6728,25 @@ const TIMAAT = {
 			$('#timaat-mediadatasets-medium-form').show();
 		},
 
-		createMedium: async function(mediumModel, title) {
+		createMedium: async function(mediumModel, title, source) {
 			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
 			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
 			// This routine can be used to create empty media of a certain type
-			console.log("TCL: createMedium: async function -> mediumModel, title", mediumModel, title);
+			console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-				// console.log("TCL: newTitle", newTitle);
 				
 				// create medium
-				var newMediumModel = mediumModel;
-				newMediumModel.title = newTitle;
-        // console.log("TCL: newMediumModel", newMediumModel);
-				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+				var tempMediumModel = mediumModel;
+				tempMediumModel.title = newTitle;
+				tempMediumModel.source = source;
+				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+
+				// update source (createMedium created an empty source)
+				source.id = newMediumModel.sources[0].id;
+				var updatedSource = await TIMAAT.MediaService.updateSource(source);
+				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
 
 				// create medium translation with medium id
 				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
@@ -6445,7 +6763,7 @@ const TIMAAT = {
 			};
 		},
 
-		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title) {
+		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title, source) {
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
 			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
 			try {
@@ -6453,9 +6771,15 @@ const TIMAAT = {
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
 				
 				// create medium
-				var newMediumModel = mediumModel;
-				newMediumModel.title = newTitle;
-				newMediumModel = await TIMAAT.MediaService.createMedium(newMediumModel);
+				var tempMediumModel = mediumModel;
+				tempMediumModel.title = newTitle;
+				tempMediumModel.source = source;
+				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+
+				// update source (createMedium created an empty source)
+				source.id = newMediumModel.sources[0].id;
+				var updatedSource = await TIMAAT.MediaService.updateSource(source);
+				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
 
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
@@ -6483,7 +6807,11 @@ const TIMAAT = {
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
 				medium.model.title = tempTitle;
 
+				// update source
+				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
+
 				// update data that is part of medium (includes updating last edited by/at)
+				console.log("TCL: updateMedium: async function - medium.model", medium.model);
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -6510,8 +6838,20 @@ const TIMAAT = {
 			};
 
 			try {
+				// update source
+				var tempSource = await TIMAAT.MediaService.updateSource(mediumSubtypeData.model.medium.sources[0]);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+
+			try {
 				// update data that is part of mediumSubtypeData
-				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
+				console.log("TCL: mediumSubtype", mediumSubtype);
+				console.log("TCL: mediumSubtypeData.model", mediumSubtypeData.model);
+				var tempMediumSubtypeData = mediumSubtypeData;
+				// tempMediumSubtypeData.model.medium.sources = null;
+        console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
+				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, tempMediumSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -6519,7 +6859,8 @@ const TIMAAT = {
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
-				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);
+        console.log("TCL: UpdateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
+				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -7379,7 +7720,7 @@ const TIMAAT = {
 			this.model = model;
 			// create and style list view element
 			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteVideoButton = '';
+			if ( model.mediumId < 0 ) deleteVideoButton = '';
 			this.listView = $(
 				'<li class="list-group-item"> ' +	
 					deleteVideoButton +
@@ -7456,7 +7797,7 @@ const TIMAAT = {
 			// console.log("TCL: Video -> updateUI -> updateUI()");
 			// title
 			var name = this.model.medium.title.name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-video-list-name').text(name);
 		}
 

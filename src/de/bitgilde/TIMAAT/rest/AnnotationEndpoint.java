@@ -32,6 +32,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -43,7 +44,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 @Path("/annotation")
 public class AnnotationEndpoint {
 	
-	@Context ContainerRequestContext crc;
+	@Context ContainerRequestContext containerRequestContext;
 	
 
 	@GET
@@ -96,9 +97,9 @@ public class AnnotationEndpoint {
 		// update log metadata
 		newAnno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newAnno.getCreatedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
-			newAnno.getLastEditedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -174,8 +175,8 @@ public class AnnotationEndpoint {
 
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			annotation.getLastEditedByUserAccount().setId((int) crc.getProperty("TIMAAT.userID"));
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -213,7 +214,7 @@ public class AnnotationEndpoint {
 		entityManager.refresh(mal);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
 
 		return Response.ok().build();
 	}

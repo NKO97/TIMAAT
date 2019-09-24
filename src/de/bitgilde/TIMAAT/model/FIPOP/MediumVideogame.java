@@ -23,8 +23,6 @@ public class MediumVideogame implements Serializable {
 	@PrimaryKeyJoinColumn(name="medium_id")
 	private Medium medium;
 
-	private String brand;
-
 	@Column(name="is_episode", columnDefinition = "BOOLEAN")
 	private Boolean isEpisode;
 	
@@ -45,22 +43,6 @@ public class MediumVideogame implements Serializable {
 
 	public void setMedium(Medium medium) {
 		this.medium = medium;
-	}
-
-	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents videogame list from being displayed=)
-		return this.getMedium().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setMediumId?
-		this.getMedium().setId(id);
-	}
-
-	public String getBrand() {
-		return this.brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
 	}
 
 	public Boolean getIsEpisode() {
