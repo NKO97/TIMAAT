@@ -833,7 +833,7 @@ const TIMAAT = {
     // console.log("TCL: video", video);
 			video.poll = window.setInterval(function() {
 				jQuery.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.id+'/status',
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.mediumId+'/status',
 					type:"GET",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
@@ -912,7 +912,7 @@ const TIMAAT = {
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
-			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			videoelement.appendTo('#timaat-video-list');
 			videoelement.find('.title').html(video.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
@@ -930,16 +930,16 @@ const TIMAAT = {
 				// setup video in player
 				TIMAAT.VideoPlayer.setupVideo(video);
 				// load video annotations from server
-				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				TIMAAT.Service.getAnalysisLists(video.mediumId, TIMAAT.VideoPlayer.setupAnalysisLists);
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
 				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.mediumVideo.length);
 				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 			});
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			});
 			
 			if ( video.status == "transcoding" ) TIMAAT.VideoChooser.updateVideoStatus(video);
@@ -1272,7 +1272,7 @@ const TIMAAT = {
 				var preview = $('#timaat-video-seek-bar-preview');
 				$('#timaat-video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
 				$('#timaat-video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
-				preview.find('img').attr('src', "/TIMAAT/api/medium/"+TIMAAT.VideoPlayer.model.video.id+"/thumbnail?token="+token+"&time="+time);
+				preview.find('img').attr('src', "/TIMAAT/api/medium/"+TIMAAT.VideoPlayer.model.video.mediumId+"/thumbnail?token="+token+"&time="+time);
 			});
 			
 			$('#timaat-user-log-analysislist').popover({
@@ -1343,7 +1343,7 @@ const TIMAAT = {
 					TIMAAT.VideoPlayer.curList.text = comment;					
 					TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
 				} else {
-					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
+					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.mediumId, TIMAAT.VideoPlayer._analysislistAdded);
 				}
 				modal.modal('hide');
 			});
@@ -1635,7 +1635,7 @@ const TIMAAT = {
 			$('.timaat-videoplayer-ui').show();
 			$('#timaat-videoplayer-video-title').html(video.primaryTitle.title);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
-    	var videoUrl = '/TIMAAT/api/medium/'+this.model.video.id+'/download'+'?token='+video.viewToken;
+    	var videoUrl = '/TIMAAT/api/medium/'+this.model.video.mediumId+'/download'+'?token='+video.viewToken;
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
 			map.setMaxBounds(this.videoBounds);
 			map.fitBounds(this.videoBounds);
@@ -2311,7 +2311,7 @@ const TIMAAT = {
 					}]
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.mediumId,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -2883,7 +2883,7 @@ const TIMAAT = {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	console.log("TCL: listMedia -> data", data);
+      	// console.log("TCL: listMedia -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -3097,7 +3097,7 @@ const TIMAAT = {
 		},
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-    console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);		
+		console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
@@ -4985,7 +4985,7 @@ const TIMAAT = {
 		},
 
 		_locationSubtypeRemoved: function(locationSubtype, locationSubtypeData) {
-			// console.log("TCL: _videoRemoved: function(video)");
+			// console.log("TCL: _locationSubtypeRemoved: function(locationSubtype, locationSubtypeData)");
 			// sync to server
 		 TIMAAT.LocationService.removeLocationSubtype(locationSubtype, locationSubtypeData)
 		 locationSubtypeData.remove();
@@ -6101,6 +6101,7 @@ const TIMAAT = {
 					video.model.isEpisode = isEpisode;
 					
 					video.updateUI();
+					console.log("TCL: initVideos - video: ", video);
 					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
         } else {
 					var model = {
@@ -6292,7 +6293,7 @@ const TIMAAT = {
 						lastAccessed: sourceLastAccessed,
 						isStillAvailable: sourceIsStillAvailable,
 					};
-					// There are no translation data for video or medium at the moment
+					// There are no translation data for videogame or medium at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
@@ -6514,7 +6515,7 @@ const TIMAAT = {
 				// setup model
 				var vids = Array();
 				videos.forEach(function(video) { 
-					if ( video.id > 0 )
+					if ( video.mediumId > 0 )
 						vids.push(new TIMAAT.Video(video)); 
 				});
 				TIMAAT.MediaDatasets.videos = vids;
@@ -6659,6 +6660,7 @@ const TIMAAT = {
 				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
 
 				// update data that is part of medium (includes updating last edited by/at)
+				console.log("TCL: updateMedium: async function - medium.model", medium.model);
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -6693,7 +6695,12 @@ const TIMAAT = {
 
 			try {
 				// update data that is part of mediumSubtypeData
-				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, mediumSubtypeData.model);
+				console.log("TCL: mediumSubtype", mediumSubtype);
+				console.log("TCL: mediumSubtypeData.model", mediumSubtypeData.model);
+				var tempMediumSubtypeData = mediumSubtypeData;
+				// tempMediumSubtypeData.model.medium.sources = null;
+        console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
+				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, tempMediumSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -6701,6 +6708,7 @@ const TIMAAT = {
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
+        console.log("TCL: UpdateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
 				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
 			} catch(error) {
 				console.log( "error: ", error);
@@ -7521,7 +7529,7 @@ const TIMAAT = {
 			this.model = model;
 			// create and style list view element
 			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteVideoButton = '';
+			if ( model.mediumId < 0 ) deleteVideoButton = '';
 			this.listView = $(
 				'<li class="list-group-item"> ' +	
 					deleteVideoButton +
@@ -7598,7 +7606,7 @@ const TIMAAT = {
 			// console.log("TCL: Video -> updateUI -> updateUI()");
 			// title
 			var name = this.model.medium.title.name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-video-list-name').text(name);
 		}
 

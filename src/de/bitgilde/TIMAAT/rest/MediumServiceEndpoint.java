@@ -225,6 +225,7 @@ public class MediumServiceEndpoint{
 		newMedium.setCreatedAt(creationDate);
 		newMedium.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			System.out.println("containerRequestContext.getProperty('TIMAAT.userID')" + containerRequestContext.getProperty("TIMAAT.userID"));
 			newMedium.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newMedium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -302,7 +303,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			medium.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			medium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -413,7 +414,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		audio.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			audio.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			audio.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -518,7 +519,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		document.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			document.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			document.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -626,7 +627,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		image.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			image.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			image.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -733,7 +734,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		software.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			software.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			software.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -842,7 +843,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		text.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			text.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			text.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -944,11 +945,11 @@ public class MediumServiceEndpoint{
 		MediumVideo video = entityManager.find(MediumVideo.class, id);
 
 		if ( video == null ) return Response.status(Status.NOT_FOUND).build();
-
 		// parse JSON data
 		try {
 			updatedVideo = mapper.readValue(jsonData, MediumVideo.class);
 		} catch (IOException e) {
+			System.out.println("MediumEndpoint: UPDATE VIDEO - IOException: " + e.getMessage());
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedVideo == null ) return Response.notModified().build();
@@ -966,7 +967,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		video.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			video.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			video.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error
 		}
@@ -1083,7 +1084,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		videogame.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			videogame.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			videogame.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -1205,7 +1206,7 @@ public class MediumServiceEndpoint{
 		// log metadata will be updated with the corresponding medium
 		// title.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	title.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	title.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
 		// 	// DEBUG do nothing - production system should abort with internal server error			
 		// }		
@@ -1328,7 +1329,7 @@ public class MediumServiceEndpoint{
 		// log metadata will be updated with the corresponding medium
 		// source.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	source.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	source.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
 		// 	// DEBUG do nothing - production system should abort with internal server error			
 		// }	
@@ -1462,7 +1463,8 @@ public class MediumServiceEndpoint{
 			videoTranscoder.start();
 						
 			// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.MEDIUMCREATED);
 
 		} catch (IOException e) {e.printStackTrace();}  
 

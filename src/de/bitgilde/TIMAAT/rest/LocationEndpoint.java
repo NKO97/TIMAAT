@@ -311,7 +311,7 @@ public class LocationEndpoint {
 		// update log metadata
 		location.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			location.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			location.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -559,7 +559,7 @@ public class LocationEndpoint {
 		// update log metadata
 		country.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			country.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			country.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -684,7 +684,7 @@ public class LocationEndpoint {
 		// update log metadata
 		province.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			province.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			province.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -809,7 +809,7 @@ public class LocationEndpoint {
 		// update log metadata
 		county.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			county.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			county.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -934,7 +934,7 @@ public class LocationEndpoint {
 		// update log metadata
 		city.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			city.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			city.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -1059,7 +1059,7 @@ public class LocationEndpoint {
 		// update log metadata
 		street.getLocation().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			street.getLocation().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			street.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}

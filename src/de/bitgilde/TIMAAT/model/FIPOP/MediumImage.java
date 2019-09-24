@@ -79,14 +79,6 @@ public class MediumImage implements Serializable {
 		this.mediumId = mediumId;
 	}
 
-	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents image list from being displayed=)
-		return this.getMedium().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setMediumId?
-		this.getMedium().setId(id);
-	}
-
 	public String getBitDepth() {
 		return this.bitDepth;
 	}

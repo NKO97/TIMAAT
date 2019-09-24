@@ -19,7 +19,8 @@ import java.util.List;
 @NamedQuery(name="Source.findAll", query="SELECT s FROM Source s")
 @JsonIdentityInfo(
 	generator = ObjectIdGenerators.PropertyGenerator.class,
-	property = "id")
+	property = "id",
+	scope = Source.class)
 public class Source implements Serializable {
 	private static final long serialVersionUID = 1L;
 
