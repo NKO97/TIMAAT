@@ -1541,13 +1541,13 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-title">Primary Title*</label>
-                          <input type="text" class="form-control" id="timaat-medium-meta-title" name="primaryTitle" aria-describedby="PrimaryTitle" placeholder="Enter primary title">
+                          <input type="text" class="form-control" id="timaat-medium-meta-title" name="primaryTitle" placeholder="[Enter primary title]" aria-describedby="PrimaryTitle">
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-title-language-id">Title Language*</label>
-                          <select class="form-control" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId">
-                            <option value="" hidden>Choose Title Language...</option>
-                            <option value="1">default-untranslated</option>
+                          <select required class="form-control" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId">
+                            <option value="" disabled selected hidden>[Choose title language...]</option>
+                            <!-- <option value="1">default-untranslated</option> -->
                             <option value="2">English</option>
                             <option value="3">German</option>
                             <option value="4">French</option>
@@ -1558,8 +1558,8 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-medium-type-id">Medium Type*</label>
-                          <select class="form-control" id="timaat-medium-meta-medium-type-id" name="typeId">
-                            <option value="" hidden>Choose Medium Type...</option>
+                          <select required class="form-control" id="timaat-medium-meta-medium-type-id" name="typeId">
+                            <option value="" disabled selected hidden>[Choose medium type...]</option>
                             <option value="1">Audio</option>
                             <option value="2">Document</option>
                             <option value="3">Image</option>                      
@@ -1571,13 +1571,13 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-releasedate">Release Date</label>
-                          <input type="text" class="form-control" id="timaat-medium-meta-releasedate" name="releaseDate" aria-describedby="Release Date" placeholder="Pick release date">
+                          <input type="text" class="form-control" id="timaat-medium-meta-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
                         </div>
                         <div class="form-group">
                           <div class="row">
                             <div class="col-md-9">
                               <label for="timaat-medium-meta-source-url">Quelle (URL)</label>
-                              <input type="text" class="form-control" id="timaat-medium-meta-source-url" name="sourceUrl" placeholder="[Source URL]" aria-describedby="Source URL">
+                              <input type="text" class="form-control" id="timaat-medium-meta-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
                             </div> 
                             <div class="col-md-3">
                               <label for="timaat-medium-meta-source-isprimarysource">Primärquelle?</label>
@@ -1589,7 +1589,7 @@
                           <div class="row">
                             <div class="col-md-9">
                               <label for="timaat-medium-meta-source-lastaccessed">Quelle (letzter Zugriff)</label>
-                              <input type="text" class="form-control" id="timaat-medium-meta-source-lastaccessed" name="sourceLastAccessed" placeholder="[Source Last Accessed]" aria-describedby="Source Last Accessed">
+                              <input type="text" class="form-control" id="timaat-medium-meta-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter Source last accessed]" aria-describedby="Source Last Accessed">
                             </div> 
                             <div class="col-md-3">
                               <label for="timaat-medium-meta-source-isstillavailable">Quelle verfügbar?</label>
@@ -1599,11 +1599,11 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-copyright">Copyright</label>
-                          <input type="text" class="form-control" id="timaat-medium-meta-copyright" name="copyright" aria-describedby="Copyright" placeholder="Enter copyright information">
+                          <input type="text" class="form-control" id="timaat-medium-meta-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-remark">Remark</label>
-                          <textarea class="form-control" id="timaat-medium-meta-remark" name="remark" aria-describedby="Remark" placeholder="Enter remarks"></textarea>
+                          <textarea class="form-control" id="timaat-medium-meta-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark"></textarea>
                         </div>
                           <button type="button" class="btn btn-primary" id="timaat-medium-meta-submit" name="submit" type="submit">Speichern</button>
                           <button type="button" class="btn btn-secondary" id="timaat-medium-meta-dismiss" name="dismiss">Abbruch</button>                          
@@ -2425,7 +2425,7 @@
       </div><img class="popover-body" style="width:128px;"src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
 
-
+    <!-- focus username field in login mask -->
     <script>
       $('#timaat-login-modal').on('shown.bs.modal', function() {
         $('#timaat-login-user').focus();

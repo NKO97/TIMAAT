@@ -505,3 +505,10 @@ a.dropdown-item {
 .form-control::-webkit-input-placeholder {
   color: #acacac;
 }
+
+select {
+	color: #000000;
+}
+select:invalid {
+	color: #acacac;
+}
