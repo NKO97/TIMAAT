@@ -190,6 +190,7 @@ body.timaat-login-modal-open #wrapper {
 	cursor: pointer;
 	font-size: 90%;
 }
+
 #timaat-annotation-list li:hover,
 #timaat-categoryset-list li:hover,
 #timaat-event-list li:hover,
@@ -210,6 +211,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
 }
+
 .timaat-annotation-list-selected, 
 .timaat-categoryset-list-selected, 
 .timaat-event-list-selected, 
@@ -230,6 +232,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-actor-list-selected {
 	background-color: #c9e2ff;
 }
+
 .timaat-annotation-list-selected:hover,
 .timaat-categoryset-list-selected:hover,
 .timaat-event-list-selected:hover,

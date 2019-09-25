@@ -297,6 +297,8 @@ public class MediumServiceEndpoint{
 		if ( updatedMedium == null ) return Response.notModified().build();	
 
 		// update medium
+		// if ( updatedMedium.getMediaType() != null ) medium.setMediaType(updatedMedium.getMediaType()); // Don't change media type. MediumSubType won't match anymore
+		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
 
