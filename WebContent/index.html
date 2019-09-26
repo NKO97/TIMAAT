@@ -46,6 +46,9 @@
     <script src="vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag.js"></script>
     <script src="vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom.js"></script>
 
+    <!-- Moment JavaScript -->
+    <script src="vendor/moment/moment.js"></script>
+
     <!-- TIMAAT -->
     <script src="js/timaat.js"></script>
 
@@ -2436,7 +2439,7 @@
     <!-- client side form validation -->
     <script>
       var form = $("#timaat-mediadatasets-medium-form");
-      $("#timaat-mediadatasets-medium-form").validate({
+      var validator = $("#timaat-mediadatasets-medium-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -2448,9 +2451,12 @@
           typeId: {
             required: true,
           },
-          releaseDate: {
-            dateISO: true,
-          }
+          // releaseDate: {
+          //   dateISO: true,
+          // },
+          // sourceLastAccessed: {
+          //   dateISO: true,
+          // }
         },
         messages: {
           primaryTitle: {
@@ -2463,16 +2469,16 @@
           typeId: {
             required: "Please provide the type of the medium"
           },
-          releaseDate: {
-            dateISO: "Please provide a valid date"
-          },
-          lastAccessed: {
-            dateISO: "Please provide a valid date"
-          }
+          // releaseDate: {
+          //   dateISO: "Please provide a valid date"
+          // },
+          // sourceLastAccessed: {
+          //   dateISO: "Please provide a valid date"
+          // }
         },
         submitHandler: function(form) {
           form.submit();
-        }
+        },
       });
     </script>
   </body>

@@ -5191,6 +5191,7 @@ const TIMAAT = {
 	      console.log("TCL: $('#timaat-medium-meta-dismiss').click(function(ev)");
 				$('#timaat-mediadatasets-medium-form').data('medium', null);
 				$('#timaat-mediadatasets-medium-form').trigger('reset');
+				validator.resetForm();
 				$('#timaat-mediadatasets-medium-form').hide();
 			});
 
@@ -6514,6 +6515,7 @@ const TIMAAT = {
 		addMedium: function() {	
     	console.log("TCL: addMedium: function()");
 			$('#timaat-mediadatasets-medium-form').data('medium', null);
+			validator.resetForm();
 			$('#timaat-mediadatasets-medium-form').trigger('reset');
 			$('#timaat-mediadatasets-medium-form').show();
 			$('#timaat-medium-meta-submit').show();
@@ -6523,8 +6525,8 @@ const TIMAAT = {
 			// setup form
 			$('#mediumMetaLabel').html("Medium hinzufügen");
 			$('#timaat-medium-meta-submit').html("Hinzufügen");
-			$("#timaat-medium-meta-releasedate").datepicker();
-			$("#timaat-medium-meta-source-lastaccessed").datepicker();
+			$("#timaat-medium-meta-releasedate").datepicker({format: 'yyyy-mm-dd'});
+			$("#timaat-medium-meta-source-lastaccessed").datepicker({format: 'yyyy-mm-dd'});
 			$("#timaat-medium-meta-source-isprimarysource").prop('checked', true);
 			$("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
 		},
@@ -6565,6 +6567,7 @@ const TIMAAT = {
 
 		showMediumData: function(medium) {
 			$('#timaat-mediadatasets-medium-form').trigger('reset');
+			validator.resetForm();
 			$('#timaat-mediadatasets-medium-form').show();
 			$('#timaat-mediadatasets-medium-form :input').prop("disabled", true);
 			// $('#timaat-medium-edit-in-form').show();
@@ -6593,13 +6596,14 @@ const TIMAAT = {
 
 		editMedium: function(medium) {
 			$('#timaat-mediadatasets-medium-form').trigger('reset');
+			validator.resetForm();
 			$('#timaat-mediadatasets-medium-form').show();
 			$('#timaat-medium-meta-submit').show();
 			$('#timaat-medium-meta-dismiss').show();
 			$('#timaat-mediadatasets-medium-form :input').prop("disabled", false);
 			$('#timaat-medium-meta-medium-type-id').prop("disabled", true);
-			$("#timaat-medium-meta-releasedate").datepicker();
-			$("#timaat-medium-meta-source-lastaccessed").datepicker();
+			$("#timaat-medium-meta-releasedate").datepicker({format: 'yyyy-mm-dd'});
+			$("#timaat-medium-meta-source-lastaccessed").datepicker({format: 'yyyy-mm-dd'});
 			// $('#timaat-medium-edit-in-form').hide();
 
 			// setup UI
@@ -6914,7 +6918,6 @@ const TIMAAT = {
 
 			// edit handler
 			$(this.listView).find('.timaat-medium-edit').on('click', this, function(ev) {
-      console.log("TCL: Medium -> constructor -> this", this);
 				// console.log("TCL: Medium -> constructor -> this.listView.find('.timaat-medium-edit')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
