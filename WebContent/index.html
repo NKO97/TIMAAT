@@ -21,6 +21,7 @@
     <!-- jQuery Plugins-->
     <script src="vendor/jquery/plugins/jquery-taginput.js"></script>
     <script src="vendor/jquery/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/jquery/plugins/jquery.validate.js"></script>
 
     <!-- Popper for Bootstrap JavaScript -->
     <script src="vendor/popper/popper.min.js"></script>
@@ -1478,7 +1479,7 @@
             </div>
           </div>
           <div class="row" style="padding-top: 1em;">
-            <div class="col-lg-12">
+            <div class="col-md-12">
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
@@ -1510,7 +1511,7 @@
                 <!-- Media UI -->
                 <div class="tab-pane fade show active" id="media" role="tabpanel" aria-labelledby="media-tab">
                   <div class="row ui" style="padding-top: 1em;">
-                    <div class="col-lg-4">
+                    <div class="col-md-4">
                       <div class="card">
                         <div class="card-header">Medien
                           <button type="button" id="timaat-medium-add" class="btn btn-outline btn-success btn-sm float-right">
@@ -1525,14 +1526,14 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-8">
-                      <form class="form" id="timaat-mediadatasets-medium-form" name="timaat-mediadatasets-medium-form" method="POST">
+                    <div class="col-md-8">
+                      <form class="form" id="timaat-mediadatasets-medium-form" name="timaat-mediadatasets-medium-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="row">
-                            <div class="col-lg-10">
+                            <div class="col-md-10">
                               <h5 class="form-title" id="mediumMetaLabel">Medium</h5>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-md-2">
                               <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm timaat-medium-edit float-right" id="timaat-medium-edit-in-form">
                                 <i class="fas fa-edit"></i>
                               </button> -->
@@ -1541,11 +1542,11 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-title">Primary Title*</label>
-                          <input type="text" class="form-control" id="timaat-medium-meta-title" name="primaryTitle" placeholder="[Enter primary title]" aria-describedby="PrimaryTitle">
+                          <input type="text" class="form-control" id="timaat-medium-meta-title" name="primaryTitle" placeholder="[Enter primary title]" aria-describedby="PrimaryTitle" minlength="3" required>
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-title-language-id">Title Language*</label>
-                          <select required class="form-control" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId">
+                          <select class="form-control" id="timaat-medium-meta-title-language-id" name="primaryTitleLanguageId" required>
                             <option value="" disabled selected hidden>[Choose title language...]</option>
                             <!-- <option value="1">default-untranslated</option> -->
                             <option value="2">English</option>
@@ -1558,7 +1559,7 @@
                         </div>
                         <div class="form-group">
                           <label for="timaat-medium-meta-medium-type-id">Medium Type*</label>
-                          <select required class="form-control" id="timaat-medium-meta-medium-type-id" name="typeId">
+                          <select class="form-control" id="timaat-medium-meta-medium-type-id" name="typeId" required>
                             <option value="" disabled selected hidden>[Choose medium type...]</option>
                             <option value="1">Audio</option>
                             <option value="2">Document</option>
@@ -1589,7 +1590,7 @@
                           <div class="row">
                             <div class="col-md-9">
                               <label for="timaat-medium-meta-source-lastaccessed">Quelle (letzter Zugriff)</label>
-                              <input type="text" class="form-control" id="timaat-medium-meta-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter Source last accessed]" aria-describedby="Source Last Accessed">
+                              <input type="text" class="form-control" id="timaat-medium-meta-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
                             </div> 
                             <div class="col-md-3">
                               <label for="timaat-medium-meta-source-isstillavailable">Quelle verfügbar?</label>
@@ -2429,6 +2430,49 @@
     <script>
       $('#timaat-login-modal').on('shown.bs.modal', function() {
         $('#timaat-login-user').focus();
+      });
+    </script>
+
+    <!-- client side form validation -->
+    <script>
+      var form = $("#timaat-mediadatasets-medium-form");
+      $("#timaat-mediadatasets-medium-form").validate({
+        rules: {
+          primaryTitle: {
+            required: true,
+            minlength: 3,
+          },
+          primaryTitleLanguageId: {
+            required: true,
+          },
+          typeId: {
+            required: true,
+          },
+          releaseDate: {
+            dateISO: true,
+          }
+        },
+        messages: {
+          primaryTitle: {
+            required: "Enter a title (min length: 3)",
+            minlength: "Title too short: min length is 3"
+          },
+          primaryTitleLanguageId: {
+            required: "Please provide the title's language"
+          },
+          typeId: {
+            required: "Please provide the type of the medium"
+          },
+          releaseDate: {
+            dateISO: "Please provide a valid date"
+          },
+          lastAccessed: {
+            dateISO: "Please provide a valid date"
+          }
+        },
+        submitHandler: function(form) {
+          form.submit();
+        }
       });
     </script>
   </body>

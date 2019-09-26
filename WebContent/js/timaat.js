@@ -5113,23 +5113,23 @@ const TIMAAT = {
 			$('#timaat-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium()');
 			
 			// Submit medium data button functionality
-			$("#timaat-medium-meta-submit").on('click', function(ev) {
+			$("#timaat-medium-meta-submit").on('click', function(event) {
 				console.log("TCL: $('#timaat-medium-meta-submit').click(function(ev)");
 
-				// the original medium mudel
-				var medium = $('#timaat-mediadatasets-medium-form').data('medium');
-				// console.log("TCL: medium", medium);
-				
+				// continue only if client side validation has passed
+				event.preventDefault();
+				if (!$("#timaat-mediadatasets-medium-form").valid()) return false;
+
+				// the original medium model (in case of editing an existing medium)
+				var medium = $("#timaat-mediadatasets-medium-form").data("medium");				
 				// Create/Edit medium window submitted data
-				var formData = $('#timaat-mediadatasets-medium-form').serializeArray();
-				// console.log("TCL: formData", formData);
+				var formData = $("#timaat-mediadatasets-medium-form").serializeArray();
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
-				// console.log("TCL: formDataObject", formDataObject);
 
-				if (medium) {
+				if (medium) { // update medium
 					medium.model.title.name = formDataObject.primaryTitle;
 					medium.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					medium.model.mediaType.id = Number(formDataObject.typeId);
@@ -5140,10 +5140,8 @@ const TIMAAT = {
 					medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					medium.model.copyright = formDataObject.copyright;
 					medium.model.remark = formDataObject.remark;
-
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);
-
 				} else { // create new medium
 					var model = {
 						id: 0,

@@ -489,6 +489,10 @@ a.dropdown-item {
 	padding: 5px;
 }
 
+.form .error { 
+	color:#ff0000
+}
+
 .form-control input[type=text], input[type=date] {
 	color: #000000;
 }
