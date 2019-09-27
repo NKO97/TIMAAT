@@ -165,7 +165,14 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-mediadatasets-medium-form {
+#timaat-mediadatasets-medium-form,
+#timaat-mediadatasets-audio-form,
+#timaat-mediadatasets-document-form,
+#timaat-mediadatasets-image-form,
+#timaat-mediadatasets-software-form,
+#timaat-mediadatasets-text-form,
+#timaat-mediadatasets-video-form,
+#timaat-mediadatasets-videogame-form {
 	display:none;
 }
 

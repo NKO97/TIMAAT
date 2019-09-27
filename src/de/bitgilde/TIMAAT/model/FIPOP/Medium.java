@@ -50,8 +50,7 @@ public class Medium implements Serializable {
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="release_date")
+	@Column(name="release_date", columnDefinition = "DATE")
 	private Date releaseDate;
 
 	private String remark;
