@@ -6220,7 +6220,7 @@ const TIMAAT = {
 			// setup form
 			$('#mediumMetaLabel').html("Medium hinzufügen");
 			$('#timaat-medium-meta-submit').html("Hinzufügen");
-			$("#timaat-medium-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+			$("#timaat-medium-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 			$("#timaat-medium-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 			$("#timaat-medium-meta-source-isprimarysource").prop('checked', true);
 			$("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
@@ -6241,7 +6241,7 @@ const TIMAAT = {
 					// setup form
 					$('#audioMetaLabel').html("Audio hinzufügen");
 					$('#timaat-audio-meta-submit').html("Hinzufügen");
-					$("#timaat-audio-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-audio-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-audio-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-audio-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-audio-meta-source-isstillavailable").prop('checked', false);
@@ -6259,7 +6259,7 @@ const TIMAAT = {
 					// setup form
 					$('#documentMetaLabel').html("Document hinzufügen");
 					$('#timaat-document-meta-submit').html("Hinzufügen");
-					$("#timaat-document-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-document-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-document-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-document-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-document-meta-source-isstillavailable").prop('checked', false);
@@ -6277,7 +6277,7 @@ const TIMAAT = {
 					// setup form
 					$('#imageMetaLabel').html("Image hinzufügen");
 					$('#timaat-image-meta-submit').html("Hinzufügen");
-					$("#timaat-image-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-image-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-image-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-image-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-image-meta-source-isstillavailable").prop('checked', false);
@@ -6295,7 +6295,7 @@ const TIMAAT = {
 					// setup form
 					$('#softwareMetaLabel').html("Software hinzufügen");
 					$('#timaat-software-meta-submit').html("Hinzufügen");
-					$("#timaat-software-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-software-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-software-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-software-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-software-meta-source-isstillavailable").prop('checked', false);
@@ -6313,7 +6313,7 @@ const TIMAAT = {
 					// setup form
 					$('#textMetaLabel').html("Text hinzufügen");
 					$('#timaat-text-meta-submit').html("Hinzufügen");
-					$("#timaat-text-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-text-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-text-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-text-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-text-meta-source-isstillavailable").prop('checked', false);
@@ -6331,7 +6331,7 @@ const TIMAAT = {
 					// setup form
 					$('#videoMetaLabel').html("Video hinzufügen");
 					$('#timaat-video-meta-submit').html("Hinzufügen");
-					$("#timaat-video-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-video-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-video-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-video-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-video-meta-source-isstillavailable").prop('checked', false);
@@ -6349,7 +6349,7 @@ const TIMAAT = {
 					// setup form
 					$('#videogameMetaLabel').html("Videogame hinzufügen");
 					$('#timaat-videogame-meta-submit').html("Hinzufügen");
-					$("#timaat-videogame-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+					$("#timaat-videogame-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 					$("#timaat-videogame-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 					$("#timaat-videogame-meta-source-isprimarysource").prop('checked', true);
 					$("#timaat-videogame-meta-source-isstillavailable").prop('checked', false);
@@ -6376,7 +6376,7 @@ const TIMAAT = {
 				$('#timaat-medium-meta-dismiss').show();
 				$('#timaat-mediadatasets-medium-form :input').prop("disabled", false);
 				$('#timaat-medium-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-medium-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-medium-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-medium-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-medium-edit-in-form').hide();
 				$('#mediumMetaLabel').html("Medium bearbeiten");
@@ -6431,7 +6431,7 @@ const TIMAAT = {
 				$('#timaat-audio-meta-dismiss').show();
 				$('#timaat-mediadatasets-audio-form :input').prop("disabled", false);
 				$('#timaat-audio-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-audio-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-audio-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-audio-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-audio-edit-in-form').hide();
 				$('#audioMetaLabel').html("Audio bearbeiten");
@@ -6488,7 +6488,7 @@ const TIMAAT = {
 				$('#timaat-document-meta-dismiss').show();
 				$('#timaat-mediadatasets-document-form :input').prop("disabled", false);
 				$('#timaat-document-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-document-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-document-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-document-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-document-edit-in-form').hide();
 				$('#documentMetaLabel').html("Document bearbeiten");
@@ -6545,7 +6545,7 @@ const TIMAAT = {
 				$('#timaat-image-meta-dismiss').show();
 				$('#timaat-mediadatasets-image-form :input').prop("disabled", false);
 				$('#timaat-image-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-image-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-image-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-image-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-image-edit-in-form').hide();
 				$('#imageMetaLabel').html("Image bearbeiten");
@@ -6604,7 +6604,7 @@ const TIMAAT = {
 				$('#timaat-software-meta-dismiss').show();
 				$('#timaat-mediadatasets-software-form :input').prop("disabled", false);
 				$('#timaat-software-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-software-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-software-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-software-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-software-edit-in-form').hide();
 				$('#softwareMetaLabel').html("software bearbeiten");
@@ -6661,7 +6661,7 @@ const TIMAAT = {
 				$('#timaat-text-meta-dismiss').show();
 				$('#timaat-mediadatasets-text-form :input').prop("disabled", false);
 				$('#timaat-text-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-text-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-text-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-text-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-text-edit-in-form').hide();
 				$('#textMetaLabel').html("Text bearbeiten");
@@ -6718,7 +6718,7 @@ const TIMAAT = {
 				$('#timaat-video-meta-dismiss').show();
 				$('#timaat-mediadatasets-video-form :input').prop("disabled", false);
 				$('#timaat-video-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-video-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-video-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-video-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-video-edit-in-form').hide();
 				$('#videoMetaLabel').html("Video bearbeiten");
@@ -6784,7 +6784,7 @@ const TIMAAT = {
 				$('#timaat-videogame-meta-dismiss').show();
 				$('#timaat-mediadatasets-videogame-form :input').prop("disabled", false);
 				$('#timaat-videogame-meta-medium-type-id').prop("disabled", true);
-				$("#timaat-videogame-meta-releasedate").datetimepicker({timepicker: false, format: "YYYY-MM-DD"});
+				$("#timaat-videogame-meta-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$("#timaat-videogame-meta-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				// $('#timaat-videogame-edit-in-form').hide();
 				$('#videogameMetaLabel').html("Videogame bearbeiten");
