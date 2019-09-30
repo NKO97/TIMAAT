@@ -5131,7 +5131,7 @@ const TIMAAT = {
 				if (medium) { // update medium
           // console.log("TCL: medium", medium);
 					// medium data
-					medium.model.releaseDate = moment.utc(formDataObject.releaseDate);
+					medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
           // console.log("TCL: releaseDate", medium.model.releaseDate);
 					medium.model.copyright = formDataObject.copyright;
 					medium.model.remark = formDataObject.remark;
@@ -5142,7 +5142,7 @@ const TIMAAT = {
 					// source data
 					medium.model.sources[0].url = formDataObject.sourceUrl;
 					medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
           // console.log("TCL: lastAccessed", medium.model.sources[0].lastAccessed);
 					medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 
@@ -5153,7 +5153,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: Number(formDataObject.typeId),
 						},
@@ -5181,7 +5181,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),            
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// console.log("TCL: lastAccessed", source.lastAccessed);
@@ -5235,7 +5235,7 @@ const TIMAAT = {
 
 				if (audio) { // update audio
 					// medium data
-					audio.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					audio.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					audio.model.medium.copyright = formDataObject.copyright;
 					audio.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5244,7 +5244,7 @@ const TIMAAT = {
 					// source data
 					audio.model.medium.sources[0].url = formDataObject.sourceUrl;
 					audio.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					audio.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					audio.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					audio.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// audio data
 					audio.model.length = TIMAAT.Util.parseTime(formDataObject.length);
@@ -5266,7 +5266,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 1 // 1 = Audio. TODO check clause to find proper id
 						},
@@ -5290,7 +5290,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or audio at the moment
@@ -5348,7 +5348,7 @@ const TIMAAT = {
 				if (mediumDocument) { // update document
           console.log("TCL: mediumDocument", mediumDocument);
 					// medium data
-					mediumDocument.medium.model.releaseDate = moment.utc(formDataObject.releaseDate);
+					mediumDocument.medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					mediumDocument.medium.model.copyright = formDataObject.copyright;
 					mediumDocument.medium.model.remark = formDataObject.remark;
 					// title data
@@ -5357,7 +5357,7 @@ const TIMAAT = {
 					// source data
 					mediumDocument.medium.model.sources[0].url = formDataObject.sourceUrl;
 					mediumDocument.medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					mediumDocument.medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					mediumDocument.medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					mediumDocument.medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// document data
 					// currently empty
@@ -5374,7 +5374,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 2 // 2 = mediumDocument. TODO check clause to find proper id
 						},
@@ -5398,7 +5398,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or document at the moment
@@ -5455,7 +5455,7 @@ const TIMAAT = {
 
 				if (image) { // update image
 					// medium data
-					image.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					image.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					image.model.medium.copyright = formDataObject.copyright;
 					image.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5464,7 +5464,7 @@ const TIMAAT = {
 					// source data
 					image.model.medium.sources[0].url = formDataObject.sourceUrl;
 					image.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					image.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					image.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					image.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// image data
 					image.model.width = formDataObject.width;
@@ -5486,7 +5486,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 3 // 3 = image. TODO check clause to find proper id
 						},
@@ -5510,7 +5510,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or image at the moment
@@ -5566,7 +5566,7 @@ const TIMAAT = {
 
 				if (software) { // update software
 					// medium data
-					software.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					software.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					software.model.medium.copyright = formDataObject.copyright;
 					software.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5575,7 +5575,7 @@ const TIMAAT = {
 					// source data
 					software.model.medium.sources[0].url = formDataObject.sourceUrl;
 					software.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					software.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					software.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					software.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// software data
 					software.model.version = formDataObject.version;
@@ -5592,7 +5592,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 4 // 4 = Software. TODO check clause to find proper id
 						},
@@ -5616,7 +5616,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or software at the moment
@@ -5672,7 +5672,7 @@ const TIMAAT = {
 
 				if (text) { // update text
 					// medium data
-					text.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					text.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					text.model.medium.copyright = formDataObject.copyright;
 					text.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5681,7 +5681,7 @@ const TIMAAT = {
 					// source data
 					text.model.medium.sources[0].url = formDataObject.sourceUrl;
 					text.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					text.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					text.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					text.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// text data
 					text.model.content = formDataObject.content;
@@ -5699,7 +5699,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 5 // 5 = Text. TODO check clause to find proper id
 						},
@@ -5723,7 +5723,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or text at the moment
@@ -5779,7 +5779,7 @@ const TIMAAT = {
 
 				if (video) { // update video
 					// medium data
-					video.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					video.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					video.model.medium.copyright = formDataObject.copyright;
 					video.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5788,7 +5788,7 @@ const TIMAAT = {
 					// source data
 					video.model.medium.sources[0].url = formDataObject.sourceUrl;
 					video.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					video.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					video.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					video.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// video data
 					video.model.length = TIMAAT.Util.parseTime(formDataObject.length);
@@ -5823,7 +5823,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 6 // 6 = Video. TODO check clause to find proper id
 						},
@@ -5847,7 +5847,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or video at the moment
@@ -5904,7 +5904,7 @@ const TIMAAT = {
 				if (videogame) { // update videogame
           console.log("TCL: videogame", videogame);
 					// medium data
-					videogame.model.medium.releaseDate = moment.utc(formDataObject.releaseDate);
+					videogame.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					videogame.model.medium.copyright = formDataObject.copyright;
 					videogame.model.medium.remark = formDataObject.remark;
 					// title data
@@ -5913,7 +5913,7 @@ const TIMAAT = {
 					// source data
 					videogame.model.medium.sources[0].url = formDataObject.sourceUrl;
 					videogame.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					videogame.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed).valueOf();
+					videogame.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
 					videogame.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// videogame data
 					videogame.model.isEpisode = (formDataObject.isEpisode) ? true : false;
@@ -5931,7 +5931,7 @@ const TIMAAT = {
 						id: 0,
 						remark: formDataObject.remark,
 						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate),
+						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 						mediaType: {
 							id: 7 // 7 = Videogame. TODO check clause to find proper id
 						},
@@ -5955,7 +5955,7 @@ const TIMAAT = {
 						},
 						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
 						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed).valueOf(),
+						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
 						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 					};
 					// There are no translation data for medium or videogame at the moment
@@ -6389,22 +6389,23 @@ const TIMAAT = {
 			$("#timaat-medium-meta-medium-type-id").val(medium.model.mediaType.id);
 			$("#timaat-medium-meta-remark").val(medium.model.remark);
 			$("#timaat-medium-meta-copyright").val(medium.model.copyright);
-			$("#timaat-medium-meta-releasedate").val(moment(medium.model.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(medium.model.releaseDate)))
+				$("#timaat-medium-meta-releasedate").val("");
+				else	$("#timaat-medium-meta-releasedate").val(moment(medium.model.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-medium-meta-title").val(medium.model.title.name);
 			$("#timaat-medium-meta-title-language-id").val(medium.model.title.language.id);
 			// source data
-			if (medium.model.sources[0].isPrimarySource) {
+			if (medium.model.sources[0].isPrimarySource)
 				$("#timaat-medium-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-medium-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-medium-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-medium-meta-source-url").val(medium.model.sources[0].url);
-			$("#timaat-medium-meta-source-lastaccessed").val(moment.utc(medium.model.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-
-			if (medium.model.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(medium.model.sources[0].lastAccessed))) 
+				$("#timaat-medium-meta-source-lastaccessed").val("");
+				else	$("#timaat-medium-meta-source-lastaccessed").val(moment.utc(medium.model.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (medium.model.sources[0].isStillAvailable)
 				$("#timaat-medium-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-medium-meta-source-isstillavailable").prop('checked', false);
 
 			if ( action == "edit") {
 				$('#timaat-mediadatasets-medium-form').data('medium', medium);
@@ -6443,21 +6444,23 @@ const TIMAAT = {
 			$("#timaat-audio-meta-medium-type-id").val(audio.model.medium.mediaType.id);
 			$("#timaat-audio-meta-remark").val(audio.model.medium.remark);
 			$("#timaat-audio-meta-copyright").val(audio.model.medium.copyright);
-			$("#timaat-audio-meta-releasedate").val(moment(audio.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(audio.model.medium.releaseDate)))
+				$("#timaat-audio-meta-releasedate").val("");
+				else	$("#timaat-audio-meta-releasedate").val(moment(audio.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-audio-meta-title").val(audio.model.medium.title.name);
 			$("#timaat-audio-meta-title-language-id").val(audio.model.medium.title.language.id);
 			// source data
-			if (audio.model.medium.sources[0].isPrimarySource) {
+			if (audio.model.medium.sources[0].isPrimarySource)
 				$("#timaat-audio-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-audio-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-audio-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-audio-meta-source-url").val(audio.model.medium.sources[0].url);
-			$("#timaat-audio-meta-source-lastaccessed").val(moment.utc(audio.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (audio.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(audio.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-audio-meta-source-lastaccessed").val("");
+				else	$("#timaat-audio-meta-source-lastaccessed").val(moment.utc(audio.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (audio.model.medium.sources[0].isStillAvailable)
 				$("#timaat-audio-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-audio-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-audio-meta-source-isstillavailable").prop('checked', false);
 			// audio data
 			$("#timaat-audio-meta-length").val(audio.model.length);
 
@@ -6498,21 +6501,23 @@ const TIMAAT = {
 			$("#timaat-document-meta-medium-type-id").val(mediumDocument.model.medium.mediaType.id);
 			$("#timaat-document-meta-remark").val(mediumDocument.model.medium.remark);
 			$("#timaat-document-meta-copyright").val(mediumDocument.model.medium.copyright);
-			$("#timaat-document-meta-releasedate").val(moment.utc(mediumDocument.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(mediumDocument.model.medium.releaseDate)))
+				$("#timaat-document-meta-releasedate").val("");
+				else	$("#timaat-document-meta-releasedate").val(moment(mediumDocument.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-document-meta-title").val(mediumDocument.model.medium.title.name);
 			$("#timaat-document-meta-title-language-id").val(mediumDocument.model.medium.title.language.id);
 			// source data
-			if (mediumDocument.model.medium.sources[0].isPrimarySource) {
+			if (mediumDocument.model.medium.sources[0].isPrimarySource)
 				$("#timaat-document-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-document-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-document-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-document-meta-source-url").val(mediumDocument.model.medium.sources[0].url);
-			$("#timaat-document-meta-source-lastaccessed").val(moment(mediumDocument.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (mediumDocument.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(mediumDocument.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-document-meta-source-lastaccessed").val("");
+				else	$("#timaat-document-meta-source-lastaccessed").val(moment.utc(mediumDocument.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (mediumDocument.model.medium.sources[0].isStillAvailable)
 				$("#timaat-document-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-document-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-document-meta-source-isstillavailable").prop('checked', false);
 			// document data
 			// currently empty
 
@@ -6553,21 +6558,23 @@ const TIMAAT = {
 			$("#timaat-image-meta-medium-type-id").val(image.model.medium.mediaType.id);
 			$("#timaat-image-meta-remark").val(image.model.medium.remark);
 			$("#timaat-image-meta-copyright").val(image.model.medium.copyright);
-			$("#timaat-image-meta-releasedate").val(moment.utc(image.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(image.model.medium.releaseDate)))
+				$("#timaat-image-meta-releasedate").val("");
+				else	$("#timaat-image-meta-releasedate").val(moment(image.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-image-meta-title").val(image.model.medium.title.name);
 			$("#timaat-image-meta-title-language-id").val(image.model.medium.title.language.id);
 			// source data
-			if (image.model.medium.sources[0].isPrimarySource) {
+			if (image.model.medium.sources[0].isPrimarySource)
 				$("#timaat-image-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-image-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-image-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-image-meta-source-url").val(image.model.medium.sources[0].url);
-			$("#timaat-image-meta-source-lastaccessed").val(moment(image.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (image.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(image.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-image-meta-source-lastaccessed").val("");
+				else	$("#timaat-image-meta-source-lastaccessed").val(moment.utc(image.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (image.model.medium.sources[0].isStillAvailable)
 				$("#timaat-image-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-image-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-image-meta-source-isstillavailable").prop('checked', false);
 			// image data
 			$("#timaat-image-meta-width").val(image.model.width);
 			$("#timaat-image-meta-height").val(image.model.height);
@@ -6610,21 +6617,23 @@ const TIMAAT = {
 			$("#timaat-software-meta-medium-type-id").val(software.model.medium.mediaType.id);
 			$("#timaat-software-meta-remark").val(software.model.medium.remark);
 			$("#timaat-software-meta-copyright").val(software.model.medium.copyright);
-			$("#timaat-software-meta-releasedate").val(moment(software.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(software.model.medium.releaseDate)))
+				$("#timaat-software-meta-releasedate").val("");
+				else	$("#timaat-software-meta-releasedate").val(moment(software.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-software-meta-title").val(software.model.medium.title.name);
 			$("#timaat-software-meta-title-language-id").val(software.model.medium.title.language.id);
 			// source data
-			if (software.model.medium.sources[0].isPrimarySource) {
+			if (software.model.medium.sources[0].isPrimarySource)
 				$("#timaat-software-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-software-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-software-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-software-meta-source-url").val(software.model.medium.sources[0].url);
-			$("#timaat-software-meta-source-lastaccessed").val(moment.utc(software.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (software.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(software.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-software-meta-source-lastaccessed").val("");
+				else	$("#timaat-software-meta-source-lastaccessed").val(moment.utc(software.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (software.model.medium.sources[0].isStillAvailable)
 				$("#timaat-software-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-software-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-software-meta-source-isstillavailable").prop('checked', false);
 			// software data
 			$("#timaat-software-meta-version").val(software.model.version);
 
@@ -6665,21 +6674,23 @@ const TIMAAT = {
 			$("#timaat-text-meta-medium-type-id").val(text.model.medium.mediaType.id);
 			$("#timaat-text-meta-remark").val(text.model.medium.remark);
 			$("#timaat-text-meta-copyright").val(text.model.medium.copyright);
-			$("#timaat-text-meta-releasedate").val(moment(text.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(text.model.medium.releaseDate)))
+				$("#timaat-text-meta-releasedate").val("");
+				else	$("#timaat-text-meta-releasedate").val(moment(text.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-text-meta-title").val(text.model.medium.title.name);
 			$("#timaat-text-meta-title-language-id").val(text.model.medium.title.language.id);
 			// source data
-			if (text.model.medium.sources[0].isPrimarySource) {
+			if (text.model.medium.sources[0].isPrimarySource)
 				$("#timaat-text-meta-source-isprimarysource").prop('checked', true);
-			} else { $("#timaat-text-meta-source-isprimarysource").prop('checked', false);
-			};
+				else $("#timaat-text-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-text-meta-source-url").val(text.model.medium.sources[0].url);
-			$("#timaat-text-meta-source-lastaccessed").val(moment.utc(text.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (text.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(text.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-text-meta-source-lastaccessed").val("");
+				else	$("#timaat-text-meta-source-lastaccessed").val(moment.utc(text.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (text.model.medium.sources[0].isStillAvailable)
 				$("#timaat-text-meta-source-isstillavailable").prop('checked', true);
-			} else { $("#timaat-text-meta-source-isstillavailable").prop('checked', false);
-			};
+			  else $("#timaat-text-meta-source-isstillavailable").prop('checked', false);
 			// text data
 			$("#timaat-text-meta-content").val(text.model.content);
 
@@ -6720,23 +6731,23 @@ const TIMAAT = {
 			$("#timaat-video-meta-medium-type-id").val(video.model.medium.mediaType.id);
 			$("#timaat-video-meta-remark").val(video.model.medium.remark);
 			$("#timaat-video-meta-copyright").val(video.model.medium.copyright);
-			$("#timaat-video-meta-releasedate").val(moment(video.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(video.model.medium.releaseDate)))
+				$("#timaat-video-meta-releasedate").val("");
+				else	$("#timaat-video-meta-releasedate").val(moment(video.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-video-meta-title").val(video.model.medium.title.name);
 			$("#timaat-video-meta-title-language-id").val(video.model.medium.title.language.id);
 			// source data
-			if (video.model.medium.sources[0].isPrimarySource) {
+			if (video.model.medium.sources[0].isPrimarySource)
 				$("#timaat-video-meta-source-isprimarysource").prop('checked', true);
-			} else { 
-				$("#timaat-video-meta-source-isprimarysource").prop('checked', false);
-			}
+				else $("#timaat-video-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-video-meta-source-url").val(video.model.medium.sources[0].url);
-			$("#timaat-video-meta-source-lastaccessed").val(moment.utc(video.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (video.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(video.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-video-meta-source-lastaccessed").val("");
+				else	$("#timaat-video-meta-source-lastaccessed").val(moment.utc(video.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (video.model.medium.sources[0].isStillAvailable)
 				$("#timaat-video-meta-source-isstillavailable").prop('checked', true);
-			} else { 
-				$("#timaat-video-meta-source-isstillavailable").prop('checked', false);
-			}
+			  else $("#timaat-video-meta-source-isstillavailable").prop('checked', false);
 			// video data
 			$("#timaat-video-meta-length").val(video.model.length);
 			$("#timaat-video-meta-videocodec").val(video.model.videoCodec);
@@ -6745,11 +6756,9 @@ const TIMAAT = {
 			$("#timaat-video-meta-framerate").val(video.model.frameRate);
 			$("#timaat-video-meta-datarate").val(video.model.dataRate);
 			$("#timaat-video-meta-totalbitrate").val(video.model.totalBitrate);
-			if (video.model.isEpisode) {
+			if (video.model.isEpisode)
 				$("#timaat-video-meta-isepisode").prop('checked', true);
-			} else { 
-				$("#timaat-video-meta-isepisode").prop('checked', false);
-			}
+			  else $("#timaat-video-meta-isepisode").prop('checked', false);
 
 			if ( action == "edit") {
 				$('#timaat-mediadatasets-video-form').data('video', video);
@@ -6788,29 +6797,27 @@ const TIMAAT = {
 			$("#timaat-videogame-meta-medium-type-id").val(videogame.model.medium.mediaType.id);
 			$("#timaat-videogame-meta-remark").val(videogame.model.medium.remark);
 			$("#timaat-videogame-meta-copyright").val(videogame.model.medium.copyright);
-			$("#timaat-videogame-meta-releasedate").val(moment(videogame.model.medium.releaseDate).format("YYYY-MM-DD"));
+			if (isNaN(moment(videogame.model.medium.releaseDate)))
+				$("#timaat-videogame-meta-releasedate").val("");
+				else	$("#timaat-videogame-meta-releasedate").val(moment(videogame.model.medium.releaseDate).format("YYYY-MM-DD"));
 			// title data
 			$("#timaat-videogame-meta-title").val(videogame.model.medium.title.name);
 			$("#timaat-videogame-meta-title-language-id").val(videogame.model.medium.title.language.id);
 			// source data
-			if (videogame.model.medium.sources[0].isPrimarySource) {
+			if (videogame.model.medium.sources[0].isPrimarySource)
 				$("#timaat-videogame-meta-source-isprimarysource").prop('checked', true);
-			} else { 
-				$("#timaat-videogame-meta-source-isprimarysource").prop('checked', false);
-			}
+			  else $("#timaat-videogame-meta-source-isprimarysource").prop('checked', false);
 			$("#timaat-videogame-meta-source-url").val(videogame.model.medium.sources[0].url);
-			$("#timaat-videogame-meta-source-lastaccessed").val(moment.utc(videogame.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
-			if (videogame.model.medium.sources[0].isStillAvailable) {
+			if (isNaN(moment.utc(videogame.model.medium.sources[0].lastAccessed))) 
+				$("#timaat-videogame-meta-source-lastaccessed").val("");
+				else	$("#timaat-videogame-meta-source-lastaccessed").val(moment.utc(videogame.model.medium.sources[0].lastAccessed).format("YYYY-MM-DD HH:mm"));
+			if (videogame.model.medium.sources[0].isStillAvailable)
 				$("#timaat-videogame-meta-source-isstillavailable").prop('checked', true);
-			} else { 
-				$("#timaat-videogame-meta-source-isstillavailable").prop('checked', false);
-			}
+			  else $("#timaat-videogame-meta-source-isstillavailable").prop('checked', false);
 			// videogame data
-			if (videogame.model.isEpisode) {
+			if (videogame.model.isEpisode)
 				$("#timaat-videogame-meta-isepisode").prop('checked', true);
-			} else { 
-				$("#timaat-videogame-meta-isepisode").prop('checked', false);
-			}
+			  else $("#timaat-videogame-meta-isepisode").prop('checked', false);
 
 			if ( action == "edit") {
 				$('#timaat-mediadatasets-videogame-form').data('videogame', videogame);
