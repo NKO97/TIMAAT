@@ -28,6 +28,10 @@ public class Title implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums1;
 
+	//bi-directional many-to-one association to Language
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	private Language language;
+
 	//bi-directional many-to-many association to Medium
 	@ManyToMany
 	@JsonIgnore
@@ -58,48 +62,6 @@ public class Title implements Serializable {
 	// 		}
 	// 	)
 	// private List<Nasheed> nasheeds2;
-
-	//bi-directional many-to-one association to Language
-	@ManyToOne(cascade=CascadeType.PERSIST)
-	private Language language;
-
-	//bi-directional many-to-many association to Title
-	@ManyToMany
-	@JsonIgnore
-	@JoinTable(
-		name="title_has_title_translation"
-		, joinColumns={
-			@JoinColumn(name="title_translation_title_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="title_id")
-			}
-		)
-	private List<Title> titles1;
-
-	//bi-directional many-to-many association to Title
-	@ManyToMany(mappedBy="titles1")
-	@JsonIgnore
-	private List<Title> titles2;
-
-	//bi-directional many-to-many association to Title
-	@ManyToMany
-	@JsonIgnore
-	@JoinTable(
-		name="title_translation_has_title_translation_alternative"
-		, joinColumns={
-			@JoinColumn(name="title_translation_alternative_title_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="title_translation_title_id")
-			}
-		)
-	private List<Title> titles3;
-
-	//bi-directional many-to-many association to Title
-	@ManyToMany(mappedBy="titles3")
-	@JsonIgnore
-	private List<Title> titles4;
 
 	public Title() {
 	}
@@ -142,6 +104,14 @@ public class Title implements Serializable {
 		return mediums1;
 	}
 
+	public Language getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
 	public List<Medium> getMediums2() {
 		return this.mediums2;
 	}
@@ -179,45 +149,5 @@ public class Title implements Serializable {
 	// public void setNasheeds2(List<Nasheed> nasheeds2) {
 	// 	this.nasheeds2 = nasheeds2;
 	// }
-
-	public Language getLanguage() {
-		return this.language;
-	}
-
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	public List<Title> getTitles1() {
-		return this.titles1;
-	}
-
-	public void setTitles1(List<Title> titles1) {
-		this.titles1 = titles1;
-	}
-
-	public List<Title> getTitles2() {
-		return this.titles2;
-	}
-
-	public void setTitles2(List<Title> titles2) {
-		this.titles2 = titles2;
-	}
-
-	public List<Title> getTitles3() {
-		return this.titles3;
-	}
-
-	public void setTitles3(List<Title> titles3) {
-		this.titles3 = titles3;
-	}
-
-	public List<Title> getTitles4() {
-		return this.titles4;
-	}
-
-	public void setTitles4(List<Title> titles4) {
-		this.titles4 = titles4;
-	}
 
 }

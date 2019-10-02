@@ -165,7 +165,9 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-mediadatasets-medium-form,
+#timaat-mediadatasets-medium-metadata,
+#timaat-mediadatasets-medium-metadata-form,
+#timaat-mediadatasets-medium-titles-form,
 #timaat-mediadatasets-audio-form,
 #timaat-mediadatasets-document-form,
 #timaat-mediadatasets-image-form,
@@ -185,7 +187,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-county-list li,
 #timaat-city-list li,
 #timaat-street-list li,
-#timaat-medium-list li,
+#timaat-mediadatasets-medium-list li,
 #timaat-audio-list li,
 #timaat-document-list li,
 #timaat-image-list li,
@@ -207,7 +209,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-county-list li:hover,
 #timaat-city-list li:hover,
 #timaat-street-list li:hover,
-#timaat-medium-list li:hover,
+#timaat-mediadatasets-medium-list li:hover,
 #timaat-audio-list li:hover,
 #timaat-document-list li:hover,
 #timaat-image-list li:hover,
@@ -228,7 +230,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-list-selected,
 .timaat-city-list-selected,
 .timaat-street-list-selected,
-.timaat-medium-list-selected,
+.timaat-mediadatasets-medium-list-selected,
 .timaat-audio-list-selected,
 .timaat-document-list-selected,
 .timaat-image-list-selected,
@@ -249,7 +251,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-list-selected:hover,
 .timaat-city-list-selected:hover,
 .timaat-street-list-selected:hover,
-.timaat-medium-list-selected:hover,
+.timaat-mediadatasets-medium-list-selected:hover,
 .timaat-audio-list-selected:hover,
 .timaat-document-list-selected:hover,
 .timaat-image-list-selected:hover,
@@ -269,7 +271,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-chooser,
 .timaat-city-chooser,
 .timaat-street-chooser,
-.timaat-medium-chooser,
+.timaat-mediadatasets-medium-chooser,
 .timaat-audio-chooser,
 .timaat-document-chooser,
 .timaat-image-chooser,
@@ -289,7 +291,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-remove,
 .timaat-city-remove,
 .timaat-street-remove,
-.timaat-medium-remove,
+.timaat-mediadatasets-medium-remove,
 .timaat-audio-remove,
 .timaat-document-remove,
 .timaat-image-remove,
@@ -456,7 +458,7 @@ a.dropdown-item {
 	cursor: default;
 }
 
-#timaat-medium-tags {
+#timaat-mediadatasets-medium-tags {
 	cursor: pointer;
 }
 
@@ -467,7 +469,7 @@ a.dropdown-item {
 .stepfwdbutton i:hover,
 .timaat-user-log i:hover,
 .timaat-annotation-list-tags i:hover,
-#timaat-medium-tags i:hover {
+#timaat-mediadatasets-medium-tags i:hover {
 	color: #17a2b8;
 }
 
@@ -500,6 +502,10 @@ a.dropdown-item {
 	color:#ff0000
 }
 
+input.table-control {
+  width: auto;
+}
+
 .form-control input[type=text], input[type=date] {
 	color: #000000;
 }
@@ -517,9 +523,32 @@ a.dropdown-item {
   color: #acacac;
 }
 
+.form-control:disabled {
+	resize: none;
+}
+
 select {
 	color: #000000;
 }
 select:invalid {
 	color: #acacac;
 }
+
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+	text-decoration: none;
+}
+
+/* [data-role="dynamic-title-fields"] > .table-control > tr [data-role="add"] {
+	display: none;
+}
+
+[data-role="dynamic-title-fields"] > .table-control > tr:last-child [data-role="add"] {
+	display: inline-block;
+}
+
+[data-role="dynamic-title-fields"] > .table-control > tr:last-child [data-role="remove"] {
+	display: none;
+} */

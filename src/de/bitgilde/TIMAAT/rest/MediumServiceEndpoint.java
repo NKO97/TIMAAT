@@ -191,6 +191,28 @@ public class MediumServiceEndpoint{
 		return Response.ok().entity(mediumVideogameList).build();
 	}
 	
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/titles/list")
+	public Response getTitlesList(@PathParam("id") int id) {
+		// // System.out.println("MediumEndpoint: getTitlesList");
+		// Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);   
+    // 	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		// // List<Title> titleList = TIMAATApp.emf.createEntityManager().createNamedQuery("titleList.findAll").getResultList();
+		// // return Response.ok().entity(titleList).build();
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// find medium
+		Medium medium = entityManager.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		entityManager.refresh(medium);
+		
+		return Response.ok(medium.getTitles()).build();
+	}
+
 	@POST
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
