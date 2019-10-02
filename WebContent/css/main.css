@@ -523,3 +523,10 @@ select {
 select:invalid {
 	color: #acacac;
 }
+
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+	text-decoration: none;
+}

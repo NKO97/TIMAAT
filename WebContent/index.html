@@ -175,7 +175,7 @@
         <div id="sidebar-wrapper">
           <div class="navbar-default sidebar" role="navigation">
             <ul id="side-menu">
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser">
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser isDisabled">
                   <a href="#videos" 
                     onclick="TIMAAT.UI.showComponent('videochooser')" 
                     data-toggle="popover" 
@@ -191,7 +191,7 @@
                     <i class="fas fa-video"></i>
                   </a>
               </li>
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-videoplayer" >
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-videoplayer isDisabled" >
                   <a href="#annotate"
                     onclick="TIMAAT.UI.showComponent('videoplayer')"
                     data-toggle="popover"
@@ -207,7 +207,7 @@
                     <i class="fa fa fa-edit fa-fw"></i>
                   </a>
               </li>
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-settings isDisabled">
                   <a href="#settings"
                     onclick="TIMAAT.UI.showComponent('settings')"
                     data-toggle="popover"
@@ -239,7 +239,7 @@
                   <i class="fas fa-photo-video"></i>
                 </a>
               </li> 
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors isDisabled">
                 <a href="#actors"
                   onclick="TIMAAT.UI.showComponent('actors')"
                   data-toggle="popover"
@@ -255,7 +255,7 @@
                   <i class="fas fa-users"></i>
                 </a>
               </li>
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-locations">
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
                   <a href="#locations"
                   onclick="TIMAAT.UI.showComponent('locations')"
                   data-toggle="popover"
@@ -271,7 +271,7 @@
                   <i class="fas fa-map-marked-alt"></i>
                 </a>
               </li>              
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-events">
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-events isDisabled">
                 <a href="#events"
                   onclick="TIMAAT.UI.showComponent('events')" 
                   data-toggle="popover"
@@ -878,9 +878,9 @@
                     <div class="col-md-4">
                       <div class="card">
                         <div class="card-header">Medien
-                          <button type="button" id="timaat-medium-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <!-- <button type="button" id="timaat-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button>
+                          </button> -->
                         </div>
                         <div class="timaat-medium-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <div id="timaat-medium-list-loader" class="text-center card-body bg-info text-white">
