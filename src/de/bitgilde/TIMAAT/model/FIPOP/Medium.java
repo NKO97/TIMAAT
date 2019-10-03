@@ -1,8 +1,11 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +21,9 @@ import java.util.List;
 // @JsonInclude(value=Include.NON_NULL, content=Include.NON_NULL) //new
 // @SecondaryTable(name="medium_video", pkJoinColumns=@PrimaryKeyJoinColumn(name="medium_id")) // new
 @NamedQuery(name="Medium.findAll", query="SELECT m FROM Medium m")
+@JsonIdentityInfo(
+	generator = ObjectIdGenerators.PropertyGenerator.class,
+	property = "id")
 public class Medium implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,8 +50,7 @@ public class Medium implements Serializable {
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="release_date")
+	@Column(name="release_date", columnDefinition = "DATE")
 	private Date releaseDate;
 
 	private String remark;
@@ -86,11 +91,6 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to Reference
 	@ManyToOne
 	private Reference reference;
-
-	//bi-directional many-to-one association to Source
-	@ManyToOne
-	@JoinColumn(name="primary_source_source_id")
-	private Source source;
 
 	//bi-directional many-to-one association to Title
 	@ManyToOne(cascade=CascadeType.PERSIST)
@@ -379,14 +379,6 @@ public class Medium implements Serializable {
 
 	public void setReference(Reference reference) {
 		this.reference = reference;
-	}
-
-	public Source getSource() {
-		return this.source;
-	}
-
-	public void setSource(Source source) {
-		this.source = source;
 	}
 
 	public Title getTitle() {

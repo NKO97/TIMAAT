@@ -59,6 +59,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumText;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame;
+import de.bitgilde.TIMAAT.model.FIPOP.Source;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
@@ -94,9 +95,9 @@ public class MediumServiceEndpoint{
 		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
     	
     	for (Medium m : mlist ) {
-    		m.setStatus(videoStatus(m.getId()));
-        	m.setViewToken(issueFileToken(m.getId()));
-        	m.setMediumAnalysisLists(null);
+				m.setStatus(videoStatus(m.getId()));
+				m.setViewToken(issueFileToken(m.getId()));
+				m.setMediumAnalysisLists(null);
     	}
     	
 		return Response.ok().entity(mlist).build();
@@ -217,12 +218,14 @@ public class MediumServiceEndpoint{
 		newMedium.setId(0);
 		Title title = entityManager.find(Title.class, newMedium.getTitle().getId());
 		newMedium.setTitle(title);
+		Source source = new Source();
 
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newMedium.setCreatedAt(creationDate);
 		newMedium.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			System.out.println("containerRequestContext.getProperty('TIMAAT.userID')" + containerRequestContext.getProperty("TIMAAT.userID"));
 			newMedium.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newMedium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -235,7 +238,6 @@ public class MediumServiceEndpoint{
 		entityTransaction.begin();
 		entityManager.persist(title);
 		entityManager.persist(newMedium);
-		entityManager.persist(title);
 		entityManager.flush();
 		newMedium.setTitle(title);
 		entityTransaction.commit();
@@ -253,6 +255,18 @@ public class MediumServiceEndpoint{
 		entityTransaction.commit();
 		entityManager.refresh(newMedium);
 		entityManager.refresh(title);
+
+		// create sources entry of medium
+		entityTransaction.begin();
+		newMedium.getSources().add(source);
+		source.setMedium(newMedium);
+		// entityManager.merge(source);
+		// entityManager.merge(newMedium);
+		entityManager.persist(source);
+		entityManager.persist(newMedium);
+		entityTransaction.commit();
+		entityManager.refresh(newMedium);
+		entityManager.refresh(source);
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newMedium.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.MEDIUMCREATED);
@@ -283,13 +297,15 @@ public class MediumServiceEndpoint{
 		if ( updatedMedium == null ) return Response.notModified().build();	
 
 		// update medium
+		// if ( updatedMedium.getMediaType() != null ) medium.setMediaType(updatedMedium.getMediaType()); // Don't change media type. MediumSubType won't match anymore
+		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
 
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			medium.getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			medium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -400,7 +416,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		audio.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			audio.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			audio.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -505,7 +521,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		document.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			document.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			document.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -613,7 +629,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		image.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			image.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			image.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -720,7 +736,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		software.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			software.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			software.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -829,7 +845,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		text.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			text.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			text.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -931,11 +947,11 @@ public class MediumServiceEndpoint{
 		MediumVideo video = entityManager.find(MediumVideo.class, id);
 
 		if ( video == null ) return Response.status(Status.NOT_FOUND).build();
-
 		// parse JSON data
 		try {
 			updatedVideo = mapper.readValue(jsonData, MediumVideo.class);
 		} catch (IOException e) {
+			System.out.println("MediumEndpoint: UPDATE VIDEO - IOException: " + e.getMessage());
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedVideo == null ) return Response.notModified().build();
@@ -953,7 +969,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		video.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			video.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			video.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error
 		}
@@ -1070,7 +1086,7 @@ public class MediumServiceEndpoint{
 		// update log metadata
 		videogame.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			videogame.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+			videogame.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}		
@@ -1192,7 +1208,7 @@ public class MediumServiceEndpoint{
 		// log metadata will be updated with the corresponding medium
 		// title.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	title.getMedium().getLastEditedByUserAccount().setId((int) containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	title.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
 		// 	// DEBUG do nothing - production system should abort with internal server error			
 		// }		
@@ -1228,6 +1244,131 @@ public class MediumServiceEndpoint{
 	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																					UserLogManager.LogEvents.TITLEDELETED);
 	System.out.println("MediumEndpoint: deleteTitle - delete complete");	
+	return Response.ok().build();
+	}
+
+	@POST
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("source/{id}")
+	@Secured
+	public Response createSource(@PathParam("id") int id, String jsonData) {
+
+		System.out.println("MediumEndpoint: createSource: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		Source newSource = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		
+		// parse JSON data
+		try {
+			newSource = mapper.readValue(jsonData, Source.class);
+		} catch (IOException e) {
+			System.out.println("MediumEndpoint: createSource: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newSource == null ) {
+			System.out.println("MediumEndpoint: createSource: newSource == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// sanitize object data
+		newSource.setId(0);
+		Medium medium = entityManager.find(Medium.class, newSource.getMedium().getId());
+		newSource.setMedium(medium);
+
+		// update log metadata
+		// Not necessary, a source will always be created in conjunction with a medium
+
+		// persist source
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(newSource);
+		medium.getSources().add(newSource);
+		// medium.addSource(newSource);
+		entityManager.persist(medium);
+		entityManager.flush();
+		newSource.setMedium(medium);
+		entityTransaction.commit();
+		entityManager.refresh(newSource);
+		entityManager.refresh(medium);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newSource.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.SOURCECREATED);
+		System.out.println("MediumEndpoint: source created with id "+newSource.getId());
+
+		return Response.ok().entity(newSource).build();
+	}
+
+	@PATCH
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("source/{id}")
+	@Secured
+	public Response updateSource(@PathParam("id") int id, String jsonData) {
+		System.out.println("MediumEndpoint: UPDATE SOURCE - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		Source updatedSource = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Source source = entityManager.find(Source.class, id);
+		if ( source == null ) return Response.status(Status.NOT_FOUND).build();		
+		// parse JSON data
+		try {
+			updatedSource = mapper.readValue(jsonData, Source.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedSource == null ) return Response.notModified().build(); 
+
+		// update source
+		// System.out.println("MediumEndpoint: UPDATE SOURCE - source.id:"+source.getId());
+		// System.out.println("MediumEndpoint: UPDATE SOURCE - language id:"+updatedSource.getLanguage().getId());
+		if ( updatedSource.getIsPrimarySource() != null ) source.setIsPrimarySource(updatedSource.getIsPrimarySource());
+		if ( updatedSource.getUrl() != null ) source.setUrl(updatedSource.getUrl());
+		if ( updatedSource.getLastAccessed() != null ) source.setLastAccessed(updatedSource.getLastAccessed());
+		if ( updatedSource.getIsStillAvailable() != null ) source.setIsStillAvailable(updatedSource.getIsStillAvailable());
+
+		// update log metadata
+		// log metadata will be updated with the corresponding medium
+		// source.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	source.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// }	
+		
+		// persist source
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(source);
+		entityManager.persist(source);
+		entityTransaction.commit();
+		entityManager.refresh(source);
+
+		// System.out.println("MediumEndpoint: UPDATE SOURCE - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.SOURCEEDITED);
+		System.out.println("MediumEndpoint: UPDATE SOURCE - update complete");	
+		return Response.ok().entity(source).build();
+	}
+
+	@DELETE
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("source/{id}")
+	@Secured
+	public Response deleteSource(@PathParam("id") int id) {    
+	System.out.println("MediumEndpoint: deleteSource");	
+	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+	Source source = entityManager.find(Source.class, id);
+	if ( source == null ) return Response.status(Status.NOT_FOUND).build();
+	EntityTransaction entityTransaction = entityManager.getTransaction();
+	entityTransaction.begin();
+	entityManager.remove(source);
+	entityTransaction.commit();
+	// add log entry
+	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																					UserLogManager.LogEvents.SOURCEDELETED);
+	System.out.println("MediumEndpoint: deleteSource - delete complete");	
 	return Response.ok().build();
 	}
 
@@ -1278,7 +1419,7 @@ public class MediumServiceEndpoint{
 			newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
 			newMedium.setMediaType(mt);
 			newMedium.setReference(null);
-			newMedium.setSource(null);
+			newMedium.setSources(null);
 			newMedium.setPropagandaType(null);
 
 			// TODO MediumVideo needs to be created separatedly from Medium
@@ -1324,7 +1465,8 @@ public class MediumServiceEndpoint{
 			videoTranscoder.start();
 						
 			// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.MEDIUMCREATED);
 
 		} catch (IOException e) {e.printStackTrace();}  
 

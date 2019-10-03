@@ -45,14 +45,6 @@ public class MediumVideogame implements Serializable {
 		this.medium = medium;
 	}
 
-	public int getId() { // TODO not necessary with getMediumId? (BUG: removing these unused functions prevents videogame list from being displayed=)
-		return this.getMedium().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setMediumId?
-		this.getMedium().setId(id);
-	}
-
 	public Boolean getIsEpisode() {
 		return this.isEpisode;
 	}
