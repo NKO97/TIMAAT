@@ -12,8 +12,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="actor_name")
-@NamedQuery(name="Actorname.findAll", query="SELECT a FROM Actorname a")
-public class Actorname implements Serializable {
+@NamedQuery(name="Actorname.findAll", query="SELECT a FROM ActorName a")
+public class ActorName implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -39,7 +39,7 @@ public class Actorname implements Serializable {
 	@OneToMany(mappedBy="actorName")
 	private List<ActorNamePart> actorNameParts;
 
-	public Actorname() {
+	public ActorName() {
 	}
 
 	public int getId() {
@@ -92,14 +92,14 @@ public class Actorname implements Serializable {
 
 	public ActorNamePart addActorNamePart(ActorNamePart actorNamePart) {
 		getActorNameParts().add(actorNamePart);
-		actorNamePart.setActorname(this);
+		actorNamePart.setActorName(this);
 
 		return actorNamePart;
 	}
 
 	public ActorNamePart removeActorNamePart(ActorNamePart actorNamePart) {
 		getActorNameParts().remove(actorNamePart);
-		actorNamePart.setActorname(null);
+		actorNamePart.setActorName(null);
 
 		return actorNamePart;
 	}

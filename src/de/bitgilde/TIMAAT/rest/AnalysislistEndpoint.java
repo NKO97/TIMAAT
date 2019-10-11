@@ -118,6 +118,7 @@ public class AnalysislistEndpoint {
 		try {
 			updatedList = mapper.readValue(jsonData, MediumAnalysisList.class);
 		} catch (IOException e) {
+			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedList == null ) return Response.notModified().build();

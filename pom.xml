@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
-    <jersey2.version>2.27</jersey2.version>
+    <jersey2.version>2.29.1</jersey2.version>
   </properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -29,7 +29,7 @@
     </plugins>
   </build>
   <dependencies>
-  <!-- Jersey 2.27 -->
+  <!-- Jersey 2.29.1 -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>

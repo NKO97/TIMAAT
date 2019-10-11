@@ -144,7 +144,8 @@ public class ActorEndpoint {
 			actor.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+		}
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actor);

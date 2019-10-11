@@ -22,6 +22,10 @@ public class MediumAnalysisList implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Transient
+	private int mediumID;
+
 
 	// TODO text and title from translation
 

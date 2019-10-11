@@ -85,21 +85,24 @@ public class MediumServiceEndpoint{
 	@Context
 	ServletContext servletContext;
 
+	
 	@GET
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
 	public Response getMediaList() {
-		// System.out.println("MediumEndpoint: getMediaList");		
-    	@SuppressWarnings("unchecked")
+		// System.out.println("MediumEndpoint: getMediaList");
+		@SuppressWarnings("unchecked")
 		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
-    	
-    	for (Medium m : mlist ) {
-				m.setStatus(videoStatus(m.getId()));
-				m.setViewToken(issueFileToken(m.getId()));
-				m.setMediumAnalysisLists(null);
-    	}
-    	
+
+		for (Medium m : mlist) {
+			MediumVideo video = m.getMediumVideo();
+			if ( video != null ) {
+				video.setStatus(videoStatus(m.getId()));
+				video.setViewToken(issueFileToken(m.getId()));
+			}
+		}
+
 		return Response.ok().entity(mlist).build();
 	}
 
@@ -170,13 +173,20 @@ public class MediumServiceEndpoint{
 	}
 
 	@GET
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
 	public Response getVideoList() {
-		// System.out.println("MediumEndpoint: getVideoList");	
-    @SuppressWarnings("unchecked")
+		// System.out.println("MediumEndpoint: getMediaList");		
+		@SuppressWarnings("unchecked")
 		List<MediumVideo> mediumVideoList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList();
+
+		for (MediumVideo m : mediumVideoList ) {
+			m.setStatus(videoStatus(m.getMediumId()));
+			m.setViewToken(issueFileToken(m.getMediumId()));
+//			m.setMediumAnalysisLists(null);
+		}
+
 		return Response.ok().entity(mediumVideoList).build();
 	}
 
@@ -1373,106 +1383,116 @@ public class MediumServiceEndpoint{
 	}
 
 	@POST
-	@Path("upload")
+	@Path("video/{id}/upload")
   @Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	public Response createMedium( @FormDataParam("file") InputStream uploadedInputStream,  
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-		
-		Medium newMedium = null;
-		 try {
-			 // TODO assume MP4 only upload
-			 String tempName = ThreadLocalRandom.current().nextInt(1, 65535)+System.currentTimeMillis()+"-upload.mp4";
-			 File uploadTempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
+	public Response uploadMediumVideo(
+			@PathParam("id") int id,
+			@FormDataParam("file") InputStream uploadedInputStream,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 
-			 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream( uploadTempFile ));
-			 byte [] bytes = new byte[1024];
-			 int sizeRead;
-			 while ((sizeRead = uploadedInputStream.read(bytes,0, 1024)) > 0) {
-				 stream.write(bytes, 0, sizeRead);
-			 }
-			 stream.flush();
-			 stream.close();
-			 System.out.println( "You successfully uploaded !" );             
-			/*             
-			int read = 0;  
-			byte[] bytes = new byte[1024];  
-			
-			while ((read = uploadedInputStream.read(bytes)) != -1) {  
-					out.write(bytes, 0, read);  
-					out.flush();  
-			}  
-			out.close();
-			*/			
-			// persist medium			
-			EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumVideo mediumVideo = entityManager.find(MediumVideo.class, id);
+		if (mediumVideo == null) return Response.status(Status.NOT_FOUND).build();
+
+		if ( videoStatus(mediumVideo.getMediumId()).compareTo("nofile") != 0 )
+			return Response.status(Status.FORBIDDEN).entity("ERROR::Videofile already exists").build();
+		
+		try {
+			// TODO assume MP4 only upload
+			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
+					+ "-upload.mp4";
+			File uploadTempFile = new File(
+					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + tempName);
+
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
+			byte[] bytes = new byte[1024];
+			int sizeRead;
+			while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
+				stream.write(bytes, 0, sizeRead);
+			}
+			stream.flush();
+			stream.close();
+			System.out.println("You successfully uploaded !");
+			/*
+			 * int read = 0; byte[] bytes = new byte[1024];
+			 * 
+			 * while ((read = uploadedInputStream.read(bytes)) != -1) { out.write(bytes, 0,
+			 * read); out.flush(); } out.close();
+			 */
+			// persist mediumvideo changes
 			// TODO load from config
 			MediaType mt = entityManager.find(MediaType.class, 6);
 			Language lang = entityManager.find(Language.class, 1);
-			
+
+			/*
 			Title title = new Title();
 			title.setLanguage(lang);
-			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length()-4));
+			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length() - 4));
+			*/
 			
-			newMedium = new Medium();
-			newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-			newMedium.setMediaType(mt);
-			newMedium.setReference(null);
-			newMedium.setSources(null);
-			newMedium.setPropagandaType(null);
-
-			// TODO MediumVideo needs to be created separatedly from Medium
-			MediumVideo videoInfo = new MediumVideo();
-			// TODO generate AudioCodec Data
-			videoInfo.getAudioCodecInformation().setId(1);
+//			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + tempName);
+//			mediumVideo.getMedium().setMediaType(mt);
 
 			// get data from ffmpeg
-			VideoInformation info = getVideoFileInfo(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-			videoInfo.setWidth(info.getWidth());
-			videoInfo.setHeight(info.getHeight());
-			videoInfo.setFrameRate(info.getFramerate());
-			videoInfo.setVideoCodec("");
-			videoInfo.setLength(info.getDuration());
-																	
+			VideoInformation info = getVideoFileInfo(
+					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + tempName
+			);
+			mediumVideo.setWidth(info.getWidth());
+			mediumVideo.setHeight(info.getHeight());
+			mediumVideo.setFrameRate(info.getFramerate());
+			mediumVideo.setVideoCodec("");
+			mediumVideo.setLength(info.getDuration());
+
+			/*
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
-			entityManager.persist(title);
-			// newMedium.setTitle(title);
-			newMedium.setMediumVideo(videoInfo);
-			entityManager.persist(newMedium);
+			entityManager.persist(mediumVideo);
+			entityManager.persist(mediumVideo.getMedium());
 			entityManager.flush();
 			entityTransaction.commit();
-			entityManager.refresh(newMedium);
-
+			entityManager.refresh(mediumVideo);
+			*/
+			
 			// rename file with medium
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+tempName);
-			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4")); // TODO assume only mp4 upload
-			newMedium.setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
-			entityTransaction = entityManager.getTransaction();
+			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + tempName);
+			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ mediumVideo.getMediumId() + "-video-original.mp4")); // TODO assume only mp4 upload
+			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + mediumVideo.getMediumId()
+					+ "-video-original.mp4");
+			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
-			entityManager.persist(newMedium);
+			entityManager.merge(mediumVideo);
+			entityManager.merge(mediumVideo.getMedium());
+			entityManager.persist(mediumVideo);
+			entityManager.persist(mediumVideo.getMedium());
 			entityManager.flush();
 			entityTransaction.commit();
-			entityManager.refresh(newMedium);
-			
-			createThumbnails(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
-			
+			entityManager.refresh(mediumVideo);
+
+			createThumbnails(mediumVideo.getMediumId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ mediumVideo.getMediumId() + "-video-original.mp4");
+
 			// start transcoding video
-			newMedium.setStatus("transcoding");
-			newMedium.setViewToken(issueFileToken(newMedium.getId()));
-			TranscoderThread videoTranscoder = new TranscoderThread(newMedium.getId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+newMedium.getId()+"-video-original.mp4");
+			// TODO refactor
+//			newMedium.setStatus("transcoding");
+//			newMedium.setViewToken(issueFileToken(newMedium.getId()));
+			TranscoderThread videoTranscoder = new TranscoderThread(mediumVideo.getMediumId(),
+					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + mediumVideo.getMediumId()
+							+ "-video-original.mp4");
 			videoTranscoder.start();
-						
+
 			// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.MEDIUMCREATED);
+			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+					UserLogManager.LogEvents.MEDIUMCREATED);
 
-		} catch (IOException e) {e.printStackTrace();}  
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		return Response.ok().entity(newMedium).build();
+		return Response.ok().entity(mediumVideo).build();
 	}
-
 		
 	@GET
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -1483,14 +1503,14 @@ public class MediumServiceEndpoint{
     	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);   
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
     	
-		m.setStatus(videoStatus(id));
-    	m.setViewToken(issueFileToken(m.getId()));
+//		m.setStatus(videoStatus(id));
+//    	m.setViewToken(issueFileToken(m.getId()));
     	
 		return Response.ok().entity(m).build();
 	}
 
 	@HEAD
-	@Path("{id}/download")
+	@Path("video/{id}/download")
 	@Produces("video/mp4")
 	public Response getMediaFileInfo(
 			@PathParam("id") int id,
@@ -1517,7 +1537,7 @@ public class MediumServiceEndpoint{
 	}
 
 	@GET
-	@Path("{id}/download")
+	@Path("video/{id}/download")
   @Produces("video/mp4")
 	public Response getMediaFile(
 		@Context HttpHeaders headers,
@@ -1545,7 +1565,7 @@ public class MediumServiceEndpoint{
 	}
 
 	@GET
-	@Path("{id}/status")
+	@Path("video/{id}/status")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	@Secured
 	public Response getVideoStatus(@PathParam("id") int id) {
@@ -1556,7 +1576,7 @@ public class MediumServiceEndpoint{
 	}
 
 	@GET
-	@Path("{id}/thumbnail")
+	@Path("video/{id}/thumbnail")
 	@Produces("image/jpg")
 	public Response getVideoThumbnail(
 			@PathParam("id") int id,
@@ -1854,11 +1874,12 @@ public class MediumServiceEndpoint{
 	
 	private String videoStatus(int id) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
-		String status = "unavailable";
+		String status = "nofile";
 		if ( !videoDir.exists() ) return status;
     	
 		if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4").exists() ) status="ready";
 		else if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video-transcoding.mp4").exists() ) status="transcoding";
+		else status="unavailable";
 		
 		return status;
 	}
@@ -1933,19 +1954,17 @@ public class MediumServiceEndpoint{
 			e1.printStackTrace();
 		}
 	}
-	
+
 	private String issueFileToken(int mediumID) {
 		Key key = new TIMAATKeyGenerator().generateKey();
-			String token = Jwts.builder()
-					.claim("file", mediumID)
-							.setIssuer(uriInfo.getAbsolutePath().toString())
-							.setIssuedAt(new Date())
-							.setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
-							.signWith(key, SignatureAlgorithm.HS512)
-							.compact();
-	return token;
+		String token = Jwts.builder().claim("file", mediumID).setIssuer(
+				uriInfo.getAbsolutePath().toString())
+				.setIssuedAt(new Date())
+				.setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
+				.signWith(key, SignatureAlgorithm.HS512).compact();
+		return token;
 	}
-	
+
 	private int validateFileToken(String token) throws Exception {
 			// Check if the token was issued by the server and if it's not expired
 			// Throw an Exception if the token is invalid

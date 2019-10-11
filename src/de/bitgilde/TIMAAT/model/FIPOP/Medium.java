@@ -237,14 +237,6 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<Source> sources;
 
-	// new
-	@Transient
-	private String status;
-
-	// new
-	@Transient
-	private String viewToken;
-
 	public Medium() {
 	}
 
@@ -653,22 +645,6 @@ public class Medium implements Serializable {
 		source.setMedium(null);
 
 		return source;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getViewToken() {
-		return viewToken;
-	}
-
-	public void setViewToken(String viewToken) {
-		this.viewToken = viewToken;
 	}
 
 		// TODO rather get medium by medium_type

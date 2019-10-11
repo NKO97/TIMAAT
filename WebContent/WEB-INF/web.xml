@@ -27,7 +27,7 @@
     <servlet-name>TIMAAT</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
-  
+  <!-- 
   <security-constraint>
         <display-name>TIMAAT API Security</display-name>
         <web-resource-collection>
@@ -35,9 +35,10 @@
             <description/>
             <url-pattern>/api/*</url-pattern>
         </web-resource-collection>
-<!--        <user-data-constraint>
+        <user-data-constraint>
              <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
-        </user-data-constraint> -->
+        </user-data-constraint>
     </security-constraint>
-    
+   -->
+     
 </web-app>

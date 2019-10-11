@@ -470,9 +470,9 @@ const TIMAAT = {
 		
 		_parseSVG(svgitem) {
       console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
-			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			var factor = 450 / TIMAAT.VideoPlayer.model.video.height;
+			var width = TIMAAT.VideoPlayer.model.video.width;
+			var height = TIMAAT.VideoPlayer.model.video.height;
 			switch (svgitem.type) {
 				case "rectangle":
 					// [[ height, x], [ y, width]]
@@ -500,9 +500,9 @@ const TIMAAT = {
 		_syncToModel() {
       console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 			var jsonData = [];
-			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
-			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			var factor = 450 / TIMAAT.VideoPlayer.model.video.height; // TODO get from videobounds
+			var width = TIMAAT.VideoPlayer.model.video.width;
+			var height = TIMAAT.VideoPlayer.model.video.height;
 			this.svg.items.forEach(function(item) {
 				if ( item instanceof L.Rectangle ) {
 					var jsonItem = {
@@ -822,24 +822,20 @@ const TIMAAT = {
 			// setup video chooser list and UI events
 
 		},
-		
-		loadVideos: function() {
-    	// console.log("TCL: loadVideos: function()");
-			TIMAAT.Service.listVideos(TIMAAT.VideoChooser.setVideoList);
-		},
-		
+
 		updateVideoStatus: function(video) {
     	console.log("TCL: updateVideoStatus: function(video)");
     // console.log("TCL: video", video);
 			video.poll = window.setInterval(function() {
 				jQuery.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+video.mediumId+'/status',
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+video.mediumId+'/status',
 					type:"GET",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
 					video.status = data;
+					console.log("--> ", data);
 					if (data == 'unavailable' || data == 'ready') {
 						window.clearInterval(video.poll);
 						// TODO handle unavailable video error
@@ -859,19 +855,21 @@ const TIMAAT = {
 		},
 		
 		setVideoList: function(videos) {
-    	// console.log("TCL: setVideoList: function(videos)");
-    	console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
+			// console.log("TCL: setVideoList: function(videos)");
+			console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
 			// clear video UI list
-			$('#timaat-video-list').empty();
+			$('#timaat-videochooser-list').empty();
 			
 			// setup upload dropzone UI and events
 			this.uploadItem = $('<div class="card timaat-video-card timaat-video-upload-card"><div id="timaat-video-upload"></div> \
 												<img class="card-img-top" src="img/video-upload.png" alt="Video Upload" /> \
 												<div class="card-footer text-center title">Videodatei hochladen</div> \
 												</div>');
-			this.uploadItem.appendTo('#timaat-video-list');
+			// TODO refactor upload
+			/*
+			this.uploadItem.appendTo('#timaat-videochooser-list');
 			TIMAAT.VideoChooser.uploadZone = new Dropzone("#timaat-video-upload", {
 				url: "/TIMAAT/api/medium/upload",
 				createImageThumbnails: false,
@@ -895,7 +893,7 @@ const TIMAAT = {
 				}
 				TIMAAT.VideoChooser.uploadZone.removeFile(file);
 			});
-			
+			*/
 			
 			TIMAAT.VideoChooser.videos = videos;
 			videos.forEach(function(video) {
@@ -905,23 +903,64 @@ const TIMAAT = {
 		
 		_addVideo: function(video) {
     	// console.log("TCL: _addVideo: function(video)");
-    	console.log("TCL: video", video);
+    	// console.log("TCL: video", video);
 			var videoelement = $('<div class="card timaat-video-card"> <div class="timaat-video-transcoding"><i class="fas fa-cog fa-spin"></i> Transcodiere...</div> \
+					<div class="timaat-video-upload"><i class="fas fa-upload"></i> Videodatei hochladen</div> \
 				  	<img class="card-img-top timmat-video-thumbnail" src="img/video-placeholder.png" alt="Video Platzhalter"> \
 				  	<div class="text-right text-white duration">00:00</div> \
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
-			videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
-			videoelement.appendTo('#timaat-video-list');
-			videoelement.find('.title').html(video.title.name);
-			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
+			if ( video.status != "nofile" ) videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
+			videoelement.appendTo('#timaat-videochooser-list');
+			videoelement.find('.title').html(video.medium.title.name);
+			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.length));
 		
-			if ( video.status != 'ready' ) videoelement.find('.timaat-video-transcoding').show();
+			if ( video.status != 'ready'  &&  video.status != 'nofile' ) videoelement.find('.timaat-video-transcoding').show();
 			if ( video.status == 'unavailable' ) videoelement.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+			if ( video.status == 'nofile' ) {
+				videoelement.find('.timaat-video-upload').show();
+				
+				videoelement.find('.timaat-video-upload').dropzone({
+					url: "/TIMAAT/api/medium/video/"+video.medium.id+"/upload",
+					createImageThumbnails: false,
+					acceptedFiles: 'video/mp4',
+					maxFilesize: 1024,
+					timeout: 60*60*1000, // 1 hour
+					maxFiles: 1,
+					headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
+					previewTemplate: '<div class="dz-preview dz-file-preview" style="margin-top:0px"> \
+						<div class="progress" style="height: 24px;"> \
+						  	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span></div> \
+							</div> \
+						</div>',
+					complete: function(file) {
+							if ( file.status == "success" && file.accepted ) {
+								var newvideo = JSON.parse(file.xhr.response);
+								video.status = newvideo;
+								videoelement.find('.timaat-video-upload').hide();
+								videoelement.find('.timaat-video-transcoding').show();
+								video.width = newvideo.width;
+								video.height = newvideo.height;
+								video.length = newvideo.length;
+								video.frameRate = newvideo.frameRate;
+								video.ui.find('.duration').html(TIMAAT.Util.formatTime(video.length));
+
+								TIMAAT.VideoChooser.updateVideoStatus(video);
+//								TIMAAT.VideoChooser.videos.push(video);
+//								TIMAAT.VideoChooser._addVideo(video);
+							}
+							this.removeFile(file);
+					}
+				});
+			}
 			
 			video.ui = videoelement;
 			videoelement.click(function(ev) {
+				if ( video.status && video.status == 'nofile' ) {
+					// start upload process
+					
+				};
 				if ( video.status && video.status != 'ready' ) return;
 				$('.timaat-video-card').removeClass('bg-info text-white');
 				$(this).addClass('bg-info text-white');
@@ -934,12 +973,12 @@ const TIMAAT = {
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
-				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.mediumVideo.length);
-				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
+				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.length);
+				timecode = Math.min(Math.max(0, timecode),video.length);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 			});
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			});
 			
 			if ( video.status == "transcoding" ) TIMAAT.VideoChooser.updateVideoStatus(video);
@@ -964,7 +1003,7 @@ const TIMAAT = {
 		volume: 1,
 		
 		init: function() {
-    	// console.log("TCL: VideoPlayer: init: function()");
+			console.log("TCL: VideoPlayer: init: function()");
 			// init UI
 			$('.timaat-videoplayer-novideo').show();
 			$('.timaat-videoplayer-ui').hide();
@@ -1272,7 +1311,7 @@ const TIMAAT = {
 				var preview = $('#timaat-video-seek-bar-preview');
 				$('#timaat-video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
 				$('#timaat-video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
-				preview.find('img').attr('src', "/TIMAAT/api/medium/"+TIMAAT.VideoPlayer.model.video.mediumId+"/thumbnail?token="+token+"&time="+time);
+				preview.find('img').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.mediumId+"/thumbnail?token="+token+"&time="+time);
 			});
 			
 			$('#timaat-user-log-analysislist').popover({
@@ -1600,7 +1639,7 @@ const TIMAAT = {
 			console.log("TCL: video", video);
 			// setup model
 			this.model.video = video;
-			this.duration = video.mediumVideo.length;			
+			this.duration = video.length;			
 			// remove all annotations and markers
 			this.annotationList.forEach(function(annotation) {annotation.remove()});
 			this.annotationList = [];
@@ -1633,10 +1672,10 @@ const TIMAAT = {
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
 			$('.timaat-videoplayer-ui').show();
-			$('#timaat-videoplayer-video-title').html(video.primaryTitle.title);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
-    	var videoUrl = '/TIMAAT/api/medium/'+this.model.video.mediumId+'/download'+'?token='+video.viewToken;
-			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
+			$('#timaat-videoplayer-video-title').html(video.medium.title.name);
+			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.length));
+			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.medium.id+'/download'+'?token='+video.viewToken;
+			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.height * video.width]]);
 			map.setMaxBounds(this.videoBounds);
 			map.fitBounds(this.videoBounds);
 			this.overlay = L.videoOverlay(videoUrl, this.videoBounds, { autoplay: false, loop: false} ).addTo(map);
@@ -1658,8 +1697,8 @@ const TIMAAT = {
 		},
 		
 		setupAnalysisLists: function (lists) {
-    console.log("TCL: setupAnalysisLists: function (lists)");
-    console.log("TCL: lists", lists);
+			console.log("TCL: setupAnalysisLists: function (lists)");
+			console.log("TCL: lists", lists);
 			// clear old lists if any
 			$('#timaat-analysislist-chooser').empty();			
 			// setup model
@@ -2176,7 +2215,7 @@ const TIMAAT = {
       // console.log("TCL: listVideos -> listVideos(callback)");
       // console.log("TCL: listVideos -> callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -2248,12 +2287,12 @@ const TIMAAT = {
 		},
 
 		updateAnalysislist(analysislist) {
-      console.log("TCL: updateAnalysislist -> analysislist", analysislist);
+			console.log("TCL: updateAnalysislist -> analysislist", analysislist);
 			var list = {
 					id: analysislist.id,
 					title: analysislist.title,
 					text: analysislist.text,
-					mediumID: analysislist.mediumID
+					mediumID: analysislist.medium.id
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
@@ -6177,6 +6216,10 @@ const TIMAAT = {
 		setVideoLists: function(videos) {
 			console.log("TCL: setVideoLists -> videos", videos);
 				if ( !videos ) return;
+
+				// also set video chooser list
+				TIMAAT.VideoChooser.setVideoList(videos);
+
 				$('#timaat-video-list-loader').remove();
 				// clear old UI list
 				$('#timaat-video-list').empty();
@@ -7944,10 +7987,15 @@ const TIMAAT = {
 			// create and style list view element
 			var editVideoButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-video-edit float-left" id="timaat-video-edit"><i class="fas fa-edit"></i></button>';
 			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left" id="timaat-video-remove"><i class="fas fa-trash-alt"></i></button>';
+			var uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
+			
 			if ( model.id < 0 ) { 
 				deleteVideoButton = '';
 				editVideoButton = '';
 			};
+			if ( model.status != "nofile" )
+				uploadVideoButton = "";
+
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
@@ -7962,18 +8010,56 @@ const TIMAAT = {
 							<br><br>
 							<span class="timaat-video-list-medium-type-id"></span>
 						</div>
-						<div class="col-lg-2">
-							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
+						<div class="col-lg-2 float-right">
+						  <div class=btn-group-vertical>
+							<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
 								<i class="fas fa-user"></i>
-							</div>
+							</div>` +
+							uploadVideoButton +
+						  `</div>
 						</div>
 					</div>
 				</li>`
 			);
 
 			$('#timaat-video-list').append(this.listView);
-			this.updateUI();      
+			
 			var video = this; // save video for system events
+			var listView = this.listView;
+
+			// attach upload functionality
+			if ( model.status == "nofile" ) {
+				this.listView.find('.timaat-video-list-upload').dropzone({
+					url: "/TIMAAT/api/medium/video/"+video.model.medium.id+"/upload",
+					createImageThumbnails: false,
+					acceptedFiles: 'video/mp4',
+					maxFilesize: 1024,
+					timeout: 60*60*1000, // 1 hour
+					maxFiles: 1,
+					headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
+					previewTemplate: '<div class="dz-preview dz-file-preview" style="margin-top:0px"> \
+						<div class="progress" style="height: 24px;"> \
+						  	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span></div> \
+							</div> \
+						</div>',
+					complete: function(file) {
+							if ( file.status == "success" && file.accepted ) {
+								var newvideo = JSON.parse(file.xhr.response);
+								video.model.status = newvideo;
+								listView.find('.timaat-video-list-upload').hide();
+								video.model.width = newvideo.width;
+								video.model.height = newvideo.height;
+								video.model.length = newvideo.length;
+								video.model.frameRate = newvideo.frameRate;
+							}
+							this.removeFile(file);
+					}
+				});
+
+			}
+			
+			
+			this.updateUI();      
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
@@ -9411,9 +9497,7 @@ const TIMAAT = {
 					    TIMAAT.Service.token = e.token;
 					    $('body').removeClass('timaat-login-modal-open');
 					    $('#timaat-login-modal').modal('hide');
-					    $('#timaat-user-info').html(e.accountName);
-							
-					    // TIMAAT.VideoChooser.loadVideos(); // TODO re-enable and differentiate between medium and video
+					    $('#timaat-user-info').html(e.accountName);							
 							TIMAAT.Settings.loadCategorySets();
 							TIMAAT.Datasets.load();
 					  })

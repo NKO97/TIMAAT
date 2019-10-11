@@ -56,6 +56,15 @@ public class MediumVideo implements Serializable {
 	@PrimaryKeyJoinColumn(name="medium_id")
 	private Medium medium;
 
+	// new
+	@Transient
+	private String status;
+
+	// new
+	@Transient
+	private String viewToken;
+
+
 	public MediumVideo() {
 	}
 
@@ -145,6 +154,23 @@ public class MediumVideo implements Serializable {
 	
 	public void setEpisodeInformation(EpisodeInformation episodeInformation) {
 		this.episodeInformation = episodeInformation;
+	}
+	
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getViewToken() {
+		return viewToken;
+	}
+
+	public void setViewToken(String viewToken) {
+		this.viewToken = viewToken;
 	}
 
 	public Medium getMedium() {
