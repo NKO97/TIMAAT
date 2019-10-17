@@ -142,7 +142,7 @@
 			
 					$.ajax({
 							// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate",
-							url:"api/authenticate",
+						  url:"api/authenticate",
 						  type:"POST",
 						  data:JSON.stringify(credentials),
 						  contentType:"application/json; charset=utf-8",

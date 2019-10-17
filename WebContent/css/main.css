@@ -105,9 +105,10 @@ body.timaat-login-modal-open #wrapper {
 
 .timaat-video-card .title {
 	font-size: 0.75rem;
+	height: 5em;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+/*	white-space: nowrap; */
 }
 .timaat-sidebar-tab:hover {
 	background-color: white;

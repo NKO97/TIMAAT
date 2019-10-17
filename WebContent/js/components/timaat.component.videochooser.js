@@ -161,6 +161,8 @@
 							this.removeFile(file);
 					}
 				});
+				videoelement.find('.timaat-video-upload i').on('click', function(ev) {$(this).parent().click();});
+
 			}
 			
 			video.ui = videoelement;

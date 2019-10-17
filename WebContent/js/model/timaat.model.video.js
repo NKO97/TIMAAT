@@ -96,7 +96,7 @@
 							this.removeFile(file);
 					}
 				});
-
+				this.listView.find('.timaat-video-list-upload i').on('click', function(ev) {$(this).parent().click();});
 			}
 			
 			
