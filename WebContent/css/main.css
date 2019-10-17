@@ -57,12 +57,14 @@ body.timaat-login-modal-open #wrapper {
 	opacity: 0.2;
 }
 
-.timaat-video-transcoding {
+.timaat-video-status {
 	display: none;
 	cursor: default;
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 35px;
+	height: 35px;
+	right: 0px;
+	top: 0px;
 	background: rgba(0,0,0,0.8);
 	text-align: center;
 	font-size: 150%;

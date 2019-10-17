@@ -1476,13 +1476,14 @@ public class MediumServiceEndpoint{
 
 			// start transcoding video
 			// TODO refactor
+			// transcoding now done by external cron job
 //			newMedium.setStatus("transcoding");
 //			newMedium.setViewToken(issueFileToken(newMedium.getId()));
-			TranscoderThread videoTranscoder = new TranscoderThread(mediumVideo.getMediumId(),
+/*			TranscoderThread videoTranscoder = new TranscoderThread(mediumVideo.getMediumId(),
 					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + mediumVideo.getMediumId()
 							+ "-video-original.mp4");
 			videoTranscoder.start();
-
+*/
 			// add log entry
 			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 					UserLogManager.LogEvents.MEDIUMCREATED);
@@ -1558,9 +1559,11 @@ public class MediumServiceEndpoint{
     	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	if ( videoStatus(id).compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
+    	if ( videoStatus(id).compareTo("nofile") == 0 ) return Response.status(Status.NOT_FOUND).build();
     	
-		
+    	if ( videoStatus(id).compareTo("waiting") == 0 || videoStatus(id).compareTo("transcoding") == 0 )
+    		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"-video-original.mp4", headers);
+
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4", headers);
 	}
 
@@ -1876,10 +1879,12 @@ public class MediumServiceEndpoint{
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 		String status = "nofile";
 		if ( !videoDir.exists() ) return status;
-    	
+
+		if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"-video-original.mp4").exists() ) status="waiting";
 		if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4").exists() ) status="ready";
-		else if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video-transcoding.mp4").exists() ) status="transcoding";
-		else status="unavailable";
+		if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-transcoding.pid").exists() ) status="transcoding";
+
+		// TODO implement status "unavailable"
 		
 		return status;
 	}
@@ -1895,7 +1900,7 @@ public class MediumServiceEndpoint{
 	    "-show_entries", "stream=width,height,r_frame_rate,codec_name",
 	    "-show_entries", "format=duration",
 	    "-of", "json", filename };
-	    VideoInformation videoInfo = null;
+	    VideoInformation videoInfo = new VideoInformation(0, 0, 25, 0, "");
 
 	    try {
 	    	p = r.exec(commandLine);
@@ -1912,13 +1917,11 @@ public class MediumServiceEndpoint{
 
 	    	JSONObject json = new JSONObject(jsonString);
 	    	int framerate = 30; // TODO
-	    	videoInfo = new VideoInformation(
-	    			json.getJSONArray("streams").getJSONObject(0).getInt("width"),
-	    			json.getJSONArray("streams").getJSONObject(0).getInt("height"),
-	    			framerate,
-	    			Float.parseFloat(json.getJSONObject("format").getString("duration")),
-	    			json.getJSONArray("streams").getJSONObject(0).getString("codec_name")
-	    	);
+	    	videoInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getInt("width"));
+	    	videoInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getInt("height"));
+	    	videoInfo.setFramerate(framerate);
+	    	videoInfo.setDuration(Float.parseFloat(json.getJSONObject("format").getString("duration")));
+	    	videoInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
 
 
 	    } catch (IOException e1) {

@@ -46,13 +46,13 @@
 						window.clearInterval(video.poll);
 						// TODO handle unavailable video error
 						if ( data == 'unavailable' ) video.ui.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
-						if ( data == 'ready' ) video.ui.find('.timaat-video-transcoding').hide();
+						if ( data == 'ready' ) video.ui.find('.timaat-video-status').hide();
 					}
 				})
 				.fail(function(e) {
 					// TODO handle error
 					window.clearInterval(video.poll);
-					video.ui.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+					video.ui.find('.timaat-video-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
 					console.log( "error", e );
 				});
 
@@ -110,7 +110,7 @@
 		_addVideo: function(video) {
     	// console.log("TCL: _addVideo: function(video)");
     	// console.log("TCL: video", video);
-			var videoelement = $('<div class="card timaat-video-card"> <div class="timaat-video-transcoding"><i class="fas fa-cog fa-spin"></i> Transcodiere...</div> \
+			var videoelement = $('<div class="card timaat-video-card"> <div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
 					<div class="timaat-video-upload"><i class="fas fa-upload"></i> Videodatei hochladen</div> \
 				  	<img class="card-img-top timmat-video-thumbnail" src="img/video-placeholder.png" alt="Video Platzhalter"> \
 				  	<div class="text-right text-white duration">00:00</div> \
@@ -122,7 +122,9 @@
 			videoelement.find('.title').html(video.medium.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.length));
 		
-			if ( video.status != 'ready'  &&  video.status != 'nofile' ) videoelement.find('.timaat-video-transcoding').show();
+			if ( video.status != 'ready'  &&  video.status != 'nofile' ) videoelement.find('.timaat-video-status').show();
+			if ( video.status == 'waiting' ) videoelement.find('.timaat-video-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
+			// TODO refactor unavailable
 			if ( video.status == 'unavailable' ) videoelement.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
 			if ( video.status == 'nofile' ) {
 				videoelement.find('.timaat-video-upload').show();
@@ -145,7 +147,7 @@
 								var newvideo = JSON.parse(file.xhr.response);
 								video.status = newvideo;
 								videoelement.find('.timaat-video-upload').hide();
-								videoelement.find('.timaat-video-transcoding').show();
+								videoelement.find('.timaat-video-status').show();
 								video.width = newvideo.width;
 								video.height = newvideo.height;
 								video.length = newvideo.length;
@@ -167,7 +169,7 @@
 					// start upload process
 					
 				};
-				if ( video.status && video.status != 'ready' ) return;
+				if ( video.status && video.status != 'ready' && video.status != 'transcoding' && video.status != 'waiting' ) return;
 				$('.timaat-video-card').removeClass('bg-info text-white');
 				$(this).addClass('bg-info text-white');
 				TIMAAT.UI.showComponent('videoplayer');
