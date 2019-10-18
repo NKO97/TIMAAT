@@ -78,9 +78,7 @@
 			if ( video.status != 'ready'  &&  video.status != 'nofile' ) video.ui.find('.timaat-video-status').show();
 			if ( video.status == 'waiting' ) video.ui.find('.timaat-video-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
 			if ( video.status == 'nofile' ) {
-				video.ui.find('.timaat-video-upload').show();
-				
-				console.log(video.ui.find('.timaat-video-upload').dropzone);
+				video.ui.find('.timaat-video-upload').show();				
 				if ( !video.ui.find('.timaat-video-upload').hasClass('dz-clickable') ) {
 					video.ui.find('.timaat-video-upload').dropzone({
 						url: "/TIMAAT/api/medium/video/"+video.medium.id+"/upload",

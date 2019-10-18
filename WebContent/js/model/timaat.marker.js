@@ -27,7 +27,7 @@
 			    this.annotationID = annotation.model.id;
 			    this._from = Math.min(annotation.model.startTime, TIMAAT.VideoPlayer.duration);
 			    this._to = Math.max(annotation.model.startTime, annotation.model.endTime);
-			    this._color = '#'+annotation.model.svg[0].color;
+			    this._color = '#'+annotation.model.selectorSvgs[0].color;
 			    
 			    // construct marker element
 			    this.element = $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerhead"></div></div>');
@@ -99,7 +99,7 @@
 
 			  _updateElementColor() {
 		      console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
-		      this.element.css('background-color', this.hexToRgbA (this._color, 0.3));
+		      this.element.css('background-color', this.hexToRgbA ("#"+this._color, 0.3));
 			    this.element.css('border-left-color', this._color);
 			    this.element.find('.timaat-timeline-markerhead').css('background-color', this._color);	  	
 			  }

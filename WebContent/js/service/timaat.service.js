@@ -132,18 +132,19 @@
 		},
 
 		createAnalysislist(title, comment, mediumID, callback) {
-      console.log("TCL: createAnalysislist -> createAnalysislist(title, comment, mediumID, callback)");
-      console.log("TCL: createAnalysislist -> title", title);
-      console.log("TCL: createAnalysislist -> comment", comment);
-      console.log("TCL: createAnalysislist -> mediumID", mediumID);
-      // console.log("TCL: createAnalysislist -> callback", callback);
-      // console.log("TCL: createAnalysislist -> title, comment, mediumID, callback", title, comment, mediumID, callback);
+			console.log("TCL: createAnalysislist -> createAnalysislist(title, comment, mediumID, callback)");
+			console.log("TCL: createAnalysislist -> title", title);
+			console.log("TCL: createAnalysislist -> comment", comment);
+			console.log("TCL: createAnalysislist -> mediumID", mediumID);
 			var model = {
 					"id": 0,
-					"text": comment,
-					"title": title,
 					"analysisSegments": [],
 					"annotations": [],
+					"mediumAnalysisListTranslations": [{
+						"id": 0,
+						"text": comment,
+						"title": title,						
+					}],	
 					"mediumID": mediumID
 			};
 			jQuery.ajax({
@@ -212,20 +213,33 @@
 		},
 		
 		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, list, callback) {
-      console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, list, callback", title, comment, startTime, endTime, color, strokeWidth, list, callback);
+			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, list, callback", title, comment, startTime, endTime, color, strokeWidth, list, callback);
 			var model = { 	
 				id: 0, 
 				analysisListID: list,
-				comment: comment,
-				title: title,
 				startTime: startTime,
 				endTime: endTime,
-				svg: [{
+				actors: [],
+				annotations1: [],
+				annotations2: [],
+				categories: [],
+				events: [],
+				locations: [],
+				mediums: [],
+				annotationTranslations: [{
 					id: 0,
-					color: color,
+					comment: comment,
+					title: title,
+				}],
+				selectorSvgs: [{
+					id: 0,
+					colorRgba: color,
 					svgData: "[]",
-					strokeWidth: strokeWidth
-					}]
+					strokeWidth: strokeWidth,
+					svgShapeType: {
+						id: 5
+					}
+				}]
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.mediumId,
@@ -246,7 +260,7 @@
 		},
 		
 		updateAnnotation(annotation) {
-      console.log("TCL: updateAnnotation -> annotation", annotation);
+			console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+anno.model.id,

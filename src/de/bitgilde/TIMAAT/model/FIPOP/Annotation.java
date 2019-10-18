@@ -3,6 +3,16 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import de.bitgilde.TIMAAT.model.SqlTimeDeserializer;
+
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -27,58 +37,75 @@ public class Annotation implements Serializable {
 	private Timestamp lastEditedAt;
 
 	@Column(name="layer_audio")
-	private byte layerAudio;
+	private int layerAudio;
 
 	@Column(name="layer_visual")
-	private byte layerVisual;
+	private int layerVisual;
 
 	@Column(name="sequence_end_time")
-	private double sequenceEndTime;
+	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
+	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	private Time sequenceEndTime;
 
 	@Column(name="sequence_start_time")
-	private double sequenceStartTime;
+	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
+	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	private Time sequenceStartTime;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
 	@JoinColumn(name="analysis_content_audio_id")
+	@JsonBackReference
 	private AnalysisContentAudio analysisContentAudio;
 
 	//bi-directional many-to-one association to AnalysisContentVisual
 	@ManyToOne
 	@JoinColumn(name="analysis_content_visual_id")
+	@JsonBackReference
 	private AnalysisContentVisual analysisContentVisual;
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
+	@JsonBackReference
 	private SegmentSelectorType segmentSelectorType;
 
 	//bi-directional many-to-one association to AnalysisContent
 	@ManyToOne
 	@JoinColumn(name="analysis_content_id")
+	@JsonBackReference
 	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
+	@JsonBackReference
 	private Iri iri;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="medium_analysis_list_id")
+	@JsonBackReference
 	private MediumAnalysisList mediumAnalysisList;
 
+	@Transient
+	@JsonProperty("analysisListID")
+	private int analysisListID;
+	
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
+	@JsonBackReference
 	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
@@ -92,6 +119,7 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
+	@JsonManagedReference
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to Annotation
@@ -105,10 +133,12 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="source_annotation_id")
 			}
 		)
+	@JsonManagedReference
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-many association to Annotation
 	@ManyToMany(mappedBy="annotations1")
+	@JsonManagedReference
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-many association to Audience
@@ -117,10 +147,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Category
 	@ManyToMany(mappedBy="annotations")
+	@JsonManagedReference
 	private List<Category> categories;
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="annotations")
+	@JsonManagedReference
 	private List<Event> events;
 
 	//bi-directional many-to-many association to IconclassCategory
@@ -129,10 +161,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Location
 	@ManyToMany(mappedBy="annotations")
+	@JsonManagedReference
 	private List<Location> locations;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="annotations")
+	@JsonManagedReference
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Motivation
@@ -149,10 +183,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="annotation")
+	@JsonManagedReference
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg
 	@OneToMany(mappedBy="annotation")
+	@JsonManagedReference
 	private List<SelectorSvg> selectorSvgs;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypePerson
@@ -190,36 +226,56 @@ public class Annotation implements Serializable {
 		this.lastEditedAt = lastEditedAt;
 	}
 
-	public byte getLayerAudio() {
+	public int getLayerAudio() {
 		return this.layerAudio;
 	}
 
-	public void setLayerAudio(byte layerAudio) {
+	public void setLayerAudio(int layerAudio) {
 		this.layerAudio = layerAudio;
 	}
 
-	public byte getLayerVisual() {
+	public int getLayerVisual() {
 		return this.layerVisual;
 	}
 
-	public void setLayerVisual(byte layerVisual) {
+	public void setLayerVisual(int layerVisual) {
 		this.layerVisual = layerVisual;
 	}
 
-	public double getSequenceEndTime() {
+	public Time getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
-	public void setSequenceEndTime(double sequenceEndTime) {
+	public void setSequenceEndTime(Time sequenceEndTime) {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public double getSequenceStartTime() {
+	public Time getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
-	public void setSequenceStartTime(double sequenceStartTime) {
+	public void setSequenceStartTime(Time sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
+	}
+	
+	public float getStartTime() {
+		if ( this.sequenceStartTime == null ) return -1;
+		return sequenceStartTime.getTime()/1000f;
+	}
+
+	public void setStartTime(float startTime) {
+		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new Time(0);
+		this.sequenceStartTime.setTime((long)(startTime*1000f));
+	}
+
+	public float getEndTime() {
+		if ( sequenceEndTime == null ) return -1;
+		return sequenceEndTime.getTime()/1000f;
+	}
+
+	public void setEndTime(float endTime) {
+		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new Time(0);
+		this.sequenceEndTime.setTime((long)(endTime*1000f));
 	}
 
 	public AnalysisContentAudio getAnalysisContentAudio() {
@@ -462,6 +518,14 @@ public class Annotation implements Serializable {
 		selectorSvg.setAnnotation(null);
 
 		return selectorSvg;
+	}
+
+	public int getAnalysisListID() {
+		return analysisListID;
+	}
+
+	public void setAnalysisListID(int analysisListID) {
+		this.analysisListID = analysisListID;
 	}
 
 	// public List<SpatialSemanticsTypePerson> getSpatialSemanticsTypePersons() {

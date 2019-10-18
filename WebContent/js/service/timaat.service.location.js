@@ -51,6 +51,7 @@
 				callback(data);
 			})
 			.fail(function(e) {
+				console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},

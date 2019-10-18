@@ -818,12 +818,12 @@
 		},
 		
 		userLogForList: function() {
-    	console.log("TCL: userLogForList: function()");
+			console.log("TCL: userLogForList: function()");
 			$('#timaat-user-log-analysislist').popover('show');
 		},
 		
 		addAnalysislist: function() {
-    	console.log("TCL: addAnalysislist: function()");
+			console.log("TCL: addAnalysislist: function()");
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-analysislist-meta').data('analysislist', null);
 			$('#timaat-videoplayer-analysislist-meta').modal('show');
@@ -839,14 +839,14 @@
 		},
 
 		editAnalysislist: function() {
-    console.log("TCL: editAnalysislist: function()");
+			console.log("TCL: editAnalysislist: function()");
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-analysislist-meta').data('analysislist', TIMAAT.VideoPlayer.curList);
 			$('#timaat-videoplayer-analysislist-meta').modal('show');			
 		},
 		
 		removeAnalysislist: function() {
-    	console.log("TCL: removeAnalysislist: function()");
+			console.log("TCL: removeAnalysislist: function()");
 			if ( !TIMAAT.VideoPlayer.curList ) return;
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-analysislist-delete').data('analysislist', TIMAAT.VideoPlayer.curList);
@@ -854,7 +854,7 @@
 		},
 		
 		addQuickAnnotation: function() {
-    	console.log("TCL: addQuickAnnotation: function()");
+			console.log("TCL: addQuickAnnotation: function()");
 			if ( !TIMAAT.VideoPlayer.curList ) return;
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.Service.createAnnotation(
@@ -870,7 +870,7 @@
 		},
 		
 		addAnnotation: function() {
-   	 console.log("TCL: addAnnotation: function()");
+			console.log("TCL: addAnnotation: function()");
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-annotation-meta').data('annotation', null);
 			$('#timaat-videoplayer-annotation-meta').modal('show');
@@ -890,7 +890,7 @@
 		},
 		
 		updateAnnotations: function() {
-    console.log("TCL: updateAnnotations: function()");
+			console.log("TCL: updateAnnotations: function()");
 			if ( this.annotationList == null ) return;
 			this.annotationList.forEach(function(annotation) {
 				if ( annotation.isActive() && annotation.hasChanges() ) {
@@ -1078,8 +1078,8 @@
 		},
 		
 		_analysislistAdded: function(analysislist) {
-    	console.log("TCL: _analysislistAdded: function(analysislist)");
-    	console.log("TCL: analysislist", analysislist);
+			console.log("TCL: _analysislistAdded: function(analysislist)");
+			console.log("TCL: analysislist", analysislist);
 			var wasEmpty = TIMAAT.VideoPlayer.model.lists.length == 0;
 			TIMAAT.VideoPlayer.model.lists.push(analysislist);
 			

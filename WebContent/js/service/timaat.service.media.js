@@ -49,10 +49,11 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	// console.log("TCL: listMedia -> data", data);
+				console.log("TCL: listMedia -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
+				console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},
@@ -73,6 +74,7 @@
 				callback(data);
 			})
 			.fail(function(e) {
+				console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},

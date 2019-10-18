@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the selector_svg database table.
@@ -22,7 +24,7 @@ public class SelectorSvg implements Serializable {
 	private String colorRgba;
 
 	@Column(name="stroke_width")
-	private byte strokeWidth;
+	private int strokeWidth;
 
 	@Lob
 	@Column(name="svg_data")
@@ -30,11 +32,13 @@ public class SelectorSvg implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@ManyToOne
+	@JsonBackReference
 	private Annotation annotation;
 
 	//bi-directional many-to-one association to SvgShapeType
 	@ManyToOne
 	@JoinColumn(name="svg_shape_type_id")
+	@JsonBackReference
 	private SvgShapeType svgShapeType;
 
 	public SelectorSvg() {
@@ -56,11 +60,11 @@ public class SelectorSvg implements Serializable {
 		this.colorRgba = colorRgba;
 	}
 
-	public byte getStrokeWidth() {
+	public int getStrokeWidth() {
 		return this.strokeWidth;
 	}
 
-	public void setStrokeWidth(byte strokeWidth) {
+	public void setStrokeWidth(int strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 
