@@ -441,7 +441,7 @@
 					anno.model.startTime = startTime;
 					anno.model.endTime = endTime;
 					anno.svg.color = color;
-					anno.model.svg[0].color = color;
+					anno.model.selectorSvgs[0].color = color;
 					TIMAAT.VideoPlayer.updateAnnotation(anno);
 				} else {
 					TIMAAT.Service.createAnnotation(title, comment, startTime, endTime, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);

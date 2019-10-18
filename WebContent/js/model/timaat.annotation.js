@@ -28,9 +28,9 @@
 					this.marker = new TIMAAT.Marker(this);
 					this.svg = Object();
 					this.svg.items = Array();
-					this.svg.strokeWidth = this.model.svg[0].strokeWidth;
-					this.svg.color = this.model.svg[0].color;
-					this.svg.model = JSON.parse(this.model.svg[0].svgData);
+					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth;
+					this.svg.color = this.model.selectorSvgs[0].colorRgba;
+					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.layer = L.layerGroup(null, {data:'annotationlayer'});
 					
 					// create and style list view element
@@ -287,7 +287,7 @@
 					this.svg.items = Array();
 					
 					var anno = this;
-					this.svg.model = JSON.parse(this.model.svg[0].svgData);
+					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.model.forEach(function(svgitem) {
 						var item = anno._parseSVG(svgitem);
 						anno.addSVGItem(item);
@@ -447,7 +447,7 @@
 						} 
 						
 					});
-					this.model.svg[0].svgData = JSON.stringify(jsonData);
+					this.model.selectorSvgs[0].svgData = JSON.stringify(jsonData);
 				}
 				
 			}

@@ -32,13 +32,13 @@ public class SelectorSvg implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "selectorSvgs")
 	private Annotation annotation;
 
 	//bi-directional many-to-one association to SvgShapeType
 	@ManyToOne
 	@JoinColumn(name="svg_shape_type_id")
-	@JsonBackReference
+	@JsonBackReference(value = "svgShapeType")
 	private SvgShapeType svgShapeType;
 
 	public SelectorSvg() {

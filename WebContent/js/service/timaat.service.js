@@ -219,13 +219,13 @@
 				analysisListID: list,
 				startTime: startTime,
 				endTime: endTime,
-				actors: [],
-				annotations1: [],
-				annotations2: [],
-				categories: [],
-				events: [],
-				locations: [],
-				mediums: [],
+//				actors: [],
+//				annotations1: [],
+//				annotations2: [],
+//				categories: [],
+//				events: [],
+//				locations: [],
+//				mediums: [],
 				annotationTranslations: [{
 					id: 0,
 					comment: comment,
@@ -236,9 +236,9 @@
 					colorRgba: color,
 					svgData: "[]",
 					strokeWidth: strokeWidth,
-					svgShapeType: {
-						id: 5
-					}
+//					svgShapeType: {
+//						id: 5
+//					}
 				}]
 			};
 			jQuery.ajax({

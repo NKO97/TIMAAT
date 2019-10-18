@@ -48,7 +48,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList", cascade={CascadeType.ALL})
-    @JsonManagedReference
+    @JsonManagedReference(value = "mediumAnalysisList")
 	@CascadeOnDelete
 	private List<Annotation> annotations;
 

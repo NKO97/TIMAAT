@@ -55,36 +55,36 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
 	@JoinColumn(name="analysis_content_audio_id")
-	@JsonBackReference
+	@JsonBackReference(value = "analysisContentAudio")
 	private AnalysisContentAudio analysisContentAudio;
 
 	//bi-directional many-to-one association to AnalysisContentVisual
 	@ManyToOne
 	@JoinColumn(name="analysis_content_visual_id")
-	@JsonBackReference
+	@JsonBackReference(value = "analysisContentVisual")
 	private AnalysisContentVisual analysisContentVisual;
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
-	@JsonBackReference
+	@JsonBackReference(value = "segmentSelectorType")
 	private SegmentSelectorType segmentSelectorType;
 
 	//bi-directional many-to-one association to AnalysisContent
 	@ManyToOne
 	@JoinColumn(name="analysis_content_id")
-	@JsonBackReference
+	@JsonBackReference(value = "analysisContent")
 	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "iri")
 	private Iri iri;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="medium_analysis_list_id")
-	@JsonBackReference
+	@JsonBackReference(value = "mediumAnalysisList")
 	private MediumAnalysisList mediumAnalysisList;
 
 	@Transient
@@ -94,18 +94,16 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "uuid")
 	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
@@ -119,7 +117,6 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
-	@JsonManagedReference
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to Annotation
@@ -133,12 +130,10 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="source_annotation_id")
 			}
 		)
-	@JsonManagedReference
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-many association to Annotation
 	@ManyToMany(mappedBy="annotations1")
-	@JsonManagedReference
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-many association to Audience
@@ -147,12 +142,10 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Category
 	@ManyToMany(mappedBy="annotations")
-	@JsonManagedReference
 	private List<Category> categories;
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="annotations")
-	@JsonManagedReference
 	private List<Event> events;
 
 	//bi-directional many-to-many association to IconclassCategory
@@ -161,12 +154,10 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Location
 	@ManyToMany(mappedBy="annotations")
-	@JsonManagedReference
 	private List<Location> locations;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="annotations")
-	@JsonManagedReference
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Motivation
@@ -183,12 +174,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="annotation")
-	@JsonManagedReference
+	@JsonManagedReference(value = "annotationTranslations")
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg
 	@OneToMany(mappedBy="annotation")
-	@JsonManagedReference
+	@JsonManagedReference(value = "selectorSvgs")
 	private List<SelectorSvg> selectorSvgs;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypePerson
