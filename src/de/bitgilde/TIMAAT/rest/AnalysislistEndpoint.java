@@ -161,10 +161,10 @@ public class AnalysislistEndpoint {
 		tx.begin();
 		// remove all associated annotations
 		for (Annotation anno : mal.getAnnotations()) em.remove(anno);
-		while (mal.getAnnotations().size() >0) mal.removeAnnotation(mal.getAnnotations().get(0));
+		mal.getAnnotations().clear();
 		// remove all associated segments
 		for (AnalysisSegment segment : mal.getAnalysisSegments()) em.remove(segment);
-		while (mal.getAnalysisSegments().size() >0) mal.removeAnalysisSegment(mal.getAnalysisSegments().get(0));
+		mal.getAnalysisSegments().clear();
 		em.remove(mal);
 		tx.commit();
 
@@ -194,12 +194,18 @@ public class AnalysislistEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newSegment == null ) return Response.status(Status.BAD_REQUEST).build();
+		
 		// sanitize object data
 		newSegment.setId(0);
-		mal.addAnalysisSegment(newSegment);		
+		mal.addAnalysisSegment(newSegment);
+		newSegment.getAnalysisSegmentTranslations().get(0).setId(0);
+		newSegment.getAnalysisSegmentTranslations().get(0).setAnalysisSegment(newSegment);
+		newSegment.getAnalysisSegmentTranslations().get(0).setLanguage(em.find(Language.class, 1));
+		
 		// persist analysissegment and list
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
+		em.persist(newSegment.getAnalysisSegmentTranslations().get(0));
 		em.persist(newSegment);
 		em.flush();
 		newSegment.setMediumAnalysisList(mal);

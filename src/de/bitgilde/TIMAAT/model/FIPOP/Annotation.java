@@ -6,13 +6,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import de.bitgilde.TIMAAT.model.SqlTimeDeserializer;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -26,6 +25,9 @@ import java.util.List;
 @Entity
 @NamedQuery(name="Annotation.findAll", query="SELECT a FROM Annotation a")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+property  = "id", 
+scope     = Integer.class)
 public class Annotation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -187,7 +189,7 @@ public class Annotation implements Serializable {
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg
-	@OneToMany(mappedBy="annotation")
+	@OneToMany(mappedBy="annotation", cascade = CascadeType.REMOVE)
 	@JsonManagedReference(value = "Annotation-SelectorSvg")
 	private List<SelectorSvg> selectorSvgs;
 

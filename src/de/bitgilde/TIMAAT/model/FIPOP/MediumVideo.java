@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 // import model.AudioCodecInformation;
 
@@ -18,6 +19,9 @@ import java.sql.Timestamp;
 // @Embeddable
 @Table(name="medium_video")
 @NamedQuery(name="MediumVideo.findAll", query="SELECT m FROM MediumVideo m")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+property  = "mediumId", 
+scope     = Integer.class)
 public class MediumVideo implements Serializable {
 	private static final long serialVersionUID = 1L;
 

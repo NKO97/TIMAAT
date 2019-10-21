@@ -236,9 +236,9 @@
 					colorRgba: color,
 					svgData: "[]",
 					strokeWidth: strokeWidth,
-//					svgShapeType: {
-//						id: 5
-//					}
+					svgShapeType: {
+						id: 5
+					}
 				}]
 			};
 			jQuery.ajax({
@@ -260,7 +260,6 @@
 		},
 		
 		updateAnnotation(annotation) {
-			annotation.medium = null;
 			console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({
@@ -300,10 +299,13 @@
 		},
 		
 		createSegment(name, startTime, endTime, list, callback) {
-      console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);
+			console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);
 			var model = { 	
-				id: 0, 
-				name: name,
+				id: 0,
+				analysisSegmentTranslations: [{
+					id: 0,
+					name: name,
+				}],
 				startTime: startTime,
 				endTime: endTime,
 			};

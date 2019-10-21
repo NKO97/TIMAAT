@@ -151,7 +151,7 @@
 					    });
 					});
 					this.listView.find('.timaat-annotation-list-categories').on('hidden.bs.popover', function () { anno.updateUI(); });
-		      console.log("TCL: Annotation -> constructor -> anno.updateUI()");
+					console.log("TCL: Annotation -> constructor -> anno.updateUI()");
 					this.listView.find('.timaat-annotation-list-categories').dblclick(function(ev) {ev.stopPropagation();});
 
 					// attach user log info

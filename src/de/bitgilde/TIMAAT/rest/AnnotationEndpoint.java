@@ -161,6 +161,7 @@ public class AnnotationEndpoint {
 		
 		SelectorSvg newSVG = newAnno.getSelectorSvgs().get(0);
 		newAnno.getSelectorSvgs().remove(0);
+//		newSVG.setSvgShapeType(entityManager.find(SvgShapeType.class, 5)); // TODO refactor
 		
 		// persist annotation and polygons
 		entityTransaction = entityManager.getTransaction();
@@ -204,7 +205,6 @@ public class AnnotationEndpoint {
 		
     	// parse JSON data
 		try {
-			System.out.println(jsonData);
 			updatedAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -262,8 +262,10 @@ public class AnnotationEndpoint {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		MediumAnalysisList mal = annotation.getMediumAnalysisList();
+/*
 		mal.removeAnnotation(annotation);
 		entityManager.persist(mal);
+*/
 		entityManager.remove(annotation);
 		entityTransaction.commit();
 		entityManager.refresh(mal);

@@ -44,12 +44,12 @@
 				}
 				
 				updateUI() {
-		      console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
+					console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
 					this.listView.attr('data-starttime', this.model.startTime);
 					var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-					this.listView.find('.timaat-annotation-segment-title').html(this.model.name);
-					this.timelineView.find('.timaat-timeline-segment-title ').html(this.model.name);
+					this.listView.find('.timaat-annotation-segment-title').html(this.model.analysisSegmentTranslations[0].name);
+					this.timelineView.find('.timaat-timeline-segment-title ').html(this.model.analysisSegmentTranslations[0].name);
 
 					// update timeline position
 					var magicoffset = 1; // TODO replace input slider
