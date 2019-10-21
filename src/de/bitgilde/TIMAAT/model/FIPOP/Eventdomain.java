@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -20,6 +23,7 @@ public class EventDomain implements Serializable {
 
 	//bi-directional many-to-one association to EventDomainTranslation
 	@OneToMany(mappedBy="eventDomain")
+	@JsonManagedReference(value = "EventDomain-EventDomainTranslation")
 	private List<EventDomainTranslation> eventDomainTranslations;
 
 	//bi-directional many-to-many association to Event

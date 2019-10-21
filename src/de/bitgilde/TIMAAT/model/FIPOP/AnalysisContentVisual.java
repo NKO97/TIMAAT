@@ -23,13 +23,13 @@ public class AnalysisContentVisual implements Serializable {
 	private int id;
 
 	@Column(name="has_image")
-	private byte hasImage;
+	private int hasImage;
 
 	@Column(name="has_text")
-	private byte hasText;
+	private int hasText;
 
 	@Column(name="has_visual_effects")
-	private byte hasVisualEffects;
+	private int hasVisualEffects;
 
 	private String layer;
 
@@ -47,7 +47,7 @@ public class AnalysisContentVisual implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="analysisContentVisual")
-	@JsonManagedReference(value = "analysisContentVisual")
+	@JsonManagedReference(value = "AnalysisContentVisual-Annotation")
 	private List<Annotation> annotations;
 
 	public AnalysisContentVisual() {
@@ -61,27 +61,27 @@ public class AnalysisContentVisual implements Serializable {
 		this.id = id;
 	}
 
-	public byte getHasImage() {
+	public int getHasImage() {
 		return this.hasImage;
 	}
 
-	public void setHasImage(byte hasImage) {
+	public void setHasImage(int hasImage) {
 		this.hasImage = hasImage;
 	}
 
-	public byte getHasText() {
+	public int getHasText() {
 		return this.hasText;
 	}
 
-	public void setHasText(byte hasText) {
+	public void setHasText(int hasText) {
 		this.hasText = hasText;
 	}
 
-	public byte getHasVisualEffects() {
+	public int getHasVisualEffects() {
 		return this.hasVisualEffects;
 	}
 
-	public void setHasVisualEffects(byte hasVisualEffects) {
+	public void setHasVisualEffects(int hasVisualEffects) {
 		this.hasVisualEffects = hasVisualEffects;
 	}
 

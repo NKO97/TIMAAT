@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -23,12 +23,13 @@ public class MediumEventRelationshipTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-MediumEventRelationshipTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediumEventRelationshipType
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="medium_event_relationship_type_id")
+	@JsonBackReference(value = "MediumEventRelationshipType-MediumEventRelationshipTypeTranslation")
 	private MediumEventRelationshipType mediumEventRelationshipType;
 
 	public MediumEventRelationshipTypeTranslation() {

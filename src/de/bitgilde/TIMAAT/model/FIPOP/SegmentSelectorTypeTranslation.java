@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -24,12 +23,13 @@ public class SegmentSelectorTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-SegmentSelectorTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
-	@JsonBackReference(value = "segmentSelectorTypeTranslations")
+	@JsonBackReference(value = "SegmentSelectorType-SegmentSelectorTypeTranslation")
 	private SegmentSelectorType segmentSelectorType;
 
 	public SegmentSelectorTypeTranslation() {

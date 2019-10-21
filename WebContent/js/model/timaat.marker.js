@@ -119,9 +119,9 @@
 		      console.log("TCL: Marker -> hexToRgbA -> hex", hex);
 		      console.log("TCL: Marker -> hexToRgbA -> opacity", opacity);
 			    var c;
-			    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+			    if(/^#([A-Fa-f0-9]{4}){1,2}$/.test(hex)) {
 		        c= hex.substring(1).split('');
-		        if(c.length== 3){
+		        if(c.length== 4){
 		            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
 		        }
 		        c= '0x'+c.join('');

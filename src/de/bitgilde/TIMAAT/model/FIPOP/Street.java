@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -20,10 +24,12 @@ public class Street implements Serializable {
 
 	//bi-directional many-to-one association to Address
 	@OneToMany(mappedBy="street")
+	@JsonManagedReference(value = "Street-Address")
 	private List<Address> addresses;
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
+	@JsonBackReference(value = "Location-Street")
 	@PrimaryKeyJoinColumn(name="location_id")
 	private Location location;
 

@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -224,15 +228,18 @@ public class Reference implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="reference")
+	@JsonManagedReference(value = "Reference-Medium")
 	private List<Medium> mediums;
 
 	//bi-directional many-to-one association to ReferenceEntryType
 	@ManyToOne
 	@JoinColumn(name="reference_entry_type_id")
+	@JsonBackReference(value = "ReferenceEntryType-Reference")
 	private ReferenceEntryType referenceEntryType;
 
 	//bi-directional many-to-one association to ReferenceDataFieldRequirement
 	@OneToMany(mappedBy="reference")
+	@JsonManagedReference(value = "Reference-ReferenceDataFieldRequirement")
 	private List<ReferenceDataFieldRequirement> referenceDataFieldRequirements;
 
 	public Reference() {

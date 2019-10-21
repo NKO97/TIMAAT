@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class Person implements Serializable {
 	//bi-directional many-to-one association to AcademicTitle
 	@ManyToOne
 	@JoinColumn(name="academic_title_id")
+	@JsonBackReference(value = "AcademicTitle-Person")
 	private AcademicTitle academicTitle;
 
 	//bi-directional one-to-one association to Actor
@@ -44,15 +49,18 @@ public class Person implements Serializable {
 	//bi-directional many-to-one association to Location
 	@ManyToOne
 	@JoinColumn(name="place_of_birth_location_id")
+    @JsonBackReference(value = "Location-Person1")
 	private Location location1;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
 	@JoinColumn(name="place_of_death_location_id")
+    @JsonBackReference(value = "Location-Person2")
 	private Location location2;
 
 	//bi-directional many-to-one association to Sex
 	@ManyToOne
+	@JsonBackReference(value = "Sex-Person")
 	private Sex sex;
 
 	//bi-directional many-to-many association to Citizenship
@@ -70,10 +78,12 @@ public class Person implements Serializable {
 
 	//bi-directional many-to-one association to PersonIsMemberOfCollective
 	@OneToMany(mappedBy="person")
+	@JsonManagedReference(value = "Person-PersonIsMemberOfCollective")
 	private List<PersonIsMemberOfCollective> personIsMemberOfCollectives;
 
 	//bi-directional many-to-one association to PersonTranslation
 	@OneToMany(mappedBy="person")
+	@JsonManagedReference(value = "Person-PersonTranslation")
 	private List<PersonTranslation> personTranslations;
 
 	public Person() {

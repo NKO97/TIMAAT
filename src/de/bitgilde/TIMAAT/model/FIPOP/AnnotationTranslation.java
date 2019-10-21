@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -27,11 +26,12 @@ public class AnnotationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@ManyToOne
-	@JsonBackReference(value = "annotationTranslations")
+	@JsonBackReference(value = "Annotation-AnnotationTranslation")
 	private Annotation annotation;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-AnnotationTranslation")
 	private Language language;
 
 	public AnnotationTranslation() {

@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -20,10 +23,12 @@ public class MediumEventRelationshipType implements Serializable {
 
 	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="mediumEventRelationshipType")
+	@JsonManagedReference(value = "MediumEventRelationshipType-MediumEventRelationshipTypeTranslation")
 	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="mediumEventRelationshipType")
+	@JsonManagedReference(value = "MediumEventRelationshipType-MediumRelatesToEvent")
 	private List<MediumRelatesToEvent> mediumRelatesToEvents;
 
 	public MediumEventRelationshipType() {

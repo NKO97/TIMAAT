@@ -260,6 +260,7 @@
 		},
 		
 		updateAnnotation(annotation) {
+			annotation.medium = null;
 			console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({

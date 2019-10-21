@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +36,7 @@ public class Category implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
+	@JsonIgnore
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to CategorySetHasCategory

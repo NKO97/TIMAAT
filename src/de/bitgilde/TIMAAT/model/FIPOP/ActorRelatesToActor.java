@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the actor_relates_to_actor database table.
@@ -20,16 +22,19 @@ public class ActorRelatesToActor implements Serializable {
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
 	@JoinColumn(name="actor_id")
+	@JsonBackReference(value = "Actor-ActorRelatesToActor1")
 	private Actor actor1;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
 	@JoinColumn(name="relates_to_actor_id")
+	@JsonBackReference(value = "Actor-ActorRelatesToActor2")
 	private Actor actor2;
 
 	//bi-directional many-to-one association to ActorActorRelationshipType
 	@ManyToOne
 	@JoinColumn(name="actor_actor_relationship_type_id")
+	@JsonBackReference(value = "ActorActorRelationshipType-ActorRelatesToActor")
 	private ActorActorRelationshipType actorActorRelationshipType;
 
 	public ActorRelatesToActor() {

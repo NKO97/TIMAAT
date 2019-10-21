@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.List;
 
 
@@ -40,11 +43,13 @@ public class PhoneNumber implements Serializable {
 	//bi-directional many-to-one association to Country
 	@ManyToOne
 	@JoinColumn(name="idd_prefix_country_location_id")
+	@JsonBackReference(value = "Country-PhoneNumber")
 	private Country country;
 
 	//bi-directional many-to-one association to PhoneNumberType
 	@ManyToOne
 	@JoinColumn(name="phone_number_type_id")
+	@JsonBackReference(value = "PhoneNumberType-PhoneNumber")
 	private PhoneNumberType phoneNumberType;
 
 	public PhoneNumber() {

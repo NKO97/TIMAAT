@@ -3,7 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
 import java.util.List;
@@ -48,12 +50,12 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Annotation1")
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Annotation2")
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
@@ -78,22 +80,22 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Event")
 	private List<Event> events1;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Event2")
 	private List<Event> events2;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Location")
 	private List<Location> locations1;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Location2")
 	private List<Location> locations2;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
@@ -108,22 +110,22 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Medium")
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-Medium2")
 	private List<Medium> mediums2;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-MediumAnalysisList")
 	private List<MediumAnalysisList> mediumAnalysisLists1;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "UserAccount-MediumAnalysisList2")
 	private List<MediumAnalysisList> mediumAnalysisLists2;
 
 	//bi-directional many-to-one association to UserAccessToken

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the reference_data_field_requirements database table.
@@ -18,21 +20,23 @@ public class ReferenceDataFieldRequirement implements Serializable {
 	private ReferenceDataFieldRequirementPK id;
 
 	@Column(name="is_not_standard_style")
-	private byte isNotStandardStyle;
+	private int isNotStandardStyle;
 
 	@Column(name="is_optional")
-	private byte isOptional;
+	private int isOptional;
 
 	@Column(name="is_required")
-	private byte isRequired;
+	private int isRequired;
 
 	//bi-directional many-to-one association to Reference
 	@ManyToOne
+	@JsonBackReference(value = "Reference-ReferenceDataFieldRequirement")
 	private Reference reference;
 
 	//bi-directional many-to-one association to ReferenceEntryType
 	@ManyToOne
 	@JoinColumn(name="reference_entry_type_id")
+	@JsonBackReference(value = "ReferenceEntryType-ReferenceDataFieldRequirement")
 	private ReferenceEntryType referenceEntryType;
 
 	public ReferenceDataFieldRequirement() {
@@ -46,27 +50,27 @@ public class ReferenceDataFieldRequirement implements Serializable {
 		this.id = id;
 	}
 
-	public byte getIsNotStandardStyle() {
+	public int getIsNotStandardStyle() {
 		return this.isNotStandardStyle;
 	}
 
-	public void setIsNotStandardStyle(byte isNotStandardStyle) {
+	public void setIsNotStandardStyle(int isNotStandardStyle) {
 		this.isNotStandardStyle = isNotStandardStyle;
 	}
 
-	public byte getIsOptional() {
+	public int getIsOptional() {
 		return this.isOptional;
 	}
 
-	public void setIsOptional(byte isOptional) {
+	public void setIsOptional(int isOptional) {
 		this.isOptional = isOptional;
 	}
 
-	public byte getIsRequired() {
+	public int getIsRequired() {
 		return this.isRequired;
 	}
 
-	public void setIsRequired(byte isRequired) {
+	public void setIsRequired(int isRequired) {
 		this.isRequired = isRequired;
 	}
 

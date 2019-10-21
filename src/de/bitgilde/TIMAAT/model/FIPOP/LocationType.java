@@ -3,7 +3,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -26,12 +25,12 @@ public class LocationType implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="locationType")
-	@JsonBackReference
+	@JsonIgnore
 	private List<Location> locations;
 
 	//bi-directional many-to-one association to LocationTypeTranslation
 	@OneToMany(mappedBy="locationType")
-	@JsonManagedReference
+	@JsonManagedReference(value = "LocationType-LocationTypeTranslation")
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
 	public LocationType() {

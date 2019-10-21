@@ -41,7 +41,7 @@ public class Location implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
-    @JsonManagedReference
+	@JsonIgnore
 	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to City
@@ -61,7 +61,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="location")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Location-Event")
 	private List<Event> events;
 
 	//bi-directional many-to-one association to Location
@@ -73,38 +73,38 @@ public class Location implements Serializable {
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="location")
 	@JsonIgnore // TODO might have to be removed once location hierarchy is developed
-    @JsonManagedReference
 	private List<Location> locations;
 
 	//bi-directional many-to-one association to LocationType
 	@ManyToOne
 	@JoinColumn(name="location_type_id")
-	@JsonManagedReference
 	private LocationType locationType;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Location")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Location2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Location-LocationTranslation")
 	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="location1")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Location-Person1")
 	private List<Person> persons1;
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="location2")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Location-Person2")
 	private List<Person> persons2;
 
 	//bi-directional one-to-one association to Province
@@ -113,13 +113,12 @@ public class Location implements Serializable {
 	private Province province;
 
 	//bi-directional one-to-one association to Street
-	@JsonIgnore
 	@OneToOne(mappedBy="location")
+	@JsonManagedReference(value = "Location-Street")
 	private Street street;
 
 	//bi-directional many-to-many association to Territory
 	@ManyToMany(mappedBy="locations")
-    @JsonManagedReference
 	private List<Territory> territories;
 
 	public Location() {

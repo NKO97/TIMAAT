@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Time;
 import java.util.List;
@@ -34,11 +35,12 @@ public class AnalysisSegment implements Serializable {
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="analysis_list_id")
-	@JsonIgnore
+	@JsonBackReference(value = "MediumAnalysisList-AnalysisSegment")
 	private MediumAnalysisList mediumAnalysisList;
 
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="analysisSegment")
+	@JsonManagedReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
 	public AnalysisSegment() {

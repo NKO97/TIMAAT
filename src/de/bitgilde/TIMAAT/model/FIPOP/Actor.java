@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -24,7 +28,7 @@ public class Actor implements Serializable {
 	private byte isFictional;
 
 	//bi-directional many-to-many association to ActorType
-	@ManyToMany(mappedBy="actors")
+	@ManyToMany(mappedBy="actors")	
 	private List<ActorType> actorTypes;
 
 	@JoinColumn(name="created_by_user_account_id")
@@ -38,12 +42,15 @@ public class Actor implements Serializable {
 
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
+	
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
+	@JsonManagedReference(value = "Actor-ActorHasAddress")
 	private List<ActorHasAddress> actorHasAddresses;
 
 	//bi-directional many-to-one association to ActorHasEmailAddress
 	@OneToMany(mappedBy="actor")
+	@JsonManagedReference(value = "Actor-ActorHasEmailAddress")
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
 	//bi-directional many-to-many association to PhoneNumber
@@ -60,14 +67,17 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-one association to ActorName
 	@OneToMany(mappedBy="actor")
+	@JsonManagedReference(value = "Actor-ActorName")
 	private List<ActorName> actorNames;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor1")
+	@JsonManagedReference(value = "Actor-ActorRelatesToActor1")
 	private List<ActorRelatesToActor> actorRelatesToActors1;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor2")
+	@JsonManagedReference(value = "Actor-ActorRelatesToActor2")
 	private List<ActorRelatesToActor> actorRelatesToActors2;
 
 	//bi-directional many-to-many association to Annotation

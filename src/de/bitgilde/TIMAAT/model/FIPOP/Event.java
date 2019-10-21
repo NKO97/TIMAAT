@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -49,16 +53,19 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
+	@JsonBackReference(value = "Location-Event")
 	private Location location;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Event")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Event2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to ActorHasRole
@@ -89,18 +96,22 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to EventRelatesToEvent
 	@OneToMany(mappedBy="event1")
+	@JsonManagedReference(value = "Event-EventRelatesToEvent1")
 	private List<EventRelatesToEvent> eventRelatesToEvents1;
 
 	//bi-directional many-to-one association to EventRelatesToEvent
 	@OneToMany(mappedBy="event2")
+	@JsonManagedReference(value = "Event-EventRelatesToEvent2")
 	private List<EventRelatesToEvent> eventRelatesToEvents2;
 
 	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="event")
+	@JsonManagedReference(value = "Event-EventTranslation")
 	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="event")
+	@JsonManagedReference(value = "Event-MediumRelatesToEvent")
 	private List<MediumRelatesToEvent> mediumRelatesToEvents;
 
 	public Event() {

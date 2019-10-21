@@ -42,13 +42,13 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
-    @JsonManagedReference
+    @JsonManagedReference(value = "MediumAnalysisList-AnalysisSegment")
 	@CascadeOnDelete
 	private List<AnalysisSegment> analysisSegments;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList", cascade={CascadeType.ALL})
-    @JsonManagedReference(value = "mediumAnalysisList")
+    @JsonManagedReference(value = "MediumAnalysisList-Annotation")
 	@CascadeOnDelete
 	private List<Annotation> annotations;
 
@@ -59,29 +59,28 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "Medium-MediumAnalysisList")
 	private Medium medium;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-    @JsonBackReference
+    @JsonBackReference(value = "UserAccount-MediumAnalysisList")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference
+	@JsonBackReference(value = "UserAccount-MediumAnalysisList2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediumAnalysisLists")
-    @JsonManagedReference
 	private List<Tag> tags;
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
 	@OneToMany(mappedBy="mediumAnalysisList")
-    @JsonManagedReference
+    @JsonManagedReference(value = "MediumAnalysisList-MediumAnalysisListTranslation")
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList

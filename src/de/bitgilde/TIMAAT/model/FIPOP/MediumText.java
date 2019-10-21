@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Set;
 
 
@@ -23,6 +26,7 @@ public class MediumText implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@OneToMany(mappedBy="mediumText")
+	@JsonManagedReference(value = "MediumText-AnalysisContentAudio")
 	private Set<AnalysisContentAudio> analysisContentAudios;
 
 	//bi-directional one-to-one association to Medium

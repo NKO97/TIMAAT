@@ -3,7 +3,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class Uuid implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="uuid")
-	@JsonManagedReference(value = "uuid")
+	@JsonManagedReference(value = "Uuid-Annotation")
 	private List<Annotation> annotations;
 
 	public Uuid() {

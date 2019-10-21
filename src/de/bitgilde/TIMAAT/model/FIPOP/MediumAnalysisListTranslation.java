@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -26,12 +27,13 @@ public class MediumAnalysisListTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-MediumAnalysisListTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="medium_analysis_list_id")
+	@JsonBackReference(value = "MediumAnalysisList-MediumAnalysisListTranslation")
 	private MediumAnalysisList mediumAnalysisList;
 
 	public MediumAnalysisListTranslation() {

@@ -3,7 +3,6 @@ package de.bitgilde.TIMAAT.rest;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -35,7 +34,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
-import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -206,8 +204,10 @@ public class AnnotationEndpoint {
 		
     	// parse JSON data
 		try {
+			System.out.println(jsonData);
 			updatedAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
