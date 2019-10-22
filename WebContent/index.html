@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="bitGilde IT Solutions UG (haftungsbeschr&auml;nkt)">
 
-    <title>TIMAAT - Client v0.Sprint-5b4 (2019-09-27)</title>
+    <title>TIMAAT - Client</title>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,42 +16,10 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- jQuery -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- jQuery Plugins-->
-    <script src="vendor/jquery/plugins/jquery-taginput.js"></script>
-    <script src="vendor/jquery/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="vendor/jquery/plugins/jquery.validate.js"></script>
-    <script src="vendor/jquery/plugins/jquery-datetimepicker/jquery.datetimepicker.full.js"></script>
-
-    <!-- Popper for Bootstrap JavaScript -->
-    <script src="vendor/popper/popper.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    
-    <!-- Argon2 Core JavaScript -->    
-    <script src="vendor/argon2/argon2-asm.min.js"></script>
-
-    <!-- Tinycolorpicker JavaScript -->
-    <script src="vendor/tinycolorpicker/jquery.tinycolorpicker.js"></script>
-
-    <!-- Dropzone JavaScript -->
-    <script src="vendor/dropzone/dropzone.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="js/sb-admin-2.js"></script>
-
-    <!-- Leaflet JavaScript -->
-    <script src="vendor/leaflet/leaflet.js"></script>
-    <script src="vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable.js"></script>
-    <script src="vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag.js"></script>
-    <script src="vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom.js"></script>
-
-    <!-- Moment JavaScript -->
-    <script src="vendor/moment/moment.js"></script>
 
     <!-- TIMAAT -->
-    <script src="js/timaat.js"></script>
+	<script data-main="js/timaat.init.js" src="js/require.js"></script>
+
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -110,7 +78,7 @@
     <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="text-muted d-flex justify-content-end mr-1">v0.Sprint-5b4 (2019-09-27)
+          <div id="timaat-version-info" class="text-muted d-flex justify-content-end mr-1">v.unknown
           </div>
           <div class="modal-header">
             <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
@@ -180,7 +148,7 @@
                     onclick="TIMAAT.UI.showComponent('videochooser')" 
                     data-toggle="popover" 
                     data-trigger="hover" 
-                    ata-animation="false" 
+                    data-animation="false" 
                     data-placement="right" 
                     data-template="
                       <div class='popover' role='tooltip'>
@@ -299,13 +267,13 @@
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-header bg-info text-white">
-                  <strong>Verfügbare Videos (currently disabled)</strong>
+                  <strong>Verfügbare Videos</strong>
                 </div>
-                <!-- <div class="card-body" id="timaat-video-list">                      
+					<div class="card-body" id="timaat-videochooser-list">                      
                   <div class="d-flex alert alert-secondary justify-content-center" role="alert">
                     <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
                   </div>
-                </div> -->
+                </div>
               </div>
             </div>				
           </div>
@@ -2419,353 +2387,5 @@
       </div><img class="popover-body" style="width:128px;"src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
 
-    <!-- focus username field in login mask -->
-    <script>
-      $('#timaat-login-modal').on('shown.bs.modal', function() {
-        $('#timaat-login-user').focus();
-      });
-    </script>
-
-    <!-- client side form validation -->
-    <script>
-      var mediumMetadataForm = $("#timaat-mediadatasets-medium-metadata-form");
-      var mediumFormValidator = $("#timaat-mediadatasets-medium-metadata-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-            maxlength: 200
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          typeId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3",
-            maxlength: "Title is too long: max length is 200"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          typeId: {
-            required: "Please provide the type of the medium"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(mediumMetadataForm) {
-          mediumMetadataForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var mediumTitlesForm = $("#timaat-mediadatasets-medium-titles-form");
-      var mediumTitlesFormValidator = $("#timaat-mediadatasets-medium-titles-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-            maxlength: 200,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3",
-            maxlength: "Title is too long: max length is 200"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-        },
-        submitHandler: function(mediumTitlesForm) {
-          mediumTitlesForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var audioForm = $("#timaat-mediadatasets-audio-form");
-      var audioFormValidator = $("#timaat-mediadatasets-audio-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(audioForm) {
-          audioForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var documentForm = $("#timaat-mediadatasets-document-form");
-      var documentFormValidator = $("#timaat-mediadatasets-document-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(documentForm) {
-          documentForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var imageForm = $("#timaat-mediadatasets-image-form");
-      var imageFormValidator = $("#timaat-mediadatasets-image-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(imageForm) {
-          imageForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var softwareForm = $("#timaat-mediadatasets-software-form");
-      var softwareFormValidator = $("#timaat-mediadatasets-software-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(softwareForm) {
-          softwareForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var textForm = $("#timaat-mediadatasets-text-form");
-      var textFormValidator = $("#timaat-mediadatasets-text-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(textForm) {
-          textForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var videoForm = $("#timaat-mediadatasets-video-form");
-      var videoFormValidator = $("#timaat-mediadatasets-video-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(videoForm) {
-          videoForm.submit();
-        },
-      });
-    </script>
-    <script>
-      var videogameForm = $("#timaat-mediadatasets-videogame-form");
-      var videogameFormValidator = $("#timaat-mediadatasets-videogame-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
-          // releaseDate: {
-          //   dateISO: true,
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: true,
-          // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(videogameForm) {
-          videogameForm.submit();
-        },
-      });
-    </script>
   </body>
 </html>

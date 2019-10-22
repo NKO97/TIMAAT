@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class Uuid implements Serializable {
 	private String uuid;
 
 	//bi-directional many-to-one association to Annotation
-	@JsonIgnore
 	@OneToMany(mappedBy="uuid")
+	@JsonManagedReference(value = "uuid")
 	private List<Annotation> annotations;
 
 	public Uuid() {

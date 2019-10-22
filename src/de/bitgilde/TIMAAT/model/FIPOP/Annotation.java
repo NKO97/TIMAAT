@@ -3,6 +3,15 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import de.bitgilde.TIMAAT.model.SqlTimeDeserializer;
+
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,46 +37,60 @@ public class Annotation implements Serializable {
 	private Timestamp lastEditedAt;
 
 	@Column(name="layer_audio")
-	private byte layerAudio;
+	private int layerAudio;
 
 	@Column(name="layer_visual")
-	private byte layerVisual;
+	private int layerVisual;
 
 	@Column(name="sequence_end_time")
-	private double sequenceEndTime;
+	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
+	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	private Time sequenceEndTime;
 
 	@Column(name="sequence_start_time")
-	private double sequenceStartTime;
+	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
+	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	private Time sequenceStartTime;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
 	@JoinColumn(name="analysis_content_audio_id")
+	@JsonBackReference(value = "analysisContentAudio")
 	private AnalysisContentAudio analysisContentAudio;
 
 	//bi-directional many-to-one association to AnalysisContentVisual
 	@ManyToOne
 	@JoinColumn(name="analysis_content_visual_id")
+	@JsonBackReference(value = "analysisContentVisual")
 	private AnalysisContentVisual analysisContentVisual;
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
+	@JsonBackReference(value = "segmentSelectorType")
 	private SegmentSelectorType segmentSelectorType;
 
 	//bi-directional many-to-one association to AnalysisContent
 	@ManyToOne
 	@JoinColumn(name="analysis_content_id")
+	@JsonBackReference(value = "analysisContent")
 	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
+	@JsonBackReference(value = "iri")
 	private Iri iri;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="medium_analysis_list_id")
+	@JsonBackReference(value = "mediumAnalysisList")
 	private MediumAnalysisList mediumAnalysisList;
 
+	@Transient
+	@JsonProperty("analysisListID")
+	private int analysisListID;
+	
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
@@ -80,6 +103,7 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
+	@JsonBackReference(value = "uuid")
 	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
@@ -150,10 +174,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="annotation")
+	@JsonManagedReference(value = "annotationTranslations")
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg
 	@OneToMany(mappedBy="annotation")
+	@JsonManagedReference(value = "selectorSvgs")
 	private List<SelectorSvg> selectorSvgs;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypePerson
@@ -191,36 +217,56 @@ public class Annotation implements Serializable {
 		this.lastEditedAt = lastEditedAt;
 	}
 
-	public byte getLayerAudio() {
+	public int getLayerAudio() {
 		return this.layerAudio;
 	}
 
-	public void setLayerAudio(byte layerAudio) {
+	public void setLayerAudio(int layerAudio) {
 		this.layerAudio = layerAudio;
 	}
 
-	public byte getLayerVisual() {
+	public int getLayerVisual() {
 		return this.layerVisual;
 	}
 
-	public void setLayerVisual(byte layerVisual) {
+	public void setLayerVisual(int layerVisual) {
 		this.layerVisual = layerVisual;
 	}
 
-	public double getSequenceEndTime() {
+	public Time getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
-	public void setSequenceEndTime(double sequenceEndTime) {
+	public void setSequenceEndTime(Time sequenceEndTime) {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public double getSequenceStartTime() {
+	public Time getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
-	public void setSequenceStartTime(double sequenceStartTime) {
+	public void setSequenceStartTime(Time sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
+	}
+	
+	public float getStartTime() {
+		if ( this.sequenceStartTime == null ) return -1;
+		return sequenceStartTime.getTime()/1000f;
+	}
+
+	public void setStartTime(float startTime) {
+		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new Time(0);
+		this.sequenceStartTime.setTime((long)(startTime*1000f));
+	}
+
+	public float getEndTime() {
+		if ( sequenceEndTime == null ) return -1;
+		return sequenceEndTime.getTime()/1000f;
+	}
+
+	public void setEndTime(float endTime) {
+		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new Time(0);
+		this.sequenceEndTime.setTime((long)(endTime*1000f));
 	}
 
 	public AnalysisContentAudio getAnalysisContentAudio() {
@@ -463,6 +509,14 @@ public class Annotation implements Serializable {
 		selectorSvg.setAnnotation(null);
 
 		return selectorSvg;
+	}
+
+	public int getAnalysisListID() {
+		return analysisListID;
+	}
+
+	public void setAnalysisListID(int analysisListID) {
+		this.analysisListID = analysisListID;
 	}
 
 	// public List<SpatialSemanticsTypePerson> getSpatialSemanticsTypePersons() {

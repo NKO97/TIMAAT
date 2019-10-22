@@ -12,6 +12,7 @@ import de.bitgilde.TIMAAT.TIMAATApp;
  *
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
  */
+@Deprecated
 public class TranscoderThread extends Thread {
 
 	private int id;

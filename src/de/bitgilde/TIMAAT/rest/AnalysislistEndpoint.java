@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
@@ -81,10 +82,14 @@ public class AnalysislistEndpoint {
 			return Response.serverError().build();
 		}
 		newList.setAnalysisSegments(new ArrayList<AnalysisSegment>());
-		newList.setAnnotations(new ArrayList<Annotation>());		
+		newList.setAnnotations(new ArrayList<Annotation>());
+		newList.getMediumAnalysisListTranslations().get(0).setId(0);
+		newList.getMediumAnalysisListTranslations().get(0).setLanguage(em.find(Language.class, 1));
+		newList.getMediumAnalysisListTranslations().get(0).setMediumAnalysisList(newList);
 		// persist analysislist and polygons
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
+		em.persist(newList.getMediumAnalysisListTranslations().get(0));
 		em.persist(newList);
 		m.addMediumAnalysisList(newList);
 		em.persist(m);
@@ -118,6 +123,7 @@ public class AnalysislistEndpoint {
 		try {
 			updatedList = mapper.readValue(jsonData, MediumAnalysisList.class);
 		} catch (IOException e) {
+			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedList == null ) return Response.notModified().build();

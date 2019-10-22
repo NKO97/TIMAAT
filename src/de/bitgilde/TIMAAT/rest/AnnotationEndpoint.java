@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.rest;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -27,12 +29,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.Iri;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -79,6 +84,7 @@ public class AnnotationEndpoint {
 		try {
 			newAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newAnno == null ) return Response.status(Status.BAD_REQUEST).build();
@@ -88,12 +94,58 @@ public class AnnotationEndpoint {
 		
 		// get analysis list id for medium
 		@SuppressWarnings("unchecked")
-		List<MediumAnalysisList> malList = entityManager.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
+		List<MediumAnalysisList> malList = (List<MediumAnalysisList>) entityManager.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
 		.setParameter("medium", medium)
-		.setParameter("listId", newAnno.getMediumAnalysisList().getId()).getResultList();
+		.setParameter("listId", newAnno.getAnalysisListID()).getResultList();
 		if ( malList.size() < 1 ) Response.status(Status.NOT_FOUND).build();
 		newAnno.setMediumAnalysisList(malList.get(0));
-
+		
+		// set up metadata
+		newAnno.getAnnotationTranslations().get(0).setId(0);
+		newAnno.getAnnotationTranslations().get(0).setAnnotation(newAnno);
+		newAnno.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		newAnno.setLayerAudio((byte) 1);
+		newAnno.setLayerVisual((byte) 1);
+		
+		// create IRI
+		String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
+				"://"+
+				containerRequestContext.getUriInfo().getBaseUri().getHost()+
+				":"+
+				containerRequestContext.getUriInfo().getBaseUri().getPort()+
+				containerRequestContext.getUriInfo().getBaseUri().getPath()+
+				"iri/"+Math.random(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
+		Iri iri = new Iri();
+		iri.setId(0);
+		iri.setIri(iristring);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(iri);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(iri);
+		iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
+				"://"+
+				containerRequestContext.getUriInfo().getBaseUri().getHost()+
+				":"+
+				containerRequestContext.getUriInfo().getBaseUri().getPort()+
+				containerRequestContext.getUriInfo().getBaseUri().getPath()+
+				"iri/"+iri.getId(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
+		iri.setIri(iristring);
+		entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(iri);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(iri);		
+		newAnno.setIri(iri);
+		
+		// create UUID
+		Uuid uuid = new Uuid();
+		uuid.setId(0);
+		uuid.setUuid(UUID.randomUUID().toString());
+		newAnno.setUuid(uuid);
+		
 		// update log metadata
 		newAnno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -113,8 +165,11 @@ public class AnnotationEndpoint {
 		newAnno.getSelectorSvgs().remove(0);
 		
 		// persist annotation and polygons
-		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		entityManager.persist(newAnno.getAnnotationTranslations().get(0));
+		entityManager.persist(uuid);
+		newAnno.setUuid(uuid);
 		entityManager.persist(newAnno);
 		newSVG.setAnnotation(newAnno);
 		entityManager.persist(newSVG);
@@ -160,8 +215,8 @@ public class AnnotationEndpoint {
     	// update annotation
 		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
 		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
-		if ( updatedAnno.getSequenceStartTime() >= 0 ) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
-		if ( updatedAnno.getSequenceEndTime() >= 0 ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
+		if ( updatedAnno.getStartTime() >= 0 ) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
+		if ( updatedAnno.getEndTime() >= 0 ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
 
 		if ( updatedAnno.getSelectorSvgs() != null 
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 

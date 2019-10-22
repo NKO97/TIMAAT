@@ -5,6 +5,10 @@ import javax.persistence.*;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -22,6 +26,11 @@ public class MediumAnalysisList implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Transient
+	@JsonProperty("mediumID")
+	private int mediumID;
+
 
 	// TODO text and title from translation
 
@@ -33,11 +42,13 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
+    @JsonManagedReference
 	@CascadeOnDelete
 	private List<AnalysisSegment> analysisSegments;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList", cascade={CascadeType.ALL})
+    @JsonManagedReference(value = "mediumAnalysisList")
 	@CascadeOnDelete
 	private List<Annotation> annotations;
 
@@ -48,24 +59,29 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
+    @JsonBackReference
 	private Medium medium;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+    @JsonBackReference
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediumAnalysisLists")
+    @JsonManagedReference
 	private List<Tag> tags;
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
 	@OneToMany(mappedBy="mediumAnalysisList")
+    @JsonManagedReference
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList

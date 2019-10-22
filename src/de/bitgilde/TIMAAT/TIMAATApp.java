@@ -39,7 +39,7 @@ public class TIMAATApp extends Application {
     public final static PropertyManagement timaatProps = new PropertyManagement();
     
     public static EntityManagerFactory emf;
-	public static String systemExt;
+	public static String systemExt = "";
 
 
     /**

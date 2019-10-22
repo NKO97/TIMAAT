@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Iri implements Serializable {
 	//bi-directional many-to-one association to Annotation
 	@JsonIgnore
 	@OneToMany(mappedBy="iri")
+	@JsonManagedReference(value = "iri")
 	private List<Annotation> annotations;
 
 	public Iri() {

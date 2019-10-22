@@ -2,11 +2,11 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.persistence.*;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -66,6 +66,7 @@ public class Medium implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
+    @JsonManagedReference
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to UserAccount
@@ -104,6 +105,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="medium")
+    @JsonManagedReference
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional one-to-one association to MediumAudio
@@ -236,14 +238,6 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to Source
 	@OneToMany(mappedBy="medium")
 	private List<Source> sources;
-
-	// new
-	@Transient
-	private String status;
-
-	// new
-	@Transient
-	private String viewToken;
 
 	public Medium() {
 	}
@@ -653,22 +647,6 @@ public class Medium implements Serializable {
 		source.setMedium(null);
 
 		return source;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getViewToken() {
-		return viewToken;
-	}
-
-	public void setViewToken(String viewToken) {
-		this.viewToken = viewToken;
 	}
 
 		// TODO rather get medium by medium_type

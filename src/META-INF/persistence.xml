@@ -118,7 +118,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySet</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySetPK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLog</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPassword</class>

@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -24,12 +24,13 @@ public class LocationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference
 	private Language language;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="location_id")
+	@JsonBackReference
 	private Location location;
 
 	public LocationTranslation() {

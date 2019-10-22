@@ -33,6 +33,7 @@ import java.util.logging.Logger;
  */
 public class PropertyManagement {
     private static final Boolean DEBUG = true; // TODO: all debug output should be written to logger as info.
+    public String propertyPath = "";
     private final String strTIMAATDir = ".timaat";
     private final Path pathTIMAATDir;
     private final Path pathDefaultTIMAATProperties;
@@ -54,12 +55,14 @@ public class PropertyManagement {
         if( Files.notExists(pathTIMAATDir) ) {
             createTIMAATDir();
             createDefaultTIMAATProperties();
+            propertyPath = pathDefaultTIMAATProperties.toString();
         } else {
             // check if properties have been defined
             if( Files.exists(pathModifiedTIMAATProperties) ){
                 // load these values
                 if(DEBUG) System.out.println("[TIMAAT::modified properties:"+pathModifiedTIMAATProperties+"]");
                 useDefault = false;
+                propertyPath = pathModifiedTIMAATProperties.toString();
             } else {
                 // Paranoia check
                 if( Files.notExists(pathDefaultTIMAATProperties) ) {

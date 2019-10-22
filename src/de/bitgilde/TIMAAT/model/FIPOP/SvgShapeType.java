@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Set;
 
 
@@ -20,10 +23,12 @@ public class SvgShapeType implements Serializable {
 
 	//bi-directional many-to-one association to SelectorSvg
 	@OneToMany(mappedBy="svgShapeType")
+	@JsonManagedReference(value = "svgShapeType")
 	private Set<SelectorSvg> selectorSvgs;
 
 	//bi-directional many-to-one association to SvgShapeTypeTranslation
 	@OneToMany(mappedBy="svgShapeType")
+	@JsonManagedReference(value = "svgShapeTypeTranslations")
 	private Set<SvgShapeTypeTranslation> svgShapeTypeTranslations;
 
 	public SvgShapeType() {

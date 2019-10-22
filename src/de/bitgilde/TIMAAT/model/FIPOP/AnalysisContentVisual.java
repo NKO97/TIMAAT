@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -44,6 +47,7 @@ public class AnalysisContentVisual implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="analysisContentVisual")
+	@JsonManagedReference(value = "analysisContentVisual")
 	private List<Annotation> annotations;
 
 	public AnalysisContentVisual() {

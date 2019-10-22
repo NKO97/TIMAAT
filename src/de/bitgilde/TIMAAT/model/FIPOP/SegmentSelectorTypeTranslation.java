@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -27,8 +28,8 @@ public class SegmentSelectorTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="segment_selector_type_id")
+	@JsonBackReference(value = "segmentSelectorTypeTranslations")
 	private SegmentSelectorType segmentSelectorType;
 
 	public SegmentSelectorTypeTranslation() {

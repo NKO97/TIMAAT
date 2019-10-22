@@ -3,7 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -39,6 +41,7 @@ public class Location implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
+    @JsonManagedReference
 	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to City
@@ -58,6 +61,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="location")
+    @JsonManagedReference
 	private List<Event> events;
 
 	//bi-directional many-to-one association to Location
@@ -69,12 +73,13 @@ public class Location implements Serializable {
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="location")
 	@JsonIgnore // TODO might have to be removed once location hierarchy is developed
+    @JsonManagedReference
 	private List<Location> locations;
 
 	//bi-directional many-to-one association to LocationType
 	@ManyToOne
-	// @JsonIgnore
 	@JoinColumn(name="location_type_id")
+	@JsonManagedReference
 	private LocationType locationType;
 
 	//bi-directional many-to-one association to UserAccount
@@ -89,15 +94,17 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
-	// @JsonIgnore
+    @JsonManagedReference
 	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="location1")
+    @JsonManagedReference
 	private List<Person> persons1;
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="location2")
+    @JsonManagedReference
 	private List<Person> persons2;
 
 	//bi-directional one-to-one association to Province
@@ -112,6 +119,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-many association to Territory
 	@ManyToMany(mappedBy="locations")
+    @JsonManagedReference
 	private List<Territory> territories;
 
 	public Location() {
