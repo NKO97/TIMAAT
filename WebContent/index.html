@@ -24,6 +24,9 @@
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Data Tables CSS -->
+    <link href="vendor/datatables/datatables.min.css" rel="stylesheet" type="text/css">
+
     <!-- JQuery UI CSS -->
     <link href="vendor/jquery/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 
@@ -269,11 +272,27 @@
                 <div class="card-header bg-info text-white">
                   <strong>Verfügbare Videos</strong>
                 </div>
-					<div class="card-body" id="timaat-videochooser-list">                      
-                  <div class="d-flex alert alert-secondary justify-content-center" role="alert">
+                <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
                     <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
                   </div>
-                </div>
+                
+					<div class="card-body">
+						<table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
+				  			<thead class="thead-dark">
+				    			<tr>
+				      				<th style="width: 200px;min-width: 200px !important;">Vorschau</th>
+				      				<th style="width: 40%">Titel</th>
+				      				<th>L&auml;nge</th>
+				      				<th>angelegt&nbsp;</th>
+				      				<th>bearbeitet&nbsp;</th>
+				      				<th style="width:150px">Aktionen</th>
+				    			</tr>
+				  			</thead>
+				  			<tbody id="timaat-videochooser-list">
+							</tbody>
+						</table>
+					
+                	</div>
               </div>
             </div>				
           </div>

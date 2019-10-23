@@ -26,6 +26,8 @@
 		init: function() {
     	// console.log("TCL: VideoChooser: init: function()");
 			// setup video chooser list and UI events
+			
+			moment.locale('de');
 
 		},
 
@@ -78,7 +80,9 @@
 			if ( video.status != 'ready'  &&  video.status != 'nofile' ) video.ui.find('.timaat-video-status').show();
 			if ( video.status == 'waiting' ) video.ui.find('.timaat-video-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
 			if ( video.status == 'nofile' ) {
-				video.ui.find('.timaat-video-upload').show();				
+				video.ui.find('.timaat-video-upload').show();
+				video.ui.find('.timaat-video-annotate').hide();
+
 				if ( !video.ui.find('.timaat-video-upload').hasClass('dz-clickable') ) {
 					video.ui.find('.timaat-video-upload').dropzone({
 						url: "/TIMAAT/api/medium/video/"+video.medium.id+"/upload",
@@ -98,6 +102,7 @@
 									var newvideo = JSON.parse(file.xhr.response);
 									video.status = newvideo;
 									video.ui.find('.timaat-video-upload').hide();
+									video.ui.find('.timaat-video-annotate').show();
 									video.ui.find('.timaat-video-status').show();
 									video.width = newvideo.width;
 									video.height = newvideo.height;
@@ -121,25 +126,56 @@
 			console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
+			$('#timaat-videochooser-list-loading').attr('style','display:none !important');
+			
 			// clear video UI list
 			$('#timaat-videochooser-list').empty();
-			
-			// setup upload dropzone UI and events
-			this.uploadItem = $('<div class="card timaat-video-card timaat-video-upload-card"><div id="timaat-video-upload"></div> \
-												<img class="card-img-top" src="img/video-upload.png" alt="Video Upload" /> \
-												<div class="card-footer text-center title">Videodatei hochladen</div> \
-												</div>');
-			// TODO refactor upload			
-			
+						
 			TIMAAT.VideoChooser.videos = videos;
+			
+			if ( TIMAAT.VideoChooser.dt ) TIMAAT.VideoChooser.dt.destroy();
+			
 			videos.forEach(function(video) {
 				TIMAAT.VideoChooser._addVideo(video);
 			});
+			
+			TIMAAT.VideoChooser.dt = $('#timaat-videochooser-table').DataTable({
+				"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"order": [[ 3, 'desc' ]],
+				"pagingType": "simple_numbers",
+				"columns": [
+				    { "orderable": false },
+				    null,
+				    null,
+				    null,
+				    null,
+				    { "orderable": false },
+				  ],
+				"language": {
+					"decimal": ",",
+					"thousands": ".",
+					"search": "Suche",
+					"lengthMenu": "Zeige _MENU_ Videos pro Seite",
+					"zeroRecords": "Keine Videos gefunden.",
+					"info": "Zeige Seite _PAGE_ von _PAGES_",
+					"infoEmpty": "Keine Videos verf&uuml;gbar.",
+					"infoFiltered": "(gefiltert, _MAX_ Videos gesamt)",
+					"paginate": {
+					            "first":      "Erste",
+					            "previous":   "Vorherige",
+					            "next":       "N&auml;chste",
+					            "last":       "Letzte"
+					        },
+				},
+				
+			});
+
 		},
 		
 		_addVideo: function(video) {
     	// console.log("TCL: _addVideo: function(video)");
     	// console.log("TCL: video", video);
+/*
 			var videoelement = $('<div class="card timaat-video-card"> <div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
 					<div class="timaat-video-upload"><i class="fas fa-upload"></i> Videodatei hochladen</div> \
 				  	<img class="card-img-top timmat-video-thumbnail" src="img/video-placeholder.png" alt="Video Platzhalter"> \
@@ -147,16 +183,36 @@
 				  	<div class="card-footer text-left title">/div> \
 				      </div>'
 			);
+*/
+			var videoelement = $('<tr> \
+					<td style="padding:0; width: 200px;"> \
+					<div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
+				  	<img class="card-img-top timmat-video-thumbnail" src="img/video-placeholder.png" width="200" height="113" alt="Videovorschau"> \
+					</td> \
+					<td class="title"></td>\
+					<td class="duration">00:00:00</td>\
+				      <td class="created">xx.xx.xxxx xx:xx</td>\
+				      <td class="edited">xx.xx.xxxx xx:xx</td>\
+				      <td>\
+				      	<button type="button" class="btn btn-outline-primary btn-block timaat-video-upload"><i class="fas fa-upload"></i> Upload</button> \
+					    <button type="button" class="btn btn-outline-success btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i> Annotieren</button> \
+					  </td> \
+					</tr>'
+			);
+
 			if ( video.status != "nofile" ) videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
+
 			videoelement.appendTo('#timaat-videochooser-list');
 			videoelement.find('.title').html(video.medium.title.name);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.length));
+			videoelement.find('.created').html(moment(video.medium.createdAt).format('YYYY-MM-DD, kk:mm [Uhr]'));
+			videoelement.find('.edited').html(moment(video.medium.lastEditedAt).format('YYYY-MM-DD, kk:mm [Uhr]'));
 		
 			video.ui = videoelement;
 			TIMAAT.VideoChooser.setVideoStatus(video);
 			
 			// set up events
-			videoelement.click(function(ev) {
+			videoelement.find('.timaat-video-annotate').click(function(ev) {
 				if ( video.status && video.status == 'nofile' ) {
 					// start upload process
 					
@@ -173,11 +229,13 @@
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+				if ( video.status && video.status == "nofile" ) return;
 				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.length);
 				timecode = Math.min(Math.max(0, timecode),video.length);
 				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 			});
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
+				if ( video.status && video.status == "nofile" ) return;
 				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.mediumId+"/thumbnail"+"?token="+video.viewToken);
 			});
 			

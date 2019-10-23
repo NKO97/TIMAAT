@@ -19,6 +19,8 @@ requirejs.config({
 	    "leaflet-customcontrol":	'../vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom',
 
 	    "moment":					'../vendor/moment/moment',
+
+	    "datatables":				'../vendor/datatables/datatables.min',
 		
 		"sbadmin2":					'sb-admin-2',
 		"timaathtml":				'timaat.html',
@@ -74,6 +76,7 @@ requirejs.config({
 	    'leaflet-pathdrag': { deps: ['leaflet'], exports: 'L.PathDraggable' },
 	    'leaflet-customcontrol': { deps: ['leaflet'], },
 	    'moment': { deps: [ 'jquery' ], exports: 'moment' },
+	    'datatables': { deps: [ 'bootstrap', 'jquery' ] },
 	}
 });
 
@@ -96,7 +99,7 @@ require(['domReady',
 	'leaflet-customcontrol',
 	], function (domReady) { domReady(function () {
 	  console.log("TIMAAT::Init");
-	  requirejs(['moment', 'sbadmin2', 'timaathtml', 
+	  requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
 		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
 		  'TIMAAT-datasets', 'TIMAAT-actordatasets', 'TIMAAT-eventdatasets', 'TIMAAT-locationdatasets', 'TIMAAT-mediadatasets',
 		  'TIMAAT-service', 'TIMAAT-actorservice', 'TIMAAT-locationservice', 'TIMAAT-mediaservice', 'TIMAAT-eventservice',
