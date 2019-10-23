@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class AnalysisContentAudio implements Serializable {
 	//bi-directional many-to-one association to MediumText
 	@ManyToOne
 	@JoinColumn(name="medium_text_medium_id")
+	@JsonBackReference(value = "MediumText-AnalysisContentAudio")
 	private MediumText mediumText;
 
 	//bi-directional many-to-many association to LineupMember
@@ -49,7 +51,7 @@ public class AnalysisContentAudio implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="analysisContentAudio")
-	@JsonManagedReference(value = "analysisContentAudio")
+	@JsonManagedReference(value = "AnalysisContentAudio-Annotation")
 	private List<Annotation> annotations;
 
 	public AnalysisContentAudio() {

@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class Collective implements Serializable {
 
 	//bi-directional many-to-one association to PersonIsMemberOfCollective
 	@OneToMany(mappedBy="collective")
+	@JsonManagedReference(value = "Collective-PersonIsMemberOfCollective")
 	private List<PersonIsMemberOfCollective> personIsMemberOfCollectives;
 
 	public Collective() {

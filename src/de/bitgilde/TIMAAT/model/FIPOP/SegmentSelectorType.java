@@ -25,12 +25,12 @@ public class SegmentSelectorType implements Serializable {
 	// TODO get type from translations
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="segmentSelectorType")
-	@JsonManagedReference(value = "segmentSelectorType")
+	@JsonManagedReference(value = "SegmentSelectorType-Annotation")
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to SegmentSelectorTypeTranslation
 	@OneToMany(mappedBy="segmentSelectorType")
-	@JsonManagedReference(value = "segmentSelectorTypeTranslations")
+	@JsonManagedReference(value = "SegmentSelectorType-SegmentSelectorTypeTranslation")
 	private List<SegmentSelectorTypeTranslation> segmentSelectorTypeTranslations;
 
 	public SegmentSelectorType() {

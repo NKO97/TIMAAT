@@ -3,7 +3,6 @@ package de.bitgilde.TIMAAT.rest;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -35,7 +34,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
-import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -163,6 +161,7 @@ public class AnnotationEndpoint {
 		
 		SelectorSvg newSVG = newAnno.getSelectorSvgs().get(0);
 		newAnno.getSelectorSvgs().remove(0);
+//		newSVG.setSvgShapeType(entityManager.find(SvgShapeType.class, 5)); // TODO refactor
 		
 		// persist annotation and polygons
 		entityTransaction = entityManager.getTransaction();
@@ -208,6 +207,7 @@ public class AnnotationEndpoint {
 		try {
 			updatedAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
@@ -262,8 +262,10 @@ public class AnnotationEndpoint {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		MediumAnalysisList mal = annotation.getMediumAnalysisList();
+/*
 		mal.removeAnnotation(annotation);
 		entityManager.persist(mal);
+*/
 		entityManager.remove(annotation);
 		entityTransaction.commit();
 		entityManager.refresh(mal);

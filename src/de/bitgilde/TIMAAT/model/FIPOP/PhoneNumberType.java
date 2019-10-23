@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -20,10 +23,12 @@ public class PhoneNumberType implements Serializable {
 
 	//bi-directional many-to-one association to PhoneNumber
 	@OneToMany(mappedBy="phoneNumberType")
+	@JsonManagedReference(value = "PhoneNumberType-PhoneNumber")
 	private List<PhoneNumber> phoneNumbers;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="phoneNumberType")
+	@JsonManagedReference(value = "PhoneNumberType-PhoneNumberTypeTranslation")
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
 	public PhoneNumberType() {

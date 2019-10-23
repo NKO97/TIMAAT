@@ -27,7 +27,7 @@ public class Iri implements Serializable {
 	//bi-directional many-to-one association to Annotation
 	@JsonIgnore
 	@OneToMany(mappedBy="iri")
-	@JsonManagedReference(value = "iri")
+	@JsonManagedReference(value = "Iri-Annotation")
 	private List<Annotation> annotations;
 
 	public Iri() {

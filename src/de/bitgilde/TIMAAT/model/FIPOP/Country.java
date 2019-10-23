@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class Country implements Serializable {
 
 	//bi-directional many-to-one association to PhoneNumber
 	@OneToMany(mappedBy="country")
-	@JsonIgnore
+	@JsonManagedReference(value = "Country-PhoneNumber")
 	private List<PhoneNumber> phoneNumbers;
 
 	public Country() {

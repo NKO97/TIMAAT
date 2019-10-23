@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -23,11 +23,12 @@ public class SexTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-SexTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Sex
 	@ManyToOne
-	@JsonIgnore
+	@JsonBackReference(value = "Sex-SexTranslation")
 	private Sex sex;
 
 	public SexTranslation() {

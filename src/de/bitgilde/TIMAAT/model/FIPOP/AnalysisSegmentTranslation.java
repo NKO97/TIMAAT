@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -17,18 +17,20 @@ public class AnalysisSegmentTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@ManyToOne
-	@JsonIgnore
+	@JsonBackReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	@JoinColumn(name="analysis_segment_id")
 	private AnalysisSegment analysisSegment;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-AnalysisSegmentTranslation")
 	private Language language;
 
 	public AnalysisSegmentTranslation() {

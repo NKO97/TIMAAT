@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -20,10 +23,12 @@ public class EmailAddressType implements Serializable {
 
 	//bi-directional many-to-one association to ActorHasEmailAddress
 	@OneToMany(mappedBy="emailAddressType")
+	@JsonManagedReference(value = "EmailAddressType-ActorHasEmailAddress")
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
 	//bi-directional many-to-one association to EmailAddressTypeTranslation
 	@OneToMany(mappedBy="emailAddressType")
+	@JsonManagedReference(value = "EmailAddressType-EmailAddressTypeTranslation")
 	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
 	public EmailAddressType() {

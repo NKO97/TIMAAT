@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -24,11 +25,12 @@ public class ActorActorRelationshipTypeTranslation implements Serializable {
 	//bi-directional many-to-one association to ActorActorRelationshipType
 	@ManyToOne
 	@JoinColumn(name="actor_actor_relationship_type_id")
-	@JsonIgnore
+	@JsonBackReference(value = "ActorActorRelationshipType-ActorActorRelationshipTypeTranslation")
 	private ActorActorRelationshipType actorActorRelationshipType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-ActorActorRelationshipTypeTranslation")
 	private Language language;
 
 	public ActorActorRelationshipTypeTranslation() {

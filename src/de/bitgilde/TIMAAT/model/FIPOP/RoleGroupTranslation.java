@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -23,12 +23,13 @@ public class RoleGroupTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-RoleGroupTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to RoleGroup
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="role_group_id")
+	@JsonBackReference(value = "RoleGroup-RoleGroupTranslation")
 	private RoleGroup roleGroup;
 
 	public RoleGroupTranslation() {

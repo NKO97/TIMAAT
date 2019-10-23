@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +42,7 @@ public class Territory implements Serializable {
 
 	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="territory")
+	@JsonManagedReference(value = "Territory-TerritoryTranslation")
 	private List<TerritoryTranslation> territoryTranslations;
 
 	public Territory() {

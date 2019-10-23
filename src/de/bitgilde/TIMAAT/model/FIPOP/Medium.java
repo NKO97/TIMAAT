@@ -39,6 +39,7 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Medium")
 	private UserAccount createdByUserAccount;
 
 	@Column(name="file_hash")
@@ -66,12 +67,12 @@ public class Medium implements Serializable {
 			@JoinColumn(name="annotation_id")
 			}
 		)
-    @JsonManagedReference
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Medium2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
@@ -87,10 +88,12 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to PropagandaType
 	@ManyToOne
 	@JoinColumn(name="propaganda_type_id")
+	@JsonBackReference(value = "PropagandaType-Medium")
 	private PropagandaType propagandaType;
 		
 	//bi-directional many-to-one association to Reference
 	@ManyToOne
+	@JsonBackReference(value = "Reference-Medium")
 	private Reference reference;
 
 	//bi-directional many-to-one association to Title
@@ -105,7 +108,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="medium")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Medium-MediumAnalysisList")
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional one-to-one association to MediumAudio
@@ -152,6 +155,7 @@ public class Medium implements Serializable {
 			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
 			}
 		)
+	@JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-many association to Category
@@ -207,6 +211,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="medium")
+	@JsonManagedReference(value = "Medium-MediumRelatesToEvent")
 	private List<MediumRelatesToEvent> mediumRelatesToEvents;
 
 	//bi-directional many-to-one association to MediumRelatesToMedium
@@ -237,6 +242,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to Source
 	@OneToMany(mappedBy="medium")
+	@JsonManagedReference(value = "Medium-Source")
 	private List<Source> sources;
 
 	public Medium() {

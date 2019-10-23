@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -23,12 +24,13 @@ public class EmailAddressTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to EmailAddressType
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="email_address_type_id")
+	@JsonBackReference(value = "EmailAddressType-EmailAddressTypeTranslation")
 	private EmailAddressType emailAddressType;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-EmailAddressTypeTranslation")
 	private Language language;
 
 	public EmailAddressTypeTranslation() {

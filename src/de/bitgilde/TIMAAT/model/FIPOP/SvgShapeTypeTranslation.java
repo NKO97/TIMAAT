@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -24,12 +23,13 @@ public class SvgShapeTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-SvgShapeTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to SvgShapeType
 	@ManyToOne
 	@JoinColumn(name="svg_shape_type_id")
-	@JsonBackReference(value = "svgShapeTypeTranslations")
+	@JsonBackReference(value = "SvgShapeType-SvgShapeTypeTranslation")
 	private SvgShapeType svgShapeType;
 
 	public SvgShapeTypeTranslation() {

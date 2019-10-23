@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 
 
@@ -28,15 +31,18 @@ public class ActorHasAddress implements Serializable {
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
+	@JsonBackReference(value = "Actor-ActorHasAddress")
 	private Actor actor;
 
 	//bi-directional many-to-one association to Address
 	@ManyToOne
+	@JsonBackReference(value = "Address-ActorHasAddress")
 	private Address address;
 
 	//bi-directional many-to-one association to AddressType
 	@ManyToOne
 	@JoinColumn(name="address_type_id")
+	@JsonBackReference(value = "AddressType-ActorHasAddress")
 	private AddressType addressType;
 
 	public ActorHasAddress() {

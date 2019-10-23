@@ -24,13 +24,13 @@ public class LocationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "Language-LocationTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne
 	@JoinColumn(name="location_id")
-	@JsonBackReference
+	@JsonBackReference(value = "Location-LocationTranslation")
 	private Location location;
 
 	public LocationTranslation() {

@@ -57,7 +57,7 @@ public class AnalysisContent implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="analysisContent")
-	@JsonManagedReference(value = "analysisContent")
+	@JsonManagedReference(value = "AnalysisContent-Annotation")
 	private List<Annotation> annotations;
 
 	public AnalysisContent() {

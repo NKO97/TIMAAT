@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Time;
 import java.util.List;
@@ -34,11 +35,12 @@ public class AnalysisSegment implements Serializable {
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="analysis_list_id")
-	@JsonIgnore
+	@JsonBackReference(value = "MediumAnalysisList-AnalysisSegment")
 	private MediumAnalysisList mediumAnalysisList;
 
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
-	@OneToMany(mappedBy="analysisSegment")
+	@OneToMany(mappedBy="analysisSegment", cascade = CascadeType.ALL)
+	@JsonManagedReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
 	public AnalysisSegment() {
@@ -72,6 +74,26 @@ public class AnalysisSegment implements Serializable {
 	public void setSegmentStartTime(Time segmentStartTime) {
 		this.segmentStartTime = segmentStartTime;
 		// this.segmentStartTime = new java.sql.Timestamp((long)(segmentStartTime*1000f));
+	}
+
+	public float getStartTime() {
+		if ( this.segmentStartTime == null ) return -1;
+		return segmentStartTime.getTime()/1000f;
+	}
+
+	public void setStartTime(float startTime) {
+		if ( this.segmentStartTime == null ) this.segmentStartTime = new Time(0);
+		this.segmentStartTime.setTime((long)(startTime*1000f));
+	}
+
+	public float getEndTime() {
+		if ( segmentEndTime == null ) return -1;
+		return segmentEndTime.getTime()/1000f;
+	}
+
+	public void setEndTime(float endTime) {
+		if ( this.segmentEndTime == null ) this.segmentEndTime = new Time(0);
+		this.segmentEndTime.setTime((long)(endTime*1000f));
 	}
 
 	public MediumAnalysisList getMediumAnalysisList() {

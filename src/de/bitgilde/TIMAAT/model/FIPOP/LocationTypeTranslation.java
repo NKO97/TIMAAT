@@ -4,8 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -26,13 +24,13 @@ public class LocationTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "Language-LocationTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to LocationType
 	@ManyToOne
 	@JoinColumn(name="location_type_id")
-	@JsonBackReference
+	@JsonBackReference(value = "LocationType-LocationTypeTranslation")
 	private LocationType locationType;
 
 	public LocationTypeTranslation() {

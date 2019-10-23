@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -23,6 +25,7 @@ public class AcademicTitle implements Serializable {
 
 	//bi-directional many-to-one association to Person
 	@OneToMany(mappedBy="academicTitle")
+	@JsonManagedReference(value = "AcademicTitle-Person")
 	private List<Person> persons;
 
 	public AcademicTitle() {

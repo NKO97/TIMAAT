@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -23,12 +23,13 @@ public class EventDomainTranslation implements Serializable {
 
 	//bi-directional many-to-one association to EventDomain
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="event_domain_id")
+	@JsonBackReference(value = "EventDomain-EventDomainTranslation")
 	private EventDomain eventDomain;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@JsonBackReference(value = "Language-EventDomainTranslation")
 	private Language language;
 
 	public EventDomainTranslation() {

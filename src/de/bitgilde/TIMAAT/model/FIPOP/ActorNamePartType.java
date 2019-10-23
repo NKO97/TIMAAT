@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -23,15 +24,16 @@ public class ActorNamePartType implements Serializable {
 	private int id;
 
 	@Column(name="display_position")
-	private byte displayPosition;
+	private int displayPosition;
 
 	//bi-directional many-to-one association to ActorNamePart
 	@OneToMany(mappedBy="actorNamePartType")
-	@JsonIgnore
+	@JsonManagedReference(value = "ActorNamePartType-ActorNamePart")
 	private List<ActorNamePart> actorNameParts;
 
 	//bi-directional many-to-one association to ActorNamePartTypeTranslation
 	@OneToMany(mappedBy="actorNamePartType")
+	@JsonManagedReference(value = "ActorNamePartType-ActorNamePartTypeTranslation")
 	private List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations;
 
 	public ActorNamePartType() {
@@ -45,11 +47,11 @@ public class ActorNamePartType implements Serializable {
 		this.id = id;
 	}
 
-	public byte getDisplayPosition() {
+	public int getDisplayPosition() {
 		return this.displayPosition;
 	}
 
-	public void setDisplayPosition(byte displayPosition) {
+	public void setDisplayPosition(int displayPosition) {
 		this.displayPosition = displayPosition;
 	}
 

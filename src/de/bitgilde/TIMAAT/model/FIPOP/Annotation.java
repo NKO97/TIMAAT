@@ -6,11 +6,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import de.bitgilde.TIMAAT.model.SqlTimeDeserializer;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -23,6 +24,10 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Annotation.findAll", query="SELECT a FROM Annotation a")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+property  = "id", 
+scope     = Integer.class)
 public class Annotation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -43,48 +48,46 @@ public class Annotation implements Serializable {
 	private int layerVisual;
 
 	@Column(name="sequence_end_time")
-	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
-	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
 	private Time sequenceEndTime;
 
 	@Column(name="sequence_start_time")
-	@JsonFormat(pattern = "HH:mm:ss.SSSZ")
-	@JsonDeserialize(using = SqlTimeDeserializer.class)
+	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
 	private Time sequenceStartTime;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
 	@JoinColumn(name="analysis_content_audio_id")
-	@JsonBackReference(value = "analysisContentAudio")
+	@JsonBackReference(value = "AnalysisContentAudio-Annotation")
 	private AnalysisContentAudio analysisContentAudio;
 
 	//bi-directional many-to-one association to AnalysisContentVisual
 	@ManyToOne
 	@JoinColumn(name="analysis_content_visual_id")
-	@JsonBackReference(value = "analysisContentVisual")
+	@JsonBackReference(value = "AnalysisContentVisual-Annotation")
 	private AnalysisContentVisual analysisContentVisual;
 
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
-	@JsonBackReference(value = "segmentSelectorType")
+	@JsonBackReference(value = "SegmentSelectorType-Annotation")
 	private SegmentSelectorType segmentSelectorType;
 
 	//bi-directional many-to-one association to AnalysisContent
 	@ManyToOne
 	@JoinColumn(name="analysis_content_id")
-	@JsonBackReference(value = "analysisContent")
+	@JsonBackReference(value = "AnalysisContent-Annotation")
 	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
-	@JsonBackReference(value = "iri")
+	@JsonBackReference(value = "Iri-Annotation")
 	private Iri iri;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="medium_analysis_list_id")
-	@JsonBackReference(value = "mediumAnalysisList")
+	@JsonBackReference(value = "MediumAnalysisList-Annotation")
 	private MediumAnalysisList mediumAnalysisList;
 
 	@Transient
@@ -94,16 +97,18 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Annotation1")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "UserAccount-Annotation2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
-	@JsonBackReference(value = "uuid")
+	@JsonBackReference(value = "Uuid-Annotation")
 	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
@@ -117,6 +122,7 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
+	@JsonIgnore
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to Annotation
@@ -130,10 +136,12 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="source_annotation_id")
 			}
 		)
+	@JsonIgnore
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-many association to Annotation
 	@ManyToMany(mappedBy="annotations1")
+	@JsonIgnore
 	private List<Annotation> annotations2;
 
 	//bi-directional many-to-many association to Audience
@@ -146,6 +154,7 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="annotations")
+	@JsonIgnore
 	private List<Event> events;
 
 	//bi-directional many-to-many association to IconclassCategory
@@ -154,10 +163,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Location
 	@ManyToMany(mappedBy="annotations")
+	@JsonIgnore
 	private List<Location> locations;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="annotations")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Motivation
@@ -174,12 +185,12 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="annotation")
-	@JsonManagedReference(value = "annotationTranslations")
+	@JsonManagedReference(value = "Annotation-AnnotationTranslation")
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg
-	@OneToMany(mappedBy="annotation")
-	@JsonManagedReference(value = "selectorSvgs")
+	@OneToMany(mappedBy="annotation", cascade = CascadeType.REMOVE)
+	@JsonManagedReference(value = "Annotation-SelectorSvg")
 	private List<SelectorSvg> selectorSvgs;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypePerson

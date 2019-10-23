@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the medium_relates_to_event database table.
@@ -19,15 +21,18 @@ public class MediumRelatesToEvent implements Serializable {
 
 	//bi-directional many-to-one association to Event
 	@ManyToOne
+	@JsonBackReference(value = "Event-MediumRelatesToEvent")
 	private Event event;
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
+	@JsonBackReference(value = "Medium-MediumRelatesToEvent")
 	private Medium medium;
 
 	//bi-directional many-to-one association to MediumEventRelationshipType
 	@ManyToOne
 	@JoinColumn(name="medium_event_relationship_type_id")
+	@JsonBackReference(value = "MediumEventRelationshipType-MediumRelatesToEvent")
 	private MediumEventRelationshipType mediumEventRelationshipType;
 
 	public MediumRelatesToEvent() {
