@@ -562,14 +562,18 @@ select:invalid {
 	text-decoration: none;
 }
 
-/* [data-role="dynamic-title-fields"] > .table-control > tr [data-role="add"] {
-	display: none;
+[data-role="dynamic-title-fields"] > .form-group + .form-group {
+    margin-top: 0.5em;
 }
 
-[data-role="dynamic-title-fields"] > .table-control > tr:last-child [data-role="add"] {
-	display: inline-block;
+[data-role="dynamic-title-fields"] > .form-group [data-role="add"] {
+    display: none;
 }
 
-[data-role="dynamic-title-fields"] > .table-control > tr:last-child [data-role="remove"] {
-	display: none;
-} */
+[data-role="dynamic-title-fields"] > .form-group:last-child [data-role="add"] {
+    display: inline-block;
+}
+
+[data-role="dynamic-title-fields"] > .form-group:last-child [data-role="remove"] {
+    display: none;
+}

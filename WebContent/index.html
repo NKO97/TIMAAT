@@ -203,7 +203,7 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                     </div>"
-                  title="Media">
+                  title="Medien">
                   <i class="fas fa-photo-video"></i>
                 </a>
               </li> 
@@ -958,7 +958,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title" id="mediumTitleLable">Titelliste des Mediums</h5>
+                              <h5 class="form-title" id="mediumTitleLable">Medium titles</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-titles-form-edit" name="edit">
@@ -966,25 +966,57 @@
                               </button>
                             </div>
                           </div>
-                        </div>
-                        <div class="table-responsive">
-                          <table class="table table-bordered table-striped" id="timaat-mediadatasets-medium-titles-form-table">
-                            <thead>
-                              <tr>
-                                <th scope="col" style="width:10%">Primary title</th>
-                                <th scope="col" style="width:65%">Medium title</th>
-                                <th scope="col" style="width:20%">Title's language</th>
-                                <th scope="col" style="width:5%"></th>
-                              </tr>
-                            </thead>
-                            <div data-role="dynamic-title-fields">
-                              <div class="table-title-row">
-                              <tbody class="table-control">
-                                <!-- table content will be created dynamically -->
-                              </tbody>
-                              </div>
+                          <div class="form-row">
+                            <div class="col-md-2">
+                              <h6 class="form-header">Primary title</h6>
                             </div>
-                          </table>
+                            <div class="col-md-6">
+                              <h6 class="form-header">Medium title</h6>
+                            </div>
+                            <div class="col-md-3">
+                              <h6 class="form-header">Title's language</h6>
+                            </div>
+                            <div class="col-md-1">
+                              <h6 class="form-header"></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="medium-titles-container">
+                          <div data-role="dynamic-title-fields" id="dynamic-title-fields">
+                            <div class="form-group">
+                              <!-- <div class="form-row">
+                                <div class="form-check titleIsPrimary col-md-2">
+                                  <label class="sr-only" for="isPrimaryTitle"></label>
+                                  <input class="form-check-input" type="radio" id="isPrimaryTitle" name="isPrimaryTitle" placeholder="Is Primary Title">
+                                </div>
+                                <div class="titleName col-md-6">
+                                  <label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
+                                  <input class="form-control" id="timaat-mediadatasets-medium-titles-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+                                </div>
+                                <div class="titleLanguageId col-md-3">
+                                  <label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+                                  <select class="form-control" id="timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+                                    <option value="" disabled selected hidden>[Choose title language...]</option>
+                                    <option value="2">English</option>
+                                    <option value="3">German</option>
+                                    <option value="4">French</option>
+                                    <option value="5">Spanish</option>
+                                    <option value="6">Russian</option>
+                                    <option value="7">Arabic</option>
+                                  </select>
+                                </div>
+                                <div class="col-md-1">
+                                  <button class="btn btn-danger" data-role="remove">
+                                    <span class="fas fa-trash-alt"></span>
+                                  </button>
+                                  <button class="btn btn-primary" data-role="add">
+                                    <span class="fas fa-plus"></span>
+                                  </button>
+                                </div>
+                              </div> -->
+                            </div>
+                          <!-- additional table content will be created dynamically --> 
+                          </div>
                         </div>
                         <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit" type="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>

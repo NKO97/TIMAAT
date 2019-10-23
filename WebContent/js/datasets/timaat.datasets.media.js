@@ -138,7 +138,8 @@
 			$('#media-tab-titles-form').click(function(event) {
 				$('.nav-tabs a[href="#mediaTitles"]').tab("show");
 				$('.form').hide();
-				TIMAAT.MediaDatasets.initTitles($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
+				// TIMAAT.MediaDatasets.initTitles($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
+				TIMAAT.MediaDatasets.setTitleList($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
 				$('#timaat-mediadatasets-medium-titles-form').show();
 				// var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
 				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
@@ -202,11 +203,18 @@
 						mediaType: {
 							id: Number(formDataObject.typeId),
 						},
+						titles: {
+							id: 0,
+							language: {
+								id: Number(formDataObject.primaryTitleLanguageId),
+							},
+							name: formDataObject.primaryTitle,
+						},
+					};
 						// work: {
 						// 	id: 1,  // TODO implement work
 						// },
 						// mediumTranslations: [],
-					};
 					// console.log("TCL: releaseDate", model.releaseDate);
 					// var modelTranslation = {
 					// 	id: 0,
@@ -245,11 +253,11 @@
 				console.log("TCL: submit tile form");
 				// continue only if client side validation has passed
 				event.preventDefault();
-				$('#timaat-mediadatasets-medium-titles-form-table').find('tbody tr:last').detach();
+				// $('#timaat-mediadatasets-medium-titles-form-table').find('tbody tr:last').detach();
 				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
 
 				// the original medium model (in case of editing an existing medium)
-				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");				
+				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");			
 				// Create/Edit medium window submitted data
 				var formData = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 				var formDataObject = {};
@@ -308,41 +316,115 @@
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
-			$(document).on('click', '[id^="timaat-mediadatasets-medium-titles-form-title-add"]', function(event) {
-				console.log("TCL: $('#timaat-mediadatasets-medium-titles-form-title-add')");
-				var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
-				var newTitlePos = medium.model.titles.length;
-				var titles = [];
-				var i = 0;
-				for ( ; i< newTitlePos; i++) {
-					titles[i] = medium.model.titles[i].name;
-				}
-				console.log("TCL: titles", titles);
-				i = 0;
-				var values = [];
-				$('input[id^="timaat-mediadatasets-medium-titles-title"]').each(function(input) {
-					values[i] = $('input[id^="timaat-mediadatasets-medium-titles-title"]').val();
-					i++;
-				})
-				console.log("TCL: values", values);
-        // console.log("TCL: medium.model.titles.length", medium.model.titles.length);
-				// medium.model.titles[newTitlePos].name = $('#timaat-mediadatasets-medium-titles-title['+(newTitlePos-1)+']');
-				// medium.model.titles[newTitlePos].language.id = $('#timaat-mediadatasets-medium-titles-title['+(newTitlePos-1)+']');
-				// TIMAAT.MediaDatasets.addTitleRow(medium.model.titles.length);
-        // console.log("TCL: medium.model.titles.length", medium.model.titles.length);
+			// Remove title button click
+			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
+				e.preventDefault();
+				// TODO consider undo function or popup asking if user really wants to delete a title
+				$(this).closest('.form-group').remove();
 			});
 
-		// 	$(document).on('click', '[data-role="dynamic-fields"] > .table-title-row [data-role="add"]', function(e) {
-		// 		console.log("TCL: click");
-		// 		e.preventDefault();
-		// 		var container = $(this).closest('[data-role="dynamic-title-fields"]');
-		// 		new_field_group = container.children().filter('.table-title.row:first-child').clone();
-		// 		new_field_group.find('input').each(function(){
-		// 				$(this).val('');
-		// 		});
-		// 		container.append(new_field_group);
-		// 	}
-    // );
+			// Add title button click
+			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="add"]', function(e) {
+				e.preventDefault();
+
+				// var container = $(this).closest('[data-role="dynamic-title-fields"]');
+				// var new_field_group = container.children().filter('.form-group:first-child').clone();
+				// new_field_group.find('input').each(function(){
+				// 	$(this).val('');
+				// });
+				// container.append(new_field_group);
+				var listEntry = $(this).closest('[data-role="dynamic-title-fields"]');
+				console.log("TCL: listEntry", listEntry);
+				var allFieldsSet = true;
+				if (listEntry.find('input').each(function(){
+					if ($(this).val() == '')
+						allFieldsSet =false;
+					}
+				));
+				if (allFieldsSet) {
+				// if (listEntry.children().closest('[data-role="title"]').val() != '' && listEntry.children().closest('[data-role="language"]').val() != '' )	{
+				// 	console.log("TCL: listEntry.children().closest('[data-role='title']').val()", listEntry.children().closest('[data-role="title"]').val());		
+        // 	console.log("TCL: listEntry.children().closest('[data-role='language']').val()", listEntry.children().closest('[data-role="language"]').val());        
+					$(this).closest('[data-role="dynamic-title-fields"]').append(
+						`<div class="form-group">
+							<div class="form-row">
+								<div class="col-md-2 text-center">
+									<div class="form-check">
+										<label class="sr-only" for="isPrimaryTitle"></label>
+										<input class="form-check-input" type="radio" id="isPrimaryTitle" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
+									<input class="form-control" id="timaat-mediadatasets-medium-titles-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
+								</div>
+								<div class="col-md-3">
+									<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+									<select class="form-control" id="timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId">
+										<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
+										<option value="2">English</option>
+										<option value="3">German</option>
+										<option value="4">French</option>
+										<option value="5">Spanish</option>
+										<option value="6">Russian</option>
+										<option value="7">Arabic</option>
+									</select>
+								</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-danger" data-role="remove">
+										<span class="fas fa-trash-alt"></span>
+									</button>
+									<button class="btn btn-primary" data-role="add">
+										<span class="fas fa-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+					);
+				}
+				else {
+					// TODO open modal showing error that not all required fields are set.
+				}
+			});
+
+			// add empty title row
+			// $(document).on('click', '[id^="timaat-mediadatasets-medium-titles-form-title-add"]', function(event) {
+			// 	console.log("TCL: $('#timaat-mediadatasets-medium-titles-form-title-add')");
+			// 	// var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
+			// 	// var newTitlePos = medium.model.titles.length;
+			// 	// var titles = [];
+			// 	// var i = 0;
+			// 	// for ( ; i< newTitlePos; i++) {
+			// 	// 	titles[i] = medium.model.titles[i].name;
+			// 	// }
+			// 	// console.log("TCL: titles", titles);
+			// 	// i = 0;
+			// 	// var values = [];
+			// 	// $('input[id^="timaat-mediadatasets-medium-titles-title"]').each(function(input) {
+			// 	// 	values[i] = $('input[id^="timaat-mediadatasets-medium-titles-title"]').val();
+			// 	// 	i++;
+			// 	// })
+			// 	// console.log("TCL: values", values);
+			// 	// event.preventDefault();
+			// 	var currentRow = $('input[id^="timaat-mediadatasets-medium-titles-title"]').length;
+      //   console.log("TCL: currentRow", currentRow);
+			// 	var currentAddButton = "timaat-mediadatasets-medium-titles-form-title-add["+currentRow+"]";
+      //   console.log("TCL: currentAddButton", currentAddButton);
+			// 	var currentRemoveButton = "timaat-mediadatasets-medium-titles-form-title-remove["+currentRow+"]";
+			// 	console.log("TCL: currentRemoveButton", currentRemoveButton);
+			// 	$('currentAddButton').hide();
+			// 	// $('div.timaat-mediadatasets-medium-titles-form-title-remove['+currentRow+']').find( "timaat-mediadatasets-medium-titles-form-title-remove["+currentRow+"]").css( "display", "block");
+			// 	$('input[id="timaat-mediadatasets-medium-titles-form-title-remove['+currentRow+']"]').show();
+      //   console.log("TCL: $('input[id^='timaat-mediadatasets-medium-titles-title']').length ", $('input[id^="timaat-mediadatasets-medium-titles-title"]').length);
+			// 	TIMAAT.MediaDatasets.addTitleRow($('input[id^="timaat-mediadatasets-medium-titles-title"]').length);
+			// 	// var previous = $('input[id^="timaat-mediadatasets-medium-titles-title"]').length-1;
+			// 	// $('[id^="timaat-mediadatasets-medium-titles-title['+previous+']"]').closest('[data-role="add"]')
+      //   // console.log("TCL: medium.model.titles.length", medium.model.titles.length);
+			// 	// medium.model.titles[newTitlePos].name = $('#timaat-mediadatasets-medium-titles-title['+(newTitlePos-1)+']');
+			// 	// medium.model.titles[newTitlePos].language.id = $('#timaat-mediadatasets-medium-titles-title['+(newTitlePos-1)+']');
+			// 	// TIMAAT.MediaDatasets.addTitleRow(medium.model.titles.length);
+      //   // console.log("TCL: medium.model.titles.length", medium.model.titles.length);
+			// });
 
 			// Remove title from list button click
 			$(document).on('click', '[id^="timaat-mediadatasets-medium-titles-form-title-remove"]', function(event) {
@@ -983,6 +1065,13 @@
 						mediaType: {
 							id: 6 // 6 = Video. TODO check clause to find proper id
 						},
+						titles: [{
+							id: 0,
+							language: {
+								id: Number(formDataObject.primaryTitleLanguageId),
+							},
+							name: formDataObject.primaryTitle,
+						}],
 						// mediumTranslations: [],
 					};
 					// var modelTranslation = {
@@ -1137,6 +1226,7 @@
 		},
 
 		initTitles: function(medium) {
+    	console.log("TCL: medium", medium);
 			titles = medium.model.titles;
       console.log("TCL: titles", titles);
 		},
@@ -1370,6 +1460,22 @@
 			TIMAAT.MediaDatasets.videogames = vdgms;
 			TIMAAT.MediaDatasets.videogames.model = videogames;
 		},
+
+		setTitleList: function(medium) {
+			console.log("TCL: setTitleLists -> medium", medium);
+			if ( !medium ) return;
+			$('#timaat-title-list-loader').remove();
+			// clear old UI list
+			$('#timaat-title-list').empty();
+			// setup model
+			var mediumTitles = Array();
+			medium.model.titles.forEach(function(title) { 
+				if ( title.mediumId > 0 )
+					mediumTitles.model.titles.push(new TIMAAT.Title(title)); 
+			});
+			TIMAAT.MediaDatasets.titles = mediumTitles;
+			TIMAAT.MediaDatasets.titles.model = medium.model.titles;
+		},
 		
 		addMedium: function() {	
 			console.log("TCL: addMedium: function()");
@@ -1583,9 +1689,12 @@
 		},
 
 		mediumFormTitles: function(action, medium) {
-			console.log("TCL: action", action);
-			$('#timaat-mediadatasets-medium-titles-form-table').find('tbody').detach();
-			$('#timaat-mediadatasets-medium-titles-form-table').append($('<tbody>'));
+    	console.log("TCL: timaat.datasets.media -> mediumFormTitles");
+			// console.log("TCL: action", action);
+			var node = document.getElementById("dynamic-title-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
 			mediumTitlesFormValidator.resetForm();
 			$('#timaat-mediadatasets-medium-titles-form').show();
@@ -1596,24 +1705,23 @@
 			var numTitles = medium.model.titles.length;
       console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i< numTitles; i++) {
-				$('#timaat-mediadatasets-medium-titles-form-table').append(
-					`<tr>
-						 <td>
-						 	<div class="form-check titleIsPrimary">
-						 		<label class="sr-only" for="isPrimaryTitle">Primary title</label>
-						 		<input class="form-check-input" type="radio" name="isPrimaryTitle[`+i+`]" id="isPrimaryTitle[`+i+`]">
-						 	</div>
-						</td>
-						<td>
-							<div class="form-group titleName">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
-								<input class="form-control" id="timaat-mediadatasets-medium-titles-title[`+i+`]" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+				$('[data-role="dynamic-title-fields"]').append(
+					`<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-2 text-center">
+								<div class="form-check">
+									<label class="sr-only" for="isPrimaryTitle"></label>
+									<input class="form-check-input" type="radio" id="isPrimaryTitle[`+i+`]" name="isPrimaryTitle[`+i+`]" placeholder="Is Primary Title" data-role="title">
+								</div>
 							</div>
-						</td>
-						<td>
-							<div class="form-group titleLanguageId">
+							<div class="col-md-6">
+								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
+								<input class="form-control" id="timaat-mediadatasets-medium-titles-title[`+i+`]" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
+							</div>
+							<div class="col-md-3">
 								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
 								<select class="form-control" id="timaat-mediadatasets-medium-titles-title-language-id[`+i+`]" name="titleLanguageId[`+i+`]" value="`+medium.model.titles[i].language.id+`" required>
+									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
 									<option value="4">French</option>
@@ -1622,18 +1730,17 @@
 									<option value="7">Arabic</option>
 								</select>
 							</div>
-						</td>
-						<td>
-							<div>
-								<button type="button" data-role="add" id="timaat-mediadatasets-medium-titles-form-title-add[`+i+`]" name="add" class="btn btn-add btn-primary mb-1 add-title" style="display:none">
-									<i class="fas fa-plus"></i>
+							<div class="col-md-1 text-center">
+								<button class="btn btn-danger" data-role="remove">
+									<span class="fas fa-trash-alt"></span>
 								</button>
-								<button type="button" data-role="remove" id="timaat-mediadatasets-medium-titles-form-title-remove[`+i+`]" name="remove[`+i+`]" class="btn btn-remove btn-danger mb-1 remove-title">
-									<i class="fas fa-trash-alt"></i>
+								<button class="btn btn-primary" data-role="add">
+									<span class="fas fa-plus"></span>
 								</button>
 							</div>
-						</td>
-					</tr>`);
+						</div>
+					</div>`
+					);
 					// $('[id^="timaat-mediadatasets-medium-titles-form-title-remove"]').val(medium.model.titles[i].language.id);
 					// $('#timaat-mediadatasets-medium-titles-title['+i+']').val(medium.model.titles[i].name);
           // console.log("TCL: medium.model.titles["+i+"].name", medium.model.titles[i].name);
@@ -1649,9 +1756,47 @@
 				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", false);
 				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
 				$('#mediumTitlesLabel').html("Medium Titelliste");
 			}
 			else if (action == "edit") {
+				$('[data-role="dynamic-title-fields"]').append(
+					`<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-2 text-center">
+								<div class="form-check">
+									<label class="sr-only" for="isPrimaryTitle"></label>
+									<input class="form-check-input" type="radio" id="isPrimaryTitle" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
+								<input class="form-control" id="timaat-mediadatasets-medium-titles-title name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
+							</div>
+							<div class="col-md-3">
+								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+								<select class="form-control" id="timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId">
+									<option value="" disabled selected hidden>[Choose title language...]</option>
+									<option value="2">English</option>
+									<option value="3">German</option>
+									<option value="4">French</option>
+									<option value="5">Spanish</option>
+									<option value="6">Russian</option>
+									<option value="7">Arabic</option>
+								</select>
+							</div>
+							<div class="col-md-1 text-center">
+								<button class="btn btn-danger" data-role="remove">
+									<span class="fas fa-trash-alt"></span>
+								</button>
+								<button class="btn btn-primary" data-role="add">
+									<span class="fas fa-plus"></span>
+								</button>
+							</div>
+						</div>
+					</div>`
+				);
 				$('#timaat-mediadatasets-medium-titles-form-submit').show();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
 				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", false);
@@ -1661,61 +1806,8 @@
 				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
 				$('#timaat-mediadatasets-medium-titles-form-submit').html("Speichern");
 				$('#timaat-mediadatasets-medium-metadata-title').focus();
-				// start with an empty title input row to add a new title to the list
-				TIMAAT.MediaDatasets.addTitleRow(numTitles);
 				$('#timaat-mediadatasets-medium-titles-form').data('medium', medium);
 			}
-		},
-
-		addTitleRow: function(numTitles) {
-			console.log("TCL: addTitleRow: function(numTitles)", numTitles);
-			console.log("TCL: '$(#timaat-mediadatasets-medium-titles-title['+(numTitles-1)+']').val(): ", $('#timaat-mediadatasets-medium-titles-title['+(numTitles-1)+']').val());
-			// if ($('#timaat-mediadatasets-medium-titles-title['+(numTitles-1)+']').length > 0 
-			// 	&& $('#timaat-mediadatasets-medium-titles-title-language-id['+(numTitles-1)+']') > 0) {
-					event.preventDefault();
-					$('#timaat-mediadatasets-medium-titles-form-table').append(
-						`<tr>
-							<td>` +
-							// 	<div class="form-check">
-							// 		<label class="sr-only" for="isPrimaryTitle">Primary title</label>
-							// 		<input class="form-check-input" type="radio" name="isPrimaryTitle[]" id="isPrimaryTitle[]">
-							// 	</div>
-							`</td>
-							<td>
-								<div class="form-group">
-									<label class="sr-only" for="timaat-mediadatasets-medium-titles-title">Title</label>
-									<input class="form-control" id="timaat-mediadatasets-medium-titles-title[`+numTitles+`]" name="title[`+numTitles+`]" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
-								</div>
-							</td>
-							<td>
-								<div class="form-group">
-									<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
-									<select class="form-control" id="timaat-mediadatasets-medium-titles-title-language-id[`+numTitles+`]" name="titleLanguageId[`+numTitles+`]" required>
-										<option value="" disabled selected hidden>[Choose title language...]</option>
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
-									</select>
-								</div>
-							</td>
-							<td>
-								<div>
-									<button type="button" data-role="add" id="timaat-mediadatasets-medium-titles-form-title-add[`+numTitles+`]" name="add" class="btn btn-add btn-primary mb-1 add-title">
-										<i class="fas fa-plus"></i>
-									</button>
-									<button type="button" data-role="remove" id="timaat-mediadatasets-medium-titles-form-title-remove[`+numTitles+`]" name="remove[`+numTitles+`]" class="btn btn-remove btn-danger mb-1 remove-title" style="display:none">
-										<i class="fas fa-trash-alt"></i>
-									</button>
-								</div>
-							</td>
-						</tr>`);
-				// }
-				// else {
-				// 	// TODO popup that invalid row cannot be added
-				// }
 		},
 
 		audioFormData: function(action, audio) {
@@ -2167,7 +2259,7 @@
 
 		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title, source) {
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
-			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title", mediumSubtypeModel, mediumModel, title);
+			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title, source", mediumSubtypeModel, mediumModel, title, source);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
@@ -2175,6 +2267,7 @@
 				// create medium
 				var tempMediumModel = mediumModel;
 				tempMediumModel.title = newTitle;
+				tempMediumModel.titles[0] = newTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 
