@@ -57,6 +57,19 @@ body.timaat-login-modal-open #wrapper {
 	opacity: 0.2;
 }
 
+#timaat-videochooser-table th:first-of-type {
+	width: 200px;
+	min-width: 200px !important;
+}
+
+#timaat-videochooser-table th:nth-of-type(2) {
+	width: 40% !important;
+}
+
+.timmat-video-thumbnail {
+	cursor: ew-resize;
+}
+
 .timaat-video-status {
 	display: none;
 	cursor: default;
