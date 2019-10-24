@@ -15,6 +15,7 @@ target/
 .settings/org.eclipse.wst.validation.prefs
 
 src/model*/
+WebContent/app/
 WebContent/vendor/
 .settings/org.eclipse.jst.j2ee.ejb.annotations.xdoclet.prefs
 .settings/org.eclipse.ltk.core.refactoring.prefs

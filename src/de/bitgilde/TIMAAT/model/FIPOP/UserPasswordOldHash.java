@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="user_password_old_hashes")
+@Table(name="user_password_old_hash")
 @NamedQuery(name="UserPasswordOldHash.findAll", query="SELECT u FROM UserPasswordOldHash u")
 public class UserPasswordOldHash implements Serializable {
 	private static final long serialVersionUID = 1L;

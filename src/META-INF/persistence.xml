@@ -124,6 +124,21 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollection</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAlbum</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisListHasTag</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisListHasTagPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisListTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMediumPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTagPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasWork</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasWorkPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionTypeTranslation</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

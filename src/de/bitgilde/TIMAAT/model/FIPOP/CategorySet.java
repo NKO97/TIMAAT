@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -57,7 +56,7 @@ public class CategorySet implements Serializable {
 	@OneToMany(mappedBy="categorySet")
 	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
 
-	private List<CategorySetHasCategory> categories = new ArrayList<>();
+//	private List<CategorySetHasCategory> categories = new ArrayList<>();
 
 	public CategorySet() {
 	}
@@ -204,7 +203,7 @@ public class CategorySet implements Serializable {
 
 	public void addCategory(Category category) {
 		CategorySetHasCategory categorySetHasCategory = new CategorySetHasCategory(this, category);
-		categories.add(categorySetHasCategory);
+//		categories.add(categorySetHasCategory);
 		// category.getCategorySets().add(categorySetHasCategory);
 	}
 
