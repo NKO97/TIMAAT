@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.Key;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,10 +33,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -1196,17 +1193,20 @@ public class MediumServiceEndpoint{
 		// persist title
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		entityManager.persist(language);
 		entityManager.persist(newTitle);
 		entityManager.flush();
 		newTitle.setLanguage(language);
 		entityTransaction.commit();
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
-		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 
+		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+		
 		System.out.println("MediumServiceEndpoint: title created with id "+newTitle.getId());
+		System.out.println("MediumServiceEndpoint: title created with language id "+newTitle.getLanguage().getId());
 
 		return Response.ok().entity(newTitle).build();
 	}

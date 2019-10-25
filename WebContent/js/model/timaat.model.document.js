@@ -44,7 +44,7 @@
 						<div class="col-lg-8">
 							<span class="timaat-document-list-name"></span>
 							<br><br>
-							<span class="timaat-document-list-medium-type-id"></span>
+							<span class="timaat-document-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -105,7 +105,7 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-document-form').data('document', mediumDocument);
-				TIMAAT.MediaDatasets.documentFormData("show", mediumDocument);				
+				TIMAAT.MediaDatasets.documentFormDatasheet("show", mediumDocument);				
 				// document.listView.find('.timaat-document-list-tags').popover('show');
 			});
 
@@ -114,7 +114,7 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-document-form').data('document', mediumDocument);
-				TIMAAT.MediaDatasets.documentFormData("edit", mediumDocument);
+				TIMAAT.MediaDatasets.documentFormDatasheet("edit", mediumDocument);
 				// document.listView.find('.timaat-document-list-tags').popover('show');
 			});
 

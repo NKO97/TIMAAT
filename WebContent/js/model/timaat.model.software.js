@@ -44,7 +44,7 @@
 						<div class="col-lg-8">
 							<span class="timaat-software-list-name"></span>
 							<br><br>
-							<span class="timaat-software-list-medium-type-id"></span>
+							<span class="timaat-software-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -105,7 +105,7 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-software-form').data('software', software);
-				TIMAAT.MediaDatasets.softwareFormData("show", software);				
+				TIMAAT.MediaDatasets.softwareFormDatasheet("show", software);				
 				// software.listView.find('.timaat-software-list-tags').popover('show');
 			});
 
@@ -114,7 +114,7 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-software-form').data('software', software);
-				TIMAAT.MediaDatasets.softwareFormData("edit", software);
+				TIMAAT.MediaDatasets.softwareFormDatasheet("edit", software);
 				// software.listView.find('.timaat-software-list-tags').popover('show');
 			});
 

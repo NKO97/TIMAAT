@@ -127,9 +127,9 @@
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
-				}).done(function(mediumData) {
-					console.log("TCL: createMedium -> mediumData", mediumData);
-					resolve(mediumData);
+				}).done(function(mediumDatasheet) {
+					console.log("TCL: createMedium -> mediumDatasheet", mediumDatasheet);
+					resolve(mediumDatasheet);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
 				});

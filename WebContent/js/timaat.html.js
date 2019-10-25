@@ -254,8 +254,8 @@
           textForm.submit();
         },
       });
-      var videoForm = $("#timaat-mediadatasets-video-form");
-      var videoFormValidator = $("#timaat-mediadatasets-video-form").validate({
+      var videoMetadataForm = $("#timaat-mediadatasets-video-metadata-form");
+      var videoFormValidator = $("#timaat-mediadatasets-video-metadata-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -286,8 +286,34 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(videoForm) {
-          videoForm.submit();
+        submitHandler: function(videoMetadataForm) {
+          videoMetadataForm.submit();
+        },
+      });
+      var videoTitlesForm = $("#timaat-mediadatasets-video-titles-form");
+      var videoTitlesFormValidator = $("#timaat-mediadatasets-video-titles-form").validate({
+        rules: {
+          primaryTitle: {
+            required: true,
+            minlength: 3,
+            maxlength: 200,
+          },
+          primaryTitleLanguageId: {
+            required: true,
+          },
+        },
+        messages: {
+          primaryTitle: {
+            required: "Enter a title (min length: 3)",
+            minlength: "Title too short: min length is 3",
+            maxlength: "Title is too long: max length is 200"
+          },
+          primaryTitleLanguageId: {
+            required: "Please provide the title's language"
+          },
+        },
+        submitHandler: function(videoTitlesForm) {
+          videoTitlesForm.submit();
         },
       });
       var videogameForm = $("#timaat-mediadatasets-videogame-form");

@@ -37,7 +37,7 @@
 				</li>'
 			);
 
-			$('#timaat-mediadatasets-medium-type-list').append(this.listView);
+			$('#timaat-mediadatasets-mediumtype-list').append(this.listView);
 			this.updateUI();      
 			var MediaType = this; // save MediaType for system MediaTypes
 
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-mediadatasets-medium-type-meta').data('MediaType', MediaType);
-				$('#timaat-mediadatasets-medium-type-meta').modal('show');			
+				$('#timaat-mediadatasets-mediumtype-meta').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-mediumtype-meta').modal('show');			
 			});
 
 			// remove handler
 			this.listView.find('.timaat-mediatype-remove').click(this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-mediadatasets-medium-type-delete').data('MediaType', MediaType);
-				$('#timaat-mediadatasets-medium-type-delete').modal('show');
+				$('#timaat-mediadatasets-mediumtype-delete').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-mediumtype-delete').modal('show');
 			});
 		}
 

@@ -194,7 +194,9 @@ body.timaat-login-modal-open #wrapper {
 #timaat-mediadatasets-image-form,
 #timaat-mediadatasets-software-form,
 #timaat-mediadatasets-text-form,
-#timaat-mediadatasets-video-form,
+#timaat-mediadatasets-video-metadata,
+#timaat-mediadatasets-video-metadata-form,
+#timaat-mediadatasets-video-titles-form,
 #timaat-mediadatasets-videogame-form {
 	display:none;
 }
@@ -214,7 +216,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-image-list li,
 #timaat-software-list li,
 #timaat-text-list li,
-#timaat-video-list li,
+#timaat-mediadatasets-video-list li,
 #timaat-videogame-list li,
 #timaat-actor-list li {
 	cursor: pointer;
@@ -236,7 +238,7 @@ body.timaat-login-modal-open #wrapper {
 #timaat-image-list li:hover,
 #timaat-software-list li:hover,
 #timaat-text-list li:hover,
-#timaat-video-list li:hover,
+#timaat-mediadatasets-video-list li:hover,
 #timaat-videogame-list li:hover,
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
@@ -257,7 +259,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-image-list-selected,
 .timaat-software-list-selected,
 .timaat-text-list-selected,
-.timaat-video-list-selected,
+.timaat-mediadatasets-video-list-selected,
 .timaat-videogame-list-selected,
 .timaat-actor-list-selected {
 	background-color: #c9e2ff;
@@ -278,7 +280,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-image-list-selected:hover,
 .timaat-software-list-selected:hover,
 .timaat-text-list-selected:hover,
-.timaat-video-list-selected:hover,
+.timaat-mediadatasets-video-list-selected:hover,
 .timaat-videogame-list-selected:hover,
 .timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
@@ -298,7 +300,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-image-chooser,
 .timaat-software-chooser,
 .timaat-text-chooser,
-.timaat-video-chooser,
+.timaat-mediadatasets-video-chooser,
 .timaat-videogame-chooser,
 .timaat-actor-chooser {
 	margin-top: 0.5em;
@@ -318,7 +320,7 @@ body.timaat-login-modal-open #wrapper {
 .timaat-image-remove,
 .timaat-software-remove,
 .timaat-text-remove,
-.timaat-video-remove,
+.timaat-mediadatasets-video-remove,
 .timaat-videogame-remove,
 .timaat-actor-remove {
 	margin-right: 1em;

@@ -26,13 +26,11 @@
 			this.model = model;
 
 			// create and style list view element
-			var editVideoButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-video-edit float-left" id="timaat-video-edit"><i class="fas fa-edit"></i></button>';
-			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-video-remove float-left" id="timaat-video-remove"><i class="fas fa-trash-alt"></i></button>';
-			var uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
+			var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-video-remove float-left" id="timaat-mediadatasets-video-remove"><i class="fas fa-trash-alt"></i></button>';
+			var uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
 			
 			if ( model.id < 0 ) { 
 				deleteVideoButton = '';
-				editVideoButton = '';
 			};
 			if ( model.status != "nofile" )
 				uploadVideoButton = "";
@@ -42,35 +40,34 @@
 					<div class="row">
 						<div class="col-lg-2">
 							<div class=btn-group-vertical>` +
-								editVideoButton +
 								deleteVideoButton +
 							`</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-video-list-name"></span>
+							<span class="timaat-mediadatasets-video-list-name"></span>
 							<br><br>
-							<span class="timaat-video-list-medium-type-id"></span>
+							<span class="timaat-mediadatasets-video-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class=btn-group-vertical>
-							<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-								<i class="fas fa-user"></i>
-							</div>` +
-							uploadVideoButton +
+								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+									<i class="fas fa-user"></i>							
+								</div>` +
+								uploadVideoButton +
 						  `</div>
 						</div>
 					</div>
 				</li>`
 			);
 
-			$('#timaat-video-list').append(this.listView);
+			$('#timaat-mediadatasets-video-list').append(this.listView);
 			
 			var video = this; // save video for system events
 			var listView = this.listView;
 
 			// attach upload functionality
 			if ( model.status == "nofile" ) {
-				this.listView.find('.timaat-video-list-upload').dropzone({
+				this.listView.find('.timaat-mediadatasets-video-list-upload').dropzone({
 					url: "/TIMAAT/api/medium/video/"+video.model.medium.id+"/upload",
 					createImageThumbnails: false,
 					acceptedFiles: 'video/mp4',
@@ -87,7 +84,7 @@
 							if ( file.status == "success" && file.accepted ) {
 								var newvideo = JSON.parse(file.xhr.response);
 								video.model.status = newvideo;
-								listView.find('.timaat-video-list-upload').hide();
+								listView.find('.timaat-mediadatasets-video-list-upload').hide();
 								video.model.width = newvideo.width;
 								video.model.height = newvideo.height;
 								video.model.length = newvideo.length;
@@ -96,7 +93,7 @@
 							this.removeFile(file);
 					}
 				});
-				this.listView.find('.timaat-video-list-upload i').on('click', function(ev) {$(this).parent().click();});
+				this.listView.find('.timaat-mediadatasets-video-list-upload i').on('click', function(ev) {$(this).parent().click();});
 			}
 			
 			
@@ -147,23 +144,17 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-video-form').data('video', video);
-				TIMAAT.MediaDatasets.videoFormData("show", video);				
-				// video.listView.find('.timaat-video-list-tags').popover('show');
-			});
-
-			// edit handler
-			$(this.listView).find('.timaat-video-edit').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-video-form').data('video', video);
-				TIMAAT.MediaDatasets.videoFormData("edit", video);
-				// video.listView.find('.timaat-video-list-tags').popover('show');
+				$('.form').hide();
+				$('#timaat-mediadatasets-video-metadata').show();
+				$('.nav-tabs a[href="#videoDatasheet"]').tab("show");
+				$('#timaat-mediadatasets-video-metadata-form').data('video', video);
+				TIMAAT.MediaDatasets.videoFormDatasheet("show", video);				
+				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-video-remove').click(this, function(ev) {
-      	console.log("TCL: Video -> constructor -> this.listView.find('.timaat-video-remove')");
+			this.listView.find('.timaat-mediadatasets-video-remove').click(this, function(ev) {
+      	console.log("TCL: Video -> constructor -> this.listView.find('.timaat-mediadatasets-video-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-video-delete').data('video', video);
@@ -176,7 +167,7 @@
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-video-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-video-list-name').text(name);
 		}
 
 		remove() {

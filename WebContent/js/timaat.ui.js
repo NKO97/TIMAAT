@@ -115,6 +115,7 @@
 				TIMAAT.VideoPlayer.pause(); // TODO refactor
 				$('.timaat-component').hide();
 				$('.form').hide();
+				$('.media-data-tabs').hide();
 				$('.timaat-sidebar-tab').removeClass('bg-info');
 				$('.timaat-sidebar-tab a').removeClass('selected');
 				$('#timaat-component-'+component).show();

@@ -468,7 +468,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to Title
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-Title")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-Title")
 	private List<Title> titles;
 
 	//bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation

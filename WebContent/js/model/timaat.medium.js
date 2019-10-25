@@ -33,18 +33,22 @@
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
-						<div class="col-lg-2">` +
+						<div class="col-lg-2">
+							<div class=btn-group-vertical>` +
 								deleteMediumButton +
 							`</div>
+						</div>
 						<div class="col-lg-8">
 							<span class="timaat-mediadatasets-medium-list-name"></span>
 							<br><br>
-							<span class="timaat-mediadatasets-medium-list-medium-type-id"></span>
+							<span class="timaat-mediadatasets-medium-list-mediatype-id"></span>
 						</div>
-						<div class="col-lg-2">
-							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
-								<i class="fas fa-user"></i>
-							</div>
+						<div class="col-lg-2 float-right">
+						  <div class=btn-group-vertical>
+								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+									<i class="fas fa-user"></i>							
+								</div>` +
+						  `</div>
 						</div>
 					</div>
 				</li>`
@@ -100,10 +104,11 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('#timaat-mediadatasets-medium-metadata').show();
-				$('.nav-tabs a[href="#mediaData"]').tab("show");
+				// $('#timaat-mediadatasets-medium-metadata-tabs').show();
+				// $('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
+				$('.media-data-tabs').show();
 				$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
-				TIMAAT.MediaDatasets.mediumFormContent("show", medium);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
@@ -124,7 +129,7 @@
 			var type = this.model.mediaType.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-mediadatasets-medium-list-name').text(name);
-			this.listView.find('.timaat-mediadatasets-medium-list-medium-type-id').html(type);
+			this.listView.find('.timaat-mediadatasets-medium-list-mediatype-id').html(type);
 		}
 
 		remove() {

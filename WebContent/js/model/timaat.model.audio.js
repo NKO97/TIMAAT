@@ -44,7 +44,7 @@
 						<div class="col-lg-8">
 							<span class="timaat-audio-list-name"></span>
 							<br><br>
-							<span class="timaat-audio-list-medium-type-id"></span>
+							<span class="timaat-audio-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -105,7 +105,7 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-audio-form').data('audio', audio);
-				TIMAAT.MediaDatasets.audioFormData("show", audio);				
+				TIMAAT.MediaDatasets.audioFormDatasheet("show", audio);				
 				// audio.listView.find('.timaat-audio-list-tags').popover('show');
 			});
 
@@ -114,7 +114,7 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-audio-form').data('audio', audio);
-				TIMAAT.MediaDatasets.audioFormData("edit", audio);
+				TIMAAT.MediaDatasets.audioFormDatasheet("edit", audio);
 				// audio.listView.find('.timaat-audio-list-tags').popover('show');
 			});
 
