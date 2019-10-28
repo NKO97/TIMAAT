@@ -101,6 +101,8 @@ public class MediumServiceEndpoint{
 				video.setStatus(videoStatus(m.getId()));
 				video.setViewToken(issueFileToken(m.getId()));
 			}
+			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
+			m.getMediumAnalysisLists().clear();
 		}
 
 		return Response.ok().entity(mlist).build();
@@ -184,7 +186,8 @@ public class MediumServiceEndpoint{
 		for (MediumVideo m : mediumVideoList ) {
 			m.setStatus(videoStatus(m.getMediumId()));
 			m.setViewToken(issueFileToken(m.getMediumId()));
-//			m.setMediumAnalysisLists(null);
+			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
+			m.getMedium().getMediumAnalysisLists().clear();
 		}
 
 		return Response.ok().entity(mediumVideoList).build();
@@ -1573,7 +1576,7 @@ public class MediumServiceEndpoint{
 	@Secured
 	public Response getVideoStatus(@PathParam("id") int id) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
-		if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
+//		if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
 		return Response.ok().entity(videoStatus(id)).build();
 	}
@@ -1875,7 +1878,7 @@ public class MediumServiceEndpoint{
 		return response;
 	}
 	
-	private String videoStatus(int id) {
+	public static String videoStatus(int id) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 		String status = "nofile";
 		if ( !videoDir.exists() ) return status;
@@ -1958,10 +1961,10 @@ public class MediumServiceEndpoint{
 		}
 	}
 
-	private String issueFileToken(int mediumID) {
+	public static String issueFileToken(int mediumID) {
 		Key key = new TIMAATKeyGenerator().generateKey();
 		String token = Jwts.builder().claim("file", mediumID).setIssuer(
-				uriInfo.getAbsolutePath().toString())
+				TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME))
 				.setIssuedAt(new Date())
 				.setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
 				.signWith(key, SignatureAlgorithm.HS512).compact();

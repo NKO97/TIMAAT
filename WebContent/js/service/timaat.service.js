@@ -109,9 +109,103 @@
 			
 		},
 		
+		getMediaCollections(callback) {
+			console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});
+			
+		},
+
+		createMediacollection(title, comment, callback) {
+			console.log("TCL: createMediacollection -> createMediacollection(title, comment, callback)");
+			console.log("TCL: createMediacollection -> title", title);
+			console.log("TCL: createMediacollection -> comment", comment);
+			var model = {
+					id: 0,
+					isSystemic: 0,
+					title: title,
+					note: comment,
+			};
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection",
+				type:"POST",
+				data: JSON.stringify(model),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+		
+		updateMediacollection(collection) {
+			console.log("TCL: updatMediacollection -> collection", collection);
+			var col = {
+					id: collection.id,
+					isSystemic: 0,
+					title: collection.title,
+					note: collection.note,
+			};
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/"+col.id,
+				type:"PATCH",
+				data: JSON.stringify(col),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				// TODO refactor
+				collection.id = data.id;
+				collection.title = data.title;
+				collection.note = data.note;
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+		
+		removeMediacollection(collection) {
+			console.log("TCL: removeMediacollection -> collection", collection);
+			var col = collection;
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/"+col.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
 		getAnalysisLists(videoID, callback) {
-      console.log("TCL: getAnalysisLists -> getAnalysisLists(videoID, callback) ");
-      console.log("TCL: getAnalysisLists -> videoID", videoID);
+			console.log("TCL: getAnalysisLists -> getAnalysisLists(videoID, callback) ");
+			console.log("TCL: getAnalysisLists -> videoID", videoID);
       // console.log("TCL: getAnalysisLists -> callback", callback);
       // console.log("TCL: getAnalysisLists -> videoID, callback", videoID, callback);
 			jQuery.ajax({
@@ -195,7 +289,7 @@
 		},
 
 		removeAnalysislist(analysislist) {
-      console.log("TCL: removeAnalysislist -> analysislist", analysislist);
+			console.log("TCL: removeAnalysislist -> analysislist", analysislist);
 			var list = analysislist;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,

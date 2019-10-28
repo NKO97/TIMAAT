@@ -91,6 +91,10 @@ public class PropertyManagement {
         }
     }
     
+    public void setProperty(String key, String value) {
+    	props.setProperty(key, value);
+    }
+    
     private void createTIMAATDir() {
         if (DEBUG) System.out.println("Creating " + strTIMAATDir);
 

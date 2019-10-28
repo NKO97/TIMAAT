@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the media_collection_has_medium database table.
@@ -26,7 +28,8 @@ public class MediaCollectionHasMedium implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
-	@JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	@JoinColumn(name="media_collection_id")
+	@JsonIgnore
 	private MediaCollection mediaCollection;
 
 	public MediaCollectionHasMedium() {

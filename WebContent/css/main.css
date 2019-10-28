@@ -57,13 +57,25 @@ body.timaat-login-modal-open #wrapper {
 	opacity: 0.2;
 }
 
-#timaat-videochooser-table th:first-of-type {
+#timaat-videochooser-table th:nth-of-type(2) {
 	width: 200px;
 	min-width: 200px !important;
 }
 
-#timaat-videochooser-table th:nth-of-type(2) {
+#timaat-videochooser-table th:nth-of-type(3) {
 	width: 40% !important;
+}
+
+#timaat-videochooser-table_length, #timaat-videochooser-table_info {
+	padding-left: 1em;
+}
+#timaat-videochooser-table_filter, #timaat-videochooser-table_paginate {
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+#timaat-videochooser-collectionlibrary, #timaat-videochooser-collectionlist li {
+	cursor: pointer;
 }
 
 .timmat-video-thumbnail {

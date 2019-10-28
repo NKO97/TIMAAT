@@ -1070,8 +1070,13 @@
 		},
 
 		setMediumLists: function(media) {
-    	console.log("TCL: setMediumLists -> media", media);
+			console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
+			
+
+			// also set up video chooser list
+			TIMAAT.VideoChooser.setMedia(media);
+
 			$('#timaat-medium-list-loader').remove();
 			// clear old UI list
 			$('#timaat-medium-list').empty();
@@ -1201,9 +1206,6 @@
 		setVideoLists: function(videos) {
 			console.log("TCL: setVideoLists -> videos", videos);
 				if ( !videos ) return;
-
-				// also set video chooser list
-				TIMAAT.VideoChooser.setVideoList(videos);
 
 				$('#timaat-video-list-loader').remove();
 				// clear old UI list

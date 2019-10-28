@@ -12,10 +12,10 @@ public class MediaCollectionHasMediumPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="media_collection_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(name="media_collection_id", insertable=false, updatable=false)
 	private int mediaCollectionId;
 
-	@Column(name="medium_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(name="medium_id", insertable=false, updatable=false)
 	private int mediumId;
 
 	public MediaCollectionHasMediumPK() {

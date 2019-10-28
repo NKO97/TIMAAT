@@ -22,7 +22,7 @@ public class MediaCollectionAnalysisListHasTag implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	@ManyToOne
-	@JoinColumn(name="media_collection_analysis_list_id", nullable=false, insertable=false, updatable=false)
+	@JoinColumn(name="media_collection_analysis_list_id")
 	private MediaCollectionAnalysisList mediaCollectionAnalysisList;
 
 	public MediaCollectionAnalysisListHasTag() {

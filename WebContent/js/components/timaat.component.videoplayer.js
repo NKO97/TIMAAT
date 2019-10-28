@@ -335,13 +335,13 @@
 			});
 			$('#timaat-video-seek-bar').mousemove(function (ev) {
 				if ( !TIMAAT.VideoPlayer.video ) return;
-				var token = TIMAAT.VideoPlayer.model.video.viewToken;
+				var token = TIMAAT.VideoPlayer.model.video.mediumVideo.viewToken;
 				var bar = $(this);
 				var time = Math.round(ev.originalEvent.offsetX/bar.width()*TIMAAT.VideoPlayer.duration);
 				var preview = $('#timaat-video-seek-bar-preview');
 				$('#timaat-video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
 				$('#timaat-video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
-				preview.find('img').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.mediumId+"/thumbnail?token="+token+"&time="+time);
+				preview.find('img').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.id+"/thumbnail?token="+token+"&time="+time);
 			});
 			
 			$('#timaat-user-log-analysislist').popover({
@@ -412,7 +412,7 @@
 					TIMAAT.VideoPlayer.curList.text = comment;					
 					TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
 				} else {
-					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.mediumId, TIMAAT.VideoPlayer._analysislistAdded);
+					TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
 				}
 				modal.modal('hide');
 			});
@@ -671,7 +671,7 @@
 			console.log("TCL: video", video);
 			// setup model
 			this.model.video = video;
-			this.duration = video.length;			
+			this.duration = video.mediumVideo.length;			
 			// remove all annotations and markers
 			this.annotationList.forEach(function(annotation) {annotation.remove()});
 			this.annotationList = [];
@@ -704,10 +704,10 @@
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
 			$('.timaat-videoplayer-ui').show();
-			$('#timaat-videoplayer-video-title').html(video.medium.title.name);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.length));
-			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.medium.id+'/download'+'?token='+video.viewToken;
-			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.height * video.width]]);
+			$('#timaat-videoplayer-video-title').html(video.title.name);
+			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
+			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.mediumVideo.viewToken;
+			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
 			map.setMaxBounds(this.videoBounds);
 			map.fitBounds(this.videoBounds);
 			this.overlay = L.videoOverlay(videoUrl, this.videoBounds, { autoplay: false, loop: false} ).addTo(map);
@@ -1102,8 +1102,8 @@
 		},
 		
 		_analysislistRemoved: function(analysislist) {
-    	console.log("TCL: _analysislistRemoved: function(analysislist)");
-    	console.log("TCL: analysislist", analysislist);
+			console.log("TCL: _analysislistRemoved: function(analysislist)");
+			console.log("TCL: analysislist", analysislist);
 			// sync to server
 			TIMAAT.Service.removeAnalysislist(analysislist);
 

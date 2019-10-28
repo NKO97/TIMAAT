@@ -6,6 +6,8 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import de.bitgilde.TIMAAT.rest.MediumServiceEndpoint;
+
 // import model.AudioCodecInformation;
 
 import java.sql.Timestamp;
@@ -164,6 +166,8 @@ public class MediumVideo implements Serializable {
 	
 	
 	public String getStatus() {
+		if ( this.getMedium() != null )	this.status = MediumServiceEndpoint.videoStatus(this.getMedium().getId());
+				
 		return status;
 	}
 
@@ -172,6 +176,9 @@ public class MediumVideo implements Serializable {
 	}
 
 	public String getViewToken() {
+		if ( this.getMedium() != null && this.viewToken == null )
+			this.viewToken = MediumServiceEndpoint.issueFileToken(this.getMedium().getId());
+
 		return viewToken;
 	}
 

@@ -46,6 +46,7 @@ public class Medium implements Serializable {
 	private String fileHash;
 
 	@Column(name="file_path")
+	@JsonIgnore
 	private String filePath;
 
 	@Column(name="last_edited_at")
@@ -76,9 +77,9 @@ public class Medium implements Serializable {
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
-	// @OneToMany(mappedBy="medium")
-	// private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
-
+	@OneToMany(mappedBy="medium")
+	@JsonIgnore
+	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 	
 	//bi-directional many-to-one association to MediaType
 	@ManyToOne
@@ -140,7 +141,6 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumVideo
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumVideo mediumVideo;
 
 	//bi-directional many-to-many association to ActorHasRole
@@ -336,27 +336,28 @@ public class Medium implements Serializable {
 		this.annotations = annotations;
 	}
 
-	// 	public List<MediaCollectionHasMedium> getMediaCollectionHasMediums() {
-	// 	return this.mediaCollectionHasMediums;
-	// }
+	public List<MediaCollectionHasMedium> getMediaCollectionHasMediums() {
+		return this.mediaCollectionHasMediums;
+	}
 
-	// public void setMediaCollectionHasMediums(List<MediaCollectionHasMedium> mediaCollectionHasMediums) {
-	// 	this.mediaCollectionHasMediums = mediaCollectionHasMediums;
-	// }
+	public void setMediaCollectionHasMediums(List<MediaCollectionHasMedium> mediaCollectionHasMediums) {
+		this.mediaCollectionHasMediums = mediaCollectionHasMediums;
+	}
 
-	// public MediaCollectionHasMedium addMediaCollectionHasMedium(MediaCollectionHasMedium mediaCollectionHasMedium) {
-	// 	getMediaCollectionHasMediums().add(mediaCollectionHasMedium);
-	// 	mediaCollectionHasMedium.setMedium(this);
+	public MediaCollectionHasMedium addMediaCollectionHasMedium(MediaCollectionHasMedium mediaCollectionHasMedium) {
+		getMediaCollectionHasMediums().add(mediaCollectionHasMedium);
+		mediaCollectionHasMedium.setMedium(this);
 
-	// 	return mediaCollectionHasMedium;
-	// }
+		return mediaCollectionHasMedium;
+	}
 
-	// public MediaCollectionHasMedium removeMediaCollectionHasMedium(MediaCollectionHasMedium mediaCollectionHasMedium) {
-	// 	getMediaCollectionHasMediums().remove(mediaCollectionHasMedium);
-	// 	mediaCollectionHasMedium.setMedium(null);
+	public MediaCollectionHasMedium removeMediaCollectionHasMedium(MediaCollectionHasMedium mediaCollectionHasMedium) {
+		getMediaCollectionHasMediums().remove(mediaCollectionHasMedium);
+		mediaCollectionHasMedium.setMedium(null);
 
-	// 	return mediaCollectionHasMedium;
-	// }
+		return mediaCollectionHasMedium;
+	}
+	
 	public MediaType getMediaType() {
 		return this.mediaType;
 	}

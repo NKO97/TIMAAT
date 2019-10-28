@@ -23,7 +23,7 @@
 			component: null,
 			
 			init: function() {
-	    	// console.log("TCL: UI: init: function()");
+				// console.log("TCL: UI: init: function()");
 				$('[data-toggle="popover"]').popover();
 				
 				// init components
@@ -153,8 +153,9 @@
 						    $('body').removeClass('timaat-login-modal-open');
 						    $('#timaat-login-modal').modal('hide');
 						    $('#timaat-user-info').html(e.accountName);							
-								TIMAAT.Settings.loadCategorySets();
-								TIMAAT.Datasets.load();
+						    TIMAAT.VideoChooser.loadCollections();
+							TIMAAT.Settings.loadCategorySets();
+							TIMAAT.Datasets.load();
 						  })
 						  .fail(function(e) {
 	       				console.log("TCL: processLogin fail: e", e);

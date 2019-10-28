@@ -23,7 +23,7 @@ public class MediaCollectionHasTag implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
-	@JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	@JoinColumn(name="media_collection_id")
 	private MediaCollection mediaCollection;
 
 	public MediaCollectionHasTag() {

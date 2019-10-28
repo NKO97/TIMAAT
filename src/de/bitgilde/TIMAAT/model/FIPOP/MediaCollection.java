@@ -2,6 +2,11 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -9,7 +14,7 @@ import java.util.List;
  * The persistent class for the media_collection database table.
  * 
  */
-@Entity
+@Entity(name = "MediaCollection")
 @Table(name="media_collection")
 @NamedQuery(name="MediaCollection.findAll", query="SELECT m FROM MediaCollection m")
 public class MediaCollection implements Serializable {
@@ -50,13 +55,15 @@ public class MediaCollection implements Serializable {
 	@OneToMany(mappedBy="mediaCollection")
 	private List<MediaCollectionHasTag> mediaCollectionHasTags;
 
+	/*
 	//bi-directional many-to-one association to MediaCollectionHasWork
 	@OneToMany(mappedBy="mediaCollection")
 	private List<MediaCollectionHasWork> mediaCollectionHasWorks;
-
+	 */
+	
 	//bi-directional one-to-one association to MediaCollectionSeries
 	@OneToOne(mappedBy="mediaCollection")
-	private MediaCollectionSeries mediaCollectionSery;
+	private MediaCollectionSeries mediaCollectionSeries;
 
 	public MediaCollection() {
 	}
@@ -175,6 +182,7 @@ public class MediaCollection implements Serializable {
 		return mediaCollectionHasTag;
 	}
 
+	/*
 	public List<MediaCollectionHasWork> getMediaCollectionHasWorks() {
 		return this.mediaCollectionHasWorks;
 	}
@@ -196,13 +204,14 @@ public class MediaCollection implements Serializable {
 
 		return mediaCollectionHasWork;
 	}
-
-	public MediaCollectionSeries getMediaCollectionSery() {
-		return this.mediaCollectionSery;
+	 */
+	
+	public MediaCollectionSeries getMediaCollectionSeries() {
+		return this.mediaCollectionSeries;
 	}
 
-	public void setMediaCollectionSery(MediaCollectionSeries mediaCollectionSery) {
-		this.mediaCollectionSery = mediaCollectionSery;
+	public void setMediaCollectionSeries(MediaCollectionSeries mediaCollectionSeries) {
+		this.mediaCollectionSeries = mediaCollectionSeries;
 	}
 
 }

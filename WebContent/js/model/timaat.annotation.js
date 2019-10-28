@@ -369,10 +369,10 @@
 				}
 				
 				_parseSVG(svgitem) {
-		      console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
-					var factor = 450 / TIMAAT.VideoPlayer.model.video.height;
-					var width = TIMAAT.VideoPlayer.model.video.width;
-					var height = TIMAAT.VideoPlayer.model.video.height;
+					console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
+					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 					switch (svgitem.type) {
 						case "rectangle":
 							// [[ height, x], [ y, width]]
@@ -398,11 +398,11 @@
 				}
 				
 				_syncToModel() {
-		      console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
+					console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 					var jsonData = [];
-					var factor = 450 / TIMAAT.VideoPlayer.model.video.height; // TODO get from videobounds
-					var width = TIMAAT.VideoPlayer.model.video.width;
-					var height = TIMAAT.VideoPlayer.model.video.height;
+					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
+					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 					this.svg.items.forEach(function(item) {
 						if ( item instanceof L.Rectangle ) {
 							var jsonItem = {

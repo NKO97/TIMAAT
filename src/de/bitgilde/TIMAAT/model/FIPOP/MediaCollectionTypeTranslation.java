@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the media_collection_type_translation database table.
@@ -28,6 +30,7 @@ public class MediaCollectionTypeTranslation implements Serializable {
 	//bi-directional many-to-one association to MediaCollectionType
 	@ManyToOne
 	@JoinColumn(name="media_collection_type_id", nullable=false)
+	@JsonBackReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
 	private MediaCollectionType mediaCollectionType;
 
 	public MediaCollectionTypeTranslation() {

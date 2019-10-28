@@ -22,7 +22,11 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.ServletContext;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
@@ -41,7 +45,6 @@ public class TIMAATApp extends Application {
     public static EntityManagerFactory emf;
 	public static String systemExt = "";
 
-
     /**
      * TIMAAT Application
      * 
@@ -54,6 +57,9 @@ public class TIMAATApp extends Application {
         
     	if ( System.getProperty("os.name").startsWith("Windows") ) systemExt=".exe";
     	else systemExt = "";
+    	
+    	if ( timaatProps.getProp(PropertyConstants.SERVER_NAME) == null )
+    		timaatProps.setProperty(PropertyConstants.SERVER_NAME.key(), "localhost");
     }
     
     /**
@@ -94,6 +100,7 @@ public class TIMAATApp extends Application {
         resources.add(de.bitgilde.TIMAAT.rest.AnalysislistEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.AnnotationEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.AuthenticationEndpoint.class);
+        resources.add(de.bitgilde.TIMAAT.rest.MediaCollectionEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.MediumServiceEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.CategorySetEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.EventEndpoint.class);

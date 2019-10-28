@@ -29,7 +29,8 @@ public enum PropertyConstants {
     DATABASE_URL ("database.url"),
     DATABASE_USER ("database.user"),
     DATABASE_PASSWORD ("database.password"),
-    FFMPEG_LOCATION ("app.ffmpeg.location");
+    FFMPEG_LOCATION ("app.ffmpeg.location"),
+	SERVER_NAME ("server.name");
     
     private final String propertyKey;
     private final List<String> permissibleValues;
