@@ -128,7 +128,7 @@
 			// console.log("TCL: MediaDatasets: initMedia: function()");		
 			
 			// nav-bar functionality
-			$('#media-tab-meta-form').click(function(event) {
+			$('#media-tab-metadata-form').click(function(event) {
 				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 				$('.form').hide();
 				$('#timaat-mediadatasets-medium-metadata-form').show();
@@ -151,6 +151,7 @@
 				modal.modal('hide');
 				$('#timaat-mediadatasets-medium-metadata-form').hide();
 				$('.media-data-tabs').hide();
+				$('.form').hide();
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
@@ -165,6 +166,8 @@
 
 				// the original medium model (in case of editing an existing medium)
 				var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");				
+        // console.log("TCL: medium", medium);
+
 				// Create/Edit medium window submitted data
 				var formData = $("#timaat-mediadatasets-medium-metadata-form").serializeArray();
 				var formDataObject = {};
@@ -189,6 +192,7 @@
 
 					medium.updateUI();
 					TIMAAT.MediaDatasets.updateMedium(medium);
+					TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
 				} else { // create new medium
 					var model = {
 						id: 0,
@@ -236,8 +240,6 @@
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
 					TIMAAT.MediaDatasets.createMedium(model, title, source);
 				};
-				// console.log("TCL: TIMAAT.MediaDatasets.mediumFormDatasheet('show', $('#timaat-mediadatasets-medium-metadata-form').data('medium'));")
-				// TIMAAT.MediaDatasets.mediumFormDatasheet("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 			});
 
 			// Submit medium titles button functionality
@@ -288,6 +290,7 @@
 							},
 							name: formTitles[i].title,
 						};
+					medium.updateUI();
 					TIMAAT.MediaDatasets.updateTitle(title);
 				};
 				i = medium.model.titles.length;
@@ -304,10 +307,10 @@
 						newTitles.push(title);
 					}
 					console.log("TCL: newTitles", newTitles);
-					TIMAAT.MediaDatasets.createTitles(medium, newTitles);
+					medium.updateUI();
+					TIMAAT.MediaDatasets.addTitles(medium, newTitles);
 				};
-				medium.updateUI();
-				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-medium-titles-form").data("medium"));
+				//TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-medium-titles-form").data("medium"));
 			});
 
 			// edit content form button handler
@@ -956,7 +959,7 @@
 			// console.log("TCL: MediaDatasets: initVideos: function()");
 
 			// nav-bar functionality
-			$('#videos-tab-meta-form').click(function(event) {
+			$('#videos-tab-metadata-form').click(function(event) {
 				$('.nav-tabs a[href="#videoDatasheet"]').tab("show");
 				$('.form').hide();
 				$('#timaat-mediadatasets-video-metadata-form').show();
@@ -1557,12 +1560,12 @@
 			console.log("TCL: addMedium: function()");
 			$('.form').hide();
 			// $('.media-data-tabs').hide();
-			$('#timaat-mediadatasets-medium-metadata-form').data('medium', null);
+			// $('#timaat-mediadatasets-medium-metadata-form').data('medium', null);
 			mediumFormValidator.resetForm();
 			$('#timaat-mediadatasets-medium-metadata-form').trigger('reset');
+			$('.nav-tabs a[href="#mediumDatasheet"]').show();
+			$('.nav-tabs a[href="#mediumTitles"]').hide();
 			$('#timaat-mediadatasets-medium-metadata-form').show();
-			// $('.nav-tabs a[href="#mediumDatasheet"]').show();
-			// $('.nav-tabs a[href="#mediumTitles"]').hide();
 			$('#timaat-mediadatasets-medium-metadata-form-edit').hide();
 			$('#timaat-mediadatasets-medium-metadata-form-submit').show();
 			$('#timaat-mediadatasets-medium-metadata-form-dismiss').show();
@@ -1765,9 +1768,10 @@
 				$('#timaat-mediadatasets-medium-metadata-source-isstillavailable').prop('checked', true);
 			  else $('#timaat-mediadatasets-medium-metadata-source-isstillavailable').prop('checked', false);
 
-			if ( action == "edit") {
+			// if ( action == "edit") {
+				console.log("TCL: medium", medium);
 				$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
-			}
+			// }
 		},
 
 		mediumFormTitles: function(action, medium) {
@@ -1780,6 +1784,30 @@
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
 			mediumTitlesFormValidator.resetForm();
 			$('#timaat-mediadatasets-medium-titles-form').show();
+			// $('#media-tab-titles-form').active();
+
+			if ( action == "show") {
+				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-titles-form-edit').show();
+				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
+				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
+				$('#mediumTitlesLabel').html("Medium Titelliste");
+			}
+			else if (action == "edit") {
+				$('#timaat-mediadatasets-medium-titles-form-submit').show();
+				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
+				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-titles-form-edit').hide();
+				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", true);
+				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
+				$('#timaat-mediadatasets-medium-titles-form-submit').html("Speichern");
+				$('#timaat-mediadatasets-medium-metadata-title').focus();
+			}
 
 			// setup UI
 			// title data
@@ -1787,8 +1815,8 @@
 			var numTitles = medium.model.titles.length;
       console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i< numTitles; i++) {
-				console.log("TCL: i", i);				
-        console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
+				console.log("TCL: TIMAAT.MediaDatasets.titles[i]", medium.model.titles[i]);
+				console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
 				$('[data-role="dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -1804,7 +1832,7 @@
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" value="`+medium.model.titles[i].language.id+`" required>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" name="titleLanguageId" value="`+medium.model.titles[i].language.id+`" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -1825,21 +1853,14 @@
 						</div>
 					</div>`
 					);
+					$('[data-role="titleLanguageId['+medium.model.titles[i].language.id+']"')
+						.find('option[value='+medium.model.titles[i].language.id+']')
+						.attr("selected",true);
 			};
 
-			if ( action == "show") {
-				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", true);
-				$('#timaat-mediadatasets-medium-titles-form-edit').show();
-				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
-				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
-				$('#mediumTitlesLabel').html("Medium Titelliste");
-			}
-			else if (action == "edit") {
+			if ( action == "edit") {
 				var i = medium.model.titles.length;
+        console.log("TCL: i", i);
 				$('[data-role="dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -1876,15 +1897,6 @@
 						</div>
 					</div>`
 				);
-				$('#timaat-mediadatasets-medium-titles-form-submit').show();
-				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
-				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-titles-form-edit').hide();
-				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", true);
-				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", true);
-				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
-				$('#timaat-mediadatasets-medium-titles-form-submit').html("Speichern");
-				$('#timaat-mediadatasets-medium-metadata-title').focus();
 				$('#timaat-mediadatasets-medium-titles-form').data('medium', medium);
 			}
 		},
@@ -2449,6 +2461,8 @@
 
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+				// $('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
+				// return (newMedium);
 
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2513,16 +2527,19 @@
 			};
 		},
 
-		createTitles: async function(medium, newTitles) {
+		addTitles: async function(medium, newTitles) {
     	console.log("TCL: medium", medium);
-			console.log("TCL: createTitles: async function -> newTitles", newTitles);
+			console.log("TCL: addTitles: async function -> newTitles", newTitles);
 			try {
 				// create title
 				var i = 0;
 				for (; i <newTitles.length; i++) {
 					var newTitle = await TIMAAT.MediaService.createTitle(newTitles[i]);
-					medium.model.titles.push(newTitle);
+					console.log("TCL: medium.model.id", medium.model.id);
+					var addedTitle = await TIMAAT.MediaService.addTitle(medium.model.id, newTitle);          
+					medium.model.titles.push(addedTitle);
 				}
+				// TIMAAT.MediaDatasets.updateMedium(medium);
 				
 				// link title and medium
 				// var tempMediumModel = mediumModel;
@@ -2541,9 +2558,12 @@
 		updateMedium: async function(medium) {
 		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
 			try {
-				// update title
+				// update primary title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
 				medium.model.title = tempTitle;
+
+				// update medium_has_title
+
 
 				// update source
 				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
@@ -2641,9 +2661,11 @@
 		// },
 
 		_mediumAdded: async function(medium) {
-    	// console.log("TCL: _mediumAdded: function(medium)");
+			console.log("TCL: _mediumAdded: function(medium)");
+			console.log("TCL: medium", medium);
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
+			TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
 		},
 
 		_mediumSubtypeAdded: async function(mediumSubtype, mediumSubtypeData) {

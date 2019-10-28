@@ -1162,7 +1162,7 @@ public class MediumServiceEndpoint{
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response createTitle(@PathParam("id") int id, String jsonData) {
+	public Response createTitle(@PathParam("medium_id") int mediumId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("MediumServiceEndpoint: createTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1200,6 +1200,73 @@ public class MediumServiceEndpoint{
 		entityTransaction.commit();
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
+
+		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+		
+		System.out.println("MediumServiceEndpoint: title created with id "+newTitle.getId());
+		System.out.println("MediumServiceEndpoint: title created with language id "+newTitle.getLanguage().getId());
+
+		return Response.ok().entity(newTitle).build();
+	}
+
+	@POST
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/title/{id}")
+	@Secured
+	public Response addTitle(@PathParam("mediumid") int mediumId, @PathParam("id") int id, String jsonData) {
+
+		System.out.println("MediumServiceEndpoint: addTitle: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		Title newTitle = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		
+		// parse JSON data
+		try {
+			newTitle = mapper.readValue(jsonData, Title.class);
+		} catch (IOException e) {
+			System.out.println("MediumServiceEndpoint: addTitle: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newTitle == null ) {
+			System.out.println("MediumServiceEndpoint: addTitle: newTitle == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// System.out.println("MediumServiceEndpoint: addTitle: language id: "+newTitle.getLanguage().getId());
+		// sanitize object data
+		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
+		newTitle.setLanguage(language);
+		Medium medium = entityManager.find(Medium.class, mediumId);
+
+		// update log metadata
+		// Not necessary, a title will always be created in conjunction with a medium
+		System.out.println("MediumServiceEndpoint: addTitle: persist title");
+
+		// persist title
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(language);
+		entityManager.persist(newTitle);
+		entityManager.flush();
+		newTitle.setLanguage(language);
+		entityTransaction.commit();
+		entityManager.refresh(newTitle);
+		entityManager.refresh(language);
+
+		// create medium_has_title-table entries
+		entityTransaction.begin();
+		medium.getTitles().add(newTitle);
+		newTitle.getMediums2().add(medium);
+		entityManager.merge(newTitle);
+		entityManager.merge(medium);
+		entityManager.persist(newTitle);
+		entityManager.persist(medium);
+		entityTransaction.commit();
+		entityManager.refresh(medium);
+		entityManager.refresh(newTitle);
 
 		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 		// add log entry

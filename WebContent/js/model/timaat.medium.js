@@ -107,6 +107,7 @@
 				// $('#timaat-mediadatasets-medium-metadata-tabs').show();
 				// $('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 				$('.media-data-tabs').show();
+				$('#media-tab-metadata-form').focus();
 				$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
