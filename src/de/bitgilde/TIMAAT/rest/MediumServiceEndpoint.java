@@ -358,19 +358,23 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response deleteMedium(@PathParam("id") int id) {    
-		System.out.println("MediumServiceEndpoint: deleteMedium");	
+	public Response deleteMedium(@PathParam("id") int id) {
+		System.out.println("MediumServiceEndpoint: deleteMedium");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		// for (Title title:medium.getTitles()) {
+		// 	medium.getTitles().remove(title);
+		// }
 		entityManager.remove(medium.getTitle());
 		entityManager.remove(medium);
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.MEDIUMDELETED);
 		System.out.println("MediumServiceEndpoint: deleteMedium - delete complete");	
 		return Response.ok().build();
@@ -1237,6 +1241,7 @@ public class MediumServiceEndpoint{
 		}
 		// System.out.println("MediumServiceEndpoint: addTitle: language id: "+newTitle.getLanguage().getId());
 		// sanitize object data
+		newTitle.setId(0);
 		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
 		newTitle.setLanguage(language);
 		Medium medium = entityManager.find(Medium.class, mediumId);
@@ -1268,12 +1273,12 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(medium);
 		entityManager.refresh(newTitle);
 
-		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
+		System.out.println("MediumServiceEndpoint: addTitle: add log entry");	
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
 		
-		System.out.println("MediumServiceEndpoint: title created with id "+newTitle.getId());
-		System.out.println("MediumServiceEndpoint: title created with language id "+newTitle.getLanguage().getId());
+		System.out.println("MediumServiceEndpoint: title added with id "+newTitle.getId());
+		System.out.println("MediumServiceEndpoint: title added with language id "+newTitle.getLanguage().getId());
 
 		return Response.ok().entity(newTitle).build();
 	}
@@ -1330,7 +1335,7 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response deleteTitle(@PathParam("id") int id) {    
+		public Response deleteTitle(@PathParam("id") int id) {    
 	System.out.println("MediumServiceEndpoint: deleteTitle");	
 	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 	Title title = entityManager.find(Title.class, id);

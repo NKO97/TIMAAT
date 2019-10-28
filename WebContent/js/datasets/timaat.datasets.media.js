@@ -291,8 +291,7 @@
 									id: Number(formTitleList[i].titleLanguageId),
 								},
 								name: formTitleList[i].title,
-							};
-						medium.updateUI();
+							};						
 						TIMAAT.MediaDatasets.updateTitle(title);
 					};
 				}
@@ -307,7 +306,6 @@
 								},
 								name: formTitleList[i].title,
 							};
-						medium.updateUI();
 						TIMAAT.MediaDatasets.updateTitle(title);
 					};
 					i = medium.model.titles.length;
@@ -323,7 +321,6 @@
 						newTitles.push(title);
 					}
 					console.log("TCL: newTitles", newTitles);
-					medium.updateUI();
 					TIMAAT.MediaDatasets.addTitles(medium, newTitles);
 				}
 				// update existing titles and delete obsolete ones
@@ -337,7 +334,6 @@
 								},
 								name: formTitleList[i].title,
 							};
-						medium.updateUI();
 						TIMAAT.MediaDatasets.updateTitle(title);
 					};
 					var i = formTitleList.length;
@@ -345,6 +341,10 @@
 						TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
 					}
 				}
+				// TIMAAT.MediaDatasets.updateTitles(medium.model.titles);
+				medium.updateUI();
+				$('.form').hide();
+				TIMAAT.MediaDatasets.mediumFormTitles("show", medium);
 			});
 
 			// edit content form button handler
@@ -1829,10 +1829,10 @@
 			// title data
 			var i = 0;
 			var numTitles = medium.model.titles.length;
-      console.log("TCL: medium.model.titles", medium.model.titles);
+      // console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i< numTitles; i++) {
-				console.log("TCL: TIMAAT.MediaDatasets.titles[i]", medium.model.titles[i]);
-				console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
+				// console.log("TCL: TIMAAT.MediaDatasets.titles[i]", medium.model.titles[i]);
+				// console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
 				$('[data-role="dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -2579,9 +2579,9 @@
 				// create title
 				var i = 0;
 				for (; i <newTitles.length; i++) {
-					var newTitle = await TIMAAT.MediaService.createTitle(newTitles[i]);
+					// var newTitle = await TIMAAT.MediaService.createTitle(newTitles[i]);
 					console.log("TCL: medium.model.id", medium.model.id);
-					var addedTitle = await TIMAAT.MediaService.addTitle(medium.model.id, newTitle);          
+					var addedTitle = await TIMAAT.MediaService.addTitle(medium.model.id, newTitles[i]);          
 					medium.model.titles.push(addedTitle);
 				}
 				// TIMAAT.MediaDatasets.updateMedium(medium);
@@ -2684,26 +2684,26 @@
 			};
 		},
 
-		// updateTitles: async function(medium, titles) {
-		// 	console.log("TCL: updateTitle: async function -> titles at beginning of update process: ", titles);
-		// 	try {
-		// 		// update existing titles
-		// 		var i = 0;
-		// 		for (; i <medium.model.titles.length; i++) {
-		// 			var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.titles[i]);
-		// 		}
+		updateTitles: async function(titles) {
+			console.log("TCL: updateTitle: async function -> titles at beginning of update process: ", titles);
+			try {
+				// update existing titles
+				var i = 0;
+				for (; i <titles.length; i++) {
+					var tempTitle = await TIMAAT.MediaService.updateTitle(titles[i]);
+				}
 				
-		// 		// medium.model.title = tempTitle;
+				// medium.model.title = tempTitle;
 
-		// 		// create new titles
+				// create new titles
 
-		// 		// update data that is part of medium (includes updating last edited by/at)
-		// 		// console.log("TCL: updateMedium: async function - medium.model", medium.model);
-		// 		// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
-		// 	} catch(error) {
-		// 		console.log( "error: ", error);
-		// 	};
-		// },
+				// update data that is part of medium (includes updating last edited by/at)
+				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
+				// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+		},
 
 		_mediumAdded: async function(medium) {
 			console.log("TCL: _mediumAdded: function(medium)");
@@ -2751,6 +2751,12 @@
     	// console.log("TCL: _mediumRemoved: function(medium)");
 			// sync to server
 			TIMAAT.MediaService.removeMedium(medium);
+			var i = 0;
+			for (; i < medium.model.titles.length; i++ ) { // remove obsolete titles
+				if ( medium.model.titles[i].id != medium.model.title.id ) {
+					TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
+				}
+			}
 			medium.remove();
 		},
 
