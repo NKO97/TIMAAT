@@ -233,7 +233,8 @@
 			collections.forEach(function(collection) {
 				TIMAAT.VideoChooser._addCollection(collection);
 			});
-
+			
+			if ( !TIMAAT.VideoChooser.videos && TIMAAT.VideoChooser.collections.length > 0 ) TIMAAT.VideoChooser.setCollection(TIMAAT.VideoChooser.collections[0]);
 		},
 
 		updateVideoStatus: function(video) {
@@ -330,6 +331,9 @@
 		setCollection: function(collection) {
 			if ( TIMAAT.VideoChooser.collection == collection ) return;
 			
+			$('#timaat-videochooser-list-loading').attr('style','');
+			$('#timaat-videochooser-table').hide();
+			
 			$('#timaat-videochooser-collectionlibrary').removeClass("active");
 			$('#timaat-videochooser-collectionlist li').removeClass("active");
 			$('#timaat-videochooser-collectionlist li button').addClass("btn-outline");
@@ -337,7 +341,8 @@
 			TIMAAT.VideoChooser.collection = collection;
 			
 			if ( collection == null ) {
-				$('#timaat-videochooser-collectionlibrary').addClass("active");
+				$('#timaat-videochooser-collectionlibrary').addClass("active");				
+				if ( !TIMAAT.VideoChooser.videos ) return;
 				TIMAAT.VideoChooser.setVideoList(TIMAAT.VideoChooser.videos);
 			} else {
 				$('#timaat-videochooser-collection-'+collection.id).addClass("active");
@@ -348,6 +353,8 @@
 				TIMAAT.VideoChooser.setVideoList(videos);
 			}
 			
+			$('#timaat-videochooser-list-loading').attr('style','display:none !important');
+			$('#timaat-videochooser-table').show();
 		},
 		
 		setMedia: function(media) {
@@ -358,7 +365,11 @@
 			media.forEach(function(medium) { if ( medium.mediumVideo ) videos.push(medium); });
 			
 			TIMAAT.VideoChooser.videos = videos;
-			TIMAAT.VideoChooser.setVideoList(videos);
+			
+			if ( !TIMAAT.VideoChooser.collection ) {
+				TIMAAT.VideoChooser.collection = 'init';
+				TIMAAT.VideoChooser.setCollection(null);
+			}
 		},
 		
 		setVideoList: function(videos) {
@@ -366,10 +377,10 @@
 			console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
-			$('#timaat-videochooser-list-loading').attr('style','display:none !important');
-			$('#timaat-videochooser-table').show();
-			
-			if ( TIMAAT.VideoChooser.dt ) TIMAAT.VideoChooser.dt.destroy();
+			if ( TIMAAT.VideoChooser.dt != null ) {
+				TIMAAT.VideoChooser.dt.destroy();
+				TIMAAT.VideoChooser.dt = null;
+			}
 
 			// clear video UI list
 			$('#timaat-videochooser-list').empty();
