@@ -414,6 +414,23 @@
 			});
 		},
 
+		removeTitle(title) {
+			console.log("TCL: removeTitle -> title", title);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
 	}
 	
 }, window));
