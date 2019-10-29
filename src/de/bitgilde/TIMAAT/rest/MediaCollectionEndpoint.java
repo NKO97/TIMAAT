@@ -27,14 +27,12 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
-import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 
@@ -209,7 +207,85 @@ public class MediaCollectionEndpoint {
 
 		return Response.ok().build();
 	}
+	
+	@POST
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/medium/{mediumID}")
+	@Secured
+	public Response addMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumID") int mediumID) {
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
+    	MediaCollection col = em.find(MediaCollection.class, id);
+    	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+    	Medium m = em.find(Medium.class, mediumID);
+    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
+    	
+    	MediaCollectionHasMedium mchm = null;
+    	try {
+        	mchm = (MediaCollectionHasMedium) em.createQuery(
+        			"SELECT mchm FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
+                	.setParameter("collection", col)
+                	.setParameter("medium", m)
+                	.getSingleResult();    		
+    	} catch (Exception e) {
+    		// doesn't matter
+    	}
+    	
+    	if ( mchm == null ) {
+    		mchm = new MediaCollectionHasMedium();
+    		mchm.setMediaCollection(col);
+    		mchm.setMedium(m);
+        	try {
+        		EntityTransaction tx = em.getTransaction();
+        		tx.begin();
+        		em.persist(mchm);
+        		tx.commit();
+            	em.refresh(col);
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        		return Response.notModified().build();
+        	}
+    	}
+    	    	
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONUPDATED);
+
+		return Response.ok().build();
+	}
+
+
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/medium/{mediumID}")
+	@Secured
+	public Response deleteMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumID") int mediumID) {
+    	
+    	EntityManager em = TIMAATApp.emf.createEntityManager();
+    	MediaCollection col = em.find(MediaCollection.class, id);
+    	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+    	Medium m = em.find(Medium.class, mediumID);
+    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+
+    	try {
+    		EntityTransaction tx = em.getTransaction();
+    		tx.begin();
+        	em.createQuery("DELETE FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
+        	.setParameter("collection", col)
+        	.setParameter("medium", m)
+        	.executeUpdate();
+    		tx.commit();
+        	em.refresh(col);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return Response.notModified().build();
+    	}
+    	
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
+
+		return Response.ok().build();
+	}
 
 
 
