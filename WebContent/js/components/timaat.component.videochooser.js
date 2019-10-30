@@ -45,7 +45,7 @@
 				var heading = (col) ? "Mediensammlung bearbeiten" : "Mediensammlung hinzufügen";
 				var submit = (col) ? "Speichern" : "Hinzufügen";
 				var title = (col) ? col.title : "";
-				var comment = (col) ? col.text : "";
+				var comment = (col) ? col.note : "";
 				// setup UI from Video Player state
 				$('#mediacollectionMetaLabel').html(heading);
 				$('#timaat-mediacollection-meta-submit').html(submit);
@@ -290,6 +290,7 @@
 			collections.forEach(function(collection) {
 				TIMAAT.VideoChooser._addCollection(collection);
 			});
+			TIMAAT.VideoChooser._sortCollections();
 			
 			if ( !TIMAAT.VideoChooser.videos && TIMAAT.VideoChooser.collections.length > 0 ) TIMAAT.VideoChooser.setCollection(TIMAAT.VideoChooser.collections[0]);
 		},
@@ -395,6 +396,7 @@
 			$('#timaat-videochooser-list-action').val('add').change();
 			
 			$('#timaat-videochooser-collectionlibrary').removeClass("active");
+			$('#timaat-videochooser-collectionlibrary').addClass("text-info");
 			$('#timaat-videochooser-collectionlist li').removeClass("active");
 			$('#timaat-videochooser-collectionlist li button').addClass("btn-outline");
 			
@@ -403,7 +405,8 @@
 			$('#timaat-videochooser-list-action-remove').prop('disabled', collection == null);
 
 			if ( collection == null ) {
-				$('#timaat-videochooser-collectionlibrary').addClass("active");				
+				$('#timaat-videochooser-collectionlibrary').addClass("active");
+				$('#timaat-videochooser-collectionlibrary').removeClass("text-info");
 				if ( !TIMAAT.VideoChooser.videos ) return;
 				TIMAAT.VideoChooser.setVideoList(TIMAAT.VideoChooser.videos);
 			} else {
@@ -495,8 +498,11 @@
 			console.log("TCL: collection", collection);
 			// sync to server
 			TIMAAT.Service.updateMediacollection(collection);
-			// TODO update UI collection view
+			// update UI collection view
 			collection.ui.find('.collection-title').html(collection.title);
+			$('#timaat-videochooser-list-target-collection option[value="'+collection.id+'"]').text(collection.title);
+			
+			TIMAAT.VideoChooser._sortCollections();
 		},
 		
 		removeMediacollection: function() {
@@ -509,6 +515,7 @@
 		_mediacollectionAdded: function(col) {
 			TIMAAT.VideoChooser.collections.push(col);
 			TIMAAT.VideoChooser._addCollection(col);			
+			TIMAAT.VideoChooser._sortCollections();
 		},
 		
 		_mediacollectionRemoved: function(col) {
@@ -531,6 +538,7 @@
 			else TIMAAT.VideoChooser.setCollection(null);
 			
 			$('#timaat-videochooser-list-target-collection option[value="'+col.id+'"]').remove();			
+			TIMAAT.VideoChooser._sortCollections();
 		},
 		
 		_removeCollectionItemRow: function(row) {
@@ -551,9 +559,14 @@
 			if (index > -1) TIMAAT.VideoChooser.collection.mediaCollectionHasMediums.splice(index, 1);
 			TIMAAT.VideoChooser.dt.row(row).remove().draw();			
 		},
+		
+		_sortCollections: function() {
+			$("#timaat-videochooser-collectionlist li").sort(function sort_li(a, b) { return ($(b).text().toLowerCase()) < ($(a).text().toLowerCase()) ? 1 : -1; }).appendTo('#timaat-videochooser-collectionlist');
+			$("#timaat-videochooser-list-target-collection option").sort(function sort_li(a, b) { return ($(b).text().toLowerCase()) < ($(a).text().toLowerCase()) ? 1 : -1; }).appendTo('#timaat-videochooser-list-target-collection');
+		},
 
 		_addCollection: function(collection) {
-			var colelement = $('<li id="timaat-videochooser-collection-'+collection.id+'" class="list-group-item">\
+			var colelement = $('<li id="timaat-videochooser-collection-'+collection.id+'" class="list-group-item list-group-item-action">\
 				<i class="fas fa-folder"></i> <span class="collection-title">'+collection.title+'</span>'+
 				' <button type="button" onclick="TIMAAT.VideoChooser.removeMediacollection()" class="btn btn-danger btn-outline btn-sm float-right">\
 				<i class="fas fa-trash-alt"></i></button></li>');
@@ -628,6 +641,9 @@
 			
 				
 			// set up events
+			videoelement.on('click', '.timaat-video-thumbnail', function(ev) {
+				videoelement.find('.timaat-video-annotate').click();
+			});
 			videoelement.on('click', '.timaat-video-annotate', function(ev) {
 				if ( video.mediumVideo.status && video.mediumVideo.status == 'nofile' ) {
 					// start upload process
