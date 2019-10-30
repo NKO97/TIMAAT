@@ -156,8 +156,6 @@
 			$("#timaat-mediadatasets-medium-metadata-form-submit").on('click', function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
-				node = document.getElementById("new-title-fields");
-				node.removeChild(node.lastChild);
 				if (!$("#timaat-mediadatasets-medium-metadata-form").valid()) return false;
 
 				// the original medium model (in case of editing an existing medium)
@@ -290,7 +288,7 @@
 					languageId = $(this).val();
           console.log("TCL: languageId", languageId);
 				}));
-				if (!$("#timaat-mediadatasets-medium-titles-form").validate()) return false;
+				// if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					console.log("TCL: titlesInForm", titlesInForm);
@@ -305,11 +303,11 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
+								<label class="sr-only">Title</label>
 								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
 							</div>
 							<div class="col-md-3">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+								<label class="sr-only">Title's Language</label>
 								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+i+`]" name="titleLanguageId" required>
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -368,7 +366,9 @@
 				};
 				// continue only if client side validation has passed
 				event.preventDefault();
-				if (!$("#timaat-mediadatasets-medium-titles-form").validate()) return false;
+				console.log("TCL: Titles form: valid?");
+				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
+				console.log("TCL: Titles form: valid");
 
 				// the original medium model (in case of editing an existing medium)
 				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");			
@@ -498,10 +498,6 @@
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 			});
-		},
-
-		mediumTitlesFormSubmit: function() {
-
 		},
 
 		initAudios: function() {
@@ -1841,11 +1837,11 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
+								<label class="sr-only">Title</label>
 								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
 							</div>
 							<div class="col-md-3">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+								<label class="sr-only">Title's Language</label>
 								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" name="titleLanguageId" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
@@ -1909,11 +1905,11 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
+								<label class="sr-only">Title</label>
 								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
 							</div>
 							<div class="col-md-3">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+								<label class="sr-only">Title's Language</label>
 								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
 									<option value="" disabled selected hidden>[Choose title language...]</option>
 									<option value="2">English</option>
