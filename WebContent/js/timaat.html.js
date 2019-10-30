@@ -4,8 +4,8 @@
       });
 
     // <!-- client side form validation -->
-      var mediumMetadataForm = $("#timaat-mediadatasets-medium-metadata-form");
-      var mediumFormValidator = $("#timaat-mediadatasets-medium-metadata-form").validate({
+      var mediumFormMetadata = $("#timaat-mediadatasets-medium-metadata-form");
+      var mediumFormMetadataValidator = $("#timaat-mediadatasets-medium-metadata-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -44,34 +44,34 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(mediumMetadataForm) {
-          mediumMetadataForm.submit();
+        submitHandler: function(mediumFormMetadata) {
+          mediumFormMetadata.submit();
         },
       });
-      var mediumTitlesForm = $("#timaat-mediadatasets-medium-titles-form");
-      var mediumTitlesFormValidator = $("#timaat-mediadatasets-medium-titles-form").validate({
+      var mediumFormTitles = $("#timaat-mediadatasets-medium-titles-form");
+      var mediumFormTitlesValidator = $("#timaat-mediadatasets-medium-titles-form").validate({
         rules: {
-          primaryTitle: {
+          title: {
             required: true,
             minlength: 3,
             maxlength: 200,
           },
-          primaryTitleLanguageId: {
+          titleLanguageId: {
             required: true,
           },
         },
         messages: {
-          primaryTitle: {
+          title: {
             required: "Enter a title (min length: 3)",
             minlength: "Title too short: min length is 3",
             maxlength: "Title is too long: max length is 200"
           },
-          primaryTitleLanguageId: {
+          titleLanguageId: {
             required: "Please provide the title's language"
           },
         },
-        submitHandler: function(mediumTitlesForm) {
-          mediumTitlesForm.submit();
+        submitHandler: function(mediumFormTitles) {
+          mediumFormTitles.submit();
         },
       });
       var audioForm = $("#timaat-mediadatasets-audio-form");

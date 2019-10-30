@@ -330,6 +330,7 @@ public class MediumServiceEndpoint{
 		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
+		if ( updatedMedium.getTitle() != null ) medium.setTitle(updatedMedium.getTitle());
 
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));

@@ -33,7 +33,7 @@
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
-			TIMAAT.MediaDatasets.initMediaTypes();
+			// TIMAAT.MediaDatasets.initMediaTypes();
 			TIMAAT.MediaDatasets.initAudios();
 			TIMAAT.MediaDatasets.initDocuments();
 			TIMAAT.MediaDatasets.initImages();
@@ -41,6 +41,8 @@
 			TIMAAT.MediaDatasets.initTexts();
 			TIMAAT.MediaDatasets.initVideos();
 			TIMAAT.MediaDatasets.initVideogames();
+			TIMAAT.MediaDatasets.initTitles();
+			TIMAAT.MediaDatasets.titles = [];
 			$('.media-data-tabs').hide();
 		},
 
@@ -134,14 +136,6 @@
 				$('#timaat-mediadatasets-medium-metadata-form').show();
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 			});
-
-			$('#media-tab-titles-form').click(function(event) {
-				$('.nav-tabs a[href="#mediumTitles"]').tab("show");
-				$('.form').hide();
-				TIMAAT.MediaDatasets.setMediumTitleList($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
-				$('#timaat-mediadatasets-medium-titles-form').show();
-				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
-			});
 			
 			// delete medium button functionality (in medium list)
 			$('#timaat-mediadatasets-medium-delete-submit').click(function(ev) {
@@ -162,6 +156,8 @@
 			$("#timaat-mediadatasets-medium-metadata-form-submit").on('click', function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
+				node = document.getElementById("new-title-fields");
+				node.removeChild(node.lastChild);
 				if (!$("#timaat-mediadatasets-medium-metadata-form").valid()) return false;
 
 				// the original medium model (in case of editing an existing medium)
@@ -238,19 +234,141 @@
 					};
 					// Medium has no translation table at the moment
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
+					// TIMAAT.MediaDatasets.titles.length = 0;
+					// TIMAAT.MediaDatasets.titles.push(title);
+					// // TIMAAT.MediaDatasets.titles.model.push(title.model);
+          // console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
 					TIMAAT.MediaDatasets.createMedium(model, title, source);
 				};
 			});
 
+			// edit content form button handler
+			$('#timaat-mediadatasets-medium-metadata-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				// var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
+				// $('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
+			});
+
+			// Cancel add/edit button in content form functionality
+			$('#timaat-mediadatasets-medium-metadata-form-dismiss').click( function(event) {
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+			});
+		},
+
+		initTitles: function() {
+			$('#media-tab-titles-form').click(function(event) {
+				$('.nav-tabs a[href="#mediumTitles"]').tab("show");
+				$('.form').hide();
+				TIMAAT.MediaDatasets.setMediumTitleList($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
+				$('#timaat-mediadatasets-medium-titles-form').show();
+				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+			});
+
+			// edit titles form button handler
+			$('#timaat-mediadatasets-medium-titles-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
+			});
+
+			// Add title button click
+			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(e) {
+				e.preventDefault();
+				console.log("TCL: add title to list")
+				var listEntry = $(this).closest('[data-role="new-title-fields"]');
+				var title = '';
+				var languageId = null;
+				if (listEntry.find('input').each(function(){           
+					title = $(this).val();
+          console.log("TCL: title", title);
+				}));
+				if (listEntry.find('select').each(function(){
+					languageId = $(this).val();
+          console.log("TCL: languageId", languageId);
+				}));
+				if (!$("#timaat-mediadatasets-medium-titles-form").validate()) return false;
+				if (title != '' && languageId != null) {
+					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
+					console.log("TCL: titlesInForm", titlesInForm);
+					var i = Math.floor((titlesInForm.length - 1) / 2) - 1;
+					$('#dynamic-title-fields').append(
+						`<div class="form-group" data-role="title-entry">
+						<div class="form-row">
+							<div class="col-md-2 text-center">
+								<div class="form-check">
+									<label class="sr-only" for="isPrimaryTitle"></label>
+									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
+								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
+							</div>
+							<div class="col-md-3">
+								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+i+`]" name="titleLanguageId" required>
+									<option value="2">English</option>
+									<option value="3">German</option>
+									<option value="4">French</option>
+									<option value="5">Spanish</option>
+									<option value="6">Russian</option>
+									<option value="7">Arabic</option>
+								</select>
+							</div>
+							<div class="col-md-1 text-center">
+								<button class="btn btn-danger" data-role="remove">
+									<span class="fas fa-trash-alt"></span>
+								</button>
+							</div>
+						</div>
+					</div>`
+					);
+					($('[data-role="titleLanguageId['+i+']"]'))
+						.find('option[value='+languageId+']')
+						.attr("selected",true);
+					if (listEntry.find('input').each(function(){
+						console.log("TCL: $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+					if (listEntry.find('select').each(function(){
+						console.log("TCL: $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+				}
+				else {
+					// TODO open modal showing error that not all required fields are set.
+				}
+			});
+
+			// Remove title button click
+			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
+				e.preventDefault();
+				var isPrimaryTitle = $(this).closest('.form-group').find('input[name=isPrimaryTitle]:checked').val();
+				if (isPrimaryTitle == "on") {
+					// TODO modal informing that primary title entry cannot be deleted					
+					console.log("CANNOT DELETE PRIMARY TITLE");
+				}
+				else {
+					// TODO consider undo function or popup asking if user really wants to delete a title
+					console.log("DELETE TITLE ENTRY");
+					$(this).closest('.form-group').remove();
+				}
+			});
+
 			// Submit medium titles button functionality
 			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', function(event) {
-				console.log("TCL: submit title form");
-				// remove last line in form as this one is for a title not added to the list
-				var emptyRow = document.getElementById("dynamic-title-fields");
-				emptyRow.removeChild(emptyRow.lastChild);
+				console.log("TCL: Titles form: submit");
+				var node = document.getElementById("new-title-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild)
+				};
 				// continue only if client side validation has passed
 				event.preventDefault();
-				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
+				if (!$("#timaat-mediadatasets-medium-titles-form").validate()) return false;
 
 				// the original medium model (in case of editing an existing medium)
 				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");			
@@ -258,7 +376,7 @@
 				
 				// Create/Edit medium window submitted data
 				var formData = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
-        console.log("TCL: formData", formData);
+				console.log("TCL: formData", formData);
 				var formTitleList = [];
 				var i = 0;
 				while ( i < formData.length) {
@@ -271,12 +389,12 @@
 						element.isPrimaryTitle = true;
 						element.title = formData[i+1].value;
 						element.titleLanguageId = formData[i+2].value;
-						i = i+3;						
+						i = i+3;
 					} else {
 						element.isPrimaryTitle = false;
 						element.title = formData[i].value;
 						element.titleLanguageId = formData[i+1].value;
-						i = i+2;						
+						i = i+2;
 					};
 					formTitleList[formTitleList.length] = element;
 				}
@@ -291,8 +409,8 @@
 									id: Number(formTitleList[i].titleLanguageId),
 								},
 								name: formTitleList[i].title,
-							};						
-						TIMAAT.MediaDatasets.updateTitle(title);
+							};
+						TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
 				}
 				// update existing titles and add new ones
@@ -306,7 +424,7 @@
 								},
 								name: formTitleList[i].title,
 							};
-						TIMAAT.MediaDatasets.updateTitle(title);
+						TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
 					i = medium.model.titles.length;
 					var newTitles = [];
@@ -334,116 +452,56 @@
 								},
 								name: formTitleList[i].title,
 							};
-						TIMAAT.MediaDatasets.updateTitle(title);
+						TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
-					var i = formTitleList.length;
-					for (; i < medium.model.titles.length; i++ ) { // remove obsolete titles
+					var i = medium.model.titles.length - 1;
+					for (; i >=  formTitleList.length; i-- ) { // remove obsolete titles
+						console.log("TCL: medium.model.titles", medium.model.titles);
 						TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
+						medium.model.titles.pop();				
 					}
 				}
-				// TIMAAT.MediaDatasets.updateTitles(medium.model.titles);
-				medium.updateUI();
+				// set primary title
+				var i = 0;
+				for (; i < formTitleList.length; i++ ) {
+					if (formTitleList[i].isPrimaryTitle) {
+						console.log("TCL: formTitleList[i]", formTitleList[i]);
+						medium.model.title = medium.model.titles[i];
+						TIMAAT.MediaDatasets.updateMedium(medium);
+					}
+				}
+
+				// console.log("TCL: medium: ", medium);
+				// console.log("TCL: medium.model.titles.length", medium.model.titles.length);
+				// i = 0;
+				// TIMAAT.MediaDatasets.titles.length = 0;
+				// for (; i < medium.model.titles.length; i++) {
+				//   console.log("TCL: medium.model.titles.length", medium.model.titles.length);
+				// 	var title = {
+				// 		id: medium.model.titles[i].id,
+				// 			language: {
+				// 				id: medium.model.titles[i].language.id,
+				// 			},
+				// 			name: medium.model.titles[i].name,
+				// 		};
+				// 	TIMAAT.MediaDatasets.titles.push(title);
+				// 	// TIMAAT.MediaDatasets.titles.model.push(title);
+				// }
+				// console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
 				$('.form').hide();
-				TIMAAT.MediaDatasets.mediumFormTitles("show", medium);
-			});
-
-			// edit content form button handler
-			$('#timaat-mediadatasets-medium-metadata-form-edit').on('click', function(event) {
-				event.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				// var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
-				// $('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
-				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
-			});
-
-			// edit titles form button handler
-			$('#timaat-mediadatasets-medium-titles-form-edit').on('click', function(event) {
-				event.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
-				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
-			});
-
-			// Remove title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
-				e.preventDefault();
-				// TODO consider undo function or popup asking if user really wants to delete a title
-				$(this).closest('.form-group').remove();
-			});
-
-			// Add title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="add"]', function(e) {
-				e.preventDefault();
-				// var container = $(this).closest('[data-role="dynamic-title-fields"]');
-				// var new_field_group = container.children().filter('.form-group:first-child').clone();
-				// new_field_group.find('input').each(function(){
-				// 	$(this).val('');
-				// });
-				// container.append(new_field_group);
-				var listEntry = $(this).closest('[data-role="dynamic-title-fields"]');
-				var allFieldsSet = true;
-				if (listEntry.find('input').each(function(){
-					if ($(this).val() == '')
-						allFieldsSet =false;
-					}
-				));
-				if (allFieldsSet) {
-					// var formData = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
-					// var i = Math.floor(formData.length/2);
-          // console.log("TCL: numTitles", i);
-					$(this).closest('[data-role="dynamic-title-fields"]').append(
-						`<div class="form-group" data-role="title-entry">
-						<div class="form-row">
-							<div class="col-md-2 text-center">
-								<div class="form-check">
-									<label class="sr-only" for="isPrimaryTitle"></label>
-									<input class="form-check-input isPrimaryTitle" type="radio"  name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
-							</div>
-							<div class="col-md-3">
-								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId">
-									<option value="" disabled selected hidden>[Choose title language...]</option>
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
-								</select>
-							</div>
-							<div class="col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
-								</button>
-								<button class="btn btn-primary" data-role="add">
-									<span class="fas fa-plus"></span>
-								</button>
-							</div>
-						</div>
-					</div>`
-					);
-				}
-				else {
-					// TODO open modal showing error that not all required fields are set.
-				}
-			});
-
-			// Cancel add/edit button in content form functionality
-			$('#timaat-mediadatasets-medium-metadata-form-dismiss').click( function(event) {
-				TIMAAT.MediaDatasets.mediumFormDatasheet("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+				// TODO reload form with new data
+				// $('.nav-tabs a[href="#mediumTitles"]').trigger('click');
+				// TIMAAT.MediaDatasets.mediumFormTitles("show", medium);
 			});
 
 			// Cancel add/edit button in titles form functionality
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
-				// $('.table-control tr:last').remove();
 				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 			});
+		},
+
+		mediumTitlesFormSubmit: function() {
+
 		},
 
 		initAudios: function() {
@@ -1142,67 +1200,6 @@
 				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
-			// Remove title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
-				e.preventDefault();
-				// TODO consider undo function or popup asking if user really wants to delete a title
-				$(this).closest('.form-group').remove();
-			});
-
-			// Add title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="add"]', function(e) {
-				e.preventDefault();
-				var listEntry = $(this).closest('[data-role="dynamic-title-fields"]');
-				// console.log("TCL: listEntry", listEntry);
-				var allFieldsSet = true;
-				if (listEntry.find('input').each(function(){
-					if ($(this).val() == '')
-						allFieldsSet =false;
-					}
-				));
-				if (allFieldsSet) {
-					$(this).closest('[data-role="dynamic-title-fields"]').append(
-						`<div class="form-group">
-							<div class="form-row">
-								<div class="col-md-2 text-center">
-									<div class="form-check">
-										<label class="sr-only" for="isPrimaryTitle"></label>
-										<input class="form-check-input" type="radio" id="isPrimaryTitle" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label class="sr-only" for="timaat-mediadatasets-video-titles-title">Title</label>
-									<input class="form-control" id="timaat-mediadatasets-video-titles-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
-								</div>
-								<div class="col-md-3">
-									<label class="sr-only" for="timaat-mediadatasets-video-titles-title-language-id">Title's Language</label>
-									<select class="form-control" id="timaat-mediadatasets-video-titles-title-language-id" name="titleLanguageId">
-										<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
-									</select>
-								</div>
-								<div class="col-md-1 text-center">
-									<button class="btn btn-danger" data-role="remove">
-										<span class="fas fa-trash-alt"></span>
-									</button>
-									<button class="btn btn-primary" data-role="add">
-										<span class="fas fa-plus"></span>
-									</button>
-								</div>
-							</div>
-						</div>`
-					);
-				}
-				else {
-					// TODO open modal showing error that not all required fields are set.
-				}
-			});
-
 			// Cancel add/edit button in content form functionality
 			$('#timaat-mediadatasets-video-metadata-form-dismiss').click( function(event) {
 				TIMAAT.MediaDatasets.videoFormDatasheet("show", $("#timaat-mediadatasets-video-metadata-form").data("video"));
@@ -1320,12 +1317,6 @@
 				videogameFormValidator.resetForm();
 				$('#timaat-mediadatasets-videogame-form').hide();
 			});
-		},
-
-		initTitles: function(medium) {
-    	console.log("TCL: medium", medium);
-			titles = medium.model.titles;
-      console.log("TCL: titles", titles);
 		},
 
 		load: function() {
@@ -1568,10 +1559,10 @@
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
 				if ( title.mediumId > 0 )
-					mediumTitles.model.titles.push(new TIMAAT.Title(title)); 
+					mediumTitles.model.titles.push(title); 
 			});
-			TIMAAT.MediaDatasets.titles = mediumTitles;
-			TIMAAT.MediaDatasets.titles.model = medium.model.titles;
+			// TIMAAT.MediaDatasets.titles = mediumTitles;
+			// TIMAAT.MediaDatasets.titles.model = medium.model.titles;
 		},
 
 		setMediumSubtypeTitleList: function(subtype) {
@@ -1595,7 +1586,7 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			$('#timaat-mediadatasets-medium-metadata-form').data('medium', null);
-			mediumFormValidator.resetForm();
+			mediumFormMetadataValidator.resetForm();
 			$('#timaat-mediadatasets-medium-metadata-form').trigger('reset');
 			$('.nav-tabs a[href="#mediumDatasheet"]').show();
 			$('.nav-tabs a[href="#mediumTitles"]').hide();
@@ -1752,7 +1743,7 @@
 		mediumFormDatasheet: function(action, medium) {
     	console.log("TCL: medium", medium);
 			$('#timaat-mediadatasets-medium-metadata-form').trigger('reset');
-			mediumFormValidator.resetForm();
+			mediumFormMetadataValidator.resetForm();
 			$('.media-data-tabs').show();
 			$('.nav-tabs a[href="#mediumDatasheet"]').focus();
 			$('#timaat-mediadatasets-medium-metadata-form').show();
@@ -1812,18 +1803,25 @@
 		},
 
 		mediumFormTitles: function(action, medium) {
-    	console.log("TCL: timaat.datasets.media -> mediumFormTitles");
-			// console.log("TCL: action", action);
+    	console.log("TCL: mediumFormTitles: action, medium", action, medium);
 			var node = document.getElementById("dynamic-title-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
 			};
+			var node = document.getElementById("new-title-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
-			mediumTitlesFormValidator.resetForm();
-			$('#timaat-mediadatasets-medium-titles-form').show();
+			// document.forms['timaat-mediadatasets-medium-titles-form'].reset();
+			// $('#timaat-mediadatasets-medium-titles-form')[0].reset();
+			// $('.form').each(function() {
+			// 	this.reset();
+			// });
+			mediumFormTitlesValidator.resetForm();
 			$('.media-data-tabs').show();
 			$('.nav-tabs a[href="#mediumTitles"]').focus();
-
+			$('#timaat-mediadatasets-medium-titles-form').show();
 			
 			// setup UI
 			// title data
@@ -1839,7 +1837,7 @@
 							<div class="col-md-2 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isPrimaryTitle"></label>
-									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="primaryTitle[`+medium.model.titles[i].id+`]">
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -1848,7 +1846,7 @@
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" name="titleLanguageId" value="`+medium.model.titles[i].language.id+`" required>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" name="titleLanguageId" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -1862,9 +1860,6 @@
 								<button class="btn btn-danger" data-role="remove">
 									<span class="fas fa-trash-alt"></span>
 								</button>
-								<button class="btn btn-primary" data-role="add">
-									<span class="fas fa-plus"></span>
-								</button>
 							</div>
 						</div>
 					</div>`
@@ -1872,6 +1867,10 @@
 					$('[data-role="titleLanguageId['+medium.model.titles[i].language.id+']"')
 						.find('option[value='+medium.model.titles[i].language.id+']')
 						.attr("selected",true);
+					if (medium.model.titles[i].id == medium.model.title.id) {
+						$('[data-role="primaryTitle['+medium.model.titles[i].id+']"')
+							.prop("checked",true);
+					}
 			};
 
 			if ( action == "show") {
@@ -1881,6 +1880,8 @@
 				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", false);
 				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
+				$('[data-role="new-title-fields"').hide();
+				$('.title-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
 				$('#mediumTitlesLabel').html("Medium Titelliste");
@@ -1892,27 +1893,28 @@
 				$('#timaat-mediadatasets-medium-titles-form-edit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", true);
+				$('[data-role="new-title-fields"').show();
+				$('.title-form-divider').show();
 				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
 				$('#timaat-mediadatasets-medium-titles-form-submit').html("Speichern");
 				$('#timaat-mediadatasets-medium-metadata-title').focus();
-				var i = medium.model.titles.length;
-        console.log("TCL: i", i);
-				$('[data-role="dynamic-title-fields"]').append(
+
+				// fields for new title entry
+				$('[data-role="new-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
 							<div class="col-md-2 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isPrimaryTitle"></label>
-									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+									<span>Add new title:</span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-name">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
+								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only" for="timaat-mediadatasets-medium-titles-title-language-id">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId">
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
 									<option value="" disabled selected hidden>[Choose title language...]</option>
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -1923,9 +1925,6 @@
 								</select>
 							</div>
 							<div class="col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
-								</button>
 								<button class="btn btn-primary" data-role="add">
 									<span class="fas fa-plus"></span>
 								</button>
@@ -2556,7 +2555,8 @@
 			console.log("TCL: createTitle: async function -> titleModel", titleModel);
 			try {
 				// create title
-				var newTitle = await TIMAAT.MediaService.createTitle(titleModel.model);
+				var newTitleModel = await TIMAAT.MediaService.createTitle(titleModel.model);
+        console.log("TCL: newTitleModel", newTitleModel);
 				
 				// link title and medium
 				// var tempMediumModel = mediumModel;
@@ -2564,8 +2564,8 @@
 				// tempMediumModel.source = source;
 				// var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 
-				// push new medium to dataset model
-				// await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+				// push new title to dataset model
+				// await TIMAAT.MediaDatasets._titleAdded(newTitleModel);
 
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2573,16 +2573,15 @@
 		},
 
 		addTitles: async function(medium, newTitles) {
-    	console.log("TCL: medium", medium);
-			console.log("TCL: addTitles: async function -> newTitles", newTitles);
+			console.log("TCL: addTitles: async function -> medium, newTitles", medium, newTitles);
 			try {
 				// create title
 				var i = 0;
 				for (; i <newTitles.length; i++) {
 					// var newTitle = await TIMAAT.MediaService.createTitle(newTitles[i]);
-					console.log("TCL: medium.model.id", medium.model.id);
-					var addedTitle = await TIMAAT.MediaService.addTitle(medium.model.id, newTitles[i]);          
-					medium.model.titles.push(addedTitle);
+					var addedTitleModel = await TIMAAT.MediaService.addTitle(medium.model.id, newTitles[i]);
+					medium.model.titles.push(addedTitleModel);
+          console.log("TCL: medium.model.titles", medium.model.titles);
 				}
 				// TIMAAT.MediaDatasets.updateMedium(medium);
 				
@@ -2592,12 +2591,17 @@
 				// tempMediumModel.source = source;
 				// var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 
-				// push new medium to dataset model
-				// await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
-
 			} catch(error) {
 				console.log( "error: ", error);
 			};
+			// try {
+			// 	// push new title to dataset model
+			// 	console.log("TCL: addedTitleModel", addedTitleModel);
+			// 	await TIMAAT.MediaDatasets._titleAdded(addedTitleModel);
+
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
 		},
 
 		updateMedium: async function(medium) {
@@ -2669,33 +2673,17 @@
 			};
 		},
 
-		updateTitle: async function(title) {
+		updateTitle: async function(title, medium) {
 			console.log("TCL: updateTitle: async function -> title at beginning of update process: ", title);
 			try {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(title);
-				// medium.model.title = tempTitle;
-
-				// update data that is part of medium (includes updating last edited by/at)
-				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
-				// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
-			} catch(error) {
-				console.log( "error: ", error);
-			};
-		},
-
-		updateTitles: async function(titles) {
-			console.log("TCL: updateTitle: async function -> titles at beginning of update process: ", titles);
-			try {
-				// update existing titles
+				console.log("TCL: tempTitle", tempTitle);
 				var i = 0;
-				for (; i <titles.length; i++) {
-					var tempTitle = await TIMAAT.MediaService.updateTitle(titles[i]);
+				for (; i < medium.model.titles.length; i++) {
+					if (medium.model.titles[i].id == title.id)
+						medium.model.titles[i] = tempTitle;
 				}
-				
-				// medium.model.title = tempTitle;
-
-				// create new titles
 
 				// update data that is part of medium (includes updating last edited by/at)
 				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
@@ -2704,6 +2692,27 @@
 				console.log( "error: ", error);
 			};
 		},
+
+		// updateTitles: async function(titles) {
+		// 	console.log("TCL: updateTitle: async function -> titles at beginning of update process: ", titles);
+		// 	try {
+		// 		// update existing titles
+		// 		var i = 0;
+		// 		for (; i <titles.length; i++) {
+		// 			var tempTitle = await TIMAAT.MediaService.updateTitle(titles[i]);
+		// 		}
+				
+		// 		// medium.model.title = tempTitle;
+
+		// 		// create new titles
+
+		// 		// update data that is part of medium (includes updating last edited by/at)
+		// 		// console.log("TCL: updateMedium: async function - medium.model", medium.model);
+		// 		// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
+		// 	} catch(error) {
+		// 		console.log( "error: ", error);
+		// 	};
+		// },
 
 		_mediumAdded: async function(medium) {
 			console.log("TCL: _mediumAdded: function(medium)");
@@ -2746,6 +2755,16 @@
 					break;
 			}
 		},
+
+		// _titleAdded: async function(title) {
+		// 	console.log("TCL: _titleAdded: function(title)");
+		// 	console.log("TCL: title", title);
+		// 	console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
+		// 	// TIMAAT.MediaDatasets.titles.model.push(title);
+		// 	TIMAAT.MediaDatasets.titles.push(title);
+		// 	// TIMAAT.MediaDatasets.titles.push(new TIMAAT.Title(title));
+    //   console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
+		// },
 		
 		_mediumRemoved: function(medium) {
     	// console.log("TCL: _mediumRemoved: function(medium)");
@@ -2755,6 +2774,7 @@
 			for (; i < medium.model.titles.length; i++ ) { // remove obsolete titles
 				if ( medium.model.titles[i].id != medium.model.title.id ) {
 					TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
+					medium.model.titles.splice(i,1);
 				}
 			}
 			medium.remove();
