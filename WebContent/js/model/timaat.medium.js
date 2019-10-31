@@ -54,9 +54,10 @@
 				</li>`
 			);
 
-			$('#timaat-mediadatasets-medium-list').append(this.listView);
-			this.updateUI();      
+			$('#timaat-mediadatasets-medium-list').append(this.listView);     
 			var medium = this; // save medium for system events
+
+			this.updateUI(); 
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
@@ -104,9 +105,7 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				// $('#timaat-mediadatasets-medium-metadata-tabs').show();
-				// $('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-				$('.media-data-tabs').show();
+				$('.medium-data-tab').show();
 				$('.nav-tabs a[href="#mediumTitles"]').show();
 				$('.nav-tabs a[href="#mediumDatasheet"]').focus();
 				$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);

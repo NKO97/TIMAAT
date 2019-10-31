@@ -95,9 +95,8 @@
 				});
 				this.listView.find('.timaat-mediadatasets-video-list-upload i').on('click', function(ev) {$(this).parent().click();});
 			}
-			
-			
-			this.updateUI();      
+						
+			this.updateUI();
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
@@ -145,8 +144,9 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('#timaat-mediadatasets-video-metadata').show();
-				$('.nav-tabs a[href="#videoDatasheet"]').tab("show");
+				$('.videos-data-tabs').show();
+				$('.nav-tabs a[href="#mediumTitles"]').show();
+				$('.nav-tabs a[href="#videoDatasheet"]').focus();
 				$('#timaat-mediadatasets-video-metadata-form').data('video', video);
 				TIMAAT.MediaDatasets.videoFormDatasheet("show", video);				
 				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');

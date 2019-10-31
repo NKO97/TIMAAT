@@ -34,7 +34,7 @@
 				container: 'body',
 				boundary: 'viewport',				
 			});
-			$('#timaat-mediadatasets-medioum-categories').on('inserted.bs.popover', function () {
+			$('#timaat-mediadatasets-medium-categories').on('inserted.bs.popover', function () {
 				var categories = "";
 				if ( TIMAAT.VideoPlayer.video == null ) {
 					$('.timaat-category-input').html('Kein Video geladen');

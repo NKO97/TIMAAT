@@ -130,7 +130,7 @@
 			// console.log("TCL: MediaDatasets: initMedia: function()");		
 			
 			// nav-bar functionality
-			$('#media-tab-metadata-form').click(function(event) {
+			$('#media-tab-medium-metadata-form').click(function(event) {
 				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 				$('.form').hide();
 				$('#timaat-mediadatasets-medium-metadata-form').show();
@@ -244,8 +244,6 @@
 			$('#timaat-mediadatasets-medium-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				// var medium = $("#timaat-mediadatasets-medium-metadata-form").data("medium");
-				// $('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
@@ -265,12 +263,36 @@
 				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 			});
 
+			// $('#medium-subtype-tab-titles-form').click(function(event) {
+			// 	$('.nav-tabs a[href="#mediumSubtypeTitles"]').tab("show");
+			// 	$('.form').hide();
+			// 	TIMAAT.MediaDatasets.setMediumTitleList($("#timaat-mediadatasets-medium-metadata-form").data("medium"))
+			// 	$('#timaat-mediadatasets-medium-titles-form').show();
+			// 	TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+			// });
+
+			$('#videos-tab-titles-form').click(function(event) {
+				$('.nav-tabs a[href="#mediumtitles"]').tab("show");
+				$('.form').hide();
+				TIMAAT.MediaDatasets.setMediumSubtypeTitleList($("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"))
+				$('#timaat-mediadatasets-medium-titles-form').show();
+				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
+			});
+			
 			// edit titles form button handler
 			$('#timaat-mediadatasets-medium-titles-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
+			});
+
+			// edit titles form button handler
+			$('#timaat-mediadatasets-video-titles-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
+				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
 			// Add title button click
@@ -304,11 +326,11 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
+								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+i+`]" name="titleLanguageId" required>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id"  name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]"required>
 									<option value="2">English</option>
 									<option value="3">German</option>
 									<option value="4">French</option>
@@ -328,6 +350,16 @@
 					($('[data-role="titleLanguageId['+i+']"]'))
 						.find('option[value='+languageId+']')
 						.attr("selected",true);
+					$('input[name="title['+i+']"').rules("add",
+					{
+						required: true,
+						minlength: 3,
+						maxlength: 200,
+					});
+				$('select[name="titleLanguageId['+i+']"').rules("add",
+					{
+						required: true,
+					});
 					if (listEntry.find('input').each(function(){
 						console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
@@ -358,25 +390,61 @@
 			});
 
 			// Submit medium titles button functionality
-			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', function(event) {
+			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', async function(event) {
 				console.log("TCL: Titles form: submit");
+				// add rules to dynamically added form fields
+				console.log("TCL: Titles form: valid?");
+				// continue only if client side validation has passed
+				event.preventDefault();
 				var node = document.getElementById("new-title-fields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild)
 				};
-				// continue only if client side validation has passed
-				event.preventDefault();
-				console.log("TCL: Titles form: valid?");
-				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
+				// test if form is valid 
+				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) {
+					$('[data-role="new-title-fields"]').append(
+						`<div class="form-group" data-role="title-entry">
+							<div class="form-row">
+								<div class="col-md-2 text-center">
+									<div class="form-check">
+										<span>Add new title:</span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only">Title</label>
+									<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
+								</div>
+								<div class="col-md-3">
+									<label class="sr-only">Title's Language</label>
+									<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+										<option value="" disabled selected hidden>[Choose title language...]</option>
+										<option value="2">English</option>
+										<option value="3">German</option>
+										<option value="4">French</option>
+										<option value="5">Spanish</option>
+										<option value="6">Russian</option>
+										<option value="7">Arabic</option>
+									</select>
+								</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-primary" data-role="add">
+										<span class="fas fa-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+					);					
+					return false;
+				}
 				console.log("TCL: Titles form: valid");
 
 				// the original medium model (in case of editing an existing medium)
 				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");			
-				console.log("TCL: medium", medium);
+				// console.log("TCL: medium", medium);
 				
 				// Create/Edit medium window submitted data
 				var formData = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
-				console.log("TCL: formData", formData);
+				// console.log("TCL: formData", formData);
 				var formTitleList = [];
 				var i = 0;
 				while ( i < formData.length) {
@@ -398,7 +466,7 @@
 					};
 					formTitleList[formTitleList.length] = element;
 				}
-				console.log("TCL: formTitleList", formTitleList);
+				// console.log("TCL: formTitleList", formTitleList);
 				// only updates to existing titles
 				if (formTitleList.length == medium.model.titles.length) {
 					var i = 0;
@@ -410,7 +478,7 @@
 								},
 								name: formTitleList[i].title,
 							};
-						TIMAAT.MediaDatasets.updateTitle(title, medium);
+						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
 				}
 				// update existing titles and add new ones
@@ -424,7 +492,7 @@
 								},
 								name: formTitleList[i].title,
 							};
-						TIMAAT.MediaDatasets.updateTitle(title, medium);
+						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
 					i = medium.model.titles.length;
 					var newTitles = [];
@@ -438,8 +506,7 @@
 							};
 						newTitles.push(title);
 					}
-					console.log("TCL: newTitles", newTitles);
-					TIMAAT.MediaDatasets.addTitles(medium, newTitles);
+					await TIMAAT.MediaDatasets.addTitles(medium, newTitles);
 				}
 				// update existing titles and delete obsolete ones
 				else if (formTitleList.length < medium.model.titles.length) {
@@ -452,11 +519,10 @@
 								},
 								name: formTitleList[i].title,
 							};
-						TIMAAT.MediaDatasets.updateTitle(title, medium);
+						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
 					var i = medium.model.titles.length - 1;
 					for (; i >=  formTitleList.length; i-- ) { // remove obsolete titles
-						console.log("TCL: medium.model.titles", medium.model.titles);
 						TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
 						medium.model.titles.pop();				
 					}
@@ -465,9 +531,8 @@
 				var i = 0;
 				for (; i < formTitleList.length; i++ ) {
 					if (formTitleList[i].isPrimaryTitle) {
-						console.log("TCL: formTitleList[i]", formTitleList[i]);
 						medium.model.title = medium.model.titles[i];
-						TIMAAT.MediaDatasets.updateMedium(medium);
+						await TIMAAT.MediaDatasets.updateMedium(medium);
 					}
 				}
 
@@ -497,6 +562,11 @@
 			// Cancel add/edit button in titles form functionality
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-medium-metadata-form").data("medium"));
+			});
+
+			// Cancel add/edit button in titles form functionality
+			$('#timaat-mediadatasets-video-titles-form-dismiss').click( function(event) {
+				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
 			});
 		},
 
@@ -1054,15 +1124,6 @@
 				TIMAAT.MediaDatasets.videoFormDatasheet('show', $("#timaat-mediadatasets-video-metadata-form").data("video"));
 			});
 
-			$('#videos-tab-titles-form').click(function(event) {
-				$('.nav-tabs a[href="#videoTitles"]').tab("show");
-				$('.form').hide();
-				TIMAAT.MediaDatasets.setMediumSubtypeTitleList($("#timaat-mediadatasets-video-metadata-form").data("video"))
-				$('#timaat-mediadatasets-video-titles-form').show();
-				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
-			});
-			
-
 			// delete video button functionality (in video list)
 			$('#timaat-mediadatasets-video-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-video-delete');
@@ -1070,6 +1131,8 @@
 				if (video) TIMAAT.MediaDatasets._videoSubtypeRemoved(video);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-video-metadata-form').hide();
+				$('.videos-data-tabs').hide();
+				$('.form').hide();
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
@@ -1083,7 +1146,8 @@
 				if (!$("#timaat-mediadatasets-video-metadata-form").valid()) return false;
 
 				// the original video model (in case of editing an existing video)
-				var video = $("#timaat-mediadatasets-video-metadata-form").data("video");				
+				var video = $("#timaat-mediadatasets-video-metadata-form").data("video");
+
 				// Create/Edit video window submitted data
 				var formData = $("#timaat-mediadatasets-video-metadata-form").serializeArray();
 				var formDataObject = {};
@@ -1116,6 +1180,7 @@
 
 					video.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
+					TIMAAT.MediaDatasets.mediumSubtypeFormDatasheet("show", "video", video);
 				} else { // create new video
 					var model = {
 						mediumId: 0,
@@ -1177,33 +1242,20 @@
 					// };					
 					TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title, source);
 				}
-				TIMAAT.MediaDatasets.videoFormDatasheet("show", $("#timaat-mediadatasets-video-metadata-form").data("video"));
+				// TIMAAT.MediaDatasets.videoFormDatasheet("show", $("#timaat-mediadatasets-video-metadata-form").data("video"));
 			});
 
 			// edit content form button handler
 			$('#timaat-mediadatasets-video-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.videoFormDatasheet("edit", $("#timaat-mediadatasets-video-metadata-form").data("video"));
-				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
-			});
-
-			// edit titles form button handler
-			$('#timaat-mediadatasets-video-titles-form-edit').on('click', function(event) {
-				event.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
+				TIMAAT.MediaDatasets.mediumSubtypeFormDatasheet("edit", "video", $("#timaat-mediadatasets-video-metadata-form").data("video"));
 				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
 			// Cancel add/edit button in content form functionality
 			$('#timaat-mediadatasets-video-metadata-form-dismiss').click( function(event) {
-				TIMAAT.MediaDatasets.videoFormDatasheet("show", $("#timaat-mediadatasets-video-metadata-form").data("video"));
-			});
-
-			// Cancel add/edit button in titles form functionality
-			$('#timaat-mediadatasets-video-titles-form-dismiss').click( function(event) {
-				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-video-metadata-form").data("video.model.medium"));
+				TIMAAT.MediaDatasets.mediumSubtypeFormDatasheet("show", "video", $("#timaat-mediadatasets-video-metadata-form").data("video"));
 			});
 		},
 
@@ -1608,7 +1660,7 @@
 			switch (mediumSubtype) {
 				case "audio":
 					$('#timaat-mediadatasets-audio-form').data('audio', null);
-					audioFormValidator.resetForm();
+					audioFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-audio-form').trigger('reset');
 					$('#timaat-mediadatasets-audio-form').show();
 					$('#timaat-audio-meta-submit').show();
@@ -1626,7 +1678,7 @@
 
 				case "document":
 					$('#timaat-mediadatasets-document-form').data('document', null);
-					documentFormValidator.resetForm();
+					documentFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-document-form').trigger('reset');
 					$('#timaat-mediadatasets-document-form').show();
 					$('#timaat-document-meta-submit').show();
@@ -1644,7 +1696,7 @@
 
 				case "image":
 					$('#timaat-mediadatasets-image-form').data('image', null);
-					imageFormValidator.resetForm();
+					imageFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-image-form').trigger('reset');
 					$('#timaat-mediadatasets-image-form').show();
 					$('#timaat-image-meta-submit').show();
@@ -1662,7 +1714,7 @@
 
 				case "software":
 					$('#timaat-mediadatasets-software-form').data('software', null);
-					softwareFormValidator.resetForm();
+					softwareFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-software-form').trigger('reset');
 					$('#timaat-mediadatasets-software-form').show();
 					$('#timaat-software-meta-submit').show();
@@ -1680,7 +1732,7 @@
 
 				case "text":
 					$('#timaat-mediadatasets-text-form').data('text', null);
-					textFormValidator.resetForm();
+					textFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-text-form').trigger('reset');
 					$('#timaat-mediadatasets-text-form').show();
 					$('#timaat-text-meta-submit').show();
@@ -1697,11 +1749,14 @@
 					break;
 
 				case "video":
+        	console.log("TCL: video", mediumSubtype);
+					$('.videos-data-tabs').hide();
 					$('#timaat-mediadatasets-video-metadata-form').data('video', null);
-					videoFormValidator.resetForm();
+					videoFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-video-metadata-form').trigger('reset');
+					$('.nav-tabs a[href="#videoDatasheet"]').show();
+					$('.nav-tabs a[href="#mediumTitles"]').hide();
 					$('#timaat-mediadatasets-video-metadata-form').show();
-					$('.nav-tabs a[href="#videoTitles"]').hide();
 					$('#timaat-mediadatasets-video-metadata-form-edit').hide();
 					$('#timaat-mediadatasets-video-metadata-form-submit').show();
 					$('#timaat-mediadatasets-video-metadata-form-dismiss').show();
@@ -1718,7 +1773,7 @@
 
 				case "videogame":
 					$('#timaat-mediadatasets-videogame-form').data('videogame', null);
-					videogameFormValidator.resetForm();
+					videogameFormMetadataValidator.resetForm();
 					$('#timaat-mediadatasets-videogame-form').trigger('reset');
 					$('#timaat-mediadatasets-videogame-form').show();
 					$('#timaat-videogame-meta-submit').show();
@@ -1740,7 +1795,7 @@
     	console.log("TCL: medium", medium);
 			$('#timaat-mediadatasets-medium-metadata-form').trigger('reset');
 			mediumFormMetadataValidator.resetForm();
-			$('.media-data-tabs').show();
+			$('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumDatasheet"]').focus();
 			$('#timaat-mediadatasets-medium-metadata-form').show();
 
@@ -1758,8 +1813,8 @@
 				$('#timaat-mediadatasets-medium-metadata-form-dismiss').show();
 				$('#timaat-mediadatasets-medium-metadata-form :input').prop("disabled", false);
 				$('#timaat-mediadatasets-medium-metadata-mediatype-id').prop("disabled", true);
-				$("#timaat-mediadatasets-medium-metadata-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
-				$("#timaat-mediadatasets-medium-metadata-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
+				$('#timaat-mediadatasets-medium-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
+				$('#timaat-mediadatasets-medium-metadata-source-lastaccessed').datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				$('#timaat-mediadatasets-medium-metadata-form-edit').hide();
 				$('#timaat-mediadatasets-medium-metadata-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-metadata-form-edit :input').prop("disabled", true);
@@ -1815,7 +1870,7 @@
 			// 	this.reset();
 			// });
 			mediumFormTitlesValidator.resetForm();
-			$('.media-data-tabs').show();
+			$('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumTitles"]').focus();
 			$('#timaat-mediadatasets-medium-titles-form').show();
 			
@@ -1838,11 +1893,11 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
+								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title[`+i+`]" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" name="titleLanguageId" required>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -1865,8 +1920,18 @@
 						.attr("selected",true);
 					if (medium.model.titles[i].id == medium.model.title.id) {
 						$('[data-role="primaryTitle['+medium.model.titles[i].id+']"')
-							.prop("checked",true);
+							.prop("checked",true);							
 					}
+					$('input[name="title['+i+']"').rules("add",
+						{
+							required: true,
+							minlength: 3,
+							maxlength: 200,
+						});
+					$('select[name="titleLanguageId['+i+']"').rules("add",
+						{
+							required: true,
+						});
 			};
 
 			if ( action == "show") {
@@ -1906,7 +1971,7 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
+								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
@@ -2219,189 +2284,109 @@
 			}
 		},
 
-		videoFormDatasheet: function(action, video) {
+		mediumSubtypeFormDatasheet: function(action, subtype, mediumSubtype) {
+    	console.log("TCL: action, subtype, mediumSubtype", action, subtype, mediumSubtype);
 			$('#timaat-mediadatasets-video-metadata-form').trigger('reset');
-			videoFormValidator.resetForm();
-			$('#timaat-mediadatasets-video-metadata-form').show();
+			switch (subtype) {
+				case "audio":
+					audioFormMetadataValidator.resetForm();
+					break;
+				case "mediumDocument":
+					documentFormMetadataValidator.resetForm();
+					break;
+				case "image":
+					imageFormMetadataValidator.resetForm();
+					break;
+				case "software":
+					softwareFormMetadataValidator.resetForm();
+					break;
+				case "text":
+					textFormMetadataValidator.resetForm();
+					break;
+				case "video":
+					videoFormMetadataValidator.resetForm();
+					break;
+				case "videogame":
+					videogameFormMetadataValidator.resetForm();
+					break
+			}
+				$('.'+subtype+'-data-tabs').show();
+				$('.nav-tabs a[href="#'+subtype+'Datasheet"]').focus();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form').show();
 
 			if ( action == "show") {
-				$('#timaat-mediadatasets-video-metadata-form :input').prop("disabled", true);
-				$('#timaat-mediadatasets-video-metadata-form-edit').show();
-				$('#timaat-mediadatasets-video-metadata-form-edit').prop("disabled", false);
-				$('#timaat-mediadatasets-video-metadata-form-edit :input').prop("disabled", false);
-				$('#timaat-mediadatasets-video-metadata-form-submit').hide();
-				$('#timaat-mediadatasets-video-metadata-form-dismiss').hide();
-				$('#videoMetaLabel').html("Video Datasheet");
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form :input').prop("disabled", true);
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit').show();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit').prop("disabled", false);
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit :input').prop("disabled", false);
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-submit').hide();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-dismiss').hide();
+				$('#'+subtype+'MetaLabel').html(subtype+" Datasheet");
 			}
 			else if (action == "edit") {
-				$('#timaat-mediadatasets-video-metadata-form-submit').show();
-				$('#timaat-mediadatasets-video-metadata-form-dismiss').show();
-				$('#timaat-mediadatasets-video-metadata-form :input').prop("disabled", false);
-				// $('#timaat-mediadatasets-video-metadata-video-type-id').prop("disabled", true);
-				$("#timaat-mediadatasets-video-metadata-releasedate").datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
-				$("#timaat-mediadatasets-video-metadata-source-lastaccessed").datetimepicker({format: "YYYY-MM-DD HH:mm"});
-				$('#timaat-mediadatasets-video-metadata-form-edit').hide();
-				$('#timaat-mediadatasets-video-metadata-form-edit').prop("disabled", true);
-				$('#timaat-mediadatasets-video-metadata-form-edit :input').prop("disabled", true);
-				$('#videoMetaLabel').html("Video bearbeiten");
-				$('#timaat-mediadatasets-video-metadata-form-submit').html("Speichern");
-				$('#timaat-mediadatasets-video-metadata-title').focus();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-submit').show();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-dismiss').show();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form :input').prop("disabled", false);
+				$('#timaat-mediadatasets-'+subtype+'-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
+				$('#timaat-mediadatasets-'+subtype+'-metadata-source-lastaccessed').datetimepicker({format: "YYYY-MM-DD HH:mm"});
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit').hide();
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit').prop("disabled", true);
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-edit :input').prop("disabled", true);
+				$('#'+subtype+'MetaLabel').html(subtype+" bearbeiten");
+				$('#timaat-mediadatasets-'+subtype+'-metadata-form-submit').html("Speichern");
+				$('#timaat-mediadatasets-'+subtype+'-metadata-title').focus();
 			}
 
 			// setup UI
 			// medium data
-			// $('#timaat-mediadatasets-video-metadata-mediatype-id').val(video.model.medium.mediaType.id);
-			$('#timaat-mediadatasets-video-metadata-remark').val(video.model.medium.remark);
-			$('#timaat-mediadatasets-video-metadata-copyright').val(video.model.medium.copyright);
-			if (isNaN(moment(video.model.medium.releaseDate)))
-				$('#timaat-mediadatasets-video-metadata-releasedate').val('');
-				else $('#timaat-mediadatasets-video-metadata-releasedate').val(moment(video.model.medium.releaseDate).format('YYYY-MM-DD'));
+			$('#timaat-mediadatasets-'+subtype+'-metadata-remark').val(mediumSubtype.model.medium.remark);
+			$('#timaat-mediadatasets-'+subtype+'-metadata-copyright').val(mediumSubtype.model.medium.copyright);
+			if (isNaN(moment(mediumSubtype.model.medium.releaseDate)))
+				$('#timaat-mediadatasets-'+subtype+'-metadata-releasedate').val('');
+				else $('#timaat-mediadatasets-'+subtype+'-metadata-releasedate').val(moment(mediumSubtype.model.medium.releaseDate).format('YYYY-MM-DD'));
 			// title data
-			$('#timaat-mediadatasets-video-metadata-title').val(video.model.medium.title.name);
-			$('#timaat-mediadatasets-video-metadata-title-language-id').val(video.model.medium.title.language.id);
+			$('#timaat-mediadatasets-'+subtype+'-metadata-title').val(mediumSubtype.model.medium.title.name);
+			$('#timaat-mediadatasets-'+subtype+'-metadata-title-language-id').val(mediumSubtype.model.medium.title.language.id);
 			// source data
-			if (video.model.medium.sources[0].isPrimarySource)
-				$('#timaat-mediadatasets-video-metadata-source-isprimarysource').prop('checked', true);
-				else $('#timaat-mediadatasets-video-metadata-source-isprimarysource').prop('checked', false);
-			$('#timaat-mediadatasets-video-metadata-source-url').val(video.model.medium.sources[0].url);
-			if (isNaN(moment.utc(video.model.medium.sources[0].lastAccessed))) 
-				$('#timaat-mediadatasets-video-metadata-source-lastaccessed').val('');
-				else $('#timaat-mediadatasets-video-metadata-source-lastaccessed').val(moment.utc(video.model.medium.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
-			if (video.model.medium.sources[0].isStillAvailable)
-				$('#timaat-mediadatasets-video-metadata-source-isstillavailable').prop('checked', true);
-			  else $('#timaat-mediadatasets-video-metadata-source-isstillavailable').prop('checked', false);
-			// video data
-			$("#timaat-mediadatasets-video-metadata-length").val(video.model.length);
-			$("#timaat-mediadatasets-video-metadata-videocodec").val(video.model.videoCodec);
-			$("#timaat-mediadatasets-video-metadata-width").val(video.model.width);
-			$("#timaat-mediadatasets-video-metadata-height").val(video.model.height);
-			$("#timaat-mediadatasets-video-metadata-framerate").val(video.model.frameRate);
-			$("#timaat-mediadatasets-video-metadata-datarate").val(video.model.dataRate);
-			$("#timaat-mediadatasets-video-metadata-totalbitrate").val(video.model.totalBitrate);
-			if (video.model.isEpisode)
-				$("#timaat-mediadatasets-video-metadata-isepisode").prop('checked', true);
-			  else $("#timaat-mediadatasets-video-metadata-isepisode").prop('checked', false);
-
-			if ( action == "edit") {
-				$('#timaat-mediadatasets-video-metadata-form').data('video', video);
+			if (mediumSubtype.model.medium.sources[0].isPrimarySource)
+				$('#timaat-mediadatasets-'+subtype+'-metadata-source-isprimarysource').prop('checked', true);
+				else $('#timaat-mediadatasets-'+subtype+'-metadata-source-isprimarysource').prop('checked', false);
+			$('#timaat-mediadatasets-'+subtype+'-metadata-source-url').val(mediumSubtype.model.medium.sources[0].url);
+			if (isNaN(moment.utc(mediumSubtype.model.medium.sources[0].lastAccessed))) 
+				$('#timaat-mediadatasets-'+subtype+'-metadata-source-lastaccessed').val('');
+				else $('#timaat-mediadatasets-'+subtype+'-metadata-source-lastaccessed').val(moment.utc(mediumSubtype.model.medium.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+			if (mediumSubtype.model.medium.sources[0].isStillAvailable)
+				$('#timaat-mediadatasets-'+subtype+'-metadata-source-isstillavailable').prop('checked', true);
+				else $('#timaat-mediadatasets-'+subtype+'-metadata-source-isstillavailable').prop('checked', false);
+			switch (subtype) {
+				case "audio":
+					break;
+				case "mediumDocument":
+					break;
+				case "image":
+					break;
+				case "software":
+					break;
+				case "text":
+					break;
+				case "video":
+					// video data
+					$('#timaat-mediadatasets-video-metadata-length').val(mediumSubtype.model.length);
+					$('#timaat-mediadatasets-video-metadata-videocodec').val(mediumSubtype.model.videoCodec);
+					$('#timaat-mediadatasets-video-metadata-width').val(mediumSubtype.model.width);
+					$('#timaat-mediadatasets-video-metadata-height').val(mediumSubtype.model.height);
+					$('#timaat-mediadatasets-video-metadata-framerate').val(mediumSubtype.model.frameRate);
+					$('#timaat-mediadatasets-video-metadata-datarate').val(mediumSubtype.model.dataRate);
+					$('#timaat-mediadatasets-video-metadata-totalbitrate').val(mediumSubtype.model.totalBitrate);
+					if (mediumSubtype.model.isEpisode)
+						$('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', true);
+						else $('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', false);
+						$('#timaat-mediadatasets-video-metadata-form').data('video', video);
+					break;
+				case "videogame":
+					break
 			}
 		},
-
-		// videoFormTitles: function(action, video) {
-    // 	console.log("TCL: timaat.datasets.media -> videoFormTitles");
-		// 	// console.log("TCL: action", action);
-		// 	var node = document.getElementById("dynamic-title-fields");
-		// 	while (node.lastChild) {
-		// 		node.removeChild(node.lastChild)
-		// 	};
-		// 	$('#timaat-mediadatasets-video-titles-form').trigger('reset');
-		// 	videoTitlesFormValidator.resetForm();
-		// 	$('#timaat-mediadatasets-video-titles-form').show();
-
-		// 	// setup UI
-		// 	// title data
-		// 	var i = 0;
-		// 	var numTitles = video.model.medium.titles.length;
-    //   console.log("TCL: video.model.titles", video.model.medium.titles);
-		// 	for (; i< numTitles; i++) {
-		// 		$('[data-role="dynamic-title-fields"]').append(
-		// 			`<div class="form-group">
-		// 				<div class="form-row">
-		// 					<div class="col-md-2 text-center">
-		// 						<div class="form-check">
-		// 							<label class="sr-only" for="isPrimaryTitle"></label>
-		// 							<input class="form-check-input" type="radio" id="isPrimaryTitle[`+i+`]" name="isPrimaryTitle[`+i+`]" placeholder="Is Primary Title" data-role="title">
-		// 						</div>
-		// 					</div>
-		// 					<div class="col-md-6">
-		// 						<label class="sr-only" for="timaat-mediadatasets-video-titles-title">Title</label>
-		// 						<input class="form-control" id="timaat-mediadatasets-video-titles-title[`+i+`]" name="title[`+i+`]" value="`+video.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language" required>
-		// 					</div>
-		// 					<div class="col-md-3">
-		// 						<label class="sr-only" for="timaat-mediadatasets-video-titles-title-language-id">Title's Language</label>
-		// 						<select class="form-control" id="timaat-mediadatasets-video-titles-title-language-id[`+i+`]" name="titleLanguageId[`+i+`]" value="`+video.model.titles[i].language.id+`" required>
-		// 							<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
-		// 							<option value="2">English</option>
-		// 							<option value="3">German</option>
-		// 							<option value="4">French</option>
-		// 							<option value="5">Spanish</option>
-		// 							<option value="6">Russian</option>
-		// 							<option value="7">Arabic</option>
-		// 						</select>
-		// 					</div>
-		// 					<div class="col-md-1 text-center">
-		// 						<button class="btn btn-danger" data-role="remove">
-		// 							<span class="fas fa-trash-alt"></span>
-		// 						</button>
-		// 						<button class="btn btn-primary" data-role="add">
-		// 							<span class="fas fa-plus"></span>
-		// 						</button>
-		// 					</div>
-		// 				</div>
-		// 			</div>`
-		// 			);
-		// 	};
-
-		// 	if ( action == "show") {
-		// 		$('#timaat-mediadatasets-video-titles-form :input').prop("disabled", true);
-		// 		$('#timaat-mediadatasets-video-titles-form-edit').show();
-		// 		$('#timaat-mediadatasets-video-titles-form-edit').prop("disabled", false);
-		// 		$('#timaat-mediadatasets-video-titles-form-edit :input').prop("disabled", false);
-		// 		$('#timaat-mediadatasets-video-titles-form-submit').hide();
-		// 		$('#timaat-mediadatasets-video-titles-form-dismiss').hide();
-		// 		$('[data-role="remove"]').hide();
-		// 		$('[data-role="add"]').hide();
-		// 		$('#videoTitlesLabel').html("Video Titelliste");
-		// 	}
-		// 	else if (action == "edit") {
-		// 		$('[data-role="dynamic-title-fields"]').append(
-		// 			`<div class="form-group">
-		// 				<div class="form-row">
-		// 					<div class="col-md-2 text-center">
-		// 						<div class="form-check">
-		// 							<label class="sr-only" for="isPrimaryTitle"></label>
-		// 							<input class="form-check-input" type="radio" id="isPrimaryTitle" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
-		// 						</div>
-		// 					</div>
-		// 					<div class="col-md-6">
-		// 						<label class="sr-only" for="timaat-mediadatasets-video-titles-title">Title</label>
-		// 						<input class="form-control" id="timaat-mediadatasets-video-titles-title name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="language">
-		// 					</div>
-		// 					<div class="col-md-3">
-		// 						<label class="sr-only" for="timaat-mediadatasets-video-titles-title-language-id">Title's Language</label>
-		// 						<select class="form-control" id="timaat-mediadatasets-video-titles-title-language-id" name="titleLanguageId">
-		// 							<option value="" disabled selected hidden>[Choose title language...]</option>
-		// 							<option value="2">English</option>
-		// 							<option value="3">German</option>
-		// 							<option value="4">French</option>
-		// 							<option value="5">Spanish</option>
-		// 							<option value="6">Russian</option>
-		// 							<option value="7">Arabic</option>
-		// 						</select>
-		// 					</div>
-		// 					<div class="col-md-1 text-center">
-		// 						<button class="btn btn-danger" data-role="remove">
-		// 							<span class="fas fa-trash-alt"></span>
-		// 						</button>
-		// 						<button class="btn btn-primary" data-role="add">
-		// 							<span class="fas fa-plus"></span>
-		// 						</button>
-		// 					</div>
-		// 				</div>
-		// 			</div>`
-		// 		);
-		// 		$('#timaat-mediadatasets-video-titles-form-submit').show();
-		// 		$('#timaat-mediadatasets-video-titles-form-dismiss').show();
-		// 		$('#timaat-mediadatasets-video-titles-form :input').prop("disabled", false);
-		// 		$('#timaat-mediadatasets-video-titles-form-edit').hide();
-		// 		$('#timaat-mediadatasets-video-titles-form-edit').prop("disabled", true);
-		// 		$('#timaat-mediadatasets-video-titles-form-edit :input').prop("disabled", true);
-		// 		$('#videoTitlesLabel').html("Video Titelliste bearbeiten");
-		// 		$('#timaat-mediadatasets-video-titles-form-submit').html("Speichern");
-		// 		$('#timaat-mediadatasets-video-metadata-title').focus();
-		// 		$('#timaat-mediadatasets-video-titles-form').data('video', video);
-		// 	}
-		// },
 
 		videogameFormDatasheet: function(action, videogame) {
 			$('#timaat-mediadatasets-videogame-form').trigger('reset');
@@ -2470,7 +2455,6 @@
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-        console.log("TCL: newTitle", newTitle);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2480,7 +2464,6 @@
 				tempMediumModel.title = newTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
-        console.log("TCL: newMediumModel", newMediumModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2494,8 +2477,6 @@
 				// var newTranslationData = await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
 				// newMediumModel.mediumTranslations[0] = newTranslationData;
 				
-				// create video/image/etc depending on video type
-				// TODO switch (mediumModel.mediaType)
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2503,7 +2484,6 @@
 				// push new medium to dataset model
 				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
 				$('.form').hide();
-
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2519,7 +2499,6 @@
 				// create medium
 				var tempMediumModel = mediumModel;
 				tempMediumModel.title = newTitle;
-				tempMediumModel.titles[0] = newTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 
@@ -2542,6 +2521,7 @@
 				// push new mediumSubtype to dataset model
 				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
 
+				$('.form').hide();
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2577,7 +2557,8 @@
 					// var newTitle = await TIMAAT.MediaService.createTitle(newTitles[i]);
 					var addedTitleModel = await TIMAAT.MediaService.addTitle(medium.model.id, newTitles[i]);
 					medium.model.titles.push(addedTitleModel);
-          console.log("TCL: medium.model.titles", medium.model.titles);
+					console.log("TCL: medium.model.titles", medium.model.titles);
+					console.log("TCL: medium.model.titles.length", medium.model.titles.length);	
 				}
 				// TIMAAT.MediaDatasets.updateMedium(medium);
 				
@@ -2607,14 +2588,11 @@
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
 				medium.model.title = tempTitle;
 
-				// update medium_has_title
-
-
 				// update source
 				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
 
 				// update data that is part of medium (includes updating last edited by/at)
-				console.log("TCL: updateMedium: async function - medium.model", medium.model);
+				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
 				var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2649,11 +2627,11 @@
 
 			try {
 				// update data that is part of mediumSubtypeData
-				console.log("TCL: mediumSubtype", mediumSubtype);
-				console.log("TCL: mediumSubtypeData.model", mediumSubtypeData.model);
+				// console.log("TCL: mediumSubtype", mediumSubtype);
+				// console.log("TCL: mediumSubtypeData.model", mediumSubtypeData.model);
 				var tempMediumSubtypeData = mediumSubtypeData;
 				// tempMediumSubtypeData.model.medium.sources = null;
-        console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
+        // console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
 				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, tempMediumSubtypeData.model);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2662,7 +2640,7 @@
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
-        console.log("TCL: UpdateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
+        // console.log("TCL: UpdateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
 				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2711,8 +2689,8 @@
 		// },
 
 		_mediumAdded: async function(medium) {
-			console.log("TCL: _mediumAdded: function(medium)");
-			console.log("TCL: medium", medium);
+			// console.log("TCL: _mediumAdded: function(medium)");
+			// console.log("TCL: medium", medium);
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
 			// TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
@@ -2779,7 +2757,14 @@
 		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
 			// console.log("TCL: _videoRemoved: function(video)");
 			// sync to server
-		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData)
+		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData);
+		 var i = 0;
+		 for (; i < mediumSubtypeData.model.medium.titles.length; i++ ) { // remove obsolete titles
+			 if ( mediumSubtypeData.model.medium.titles[i].id != mediumSubtypeData.model.medium.title.id ) {
+				 TIMAAT.MediaService.removeTitle(mediumSubtypeData.model.medium.titles[i]);
+				 mediumSubtypeData.model.medium.titles.splice(i,1);
+			 }
+		 }
 		 mediumSubtypeData.remove();
 	 },
 

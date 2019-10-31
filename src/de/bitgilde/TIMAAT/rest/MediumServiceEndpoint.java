@@ -1188,6 +1188,7 @@ public class MediumServiceEndpoint{
 		}
 		// System.out.println("MediumServiceEndpoint: createTitle: language id: "+newTitle.getLanguage().getId());
 		// sanitize object data
+		newTitle.setId(0);
 		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
 		newTitle.setLanguage(language);
 

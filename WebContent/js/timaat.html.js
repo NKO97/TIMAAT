@@ -60,22 +60,12 @@
             required: true,
           },
         },
-        messages: {
-          title: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3",
-            maxlength: "Title is too long: max length is 200"
-          },
-          titleLanguageId: {
-            required: "Please provide the title's language"
-          },
-        },
         submitHandler: function(mediumFormTitles) {
           mediumFormTitles.submit();
         },
       });
-      var audioForm = $("#timaat-mediadatasets-audio-form");
-      var audioFormValidator = $("#timaat-mediadatasets-audio-form").validate({
+      var audioFormMetadata = $("#timaat-mediadatasets-audio-form");
+      var audioFormMetadataValidator = $("#timaat-mediadatasets-audio-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -106,12 +96,12 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(audioForm) {
-          audioForm.submit();
+        submitHandler: function(audioFormMetadata) {
+          audioFormMetadata.submit();
         },
       });
-      var documentForm = $("#timaat-mediadatasets-document-form");
-      var documentFormValidator = $("#timaat-mediadatasets-document-form").validate({
+      var documentFormMetadata = $("#timaat-mediadatasets-document-form");
+      var documentFormMetadataValidator = $("#timaat-mediadatasets-document-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -142,12 +132,12 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(documentForm) {
-          documentForm.submit();
+        submitHandler: function(documentFormMetadata) {
+          documentFormMetadata.submit();
         },
       });
-      var imageForm = $("#timaat-mediadatasets-image-form");
-      var imageFormValidator = $("#timaat-mediadatasets-image-form").validate({
+      var imageFormMetadata = $("#timaat-mediadatasets-image-form");
+      var imageFormMetadataValidator = $("#timaat-mediadatasets-image-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -178,12 +168,12 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(imageForm) {
-          imageForm.submit();
+        submitHandler: function(imageFormMetadata) {
+          imageFormMetadata.submit();
         },
       });
-      var softwareForm = $("#timaat-mediadatasets-software-form");
-      var softwareFormValidator = $("#timaat-mediadatasets-software-form").validate({
+      var softwareFormMetadata = $("#timaat-mediadatasets-software-form");
+      var softwareFormMetadataValidator = $("#timaat-mediadatasets-software-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -214,12 +204,12 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(softwareForm) {
-          softwareForm.submit();
+        submitHandler: function(softwareFormMetadata) {
+          softwareFormMetadata.submit();
         },
       });
-      var textForm = $("#timaat-mediadatasets-text-form");
-      var textFormValidator = $("#timaat-mediadatasets-text-form").validate({
+      var textFormMetadata = $("#timaat-mediadatasets-text-form");
+      var textFormMetadataValidator = $("#timaat-mediadatasets-text-form").validate({
         rules: {
           primaryTitle: {
             required: true,
@@ -250,16 +240,17 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(textForm) {
+        submitHandler: function(textFormMetadata) {
           textForm.submit();
         },
       });
-      var videoMetadataForm = $("#timaat-mediadatasets-video-metadata-form");
-      var videoFormValidator = $("#timaat-mediadatasets-video-metadata-form").validate({
+      var videoFormMetadata = $("#timaat-mediadatasets-video-metadata-form");
+      var videoFormMetadataValidator = $("#timaat-mediadatasets-video-metadata-form").validate({
         rules: {
           primaryTitle: {
             required: true,
             minlength: 3,
+            maxlength: 200
           },
           primaryTitleLanguageId: {
             required: true,
@@ -270,37 +261,6 @@
           // sourceLastAccessed: {
           //   dateISO: true,
           // }
-        },
-        messages: {
-          primaryTitle: {
-            required: "Enter a title (min length: 3)",
-            minlength: "Title too short: min length is 3"
-          },
-          primaryTitleLanguageId: {
-            required: "Please provide the title's language"
-          },
-          // releaseDate: {
-          //   dateISO: "Please provide a valid date"
-          // },
-          // sourceLastAccessed: {
-          //   dateISO: "Please provide a valid date"
-          // }
-        },
-        submitHandler: function(videoMetadataForm) {
-          videoMetadataForm.submit();
-        },
-      });
-      var videoTitlesForm = $("#timaat-mediadatasets-video-titles-form");
-      var videoTitlesFormValidator = $("#timaat-mediadatasets-video-titles-form").validate({
-        rules: {
-          primaryTitle: {
-            required: true,
-            minlength: 3,
-            maxlength: 200,
-          },
-          primaryTitleLanguageId: {
-            required: true,
-          },
         },
         messages: {
           primaryTitle: {
@@ -311,12 +271,44 @@
           primaryTitleLanguageId: {
             required: "Please provide the title's language"
           },
+          // releaseDate: {
+          //   dateISO: "Please provide a valid date"
+          // },
+          // sourceLastAccessed: {
+          //   dateISO: "Please provide a valid date"
+          // }
         },
-        submitHandler: function(videoTitlesForm) {
-          videoTitlesForm.submit();
+        submitHandler: function(videoFormMetadata) {
+          videoFormMetadata.submit();
         },
       });
-      var videogameForm = $("#timaat-mediadatasets-videogame-form");
+      // var videoTitlesForm = $("#timaat-mediadatasets-video-titles-form");
+      // var videoTitlesFormValidator = $("#timaat-mediadatasets-video-titles-form").validate({
+      //   rules: {
+      //     primaryTitle: {
+      //       required: true,
+      //       minlength: 3,
+      //       maxlength: 200,
+      //     },
+      //     primaryTitleLanguageId: {
+      //       required: true,
+      //     },
+      //   },
+      //   messages: {
+      //     primaryTitle: {
+      //       required: "Enter a title (min length: 3)",
+      //       minlength: "Title too short: min length is 3",
+      //       maxlength: "Title is too long: max length is 200"
+      //     },
+      //     primaryTitleLanguageId: {
+      //       required: "Please provide the title's language"
+      //     },
+      //   },
+      //   submitHandler: function(videoTitlesForm) {
+      //     videoTitlesForm.submit();
+      //   },
+      // });
+      var videogameFormMetadataMetadata = $("#timaat-mediadatasets-videogame-form");
       var videogameFormValidator = $("#timaat-mediadatasets-videogame-form").validate({
         rules: {
           primaryTitle: {
@@ -348,8 +340,8 @@
           //   dateISO: "Please provide a valid date"
           // }
         },
-        submitHandler: function(videogameForm) {
-          videogameForm.submit();
+        submitHandler: function(videogameFormMetadata) {
+          videogameFormMetadata.submit();
         },
       });
       
