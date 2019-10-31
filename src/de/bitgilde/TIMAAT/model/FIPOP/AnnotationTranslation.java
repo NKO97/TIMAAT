@@ -31,7 +31,7 @@ public class AnnotationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-AnnotationTranslation")
+	// @JsonBackReference(value = "Language-AnnotationTranslation")
 	private Language language;
 
 	public AnnotationTranslation() {

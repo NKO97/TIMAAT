@@ -185,7 +185,7 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="annotation")
-	@JsonManagedReference(value = "Annotation-AnnotationTranslation")
+	// @JsonManagedReference(value = "Annotation-AnnotationTranslation")
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to SelectorSvg

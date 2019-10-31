@@ -32,7 +32,7 @@ public class ActorNamePartType implements Serializable {
 
 	//bi-directional many-to-one association to ActorNamePartTypeTranslation
 	@OneToMany(mappedBy="actorNamePartType")
-	@JsonManagedReference(value = "ActorNamePartType-ActorNamePartTypeTranslation")
+	// @JsonManagedReference(value = "ActorNamePartType-ActorNamePartTypeTranslation")
 	private List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations;
 
 	public ActorNamePartType() {

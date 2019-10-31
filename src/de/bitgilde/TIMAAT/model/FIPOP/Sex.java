@@ -27,7 +27,7 @@ public class Sex implements Serializable {
 
 	//bi-directional many-to-one association to SexTranslation
 	@OneToMany(mappedBy="sex")
-	@JsonManagedReference(value = "Sex-SexTranslation")
+	// @JsonManagedReference(value = "Sex-SexTranslation")
 	private List<SexTranslation> sexTranslations;
 
 	public Sex() {

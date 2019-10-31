@@ -24,7 +24,7 @@ public class EventEventRelationshipType implements Serializable {
 
 	//bi-directional many-to-one association to EventEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="eventEventRelationshipType")
-	@JsonManagedReference(value = "EventEventRelationshipType-EventEventRelationshipTypeTranslation")
+	// @JsonManagedReference(value = "EventEventRelationshipType-EventEventRelationshipTypeTranslation")
 	private List<EventEventRelationshipTypeTranslation> eventEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to EventRelatesToEvent

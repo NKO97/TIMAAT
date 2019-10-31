@@ -39,7 +39,7 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Medium")
+	// @JsonBackReference(value = "UserAccount-Medium")
 	private UserAccount createdByUserAccount;
 
 	@Column(name="file_hash")
@@ -72,7 +72,7 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Medium2")
+	// @JsonBackReference(value = "UserAccount-Medium2")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
@@ -211,7 +211,8 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediumRelatesToEvent
 	@OneToMany(mappedBy="medium")
-	@JsonManagedReference(value = "Medium-MediumRelatesToEvent")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Medium-MediumRelatesToEvent")
 	private List<MediumRelatesToEvent> mediumRelatesToEvents;
 
 	//bi-directional many-to-one association to MediumRelatesToMedium

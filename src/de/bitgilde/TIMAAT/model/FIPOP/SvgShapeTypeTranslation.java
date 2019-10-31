@@ -23,7 +23,7 @@ public class SvgShapeTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-SvgShapeTypeTranslation")
+	// @JsonBackReference(value = "Language-SvgShapeTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to SvgShapeType

@@ -22,7 +22,7 @@ public class Citizenship implements Serializable {
 
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="citizenship")
-	@JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
+	// @JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-many association to Country

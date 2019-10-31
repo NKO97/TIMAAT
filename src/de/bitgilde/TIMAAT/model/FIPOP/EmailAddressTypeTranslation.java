@@ -29,7 +29,7 @@ public class EmailAddressTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-EmailAddressTypeTranslation")
+	// @JsonBackReference(value = "Language-EmailAddressTypeTranslation")
 	private Language language;
 
 	public EmailAddressTypeTranslation() {

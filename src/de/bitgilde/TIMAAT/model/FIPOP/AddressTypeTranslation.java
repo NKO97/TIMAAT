@@ -29,7 +29,7 @@ public class AddressTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-AddressTypeTranslation")
+	// @JsonBackReference(value = "Language-AddressTypeTranslation")
 	private Language language;
 
 	public AddressTypeTranslation() {

@@ -24,7 +24,7 @@ public class LocationTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-LocationTypeTranslation")
+	// @JsonBackReference(value = "Language-LocationTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to LocationType

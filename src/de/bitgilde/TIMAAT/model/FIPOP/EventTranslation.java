@@ -31,7 +31,7 @@ public class EventTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-EventTranslation")
+	// @JsonBackReference(value = "Language-EventTranslation")
 	private Language language;
 
 	public EventTranslation() {

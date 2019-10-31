@@ -23,7 +23,7 @@ public class TerritoryTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-TerritoryTranslation")
+	// @JsonBackReference(value = "Language-TerritoryTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Territory

@@ -106,7 +106,7 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="event")
-	@JsonManagedReference(value = "Event-EventTranslation")
+	// @JsonManagedReference(value = "Event-EventTranslation")
 	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent

@@ -28,7 +28,7 @@ public class AddressType implements Serializable {
 
 	//bi-directional many-to-one association to AddressTypeTranslation
 	@OneToMany(mappedBy="addressType")
-	@JsonManagedReference(value = "AddressType-AddressTypeTranslation")
+	// @JsonManagedReference(value = "AddressType-AddressTypeTranslation")
 	private List<AddressTypeTranslation> addressTypeTranslations;
 
 	public AddressType() {

@@ -28,7 +28,7 @@ public class SvgShapeType implements Serializable {
 
 	//bi-directional many-to-one association to SvgShapeTypeTranslation
 	@OneToMany(mappedBy="svgShapeType")
-	@JsonManagedReference(value = "SvgShapeType-SvgShapeTypeTranslation")
+	// @JsonManagedReference(value = "SvgShapeType-SvgShapeTypeTranslation")
 	private Set<SvgShapeTypeTranslation> svgShapeTypeTranslations;
 
 	public SvgShapeType() {

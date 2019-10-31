@@ -23,7 +23,7 @@ public class RoleTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-RoleTranslation")
+	// @JsonBackReference(value = "Language-RoleTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Role

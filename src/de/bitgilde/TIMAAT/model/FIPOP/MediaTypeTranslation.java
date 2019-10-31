@@ -23,7 +23,7 @@ public class MediaTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-MediaTypeTranslation")
+	// @JsonBackReference(value = "Language-MediaTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediaType

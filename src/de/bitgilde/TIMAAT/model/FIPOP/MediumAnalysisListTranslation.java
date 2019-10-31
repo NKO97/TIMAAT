@@ -26,7 +26,7 @@ public class MediumAnalysisListTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-MediumAnalysisListTranslation")
+	// @JsonBackReference(value = "Language-MediumAnalysisListTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediumAnalysisList

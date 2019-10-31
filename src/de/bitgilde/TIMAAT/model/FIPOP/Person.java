@@ -83,7 +83,7 @@ public class Person implements Serializable {
 
 	//bi-directional many-to-one association to PersonTranslation
 	@OneToMany(mappedBy="person")
-	@JsonManagedReference(value = "Person-PersonTranslation")
+	// @JsonManagedReference(value = "Person-PersonTranslation")
 	private List<PersonTranslation> personTranslations;
 
 	public Person() {
