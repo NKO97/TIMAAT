@@ -105,11 +105,13 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.title-data-tab').show();
 				$('.medium-data-tab').show();
-				$('.nav-tabs a[href="#mediumTitles"]').show();
 				$('.nav-tabs a[href="#mediumDatasheet"]').focus();
-				$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
-				TIMAAT.MediaDatasets.mediumFormDatasheet("show", medium);
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', medium);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
@@ -139,10 +141,14 @@
 			this.listView.remove(); // TODO remove tags from medium_has_tags
 			// remove from medium list
 			var index = TIMAAT.MediaDatasets.media.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.media.splice(index, 1);
+			if (index > -1) {
+				 TIMAAT.MediaDatasets.media.splice(index, 1);
+			}
 			// remove from model list
-			index = TIMAAT.MediaDatasets.media.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.media.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.media.model.indexOf(this);
+			if (indexModel > -1) {
+				TIMAAT.MediaDatasets.media.model.splice(index, 1);
+			}
 		}
 
 	}

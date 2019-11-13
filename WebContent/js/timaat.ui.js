@@ -32,7 +32,7 @@
 				TIMAAT.Settings.init();
 				TIMAAT.Datasets.init();
 				
-				TIMAAT.UI.showComponent('media');
+				TIMAAT.UI.showComponent('videochooser');
 				$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 				$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
 				if ( TIMAAT.Service.state != 1 ) {
@@ -114,8 +114,6 @@
 				TIMAAT.UI.component = component;
 				TIMAAT.VideoPlayer.pause(); // TODO refactor
 				$('.timaat-component').hide();
-				$('.form').hide();
-				$('.media-data-tabs').hide();
 				$('.timaat-sidebar-tab').removeClass('bg-info');
 				$('.timaat-sidebar-tab a').removeClass('selected');
 				$('#timaat-component-'+component).show();

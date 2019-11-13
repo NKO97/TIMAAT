@@ -186,18 +186,8 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-mediadatasets-medium-metadata,
-#timaat-mediadatasets-medium-metadata-form,
-#timaat-mediadatasets-medium-titles-form,
-#timaat-mediadatasets-audio-form,
-#timaat-mediadatasets-document-form,
-#timaat-mediadatasets-image-form,
-#timaat-mediadatasets-software-form,
-#timaat-mediadatasets-text-form,
-#timaat-mediadatasets-video-metadata,
-#timaat-mediadatasets-video-metadata-form,
-#timaat-mediadatasets-video-titles-form,
-#timaat-mediadatasets-videogame-form {
+#timaat-mediadatasets-media-metadata-form,
+#timaat-mediadatasets-medium-titles-form {
 	display:none;
 }
 
@@ -211,13 +201,13 @@ body.timaat-login-modal-open #wrapper {
 #timaat-city-list li,
 #timaat-street-list li,
 #timaat-mediadatasets-medium-list li,
-#timaat-audio-list li,
-#timaat-document-list li,
-#timaat-image-list li,
-#timaat-software-list li,
-#timaat-text-list li,
+#timaat-mediadatasets-audio-list li,
+#timaat-mediadatasets-document-list li,
+#timaat-mediadatasets-image-list li,
+#timaat-mediadatasets-software-list li,
+#timaat-mediadatasets-text-list li,
 #timaat-mediadatasets-video-list li,
-#timaat-videogame-list li,
+#timaat-mediadatasets-videogame-list li,
 #timaat-actor-list li {
 	cursor: pointer;
 	font-size: 90%;
@@ -233,13 +223,13 @@ body.timaat-login-modal-open #wrapper {
 #timaat-city-list li:hover,
 #timaat-street-list li:hover,
 #timaat-mediadatasets-medium-list li:hover,
-#timaat-audio-list li:hover,
-#timaat-document-list li:hover,
-#timaat-image-list li:hover,
-#timaat-software-list li:hover,
-#timaat-text-list li:hover,
+#timaat-mediadatasets-audio-list li:hover,
+#timaat-mediadatasets-document-list li:hover,
+#timaat-mediadatasets-image-list li:hover,
+#timaat-mediadatasets-software-list li:hover,
+#timaat-mediadatasets-text-list li:hover,
 #timaat-mediadatasets-video-list li:hover,
-#timaat-videogame-list li:hover,
+#timaat-mediadatasets-videogame-list li:hover,
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
 }
@@ -254,13 +244,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-city-list-selected,
 .timaat-street-list-selected,
 .timaat-mediadatasets-medium-list-selected,
-.timaat-audio-list-selected,
-.timaat-document-list-selected,
-.timaat-image-list-selected,
-.timaat-software-list-selected,
-.timaat-text-list-selected,
+.timaat-mediadatasets-audio-list-selected,
+.timaat-mediadatasets-document-list-selected,
+.timaat-mediadatasets-image-list-selected,
+.timaat-mediadatasets-software-list-selected,
+.timaat-mediadatasets-text-list-selected,
 .timaat-mediadatasets-video-list-selected,
-.timaat-videogame-list-selected,
+.timaat-mediadatasets-videogame-list-selected,
 .timaat-actor-list-selected {
 	background-color: #c9e2ff;
 }
@@ -275,13 +265,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-city-list-selected:hover,
 .timaat-street-list-selected:hover,
 .timaat-mediadatasets-medium-list-selected:hover,
-.timaat-audio-list-selected:hover,
-.timaat-document-list-selected:hover,
-.timaat-image-list-selected:hover,
-.timaat-software-list-selected:hover,
-.timaat-text-list-selected:hover,
+.timaat-mediadatasets-audio-list-selected:hover,
+.timaat-mediadatasets-document-list-selected:hover,
+.timaat-mediadatasets-image-list-selected:hover,
+.timaat-mediadatasets-software-list-selected:hover,
+.timaat-mediadatasets-text-list-selected:hover,
 .timaat-mediadatasets-video-list-selected:hover,
-.timaat-videogame-list-selected:hover,
+.timaat-mediadatasets-videogame-list-selected:hover,
 .timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
@@ -523,6 +513,10 @@ a.dropdown-item {
 
 .form .error { 
 	color:#ff0000
+}
+
+.caps-title:first-letter {
+	text-transform: capitalize;
 }
 
 input.table-control {

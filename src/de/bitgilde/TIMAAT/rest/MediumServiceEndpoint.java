@@ -254,7 +254,7 @@ public class MediumServiceEndpoint{
 		newMedium.setCreatedAt(creationDate);
 		newMedium.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			System.out.println("containerRequestContext.getProperty('TIMAAT.userID')" + containerRequestContext.getProperty("TIMAAT.userID"));
+			System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 			newMedium.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newMedium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -262,6 +262,7 @@ public class MediumServiceEndpoint{
 			return Response.serverError().build();
 		}
 
+		System.out.println("MediumServiceEndpoint: createMedium - persist medium");
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();

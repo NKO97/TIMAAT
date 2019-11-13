@@ -26,25 +26,22 @@
 			this.model = model;
 
 			// create and style list view element
-			var editImageButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-image-edit float-left" id="timaat-image-edit"><i class="fas fa-edit"></i></button>';
-			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-image-remove float-left" id="timaat-image-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-image-remove float-left" id="timaat-mediadatasets-image-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteImageButton = '';
-				editImageButton = '';
 			};
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-2">
 							<div class=btn-group-vertical>` +
-								editImageButton +
 								deleteImageButton +
 							`</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-image-list-name"></span>
+							<span class="timaat-mediadatasets-image-list-name"></span>
 							<br><br>
-							<span class="timaat-image-list-mediatype-id"></span>
+							<span class="timaat-mediadatasets-image-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -55,7 +52,7 @@
 				</li>`
 			);
 
-			$('#timaat-image-list').append(this.listView);
+			$('#timaat-mediadatasets-image-list').append(this.listView);
 			this.updateUI();      
 			var image = this; // save image for system events
 
@@ -104,23 +101,24 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-image-form').data('image', image);
-				TIMAAT.MediaDatasets.imageFormDatasheet("show", image);				
-				// image.listView.find('.timaat-image-list-tags').popover('show');
-			});
-
-			// edit handler
-			$(this.listView).find('.timaat-image-edit').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-image-form').data('image', image);
-				TIMAAT.MediaDatasets.imageFormDatasheet("edit", image);
-				// image.listView.find('.timaat-image-list-tags').popover('show');
+				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.image-data-tab').show();
+				$('.title-data-tab').show();
+				$('.nav-tabs a[href="#imageDatasheet"]').focus();
+				// make certain the current medium model matches the current image model
+				var imageMedium = new Object();
+				imageMedium.model = image.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', imageMedium);
+				$('#timaat-mediadatasets-media-metadata-form').data('image', image);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "image", image);   			
+				// image.listView.find('.timaat-mediadatasets-image-list-tags').popover('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-image-remove').click(this, function(ev) {
-      	console.log("TCL: Image -> constructor -> this.listView.find('.timaat-image-remove')");
+			this.listView.find('.timaat-mediadatasets-image-remove').click(this, function(ev) {
+      	console.log("TCL: Image -> constructor -> this.listView.find('.timaat-mediadatasets-image-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-image-delete').data('image', image);
@@ -133,7 +131,7 @@
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-image-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-image-list-name').text(name);
 		}
 
 		remove() {
@@ -144,8 +142,8 @@
 			var index = TIMAAT.MediaDatasets.images.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.images.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.images.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.images.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.images.model.indexOf(this);
+			if (indexModel > -1) TIMAAT.MediaDatasets.images.model.splice(index, 1);
 		}
 
 	}

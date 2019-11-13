@@ -144,17 +144,24 @@
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.videos-data-tabs').show();
-				$('.nav-tabs a[href="#mediumTitles"]').show();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.video-data-tab').show();
+				$('.title-data-tab').show();
 				$('.nav-tabs a[href="#videoDatasheet"]').focus();
-				$('#timaat-mediadatasets-video-metadata-form').data('video', video);
-				TIMAAT.MediaDatasets.videoFormDatasheet("show", video);				
+				// make certain the current medium model matches the current video model
+				var videoMedium = {
+					model: {}
+				};
+				videoMedium.model = video.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', videoMedium);
+				$('#timaat-mediadatasets-media-metadata-form').data('video', video);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "video", video);        
 				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-mediadatasets-video-remove').click(this, function(ev) {
-      	console.log("TCL: Video -> constructor -> this.listView.find('.timaat-mediadatasets-video-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-video-delete').data('video', video);
@@ -178,8 +185,8 @@
 			var index = TIMAAT.MediaDatasets.videos.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.videos.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.videos.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.videos.model.indexOf(this);
+			if (indexModel > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
 		}
 
 	}

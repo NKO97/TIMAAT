@@ -243,7 +243,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to Source
 	@OneToMany(mappedBy="medium")
-	@JsonManagedReference(value = "Medium-Source")
+	// @JsonManagedReference(value = "Medium-Source")
 	private List<Source> sources;
 
 	public Medium() {
