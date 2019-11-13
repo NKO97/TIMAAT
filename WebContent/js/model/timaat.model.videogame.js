@@ -26,25 +26,22 @@
 			this.model = model;
 
 			// create and style list view element
-			var editVideogameButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-videogame-edit float-left" id="timaat-videogame-edit"><i class="fas fa-edit"></i></button>';
-			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-videogame-remove float-left" id="timaat-videogame-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-videogame-remove float-left" id="timaat-mediadatasets-videogame-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteVideogameButton = '';
-				editVideogameButton = '';
 			};
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-2">
 							<div class=btn-group-vertical>` +
-								editVideogameButton +
 								deleteVideogameButton +
 							`</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-videogame-list-name"></span>
+							<span class="timaat-mediadatasets-videogame-list-name"></span>
 							<br><br>
-							<span class="timaat-videogame-list-medium-type-id"></span>
+							<span class="timaat-mediadatasets-videogame-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -55,7 +52,7 @@
 				</li>`
 			);
 
-			$('#timaat-videogame-list').append(this.listView);
+			$('#timaat-mediadatasets-videogame-list').append(this.listView);
 			this.updateUI();      
 			var videogame = this; // save videogame for system events
 
@@ -104,23 +101,24 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-videogame-form').data('videogame', videogame);
-				TIMAAT.MediaDatasets.videogameFormData("show", videogame);				
-				// videogame.listView.find('.timaat-videogame-list-tags').popover('show');
-			});
-
-			// edit handler
-			$(this.listView).find('.timaat-videogame-edit').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-videogame-form').data('videogame', videogame);
-				TIMAAT.MediaDatasets.videogameFormData("edit", videogame);
-				// videogame.listView.find('.timaat-videogame-list-tags').popover('show');
+				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.videogame-data-tab').show();
+				$('.title-data-tab').show();
+				$('.nav-tabs a[href="#videogameDatasheet"]').focus();
+				// make certain the current medium model matches the current videogame model
+				var videogameMedium = new Object();
+				videogameMedium.model = videogame.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', videogameMedium);
+				$('#timaat-mediadatasets-media-metadata-form').data('videogame', videogame);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "videogame", videogame);   			
+				// videogame.listView.find('.timaat-mediadatasets-videogame-list-tags').popover('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-videogame-remove').click(this, function(ev) {
-      	console.log("TCL: Videogame -> constructor -> this.listView.find('.timaat-videogame-remove')");
+			this.listView.find('.timaat-mediadatasets-videogame-remove').click(this, function(ev) {
+      	console.log("TCL: Videogame -> constructor -> this.listView.find('.timaat-mediadatasets-videogame-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-videogame-delete').data('videogame', videogame);
@@ -133,7 +131,7 @@
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-videogame-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-videogame-list-name').text(name);
 		}
 
 		remove() {
@@ -144,8 +142,8 @@
 			var index = TIMAAT.MediaDatasets.videogames.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.videogames.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.videogames.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.videogames.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.videogames.model.indexOf(this);
+			if (indexModel > -1) TIMAAT.MediaDatasets.videogames.model.splice(index, 1);
 		}
 
 	}

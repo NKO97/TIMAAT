@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -30,7 +29,7 @@ public class EventEventRelationshipTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-EventEventRelationshipTypeTranslation")
+	// @JsonBackReference(value = "Language-EventEventRelationshipTypeTranslation")
 	private Language language;
 
 	public EventEventRelationshipTypeTranslation() {

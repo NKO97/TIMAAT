@@ -39,7 +39,7 @@ public class Role implements Serializable {
 
 	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="role")
-	@JsonManagedReference(value = "Role-RoleTranslation")
+	// @JsonManagedReference(value = "Role-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to SiocContainerHasRoleInArea

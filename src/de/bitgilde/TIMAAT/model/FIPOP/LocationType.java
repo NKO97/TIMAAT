@@ -30,7 +30,7 @@ public class LocationType implements Serializable {
 
 	//bi-directional many-to-one association to LocationTypeTranslation
 	@OneToMany(mappedBy="locationType")
-	@JsonManagedReference(value = "LocationType-LocationTypeTranslation")
+	// @JsonManagedReference(value = "LocationType-LocationTypeTranslation")
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
 	public LocationType() {

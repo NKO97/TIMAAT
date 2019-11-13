@@ -26,25 +26,22 @@
 			this.model = model;
 
 			// create and style list view element
-			var editSoftwareButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-software-edit float-left" id="timaat-software-edit"><i class="fas fa-edit"></i></button>';
-			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-software-remove float-left" id="timaat-software-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-software-remove float-left" id="timaat-mediadatasets-software-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteSoftwareButton = '';
-				editSoftwareButton = '';
 			};
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-2">
 							<div class=btn-group-vertical>` +
-								editSoftwareButton +
 								deleteSoftwareButton +
 							`</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-software-list-name"></span>
+							<span class="timaat-mediadatasets-software-list-name"></span>
 							<br><br>
-							<span class="timaat-software-list-medium-type-id"></span>
+							<span class="timaat-mediadatasets-software-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -55,7 +52,7 @@
 				</li>`
 			);
 
-			$('#timaat-software-list').append(this.listView);
+			$('#timaat-mediadatasets-software-list').append(this.listView);
 			this.updateUI();      
 			var software = this; // save software for system events
 
@@ -104,23 +101,24 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-software-form').data('software', software);
-				TIMAAT.MediaDatasets.softwareFormData("show", software);				
-				// software.listView.find('.timaat-software-list-tags').popover('show');
-			});
-
-			// edit handler
-			$(this.listView).find('.timaat-software-edit').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-software-form').data('software', software);
-				TIMAAT.MediaDatasets.softwareFormData("edit", software);
-				// software.listView.find('.timaat-software-list-tags').popover('show');
+				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.software-data-tab').show();
+				$('.title-data-tab').show();
+				$('.nav-tabs a[href="#softwareDatasheet"]').focus();
+				// make certain the current medium model matches the current software model
+				var softwareMedium = new Object();
+				softwareMedium.model = software.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', softwareMedium);
+				$('#timaat-mediadatasets-media-metadata-form').data('software', software);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "software", software);   				
+				// software.listView.find('.timaat-mediadatasets-software-list-tags').popover('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-software-remove').click(this, function(ev) {
-      	console.log("TCL: Software -> constructor -> this.listView.find('.timaat-software-remove')");
+			this.listView.find('.timaat-mediadatasets-software-remove').click(this, function(ev) {
+      	console.log("TCL: Software -> constructor -> this.listView.find('.timaat-mediadatasets-software-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-software-delete').data('software', software);
@@ -133,7 +131,7 @@
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-software-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-software-list-name').text(name);
 		}
 
 		remove() {
@@ -144,8 +142,8 @@
 			var index = TIMAAT.MediaDatasets.softwares.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.softwares.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.softwares.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.softwares.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.softwares.model.indexOf(this);
+			if (indexModel > -1) TIMAAT.MediaDatasets.softwares.model.splice(index, 1);
 		}
 
 	}

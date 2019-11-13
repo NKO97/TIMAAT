@@ -30,7 +30,7 @@ public class AnalysisSegmentTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-AnalysisSegmentTranslation")
+	// @JsonBackReference(value = "Language-AnalysisSegmentTranslation")
 	private Language language;
 
 	public AnalysisSegmentTranslation() {

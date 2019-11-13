@@ -80,6 +80,25 @@
 			});			
 		},
 
+		listMediumTitles(medium, callback) {
+			// console.log("TCL: listMedia -> callback", callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/titles/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	// console.log("TCL: listMedia -> data", data);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});			
+		},
+
 		async createMedium(mediumModel) {
 			console.log("TCL: async createMedium -> mediumModel", mediumModel);
 			var newMediumModel = {
@@ -168,6 +187,7 @@
 
 		async createTitle(title) {
 			console.log("TCL: async createTitle -> title", title);
+			console.log("TCL: async createTitle -> JSON.stringify(title)", JSON.stringify(title));
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -180,6 +200,30 @@
 					},
 				}).done(function(titleData) {
 					console.log("TCL: createTitle -> titleData", titleData);
+					resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async addTitle(mediumId, title) {
+      console.log("TCL: addTitle -> mediumId", mediumId);
+			console.log("TCL: async addTitle -> title", title);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
+					type:"POST",
+					data: JSON.stringify(title),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(titleData) {
+					console.log("TCL: addTitle -> titleData", titleData);
 					resolve(titleData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -266,12 +310,14 @@
 		},
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-		console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
+			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
+			var tempSubtypeModel = subtypeModel;
+			delete tempSubtypeModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
 					type:"PATCH",
-					data: JSON.stringify(subtypeModel),
+					data: JSON.stringify(tempSubtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -354,10 +400,27 @@
 			});
 		},
 
-		removeMediumSubtype(mediumSubtype, subtype) {
-      console.log("TCL: removeMediumSubtype -> mediumSubtype, subtype", mediumSubtype, subtype);
+		removeMediumSubtype(subtype, subtypeData) {
+      console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtype.model.mediumId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+subtype+"/"+subtypeData.model.mediumId,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+		removeTitle(title) {
+			console.log("TCL: removeTitle -> title", title);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

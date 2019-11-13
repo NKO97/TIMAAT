@@ -3,8 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Timestamp;
@@ -42,7 +42,8 @@ public class Source implements Serializable {
 	//bi-directional many-to-one association to Medium
 	// @ManyToOne(cascade=CascadeType.PERSIST)
 	@ManyToOne
-	@JsonBackReference(value = "Medium-Source")
+	@JsonIgnore
+	// @JsonBackReference(value = "Medium-Source")
 	private Medium medium;
 
 	public Source() {

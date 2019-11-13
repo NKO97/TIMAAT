@@ -23,7 +23,7 @@ public class SexTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-SexTranslation")
+	// @JsonBackReference(value = "Language-SexTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Sex

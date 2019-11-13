@@ -23,7 +23,7 @@ public class MediumEventRelationshipType implements Serializable {
 
 	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="mediumEventRelationshipType")
-	@JsonManagedReference(value = "MediumEventRelationshipType-MediumEventRelationshipTypeTranslation")
+	// @JsonManagedReference(value = "MediumEventRelationshipType-MediumEventRelationshipTypeTranslation")
 	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent

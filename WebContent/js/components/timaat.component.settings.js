@@ -25,7 +25,7 @@
 		init: function() {
     	// console.log("TCL: Settings: init: function()");
 			// attach category editor
-			$('#timaat-medium-categories').popover({
+			$('#timaat-mediadatasets-medium-categories').popover({
 				placement: 'right',
 				title: 'Medium Categories bearbeiten',
 				trigger: 'click',
@@ -34,7 +34,7 @@
 				container: 'body',
 				boundary: 'viewport',				
 			});
-			$('#timaat-medium-categories').on('inserted.bs.popover', function () {
+			$('#timaat-mediadatasets-medium-categories').on('inserted.bs.popover', function () {
 				var categories = "";
 				if ( TIMAAT.VideoPlayer.video == null ) {
 					$('.timaat-category-input').html('Kein Video geladen');
@@ -67,7 +67,7 @@
 			    	}
 			    });
 			});
-			$('#timaat-medium-categories').on('hidden.bs.popover', function () { 
+			$('#timaat-mediadatasets-medium-categories').on('hidden.bs.popover', function () { 
 			});			
 
 			// delete categoryset functionality

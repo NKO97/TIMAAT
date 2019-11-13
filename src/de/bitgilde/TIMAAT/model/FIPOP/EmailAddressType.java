@@ -28,7 +28,7 @@ public class EmailAddressType implements Serializable {
 
 	//bi-directional many-to-one association to EmailAddressTypeTranslation
 	@OneToMany(mappedBy="emailAddressType")
-	@JsonManagedReference(value = "EmailAddressType-EmailAddressTypeTranslation")
+	// @JsonManagedReference(value = "EmailAddressType-EmailAddressTypeTranslation")
 	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
 	public EmailAddressType() {

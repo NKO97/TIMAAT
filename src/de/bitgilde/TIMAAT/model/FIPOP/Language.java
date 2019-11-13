@@ -33,12 +33,14 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-ActorActorRelationshipTypeTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-ActorActorRelationshipTypeTranslation")
 	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to ActorNamePartTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-ActorNamePartTypeTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-ActorNamePartTypeTranslation")
 	private List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations;
 
 	//bi-directional many-to-one association to ActorTypeTranslation
@@ -48,7 +50,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to AddressTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-AddressTypeTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-AddressTypeTranslation")
 	private List<AddressTypeTranslation> addressTypeTranslations;
 
 	//bi-directional many-to-one association to AmbienceSubtypeTranslation
@@ -63,7 +66,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-AnalysisSegmentTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
 	//bi-directional many-to-one association to AnnotationTextualBodyTranslation
@@ -73,7 +77,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-AnnotationTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-AnnotationTranslation")
 	private List<AnnotationTranslation> annotationTranslations;
 
 	//bi-directional many-to-one association to ArticulationTranslation
@@ -153,7 +158,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-CitizenshipTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-CitizenshipTranslation")
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-one association to ConceptColorTranslation
@@ -183,27 +189,32 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to EmailAddressTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-EmailAddressTypeTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-EmailAddressTypeTranslation")
 	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
 	//bi-directional many-to-one association to EventDomainTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-EventDomainTranslation")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-EventDomainTranslation")
 	private List<EventDomainTranslation> eventDomainTranslations;
 
 	//bi-directional many-to-one association to EventEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-EventEventRelationshipTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-EventEventRelationshipTypeTranslation")
 	private List<EventEventRelationshipTypeTranslation> eventEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-EventTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-EventTranslation")
 	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to EventTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-EventTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-EventTypeTranslation")
 	private List<EventTypeTranslation> eventTypeTranslations;
 
 	//bi-directional many-to-one association to FrequencyOfEventsTranslation
@@ -233,12 +244,14 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-LocationTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-LocationTranslation")
 	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to LocationTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-LocationTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-LocationTypeTranslation")
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
 	//bi-directional many-to-one association to MartinezScheffelUnreliableNarrationTranslation
@@ -258,17 +271,20 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to MediaTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-MediaTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-MediaTypeTranslation")
 	private List<MediaTypeTranslation> mediaTypeTranslations;
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-MediumAnalysisListTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-MediumAnalysisListTranslation")
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-MediumEventRelationshipTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-MediumEventRelationshipTypeTranslation")
 	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumHasLanguage
@@ -333,12 +349,14 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to PersonTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-PersonTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-PersonTranslation")
 	private List<PersonTranslation> personTranslations;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-PhoneNumberTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-PhoneNumberTypeTranslation")
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
 	//bi-directional many-to-one association to RatingCategoryTranslation
@@ -353,22 +371,26 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to RoleGroupTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-RoleGroupTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-RoleGroupTranslation")
 	private List<RoleGroupTranslation> roleGroupTranslations;
 
 	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-RoleTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to SegmentSelectorTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-SegmentSelectorTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-SegmentSelectorTypeTranslation")
 	private List<SegmentSelectorTypeTranslation> segmentSelectorTypeTranslations;
 
 	//bi-directional many-to-one association to SexTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-SexTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-SexTranslation")
 	private List<SexTranslation> sexTranslations;
 
 	//bi-directional many-to-one association to SiocContainer
@@ -443,7 +465,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to SvgShapeTypeTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-SvgShapeTypeTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-SvgShapeTypeTranslation")
 	private List<SvgShapeTypeTranslation> svgShapeTypeTranslations;
 
 	//bi-directional many-to-one association to TempoMarkingTranslation
@@ -458,7 +481,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-TerritoryTranslation")
+	@JsonIgnore
+	// 	@JsonManagedReference(value = "Language-TerritoryTranslation")
 	private List<TerritoryTranslation> territoryTranslations;
 
 	//bi-directional many-to-one association to TimeOfTheNarratingTranslation
@@ -468,7 +492,8 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to Title
 	@OneToMany(mappedBy="language")
-	@JsonManagedReference(value = "Language-Title")
+	@JsonIgnore
+	// @JsonManagedReference(value = "Language-Title")
 	private List<Title> titles;
 
 	//bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation

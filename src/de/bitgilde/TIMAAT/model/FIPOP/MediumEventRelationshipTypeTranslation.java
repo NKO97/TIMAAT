@@ -23,7 +23,7 @@ public class MediumEventRelationshipTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-MediumEventRelationshipTypeTranslation")
+	// @JsonBackReference(value = "Language-MediumEventRelationshipTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediumEventRelationshipType

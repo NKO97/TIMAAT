@@ -26,25 +26,22 @@
 			this.model = model;
 
 			// create and style list view element
-			var editDocumentButton = '<button type="button" class="btn btn-outline btn-secondary btn-sm timaat-document-edit float-left" id="timaat-document-edit"><i class="fas fa-edit"></i></button>';
-			var deleteDocumentButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-document-remove float-left" id="timaat-document-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteDocumentButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-document-remove float-left" id="timaat-mediadatasets-document-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteDocumentButton = '';
-				editDocumentButton = '';
 			};
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-2">
 							<div class=btn-group-vertical>` +
-								editDocumentButton +
 								deleteDocumentButton +
 							`</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-document-list-name"></span>
+							<span class="timaat-mediadatasets-document-list-name"></span>
 							<br><br>
-							<span class="timaat-document-list-medium-type-id"></span>
+							<span class="timaat-mediadatasets-document-list-mediatype-id"></span>
 						</div>
 						<div class="col-lg-2">
 							<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;">
@@ -55,7 +52,7 @@
 				</li>`
 			);
 
-			$('#timaat-document-list').append(this.listView);
+			$('#timaat-mediadatasets-document-list').append(this.listView);
 			this.updateUI();      
 			var mediumDocument = this; // save document for system events
 
@@ -104,23 +101,24 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-document-form').data('document', mediumDocument);
-				TIMAAT.MediaDatasets.documentFormData("show", mediumDocument);				
-				// document.listView.find('.timaat-document-list-tags').popover('show');
-			});
-
-			// edit handler
-			$(this.listView).find('.timaat-document-edit').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-document-form').data('document', mediumDocument);
-				TIMAAT.MediaDatasets.documentFormData("edit", mediumDocument);
-				// document.listView.find('.timaat-document-list-tags').popover('show');
+				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.document-data-tab').show();
+				$('.title-data-tab').show();
+				$('.nav-tabs a[href="#documentDatasheet"]').focus();
+				// make certain the current medium model matches the current document model
+				var documentMedium = new Object();
+				documentMedium.model = mediumDocument.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', documentMedium);
+				$('#timaat-mediadatasets-media-metadata-form').data('document', mediumDocument);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "document", mediumDocument);   			
+				// document.listView.find('.timaat-mediadatasets-document-list-tags').popover('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-document-remove').click(this, function(ev) {
-      	console.log("TCL: Document -> constructor -> this.listView.find('.timaat-document-remove')");
+			this.listView.find('.timaat-mediadatasets-document-remove').click(this, function(ev) {
+      	console.log("TCL: Document -> constructor -> this.listView.find('.timaat-mediadatasets-document-remove')");
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-mediadatasets-document-delete').data('document', mediumDocument);
@@ -133,7 +131,7 @@
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-document-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-document-list-name').text(name);
 		}
 
 		remove() {
@@ -144,8 +142,8 @@
 			var index = TIMAAT.MediaDatasets.documents.indexOf(this);
 			if (index > -1) TIMAAT.MediaDatasets.documents.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.documents.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.documents.model.splice(index, 1);
+			var indexModel = TIMAAT.MediaDatasets.documents.model.indexOf(this);
+			if (indexModel > -1) TIMAAT.MediaDatasets.documents.model.splice(index, 1);
 		}
 
 	}

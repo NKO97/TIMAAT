@@ -28,7 +28,7 @@ public class CitizenshipTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-CitizenshipTranslation")
+	// @JsonBackReference(value = "Language-CitizenshipTranslation")
 	private Language language;
 
 	public CitizenshipTranslation() {

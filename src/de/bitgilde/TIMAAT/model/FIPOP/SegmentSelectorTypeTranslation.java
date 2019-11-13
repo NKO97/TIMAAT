@@ -23,7 +23,7 @@ public class SegmentSelectorTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-SegmentSelectorTypeTranslation")
+	// @JsonBackReference(value = "Language-SegmentSelectorTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to SegmentSelectorType

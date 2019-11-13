@@ -28,7 +28,7 @@ public class PhoneNumberType implements Serializable {
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="phoneNumberType")
-	@JsonManagedReference(value = "PhoneNumberType-PhoneNumberTypeTranslation")
+	// @JsonManagedReference(value = "PhoneNumberType-PhoneNumberTypeTranslation")
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
 	public PhoneNumberType() {

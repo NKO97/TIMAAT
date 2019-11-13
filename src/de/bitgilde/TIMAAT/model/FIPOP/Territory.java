@@ -42,7 +42,7 @@ public class Territory implements Serializable {
 
 	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="territory")
-	@JsonManagedReference(value = "Territory-TerritoryTranslation")
+	// @JsonManagedReference(value = "Territory-TerritoryTranslation")
 	private List<TerritoryTranslation> territoryTranslations;
 
 	public Territory() {

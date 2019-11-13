@@ -40,7 +40,7 @@ public class AnalysisSegment implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="analysisSegment", cascade = CascadeType.ALL)
-	@JsonManagedReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
+	// @JsonManagedReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
 	public AnalysisSegment() {

@@ -23,7 +23,7 @@ public class PhoneNumberTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-PhoneNumberTypeTranslation")
+	// @JsonBackReference(value = "Language-PhoneNumberTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to PhoneNumberType

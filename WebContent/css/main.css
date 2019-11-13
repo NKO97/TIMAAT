@@ -213,14 +213,8 @@ body.timaat-login-modal-open #wrapper {
 	overflow-x: hidden;
 }
 
-#timaat-mediadatasets-medium-form,
-#timaat-mediadatasets-audio-form,
-#timaat-mediadatasets-document-form,
-#timaat-mediadatasets-image-form,
-#timaat-mediadatasets-software-form,
-#timaat-mediadatasets-text-form,
-#timaat-mediadatasets-video-form,
-#timaat-mediadatasets-videogame-form {
+#timaat-mediadatasets-media-metadata-form,
+#timaat-mediadatasets-medium-titles-form {
 	display:none;
 }
 
@@ -233,14 +227,14 @@ body.timaat-login-modal-open #wrapper {
 #timaat-county-list li,
 #timaat-city-list li,
 #timaat-street-list li,
-#timaat-medium-list li,
-#timaat-audio-list li,
-#timaat-document-list li,
-#timaat-image-list li,
-#timaat-software-list li,
-#timaat-text-list li,
-#timaat-video-list li,
-#timaat-videogame-list li,
+#timaat-mediadatasets-medium-list li,
+#timaat-mediadatasets-audio-list li,
+#timaat-mediadatasets-document-list li,
+#timaat-mediadatasets-image-list li,
+#timaat-mediadatasets-software-list li,
+#timaat-mediadatasets-text-list li,
+#timaat-mediadatasets-video-list li,
+#timaat-mediadatasets-videogame-list li,
 #timaat-actor-list li {
 	cursor: pointer;
 	font-size: 90%;
@@ -255,14 +249,14 @@ body.timaat-login-modal-open #wrapper {
 #timaat-county-list li:hover,
 #timaat-city-list li:hover,
 #timaat-street-list li:hover,
-#timaat-medium-list li:hover,
-#timaat-audio-list li:hover,
-#timaat-document-list li:hover,
-#timaat-image-list li:hover,
-#timaat-software-list li:hover,
-#timaat-text-list li:hover,
-#timaat-video-list li:hover,
-#timaat-videogame-list li:hover,
+#timaat-mediadatasets-medium-list li:hover,
+#timaat-mediadatasets-audio-list li:hover,
+#timaat-mediadatasets-document-list li:hover,
+#timaat-mediadatasets-image-list li:hover,
+#timaat-mediadatasets-software-list li:hover,
+#timaat-mediadatasets-text-list li:hover,
+#timaat-mediadatasets-video-list li:hover,
+#timaat-mediadatasets-videogame-list li:hover,
 #timaat-actor-list li:hover {
 	background-color: #e5e5e5;
 }
@@ -276,14 +270,14 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-list-selected,
 .timaat-city-list-selected,
 .timaat-street-list-selected,
-.timaat-medium-list-selected,
-.timaat-audio-list-selected,
-.timaat-document-list-selected,
-.timaat-image-list-selected,
-.timaat-software-list-selected,
-.timaat-text-list-selected,
-.timaat-video-list-selected,
-.timaat-videogame-list-selected,
+.timaat-mediadatasets-medium-list-selected,
+.timaat-mediadatasets-audio-list-selected,
+.timaat-mediadatasets-document-list-selected,
+.timaat-mediadatasets-image-list-selected,
+.timaat-mediadatasets-software-list-selected,
+.timaat-mediadatasets-text-list-selected,
+.timaat-mediadatasets-video-list-selected,
+.timaat-mediadatasets-videogame-list-selected,
 .timaat-actor-list-selected {
 	background-color: #c9e2ff;
 }
@@ -297,14 +291,14 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-list-selected:hover,
 .timaat-city-list-selected:hover,
 .timaat-street-list-selected:hover,
-.timaat-medium-list-selected:hover,
-.timaat-audio-list-selected:hover,
-.timaat-document-list-selected:hover,
-.timaat-image-list-selected:hover,
-.timaat-software-list-selected:hover,
-.timaat-text-list-selected:hover,
-.timaat-video-list-selected:hover,
-.timaat-videogame-list-selected:hover,
+.timaat-mediadatasets-medium-list-selected:hover,
+.timaat-mediadatasets-audio-list-selected:hover,
+.timaat-mediadatasets-document-list-selected:hover,
+.timaat-mediadatasets-image-list-selected:hover,
+.timaat-mediadatasets-software-list-selected:hover,
+.timaat-mediadatasets-text-list-selected:hover,
+.timaat-mediadatasets-video-list-selected:hover,
+.timaat-mediadatasets-videogame-list-selected:hover,
 .timaat-actor-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
@@ -317,13 +311,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-chooser,
 .timaat-city-chooser,
 .timaat-street-chooser,
-.timaat-medium-chooser,
+.timaat-mediadatasets-medium-chooser,
 .timaat-audio-chooser,
 .timaat-document-chooser,
 .timaat-image-chooser,
 .timaat-software-chooser,
 .timaat-text-chooser,
-.timaat-video-chooser,
+.timaat-mediadatasets-video-chooser,
 .timaat-videogame-chooser,
 .timaat-actor-chooser {
 	margin-top: 0.5em;
@@ -337,13 +331,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-county-remove,
 .timaat-city-remove,
 .timaat-street-remove,
-.timaat-medium-remove,
+.timaat-mediadatasets-medium-remove,
 .timaat-audio-remove,
 .timaat-document-remove,
 .timaat-image-remove,
 .timaat-software-remove,
 .timaat-text-remove,
-.timaat-video-remove,
+.timaat-mediadatasets-video-remove,
 .timaat-videogame-remove,
 .timaat-actor-remove {
 	margin-right: 1em;
@@ -504,7 +498,7 @@ a.dropdown-item {
 	cursor: default;
 }
 
-#timaat-medium-tags {
+#timaat-mediadatasets-medium-tags {
 	cursor: pointer;
 }
 
@@ -515,7 +509,7 @@ a.dropdown-item {
 .stepfwdbutton i:hover,
 .timaat-user-log i:hover,
 .timaat-annotation-list-tags i:hover,
-#timaat-medium-tags i:hover {
+#timaat-mediadatasets-medium-tags i:hover {
 	color: #17a2b8;
 }
 
@@ -548,6 +542,14 @@ a.dropdown-item {
 	color:#ff0000
 }
 
+.caps-title:first-letter {
+	text-transform: capitalize;
+}
+
+input.table-control {
+  width: auto;
+}
+
 .form-control input[type=text], input[type=date] {
 	color: #000000;
 }
@@ -565,6 +567,10 @@ a.dropdown-item {
   color: #acacac;
 }
 
+.form-control:disabled {
+	resize: none;
+}
+
 select {
 	color: #000000;
 }
@@ -577,4 +583,28 @@ select:invalid {
   cursor: not-allowed;
   opacity: 0.5;
 	text-decoration: none;
+}
+
+[data-role="dynamic-title-fields"] > .form-group + .form-group {
+    margin-top: 0.5em;
+}
+
+[data-role="dynamic-title-fields"] > .form-group [data-role="add"] {
+    display: none;
+}
+
+[data-role="new-title-fields"] > .form-group + .form-group {
+	margin-top: 0.5em;
+}
+
+[data-role="new-title-fields"] > .form-group [data-role="add"] {
+	display: none;
+}
+
+[data-role="new-title-fields"] > .form-group:last-child [data-role="add"] {
+    display: inline-block;
+}
+
+[data-role="new-title-fields"] > .form-group:last-child [data-role="remove"] {
+    display: none;
 }

@@ -36,7 +36,7 @@ public class RoleGroup implements Serializable {
 
 	//bi-directional many-to-one association to RoleGroupTranslation
 	@OneToMany(mappedBy="roleGroup")
-	@JsonManagedReference(value = "RoleGroup-RoleGroupTranslation")
+	// @JsonManagedReference(value = "RoleGroup-RoleGroupTranslation")
 	private List<RoleGroupTranslation> roleGroupTranslations;
 
 	public RoleGroup() {

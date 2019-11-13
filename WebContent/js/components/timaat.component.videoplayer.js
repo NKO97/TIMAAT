@@ -33,7 +33,6 @@
 		volume: 1,
 		
 		init: function() {
-			console.log("TCL: VideoPlayer: init: function()");
 			// init UI
 			$('.timaat-videoplayer-novideo').show();
 			$('.timaat-videoplayer-ui').hide();

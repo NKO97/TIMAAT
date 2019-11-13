@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
- * The persistent class for the territory_translation database table.
+ * The persistent class for the role_translation database table.
  * 
  */
 @Entity
-@Table(name="territory_translation")
-@NamedQuery(name="TerritoryTranslation.findAll", query="SELECT t FROM TerritoryTranslation t")
-public class TerritoryTranslation implements Serializable {
+@Table(name="role_translation")
+@NamedQuery(name="RoleTranslation.findAll", query="SELECT r FROM RoleTranslation r")
+public class RoleTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,15 +23,15 @@ public class TerritoryTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	@JsonBackReference(value = "Language-TerritoryTranslation")
+	// @JsonBackReference(value = "Language-RoleTranslation")
 	private Language language;
 
-	//bi-directional many-to-one association to Territory
+	//bi-directional many-to-one association to Role
 	@ManyToOne
-	@JsonBackReference(value = "Territory-TerritoryTranslation")
-	private Territory territory;
+	@JsonBackReference(value = "Role-RoleTranslation")
+	private Role role;
 
-	public TerritoryTranslation() {
+	public RoleTranslation() {
 	}
 
 	public int getId() {
@@ -58,12 +58,12 @@ public class TerritoryTranslation implements Serializable {
 		this.language = language;
 	}
 
-	public Territory getTerritory() {
-		return this.territory;
+	public Role getRole() {
+		return this.role;
 	}
 
-	public void setTerritory(Territory territory) {
-		this.territory = territory;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }
