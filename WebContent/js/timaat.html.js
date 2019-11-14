@@ -29,21 +29,27 @@
           // },
           width: {
             number: true,
+            max: 65535
           },
           height: {
             number: true,
+            max: 65535
           },
           bitDepth: {
             number: true,
+            max: 65535
           },
           frameRate: {
             number: true,
+            max: 65535
           },
           dataRate: {
             number: true,
+            max: 65535
           },
           totalBitrate: {
             number: true,
+            max: 65535
           }       
         },
         messages: {
@@ -69,21 +75,27 @@
           // },
           width: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           },
           height: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           },
           bitDepth: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           },
           frameRate: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           },
           dataRate: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           },
           totalBitrate: {
             number: "Please provide a valid number",
+            max: "Please provide a value not greater 65535"
           }
         },
         submitHandler: function(mediumFormMetadata) {

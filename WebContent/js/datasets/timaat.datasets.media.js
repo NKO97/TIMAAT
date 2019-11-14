@@ -2120,31 +2120,46 @@
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
-				
-				// create medium
-				var tempMediumModel = mediumModel;
-				tempMediumModel.title = newTitle;
-				tempMediumModel.source = source;
-				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
-
-				// update source (createMedium created an empty source)
-				source.id = newMediumModel.sources[0].id;
-				var updatedSource = await TIMAAT.MediaService.updateSource(source);
-				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
-
-				// push new medium to dataset model
-				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
-				
-				// create medium translation with medium id
-				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
-
-				// create mediumSubtype with medium id
-				mediumSubtypeModel.mediumId = newMediumModel.id;
-				var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
-
-				// push new mediumSubtype to dataset model
-				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+					// create medium
+					var tempMediumModel = mediumModel;
+					tempMediumModel.title = newTitle;
+					tempMediumModel.source = source;
+					var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+				try {
+					// update source (createMedium created an empty source)
+					source.id = newMediumModel.sources[0].id;
+					var updatedSource = await TIMAAT.MediaService.updateSource(source);
+					newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+				try {
+					// push new medium to dataset model
+					await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+					
+					// create medium translation with medium id
+					// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+					// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+				try {
+					// create mediumSubtype with medium id
+					mediumSubtypeModel.mediumId = newMediumModel.id;
+					var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+					try {
+					// push new mediumSubtype to dataset model
+					await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};

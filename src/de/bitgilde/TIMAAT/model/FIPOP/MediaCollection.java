@@ -3,10 +3,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.List;
 
 

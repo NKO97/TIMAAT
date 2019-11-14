@@ -147,7 +147,7 @@
           <div class="navbar-default sidebar" role="navigation">
             <ul id="side-menu">
               <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser">
-                  <a href="#videos" 
+                  <a href="#mediaLibrary" 
                     onclick="TIMAAT.UI.showComponent('videochooser')" 
                     data-toggle="popover" 
                     data-trigger="hover" 
@@ -317,7 +317,11 @@
           		<div class="card">
 			<div class="card-header"><strong>Mediensammlungen</strong> <button type="button" onclick="TIMAAT.VideoChooser.addMediacollection()" class="btn btn-outline-success btn-sm float-right"><i class="fas fa-plus"></i></button></div>
 			<div class="card-body" style="padding:0">
-				<ul class="list-group"><li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active"><i class="fas fa-inbox"></i> Bibliothek</li></ul>
+				<ul class="list-group">
+          <li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active">
+            <i class="fas fa-inbox"></i> Bibliothek
+          </li>
+        </ul>
 				<div id="timaat-mediacollection-list-loader" class="text-center card-body">
                 	<i class="fas fa-spinner fa-spin"></i> Lade Mediensammlungen...
 				</div>
@@ -1249,11 +1253,11 @@
                           <div class="row">
                             <div class="col-md-6">
                               <label for="timaat-mediadatasets-video-metadata-width">Videobreite</label>
-                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-width" name="width" placeholder="[Enter width]" aria-describedby="Width">
+                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
                             </div>
                             <div class="col-md-6">
                               <label for="timaat-mediadatasets-video-metadata-height">Videohöhe</label>
-                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-height" name="height" placeholder="[Enter height]" aria-describedby="Height">
+                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
                             </div>  
                           </div>
                         </div>
@@ -1261,15 +1265,15 @@
                           <div class="row">
                             <div class="col-md-4">
                               <label for="timaat-mediadatasets-video-metadata-framerate">Frame rate</label>
-                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-framerate" name="frameRate" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
+                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
                             </div>
                             <div class="col-md-4">
                               <label for="timaat-mediadatasets-video-metadata-datarate">Data rate</label>
-                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-datarate" name="dataRate" placeholder="[Enter data rate]" aria-describedby="Data Rate">
+                              <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
                           </div>
                           <div class="col-md-4">
                             <label for="timaat-mediadatasets-video-metadata-totalbitrate">Total bitrate</label>
-                            <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-totalbitrate" name="totalBitrate" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
+                            <input type="text" class="form-control" id="timaat-mediadatasets-video-metadata-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
                             </div>
                           </div>
                         </div>
@@ -1370,41 +1374,6 @@
                 </div>
               </div>
             </div>
-                <!-- Audios UI -->
-                <!-- <div class="tab-pane fade" id="audios" role="tabpanel" aria-labelledby="audios-tab">
-                  <div class="row ui" style="padding-top: 1em;">
-                  </div>
-                </div> -->
-                <!-- Documents UI -->
-                <!-- <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
-                    <div class="row ui" style="padding-top: 1em;">
-                    </div>
-                  </div> -->
-                <!-- Images UI -->
-                <!-- <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
-                    <div class="row ui" style="padding-top: 1em;">
-                    </div>
-                  </div> -->
-                <!-- Softwares UI -->
-                <!-- <div class="tab-pane fade" id="softwares" role="tabpanel" aria-labelledby="softwares-tab">
-                    <div class="row ui" style="padding-top: 1em;">
-                    </div>
-                  </div> -->
-                <!-- Texts UI -->
-                <!-- <div class="tab-pane fade" id="texts" role="tabpanel" aria-labelledby="texts-tab">
-                    <div class="row ui" style="padding-top: 1em;">
-                    </div>
-                  </div> -->
-                <!-- Videos UI -->
-                <!-- <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="videos-tab">
-                  <div class="row ui" style="padding-top: 1em;">
-                </div>
-                </div> -->
-                <!-- Videogames UI -->
-                <!-- <div class="tab-pane fade" id="videogames" role="tabpanel" aria-labelledby="videogames-tab">
-                    <div class="row ui" style="padding-top: 1em;">
-                    </div>
-                  </div> -->
           </div> 
         </div>
 

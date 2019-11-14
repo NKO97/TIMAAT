@@ -98,7 +98,7 @@ public class MediaCollectionEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("/")
+	// @Path("/")
 	public Response createMediaCollection(String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		MediaCollection newCol = null;    	
@@ -180,7 +180,7 @@ public class MediaCollectionEndpoint {
 		em.refresh(col);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONUPDATED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
 		return Response.ok().entity(col).build();
 	}
@@ -249,7 +249,7 @@ public class MediaCollectionEndpoint {
     	}
     	    	
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONUPDATED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
 		return Response.ok().build();
 	}
