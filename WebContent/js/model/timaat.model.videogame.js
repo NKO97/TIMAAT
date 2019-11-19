@@ -26,7 +26,7 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-videogame-remove float-left" id="timaat-mediadatasets-videogame-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteVideogameButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-videogame-remove float-left" id="timaat-mediadatasets-videogame-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteVideogameButton = '';
 			};

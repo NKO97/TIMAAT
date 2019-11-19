@@ -260,7 +260,7 @@
 			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = mediumModel;
 			delete tempMediumModel.ui;
-			delete tempMediumModel.mediumVideo;
+			// delete tempMediumModel.mediumVideo;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
@@ -316,7 +316,7 @@
 			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
 			var tempSubtypeModel = subtypeModel;
 			delete tempSubtypeModel.ui;
-			delete tempSubtypeModel.mediumVideo;
+			// delete tempSubtypeModel.mediumVideo;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,

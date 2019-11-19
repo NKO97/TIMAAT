@@ -312,13 +312,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-city-chooser,
 .timaat-street-chooser,
 .timaat-mediadatasets-medium-chooser,
-.timaat-audio-chooser,
-.timaat-document-chooser,
-.timaat-image-chooser,
-.timaat-software-chooser,
-.timaat-text-chooser,
+.timaat-mediadatasets-audio-chooser,
+.timaat-mediadatasets-document-chooser,
+.timaat-mediadatasets-image-chooser,
+.timaat-mediadatasets-software-chooser,
+.timaat-mediadatasets-text-chooser,
 .timaat-mediadatasets-video-chooser,
-.timaat-videogame-chooser,
+.timaat-mediadatasets-videogame-chooser,
 .timaat-actor-chooser {
 	margin-top: 0.5em;
 }
@@ -332,13 +332,13 @@ body.timaat-login-modal-open #wrapper {
 .timaat-city-remove,
 .timaat-street-remove,
 .timaat-mediadatasets-medium-remove,
-.timaat-audio-remove,
-.timaat-document-remove,
-.timaat-image-remove,
-.timaat-software-remove,
-.timaat-text-remove,
+.timaat-mediadatasets-audio-remove,
+.timaat-mediadatasets-document-remove,
+.timaat-mediadatasets-image-remove,
+.timaat-mediadatasets-software-remove,
+.timaat-mediadatasets-text-remove,
 .timaat-mediadatasets-video-remove,
-.timaat-videogame-remove,
+.timaat-mediadatasets-videogame-remove,
 .timaat-actor-remove {
 	margin-right: 1em;
 }

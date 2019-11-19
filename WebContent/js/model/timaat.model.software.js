@@ -26,7 +26,7 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-software-remove float-left" id="timaat-mediadatasets-software-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteSoftwareButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-software-remove float-left" id="timaat-mediadatasets-software-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteSoftwareButton = '';
 			};

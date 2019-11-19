@@ -26,7 +26,7 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-image-remove float-left" id="timaat-mediadatasets-image-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteImageButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-image-remove float-left" id="timaat-mediadatasets-image-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteImageButton = '';
 			};

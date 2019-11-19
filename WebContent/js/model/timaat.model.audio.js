@@ -26,7 +26,7 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteAudioButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-audio-remove float-left" id="timaat-mediadatasets-audio-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteAudioButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-audio-remove float-left" id="timaat-mediadatasets-audio-remove"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) { 
 				deleteAudioButton = '';
 			};

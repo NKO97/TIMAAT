@@ -1357,6 +1357,7 @@
 					var videoMedium = new Object();
 					videoMedium.model = video.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', videoMedium);
+					// TIMAAT.MediaDatasets.mediaDatasets.push(videoMedium);
 				}
 			});
 
