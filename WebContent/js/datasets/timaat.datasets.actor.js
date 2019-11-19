@@ -141,7 +141,7 @@
 		
 		setActorLists: function(actors) {
     // console.log("TCL: setActorLists: function(actors)");
-    console.log("TCL: actors", actors);
+    // console.log("TCL: actors", actors);
 			if ( !actors ) return;
 			$('#timaat-actor-list-loader').remove();
 			// clear old UI list

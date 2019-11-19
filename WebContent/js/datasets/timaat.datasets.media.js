@@ -30,6 +30,7 @@
 		videos: null,
 		videogames: null,	
 		titles: null,
+		mediaDatasets: null,
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
@@ -195,7 +196,7 @@
 					medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 
 					medium.updateUI();
-					TIMAAT.MediaDatasets.updateMedium(medium);
+					await TIMAAT.MediaDatasets.updateMedium(medium);
 					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
 				} else { // create new medium
 					var model = {
@@ -1566,7 +1567,7 @@
 		},
 
 		setMediaTypeLists: function(mediaTypes) {
-			console.log("TCL: mediaTypes", mediaTypes);
+			// console.log("TCL: mediaTypes", mediaTypes);
 			if ( !mediaTypes ) return;
 			$('#timaat-mediatype-list-loader').remove();
 			// clear old UI list
@@ -1583,21 +1584,26 @@
 			$('.media-data-tabs').hide();
     	console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
-
-			// also set up video chooser list
-			TIMAAT.VideoChooser.setMedia(media);
 			
 			$('#timaat-mediadatasets-medium-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-medium-list').empty();
 			// setup model
 			var meds = Array();
+			TIMAAT.MediaDatasets.mediaDatasets = new Array();
 			media.forEach(function(medium) { 
 				if ( medium.id > 0 ) 
-					meds.push(new TIMAAT.Medium(medium)); 
+					meds.push(new TIMAAT.Medium(medium));
+					if (!medium.mediumVideo) {
+						console.log("TCL: medium.mediumVideo == null!", medium)
+					}
+					TIMAAT.MediaDatasets.mediaDatasets.push(medium);
 			});
 			TIMAAT.MediaDatasets.media = meds;
 			TIMAAT.MediaDatasets.media.model = media;
+			console.log("TCL: TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);
+			// also set up video chooser list
+			TIMAAT.VideoChooser.setMedia(TIMAAT.MediaDatasets.mediaDatasets);
 		},
 
 		setAudioLists: function(audios) {
@@ -1696,9 +1702,6 @@
 			$('.media-data-tabs').hide();
 			if ( !videos ) return;
 
-			// also set video chooser list
-			TIMAAT.VideoChooser.setVideoList(videos);
-
 			$('#timaat-mediadatasets-video-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-video-list').empty();
@@ -1706,10 +1709,12 @@
 			var vids = Array();
 			videos.forEach(function(video) { 
 				if ( video.mediumId > 0 )
-					vids.push(new TIMAAT.Video(video)); 
+					vids.push(new TIMAAT.Video(video));
 			});
 			TIMAAT.MediaDatasets.videos = vids;
 			TIMAAT.MediaDatasets.videos.model = videos;
+			// also set video chooser list
+			// TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.mediaDatasets);
 		},
 
 		setVideogameLists: function(videogames) {
@@ -1793,7 +1798,7 @@
 		},
 
 		mediumFormDatasheet: function(action, mediumType, mediumTypeData) {
-    	console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
+    	// console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
 			$('#timaat-mediadatasets-media-metadata-form').trigger('reset');
 			$('.datasheet-data').hide();
 			$('.title-data').show();
@@ -1862,7 +1867,7 @@
 			else {
 				data = mediumTypeData.model.medium;
 			}
-			console.log("TCL: data", data);
+			// console.log("TCL: data", data);
 			// medium data
 			$('#timaat-mediadatasets-media-metadata-mediatype-id').val(data.mediaType.id);
 			$('#timaat-mediadatasets-media-metadata-remark').val(data.remark);
@@ -2198,7 +2203,7 @@
 					console.log("TCL: medium.model.titles", medium.model.titles);
 					console.log("TCL: medium.model.titles.length", medium.model.titles.length);	
 				}
-				// TIMAAT.MediaDatasets.updateMedium(medium);
+				// await TIMAAT.MediaDatasets.updateMedium(medium);
 				
 				// link title and medium
 				// var tempMediumModel = mediumModel;
@@ -2349,7 +2354,13 @@
 		},
 
 		_mediumRemoved: function(medium) {
-    	// console.log("TCL: _mediumRemoved: function(medium)");
+			// console.log("TCL: _mediumRemoved: function(medium)");
+			var i = 0;
+			for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
+				if (TIMAAT.MediaDatasets.mediaDatasets[i].id == medium.id) {
+					TIMAAT.MediaDatasets.mediaDatasets[i].splice(i,1);
+				}
+			}
 			// sync to server
 			TIMAAT.MediaService.removeMedium(medium);
 			var i = 0;

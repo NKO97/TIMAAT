@@ -645,7 +645,7 @@
 		},
 
 		setLocationTypeLists: function(locationTypes) {
-			console.log("TCL: locationTypes", locationTypes);
+			// console.log("TCL: locationTypes", locationTypes);
 			if ( !locationTypes ) return;
 			$('#timaat-locationtype-list-loader').remove();
 			// clear old UI list
@@ -658,7 +658,7 @@
 		},
 		
 		setLocationLists: function(locations) {
-			console.log("TCL: locations", locations);
+			// console.log("TCL: locations", locations);
 			if ( !locations ) return;
 			$('#timaat-location-list-loader').remove();
 			// clear old UI list
@@ -672,7 +672,7 @@
 		
 		setCountryLists: function(countries) {
 			// console.log("TCL: setCountryLists: function(countries)");
-			console.log("TCL: countries", countries);
+			// console.log("TCL: countries", countries);
 			if ( !countries ) return;
 			$('#timaat-country-list-loader').remove();
 			// clear old UI list
@@ -689,7 +689,7 @@
 
 		setProvinceLists: function(provinces) {
 			// console.log("TCL: setProvinceLists: function(provinces)");
-			console.log("TCL: provinces", provinces);
+			// console.log("TCL: provinces", provinces);
 			if ( !provinces ) return;
 			$('#timaat-province-list-loader').remove();
 			// clear old UI list
@@ -706,7 +706,7 @@
 
 		setCountyLists: function(counties) {
 			// console.log("TCL: setCountyLists: function(counties)");
-			console.log("TCL: counties", counties);
+			// console.log("TCL: counties", counties);
 			if ( !counties ) return;
 			$('#timaat-county-list-loader').remove();
 			// clear old UI list
@@ -723,7 +723,7 @@
 
 		setCityLists: function(cities) {
 			// console.log("TCL: setCityLists: function(cities)");
-			console.log("TCL: cities", cities);
+			// console.log("TCL: cities", cities);
 			if ( !cities ) return;
 			$('#timaat-city-list-loader').remove();
 			// clear old UI list
@@ -740,7 +740,7 @@
 
 		setStreetLists: function(streets) {
 			// console.log("TCL: setStreetLists: function(streets)");
-			console.log("TCL: streets", streets);
+			// console.log("TCL: streets", streets);
 			if ( !streets ) return;
 			$('#timaat-street-list-loader').remove();
 			// clear old UI list

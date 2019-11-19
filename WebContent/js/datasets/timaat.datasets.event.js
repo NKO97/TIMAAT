@@ -201,7 +201,7 @@
 		
 		setEventLists: function(events) {
     	// console.log("TCL: setEventLists: function(events)");
-    	console.log("TCL: events: ", events);
+    	// console.log("TCL: events: ", events);
 			if ( !events ) return;
 			$('#timaat-event-list-loader').remove();
 			// clear old UI list

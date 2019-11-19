@@ -35,7 +35,17 @@
 			console.log("TCL: VideoChooser: init: function()");
 						
 			// setup video chooser list and UI events
-			$('#timaat-videochooser-collectionlibrary').click(function(ev) { TIMAAT.VideoChooser.setCollection(null); });
+			$('#timaat-videochooser-collectionlibrary').click(function(ev) {
+				console.log("TCL: TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);
+				var videos = [];
+				TIMAAT.MediaDatasets.mediaDatasets.forEach(function(video) {
+					if (video.mediumVideo) {
+						videos.push(video);
+					}
+				});
+				TIMAAT.VideoChooser.setVideoList(videos);
+				TIMAAT.VideoChooser.setCollection(null);
+			});
 
 			moment.locale('de');
 
