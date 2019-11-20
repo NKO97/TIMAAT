@@ -2130,42 +2130,42 @@
 				console.log( "error: ", error);
 			};
 			try {
-					// create medium
-					var tempMediumModel = mediumModel;
-					tempMediumModel.title = newTitle;
-					tempMediumModel.source = source;
-					var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
-				} catch(error) {
-					console.log( "error: ", error);
-				};
-				try {
-					// update source (createMedium created an empty source)
-					source.id = newMediumModel.sources[0].id;
-					var updatedSource = await TIMAAT.MediaService.updateSource(source);
-					newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
-				} catch(error) {
-					console.log( "error: ", error);
-				};
-				try {
-					// push new medium to dataset model
-					await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
-					
-					// create medium translation with medium id
-					// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-					// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
-				} catch(error) {
-					console.log( "error: ", error);
-				};
-				try {
-					// create mediumSubtype with medium id
-					mediumSubtypeModel.mediumId = newMediumModel.id;
-					var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
-				} catch(error) {
-					console.log( "error: ", error);
-				};
-					try {
-					// push new mediumSubtype to dataset model
-					await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
+				// create medium
+				var tempMediumModel = mediumModel;
+				tempMediumModel.title = newTitle;
+				tempMediumModel.source = source;
+				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// update source (createMedium created an empty source)
+				source.id = newMediumModel.sources[0].id;
+				var updatedSource = await TIMAAT.MediaService.updateSource(source);
+				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// push new medium to dataset model
+				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+				
+				// create medium translation with medium id
+				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// create mediumSubtype with medium id
+				mediumSubtypeModel.mediumId = newMediumModel.id;
+				var newMediumSubtypeModel = await TIMAAT.MediaService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// push new mediumSubtype to dataset model
+				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumSubtypeModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2354,7 +2354,8 @@
 			}
 		},
 
-		_mediumRemoved: function(medium) {
+		_mediumRemoved: async function(medium) {
+    	console.log("TCL: _mediumRemoved", medium);
 			// console.log("TCL: _mediumRemoved: function(medium)");
 			var i = 0;
 			for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
@@ -2363,7 +2364,22 @@
 				}
 			}
 			// sync to server
+			// remove medium from all collections it is part of			
+			function isMediumInMediaCollectionHasMediums(medium, mchm) {
+				if (mchm.filter(x => x.medium.id == medium.id)) {
+					return true
+				} else
+				return false;
+			};
+			var i = 0;
+			for (; i < TIMAAT.VideoChooser.collections.length; i++) {
+				if (isMediumInMediaCollectionHasMediums(medium, TIMAAT.VideoChooser.collections[i].mediaCollectionHasMediums)) {
+					await TIMAAT.Service.removeCollectionItem(TIMAAT.VideoChooser.collections[i], medium.model);
+				}
+			}
+
 			TIMAAT.MediaService.removeMedium(medium);
+			// remove all titles from medium
 			var i = 0;
 			for (; i < medium.model.titles.length; i++ ) { // remove obsolete titles
 				if ( medium.model.titles[i].id != medium.model.title.id ) {

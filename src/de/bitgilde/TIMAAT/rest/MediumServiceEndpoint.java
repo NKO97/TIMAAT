@@ -88,7 +88,7 @@ public class MediumServiceEndpoint{
 	@Secured
 	@Path("list")
 	public Response getMediaList() {
-		// System.out.println("MediumServiceEndpoint: getMediaList");
+		System.out.println("MediumServiceEndpoint: getMediaList");
 		@SuppressWarnings("unchecked")
 		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
 
@@ -97,6 +97,8 @@ public class MediumServiceEndpoint{
 			if ( video != null ) {
 				video.setStatus(videoStatus(m.getId()));
 				video.setViewToken(issueFileToken(m.getId()));
+				m.setMediumVideo(video);
+				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().toString());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();

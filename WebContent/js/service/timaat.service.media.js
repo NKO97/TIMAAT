@@ -40,7 +40,7 @@
 		},
 
 		listMedia(callback) {
-			// console.log("TCL: listMedia -> callback", callback);
+			console.log("TCL: listMedia -> callback", callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
 				type:"GET",
@@ -128,7 +128,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(mediumData) {
-					console.log("TCL: createMedium -> mediumData", mediumData);
+					console.log("TCL: createMedium -> returning mediumData", mediumData);
 					resolve(mediumData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
@@ -175,7 +175,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(subtypeData) {
-					console.log("TCL: createMediumSubtype subtypeData", subtypeData);
+					console.log("TCL: createMediumSubtype - returning subtypeData", subtypeData);
 					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -186,8 +186,8 @@
 		},
 
 		async createTitle(title) {
-			console.log("TCL: async createTitle -> title", title);
-			console.log("TCL: async createTitle -> JSON.stringify(title)", JSON.stringify(title));
+			// console.log("TCL: async createTitle -> title", title);
+			// console.log("TCL: async createTitle -> JSON.stringify(title)", JSON.stringify(title));
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -199,7 +199,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(titleData) {
-					console.log("TCL: createTitle -> titleData", titleData);
+					// console.log("TCL: createTitle -> titleData", titleData);
 					resolve(titleData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -210,8 +210,8 @@
 		},
 
 		async addTitle(mediumId, title) {
-      console.log("TCL: addTitle -> mediumId", mediumId);
-			console.log("TCL: async addTitle -> title", title);
+      // console.log("TCL: addTitle -> mediumId", mediumId);
+			// console.log("TCL: async addTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
@@ -234,7 +234,7 @@
 		},
 
 		async createSource(source) {
-			console.log("TCL: async createSource -> source", source);
+			// console.log("TCL: async createSource -> source", source);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
@@ -272,7 +272,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMedium -> updateData", updateData);
+					console.log("TCL: async updateMedium -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -328,7 +328,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMediumSubtype -> updateData", updateData);
+					console.log("TCL: async updateMediumSubtype -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -340,7 +340,7 @@
 		},
 
 		async updateTitle(title) {
-			console.log("TCL: async updateTitle -> title", title);
+			// console.log("TCL: async updateTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -364,7 +364,7 @@
 		},
 
 		async updateSource(source) {
-			console.log("TCL: async updateSource -> source", source);
+			// console.log("TCL: async updateSource -> source", source);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
@@ -376,7 +376,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateSource -> updateData", updateData);
+					// console.log("TCL: async updateSource -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );

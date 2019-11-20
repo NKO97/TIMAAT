@@ -223,22 +223,27 @@
 		},
 
 
-		removeCollectionItem(collection, medium) {
+		async removeCollectionItem(collection, medium) {
 			console.log("TCL: removeCollectionItem -> collection", collection);
 			console.log("TCL: removeCollectionItem -> medium", medium);
 			var col = collection;
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/"+col.id+"/medium/"+medium.id,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/"+col.id+"/medium/"+medium.id,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: removed medium from collection");
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
 			});
 		},
 
