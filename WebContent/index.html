@@ -971,9 +971,9 @@
                     <div class="col-md-4">
                       <div class="card media-cards media-card">
                         <div class="card-header">Medien
-                          <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> -->
+                          </button>
                         </div>
                         <div class="timaat-mediadatasets-medium-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <div id="timaat-mediadatasets-medium-list-loader" class="text-center card-body bg-info text-white">
@@ -1100,6 +1100,9 @@
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
                           <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Medientitel</a>
+                        </li>
+                        <li class="nav-item media-data-tabs title-data-tab">
+                          <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachspuren</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -1368,6 +1371,50 @@
                         </div>
                         <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit" type="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- language tracks form -->
+                      <form class="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="mediumLanguageTracksLabel">Medium language tracks</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-languagetracks-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="col-md-5">
+                              <h6 class="form-header">Track type</h6>
+                            </div>
+                            <div class="col-md-5">
+                              <h6 class="form-header">Track language</h6>
+                            </div>
+                            <div class="col-md-2">
+                              <h6 class="form-header"></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="medium-languagetracks-container">
+                          <div data-role="dynamic-languagetrack-fields" id="dynamic-languagetrack-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional language track form content will be created dynamically --> 
+                          </div>
+                          <div class="languagetrack-form-divider">
+                          <br>
+                          <hr>                            
+                          </div>
+                          <div data-role="new-languagetrack-fields" id="new-languagetrack-fields">
+                            <!-- one row for new language track information that shall be added to the language track list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-submit" name="submit" type="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-languagetracks-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                     </div>
                   </div>

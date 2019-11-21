@@ -118,6 +118,20 @@
           mediumFormTitles.submit();
         },
       });
+      var mediumFormLanguageTracks = $("#timaat-mediadatasets-medium-languagetracks-form");
+      var mediumFormLanguageTracksValidator = $("#timaat-mediadatasets-medium-languagetracks-form").validate({
+        rules: {
+          languageTrackTypeId: {
+            required: true,
+          },
+          languageTrackLanguageId: {
+            required: true,
+          },
+        },
+        submitHandler: function(mediumFormLanguageTracks) {
+          mediumFormLanguageTracks.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

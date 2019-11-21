@@ -11618,12 +11618,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (1, 1, 1, 'Subtitle');
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (2, 2, 1, 'Audio Track');
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (3, 1, 2, 'Subtitle');
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (4, 2, 2, 'Audio Track');
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (5, 1, 3, 'Untertitel');
-INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (6, 2, 3, 'Tonspur');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (1, 1, 1, 'Audio Track');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (2, 2, 1, 'Subtitle');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (3, 1, 2, 'Audio Track');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (4, 2, 2, 'Subtitle');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (5, 1, 3, 'Tonspur');
+INSERT INTO `FIPOP`.`medium_language_type_translation` (`id`, `medium_language_type_id`, `language_id`, `type`) VALUES (6, 2, 3, 'Untertitel');
 
 COMMIT;
 

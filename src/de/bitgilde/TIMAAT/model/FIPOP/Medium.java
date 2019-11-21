@@ -185,8 +185,8 @@ public class Medium implements Serializable {
 	// private List<Genre> genres;
 
 	//bi-directional many-to-one association to MediumHasLanguage
-	// @OneToMany(mappedBy="medium")
-	// private List<MediumHasLanguage> mediumHasLanguages;
+	@OneToMany(mappedBy="medium")
+	private List<MediumHasLanguage> mediumHasLanguages;
 
 	//bi-directional many-to-many association to RatingCategory
 	// @ManyToMany(mappedBy="mediums")
@@ -461,27 +461,27 @@ public class Medium implements Serializable {
 	// 	this.genres = genres;
 	// }
 
-	// public List<MediumHasLanguage> getMediumHasLanguages() {
-	// 	return this.mediumHasLanguages;
-	// }
+	public List<MediumHasLanguage> getMediumHasLanguages() {
+		return this.mediumHasLanguages;
+	}
 
-	// public void setMediumHasLanguages(List<MediumHasLanguage> mediumHasLanguages) {
-	// 	this.mediumHasLanguages = mediumHasLanguages;
-	// }
+	public void setMediumHasLanguages(List<MediumHasLanguage> mediumHasLanguages) {
+		this.mediumHasLanguages = mediumHasLanguages;
+	}
 
-	// public MediumHasLanguage addMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
-	// 	getMediumHasLanguages().add(mediumHasLanguage);
-	// 	mediumHasLanguage.setMedium(this);
+	public MediumHasLanguage addMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
+		getMediumHasLanguages().add(mediumHasLanguage);
+		mediumHasLanguage.setMedium(this);
 
-	// 	return mediumHasLanguage;
-	// }
+		return mediumHasLanguage;
+	}
 
-	// public MediumHasLanguage removeMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
-	// 	getMediumHasLanguages().remove(mediumHasLanguage);
-	// 	mediumHasLanguage.setMedium(null);
+	public MediumHasLanguage removeMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
+		getMediumHasLanguages().remove(mediumHasLanguage);
+		mediumHasLanguage.setMedium(null);
 
-	// 	return mediumHasLanguage;
-	// }
+		return mediumHasLanguage;
+	}
 
 	// public List<RatingCategory> getRatingCategories() {
 	// 	return this.ratingCategories;

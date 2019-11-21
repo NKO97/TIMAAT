@@ -88,7 +88,11 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumDocument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguagePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumImage</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEvent</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumRelatesToEventPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware</class>

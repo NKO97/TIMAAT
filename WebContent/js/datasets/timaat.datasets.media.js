@@ -43,7 +43,7 @@
 			TIMAAT.MediaDatasets.initVideos();
 			TIMAAT.MediaDatasets.initVideogames();
 			TIMAAT.MediaDatasets.initTitles();
-			TIMAAT.MediaDatasets.titles = [];
+			TIMAAT.MediaDatasets.initLanguageTracks();
 			$('.media-data-tabs').hide();
 			$('.media-cards').hide();
 			$('.media-card').show();
@@ -87,9 +87,9 @@
 				var modal = $('#timaat-mediadatasets-mediumtype-meta');
 				var mediaType = modal.data('mediaType');
 				var type = $("#timaat-mediadatasets-mediumtype-meta-name").val();
-				var hasVisual = $("#timaat-mediadatasets-mediumtype-meta-has-visual").val();
-				var hasAudio = $("#timaat-mediadatasets-mediumtype-meta-has-audio").val();
-				var hasContent = $("#timaat-mediadatasets-mediumtype-meta-has-content").val();
+				var hasVisual = $("#timaat-mediadatasets-mediumtype-meta-hasvisual").val();
+				var hasAudio = $("#timaat-mediadatasets-mediumtype-meta-hasaudio").val();
+				var hasContent = $("#timaat-mediadatasets-mediumtype-meta-hascontent").val();
 
 				if (mediaType) {
 					mediaType.model.medium.mediaTypeTranslations[0].type = type;
@@ -283,7 +283,7 @@
 			// Add title button click
 			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(e) {
 				e.preventDefault();
-				console.log("TCL: add title to list")
+				console.log("TCL: add title to list");
 				var listEntry = $(this).closest('[data-role="new-title-fields"]');
 				var title = '';
 				var languageId = null;
@@ -299,7 +299,7 @@
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					console.log("TCL: titlesInForm", titlesInForm);
-					var i = Math.floor((titlesInForm.length - 1) / 2) - 1;
+					var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isPrimaryTitle' occurence
 					$('#dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -315,7 +315,7 @@
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id"  name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]"required>
+								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]" required>
 									<option value="2">English</option>
 									<option value="3">German</option>
 									<option value="4">French</option>
@@ -455,10 +455,10 @@
 					for (; i < medium.model.titles.length; i++ ) { // update existing titles
 						var title = {
 							id: medium.model.titles[i].id,
-								language: {
-									id: Number(formTitleList[i].titleLanguageId),
-								},
-								name: formTitleList[i].title,
+							language: {
+								id: Number(formTitleList[i].titleLanguageId),
+							},
+							name: formTitleList[i].title,
 							};
 						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
@@ -469,10 +469,10 @@
 					for (; i < medium.model.titles.length; i++ ) { // update existing titles
 						var title = {
 							id: medium.model.titles[i].id,
-								language: {
-									id: Number(formTitleList[i].titleLanguageId),
-								},
-								name: formTitleList[i].title,
+							language: {
+								id: Number(formTitleList[i].titleLanguageId),
+							},
+							name: formTitleList[i].title,
 							};
 						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
@@ -481,10 +481,10 @@
 					for (; i < formTitleList.length; i++) { // create new titles
 						var title = {
 							id: 0,
-								language: {
-									id: Number(formTitleList[i].titleLanguageId),
-								},
-								name: formTitleList[i].title,
+							language: {
+								id: Number(formTitleList[i].titleLanguageId),
+							},
+							name: formTitleList[i].title,
 							};
 						newTitles.push(title);
 					}
@@ -496,10 +496,10 @@
 					for (; i < formTitleList.length; i++ ) { // update existing titles
 						var title = {
 							id: medium.model.titles[i].id,
-								language: {
-									id: Number(formTitleList[i].titleLanguageId),
-								},
-								name: formTitleList[i].title,
+							language: {
+								id: Number(formTitleList[i].titleLanguageId),
+							},
+							name: formTitleList[i].title,
 							};
 						await TIMAAT.MediaDatasets.updateTitle(title, medium);
 					};
@@ -523,6 +523,238 @@
 			// Cancel add/edit button in titles form functionality
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+			});
+		},
+
+		initLanguageTracks: function() {
+			$('#media-tab-languagetracks-form').click(function(event) {
+				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab("show");
+				$('.form').hide();
+				TIMAAT.MediaDatasets.setMediumLanguageTrackList($("#timaat-mediadatasets-media-metadata-form").data("medium"))
+				$('#timaat-mediadatasets-medium-languagetracks-form').show();
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+			});
+			
+			// edit languageTracks form button handler
+			$('#timaat-mediadatasets-medium-languagetracks-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks("edit", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
+			});
+
+			// Add languageTrack button click
+			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', function(e) {
+				e.preventDefault();
+				console.log("TCL: add languageTrack to list");
+				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
+				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
+				console.log("TCL: mediumLanguageTypeId: ", mediumLanguageTypeId);
+				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
+				console.log("TCL: languageId: ", languageId);
+				// if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) return false;
+				if (mediumLanguageTypeId != null && languageId != null) {
+					var languageTracksInForm = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
+						console.log("TCL: languageTracksInForm", languageTracksInForm);
+					var i = Math.floor((languageTracksInForm.length -1) / 2 ); // length -1 as the 'add new track' row is still part of the form and has to be removed
+          	console.log("TCL: i", i);
+					$('#dynamic-languagetrack-fields').append(
+						`<div class="form-group" data-role="languagetrack-entry">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label class="sr-only">Track Type</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required>
+									<option value="1">Audio track</option>
+									<option value="2">Subtitle track</option>
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label class="sr-only">Track Language</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required>
+									<option value="2">English</option>
+									<option value="3">German</option>
+									<option value="4">French</option>
+									<option value="5">Spanish</option>
+									<option value="6">Russian</option>
+									<option value="7">Arabic</option>
+								</select>
+							</div>
+							<div class="col-md-2 text-center">
+								<button class="btn btn-danger" data-role="remove">
+									<span class="fas fa-trash-alt"></span>
+								</button>
+							</div>
+						</div>
+					</div>`
+					);
+					($('[data-role="languageTrackTypeId['+i+']"]'))
+						.find('option[value='+mediumLanguageTypeId+']')
+						.attr("selected",true);
+					($('[data-role="languageTrackLanguageId['+i+']"]'))
+						.find('option[value='+languageId+']')
+						.attr("selected",true);
+					$('select[name="languageTrackTypeId['+i+']"').rules("add",
+					{
+						required: true,
+					});
+				$('select[name="languageTrackLanguageId['+i+']"').rules("add",
+					{
+						required: true,
+					});
+					// if (listEntry.find('input').each(function(){
+					// 	console.log("TCL: $(this).val()", $(this).val());
+					// 	$(this).val('');
+					// }));
+					// if (listEntry.find('select').each(function(){
+					// 	console.log("TCL: $(this).val()", $(this).val());
+					// 	$(this).val('');
+					// }));
+					listEntry.find('[data-role="languageTrackTypeId"]').val('');
+					listEntry.find('[data-role="languageTrackLanguageId"]').val('');					
+				}
+				else {
+					// TODO open modal showing error that not all required fields are set.
+				}
+			});
+
+			// Remove languageTrack button click
+			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', function(e) {
+				e.preventDefault();
+					// TODO consider undo function or popup asking if user really wants to delete a languagetrack
+					console.log("DELETE languageTrack ENTRY");
+					$(this).closest('.form-group').remove();
+			});
+
+			// Submit medium languageTracks button functionality
+			$("#timaat-mediadatasets-medium-languagetracks-form-submit").on('click', async function(event) {
+				console.log("TCL: languageTracks form: submit");
+				// add rules to dynamically added form fields
+				console.log("TCL: languageTracks form: valid?");
+				// continue only if client side validation has passed
+				event.preventDefault();
+				var node = document.getElementById("new-languagetrack-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild)
+				};
+				// test if form is valid
+				// add empty 'add new trck' row to form
+				if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) {
+					$('[data-role="new-languagetrack-fields"]').append(
+						`<div class="form-group" data-role="languagetrack-entry">
+							<div class="form-row">
+								<div class="col-md-2 text-center">
+									<div class="form-check">
+										<span>Add new track:</span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<label class="sr-only">Track Type</label>
+									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
+										<option value="" disabled selected hidden>[Choose track type...]</option>
+										<option value="1">Audio track</option>
+										<option value="2">Subtitle track</option>
+									</select>
+								</div>
+								<div class="col-md-4">
+									<label class="sr-only">Track Language</label>
+									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
+										<option value="" disabled selected hidden>[Choose languagetrack language...]</option>
+										<option value="2">English</option>
+										<option value="3">German</option>
+										<option value="4">French</option>
+										<option value="5">Spanish</option>
+										<option value="6">Russian</option>
+										<option value="7">Arabic</option>
+									</select>
+								</div>
+								<div class="col-md-2 text-center">
+									<button class="btn btn-primary" data-role="add">
+										<span class="fas fa-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+					);					
+					return false;
+				}
+				console.log("TCL: languageTracks form: valid");
+
+				// the original medium model (in case of editing an existing medium)
+				var medium = $("#timaat-mediadatasets-medium-languagetracks-form").data("medium");			
+
+				// Create/Edit medium window submitted data
+				var formData = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
+        console.log("TCL: formData", formData);
+				var formLanguageTrackList = [];
+				var i = 0;
+				while ( i < formData.length) {
+					var element = {
+					languageTrackTypeId: 0,
+					languageTrackLanguageId: 0,
+					};
+					element.languageTrackTypeId = formData[i].value;
+					element.languageTrackLanguageId = formData[i+1].value;
+					i = i+2;
+					formLanguageTrackList[formLanguageTrackList.length] = element;
+				}
+				// only updates to existing languageTracks
+				if (formLanguageTrackList.length == medium.model.mediumHasLanguages.length) {
+					var i = 0;
+					for (; i < medium.model.mediumHasLanguages.length; i++ ) { // update existing languageTracks
+						var languageTrack = {
+							mediumId: Number(medium.model.id),
+							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
+							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
+							};
+						await TIMAAT.MediaDatasets.updateLanguageTrack(languageTrack, medium);
+					};
+				}
+				// update existing languageTracks and add new ones
+				else if (formLanguageTrackList.length > medium.model.mediumHasLanguages.length) {
+					var i = 0;
+					for (; i < medium.model.mediumHasLanguages.length; i++ ) { // update existing languageTracks
+						var languageTrack = {
+							mediumId: Number(medium.model.id),
+							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
+							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
+							};
+						await TIMAAT.MediaDatasets.updateLanguageTrack(languageTrack, medium);
+					};
+					i = medium.model.mediumHasLanguages.length;
+					var newLanguageTracks = [];
+					for (; i < formLanguageTrackList.length; i++) { // create new languageTracks
+						var languageTrack = {
+							mediumId: Number(medium.model.id),
+							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
+							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
+							};
+						newLanguageTracks.push(languageTrack);
+					}
+					await TIMAAT.MediaDatasets.addLanguageTracks(medium, newLanguageTracks);
+				}
+				// update existing languageTracks and delete obsolete ones
+				else if (formLanguageTrackList.length < medium.model.mediumHasLanguages.length) {
+					var i = 0;
+					for (; i < formLanguageTrackList.length; i++ ) { // update existing languageTracks
+						var languageTrack = {
+							mediumId: Number(medium.model.id),
+							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
+							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
+							};
+						await TIMAAT.MediaDatasets.updateLanguageTrack(languageTrack, medium);
+					};
+					var i = medium.model.mediumHasLanguages.length - 1;
+					for (; i >=  formLanguageTrackList.length; i-- ) { // remove obsolete languageTracks
+						TIMAAT.MediaService.removeLanguageTrack(medium.model.mediumHasLanguages[i]);
+						medium.model.mediumHasLanguages.pop();				
+					}
+				}
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks("show", medium);
+			});
+
+			// Cancel add/edit button in languageTracks form functionality
+			$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').click( function(event) {
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks("show", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
 			});
 		},
 
@@ -1748,8 +1980,20 @@
 				if ( title.mediumId > 0 )
 					mediumTitles.model.titles.push(title); 
 			});
-			// TIMAAT.MediaDatasets.titles = mediumTitles;
-			// TIMAAT.MediaDatasets.titles.model = medium.model.titles;
+		},
+
+		setMediumLanguageTrackList: function(medium) {
+			console.log("TCL: setMediumLanguageTrackList -> medium", medium);
+			if ( !medium ) return;
+			$('#timaat-languagetrack-list-loader').remove();
+			// clear old UI list
+			$('#timaat-languagetrack-list').empty();
+			// setup model
+			var mediumLanguageTracks = Array();
+			medium.model.mediumHasLanguages.forEach(function(languageTrack) { 
+				if ( languageTrack.mediumId > 0 )
+					mediumLanguageTracks.model.mediumHasLanguages.push(languageTrack); 
+			});
 		},
 
 		addMedium: function(mediumType) {	
@@ -1940,11 +2184,6 @@
 				node.removeChild(node.lastChild)
 			};
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
-			// document.forms['timaat-mediadatasets-medium-titles-form'].reset();
-			// $('#timaat-mediadatasets-medium-titles-form')[0].reset();
-			// $('.form').each(function() {
-			// 	this.reset();
-			// });
 			mediumFormTitlesValidator.resetForm();
 			// $('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumTitles"]').focus();
@@ -1956,7 +2195,6 @@
 			var numTitles = medium.model.titles.length;
       // console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i< numTitles; i++) {
-				// console.log("TCL: TIMAAT.MediaDatasets.titles[i]", medium.model.titles[i]);
 				// console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
 				$('[data-role="dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
@@ -2070,6 +2308,145 @@
 					</div>`
 				);
 				$('#timaat-mediadatasets-medium-titles-form').data('medium', medium);
+			}
+		},
+
+		mediumFormLanguageTracks: function(action, medium) {
+    	console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
+			var node = document.getElementById("dynamic-languagetrack-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
+			var node = document.getElementById("new-languagetrack-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
+			$('#timaat-mediadatasets-medium-languagetracks-form').trigger('reset');
+			mediumFormLanguageTracksValidator.resetForm();
+			// $('.medium-data-tab').show();
+			$('.nav-tabs a[href="#mediumLanguageTracks"]').focus();
+			$('#timaat-mediadatasets-medium-languagetracks-form').show();
+			
+			// setup UI
+			// languageTrack data
+			var i = 0;
+			var numLanguageTracks = medium.model.mediumHasLanguages.length;
+      console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
+			for (; i< numLanguageTracks; i++) {
+				// console.log("TCL: TIMAAT.MediaDatasets.mediumHasLanguages[i]", medium.model.mediumHasLanguages[i]);
+				// console.log("TCL: medium.model.mediumHasLanguages[i].languageId", medium.model.mediumHasLanguages[i].languageId);
+				$('[data-role="dynamic-languagetrack-fields"]').append(
+					`<div class="form-group" data-role="languagetrack-entry">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label class="sr-only">Track Type</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageTypeId+`]" required>
+									<!-- <option value="" disabled selected hidden>[Choose Track type...]</option> -->
+									<option value="1">Audio Track</option>
+									<option value="2">Subtitle Track</option>
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label class="sr-only">Track Language</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].languageId+`]" required>
+									<!-- <option value="" disabled selected hidden>[Choose Track language...]</option> -->
+									<option value="2">English</option>
+									<option value="3">German</option>
+									<option value="4">French</option>
+									<option value="5">Spanish</option>
+									<option value="6">Russian</option>
+									<option value="7">Arabic</option>
+								</select>
+							</div>
+							<div class="col-md-2 text-center">
+								<button class="btn btn-danger" data-role="remove">
+									<span class="fas fa-trash-alt"></span>
+								</button>
+							</div>
+						</div>
+					</div>`
+					);
+					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageTypeId+']"')
+						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageTypeId+']')
+						.attr("selected",true);
+					$('[data-role="languageTrackLanguageId['+medium.model.mediumHasLanguages[i].languageId+']"')
+						.find('option[value='+medium.model.mediumHasLanguages[i].languageId+']')
+						.attr("selected",true);
+					$('select[name="languageTrackTypeId['+i+']"').rules("add",
+						{
+							required: true,
+						});
+					$('select[name="languageTrackLanguageId['+i+']"').rules("add",
+						{
+							required: true,
+						});
+			};
+
+			if ( action == "show") {
+				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-submit').hide();
+				$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').hide();
+				$('[data-role="new-languagetrack-fields"').hide();
+				$('.languagetrack-form-divider').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
+				$('#mediumLanguageTracksLabel').html("Medium Spurliste");
+			}
+			else if (action == "edit") {
+				$('#timaat-mediadatasets-medium-languagetracks-form-submit').show();
+				$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').show();
+				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').hide();
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", true);
+				$('[data-role="new-languagetrack-fields"').show();
+				$('.languagetrack-form-divider').show();
+				$('#mediumLanguageTracksLabel').html("Medium Spurliste bearbeiten");
+				$('#timaat-mediadatasets-medium-languagetracks-form-submit').html("Speichern");
+				// $('#timaat-mediadatasets-media-metadata-languagetrack').focus();
+
+				// fields for new languageTrack entry
+				// add empty 'add new track' row to form when edit mode is enabled
+				$('[data-role="new-languagetrack-fields"]').append(
+					`<div class="form-group" data-role="languagetrack-entry">
+						<div class="form-row">
+							<div class="col-md-2 text-center">
+								<div class="form-check">
+									<span>Add new Track:</span>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label class="sr-only">Track type</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
+									<option value="" disabled selected hidden>[Choose Track type...]</option>
+									<option value="1">Audio Track</option>
+									<option value="2">Subtitle Track</option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<label class="sr-only">Track language</label>
+								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
+									<option value="" disabled selected hidden>[Choose Track language...]</option>
+									<option value="2">English</option>
+									<option value="3">German</option>
+									<option value="4">French</option>
+									<option value="5">Spanish</option>
+									<option value="6">Russian</option>
+									<option value="7">Arabic</option>
+								</select>
+							</div>
+							<div class="col-md-2 text-center">
+								<button class="btn btn-primary" data-role="add">
+									<span class="fas fa-plus"></span>
+								</button>
+							</div>
+						</div>
+					</div>`
+				);
+				$('#timaat-mediadatasets-medium-languagetracks-form').data('medium', medium);
 			}
 		},
 
@@ -2225,6 +2602,39 @@
 			// };
 		},
 
+		addLanguageTracks: async function(medium, newLanguageTracks) {
+			console.log("TCL: addLanguageTracks: async function -> medium, newLanguageTracks", medium, newLanguageTracks);
+			try {
+				// create languageTrack
+				var i = 0;
+				for (; i < newLanguageTracks.length; i++) {
+					// var newLanguageTrack = await TIMAAT.MediaService.createLanguageTrack(newLanguageTracks[i]);
+					var addedLanguageTrackModel = await TIMAAT.MediaService.addLanguageTrack(medium.model.id, newLanguageTracks[i]);
+					medium.model.mediumHasLanguages.push(addedLanguageTrackModel);
+					console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
+					console.log("TCL: medium.model.mediumHasLanguages.length", medium.model.mediumHasLanguages.length);	
+				}
+				// await TIMAAT.MediaDatasets.updateMedium(medium);
+				
+				// link languageTrack and medium
+				// var tempMediumModel = mediumModel;
+				// tempMediumModel.mediumHasLanguages = newLanguageTrack;
+				// tempMediumModel.source = source;
+				// var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			// try {
+			// 	// push new languageTrack to dataset model
+			// 	console.log("TCL: addedLanguageTrackModel", addedLanguageTrackModel);
+			// 	await TIMAAT.MediaDatasets._languageTrackAdded(addedLanguageTrackModel);
+
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
+		},
+
 		updateMedium: async function(medium) {
 		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
 			try {
@@ -2285,7 +2695,7 @@
 			try {
 				// update data that is part of medium and its translation
 				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
-        // console.log("TCL: UpdateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
+        // console.log("TCL: updateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
 				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2302,6 +2712,26 @@
 				for (; i < medium.model.titles.length; i++) {
 					if (medium.model.titles[i].id == title.id)
 						medium.model.titles[i] = tempTitle;
+				}
+
+				// update data that is part of medium (includes updating last edited by/at)
+				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
+				// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+		},
+
+		updateLanguageTrack: async function(languageTrack, medium) {
+			console.log("TCL: updateLanguageTrack: async function -> languageTrack at beginning of update process: ", languageTrack);
+			try {
+				// update languageTrack
+				var tempLanguageTrack = await TIMAAT.MediaService.updateLanguageTrack(languageTrack);
+				console.log("TCL: tempLanguageTrack", tempLanguageTrack);
+				var i = 0;
+				for (; i < medium.model.mediumHasLanguages.length; i++) {
+					if (medium.model.mediumHasLanguages[i].mediumId == languageTrack.mediumId)
+						medium.model.mediumHasLanguages[i] = tempLanguageTrack;
 				}
 
 				// update data that is part of medium (includes updating last edited by/at)
@@ -2386,6 +2816,12 @@
 					TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
 					medium.model.titles.splice(i,1);
 				}
+			}
+			// remove all language tracks from medium
+			var i = 0;
+			for (; i < medium.model.mediumHasLanguages.length; i++ ) { // remove obsolete languageTracks
+				TIMAAT.MediaService.removeLanguageTrack(medium.model.mediumHasLanguages[i]);
+				medium.model.mediumHasLanguages.splice(i,1);
 			}
 			medium.remove();
 		},

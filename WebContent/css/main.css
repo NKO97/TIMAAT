@@ -214,7 +214,8 @@ body.timaat-login-modal-open #wrapper {
 }
 
 #timaat-mediadatasets-media-metadata-form,
-#timaat-mediadatasets-medium-titles-form {
+#timaat-mediadatasets-medium-titles-form,
+#timaat-mediadatasets-medium-languagetracks-form {
 	display:none;
 }
 
@@ -607,4 +608,28 @@ select:invalid {
 
 [data-role="new-title-fields"] > .form-group:last-child [data-role="remove"] {
     display: none;
+}
+
+[data-role="dynamic-languagetrack-fields"] > .form-group + .form-group {
+	margin-top: 0.5em;
+}
+
+[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="add"] {
+	display: none;
+}
+
+[data-role="new-languagetrack-fields"] > .form-group + .form-group {
+margin-top: 0.5em;
+}
+
+[data-role="new-languagetrack-fields"] > .form-group [data-role="add"] {
+display: none;
+}
+
+[data-role="new-languagetrack-fields"] > .form-group:last-child [data-role="add"] {
+	display: inline-block;
+}
+
+[data-role="new-languagetrack-fields"] > .form-group:last-child [data-role="remove"] {
+	display: none;
 }

@@ -287,14 +287,14 @@ public class Language implements Serializable {
 	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumHasLanguage
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<MediumHasLanguage> mediumHasLanguages;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MediumHasLanguage> mediumHasLanguages;
 
 	//bi-directional many-to-one association to MediumLanguageTypeTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<MediumLanguageTypeTranslation> mediumLanguageTypeTranslations;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MediumLanguageTypeTranslation> mediumLanguageTypeTranslations;
 
 	//bi-directional many-to-one association to MotivationTranslation
 	// @OneToMany(mappedBy="language")
@@ -1620,27 +1620,27 @@ public class Language implements Serializable {
 		return mediumEventRelationshipTypeTranslation;
 	}
 
-	// public List<MediumHasLanguage> getMediumHasLanguages() {
-	// 	return this.mediumHasLanguages;
-	// }
+	public List<MediumHasLanguage> getMediumHasLanguages() {
+		return this.mediumHasLanguages;
+	}
 
-	// public void setMediumHasLanguages(List<MediumHasLanguage> mediumHasLanguages) {
-	// 	this.mediumHasLanguages = mediumHasLanguages;
-	// }
+	public void setMediumHasLanguages(List<MediumHasLanguage> mediumHasLanguages) {
+		this.mediumHasLanguages = mediumHasLanguages;
+	}
 
-	// public MediumHasLanguage addMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
-	// 	getMediumHasLanguages().add(mediumHasLanguage);
-	// 	mediumHasLanguage.setLanguage(this);
+	public MediumHasLanguage addMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
+		getMediumHasLanguages().add(mediumHasLanguage);
+		mediumHasLanguage.setLanguage(this);
 
-	// 	return mediumHasLanguage;
-	// }
+		return mediumHasLanguage;
+	}
 
-	// public MediumHasLanguage removeMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
-	// 	getMediumHasLanguages().remove(mediumHasLanguage);
-	// 	mediumHasLanguage.setLanguage(null);
+	public MediumHasLanguage removeMediumHasLanguage(MediumHasLanguage mediumHasLanguage) {
+		getMediumHasLanguages().remove(mediumHasLanguage);
+		mediumHasLanguage.setLanguage(null);
 
-	// 	return mediumHasLanguage;
-	// }
+		return mediumHasLanguage;
+	}
 
 	// public List<MediumLanguageTypeTranslation> getMediumLanguageTypeTranslations() {
 	// 	return this.mediumLanguageTypeTranslations;

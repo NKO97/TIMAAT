@@ -51,7 +51,9 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudio;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumDocument;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumImage;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageType;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumText;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
@@ -98,7 +100,7 @@ public class MediumServiceEndpoint{
 				video.setStatus(videoStatus(m.getId()));
 				video.setViewToken(issueFileToken(m.getId()));
 				m.setMediumVideo(video);
-				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().toString());
+				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
@@ -1357,6 +1359,140 @@ public class MediumServiceEndpoint{
 																					UserLogManager.LogEvents.TITLEDELETED);
 	System.out.println("MediumServiceEndpoint: deleteTitle - delete complete");	
 	return Response.ok().build();
+	}
+
+	@POST
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/languagetrack/{id}")
+	@Secured
+	public Response addMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("id") int id, @PathParam("mediumLanguageTypeId") int mediumLanguageTypeId, String jsonData) {
+
+		System.out.println("MediumServiceEndpoint: addLanguageTrack: jsonData: "+jsonData);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Language language = entityManager.find(Language.class, id);
+		if ( language == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		MediumLanguageType languageType = entityManager.find(MediumLanguageType.class, mediumLanguageTypeId);
+		if ( languageType == null ) return Response.status(Status.NOT_FOUND).build();
+
+		MediumHasLanguage mhl = null;
+		try {
+			mhl = (MediumHasLanguage) entityManager.createQuery(
+				"SELECT mhl FROM MediumHasLanguage mhl WHERE mhl.language=:language AND mhl.medium=:medium AND mhl.languageType=:languageType")
+					.setParameter("language", language)
+					.setParameter("medium", medium)
+					.setParameter("languageType", languageType)
+					.getSingleResult();
+		} catch (Exception e) {
+			// doesn't matter
+		}
+		
+		if ( mhl == null ) {
+			mhl = new MediumHasLanguage();
+			mhl.setLanguage(language);
+			mhl.setMedium(medium);
+			mhl.setMediumLanguageType(languageType);
+				try {
+					EntityTransaction entityTransaction = entityManager.getTransaction();
+					entityTransaction.begin();
+					entityManager.persist(mhl);
+					entityTransaction.commit();
+					entityManager.refresh(language);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Response.notModified().build();
+				}
+		}
+					
+	// System.out.println("MediumServiceEndpoint: addLanguageTrack: add log entry");
+	// add log entry
+	// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);
+
+	return Response.ok().build();
+	}
+
+	@PATCH
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/languagetrack/{id}")
+	@Secured
+	public Response updateMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("id") int id, String jsonData) {
+		System.out.println("MediumServiceEndpoint: UPDATE TITLE - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		Title updatedTitle = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Title title = entityManager.find(Title.class, id);
+		if ( title == null ) return Response.status(Status.NOT_FOUND).build();		
+		// parse JSON data
+		try {
+			updatedTitle = mapper.readValue(jsonData, Title.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedTitle == null ) return Response.notModified().build();    	
+		// update title
+		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - title.id:"+title.getId());
+		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - language id:"+updatedTitle.getLanguage().getId());	
+		if ( updatedTitle.getName() != null ) title.setName(updatedTitle.getName());
+		if ( updatedTitle.getLanguage() != null ) title.setLanguage(updatedTitle.getLanguage());
+
+		// update log metadata
+		// log metadata will be updated with the corresponding medium
+		// title.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	title.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// }		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(title);
+		entityManager.persist(title);
+		entityTransaction.commit();
+		entityManager.refresh(title);
+
+		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																						UserLogManager.LogEvents.TITLEEDITED);
+		System.out.println("MediumServiceEndpoint: UPDATE TITLE - update complete");	
+		return Response.ok().entity(title).build();
+	}
+
+	@DELETE
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/languagetrack/{id}")
+	@Secured
+	public Response deleteMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("id") int id, @PathParam("mediumLanguageTypeId") int mediumLanguageTypeId) {    
+		System.out.println("MediumServiceEndpoint: deleteMediumHasLanguageItem");	
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Language language = entityManager.find(Language.class, id);
+		if ( language == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		MediumLanguageType languageType = entityManager.find(MediumLanguageType.class, mediumLanguageTypeId);
+		if ( languageType == null ) return Response.status(Status.NOT_FOUND).build();
+
+		try {
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.createQuery("DELETE FROM MediumHasLanguage mhl WHERE mhl.language=:language AND mhl.medium=:medium AND mhl.languageType=:languageType")
+				.setParameter("language", language)
+				.setParameter("medium", medium)
+				.setParameter("languageType", languageType)
+				.executeUpdate();
+			entityTransaction.commit();
+			entityManager.refresh(language);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.notModified().build();
+		}
+		// add log entry
+		System.out.println("MediumServiceEndpoint: deleteMediumHasLanguageItem - delete complete");	
+		return Response.ok().build();
 	}
 
 	@POST

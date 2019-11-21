@@ -80,24 +80,24 @@
 			});			
 		},
 
-		listMediumTitles(medium, callback) {
-			// console.log("TCL: listMedia -> callback", callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/titles/list",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-      	// console.log("TCL: listMedia -> data", data);
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-			});			
-		},
+		// listMediumTitles(medium, callback) {
+		// 	// console.log("TCL: listMedia -> callback", callback);
+		// 	jQuery.ajax({
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/titles/list",
+		// 		type:"GET",
+		// 		contentType:"application/json; charset=utf-8",
+		// 		dataType:"json",
+		// 		beforeSend: function (xhr) {
+		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 		},
+		// 	}).done(function(data) {
+    //   	// console.log("TCL: listMedia -> data", data);
+		// 		callback(data);
+		// 	})
+		// 	.fail(function(e) {
+		// 		console.log( "error", e );
+		// 	});			
+		// },
 
 		async createMedium(mediumModel) {
 			console.log("TCL: async createMedium -> mediumModel", mediumModel);
@@ -225,6 +225,29 @@
 				}).done(function(titleData) {
 					console.log("TCL: addTitle -> titleData", titleData);
 					resolve(titleData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async addLanguageTrack(mediumId, track) {
+      console.log("TCL: async addLanguageTrack -> mediumId, track", mediumId, track);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/languagetrack/"+track.id,
+					type:"POST",
+					data: JSON.stringify(track),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(trackData) {
+					console.log("TCL: addTrack -> trackData", trackData);
+					resolve(trackData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -363,6 +386,30 @@
 			});
 		},
 
+		async updateLanguageTrack(languageTrack) {
+			console.log("TCL: async updateLanguageTrack -> languageTrack", languageTrack);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/languagetrack/"+languageTrack.mediumId,
+					type:"PATCH",
+					data: JSON.stringify(languageTrack),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					console.log("TCL: async updateLanguageTrack -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
 		async updateSource(source) {
 			// console.log("TCL: async updateSource -> source", source);
 			return new Promise(resolve => {
@@ -425,6 +472,23 @@
 			console.log("TCL: removeTitle -> title", title);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+		removeLanguageTrack(languageTrack) {
+			console.log("TCL: removeLanguageTrack -> languageTrack", languageTrack);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/languagetrack/"+languageTrack.mediumId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
