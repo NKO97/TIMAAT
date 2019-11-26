@@ -1250,7 +1250,7 @@ public class MediumServiceEndpoint{
 			System.out.println("MediumServiceEndpoint: addTitle: newTitle == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("MediumServiceEndpoint: addTitle: language id: "+newTitle.getLanguage().getId());
+		// System.out.println("MediumServiceEndpoint: addTitle: title: "+newTitle.getName());
 		// sanitize object data
 		newTitle.setId(0);
 		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
@@ -1305,16 +1305,16 @@ public class MediumServiceEndpoint{
 		Title updatedTitle = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Title title = entityManager.find(Title.class, id);
-		if ( title == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
+		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - old title :"+title.getName());		
 		// parse JSON data
 		try {
 			updatedTitle = mapper.readValue(jsonData, Title.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedTitle == null ) return Response.notModified().build();    	
+		if ( updatedTitle == null ) return Response.notModified().build();
 		// update title
-		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - title.id:"+title.getId());
 		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - language id:"+updatedTitle.getLanguage().getId());	
 		if ( updatedTitle.getName() != null ) title.setName(updatedTitle.getName());
 		if ( updatedTitle.getLanguage() != null ) title.setLanguage(updatedTitle.getLanguage());
@@ -1326,7 +1326,7 @@ public class MediumServiceEndpoint{
 		// 	title.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
 		// 	// DEBUG do nothing - production system should abort with internal server error			
-		// }		
+		// }
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(title);

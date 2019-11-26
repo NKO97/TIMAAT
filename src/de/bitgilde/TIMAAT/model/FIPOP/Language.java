@@ -1642,27 +1642,27 @@ public class Language implements Serializable {
 		return mediumHasLanguage;
 	}
 
-	// public List<MediumLanguageTypeTranslation> getMediumLanguageTypeTranslations() {
-	// 	return this.mediumLanguageTypeTranslations;
-	// }
+	public List<MediumLanguageTypeTranslation> getMediumLanguageTypeTranslations() {
+		return this.mediumLanguageTypeTranslations;
+	}
 
-	// public void setMediumLanguageTypeTranslations(List<MediumLanguageTypeTranslation> mediumLanguageTypeTranslations) {
-	// 	this.mediumLanguageTypeTranslations = mediumLanguageTypeTranslations;
-	// }
+	public void setMediumLanguageTypeTranslations(List<MediumLanguageTypeTranslation> mediumLanguageTypeTranslations) {
+		this.mediumLanguageTypeTranslations = mediumLanguageTypeTranslations;
+	}
 
-	// public MediumLanguageTypeTranslation addMediumLanguageTypeTranslation(MediumLanguageTypeTranslation mediumLanguageTypeTranslation) {
-	// 	getMediumLanguageTypeTranslations().add(mediumLanguageTypeTranslation);
-	// 	mediumLanguageTypeTranslation.setLanguage(this);
+	public MediumLanguageTypeTranslation addMediumLanguageTypeTranslation(MediumLanguageTypeTranslation mediumLanguageTypeTranslation) {
+		getMediumLanguageTypeTranslations().add(mediumLanguageTypeTranslation);
+		mediumLanguageTypeTranslation.setLanguage(this);
 
-	// 	return mediumLanguageTypeTranslation;
-	// }
+		return mediumLanguageTypeTranslation;
+	}
 
-	// public MediumLanguageTypeTranslation removeMediumLanguageTypeTranslation(MediumLanguageTypeTranslation mediumLanguageTypeTranslation) {
-	// 	getMediumLanguageTypeTranslations().remove(mediumLanguageTypeTranslation);
-	// 	mediumLanguageTypeTranslation.setLanguage(null);
+	public MediumLanguageTypeTranslation removeMediumLanguageTypeTranslation(MediumLanguageTypeTranslation mediumLanguageTypeTranslation) {
+		getMediumLanguageTypeTranslations().remove(mediumLanguageTypeTranslation);
+		mediumLanguageTypeTranslation.setLanguage(null);
 
-	// 	return mediumLanguageTypeTranslation;
-	// }
+		return mediumLanguageTypeTranslation;
+	}
 
 	// public List<MotivationTranslation> getMotivationTranslations() {
 	// 	return this.motivationTranslations;

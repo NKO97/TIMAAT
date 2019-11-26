@@ -2669,13 +2669,14 @@
 
 		updateMediumSubtype: async function(mediumSubtype, mediumSubtypeData) {
 			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
-			try {
-				// update title
-				var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
-				mediumSubtypeData.model.medium.title = tempTitle;
-			} catch(error) {
-				console.log( "error: ", error);
-			};
+			// try {
+			// 	// update title
+			// 	console.log("TCL: update title via update submedium")
+			// 	var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
+			// 	mediumSubtypeData.model.medium.title = tempTitle;
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
 
 			try {
 				// update source

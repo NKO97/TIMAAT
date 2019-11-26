@@ -281,8 +281,12 @@
 
 		async updateMedium(mediumModel) {
 			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
-			var tempMediumModel = mediumModel;
-			delete tempMediumModel.ui;
+			var tempMediumModel = {};
+			tempMediumModel.releaseDate = mediumModel.releaseDate;
+			tempMediumModel.remark = mediumModel.remark;
+			tempMediumModel.copyright = mediumModel.copyright;
+			tempMediumModel.title = mediumModel.title;
+			// delete tempMediumModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
@@ -362,7 +366,7 @@
 		},
 
 		async updateTitle(title) {
-			// console.log("TCL: async updateTitle -> title", title);
+			console.log("TCL: async updateTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
