@@ -52,8 +52,7 @@
 			}).done(function(data) {
 				console.log("TCL: listMedia -> data", data);
 				callback(data);
-			})
-			.fail(function(e) {
+			}).fail(function(e) {
 				console.log(e.responseText);
 				console.log( "error", e );
 			});			
@@ -233,13 +232,13 @@
 			});
 		},
 
-		async addLanguageTrack(mediumId, track) {
-      console.log("TCL: async addLanguageTrack -> mediumId, track", mediumId, track);
+		async addLanguageTrack(track) {
+      console.log("TCL: async addLanguageTrack -> track", track);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/languagetrack/"+track.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.mediumId+"/languagetrack/"+track.mediumLanguageTypeId+"/"+track.languageId,
 					type:"POST",
-					data: JSON.stringify(track),
+					// data: JSON.stringify(track),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -248,8 +247,9 @@
 				}).done(function(trackData) {
 					console.log("TCL: addTrack -> trackData", trackData);
 					resolve(trackData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.log( "error: ", error );
+					console.log( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.log( "error: ", error );
@@ -283,7 +283,6 @@
 			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = mediumModel;
 			delete tempMediumModel.ui;
-			// delete tempMediumModel.mediumVideo;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
@@ -386,13 +385,13 @@
 			});
 		},
 
-		async updateLanguageTrack(languageTrack) {
-			console.log("TCL: async updateLanguageTrack -> languageTrack", languageTrack);
+		async updateLanguageTrack(oldTrack, track) {
+			console.log("TCL: async updateTrack -> track", track);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/languagetrack/"+languageTrack.mediumId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+oldTrack.id.mediumId+"/languagetrack/"+oldTrack.id.mediumLanguageTypeId+"/"+oldTrack.id.languageId,
 					type:"PATCH",
-					data: JSON.stringify(languageTrack),
+					data: JSON.stringify(track),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -485,23 +484,27 @@
 			});
 		},
 
-		removeLanguageTrack(languageTrack) {
-			console.log("TCL: removeLanguageTrack -> languageTrack", languageTrack);
-			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/languagetrack/"+languageTrack.mediumId,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+		async removeLanguageTrack(track) {
+			console.log("TCL: removeLanguageTrack -> track", track);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.id.mediumId+"/languagetrack/"+track.id.mediumLanguageTypeId+"/"+track.id.languageId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: removed language track from medium_has_language.");
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
 			});
 		},
 
-	}
-	
+	}	
 }, window));

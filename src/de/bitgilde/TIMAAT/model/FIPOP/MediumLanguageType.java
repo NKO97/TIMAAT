@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Set;
 
 
@@ -20,6 +23,7 @@ public class MediumLanguageType implements Serializable {
 
 	//bi-directional many-to-one association to MediumHasLanguage
 	@OneToMany(mappedBy="mediumLanguageType")
+	@JsonIgnore
 	private Set<MediumHasLanguage> mediumHasLanguages;
 
 	//bi-directional many-to-one association to MediumLanguageTypeTranslation
