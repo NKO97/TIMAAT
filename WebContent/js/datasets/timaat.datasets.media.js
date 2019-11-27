@@ -316,11 +316,11 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]" required>
 									<option value="2">English</option>
 									<option value="3">German</option>
 									<option value="4">French</option>
@@ -402,11 +402,11 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Title</label>
-									<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
+									<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 								</div>
 								<div class="col-md-3">
 									<label class="sr-only">Title's Language</label>
-									<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
 										<option value="" disabled selected hidden>[Choose title language...]</option>
 										<option value="2">English</option>
 										<option value="3">German</option>
@@ -581,14 +581,14 @@
 							<div class="form-row">
 								<div class="col-md-5">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required>
 										<option value="1">Audio track</option>
 										<option value="2">Subtitle track</option>
 									</select>
 								</div>
 								<div class="col-md-5">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required>
 										<option value="2">English</option>
 										<option value="3">German</option>
 										<option value="4">French</option>
@@ -668,7 +668,7 @@
 								</div>
 								<div class="col-md-4">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
 										<option value="" disabled selected hidden>[Choose track type...]</option>
 										<option value="1">Audio track</option>
 										<option value="2">Subtitle track</option>
@@ -676,7 +676,7 @@
 								</div>
 								<div class="col-md-4">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
 										<option value="" disabled selected hidden>[Choose languagetrack language...]</option>
 										<option value="2">English</option>
 										<option value="3">German</option>
@@ -2237,11 +2237,11 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title[`+i+`]" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title[`+i+`]" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -2315,11 +2315,11 @@
 							</div>
 							<div class="col-md-6">
 								<label class="sr-only">Title</label>
-								<input class="form-control timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 							</div>
 							<div class="col-md-3">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
 									<option value="" disabled selected hidden>[Choose title language...]</option>
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -2370,7 +2370,7 @@
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track Type</label>
-								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageType.id+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageType.id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose Track type...]</option> -->
 									<option value="1">Audio Track</option>
 									<option value="2">Subtitle Track</option>
@@ -2378,7 +2378,7 @@
 							</div>
 							<div class="col-md-5">
 								<label class="sr-only">Track Language</label>
-								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].language.id+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].language.id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose Track language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -2450,7 +2450,7 @@
 							</div>
 							<div class="col-md-4">
 								<label class="sr-only">Track type</label>
-								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
 									<option value="" disabled selected hidden>[Choose Track type...]</option>
 									<option value="1">Audio Track</option>
 									<option value="2">Subtitle Track</option>
@@ -2458,7 +2458,7 @@
 							</div>
 							<div class="col-md-4">
 								<label class="sr-only">Track language</label>
-								<select class="form-control timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
 									<option value="" disabled selected hidden>[Choose Track language...]</option>
 									<option value="2">English</option>
 									<option value="3">German</option>
