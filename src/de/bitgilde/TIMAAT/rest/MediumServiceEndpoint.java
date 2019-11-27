@@ -1447,6 +1447,25 @@ public class MediumServiceEndpoint{
 		mediumHasLanguage.setLanguage(tempLanguage);
 		mediumHasLanguage.setMediumLanguageType(tempLanguageType);
 
+		// TODO This is a temporary fix until language track form is reworked
+		// don't update if mediumHasLanguage does already exist
+		MediumHasLanguage mhlInDB = null;
+		try {
+			mhlInDB = (MediumHasLanguage) entityManager.createQuery(
+				"SELECT mhlInDB FROM MediumHasLanguage mhlInDB WHERE mhlInDB.language=:language AND mhlInDB.medium=:medium AND mhlInDB.mediumLanguageType=:mediumLanguageType")
+					.setParameter("language", tempLanguage)
+					.setParameter("medium", tempMedium)
+					.setParameter("mediumLanguageType", tempLanguageType)
+					.getSingleResult();
+		} catch (Exception e) {
+			// doesn't matter
+		}
+		if (mhlInDB != null) {
+			// entry already exists, don't add it
+			return Response.notModified().build();
+		}
+		// END of TODO
+
 		try {
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
