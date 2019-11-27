@@ -40,7 +40,6 @@
 		},
 
 		listMedia(callback) {
-			console.log("TCL: listMedia -> callback", callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
 				type:"GET",

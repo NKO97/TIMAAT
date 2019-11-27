@@ -619,14 +619,6 @@
 						{
 							required: true,
 						});
-						// if (listEntry.find('input').each(function(){
-						// 	console.log("TCL: $(this).val()", $(this).val());
-						// 	$(this).val('');
-						// }));
-						// if (listEntry.find('select').each(function(){
-						// 	console.log("TCL: $(this).val()", $(this).val());
-						// 	$(this).val('');
-						// }));
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');	
 					}				
@@ -2047,19 +2039,10 @@
 				$('.mediumtype-data').hide();
 			}
 			$('.source-data').show();
-			// $('.audio-data').hide();
-			// $('.image-data').hide();
-			// $('.software-data').hide();
-			// $('.text-data').hide();
-			// $('.video-data').hide();
-			// $('.videogame-data').hide();
 			$('.'+mediumType+'-data').show();
 			$('.datasheet-form-edit-button').hide();
 			$('.datasheet-form-buttons').hide()
 			$('.'+mediumType+'-datasheet-form-submit').show();
-			// $('#timaat-mediadatasets-medium-metadata-form-edit').hide();
-			// $('#timaat-mediadatasets-'+mediumType+'-metadata-form-submit').show();
-			// $('#timaat-mediadatasets-'+mediumType+'-metadata-form-dismiss').show();
 			$('#timaat-mediadatasets-media-metadata-form :input').prop("disabled", false);
 			$('#timaat-mediadatasets-media-metadata-title').focus();
 
@@ -2085,15 +2068,8 @@
 				$('.mediumtype-data').hide();
 			}
 			$('.source-data').show();
-			// $('.audio-data').hide();
-			// $('.image-data').hide();
-			// $('.software-data').hide();
-			// $('.text-data').hide();
-			// $('.video-data').hide();
-			// $('.videogame-data').hide();
 			$('.'+mediumType+'-data').show();
 			mediumFormMetadataValidator.resetForm();
-			// $('.media-data-tabs').hide();
 			$('.'+mediumType+'-data-tab').show();
 			$('.title-data-tab').show();
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
@@ -2106,16 +2082,11 @@
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').prop("disabled", false);
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit :input').prop("disabled", false);
 				$('.datasheet-form-buttons').hide()
-				// $('.datasheet-form-dismiss-button').hide()
-				// $('#timaat-mediadatasets-'+mediumType+'-metadata-form-submit').hide();
-				// $('#timaat-mediadatasets-medium-metadata-form-dismiss').hide();
 				$('#mediumFormHeader').html(mediumType+" Datasheet");
 			}
 			else if (action == "edit") {
 				$('.datasheet-form-buttons').hide();
 				$('.'+mediumType+'-datasheet-form-submit').show();
-				// $('#timaat-mediadatasets-'+mediumType+'-metadata-form-submit').show();
-				// $('#timaat-mediadatasets-'+mediumType+'-metadata-form-dismiss').show();
 				$('#timaat-mediadatasets-media-metadata-form :input').prop("disabled", false);
 				if (mediumType == "medium") {
 					$('#timaat-mediadatasets-media-metadata-mediatype-id').prop("disabled", true);
@@ -2126,7 +2097,6 @@
 				$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
 				$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: "YYYY-MM-DD HH:mm"});
 				$('.datasheet-form-edit-button').hide();
-				// $('#timaat-mediadatasets-medium-metadata-form-edit').hide();
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit :input').prop("disabled", true);
 				$('#mediumFormHeader').html(mediumType+" bearbeiten");
@@ -2519,12 +2489,6 @@
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			// try {
-			// 	console.log("TCL: TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length]", TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length]);
-			// 	TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length]);
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// };
 		},
 
 		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title, source) {
@@ -2584,16 +2548,6 @@
 				// create title
 				var newTitleModel = await TIMAAT.MediaService.createTitle(titleModel.model);
         console.log("TCL: newTitleModel", newTitleModel);
-				
-				// link title and medium
-				// var tempMediumModel = mediumModel;
-				// tempMediumModel.title = newTitle;
-				// tempMediumModel.source = source;
-				// var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
-
-				// push new title to dataset model
-				// await TIMAAT.MediaDatasets._titleAdded(newTitleModel);
-
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2822,8 +2776,8 @@
 		},
 
 		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
-    // console.log("TCL: mediumSubtype", mediumSubtype);
-    // console.log("TCL: mediumSubtypeData", mediumSubtypeData);
+			// console.log("TCL: mediumSubtype", mediumSubtype);
+			// console.log("TCL: mediumSubtypeData", mediumSubtypeData);
 			// console.log("TCL: _videoRemoved: function(video)");
 			// sync to server
 		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData);

@@ -68,65 +68,70 @@
       }
     </style>
   </head>
-  <body class="timaat-login-modal-open">	
-    <div class="modal" id="timaat-ui-waiting" tabindex="-1" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body text-center">
-            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
-          </div>
-        </div>
-      </div>
-    </div>	
-    <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div id="timaat-version-info" class="text-muted d-flex justify-content-end mr-1">v.unknown
-          </div>
-          <div class="modal-header">
-            <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
-          </div>
-          <div class="modal-body text-center">
-            <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
-              Nutzername oder Passwort falsch.
-            </div>
-            <div class="input-group mb-3">
-              <input id="timaat-login-user" type="text" name="user" class="form-control" placeholder="Benutzername" aria-label="Benutzername">
-            </div>
-            <div class="input-group mb-3">
-              <input id="timaat-login-pass" type="password" name="pass" class="form-control" placeholder="Passwort" aria-label="Passwort">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="input-group mb-12">
-              <button id="timaat-login-submit" type="submit" name="login" class="btn btn-primary col-12">Einloggen</button>
+  <body class="timaat-login-modal-open">
+    <div class="page-loading">
+      <div class="modal" id="timaat-ui-waiting" tabindex="-1" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <i class="fas fa-spinner fa-spin"></i> Lade Daten...
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!--
-    <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"  aria-hidden="true" style="display: none;">
-      <div id="timaat-login-box" class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="timaat-loginmodal-container modal-content">
-          <div class="modal-body text-center">
-            <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
-              Nutzername oder Passwort falsch.
+    <div class="login">
+      <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div id="timaat-version-info" class="text-muted d-flex justify-content-end mr-1">v.unknown
             </div>
-            <h1>
-              TIMAAT - Bitte anmelden
-            </h1><br>
-            <input id="timaat-login-user" type="text" name="user" placeholder="Benutzername"> 
-            <input id="timaat-login-pass" type="password" name="pass" placeholder="Passwort"> 
-            <input id="timaat-login-submit" type="submit" name="login" class="login loginmodal-submit" value="Einloggen">
-            <div class="timaat-login-help">            
+            <div class="modal-header">
+              <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
+            </div>
+            <div class="modal-body text-center">
+              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
+                Nutzername oder Passwort falsch.
+              </div>
+              <div class="input-group mb-3">
+                <input id="timaat-login-user" type="text" name="user" class="form-control" placeholder="Benutzername" aria-label="Benutzername">
+              </div>
+              <div class="input-group mb-3">
+                <input id="timaat-login-pass" type="password" name="pass" class="form-control" placeholder="Passwort" aria-label="Passwort">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="input-group mb-12">
+                <button id="timaat-login-submit" type="submit" name="login" class="btn btn-primary col-12">Einloggen</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <!--
+      <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"  aria-hidden="true" style="display: none;">
+        <div id="timaat-login-box" class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="timaat-loginmodal-container modal-content">
+            <div class="modal-body text-center">
+              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
+                Nutzername oder Passwort falsch.
+              </div>
+              <h1>
+                TIMAAT - Bitte anmelden
+              </h1><br>
+              <input id="timaat-login-user" type="text" name="user" placeholder="Benutzername"> 
+              <input id="timaat-login-pass" type="password" name="pass" placeholder="Passwort"> 
+              <input id="timaat-login-submit" type="submit" name="login" class="login loginmodal-submit" value="Einloggen">
+              <div class="timaat-login-help">            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
     </div>
-    -->
     <div id="wrapper" class="toggled">
+    <div class="navigation">
       <!-- Navigation -->
       <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -263,7 +268,10 @@
           <!-- /.navbar-static-side -->
         </div>
       </nav>
+    </div>
       <div id="page-wrapper">
+        <!-------------------------------------------------------------------->
+        <!-- Video-Library                                                  -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-videochooser">
           <div class="modal fade" id="timaat-videochooser-mediacollection-delete" tabindex="-1" role="dialog" aria-labelledby="mediacollectionDeleteLabel" aria-hidden="true">
@@ -400,10 +408,10 @@
               </div>
             </div>				
           </div>
-        </div>
-      
+        </div>      
         <!-------------------------------------------------------------------->
-
+        <!-- Videoplayer                                                    -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-videoplayer">
           <div class="modal fade" id="timaat-videoplayer-analysislist-delete" tabindex="-1" role="dialog" aria-labelledby="analysislistDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -690,9 +698,9 @@
           </div>
         </div>
         <!-- /.container-fluid -->
-
         <!-------------------------------------------------------------------->
-
+        <!-- Settings                                                       -->
+        <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-settings">     
           <div class="modal fade" id="timaat-settings-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -768,7 +776,6 @@
             </div>
           </div>
         </div>
-
         <!-------------------------------------------------------------------->
         <!-- Media                                                          -->
         <!-------------------------------------------------------------------->
@@ -1107,7 +1114,7 @@
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
-                      <form class="form" id="timaat-mediadatasets-media-metadata-form" name="timaat-mediadatasets-media-metadata-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-mediadatasets-media-metadata-form" name="timaat-mediadatasets-media-metadata-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -1213,7 +1220,7 @@
                           <input class="form-control form-control-sm" id="timaat-mediadatasets-audio-metadata-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
                         </div>
                         <div class="form-group datasheet-data image-data">
-                          <div class="row">
+                          <div class="form-row">
                             <div class="col-md-4">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-image-metadata-width">Bildbreite</label>
                               <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-image-metadata-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
@@ -1237,7 +1244,7 @@
                           <textarea class="form-control form-control-sm" id="timaat-mediadatasets-text-metadata-content" name="content" placeholder="[Enter text content]" aria-describedby="Content"></textarea>
                         </div>
                         <div class="form-group datasheet-data video-data">
-                          <div class="row">
+                          <div class="form-row">
                             <div class="col-md-9">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-length">Länge</label>
                               <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
@@ -1253,7 +1260,7 @@
                           <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
                         </div>
                         <div class="form-group datasheet-data video-data">
-                          <div class="row">
+                          <div class="form-row">
                             <div class="col-md-6">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-width">Videobreite</label>
                               <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
@@ -1265,7 +1272,7 @@
                           </div>
                         </div>
                         <div class="form-group datasheet-data video-data">
-                          <div class="row">
+                          <div class="form-row">
                             <div class="col-md-4">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-framerate">Frame rate</label>
                               <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
@@ -1280,7 +1287,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="form-group datasheet-data videogame-data">
+                        <div class="form-group col-md-2 datasheet-data videogame-data">
                           <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-isepisode">Episode?</label>
                           <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-videogame-metadata-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
                         </div>
@@ -1326,7 +1333,7 @@
                         </div>
                       </form>
                       <!-- titles form -->
-                      <form class="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -1373,7 +1380,7 @@
                         <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- language tracks form -->
-                      <form class="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -1423,7 +1430,6 @@
             </div>
           </div> 
         </div>
-
         <!-------------------------------------------------------------------->
         <!-- Actors                                                         -->
         <!-------------------------------------------------------------------->
