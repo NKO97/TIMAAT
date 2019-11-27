@@ -1999,7 +1999,7 @@
 		},
 
 		setMediumTitleList: function(medium) {
-			console.log("TCL: setMediumTitleList -> medium", medium);
+			// console.log("TCL: setMediumTitleList -> medium", medium);
 			if ( !medium ) return;
 			$('#timaat-title-list-loader').remove();
 			// clear old UI list
@@ -2013,7 +2013,7 @@
 		},
 
 		setMediumLanguageTrackList: function(medium) {
-			console.log("TCL: setMediumLanguageTrackList -> medium", medium);
+			// console.log("TCL: setMediumLanguageTrackList -> medium", medium);
 			if ( !medium ) return;
 			$('#timaat-languagetrack-list-loader').remove();
 			// clear old UI list
@@ -2027,8 +2027,8 @@
 		},
 
 		addMedium: function(mediumType) {	
-			console.log("TCL: addMedium: function()");
-			console.log("TCL: mediumType", mediumType);
+			// console.log("TCL: addMedium: function()");
+			// console.log("TCL: mediumType", mediumType);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').show();
@@ -2204,7 +2204,7 @@
 		},
 
 		mediumFormTitles: function(action, medium) {
-    	console.log("TCL: mediumFormTitles: action, medium", action, medium);
+    	// console.log("TCL: mediumFormTitles: action, medium", action, medium);
 			var node = document.getElementById("dynamic-title-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -2342,7 +2342,7 @@
 		},
 
 		mediumFormLanguageTracks: function(action, medium) {
-    	console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
+    	// console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
 			var node = document.getElementById("dynamic-languagetrack-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -2361,7 +2361,7 @@
 			// languageTrack data
 			var i = 0;
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
-			console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
+			// console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
 			for (; i< numLanguageTracks; i++) {
 				// console.log("TCL: TIMAAT.MediaDatasets.mediumHasLanguages[i]", medium.model.mediumHasLanguages[i]);
 				// console.log("TCL: medium.model.mediumHasLanguages[i].languageId", medium.model.mediumHasLanguages[i].languageId);
@@ -2484,7 +2484,7 @@
 			// createMedium: async function(mediumModel, mediumModelTranslation) { // medium has no translation table at the moment
 			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
 			// This routine can be used to create empty media of a certain type
-			console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
+			// console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
@@ -2529,7 +2529,7 @@
 
 		createMediumSubtype: async function(mediumSubtype, mediumSubtypeModel, mediumModel, title, source) {
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
-			console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title, source", mediumSubtypeModel, mediumModel, title, source);
+			// console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title, source", mediumSubtypeModel, mediumModel, title, source);
 			try {
 				// create title
 				var newTitle = await TIMAAT.MediaService.createTitle(title);
@@ -2579,7 +2579,7 @@
 		},
 		
 		createTitle: async function(titleModel) {
-			console.log("TCL: createTitle: async function -> titleModel", titleModel);
+			// console.log("TCL: createTitle: async function -> titleModel", titleModel);
 			try {
 				// create title
 				var newTitleModel = await TIMAAT.MediaService.createTitle(titleModel.model);
@@ -2600,7 +2600,7 @@
 		},
 
 		addTitles: async function(medium, newTitles) {
-			console.log("TCL: addTitles: async function -> medium, newTitles", medium, newTitles);
+			// console.log("TCL: addTitles: async function -> medium, newTitles", medium, newTitles);
 			try {
 				// create title
 				var i = 0;
@@ -2618,7 +2618,7 @@
 		},
 
 		addLanguageTracks: async function(medium, newLanguageTracks) {
-			console.log("TCL: addLanguageTracks: async function -> newLanguageTracks", newLanguageTracks);
+			// console.log("TCL: addLanguageTracks: async function -> newLanguageTracks", newLanguageTracks);
 			try {
 				// create languageTrack
 				var i = 0;
@@ -2640,7 +2640,7 @@
 		},
 
 		updateMedium: async function(medium) {
-		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
+		// console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
 			try {
 				// update primary title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
@@ -2668,7 +2668,7 @@
 		},
 
 		updateMediumSubtype: async function(mediumSubtype, mediumSubtypeData) {
-			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
+			// console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
 			// try {
 			// 	// update title
 			// 	console.log("TCL: update title via update submedium")
@@ -2708,7 +2708,7 @@
 		},
 
 		updateTitle: async function(title, medium) {
-			console.log("TCL: updateTitle: async function -> title at beginning of update process: ", title);
+			// console.log("TCL: updateTitle: async function -> title at beginning of update process: ", title);
 			try {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(title);
@@ -2728,7 +2728,7 @@
 		},
 
 		updateLanguageTrack: async function(i, newTrack, medium) {
-			console.log("TCL: updateLanguageTrack: async function -> i, newTrack, medium at beginning of update process: ", i, newTrack, medium);
+			// console.log("TCL: updateLanguageTrack: async function -> i, newTrack, medium at beginning of update process: ", i, newTrack, medium);
 			try {
 				// update languageTrack
 				var tempLanguageTrack = await TIMAAT.MediaService.updateLanguageTrack(medium.model.mediumHasLanguages[i], newTrack);
@@ -2786,7 +2786,7 @@
 		},
 
 		_mediumRemoved: async function(medium) {
-    	console.log("TCL: _mediumRemoved", medium);
+    	// console.log("TCL: _mediumRemoved", medium);
 			// console.log("TCL: _mediumRemoved: function(medium)");
 			var i = 0;
 			for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
@@ -2822,8 +2822,8 @@
 		},
 
 		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
-    console.log("TCL: mediumSubtype", mediumSubtype);
-    console.log("TCL: mediumSubtypeData", mediumSubtypeData);
+    // console.log("TCL: mediumSubtype", mediumSubtype);
+    // console.log("TCL: mediumSubtypeData", mediumSubtypeData);
 			// console.log("TCL: _videoRemoved: function(video)");
 			// sync to server
 		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData);
