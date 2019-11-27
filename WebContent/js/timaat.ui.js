@@ -33,6 +33,7 @@
 				TIMAAT.Datasets.init();
 				
 				TIMAAT.UI.showComponent('videochooser');
+				$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 				$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 				$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
 				if ( TIMAAT.Service.state != 1 ) {
