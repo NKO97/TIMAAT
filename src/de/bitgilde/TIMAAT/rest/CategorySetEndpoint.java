@@ -1,10 +1,7 @@
 package de.bitgilde.TIMAAT.rest;
 
-import java.io.Console;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -116,7 +113,7 @@ public class CategorySetEndpoint {
 			List<Category> categories = null;
 			try {
 				categories = (List<Category>) entityManager
-					.createQuery("SELECT c FROM Category WHERE NOT EXISTS ( SELECT NULL FROM CategorySet cs WHERE cs.categories = c)")
+					.createQuery("SELECT c FROM Category c WHERE NOT EXISTS ( SELECT NULL FROM CategorySet cs WHERE cs.categories = c)")
 					// .createQuery("SELECT DISTINCT c.name FROM Category c, CategorySet cs INNER JOIN CategorySetHasCategory cshc ON c.id = cshc.category_id WHERE cshc.category_set_id = CategorySet.id")
 					.getResultList();
 			} catch (Exception e) {
