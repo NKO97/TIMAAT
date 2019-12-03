@@ -357,7 +357,7 @@
 					return;
 				}
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+TIMAAT.VideoPlayer.curList.userAccountID+'">[ID '+TIMAAT.VideoPlayer.curList.userAccountID+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+TIMAAT.VideoPlayer.curList.createdByUserAccountID+'">[ID '+TIMAAT.VideoPlayer.curList.createdByUserAccountID+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(TIMAAT.VideoPlayer.curList.createdAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"mir")});

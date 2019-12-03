@@ -7,6 +7,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -69,15 +70,22 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
-    @JsonBackReference(value = "UserAccount-MediumAnalysisList")
 	private UserAccount createdByUserAccount;
+	@Transient
+	@JsonProperty("createdByUserAccountID")
+	private int createdByUserAccountID;
+	
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-MediumAnalysisList2")
 	private UserAccount lastEditedByUserAccount;
+	@Transient
+	@JsonProperty("lastEditedByUserAccountID")
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany(mappedBy="mediumAnalysisLists")
@@ -99,9 +107,15 @@ public class MediumAnalysisList implements Serializable {
 		return this.id;
 	}
 
+	public int getMediumID() {
+		if ( this.medium != null ) return this.medium.getId();
+		return 0;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 
 	public String getText() {
 		return this.getMediumAnalysisListTranslations().get(0).getText();// TODO get proper translation id
@@ -201,6 +215,11 @@ public class MediumAnalysisList implements Serializable {
 	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
 		this.createdByUserAccount = createdByUserAccount;
 	}
+	
+	public int getCreatedByUserAccountID() {
+		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
+		return 0;
+	}
 
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
@@ -208,6 +227,11 @@ public class MediumAnalysisList implements Serializable {
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+	
+	public int getLastEditedByUserAccountID() {
+		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
+		return 0;
 	}
 
 	public List<Tag> getTags() {
