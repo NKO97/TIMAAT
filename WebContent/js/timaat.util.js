@@ -139,7 +139,7 @@
     // console.log("TCL: resolveUserID: function(idElement, myself)");
     // console.log("TCL:   -> idElement", idElement);
     // console.log("TCL:   -> myself", myself);
-			if ( !myself ) myself="mir";
+			if ( !myself ) myself = "mir";
 			
 			var id = $(idElement).data('userid');
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);

@@ -21,9 +21,6 @@ import java.util.List;
 // @JsonInclude(value=Include.NON_NULL, content=Include.NON_NULL) //new
 // @SecondaryTable(name="medium_video", pkJoinColumns=@PrimaryKeyJoinColumn(name="medium_id")) // new
 @NamedQuery(name="Medium.findAll", query="SELECT m FROM Medium m")
-@JsonIdentityInfo(
-	generator = ObjectIdGenerators.PropertyGenerator.class,
-	property = "id")
 public class Medium implements Serializable {
 	private static final long serialVersionUID = 1L;
 

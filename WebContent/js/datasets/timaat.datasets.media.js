@@ -560,18 +560,18 @@
 				console.log("TCL: languageId: ", languageId);
 				// if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
-					var duplicate = false;
+					// var duplicate = false;
 					var medium = $("#timaat-mediadatasets-media-metadata-form").data("medium");
           console.log("TCL: medium", medium);
-					medium.model.mediumHasLanguages.forEach(function(entry) {
-						if (entry.id.mediumLanguageTypeId == mediumLanguageTypeId && entry.id.languageId == languageId) {
-							duplicate = true;
-						}
-					});
-					if (duplicate) {
-						console.log("TCL: entry exists already.")
-						return;
-					} else {
+					// medium.model.mediumHasLanguages.forEach(function(entry) { // TODO this needs to check for current list, not mediumHasLanguages
+					// 	if (entry.id.mediumLanguageTypeId == mediumLanguageTypeId && entry.id.languageId == languageId) {
+					// 		duplicate = true;
+					// 	}
+					// });
+					// if (duplicate) {
+					// 	console.log("TCL: entry exists already.")
+					// 	return;
+					// } else {
 						var languageTracksInForm = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
 							console.log("TCL: languageTracksInForm", languageTracksInForm);
 						var i = Math.floor((languageTracksInForm.length -1) / 2 ); // length -1 as the 'add new track' row is still part of the form and has to be removed
@@ -622,7 +622,7 @@
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');	
 					}				
-				}
+				// }
 				else {
 					// TODO open modal showing error that not all required fields are set.
 				}

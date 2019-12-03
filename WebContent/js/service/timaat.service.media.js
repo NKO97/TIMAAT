@@ -52,7 +52,7 @@
 				console.log("TCL: listMedia -> data", data);
 				callback(data);
 			}).fail(function(e) {
-				console.log(e.responseText);
+//				console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},
