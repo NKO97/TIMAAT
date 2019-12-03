@@ -177,8 +177,7 @@
 						TIMAAT.VideoPlayer.jumpVisible(ev.data.model.startTime, ev.data.model.endTime);
 						TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 						TIMAAT.VideoPlayer.pause();
-						$('#timaat-videoplayer-annotation-meta').data('annotation', anno);
-						$('#timaat-videoplayer-annotation-meta').modal('show');
+						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					
 					this.changed = false;

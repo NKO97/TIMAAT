@@ -28,7 +28,8 @@
 					
 					// create and style list view element
 					this.listView = $('<li class="list-group-item timaat-annotation-list-segment" style="padding:0"> \
-								<div class="timaat-annotation-segment-title text-white font-weight-bold"></div> \
+								<div class="timaat-annotation-segment-title float-left text-white font-weight-bold"></div> \
+			                  <button type="button" class="btn btn-danger btn-sm float-right mr-auto" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button> \
 							</li>'
 					);
 					this.timelineView = $('<div class="timaat-timeline-segment"> \
@@ -62,7 +63,7 @@
 				}
 				
 				addUI() {
-		      console.log("TCL: AnalysisSegment -> addUI -> addUI()");
+					console.log("TCL: AnalysisSegment -> addUI -> addUI()");
 					$('#timaat-annotation-list').append(this.listView);
 					$('#timaat-timeline-segment-pane').append(this.timelineView);
 
@@ -71,22 +72,24 @@
 					this.listView.click(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 					});
 					this.timelineView.click(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 					});
 					this.listView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
-						$('#timaat-videoplayer-segment-meta').data('segment', segment);
-						$('#timaat-videoplayer-segment-meta').modal('show');
+						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					this.timelineView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
-						$('#timaat-videoplayer-segment-meta').data('segment', segment);
-						$('#timaat-videoplayer-segment-meta').modal('show');
+						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");
 					this.updateUI();

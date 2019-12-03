@@ -119,14 +119,13 @@
 		},
 		
 		loadCategorySets: function() {
-    // console.log("TCL: loadCategorySets: function()");
+			console.log("TCL: loadCategorySets: function()");
 			// load categorysets
-			// TIMAAT.Service.getAllCategorySets(TIMAAT.Settings.setCategorySetLists); // TODO uncomment once working
+			TIMAAT.Service.getAllCategorySets(TIMAAT.Settings.setCategorySetLists); // TODO uncomment once working
 		},
 		
 		setCategorySetLists: function(categorysets) {
-    // console.log("TCL: setCategorySetLists: function(categorysets)");
-    console.log("TCL: categorysets", categorysets);
+			console.log("TCL: categorysets", categorysets);
 			if ( !categorysets ) return;
 			$('#timaat-categoryset-list-loader').remove();
 
@@ -141,8 +140,8 @@
 			
 		},
 		
-		addCategorySet: function() {	
-    console.log("TCL: addCategorySet: function()");
+		addCategorySet: function() {
+			console.log("TCL: addCategorySet: function()");
 			$('#timaat-settings-categoryset-meta').data('categoryset', null);
 			$('#timaat-settings-categoryset-meta').modal('show');
 		},

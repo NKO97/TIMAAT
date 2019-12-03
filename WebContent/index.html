@@ -46,6 +46,9 @@
     <!-- Leaflet CSS -->
     <link href="vendor/leaflet/leaflet.css" rel="stylesheet" type="text/css">
 
+    <!-- Leaflet Sidebar CSS -->
+    <link href="vendor/leaflet/plugins/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" rel="stylesheet" type="text/css">
+
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
     
@@ -432,30 +435,6 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="timaat-videoplayer-analysislist-meta" tabindex="-1" role="dialog" aria-labelledby="analysislistMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="analysislistMetaLabel">Liste hinzufügen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-sm" id="timaat-analysislist-meta-title" placeholder="Titel" aria-label="Titel">
-              </div>
-              <div class="input-group mb-3">
-                <textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-analysislist-meta-comment" placeholder="Kommentar eingeben"></textarea>
-              </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-analysislist-meta-submit" disabled>Hinzufügen</button>
-                </div>
-              </div>
-            </div>
-          </div>		
           <div class="modal fade" id="timaat-videoplayer-annotation-delete" tabindex="-1" role="dialog" aria-labelledby="annotationDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -494,114 +473,114 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="timaat-videoplayer-annotation-meta" tabindex="-1" role="dialog" aria-labelledby="annotationMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="annotationMetaLabel">Annotation hinzufügen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <div class="timaat-colorPicker" id="timaat-annotation-meta-colorPicker">
-                      <a class="color"><div class="colorInner"></div></a>
-                      <div class="track"></div>
-                      <ul class="dropdown"><li></li></ul>
-                      <input type="hidden" id="timaat-annotation-meta-color" class="colorInput"/>
-                    </div>
-                  </span>
-                </div>
-                <input type="text" class="form-control form-control-sm" id="timaat-annotation-meta-title" placeholder="Titel" aria-label="Titel">
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Start</span>
-                </div>
-                <input type="text" class="form-control form-control-sm"  id="timaat-annotation-meta-start"placeholder="00:00:00" aria-label="Start Timecode">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" id="timaat-annotation-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
-                </div>&nbsp;&nbsp;
-                <div class="input-group-prepend">				
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
-                      <div class="dropdown-menu"  id="timaat-annotation-meta-duration-menu">
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(0)">dieses Frame</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(1)">1 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(5)">5 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(15)">15 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(30)">30 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.annotationEnd(60)">1 min</a>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item"><input type="text" id="timaat-annotation-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
-                      </div>
-                </div>
-                <input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-annotation-meta-end" aria-label="Ende Timecode">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" id="timaat-annotation-meta-setend" type="button"><i class="fas fa-clock"></i></button>
-                </div>
-              </div>
-              <div class="input-group mb-3">
-                <textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-annotation-meta-comment" placeholder="Kommentar eingeben"></textarea>
-              </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-annotation-meta-submit" disabled>Hinzufügen</button>
-                </div>
-              </div>
+          
+          
+          
+          
+          <div id="timaat-inspector" class="leaflet-sidebar collapsed">
+    <!-- Nav tabs -->
+    <div class="leaflet-sidebar-tabs">
+        <ul role="tablist"> <!-- top aligned tabs -->
+            <li><a href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+            <li><a href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
+            <li><a href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+            <li><a href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
+            <li><a href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
+        </ul>
+        <ul role="tablist"> <!-- bottom aligned tabs -->
+        </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="leaflet-sidebar-content">
+        <div id="timaat-inspector-metadata" class="leaflet-sidebar-pane">
+            <h1 class="leaflet-sidebar-header">
+                <span id="timaat-inspector-metadata-title">Metadaten</span>
+                <div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div>
+            </h1>
+          <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" tabindex="-1" aria-hidden="true">
+	<div class="input-group input-group-sm mb-3">
+		<div id="timaat-inspector-meta-color-group" class="input-group-prepend">
+			<span class="input-group-text">
+				<div class="timaat-colorPicker" id="timaat-inspector-meta-colorPicker">
+					<a class="color"><div class="colorInner"></div></a>
+					<div class="track"></div>
+					<ul class="dropdown"><li></li></ul>
+					<input type="hidden" id="timaat-inspector-meta-color" class="colorInput"/>
+				</div>
+			</span>
+		</div>
+		<input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Titel" aria-label="Titel" />
+	</div>
+	<div id="timaat-inspector-meta-timecode-group">
+	<div class="input-group input-group-sm mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Start</span>
+		</div>
+		<input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start"placeholder="00:00:00" aria-label="Start Timecode" />
+		<div class="input-group-append">
+			<button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
+		</div>
+		</div>
+			<div class="input-group input-group-sm mb-3">
+		<div class="input-group-prepend">				
+			<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+			<div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(0)">dieses Frame</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(1)">1 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(5)">5 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(15)">15 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(30)">30 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(60)">1 min</a>
+				<div role="separator" class="dropdown-divider"></div>
+				<a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
+			</div>
+		</div>
+		<input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-inspector-meta-end" aria-label="Ende Timecode" />
+		<div class="input-group-append">
+			<button class="btn btn-secondary" id="timaat-inspector-meta-setend" type="button"><i class="fas fa-clock"></i></button>
+		</div>
+	</div>
+	</div>
+	<div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
+		<textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Kommentar eingeben"></textarea>
+	</div>
+	<button type="button" class="btn btn-primary" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
+</div>
+        </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
+            <h1 class="leaflet-sidebar-header">Kategorien und Tags<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane">
+			Diese Funktion steht in Kürze zur Verfügung.
             </div>
-          </div>
-          <div class="modal fade" id="timaat-videoplayer-segment-meta" tabindex="-1" role="dialog" aria-labelledby="segmentMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="segmentMetaLabel">Segment hinzufügen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-sm" id="timaat-segment-meta-title" placeholder="Titel" aria-label="Titel">
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">Start</span>
-                </div>
-                <input type="text" class="form-control form-control-sm"  id="timaat-segment-meta-start"placeholder="00:00:00" aria-label="Start Timecode">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" id="timaat-segment-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
-                </div>&nbsp;&nbsp;
-                <div class="input-group-prepend">				
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
-                      <div class="dropdown-menu"  id="timaat-annotation-meta-duration-menu">
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(0)">dieses Frame</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(1)">1 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(5)">5 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(15)">15 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(30)">30 sek</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.segmentEnd(60)">1 min</a>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item"><input type="text" id="timaat-segment-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
-                      </div>
-                </div>
-                <input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-segment-meta-end" aria-label="Ende Timecode">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" id="timaat-segment-meta-setend" type="button"><i class="fas fa-clock"></i></button>
-                </div>
-              </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger mr-auto" id="timaat-segment-delete-submit" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-segment-meta-submit" disabled>Hinzufügen</button>
-                </div>
-              </div>
+        </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
+            <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
+			Actors werden von FIPOP noch nicht unterstützt.
             </div>
-          </div>		
+        </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
+            <h1 class="leaflet-sidebar-header">Events<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
+			Events werden von FIPOP noch nicht unterstützt.
+            </div>
+        </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
+            <h1 class="leaflet-sidebar-header">Locations<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane">
+			Locations werden von FIPOP noch nicht unterstützt.
+            </div>
+        </div>
+
+    </div>
+</div>
+          
+          
           <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
             <div class="d-flex justify-content-center col-lg-12">
               <h1>Kein Video geladen</h1>
@@ -746,7 +725,7 @@
             <div class="col-lg-12">
               <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" href="#timaat-settings-tags"><i class="fas fa-tag"></i> Tags</a>
+                  <a class="nav-link active" href="#timaat-settings-tags"><i class="fas fa-tag"></i> Kategorien</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link disabled" href="#timaat-settings-general" tabindex="-1" aria-disabled="true"><i class="fas fa-cogs"></i> Allgemein</a>
@@ -757,7 +736,7 @@
                   <div class="row timaat-settings-ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
                       <div class="card">
-                        <div class="card-header">CategorySets
+                        <div class="card-header">Kategorie Sets
                           <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">

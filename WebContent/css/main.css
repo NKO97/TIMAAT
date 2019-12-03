@@ -78,6 +78,13 @@ body.timaat-login-modal-open #wrapper {
 	cursor: pointer;
 }
 
+#timaat-inspector {
+	z-index: 1000; /* behind modal dialogs */
+}
+.timaat-inspector-pane {
+	margin-top: 1em;
+}
+
 .timmat-video-thumbnail {
 	cursor: ew-resize;
 }
@@ -501,6 +508,11 @@ a.dropdown-item {
 
 #timaat-mediadatasets-medium-tags {
 	cursor: pointer;
+}
+
+.timaat-colorPicker .track {
+	margin-left: 6.3em;
+	margin-top: 0.5em;
 }
 
 #timaat-videoplayer-video-speed:hover,

@@ -17,7 +17,8 @@ requirejs.config({
 	    "leaflet-editable":			'../vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable',
 	    "leaflet-pathdrag":			'../vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag',
 	    "leaflet-customcontrol":	'../vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom',
-
+	    "leaflet-sidebar":			'../vendor/leaflet/plugins/leaflet-sidebar-v2/js/leaflet-sidebar.min',
+	   
 	    "moment":					'../vendor/moment/moment',
 
 	    "datatables":				'../vendor/datatables/datatables.min',
@@ -75,6 +76,7 @@ requirejs.config({
 	    'leaflet-editable': { deps: ['leaflet'], },
 	    'leaflet-pathdrag': { deps: ['leaflet'], exports: 'L.PathDraggable' },
 	    'leaflet-customcontrol': { deps: ['leaflet'], },
+	    'leaflet-sidebar': { deps: ['leaflet'], },
 	    'moment': { deps: [ 'jquery' ], exports: 'moment' },
 	    'datatables': { deps: [ 'bootstrap', 'jquery' ] },
 	}
@@ -97,6 +99,7 @@ require(['domReady',
 	'leaflet-editable',
 	'leaflet-pathdrag',
 	'leaflet-customcontrol',
+	'leaflet-sidebar',
 	], function (domReady) { domReady(function () {
 	  console.log("TIMAAT::Init");
 	  requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
