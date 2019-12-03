@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the medium_has_language database table.
@@ -24,6 +26,7 @@ public class MediumHasLanguage implements Serializable {
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
 	@JoinColumn(name="medium_id")
+	@JsonIgnore
 	private Medium medium;
 
 	//bi-directional many-to-one association to MediumLanguageType
