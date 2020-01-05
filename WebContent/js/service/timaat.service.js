@@ -307,9 +307,8 @@
 			console.log("TCL: updateAnalysislist -> analysislist", analysislist);
 			var list = {
 					id: analysislist.id,
-					title: analysislist.title,
-					text: analysislist.text,
-					mediumID: analysislist.medium.id
+					mediumAnalysisListTranslations: analysislist.mediumAnalysisListTranslations,
+					mediumID: analysislist.mediumID
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
@@ -323,8 +322,8 @@
 			}).done(function(data) {
 				// TODO refactor
 				analysislist.id = data.id;
-				analysislist.title = data.title;
-				analysislist.text = data.text;
+				TIMAAT.Util.setDefTranslation(analysislist, 'mediumAnalysisListTranslations', 'title', data.title);
+				TIMAAT.Util.setDefTranslation(analysislist, 'mediumAnalysisListTranslations', 'text', data.text);
 			})
 			.fail(function(e) {
 				console.log( "error", e );

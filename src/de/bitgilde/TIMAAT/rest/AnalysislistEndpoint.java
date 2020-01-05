@@ -31,6 +31,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
@@ -129,9 +130,12 @@ public class AnalysislistEndpoint {
 		if ( updatedList == null ) return Response.notModified().build();
 		    	
     	// update analysislist
-		if ( updatedList.getTitle() != null ) mal.setTitle(updatedList.getTitle());
-		if ( updatedList.getText() != null ) mal.setText(updatedList.getText());
-
+		if ( updatedList.getMediumAnalysisListTranslations() != null )
+			for ( MediumAnalysisListTranslation trans : updatedList.getMediumAnalysisListTranslations() ) {
+				mal.setTitle(trans.getTitle(), trans.getLanguage().getCode());
+				mal.setText(trans.getText(), trans.getLanguage().getCode());
+			}
+		
 		// TODO update log metadata in general log
 		
 		EntityTransaction tx = em.getTransaction();

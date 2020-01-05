@@ -215,8 +215,8 @@ public class AnnotationEndpoint {
     	// update annotation
 		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
 		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
-		if ( updatedAnno.getStartTime() >= 0 ) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
-		if ( updatedAnno.getEndTime() >= 0 ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
+		if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
+		if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
 
 		if ( updatedAnno.getSelectorSvgs() != null 
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 
@@ -241,7 +241,9 @@ public class AnnotationEndpoint {
 		entityManager.merge(annotation);
 		entityManager.persist(annotation);
 		entityTransaction.commit();
+		System.out.println(annotation.getSequenceStartTime().getTime());
 		entityManager.refresh(annotation);
+		System.out.println(annotation.getSequenceStartTime().getTime());
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(annotation.getLastEditedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONEDITED);

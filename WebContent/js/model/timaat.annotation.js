@@ -264,23 +264,25 @@
 				}
 				
 				setChanged() {
-		      console.log("TCL: Annotation -> setChanged -> setChanged()");
+					console.log("TCL: Annotation -> setChanged -> setChanged()");
 					this.changed = true;
 				}
 				
 				hasChanges() {
-		      console.log("TCL: Annotation -> hasChanges -> hasChanges()");
+					console.log("TCL: Annotation -> hasChanges -> hasChanges()");
 					return this.changed;
 				}
 
 				
 				getModel() {
-		      console.log("TCL: Annotation -> getModel -> getModel()");
+					console.log("TCL: Annotation -> getModel -> getModel()");
+//					this.model.sequenceStartTime = TIMAAT.Util.formatTime(this.model.startTime, true);
+//					this.model.sequenceEndTime = TIMAAT.Util.formatTime(this.model.startTime, true);
 					return this.model;
 				}
 				
 				discardChanges() {
-		      console.log("TCL: Annotation -> discardChanges -> discardChanges()");
+					console.log("TCL: Annotation -> discardChanges -> discardChanges()");
 					if ( !this.changed ) return;
 					this.svg.layer.clearLayers();
 					this.svg.items = Array();

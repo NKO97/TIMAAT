@@ -69,6 +69,11 @@ public class MediaCollectionEndpoint {
 		for ( MediaCollection col : cols ) {
 			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 				m.getMedium().getMediumAnalysisLists().clear();
+				if (m.getMedium().getMediumVideo() != null) {
+					m.getMedium().getMediumVideo().getStatus();
+					m.getMedium().getMediumVideo().getViewToken();
+					m.getMedium().getMediumVideo().setMedium(null);
+				}
 			}
 		}
 		
@@ -89,6 +94,12 @@ public class MediaCollectionEndpoint {
 		// strip analysislists
 		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 			m.getMedium().getMediumAnalysisLists().clear();
+			if (m.getMedium().getMediumVideo() != null) {
+				m.getMedium().getMediumVideo().getStatus();
+				m.getMedium().getMediumVideo().getViewToken();
+				m.getMedium().getMediumVideo().setMedium(null);
+			}
+
 		}
 	
 		return Response.ok().entity(col).build();

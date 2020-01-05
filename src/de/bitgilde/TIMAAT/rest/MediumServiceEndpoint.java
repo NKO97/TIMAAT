@@ -101,7 +101,10 @@ public class MediumServiceEndpoint{
 				video.setStatus(videoStatus(m.getId()));
 				video.setViewToken(issueFileToken(m.getId()));
 				m.setMediumVideo(video);
-				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+				video.getStatus();
+				video.getViewToken();
+				video.setMedium(null);
+//				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
@@ -188,6 +191,7 @@ public class MediumServiceEndpoint{
 		for (MediumVideo m : mediumVideoList ) {
 			m.setStatus(videoStatus(m.getMediumId()));
 			m.setViewToken(issueFileToken(m.getMediumId()));
+			m.getMedium().setMediumVideo(null);
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMedium().getMediumAnalysisLists().clear();
 		}
@@ -351,11 +355,22 @@ public class MediumServiceEndpoint{
 
 		// persist medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
+		System.out.println(medium.getCreatedAt());
+		System.out.println(medium.getLastEditedAt());
 		entityTransaction.begin();
 		entityManager.merge(medium);
 		entityManager.persist(medium);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
+		System.out.println("after");
+		System.out.println(medium.getCreatedAt());
+		System.out.println(medium.getLastEditedAt());
+		
+		if ( medium.getMediumVideo() != null ) {
+			medium.getMediumVideo().getStatus();
+			medium.getMediumVideo().getViewToken();
+			medium.getMediumVideo().setMedium(null);
+		}
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
@@ -1029,6 +1044,10 @@ public class MediumServiceEndpoint{
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.VIDEOEDITED);
 		System.out.println("MediumServiceEndpoint: UPDATE VIDEO - update complete");
+		
+		video.getStatus();
+		video.getViewToken();
+		video.getMedium().setMediumVideo(null);
 
 		return Response.ok().entity(video).build();
 
@@ -1876,18 +1895,21 @@ public class MediumServiceEndpoint{
 		
 		if ( seks < 0 ) {
 			// load thumbnail from storage
+/*
 			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
 			if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
-    	
+ */
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-thumb.png");
-			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/video-placeholder.png"));
+			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 		    	
 			return Response.ok().entity(thumbnail).build();
 		} else {
 			// load timecode thumbnail from storage
+/*
 			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames");
 			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
-    	
+*/
+   	
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames/"+id+"-frame-"+String.format("%05d", seks)+".jpg");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 

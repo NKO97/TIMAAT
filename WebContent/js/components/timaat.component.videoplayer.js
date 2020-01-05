@@ -251,8 +251,8 @@
 					var title = $("#timaat-inspector-meta-title").val();
 					var comment = $("#timaat-inspector-meta-comment").val();				
 					if (list) {
-						TIMAAT.VideoPlayer.curList.title = title;
-						TIMAAT.VideoPlayer.curList.text = comment;					
+						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title', title);
+						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'text', comment);
 						TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
 					} else {
 						TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
@@ -516,6 +516,18 @@
 			});			
 		},
 		
+		switchInspector: function() {
+			if ( TIMAAT.VideoPlayer.inspector.getPosition() == 'left' ) {
+				TIMAAT.VideoPlayer.inspector.setPosition('right');
+				$('#timaat-inspector').removeClass('leaflet-sidebar-left');
+				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-right');
+			} else {
+				TIMAAT.VideoPlayer.inspector.setPosition('left');
+				$('#timaat-inspector').removeClass('leaflet-sidebar-right');
+				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
+			}
+		},
+		
 		setInspectorMetadata: function(item, type) {
 			TIMAAT.VideoPlayer.inspector.state.item = item;
 			TIMAAT.VideoPlayer.inspector.state.type = type;
@@ -559,8 +571,8 @@
 					if ( !list ) TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					var heading = (list) ? '<i class="fas fa-list-alt"></i> Liste bearbeiten' : '<i class="fas fa-list-alt"></i> Liste hinzufügen';
 					var submit = (list) ? "Speichern" : "Hinzufügen";
-					var title = (list) ? list.title : "";
-					var comment = (list) ? list.text : "";
+					var title = (list) ? TIMAAT.Util.getDefTranslation(list, 'mediumAnalysisListTranslations', 'title') : "";
+					var comment = (list) ? TIMAAT.Util.getDefTranslation(list, 'mediumAnalysisListTranslations', 'text') : "";
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
@@ -733,7 +745,7 @@
 			// setup model
 			TIMAAT.VideoPlayer.model.lists = lists;
 			lists.forEach(function(list) {
-				list.ui = $('<option value="'+list.id+'">'+list.title+'</option>');
+				list.ui = $('<option value="'+list.id+'">'+TIMAAT.Util.getDefTranslation(list, 'mediumAnalysisListTranslations', 'title')+'</option>');
 				list.ui.data('list', list);
 				$('#timaat-analysislist-chooser').append(list.ui);
 			});			
@@ -835,8 +847,6 @@
 			console.log("TCL: addAnalysislist: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.setInspectorMetadata(null, 'analysislist');			
-//			$('#timaat-videoplayer-analysislist-meta').data('analysislist', null);
-//			$('#timaat-videoplayer-analysislist-meta').modal('show');
 		},
 		
 		updateAnalysislist: function(analysislist) {
@@ -844,8 +854,9 @@
 			console.log("TCL: analysislist", analysislist);
 			// sync to server
 			TIMAAT.Service.updateAnalysislist(analysislist);
+			console.log(analysislist);
 			// TODO update UI list view
-			TIMAAT.VideoPlayer.curList.ui.html(TIMAAT.VideoPlayer.curList.title);
+			TIMAAT.VideoPlayer.curList.ui.html(TIMAAT.Util.getDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title'));
 		},
 
 		editAnalysislist: function() {
@@ -853,8 +864,6 @@
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.setInspectorMetadata(TIMAAT.VideoPlayer.curList, 'analysislist');
 			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
-//			$('#timaat-videoplayer-analysislist-meta').data('analysislist', TIMAAT.VideoPlayer.curList);
-//			$('#timaat-videoplayer-analysislist-meta').modal('show');			
 		},
 		
 		removeAnalysislist: function() {
@@ -885,8 +894,6 @@
 			console.log("TCL: addAnnotation: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.setInspectorMetadata(null,'annotation');
-//			$('#timaat-videoplayer-annotation-meta').data('annotation', null);
-//			$('#timaat-videoplayer-annotation-meta').modal('show');
 		},
 		
 		updateAnnotation: function(annotation) {
@@ -1017,8 +1024,11 @@
 		
 		sortListUI: function() {
 			console.log("TCL: sortListUI: function()");
-			$("#timaat-annotation-list li").sort(function (a, b) {return (parseInt($(b).attr('data-starttime'))) < (parseInt($(a).attr('data-starttime'))) ? 1 : -1;}) 
-                        .appendTo('#timaat-annotation-list');			
+			$("#timaat-annotation-list li").sort(function (a, b) {
+				if ( (parseFloat($(b).attr('data-starttime'))) < (parseFloat($(a).attr('data-starttime'))) ) return 1;
+				if ( (parseFloat($(b).attr('data-starttime'))) > (parseFloat($(a).attr('data-starttime'))) ) return -1;
+				return 0;
+			}).appendTo('#timaat-annotation-list');			
 		},
 		
 		updateListUI: function() {
@@ -1086,7 +1096,7 @@
 			var wasEmpty = TIMAAT.VideoPlayer.model.lists.length == 0;
 			TIMAAT.VideoPlayer.model.lists.push(analysislist);
 			
-			analysislist.ui = $('<option value="'+analysislist.id+'">'+analysislist.title+'</option>');
+			analysislist.ui = $('<option value="'+analysislist.id+'">'+TIMAAT.Util.getDefTranslation(analysislist, 'mediumAnalysisListTranslations', 'title')+'</option>');
 			analysislist.ui.data('list', analysislist);
 			
 			// update UI

@@ -152,6 +152,22 @@
 			}
 		},
 		
+		getDefTranslation: function(item, list, prop) {
+			var value = null;
+			item[list].forEach(function(translation) {
+				if ( translation && translation.language && translation.language.code == 'default' )
+					value = translation[prop];
+			});
+			return value;
+		},
+		
+		setDefTranslation: function(item, list, prop, value) {
+			item[list].forEach(function(translation) {
+				if ( translation && translation.language && translation.language.code == 'default' )
+					translation[prop] = value;
+			});
+		},
+		
 		getArgonHash: function(password, salt) {
     // console.log("TCL: getArgonHash: function(password, salt)");
 			var hash = Module.allocate(new Array(32), 'i8', Module.ALLOC_NORMAL);

@@ -308,6 +308,7 @@
 		updateVideoStatus: function(video) {
 //			console.log("TCL: updateVideoStatus: function(video)");
 			video.poll = window.setInterval(function() {
+				if ( video.ui && !video.ui.is(':visible') ) return;
 				jQuery.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+video.id+'/status',
 					type:"GET",
@@ -498,6 +499,23 @@
 						
 		},
 		
+		loadThumbnail: function (video) {
+			if ( !video || !video.ui ) return;
+			var img = $('<img />').appendTo('body').hide();
+			img.data('video', video );
+			img.on('load', function(ev) {
+				var video = $(ev.target).data('video');
+				video.ui.find('.card-img-top').attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+				$(ev.target).remove();			
+			});
+			img.on('error', function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+				$(ev.target).remove();
+			});
+			img.attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+		},
+		
 		addMediacollection: function() {
 			$('#timaat-videochooser-mediacollection-meta').data('mediacollection', null);
 			$('#timaat-videochooser-mediacollection-meta').modal('show');	
@@ -613,7 +631,7 @@
 				
 			} else {
 				videoelement = $('<tr> \
-					    <td id="videochooser-item-'+video.id+'"><input type="checkbox" aria-label="Checkbox"></td>\
+					    <td class="videochooser-item" id="videochooser-item-'+video.id+'"><input type="checkbox" aria-label="Checkbox"></td>\
 						<td style="padding:0; width: 200px;"> \
 						<div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
 					  	<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="200" height="113" alt="Videovorschau"> \
@@ -629,9 +647,8 @@
 						</td> \
 					</tr>'
 				);
+				videoelement.data('video',video);
 				
-				if ( video.mediumVideo.status != "nofile" ) videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
-
 				videoelement.find('.title').html(video.title.name);
 				videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
 				videoelement.find('.created').html(moment(video.createdAt).format('YYYY-MM-DD, kk:mm [Uhr]'));
@@ -647,6 +664,7 @@
 			if ( !TIMAAT.VideoChooser.collection ) videoelement.find('.timaat-video-collectionitemremove').hide();
 			
 			video.ui = videoelement;
+			if ( video.mediumVideo.status != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
 			TIMAAT.VideoChooser.setVideoStatus(video);
 			
 				

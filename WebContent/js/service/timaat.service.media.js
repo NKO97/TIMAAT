@@ -70,6 +70,7 @@
 				},
 			}).done(function(data) {
       	// console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
+				
 				callback(data);
 			})
 			.fail(function(e) {

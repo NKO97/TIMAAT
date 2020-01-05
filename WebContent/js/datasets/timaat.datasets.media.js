@@ -1837,7 +1837,7 @@
 		setMediumLists: function(media) {
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-    	console.log("TCL: setMediumLists -> media", media);
+    			console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
 			
 			$('#timaat-mediadatasets-medium-list-loader').remove();

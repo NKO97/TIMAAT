@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -48,12 +47,22 @@ public class Annotation implements Serializable {
 	private int layerVisual;
 
 	@Column(name="sequence_end_time")
-	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
+	@JsonIgnore
+	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
 	private Time sequenceEndTime;
 
 	@Column(name="sequence_start_time")
-	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
+	@JsonIgnore
+//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
 	private Time sequenceStartTime;
+	
+	@JsonProperty("startTime")
+	@Transient
+	private float startTime;
+
+	@JsonProperty("endTime")
+	@Transient
+	private float endTime;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
@@ -264,10 +273,16 @@ public class Annotation implements Serializable {
 		if ( this.sequenceStartTime == null ) return -1;
 		return sequenceStartTime.getTime()/1000f;
 	}
+	
+	@JsonIgnore
+	public float getStartTimeProp() {
+		return this.startTime;
+	}
 
 	public void setStartTime(float startTime) {
-		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new Time(0);
+		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new java.sql.Time(0);
 		this.sequenceStartTime.setTime((long)(startTime*1000f));
+		this.startTime = startTime;
 	}
 
 	public float getEndTime() {
@@ -275,9 +290,15 @@ public class Annotation implements Serializable {
 		return sequenceEndTime.getTime()/1000f;
 	}
 
+	@JsonIgnore
+	public float getEndTimeProp() {
+		return this.endTime;
+	}
+
 	public void setEndTime(float endTime) {
-		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new Time(0);
+		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new java.sql.Time(0);
 		this.sequenceEndTime.setTime((long)(endTime*1000f));
+		this.endTime = endTime;
 	}
 
 	public AnalysisContentAudio getAnalysisContentAudio() {

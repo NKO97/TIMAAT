@@ -93,7 +93,6 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
 	@OneToMany(mappedBy="mediumAnalysisList")
-    // @JsonManagedReference(value = "MediumAnalysisList-MediumAnalysisListTranslation")
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
@@ -116,28 +115,12 @@ public class MediumAnalysisList implements Serializable {
 		this.id = id;
 	}
 	
-
-	public String getText() {
-		return this.getMediumAnalysisListTranslations().get(0).getText();// TODO get proper translation id
-	}
-
-	public void setText(String text) {
-		 this.getMediumAnalysisListTranslations().get(0).setText(text);// TODO get proper translation id
-	}
 	public Timestamp getCreatedAt() {
 		return this.createdAt;
 	}
 
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public String getTitle() {
-	 	return this.getMediumAnalysisListTranslations().get(0).getTitle();// TODO get proper translation id
-	}
-
-	public void setTitle(String title) {
-		this.getMediumAnalysisListTranslations().get(0).setTitle(title); // TODO get proper translation id
 	}
 
 	public Timestamp getLastEditedAt() {
@@ -262,6 +245,20 @@ public class MediumAnalysisList implements Serializable {
 		mediumAnalysisListTranslation.setMediumAnalysisList(null);
 
 		return mediumAnalysisListTranslation;
+	}
+
+	public void setTitle(String title, String langcode) {
+		if ( this.mediumAnalysisListTranslations == null ) return;
+		for ( MediumAnalysisListTranslation trans : this.mediumAnalysisListTranslations ) {
+			if ( trans.getLanguage().getCode().compareTo(langcode) == 0 ) trans.setTitle(title);
+		}
+	}
+
+	public void setText(String text, String langcode) {
+		if ( this.mediumAnalysisListTranslations == null ) return;
+		for ( MediumAnalysisListTranslation trans : this.mediumAnalysisListTranslations ) {
+			if ( trans.getLanguage().getCode().compareTo(langcode) == 0 ) trans.setText(text);
+		}
 	}
 
 	// public List<UserAccountHasMediumAnalysisList> getUserAccountHasMediumAnalysisLists() {
