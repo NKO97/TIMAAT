@@ -1,11 +1,12 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ public class UserAccount implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="created_at")
-	private Date createdAt;
+	private Timestamp createdAt;
 
 	@Column(name="display_name")
 	private String displayName;
@@ -217,11 +218,11 @@ public class UserAccount implements Serializable {
 		this.contentAccessRights = contentAccessRights;
 	}
 
-	public Date getCreatedAt() {
+	public Timestamp getCreatedAt() {
 		return this.createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 
