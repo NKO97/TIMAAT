@@ -30,7 +30,6 @@ public class UserAccount implements Serializable {
 	@Column(name="content_access_rights")
 	private String contentAccessRights;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
