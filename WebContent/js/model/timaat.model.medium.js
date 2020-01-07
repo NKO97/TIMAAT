@@ -100,16 +100,17 @@
 
 			// attach medium handlers
 			$(this.listView).on('click', this, function(ev) {
-				console.log("TCL: Medium -> constructor -> open medium datasheet");
+				// console.log("TCL: Medium -> constructor -> open medium datasheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.title-data-tab').show();
-				$('.medium-data-tab').show();
-				$('.nav-tabs a[href="#mediumDatasheet"]').focus();
+				// $('.title-data-tab').show();
+				// $('.medium-data-tab').show();
+				// $('.nav-tabs a[href="#mediumDatasheet"]').focus();
+				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 				$('#timaat-mediadatasets-media-metadata-form').data('medium', medium);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');

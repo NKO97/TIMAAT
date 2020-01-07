@@ -104,9 +104,10 @@
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.software-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#softwareDatasheet"]').focus();
+				// $('.software-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#softwareDatasheet"]').focus();
+				$('.nav-tabs a[href="#softwareDatasheet"]').tab("show");
 				// make certain the current medium model matches the current software model
 				var softwareMedium = new Object();
 				softwareMedium.model = software.model.medium;

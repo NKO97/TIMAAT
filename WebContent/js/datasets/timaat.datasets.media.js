@@ -533,6 +533,7 @@
 		},
 
 		initLanguageTracks: function() {
+			// languagetrack tab click handling
 			$('#media-tab-languagetracks-form').click(function(event) {
 				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab("show");
 				$('.form').hide();
@@ -1837,7 +1838,7 @@
 		setMediumLists: function(media) {
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-    			console.log("TCL: setMediumLists -> media", media);
+    	console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
 			
 			$('#timaat-mediadatasets-medium-list-loader').remove();

@@ -104,9 +104,10 @@
 					$('.form').hide();
 					$('.media-nav-tabs').show();
 					$('.media-data-tabs').hide();
-					$('.text-data-tab').show();
-					$('.title-data-tab').show();
-					$('.nav-tabs a[href="#textDatasheet"]').focus();
+					// $('.text-data-tab').show();
+					// $('.title-data-tab').show();
+					// $('.nav-tabs a[href="#textDatasheet"]').focus();
+					$('.nav-tabs a[href="#textDatasheet"]').tab("show");
 					// make certain the current medium model matches the current text model
 					var textMedium = new Object();
 					textMedium.model = text.model.medium;

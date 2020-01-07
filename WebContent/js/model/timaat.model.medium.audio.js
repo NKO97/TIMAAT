@@ -104,9 +104,10 @@
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.audio-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#audioDatasheet"]').focus();
+				// $('.audio-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#audioDatasheet"]').focus();
+				$('.nav-tabs a[href="#audioDatasheet"]').tab("show");
 				// make certain the current medium model matches the current audio model
 				var audioMedium = new Object();
 				audioMedium.model = audio.model.medium;

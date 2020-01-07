@@ -103,10 +103,11 @@
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
 				$('.media-nav-tabs').show();
-				$('.media-data-tabs').hide();
-				$('.document-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#documentDatasheet"]').focus();
+				// $('.media-data-tabs').hide();
+				// $('.document-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#documentDatasheet"]').focus();
+				$('.nav-tabs a[href="#documentDatasheet"]').tab("show");
 				// make certain the current medium model matches the current document model
 				var documentMedium = new Object();
 				documentMedium.model = mediumDocument.model.medium;

@@ -104,9 +104,10 @@
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.videogame-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#videogameDatasheet"]').focus();
+				// $('.videogame-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#videogameDatasheet"]').focus();
+				$('.nav-tabs a[href="#videogameDatasheet"]').tab("show");
 				// make certain the current medium model matches the current videogame model
 				var videogameMedium = new Object();
 				videogameMedium.model = videogame.model.medium;

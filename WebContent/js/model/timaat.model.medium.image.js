@@ -104,9 +104,10 @@
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.image-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#imageDatasheet"]').focus();
+				// $('.image-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#imageDatasheet"]').focus();
+				$('.nav-tabs a[href="#imageDatasheet"]').tab("show");
 				// make certain the current medium model matches the current image model
 				var imageMedium = new Object();
 				imageMedium.model = image.model.medium;

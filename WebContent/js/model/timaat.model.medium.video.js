@@ -146,9 +146,10 @@
 				$('.form').hide();
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
-				$('.video-data-tab').show();
-				$('.title-data-tab').show();
-				$('.nav-tabs a[href="#videoDatasheet"]').focus();
+				// $('.video-data-tab').show();
+				// $('.title-data-tab').show();
+				// $('.nav-tabs a[href="#videoDatasheet"]').focus();
+				$('.nav-tabs a[href="#videoDatasheet"]').tab("show");
 				// make certain the current medium model matches the current video model
 				var videoMedium = {
 					model: {}
