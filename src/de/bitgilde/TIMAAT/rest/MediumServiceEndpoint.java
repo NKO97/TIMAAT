@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.security.Key;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -132,7 +133,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getAudioList");	
 		@SuppressWarnings("unchecked")
 		List<MediumAudio> mediumAudioList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll").getResultList();
-		return Response.ok().entity(mediumAudioList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumAudio m : mediumAudioList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -143,7 +146,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getDocumentList");	
 		@SuppressWarnings("unchecked")
 		List<MediumDocument> mediumDocumentList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll").getResultList();
-		return Response.ok().entity(mediumDocumentList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumDocument m : mediumDocumentList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -154,7 +159,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getImageList");	
 		@SuppressWarnings("unchecked")
 		List<MediumImage> mediumImageList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll").getResultList();
-		return Response.ok().entity(mediumImageList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumImage m : mediumImageList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -165,7 +172,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getSoftwareList");	
 		@SuppressWarnings("unchecked")
 		List<MediumSoftware> mediumSoftwareList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll").getResultList();
-		return Response.ok().entity(mediumSoftwareList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumSoftware m : mediumSoftwareList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -176,7 +185,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getTextList");	
 		@SuppressWarnings("unchecked")
 		List<MediumText> mediumTextList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll").getResultList();
-		return Response.ok().entity(mediumTextList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumText m : mediumTextList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -196,7 +207,9 @@ public class MediumServiceEndpoint{
 			m.getMedium().getMediumAnalysisLists().clear();
 		}
 
-		return Response.ok().entity(mediumVideoList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumVideo m : mediumVideoList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 
 	@GET
@@ -207,7 +220,9 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: getVideogameList");	
 		@SuppressWarnings("unchecked")
 		List<MediumVideogame> mediumVideogameList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll").getResultList();
-		return Response.ok().entity(mediumVideogameList).build();
+		List<Medium> mediumList = new ArrayList<Medium>();
+		for ( MediumVideogame m : mediumVideogameList ) mediumList.add(m.getMedium());
+		return Response.ok().entity(mediumList).build();
 	}
 	
 	@GET
@@ -1787,7 +1802,7 @@ public class MediumServiceEndpoint{
 	}
 		
 	@GET
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
 	public Response getMediaInfo(@PathParam("id") int id) {
@@ -2028,7 +2043,7 @@ public class MediumServiceEndpoint{
 
 	@SuppressWarnings("unchecked")
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/category/{name}")
 	@Secured
 	public Response addCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {    	

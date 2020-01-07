@@ -3,6 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Time;
 
 
@@ -34,6 +37,7 @@ public class MediumAudio implements Serializable {
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
+	@JsonIgnore // MediumAudio is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
 	public MediumAudio() {

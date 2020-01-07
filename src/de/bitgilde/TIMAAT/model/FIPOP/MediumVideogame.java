@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the medium_videogame database table.
@@ -21,6 +23,7 @@ public class MediumVideogame implements Serializable {
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
+	@JsonIgnore // MediumVideogame is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
 	@Column(name="is_episode", columnDefinition = "BOOLEAN")

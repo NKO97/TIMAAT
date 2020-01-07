@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Set;
@@ -32,6 +33,7 @@ public class MediumText implements Serializable {
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
+	@JsonIgnore // MediumText is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
 	//bi-directional many-to-one association to ReligiousReference

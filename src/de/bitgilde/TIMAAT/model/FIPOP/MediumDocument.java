@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the medium_document database table.
@@ -21,6 +23,7 @@ public class MediumDocument implements Serializable {
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id") 
+	@JsonIgnore // MediumDocument is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
 	//bi-directional many-to-one association to SiocItem
