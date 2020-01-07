@@ -72,7 +72,6 @@ public class MediaCollectionEndpoint {
 				if (m.getMedium().getMediumVideo() != null) {
 					m.getMedium().getMediumVideo().getStatus();
 					m.getMedium().getMediumVideo().getViewToken();
-					m.getMedium().getMediumVideo().setMedium(null);
 				}
 			}
 		}
@@ -97,7 +96,6 @@ public class MediaCollectionEndpoint {
 			if (m.getMedium().getMediumVideo() != null) {
 				m.getMedium().getMediumVideo().getStatus();
 				m.getMedium().getMediumVideo().getViewToken();
-				m.getMedium().getMediumVideo().setMedium(null);
 			}
 
 		}

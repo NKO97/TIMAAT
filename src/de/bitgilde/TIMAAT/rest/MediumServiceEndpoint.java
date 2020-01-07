@@ -104,7 +104,6 @@ public class MediumServiceEndpoint{
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-				video.setMedium(null);
 //				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
@@ -202,7 +201,6 @@ public class MediumServiceEndpoint{
 		for (MediumVideo m : mediumVideoList ) {
 			m.setStatus(videoStatus(m.getMediumId()));
 			m.setViewToken(issueFileToken(m.getMediumId()));
-			m.getMedium().setMediumVideo(null);
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMedium().getMediumAnalysisLists().clear();
 		}
@@ -384,7 +382,6 @@ public class MediumServiceEndpoint{
 		if ( medium.getMediumVideo() != null ) {
 			medium.getMediumVideo().getStatus();
 			medium.getMediumVideo().getViewToken();
-			medium.getMediumVideo().setMedium(null);
 		}
 
 		// add log entry
@@ -1062,7 +1059,6 @@ public class MediumServiceEndpoint{
 		
 		video.getStatus();
 		video.getViewToken();
-		video.getMedium().setMediumVideo(null);
 
 		return Response.ok().entity(video).build();
 
