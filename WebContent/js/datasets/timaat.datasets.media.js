@@ -1873,8 +1873,11 @@
 			// setup model
 			var auds = Array();
 			audios.forEach(function(audio) { 
-				if ( audio.mediumId > 0 )
-					auds.push(new TIMAAT.Audio(audio)); 
+				var convItem = audio.mediumAudio;
+				convItem.mediumId = audio.id;
+				convItem.medium = audio;
+				if ( convItem.mediumId > 0 )
+					auds.push(new TIMAAT.Audio(convItem)); 
 			});
 			TIMAAT.MediaDatasets.audios = auds;
 			TIMAAT.MediaDatasets.audios.model = audios;
@@ -1891,8 +1894,11 @@
 			// setup model
 			var docs = Array();
 			documents.forEach(function(mediumDocument) { 
-				if ( mediumDocument.mediumId > 0 )
-					docs.push(new TIMAAT.Document(mediumDocument)); 
+				var convItem = mediumDocument.mediumDocument;
+				convItem.mediumId = mediumDocument.id;
+				convItem.medium = mediumDocument;
+				if ( convItem.mediumId > 0 )
+					docs.push(new TIMAAT.Document(convItem)); 
 			});
 			TIMAAT.MediaDatasets.documents = docs;
 			TIMAAT.MediaDatasets.documents.model = documents;
@@ -1909,8 +1915,11 @@
 			// setup model
 			var imgs = Array();
 			images.forEach(function(image) { 
-				if ( image.mediumId > 0 )
-					imgs.push(new TIMAAT.Image(image)); 
+				var convItem = image.mediumImage;
+				convItem.mediumId = image.id;
+				convItem.medium = image;
+				if ( convItem.mediumId > 0 )
+					imgs.push(new TIMAAT.Image(convItem)); 
 			});
 			TIMAAT.MediaDatasets.images = imgs;
 			TIMAAT.MediaDatasets.images.model = images;
@@ -1927,8 +1936,11 @@
 			// setup model
 			var softws = Array();
 			softwares.forEach(function(software) { 
-				if ( software.mediumId > 0 )
-					softws.push(new TIMAAT.Software(software)); 
+				var convItem = software.mediumSoftware;
+				convItem.mediumId = software.id;
+				convItem.medium = software;
+				if ( convItem.mediumId > 0 )
+					softws.push(new TIMAAT.Software(convItem)); 
 			});
 			TIMAAT.MediaDatasets.softwares = softws;
 			TIMAAT.MediaDatasets.softwares.model = softwares;
@@ -1945,8 +1957,11 @@
 			// setup model
 			var txts = Array();
 			texts.forEach(function(text) { 
-				if ( text.mediumId > 0 )
-					txts.push(new TIMAAT.Text(text)); 
+				var convItem = text.mediumText;
+				convItem.mediumId = text.id;
+				convItem.medium = text;
+				if ( convItem.mediumId > 0 )
+					txts.push(new TIMAAT.Text(convItem)); 
 			});
 			TIMAAT.MediaDatasets.texts = txts;
 			TIMAAT.MediaDatasets.texts.model = texts;
@@ -1964,8 +1979,11 @@
 			// setup model
 			var vids = Array();
 			videos.forEach(function(video) { 
-				if ( video.mediumId > 0 )
-					vids.push(new TIMAAT.Video(video));
+				var convItem = video.mediumVideo;
+				convItem.mediumId = video.id;
+				convItem.medium = video;
+				if ( convItem.mediumId > 0 )
+					vids.push(new TIMAAT.Video(convItem));
 			});
 			TIMAAT.MediaDatasets.videos = vids;
 			TIMAAT.MediaDatasets.videos.model = videos;
@@ -1984,8 +2002,12 @@
 			// setup model
 			var vdgms = Array();
 			videogames.forEach(function(videogame) { 
-				if ( videogame.mediumId > 0 )
-					vdgms.push(new TIMAAT.Videogame(videogame)); 
+				var convItem = videogame.mediumVideogame;
+				convItem.mediumId = videogame.id;
+				convItem.medium = videogame;
+
+				if ( convItem.mediumId > 0 )
+					vdgms.push(new TIMAAT.Videogame(convItem)); 
 			});
 			TIMAAT.MediaDatasets.videogames = vdgms;
 			TIMAAT.MediaDatasets.videogames.model = videogames;

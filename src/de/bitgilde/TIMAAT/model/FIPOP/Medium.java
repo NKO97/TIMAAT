@@ -109,7 +109,6 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumAudio
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumAudio mediumAudio;
 
 	//bi-directional one-to-one association to MediumDocument
@@ -137,6 +136,11 @@ public class Medium implements Serializable {
 	//bi-directional one-to-one association to MediumVideo
 	@OneToOne(mappedBy="medium")
 	private MediumVideo mediumVideo;
+
+	//bi-directional one-to-one association to MediumAudio
+	@OneToOne(mappedBy="medium")
+	@JsonIgnore
+	private MediumVideogame mediumVideogame;
 
 	//bi-directional many-to-many association to ActorHasRole
 	@ManyToMany
@@ -220,12 +224,10 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumSoftware
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumSoftware mediumSoftware;
 
 	//bi-directional one-to-one association to MediumText
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumText mediumText;
 
 	//bi-directional many-to-one association to MusicalNotation
@@ -600,6 +602,7 @@ public class Medium implements Serializable {
 		this.mediumText = mediumText;
 	}
 
+	
 	// public List<MusicalNotation> getMusicalNotations() {
 	// 	return this.musicalNotations;
 	// }
@@ -652,14 +655,22 @@ public class Medium implements Serializable {
 		return source;
 	}
 
-		// TODO rather get medium by medium_type
-		// new
-		public MediumVideo getMediumVideo() {
-			return this.mediumVideo;
-		}
+	public MediumVideo getMediumVideo() {
+		return this.mediumVideo;
+	}
 	
-		public void setMediumVideo(MediumVideo mediumVideo) {
-			this.mediumVideo = mediumVideo;
-		}
+	public void setMediumVideo(MediumVideo mediumVideo) {
+		this.mediumVideo = mediumVideo;
+	}
+	
+	public MediumVideogame getMediumVideogame() {
+		return mediumVideogame;
+	}
+
+	public void setMediumVideogame(MediumVideogame mediumVideogame) {
+		this.mediumVideogame = mediumVideogame;
+	}
+
+
 
 }
