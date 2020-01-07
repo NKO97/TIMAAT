@@ -21,3 +21,4 @@ WebContent/vendor/
 .settings/org.eclipse.ltk.core.refactoring.prefs
 .settings/org.eclipse.m2e.wtp.prefs
 .settings/org.eclipse.wst.ws.service.policy.prefs
+.classpath
