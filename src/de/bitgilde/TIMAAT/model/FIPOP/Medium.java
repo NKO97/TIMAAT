@@ -139,7 +139,6 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumAudio
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumVideogame mediumVideogame;
 
 	//bi-directional many-to-many association to ActorHasRole
