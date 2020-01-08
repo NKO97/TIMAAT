@@ -150,16 +150,18 @@
 					var name = this.model.name;
 					if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 					this.listView.find('.timaat-categoryset-list-title').text(name);
-					// tag count
-					var count = this.model.tags.length + " Tags";
-					if ( this.model.tags.length == 0 ) count = "keine Tags";
-					if ( this.model.tags.length == 1 ) count = "ein Tag";
+					// category count
+					var count = this.model.categorySetHasCategories.length + " Kategorien";
+					if ( this.model.categorySetHasCategories.length == 0 ) count = "keine Kategorien";
+					if ( this.model.categorySetHasCategories.length == 1 ) count = "eine Kategorie";
 					this.listView.find('.timaat-categoryset-list-count').text(count);
 					// tags
+					/*
 					this.listView.find('.timaat-categoryset-list-tags i').attr('title', this.model.tags.length+" Tags");			
 					if (this.model.tags.length == 0) this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tag timaat-no-tags');
 					else if (this.model.tags.length == 1) this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "ein Tag");
 					else this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tags text-dark');
+					*/
 				}
 				
 				remove() {
