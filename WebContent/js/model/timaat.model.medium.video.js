@@ -63,12 +63,13 @@
 			$('#timaat-mediadatasets-video-list').append(this.listView);
 			
 			var video = this; // save video for system events
+      console.log("TCL: Video -> constructor -> video", video);
 			var listView = this.listView;
 
 			// attach upload functionality
 			if ( model.status == "nofile" ) {
 				this.listView.find('.timaat-mediadatasets-video-list-upload').dropzone({
-					url: "/TIMAAT/api/medium/video/"+video.model.medium.id+"/upload",
+					url: "/TIMAAT/api/medium/video/"+video.model.mediumId+"/upload",
 					createImageThumbnails: false,
 					acceptedFiles: 'video/mp4',
 					maxFilesize: 1024,
@@ -172,6 +173,7 @@
 
 		updateUI() {
 			// console.log("TCL: Video -> updateUI -> updateUI()");
+			console.log("TCL: Video -> updateUI -> this", this);
 			// title
 			var name = this.model.medium.title.name;
 			if ( this.model.mediumId < 0 ) name = "[nicht zugeordnet]";

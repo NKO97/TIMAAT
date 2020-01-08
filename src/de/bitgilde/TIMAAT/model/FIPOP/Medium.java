@@ -113,7 +113,6 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumDocument
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumDocument mediumDocument;
 
 	// TOOD replace with proper medium_video table data
@@ -204,7 +203,6 @@ public class Medium implements Serializable {
 
 	//bi-directional one-to-one association to MediumImage
 	@OneToOne(mappedBy="medium")
-	@JsonIgnore
 	private MediumImage mediumImage;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent

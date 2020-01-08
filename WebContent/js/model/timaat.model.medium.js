@@ -27,6 +27,9 @@
 
 			// create and style list view element
 			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
+			// var deleteVideoButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-video-remove float-left" id="timaat-mediadatasets-video-remove"><i class="fas fa-trash-alt"></i></button>';
+			// var uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
+			
 			if ( model.id < 0 ) { 
 				deleteMediumButton = '';
 			};

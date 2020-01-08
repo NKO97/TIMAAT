@@ -22,11 +22,11 @@
 	</init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-   <listener>
+   <!-- <listener>
     <listener-class>
             de.bitgilde.TIMAAT.ServiceScheduler
         </listener-class>
-  </listener>
+  </listener> -->
   
   <servlet-mapping>
     <servlet-name>TIMAAT</servlet-name>
