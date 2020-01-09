@@ -127,10 +127,6 @@ public class Actor implements Serializable {
 		return null;
 	}
 
-	public void setName(String name) {
-		if ( this.actorNames != null && this.actorNames.size() > 0 ) this.actorNames.get(0).setName(name); // TODO get correct list item
-	}
-
 	public UserAccount getCreatedByUserAccount() {
 		return this.createdByUserAccount;
 	}
