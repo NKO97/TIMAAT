@@ -616,6 +616,20 @@
 			
 		},
 		
+		_getProducer: function(video) {
+			var producer = "";
+			if ( !video || !video.mediumHasActorWithRoles ) return producer;
+			var actor = null;
+			video.mediumHasActorWithRoles.forEach(function(role) {
+				if ( role.role.id == 112 ) actor = role.actor; // 112 == Producer, according to TIMAAT DB definition
+			});
+			if ( !actor || !actor.actorNames || actor.actorNames.length < 1 ) return producer;
+			actor.actorNames.forEach(function(name) {
+				if ( !name.usedSince && !name.usedUntil && name.name ) producer = name.name; 
+			});
+			return producer;
+		},
+		
 		_addVideo: function(video) {
 			// console.log("TCL: _addVideo: function(video)");
 			// console.log("TCL: video", video);
@@ -632,18 +646,18 @@
 			} else {
 				videoelement = $('<tr> \
 					    <td class="videochooser-item" id="videochooser-item-'+video.id+'"><input type="checkbox" aria-label="Checkbox"></td>\
-						<td style="padding:0; width: 200px;"> \
+						<td style="padding:0; width: 150px;"> \
 						<div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
-					  	<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="200" height="113" alt="Videovorschau"> \
+					  	<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"> \
 						</td> \
 						<td class="title"></td>\
 						<td class="duration">00:00:00</td>\
-					    <td class="created">xx.xx.xxxx xx:xx</td>\
-					    <td class="edited">xx.xx.xxxx xx:xx</td>\
-					    <td>\
-					      <button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-block timaat-video-upload"><i class="fas fa-upload"></i></button> \
-						  <button type="button" title="Video annotieren" class="btn btn-outline-success btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button> \
-						  <button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>\
+					    <td class="producer">xx.xx.xxxx xx:xx</td>\
+					    <td class="date">xx.xx.xxxx xx:xx</td>\
+					    <td class="actions">\
+					      <button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button> \
+						  <button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button> \
+						  <button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>\
 						</td> \
 					</tr>'
 				);
@@ -651,8 +665,8 @@
 				
 				videoelement.find('.title').html(video.title.name);
 				videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
-				videoelement.find('.created').html(moment(video.createdAt).format('YYYY-MM-DD, kk:mm [Uhr]'));
-				videoelement.find('.edited').html(moment(video.lastEditedAt).format('YYYY-MM-DD, kk:mm [Uhr]'));
+				videoelement.find('.producer').html(TIMAAT.VideoChooser._getProducer(video));
+				videoelement.find('.date').html(moment(video.releaseDate).format('YYYY-MM-DD'));
 			}
 			videoelement.data('medium', video);
 			videoelement.find('input:checkbox').prop('checked', false);

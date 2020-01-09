@@ -112,11 +112,23 @@ public class ActorName implements Serializable {
 
 	
 	public String getName() {
-		return this.actorNameParts.toString(); // TODO verify whether this works
-	}
-
-	public void setName(String name) {
-		this.actorNameParts.get(0).setName(name); // TODO verify whether this works
+		String name = "", first = "", last = "", ism = "", kunya = "", nasab = "", nisba = "", laqab = "";
+		
+		for ( ActorNamePart part: this.actorNameParts ) {
+			switch ( part.getId() ) {
+				case 1: first = part.getName(); break;
+				case 2: last = part.getName(); break;
+				case 3: ism = part.getName(); break;
+				case 4: kunya = part.getName(); break;
+				case 5: nasab = part.getName(); break;
+				case 6: nisba = part.getName(); break;
+				case 7: laqab = part.getName(); break;
+			}
+		}
+		name = last+", "+first+" "+ism+" "+kunya+" "+nasab+" "+nisba+" "+laqab;
+		name = name.trim();
+		
+		return name;
 	}
 
 }

@@ -24,7 +24,7 @@ public class Actor implements Serializable {
 	private int id;
 
 	@Column(name="is_fictional")
-	private byte isFictional;
+	private int isFictional;
 
 	//bi-directional many-to-many association to ActorType
 	@ManyToMany(mappedBy="actors")	
@@ -114,20 +114,21 @@ public class Actor implements Serializable {
 		this.id = id;
 	}
 
-	public byte getIsFictional() {
+	public int getIsFictional() {
 		return this.isFictional;
 	}
 
-	public void setIsFictional(byte isFictional) {
+	public void setIsFictional(int isFictional) {
 		this.isFictional = isFictional;
 	}
 
 	public String getName() {
-		return this.actorNames.get(0).getName(); // TODO get correct list item
+		if ( this.actorNames != null && this.actorNames.size() > 0 ) return this.actorNames.get(0).getName(); // TODO get correct list item
+		return null;
 	}
 
 	public void setName(String name) {
-		this.actorNames.get(0).setName(name); // TODO get correct list item
+		if ( this.actorNames != null && this.actorNames.size() > 0 ) this.actorNames.get(0).setName(name); // TODO get correct list item
 	}
 
 	public UserAccount getCreatedByUserAccount() {

@@ -141,6 +141,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRolePK</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

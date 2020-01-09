@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -29,6 +31,7 @@ public class Role implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
+	@JsonIgnore
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to RoleGroup
