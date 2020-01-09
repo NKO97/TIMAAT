@@ -47,6 +47,7 @@
 			$('.media-data-tabs').hide();
 			$('.media-cards').hide();
 			$('.media-card').show();
+			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
 		},
 
 		initMediaTypes: function() {
@@ -135,7 +136,7 @@
 			// nav-bar functionality
 			$('#media-tab-medium-metadata-form').click(function(event) {
 				// $('.media-data-tabs').show();
-				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#mediumDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
@@ -163,7 +164,7 @@
 				if (!$('#timaat-mediadatasets-media-metadata-form').valid()) return false;
 
 				// the original medium model (in case of editing an existing medium)
-				var medium = $('#timaat-mediadatasets-media-metadata-form').data("medium");				
+				var medium = $('#timaat-mediadatasets-media-metadata-form').data('medium');				
         // console.log("TCL: medium", medium);
 
 				// Create/Edit medium window submitted data
@@ -197,7 +198,7 @@
 
 					medium.updateUI();
 					await TIMAAT.MediaDatasets.updateMedium(medium);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				} else { // create new medium
 					var model = {
 						id: 0,
@@ -244,7 +245,7 @@
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
 					await TIMAAT.MediaDatasets.createMedium(model, title, source);
 					var medium = TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				};
 			});
 
@@ -252,15 +253,15 @@
 			$('#timaat-mediadatasets-medium-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "medium", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'medium', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
 			// Cancel add/edit button in content form functionality
 			$('#timaat-mediadatasets-medium-metadata-form-dismiss').click( function(event) {
-				var medium = $("#timaat-mediadatasets-media-metadata-form").data("medium");
+				var medium = $('#timaat-mediadatasets-media-metadata-form').data('medium');
 				if (medium != null) {
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				} else { // dismiss medium creation
 					$('.form').hide();
 				}
@@ -270,18 +271,18 @@
 
 		initTitles: function() {
 			$('#media-tab-titles-form').click(function(event) {
-				$('.nav-tabs a[href="#mediumTitles"]').tab("show");
+				$('.nav-tabs a[href="#mediumTitles"]').tab('show');
 				$('.form').hide();
-				TIMAAT.MediaDatasets.setMediumTitleList($("#timaat-mediadatasets-media-metadata-form").data("medium"))
+				TIMAAT.MediaDatasets.setMediumTitleList($('#timaat-mediadatasets-media-metadata-form').data('medium'))
 				$('#timaat-mediadatasets-medium-titles-form').show();
-				TIMAAT.MediaDatasets.mediumFormTitles('show', $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormTitles('show', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 			});
 			
 			// edit titles form button handler
 			$('#timaat-mediadatasets-medium-titles-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormTitles("edit", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormTitles('edit', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
@@ -523,30 +524,30 @@
 					}
 				}
 				console.log("TCL: show medium title form");
-				TIMAAT.MediaDatasets.mediumFormTitles("show", medium);
+				TIMAAT.MediaDatasets.mediumFormTitles('show', medium);
 			});
 
 			// Cancel add/edit button in titles form functionality
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
-				TIMAAT.MediaDatasets.mediumFormTitles("show", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormTitles('show', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 			});
 		},
 
 		initLanguageTracks: function() {
 			// languagetrack tab click handling
 			$('#media-tab-languagetracks-form').click(function(event) {
-				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab("show");
+				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab('show');
 				$('.form').hide();
-				TIMAAT.MediaDatasets.setMediumLanguageTrackList($("#timaat-mediadatasets-media-metadata-form").data("medium"))
+				TIMAAT.MediaDatasets.setMediumLanguageTrackList($('#timaat-mediadatasets-media-metadata-form').data('medium'))
 				$('#timaat-mediadatasets-medium-languagetracks-form').show();
-				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 			});
 			
 			// edit languageTracks form button handler
 			$('#timaat-mediadatasets-medium-languagetracks-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormLanguageTracks("edit", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks('edit', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
@@ -562,7 +563,7 @@
 				// if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
 					// var duplicate = false;
-					var medium = $("#timaat-mediadatasets-media-metadata-form").data("medium");
+					var medium = $('#timaat-mediadatasets-media-metadata-form').data('medium');
           console.log("TCL: medium", medium);
 					// medium.model.mediumHasLanguages.forEach(function(entry) { // TODO this needs to check for current list, not mediumHasLanguages
 					// 	if (entry.id.mediumLanguageTypeId == mediumLanguageTypeId && entry.id.languageId == languageId) {
@@ -772,29 +773,29 @@
 						medium.model.mediumHasLanguages.pop();
 					}
 				}
-				TIMAAT.MediaDatasets.mediumFormLanguageTracks("show", medium);
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', medium);
 			});
 
 			// Cancel add/edit button in languageTracks form functionality
 			$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').click( function(event) {
-				TIMAAT.MediaDatasets.mediumFormLanguageTracks("show", $("#timaat-mediadatasets-media-metadata-form").data("medium"));
+				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 			});
 		},
 
 		initAudios: function() {
 			// nav-bar functionality
 			$('#media-tab-audio-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#audioDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "audio", $("#timaat-mediadatasets-media-metadata-form").data("audio"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', $('#timaat-mediadatasets-media-metadata-form').data('audio'));
 			});
 			
 			// delete audio button functionality (in audio list)
 			$('#timaat-mediadatasets-audio-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-audio-delete');
 				var audio = modal.data('audio');
-				if (audio) TIMAAT.MediaDatasets._mediumSubtypeRemoved("audio", audio);
+				if (audio) TIMAAT.MediaDatasets._mediumSubtypeRemoved('audio', audio);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -812,7 +813,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original audio model (in case of editing an existing audio)
-				var audio = $("#timaat-mediadatasets-media-metadata-form").data("audio");		
+				var audio = $('#timaat-mediadatasets-media-metadata-form').data('audio');		
 
 				// Create/Edit audio window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -846,8 +847,8 @@
 					// TODO: audiocodecinformation
 
 					audio.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("audio", audio);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "audio", audio);
+					TIMAAT.MediaDatasets.updateMediumSubtype('audio', audio);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', audio);
 				} else { // create new audio
 					var model = {
 						mediumId: 0,
@@ -900,10 +901,10 @@
 					// 		id: 0,
 					// 		name: name,
 					// };
-					await TIMAAT.MediaDatasets.createMediumSubtype("audio", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('audio', model, medium, title, source);
 					var audio = TIMAAT.MediaDatasets.audios[TIMAAT.MediaDatasets.audios.length-1];
 					console.log("TCL: audio", audio);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "audio", audio);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', audio);
 					var audioMedium = new Object();
 					audioMedium.model = audio.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', audioMedium);
@@ -914,7 +915,7 @@
 			$('#timaat-mediadatasets-audio-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "audio", $('#timaat-mediadatasets-media-metadata-form').data("audio"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'audio', $('#timaat-mediadatasets-media-metadata-form').data('audio'));
 				// audio.listView.find('.timaat-mediadatasets-audio-list-tags').popover('show');
 			});
 
@@ -927,17 +928,17 @@
 		initDocuments: function() {
 			// nav-bar functionality
 			$('#media-tab-document-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#documentDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#documentDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "document", $("#timaat-mediadatasets-media-metadata-form").data("document"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', $('#timaat-mediadatasets-media-metadata-form').data('document'));
 			});
 
 			// delete document button functionality (in document list)
 			$('#timaat-mediadatasets-document-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-document-delete');
 				var mediumDocument = modal.data('document');
-				if (mediumDocument) TIMAAT.MediaDatasets._mediumSubtypeRemoved("document", mediumDocument);
+				if (mediumDocument) TIMAAT.MediaDatasets._mediumSubtypeRemoved('document', mediumDocument);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -955,7 +956,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original document model (in case of editing an existing document)
-				var mediumDocument = $("#timaat-mediadatasets-media-metadata-form").data("document");			
+				var mediumDocument = $('#timaat-mediadatasets-media-metadata-form').data('document');			
 
 				// Create/Edit document window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -988,8 +989,8 @@
 					// currently empty
 
 					mediumDocument.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("document", mediumDocument);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "document", mediumDocument);
+					TIMAAT.MediaDatasets.updateMediumSubtype('document', mediumDocument);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', mediumDocument);
 				} else { // create new document
 					var model = {
 						mediumId: 0,
@@ -1037,9 +1038,9 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("document", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('document', model, medium, title, source);
 					var mediumDocument = TIMAAT.MediaDatasets.documents[TIMAAT.MediaDatasets.documents.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "document", mediumDocument);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', mediumDocument);
 					var documentMedium = new Object();
 					documentMedium.model = mediumDocument.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', documentMedium);
@@ -1050,7 +1051,7 @@
 			$('#timaat-mediadatasets-document-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "document", $('#timaat-mediadatasets-media-metadata-form').data("document"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'document', $('#timaat-mediadatasets-media-metadata-form').data('document'));
 				// document.listView.find('.timaat-mediadatasets-document-list-tags').popover('show');
 			});
 
@@ -1064,17 +1065,17 @@
 		initImages: function() {
 			// nav-bar functionality
 			$('#media-tab-image-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#imageDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#imageDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "image", $("#timaat-mediadatasets-media-metadata-form").data("image"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', $('#timaat-mediadatasets-media-metadata-form').data('imaget'));
 			});
 
 			// delete image button functionality (in image list)
 			$('#timaat-mediadatasets-image-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-image-delete');
 				var image = modal.data('image');
-				if (image) TIMAAT.MediaDatasets._mediumSubtypeRemoved("image", image);
+				if (image) TIMAAT.MediaDatasets._mediumSubtypeRemoved('image', image);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -1091,7 +1092,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original image model (in case of editing an existing image)
-				var image = $("#timaat-mediadatasets-media-metadata-form").data("image");			
+				var image = $('#timaat-mediadatasets-media-metadata-form').data('imaget');			
 
 				// Create/Edit image window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -1126,8 +1127,8 @@
 					image.model.bitDepth = formDataObject.bitDepth;
 
 					image.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("image", image);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "image", image);
+					TIMAAT.MediaDatasets.updateMediumSubtype('image', image);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', image);
 				} else { // create new image
 					var model = {
 						mediumId: 0,
@@ -1178,9 +1179,9 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("image", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('image', model, medium, title, source);
 					var image = TIMAAT.MediaDatasets.images[TIMAAT.MediaDatasets.images.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "image", image);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', image);
 					var imageMedium = new Object();
 					imageMedium.model = image.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', imageMedium);
@@ -1191,7 +1192,7 @@
 			$('#timaat-mediadatasets-image-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "image", $('#timaat-mediadatasets-media-metadata-form').data("image"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'image', $('#timaat-mediadatasets-media-metadata-form').data('image'));
 				// image.listView.find('.timaat-mediadatasets-image-list-tags').popover('show');
 			});
 
@@ -1204,17 +1205,17 @@
 		initSoftwares: function() {
 			// nav-bar functionality
 			$('#media-tab-software-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#softwareDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "software", $("#timaat-mediadatasets-media-metadata-form").data("software"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', $('#timaat-mediadatasets-media-metadata-form').data('software'));
 			});
 
 			// delete software button functionality (in software list)
 			$('#timaat-mediadatasets-software-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-software-delete');
 				var software = modal.data('software');
-				if (software) TIMAAT.MediaDatasets._mediumSubtypeRemoved("software", software);
+				if (software) TIMAAT.MediaDatasets._mediumSubtypeRemoved('software', software);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -1231,7 +1232,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original software model (in case of editing an existing software)
-				var software = $("#timaat-mediadatasets-media-metadata-form").data("software");		
+				var software = $('#timaat-mediadatasets-media-metadata-form').data('software');		
 
 				// Create/Edit software window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -1263,8 +1264,8 @@
 					software.model.version = formDataObject.version;
 
 					software.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("software", software);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "software", software);
+					TIMAAT.MediaDatasets.updateMediumSubtype('software', software);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', software);
 				} else { // create new software
 					var model = {
 						mediumId: 0,
@@ -1313,9 +1314,9 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("software", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('software', model, medium, title, source);
 					var software = TIMAAT.MediaDatasets.softwares[TIMAAT.MediaDatasets.softwares.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "software", software);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', software);
 					var softwareMedium = new Object();
 					softwareMedium.model = software.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', softwareMedium);
@@ -1326,7 +1327,7 @@
 			$('#timaat-mediadatasets-software-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "software", $('#timaat-mediadatasets-media-metadata-form').data("software"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'software', $('#timaat-mediadatasets-media-metadata-form').data('software'));
 				// software.listView.find('.timaat-mediadatasets-software-list-tags').popover('show');
 			});
 
@@ -1339,17 +1340,17 @@
 		initTexts: function() {
 			// nav-bar functionality
 			$('#media-tab-text-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#textDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#textDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "text", $("#timaat-mediadatasets-media-metadata-form").data("text"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', $('#timaat-mediadatasets-media-metadata-form').data('text'));
 			});
 
 			// delete text button functionality (in text list)
 			$('#timaat-mediadatasets-text-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-text-delete');
 				var text = modal.data('text');
-				if (text) TIMAAT.MediaDatasets._mediumSubtypeRemoved("text", text);
+				if (text) TIMAAT.MediaDatasets._mediumSubtypeRemoved('text', text);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -1366,7 +1367,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original text model (in case of editing an existing text)
-				var text = $("#timaat-mediadatasets-media-metadata-form").data("text");
+				var text = $('#timaat-mediadatasets-media-metadata-form').data('text');
 
 				// Create/Edit text window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -1399,8 +1400,8 @@
 					text.model.content = formDataObject.content;
 
 					text.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("text", text);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "text", text);
+					TIMAAT.MediaDatasets.updateMediumSubtype('text', text);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', text);
 				} else { // create new text
 					var model = {
 						mediumId: 0,
@@ -1450,9 +1451,9 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("text", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('text', model, medium, title, source);
 					var text = TIMAAT.MediaDatasets.texts[TIMAAT.MediaDatasets.texts.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "text", text);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', text);
 					var textMedium = new Object();
 					textMedium.model = text.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', textMedium);
@@ -1463,7 +1464,7 @@
 			$('#timaat-mediadatasets-text-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "text", $('#timaat-mediadatasets-media-metadata-form').data("text"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'text', $('#timaat-mediadatasets-media-metadata-form').data('text'));
 				// text.listView.find('.timaat-mediadatasets-text-list-tags').popover('show');
 			});
 
@@ -1476,17 +1477,19 @@
 		initVideos: function() {
 			// nav-bar functionality
 			$('#media-tab-video-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#videoDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "video", $("#timaat-mediadatasets-media-metadata-form").data("video"));
+				var video = $('#timaat-mediadatasets-media-metadata-form').data('medium');
+        console.log("TCL: video", video);
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
 			});
 
 			// delete video button functionality (in video list)
 			$('#timaat-mediadatasets-video-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-video-delete');
 				var video = modal.data('video');
-				if (video) TIMAAT.MediaDatasets._mediumSubtypeRemoved("video", video);
+				if (video) TIMAAT.MediaDatasets._mediumSubtypeRemoved('video', video);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -1504,7 +1507,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original video model (in case of editing an existing video)
-				var video = $("#timaat-mediadatasets-media-metadata-form").data("video");
+				var video = $('#timaat-mediadatasets-media-metadata-form').data('medium');
 
 				// Create/Edit video window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -1545,8 +1548,8 @@
 
 					video.updateUI();
           console.log("TCL: video", video);
-					TIMAAT.MediaDatasets.updateMediumSubtype("video", video);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "video", video);
+					TIMAAT.MediaDatasets.updateMediumSubtype('video', video);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
 				} else { // create new video
 					var model = {
 						mediumId: 0,
@@ -1605,10 +1608,10 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("video", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('video', model, medium, title, source);
 					var video = TIMAAT.MediaDatasets.videos[TIMAAT.MediaDatasets.videos.length-1];
           console.log("TCL: video", video);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "video", video);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
 					// var videoMedium = new Object();
 					// videoMedium.model = video.model.medium;
 					// $('#timaat-mediadatasets-media-metadata-form').data('medium', videoMedium);
@@ -1621,7 +1624,7 @@
 			$('#timaat-mediadatasets-video-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "video", $('#timaat-mediadatasets-media-metadata-form').data("video"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'video', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 				// video.listView.find('.timaat-mediadatasets-video-list-tags').popover('show');
 			});
 
@@ -1634,17 +1637,17 @@
 		initVideogames: function() {
 			// nav-bar functionality
 			$('#media-tab-videogame-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#videogameDatasheet"]').tab("show");
+				$('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-mediadatasets-media-metadata-form').show();
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', "videogame", $("#timaat-mediadatasets-media-metadata-form").data("videogame"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', $('#timaat-mediadatasets-media-metadata-form').data('videogame'));
 			});
 
 			// delete videogame button functionality (in videogame list)
 			$('#timaat-mediadatasets-videogame-delete-submit').click(function(ev) {
 				var modal = $('#timaat-mediadatasets-videogame-delete');
 				var videogame = modal.data('videogame');
-				if (videogame) TIMAAT.MediaDatasets._mediumSubtypeRemoved("videogame", videogame);
+				if (videogame) TIMAAT.MediaDatasets._mediumSubtypeRemoved('videogame', videogame);
 				modal.modal('hide');
 				$('#timaat-mediadatasets-media-metadata-form').hide();
 				$('.media-data-tabs').hide();
@@ -1661,7 +1664,7 @@
 				if (!$("#timaat-mediadatasets-media-metadata-form").valid()) return false;
 
 				// the original videogame model (in case of editing an existing videogame)
-				var videogame = $("#timaat-mediadatasets-media-metadata-form").data("videogame");	
+				var videogame = $('#timaat-mediadatasets-media-metadata-form').data('videogame');	
 
 				// Create/Edit videogame window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
@@ -1694,8 +1697,8 @@
 					videogame.model.isEpisode = (formDataObject.isEpisode) ? true : false;
 
 					videogame.updateUI();
-					TIMAAT.MediaDatasets.updateMediumSubtype("videogame", videogame);
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "videogame", videogame);
+					TIMAAT.MediaDatasets.updateMediumSubtype('videogame', videogame);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', videogame);
 				} else { // create new videogame
 					var model = {
 						mediumId: 0,
@@ -1744,9 +1747,9 @@
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype("videogame", model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('videogame', model, medium, title, source);
 					var videogame = TIMAAT.MediaDatasets.videogames[TIMAAT.MediaDatasets.videogames.length-1];
-					TIMAAT.MediaDatasets.mediumFormDatasheet("show", "videogame", videogame);
+					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', videogame);
 					var videogameMedium = new Object();
 					videogameMedium.model = videogame.model.medium;
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', videogameMedium);
@@ -1757,7 +1760,7 @@
 			$('#timaat-mediadatasets-videogame-metadata-form-edit').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.MediaDatasets.mediumFormDatasheet("edit", "videogame", $('#timaat-mediadatasets-media-metadata-form').data("videogame"));
+				TIMAAT.MediaDatasets.mediumFormDatasheet('edit', 'videogame', $('#timaat-mediadatasets-media-metadata-form').data('videogame'));
 				// videogame.listView.find('.timaat-mediadatasets-videogame-list-tags').popover('show');
 			});
 
@@ -1788,39 +1791,40 @@
 		loadMediumSubtype: function(mediumSubtype) {
 			$('.media-cards').hide();
 			$('.'+mediumSubtype+'s-card').show();
+			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', mediumSubtype);
 			switch (mediumSubtype) {
-				case "audio":
+				case 'audio':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioLists);
 					break;
-				case "document":
+				case 'document':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentLists);
 					break;
-				case "image":
+				case 'image':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageLists);
 					break;
-				case "software":
+				case 'software':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareLists);
 					break;
-				case "text":
+				case 'text':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextLists);
 					break;
-				case "video":
+				case 'video':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoLists);
 					break;
-				case "videogame":
+				case 'videogame':
 					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameLists);
 					break;
 			};
 		},
 
 		loadAllMediumSubtypes: function() {
-			TIMAAT.MediaService.listMediumSubtype("audio", TIMAAT.MediaDatasets.setAudioLists);
-			TIMAAT.MediaService.listMediumSubtype("document", TIMAAT.MediaDatasets.setDocumentLists);
-			TIMAAT.MediaService.listMediumSubtype("image", TIMAAT.MediaDatasets.setImageLists);
-			TIMAAT.MediaService.listMediumSubtype("software", TIMAAT.MediaDatasets.setSoftwareLists);
-			TIMAAT.MediaService.listMediumSubtype("text", TIMAAT.MediaDatasets.setTextLists);
-			TIMAAT.MediaService.listMediumSubtype("video", TIMAAT.MediaDatasets.setVideoLists);
-			TIMAAT.MediaService.listMediumSubtype("videogame", TIMAAT.MediaDatasets.setVideogameLists);
+			TIMAAT.MediaService.listMediumSubtype('audio', TIMAAT.MediaDatasets.setAudioLists);
+			TIMAAT.MediaService.listMediumSubtype('document', TIMAAT.MediaDatasets.setDocumentLists);
+			TIMAAT.MediaService.listMediumSubtype('image', TIMAAT.MediaDatasets.setImageLists);
+			TIMAAT.MediaService.listMediumSubtype('software', TIMAAT.MediaDatasets.setSoftwareLists);
+			TIMAAT.MediaService.listMediumSubtype('text', TIMAAT.MediaDatasets.setTextLists);
+			TIMAAT.MediaService.listMediumSubtype('video', TIMAAT.MediaDatasets.setVideoLists);
+			TIMAAT.MediaService.listMediumSubtype('videogame', TIMAAT.MediaDatasets.setVideogameLists);
 		},
 
 		setMediaTypeLists: function(mediaTypes) {
@@ -1841,6 +1845,7 @@
 			$('.media-data-tabs').hide();
     	console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
+			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
 			
 			$('#timaat-mediadatasets-medium-list-loader').remove();
 			// clear old UI list
@@ -1993,14 +1998,15 @@
       // console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 			// TIMAAT.MediaDatasets.videos.model = videos;
 			videos.forEach(function(video) { 
-				if ( video.mediumVideo ) {
+				if ( video.id > 0 ) {
           console.log("TCL: video", video);
 					vids.push(new TIMAAT.Medium(video));
 				}
 			});
 			console.log("TCL: videos", videos);
-			console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
-			TIMAAT.MediaDatasets.videos = vids;      
+			TIMAAT.MediaDatasets.videos = vids;
+      console.log("TCL: vids", vids);
+			console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);   
 			TIMAAT.MediaDatasets.videos.model = videos;      
 			// also set video chooser list
 			// TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.mediaDatasets);
@@ -2113,7 +2119,7 @@
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
 			$('#timaat-mediadatasets-media-metadata-form').show();
 
-			if ( action == "show") {
+			if ( action == 'show') {
 				$('#timaat-mediadatasets-media-metadata-form :input').prop("disabled", true);
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').show();
@@ -2122,7 +2128,7 @@
 				$('.datasheet-form-buttons').hide()
 				$('#mediumFormHeader').html(mediumType+" Datasheet");
 			}
-			else if (action == "edit") {
+			else if (action == 'edit') {
 				$('.datasheet-form-buttons').hide();
 				$('.'+mediumType+'-datasheet-form-submit').show();
 				$('#timaat-mediadatasets-media-metadata-form :input').prop("disabled", false);
@@ -2175,35 +2181,35 @@
 				else $('#timaat-mediadatasets-media-metadata-source-isstillavailable').prop('checked', false);
 			// medium subtype specific data
 			switch (mediumType) {
-				case "audio":
+				case 'audio':
 					$("#timaat-mediadatasets-audio-metadata-length").val(mediumTypeData.model.length);
 				break;
 				case "mediumDocument":
 				break;
-				case "image":
+				case 'image':
 					$("#timaat-mediadatasets-image-metadata-width").val(mediumTypeData.model.width);
 					$("#timaat-mediadatasets-image-metadata-height").val(mediumTypeData.model.height);
 					$("#timaat-mediadatasets-image-metadata-bitdepth").val(mediumTypeData.model.bitDepth);
 				break;
-				case "software":
+				case 'software':
 					$("#timaat-mediadatasets-software-metadata-version").val(mediumTypeData.model.version);
 				break;
-				case "text":
+				case 'text':
 					$("#timaat-mediadatasets-text-metadata-content").val(mediumTypeData.model.content);
 				break;
-				case "video":
-					$('#timaat-mediadatasets-video-metadata-length').val(mediumTypeData.model.length);
-					$('#timaat-mediadatasets-video-metadata-videocodec').val(mediumTypeData.model.videoCodec);
-					$('#timaat-mediadatasets-video-metadata-width').val(mediumTypeData.model.width);
-					$('#timaat-mediadatasets-video-metadata-height').val(mediumTypeData.model.height);
-					$('#timaat-mediadatasets-video-metadata-framerate').val(mediumTypeData.model.frameRate);
-					$('#timaat-mediadatasets-video-metadata-datarate').val(mediumTypeData.model.dataRate);
-					$('#timaat-mediadatasets-video-metadata-totalbitrate').val(mediumTypeData.model.totalBitrate);
-					if (mediumTypeData.model.isEpisode)
+				case 'video':
+					$('#timaat-mediadatasets-video-metadata-length').val(mediumTypeData.model.mediumVideo.length);
+					$('#timaat-mediadatasets-video-metadata-videocodec').val(mediumTypeData.model.mediumVideo.videoCodec);
+					$('#timaat-mediadatasets-video-metadata-width').val(mediumTypeData.model.mediumVideo.width);
+					$('#timaat-mediadatasets-video-metadata-height').val(mediumTypeData.model.mediumVideo.height);
+					$('#timaat-mediadatasets-video-metadata-framerate').val(mediumTypeData.model.mediumVideo.frameRate);
+					$('#timaat-mediadatasets-video-metadata-datarate').val(mediumTypeData.model.mediumVideo.dataRate);
+					$('#timaat-mediadatasets-video-metadata-totalbitrate').val(mediumTypeData.model.mediumVideo.totalBitrate);
+					if (mediumTypeData.model.mediumVideo.isEpisode)
 						$('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', true);
 						else $('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', false);
 				break;
-				case "videogame":
+				case 'videogame':
 					if (mediumTypeData.model.isEpisode)
 					$("#timaat-mediadatasets-videogame-metadata-isepisode").prop('checked', true);
 					else $("#timaat-mediadatasets-videogame-metadata-isepisode").prop('checked', false);
@@ -2287,7 +2293,7 @@
 						});
 			};
 
-			if ( action == "show") {
+			if ( action == 'show') {
 				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-titles-form-edit').show();
 				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", false);
@@ -2300,7 +2306,7 @@
 				$('[data-role="add"]').hide();
 				$('#mediumTitlesLabel').html("Medium Titelliste");
 			}
-			else if (action == "edit") {
+			else if (action == 'edit') {
 				$('#timaat-mediadatasets-medium-titles-form-submit').show();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
 				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", false);
@@ -2421,7 +2427,7 @@
 						});
 			};
 
-			if ( action == "show") {
+			if ( action == 'show') {
 				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", false);
@@ -2434,7 +2440,7 @@
 				$('[data-role="add"]').hide();
 				$('#mediumLanguageTracksLabel').html("Medium Spurliste");
 			}
-			else if (action == "edit") {
+			else if (action == 'edit') {
 				$('#timaat-mediadatasets-medium-languagetracks-form-submit').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", false);
@@ -2547,6 +2553,7 @@
 				tempMediumModel.title = newTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
+        console.log("TCL: newMediumModel", newMediumModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2580,10 +2587,11 @@
 				// push new mediumSubtype to dataset model
 				console.log("TCL: newMediumModel", newMediumModel);
 				switch (mediumSubtype) {
-					case "video":
+					case 'video':
 						newMediumModel.mediumVideo = mediumSubtypeModel;
 					break;
 				};
+				console.log("TCL: newMediumModel", newMediumModel);
 				await TIMAAT.MediaDatasets._mediumSubtypeAdded(mediumSubtype, newMediumModel);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2747,10 +2755,10 @@
 
 		_mediumAdded: async function(medium) {
 			// console.log("TCL: _mediumAdded: function(medium)");
-			// console.log("TCL: medium", medium);
+			console.log("TCL: medium", medium);
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium));
-			// TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
+			// TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', medium);
 		},
 
 		_mediumSubtypeAdded: async function(mediumSubtype, mediumData) {
@@ -2758,32 +2766,32 @@
 			console.log("TCL: mediumSubtype", mediumSubtype);
     	console.log("TCL: mediumData", mediumData);
 			switch (mediumSubtype) {
-				// case "audio":
+				// case 'audio':
 				// 	TIMAAT.MediaDatasets.audios.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.audios.push(new TIMAAT.Audio(mediumSubtypeData));
 				// 	break;
-				// case "document":
+				// case 'document':
 				// 	TIMAAT.MediaDatasets.documents.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.documents.push(new TIMAAT.Document(mediumSubtypeData));
 				// 	break;
-				// case "image":
+				// case 'image':
 				// 	TIMAAT.MediaDatasets.images.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.images.push(new TIMAAT.Image(mediumSubtypeData));
 				// 	break;
-				// case "software":
+				// case 'software':
 				// 	TIMAAT.MediaDatasets.softwares.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.softwares.push(new TIMAAT.Software(mediumSubtypeData));
 				// 	break;
-				// case "text":
+				// case 'text':
 				// 	TIMAAT.MediaDatasets.texts.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.texts.push(new TIMAAT.Text(mediumSubtypeData));
 				// 	break;
-				case "video":
+				case 'video':
 					TIMAAT.MediaDatasets.videos.model.push(mediumData);
 					TIMAAT.MediaDatasets.videos.push(new TIMAAT.Medium(mediumData));
           console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 					break;
-				// case "videogame":
+				// case 'videogame':
 				// 	TIMAAT.MediaDatasets.videogames.model.push(mediumSubtypeData);
 				// 	TIMAAT.MediaDatasets.videogames.push(new TIMAAT.Videogame(mediumSubtypeData));
 				// 	break;
@@ -2828,20 +2836,18 @@
 		},
 
 		_mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData) {
-			// console.log("TCL: mediumSubtype", mediumSubtype);
-			// console.log("TCL: mediumSubtypeData", mediumSubtypeData);
-			// console.log("TCL: _videoRemoved: function(video)");
+			console.log("TCL: _mediumSubtypeRemoved: function(mediumSubtype, mediumSubtypeData)", mediumSubtype, mediumSubtypeData);
 			// sync to server
-		 TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData);
-		 var i = 0;
-		 for (; i < mediumSubtypeData.model.medium.titles.length; i++ ) { // remove obsolete titles
-			 if ( mediumSubtypeData.model.medium.titles[i].id != mediumSubtypeData.model.medium.title.id ) {
-				 TIMAAT.MediaService.removeTitle(mediumSubtypeData.model.medium.titles[i]);
-				 mediumSubtypeData.model.medium.titles.splice(i,1);
-			 }
-		 }
-		 mediumSubtypeData.remove();
-	 },
+			TIMAAT.MediaService.removeMediumSubtype(mediumSubtype, mediumSubtypeData);
+			var i = 0;
+			for (; i < mediumSubtypeData.model.medium.titles.length; i++ ) { // remove obsolete titles
+				if ( mediumSubtypeData.model.medium.titles[i].id != mediumSubtypeData.model.medium.title.id ) {
+					TIMAAT.MediaService.removeTitle(mediumSubtypeData.model.medium.titles[i]);
+					mediumSubtypeData.model.medium.titles.splice(i,1);
+				}
+			}
+			mediumSubtypeData.remove();
+		},
 
 	}
 	
