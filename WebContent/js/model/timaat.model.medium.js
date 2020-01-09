@@ -32,7 +32,7 @@
 			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
 			// var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-'+mediumType+'-remove float-left" id="timaat-mediadatasets-'+mediumType+'-remove"><i class="fas fa-trash-alt"></i></button>';
 			var uploadVideoButton = "";
-			if ( this.model.mediumVideo && model.status == "nofile" ) {
+			if ( this.model.mediumVideo && model.mediumVideo.status == "nofile" ) {
 				uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
 			}
 			if ( model.id < 0 ) { 
@@ -171,12 +171,14 @@
 		updateUI() {
 			// console.log("TCL: Medium -> updateUI -> updateUI() -> model", this.model);
 			// title
+			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
 			var name = this.model.title.name;
 			var type = this.model.mediaType.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-mediadatasets-medium-list-name').text(name);
-			this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
-			// this.listView.find('.timaat-mediadatasets-video-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').text(name);
+			if (mediumType == 'medium') {
+				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
+			}
 		}
 
 		remove() {
