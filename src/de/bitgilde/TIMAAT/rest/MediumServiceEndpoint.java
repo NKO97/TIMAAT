@@ -11,6 +11,7 @@ import java.security.Key;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -93,8 +94,8 @@ public class MediumServiceEndpoint{
 	@Path("list")
 	public Response getMediaList() {
 		System.out.println("MediumServiceEndpoint: getMediaList");
-		@SuppressWarnings("unchecked")
-		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
+		// @SuppressWarnings("unchecked")
+		List<Medium> mlist = castList(Medium.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList());
 
 		for (Medium m : mlist) {
 			MediumVideo video = m.getMediumVideo();
@@ -104,7 +105,7 @@ public class MediumServiceEndpoint{
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-//				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+				// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
@@ -194,19 +195,35 @@ public class MediumServiceEndpoint{
 	@Secured
 	@Path("video/list")
 	public Response getVideoList() {
-		// System.out.println("MediumServiceEndpoint: getMediaList");		
-		@SuppressWarnings("unchecked")
-		List<MediumVideo> mediumVideoList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList();
+		System.out.println("MediumServiceEndpoint: getVideoList");		
+		// @SuppressWarnings("unchecked")
+		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
 
-		for (MediumVideo m : mediumVideoList ) {
-			m.setStatus(videoStatus(m.getMediumId()));
-			m.setViewToken(issueFileToken(m.getMediumId()));
+		for (MediumVideo video : mediumVideoList ) {
+			video.setStatus(videoStatus(video.getMediumId()));
+			video.setViewToken(issueFileToken(video.getMediumId()));
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
-			m.getMedium().getMediumAnalysisLists().clear();
+			video.getMedium().getMediumAnalysisLists().clear();
 		}
 
 		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumVideo m : mediumVideoList ) mediumList.add(m.getMedium());
+		for ( MediumVideo video : mediumVideoList ) {
+			mediumList.add(video.getMedium());
+			// System.out.println("add medium of video: "+ video.getMediumId());
+		}
+
+		// for (Medium medium : mediumList) {
+		// 	MediumVideo video = medium.getMediumVideo();
+		// 	System.out.println("add video data to medium "+  medium.getId());
+		// 	// video.setStatus(videoStatus(medium.getId()));
+		// 	// video.setViewToken(issueFileToken(medium.getId()));
+		// 	medium.setMediumVideo(video);
+		// 	// video.getStatus();
+		// 	// video.getViewToken();
+		// 	// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+		// 	// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
+		// 	// medium.getMediumAnalysisLists().clear();
+		// }
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -279,7 +296,7 @@ public class MediumServiceEndpoint{
 		newMedium.setCreatedAt(creationDate);
 		newMedium.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+			// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 			newMedium.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newMedium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -2282,5 +2299,12 @@ public class MediumServiceEndpoint{
 	
 	return mediumID;
 	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+    List<T> r = new ArrayList<T>(c.size());
+    for(Object o: c)
+      r.add(clazz.cast(o));
+    return r;
+}
 	
 }

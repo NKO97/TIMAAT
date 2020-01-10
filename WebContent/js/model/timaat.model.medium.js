@@ -20,21 +20,21 @@
 }(function (TIMAAT) {
 	
 	TIMAAT.Medium = class Medium {
-		constructor(model) {
+		constructor(model, mediumType) {
 			// console.log("TCL: Medium -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			console.log("TCL: Medium -> constructor -> model", model);
+			// console.log("TCL: Medium -> constructor -> model", model);
 			
 			// create and style list view element
-			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
-      console.log("TCL: Medium -> constructor -> mediumType", mediumType);
+			// var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
+      // console.log("TCL: Medium -> constructor -> mediumType", mediumType);
 			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
 			var uploadVideoButton = "";
 			if ( this.model.mediumVideo && model.mediumVideo.status == "nofile" ) {
 				uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
 			}
-			console.log("TCL: Medium -> constructor -> uploadVideoButton", uploadVideoButton);
+			// console.log("TCL: Medium -> constructor -> uploadVideoButton", uploadVideoButton);
 			if ( model.id < 0 ) { 
 				deleteMediumButton = '';
 			};
@@ -68,12 +68,12 @@
 				</li>`
 			);
 
-			console.log("TCL: append me to list:", mediumType);
+			// console.log("TCL: append me to list:", mediumType);
 			$('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
 			var medium = this; // save medium for system events
 			
 			// attach video upload functionality
-			if ( this.model.mediumVideo && model.status == "nofile" ) {
+			if ( mediumType == 'video' && model.status == 'nofile' ) {
 				var video = this.model.mediumVideo;
 				this.listView.find('.timaat-mediadatasets-video-list-upload').dropzone({
 					url: "/TIMAAT/api/medium/video/"+medium.model.id+"/upload",

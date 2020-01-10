@@ -58,7 +58,7 @@
 		},
 
 		listMediumSubtype(mediumSubtype, callback) {
-			// console.log("TCL: listVideos -> callback", callback);
+			console.log("TCL: listMediumSubtype", mediumSubtype);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/list",
 				type:"GET",
@@ -69,6 +69,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+      	console.log("TCL: listMediumSubtype -> data", data);
       	// console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
 				
 				callback(data);
