@@ -16,9 +16,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountry</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountryPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorName</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorNamePart</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorNamePartType</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorNamePartTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActorPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorType</class>
@@ -141,6 +138,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRolePK</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

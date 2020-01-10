@@ -4,10 +4,8 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -23,6 +21,12 @@ public class ActorName implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name="name")
+	private String name;
+
+	@Column(name="is_primary")
+	private int isPrimary;
 
 	@Column(name="text_direction")
 	private String textDirection;
@@ -40,10 +44,6 @@ public class ActorName implements Serializable {
 	@JsonBackReference(value = "Actor-ActorName")
 	private Actor actor;
 
-	//bi-directional many-to-one association to ActorNamePart
-	@OneToMany(mappedBy="actorName")
-	@JsonManagedReference(value = "ActorName-ActorNamePart")
-	private List<ActorNamePart> actorNameParts;
 
 	public ActorName() {
 	}
@@ -62,6 +62,14 @@ public class ActorName implements Serializable {
 
 	public void setTextDirection(String textDirection) {
 		this.textDirection = textDirection;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Date getUsedSince() {
@@ -88,35 +96,15 @@ public class ActorName implements Serializable {
 		this.actor = actor;
 	}
 
-	public List<ActorNamePart> getActorNameParts() {
-		return this.actorNameParts;
+
+	public int getIsPrimary() {
+		return isPrimary;
 	}
 
-	public void setActorNameParts(List<ActorNamePart> actorNameParts) {
-		this.actorNameParts = actorNameParts;
+	public void setIsPrimary(int isPrimary) {
+		this.isPrimary = isPrimary;
 	}
-
-	public ActorNamePart addActorNamePart(ActorNamePart actorNamePart) {
-		getActorNameParts().add(actorNamePart);
-		actorNamePart.setActorName(this);
-
-		return actorNamePart;
-	}
-
-	public ActorNamePart removeActorNamePart(ActorNamePart actorNamePart) {
-		getActorNameParts().remove(actorNamePart);
-		actorNamePart.setActorName(null);
-
-		return actorNamePart;
-	}
-
 	
-	public String getName() {
-		return this.actorNameParts.toString(); // TODO verify whether this works
-	}
-
-	public void setName(String name) {
-		this.actorNameParts.get(0).setName(name); // TODO verify whether this works
-	}
+	
 
 }

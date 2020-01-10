@@ -1816,7 +1816,6 @@ public class MediumServiceEndpoint{
 		
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Secured
 	@Path("{id}")
 	public Response getMediaInfo(@PathParam("id") int id) {
     	

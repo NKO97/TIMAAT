@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -185,6 +186,12 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<MediumHasLanguage> mediumHasLanguages;
 
+	
+	//bi-directional many-to-one association to MediumHasActorWithRole
+	@OneToMany(mappedBy="medium")
+	private List<MediumHasActorWithRole> mediumHasActorWithRoles;
+
+	
 	//bi-directional many-to-many association to RatingCategory
 	// @ManyToMany(mappedBy="mediums")
 	// private List<RatingCategory> ratingCategories;
@@ -668,6 +675,27 @@ public class Medium implements Serializable {
 		this.mediumVideogame = mediumVideogame;
 	}
 
+	public List<MediumHasActorWithRole> getMediumHasActorWithRoles() {
+		return this.mediumHasActorWithRoles;
+	}
+
+	public void setMediumHasActorWithRoles(List<MediumHasActorWithRole> mediumHasActorWithRoles) {
+		this.mediumHasActorWithRoles = mediumHasActorWithRoles;
+	}
+
+	public MediumHasActorWithRole addMediumHasActorWithRole(MediumHasActorWithRole mediumHasActorWithRole) {
+		getMediumHasActorWithRoles().add(mediumHasActorWithRole);
+		mediumHasActorWithRole.setMedium(this);
+
+		return mediumHasActorWithRole;
+	}
+
+	public MediumHasActorWithRole removeMediumHasActorWithRole(MediumHasActorWithRole mediumHasActorWithRole) {
+		getMediumHasActorWithRoles().remove(mediumHasActorWithRole);
+		mediumHasActorWithRole.setMedium(null);
+
+		return mediumHasActorWithRole;
+	}
 
 
 }

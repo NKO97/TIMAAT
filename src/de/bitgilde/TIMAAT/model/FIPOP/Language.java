@@ -36,12 +36,6 @@ public class Language implements Serializable {
 	// @JsonManagedReference(value = "Language-ActorActorRelationshipTypeTranslation")
 	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
 
-	//bi-directional many-to-one association to ActorNamePartTypeTranslation
-	@OneToMany(mappedBy="language")
-	@JsonIgnore
-	// @JsonManagedReference(value = "Language-ActorNamePartTypeTranslation")
-	private List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations;
-
 	//bi-directional many-to-one association to ActorTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -584,28 +578,6 @@ public class Language implements Serializable {
 		actorActorRelationshipTypeTranslation.setLanguage(null);
 
 		return actorActorRelationshipTypeTranslation;
-	}
-
-	public List<ActorNamePartTypeTranslation> getActorNamePartTypeTranslations() {
-		return this.actorNamePartTypeTranslations;
-	}
-
-	public void setActorNamePartTypeTranslations(List<ActorNamePartTypeTranslation> actorNamePartTypeTranslations) {
-		this.actorNamePartTypeTranslations = actorNamePartTypeTranslations;
-	}
-
-	public ActorNamePartTypeTranslation addActorNamePartTypeTranslation(ActorNamePartTypeTranslation actorNamePartTypeTranslation) {
-		getActorNamePartTypeTranslations().add(actorNamePartTypeTranslation);
-		actorNamePartTypeTranslation.setLanguage(this);
-
-		return actorNamePartTypeTranslation;
-	}
-
-	public ActorNamePartTypeTranslation removeActorNamePartTypeTranslation(ActorNamePartTypeTranslation actorNamePartTypeTranslation) {
-		getActorNamePartTypeTranslations().remove(actorNamePartTypeTranslation);
-		actorNamePartTypeTranslation.setLanguage(null);
-
-		return actorNamePartTypeTranslation;
 	}
 
 	public List<ActorTypeTranslation> getActorTypeTranslations() {

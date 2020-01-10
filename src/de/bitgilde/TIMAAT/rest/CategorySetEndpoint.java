@@ -107,6 +107,7 @@ public class CategorySetEndpoint {
 			e.printStackTrace();
 			System.out.println("error: " + e);
 		};
+		/*
 		// CategorySets with Categories exist
 		if (categorySets != null ) {
 			// find all Categories within these CategorySets by searching in CategorySetHasCategory
@@ -127,6 +128,7 @@ public class CategorySetEndpoint {
 				emptyCategorySet.addCategories(categories); // TODO add categories to categoryset
 			}
 		}
+		*/
 		return Response.ok().entity(categorySets).build();
 	}
 	
