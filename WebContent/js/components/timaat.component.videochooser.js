@@ -625,7 +625,7 @@
 			});
 			if ( !actor || !actor.actorNames || actor.actorNames.length < 1 ) return producer;
 			actor.actorNames.forEach(function(name) {
-				if ( !name.usedSince && !name.usedUntil && name.name ) producer = name.name; 
+				if ( name.isPrimary && name.name ) producer = name.name; 
 			});
 			return producer;
 		},
