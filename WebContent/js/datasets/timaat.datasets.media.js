@@ -154,7 +154,11 @@
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
-			$('#timaat-mediadatasets-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium("medium")');
+			// $('#timaat-mediadatasets-medium-add').attr('onclick','TIMAAT.MediaDatasets.addMedium("medium")');
+			$('#timaat-mediadatasets-medium-add').click(function(event) {
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', null);
+				TIMAAT.MediaDatasets.addMedium("medium");
+			});
 			
 			// medium form handlers
 			// Submit medium metadata button functionality
@@ -1497,7 +1501,11 @@
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
-			$('#timaat-mediadatasets-video-add').attr('onclick','TIMAAT.MediaDatasets.addMedium("video")');
+			// $('#timaat-mediadatasets-video-add').attr('onclick','TIMAAT.MediaDatasets.addMedium("video")');
+			$('#timaat-mediadatasets-video-add').click(function(event) {
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', null);
+				TIMAAT.MediaDatasets.addMedium("video");
+			});
 
 			// video form handlers
 			// Submit video metadata button functionality
@@ -1564,6 +1572,7 @@
 						dataRate: formDataObject.dataRate,
 						totalBitrate: formDataObject.totalBitrate,
 						isEpisode: (formDataObject.isEpisode) ? true : false,
+						status: "nofile"
 					};
 					var medium = {
 						id: 0,
@@ -1999,11 +2008,11 @@
 			// TIMAAT.MediaDatasets.videos.model = videos;
 			videos.forEach(function(video) { 
 				if ( video.id > 0 ) {
-          console.log("TCL: video", video);
+          // console.log("TCL: video", video);
 					vids.push(new TIMAAT.Medium(video));
 				}
 			});
-			console.log("TCL: videos", videos);
+			// console.log("TCL: videos", videos);
 			TIMAAT.MediaDatasets.videos = vids;
       console.log("TCL: vids", vids);
 			console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);   
@@ -2064,7 +2073,7 @@
 
 		addMedium: function(mediumType) {	
 			// console.log("TCL: addMedium: function()");
-			// console.log("TCL: mediumType", mediumType);
+			console.log("TCL: addMedium: mediumType", mediumType);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').show();
@@ -2565,16 +2574,16 @@
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			try {
-				// push new medium to dataset model
-				await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
+			// try {
+			// 	// push new medium to dataset model
+			// 	await TIMAAT.MediaDatasets._mediumAdded(newMediumModel);
 				
-				// create medium translation with medium id
-				// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
-				// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
-			} catch(error) {
-				console.log( "error: ", error);
-			};
+			// 	// create medium translation with medium id
+			// 	// await TIMAAT.MediaService.createMediumTranslation(newMediumModel, mediumModelTranslation);
+			// 	// newMediumModel.mediumTranslations[0] = mediumModelTranslation;
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
 			try {
 				// create mediumSubtype with medium id
 				mediumSubtypeModel.mediumId = newMediumModel.id;
@@ -2761,10 +2770,13 @@
 			// TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', medium);
 		},
 
-		_mediumSubtypeAdded: async function(mediumSubtype, mediumData) {
-			console.log("TCL: _mediumSubtypeAdded: function(mediumSubtype, mediumSubtypeData)");
+		_mediumSubtypeAdded: async function(mediumSubtype, medium) {
+			console.log("TCL: _mediumSubtypeAdded: function(mediumSubtype, medium)");
 			console.log("TCL: mediumSubtype", mediumSubtype);
-    	console.log("TCL: mediumData", mediumData);
+			console.log("TCL: medium", medium);
+			TIMAAT.MediaDatasets.media.model.push(medium);
+			var newMedium = new TIMAAT.Medium(medium);
+			TIMAAT.MediaDatasets.media.push(newMedium);
 			switch (mediumSubtype) {
 				// case 'audio':
 				// 	TIMAAT.MediaDatasets.audios.model.push(mediumSubtypeData);
@@ -2787,8 +2799,8 @@
 				// 	TIMAAT.MediaDatasets.texts.push(new TIMAAT.Text(mediumSubtypeData));
 				// 	break;
 				case 'video':
-					TIMAAT.MediaDatasets.videos.model.push(mediumData);
-					TIMAAT.MediaDatasets.videos.push(new TIMAAT.Medium(mediumData));
+					TIMAAT.MediaDatasets.videos.model.push(medium);
+					TIMAAT.MediaDatasets.videos.push(newMedium);
           console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 					break;
 				// case 'videogame':

@@ -26,15 +26,15 @@
 			this.model = model;
 			console.log("TCL: Medium -> constructor -> model", model);
 			
-						// create and style list view element
+			// create and style list view element
 			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
       console.log("TCL: Medium -> constructor -> mediumType", mediumType);
 			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
-			// var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-'+mediumType+'-remove float-left" id="timaat-mediadatasets-'+mediumType+'-remove"><i class="fas fa-trash-alt"></i></button>';
 			var uploadVideoButton = "";
 			if ( this.model.mediumVideo && model.mediumVideo.status == "nofile" ) {
 				uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
 			}
+			console.log("TCL: Medium -> constructor -> uploadVideoButton", uploadVideoButton);
 			if ( model.id < 0 ) { 
 				deleteMediumButton = '';
 			};
@@ -68,6 +68,7 @@
 				</li>`
 			);
 
+			console.log("TCL: append me to list:", mediumType);
 			$('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
 			var medium = this; // save medium for system events
 			
@@ -188,31 +189,44 @@
 			$('#timaat-mediadatasets-media-metadata-form').data('medium', null);
 			// remove from media list
 			var index = TIMAAT.MediaDatasets.media.indexOf(this);
+			var mediumIdToDelete;
+      console.log("TCL: Medium -> remove -> mediumIdToDelete", mediumIdToDelete);
 			if (index > -1) {
-     		console.log("TCL: Medium -> remove -> index", index);
+				 console.log("TCL: Medium -> remove -> index", index);
+				mediumIdToDelete = TIMAAT.MediaDatasets.media[index].model.id
 				TIMAAT.MediaDatasets.media.splice(index, 1);
-			}
-			// remove from media model list
-			var indexModel = TIMAAT.MediaDatasets.media.model.indexOf(this);
-      console.log("TCL: Medium -> remove -> indexModel", indexModel);
-			if (indexModel > -1) {
-        console.log("TCL: Medium -> remove -> indexModel", indexModel);
 				TIMAAT.MediaDatasets.media.model.splice(index, 1);
 			}
+			// remove from media model list
+			// var indexModel = TIMAAT.MediaDatasets.media.model.indexOf(this);
+      // console.log("TCL: Medium -> remove -> indexModel", indexModel);
+			// if (indexModel > -1) {
+      //   console.log("TCL: Medium -> remove -> indexModel", indexModel);
+				// TIMAAT.MediaDatasets.media.model.splice(index, 1);
+			// }
 			switch (this.model.mediaType.id) {
 				case 6: 
 					// remove from video list
 					console.log("TCL: Medium -> remove -> video", this);
 					console.log("TCL: Medium -> remove -> TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
-					var index = TIMAAT.MediaDatasets.videos.indexOf(this);
-					// var index = TIMAAT.MediaDatasets.videos.map(function(medium) {return medium.id}).indexOf(this.model.id);
-          console.log("TCL: Medium -> remove -> index", index);
-					if (index > -1) TIMAAT.MediaDatasets.videos.splice(index, 1);
-					// remove from model list
-					var indexModel = TIMAAT.MediaDatasets.videos.model.indexOf(this);
-          console.log("TCL: Medium -> remove -> indexModel", indexModel);
-					if (indexModel > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
-					console.log("TCL: Medium -> remove -> TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
+					var videoIndex;
+					// var index = TIMAAT.MediaDatasets.videos.indexOf(this);
+					for (var i = 0; i < TIMAAT.MediaDatasets.videos.length; i++) {
+						if (TIMAAT.MediaDatasets.videos[i].model.id == mediumIdToDelete) {
+							videoIndex = i;
+							break;
+						}
+					}
+          console.log("TCL: Medium -> remove -> videoIndex", videoIndex);
+					if (videoIndex > -1) {
+						 TIMAAT.MediaDatasets.videos.splice(videoIndex, 1);
+						 TIMAAT.MediaDatasets.videos.model.splice(videoIndex, 1);
+					}
+					// // remove from model list
+					// var indexModel = TIMAAT.MediaDatasets.videos.model.indexOf(this);
+          // console.log("TCL: Medium -> remove -> indexModel", indexModel);
+					// if (indexModel > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
+					// console.log("TCL: Medium -> remove -> TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 			break;
 			}
 		}
