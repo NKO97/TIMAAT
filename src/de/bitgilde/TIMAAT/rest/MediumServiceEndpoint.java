@@ -212,18 +212,6 @@ public class MediumServiceEndpoint{
 			// System.out.println("add medium of video: "+ video.getMediumId());
 		}
 
-		// for (Medium medium : mediumList) {
-		// 	MediumVideo video = medium.getMediumVideo();
-		// 	System.out.println("add video data to medium "+  medium.getId());
-		// 	// video.setStatus(videoStatus(medium.getId()));
-		// 	// video.setViewToken(issueFileToken(medium.getId()));
-		// 	medium.setMediumVideo(video);
-		// 	// video.getStatus();
-		// 	// video.getViewToken();
-		// 	// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
-		// 	// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
-		// 	// medium.getMediumAnalysisLists().clear();
-		// }
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -469,6 +457,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newAudio);
+		entityManager.refresh(newAudio.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newAudio.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.AUDIOCREATED);
 		System.out.println("MediumServiceEndpoint: audio created with id "+newAudio.getMediumId());
@@ -577,6 +567,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newDocument);
+		entityManager.refresh(newDocument.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newDocument.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.DOCUMENTCREATED);
 		System.out.println("MediumServiceEndpoint: document created with id "+newDocument.getMediumId());
@@ -682,6 +674,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newImage);
+		entityManager.refresh(newImage.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newImage.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.IMAGECREATED);
 		System.out.println("MediumServiceEndpoint: image created with id "+newImage.getMediumId());
@@ -790,6 +784,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newSoftware);
+		entityManager.refresh(newSoftware.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newSoftware.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.SOFTWARECREATED);
 		System.out.println("MediumServiceEndpoint: software created with id "+newSoftware.getMediumId());
@@ -898,6 +894,7 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newText);
+		entityManager.refresh(newText.getMedium());
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newText.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TEXTCREATED);
@@ -1011,6 +1008,7 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newVideo);
+		entityManager.refresh(newVideo.getMedium());
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
@@ -1143,6 +1141,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newVideogame);
+		entityManager.refresh(newVideogame.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newVideogame.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOGAMECREATED);
 		System.out.println("MediumServiceEndpoint: videogame created with id "+newVideogame.getMediumId());

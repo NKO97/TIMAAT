@@ -109,9 +109,9 @@
 				// $('.nav-tabs a[href="#documentDatasheet"]').focus();
 				$('.nav-tabs a[href="#documentDatasheet"]').tab("show");
 				// make certain the current medium model matches the current document model
-				var documentMedium = new Object();
-				documentMedium.model = mediumDocument.model.medium;
-				$('#timaat-mediadatasets-media-metadata-form').data('medium', documentMedium);
+				var mediumDocument = new Object();
+				mediumDocument.model = mediumDocument.model.medium;
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', mediumDocument);
 				$('#timaat-mediadatasets-media-metadata-form').data('document', mediumDocument);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "document", mediumDocument);   			
 				// document.listView.find('.timaat-mediadatasets-document-list-tags').popover('show');

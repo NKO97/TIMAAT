@@ -156,7 +156,7 @@
 				$('.media-data-tabs').hide();
 				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 				$('#timaat-mediadatasets-media-metadata-form').data('medium', medium);
-				TIMAAT.MediaDatasets.mediumFormDatasheet("show", "medium", medium);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", mediumType, medium);
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
@@ -190,13 +190,13 @@
 			// remove from media list
 			var index = TIMAAT.MediaDatasets.media.indexOf(this);
 			var mediumIdToDelete;
-      console.log("TCL: Medium -> remove -> mediumIdToDelete", mediumIdToDelete);
 			if (index > -1) {
 				 console.log("TCL: Medium -> remove -> index", index);
 				mediumIdToDelete = TIMAAT.MediaDatasets.media[index].model.id
 				TIMAAT.MediaDatasets.media.splice(index, 1);
 				TIMAAT.MediaDatasets.media.model.splice(index, 1);
 			}
+			console.log("TCL: Medium -> remove -> mediumIdToDelete", mediumIdToDelete);
 			// remove from media model list
 			// var indexModel = TIMAAT.MediaDatasets.media.model.indexOf(this);
       // console.log("TCL: Medium -> remove -> indexModel", indexModel);

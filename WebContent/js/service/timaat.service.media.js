@@ -58,7 +58,7 @@
 		},
 
 		listMediumSubtype(mediumSubtype, callback) {
-			console.log("TCL: listMediumSubtype", mediumSubtype);
+			// console.log("TCL: listMediumSubtype", mediumSubtype);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/list",
 				type:"GET",
