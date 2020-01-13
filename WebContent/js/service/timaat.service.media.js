@@ -287,6 +287,7 @@
 			tempMediumModel.remark = mediumModel.remark;
 			tempMediumModel.copyright = mediumModel.copyright;
 			tempMediumModel.title = mediumModel.title;
+			tempMediumModel.titles = mediumModel.titles;
 			// delete tempMediumModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
@@ -340,15 +341,16 @@
 		},
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);			
-			var tempSubtypeModel = subtypeModel;
-			delete tempSubtypeModel.ui;
+			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
+			
+			// delete tempSubtypeModel.ui;
 			// delete tempSubtypeModel.mediumVideo;
+			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
 					type:"PATCH",
-					data: JSON.stringify(tempSubtypeModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {

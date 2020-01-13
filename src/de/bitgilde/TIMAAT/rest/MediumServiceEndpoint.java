@@ -428,6 +428,7 @@ public class MediumServiceEndpoint{
 	@Path("audio/{id}")
 	@Secured
 	public Response createAudio(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumServiceEndpoint: createAudio jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio newAudio = null;
@@ -471,11 +472,13 @@ public class MediumServiceEndpoint{
 	@Path("audio/{id}")
 	@Secured
 	public Response updateAudio(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumServiceEndpoint: UPDATE AUDIO - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio updatedAudio = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAudio audio = entityManager.find(MediumAudio.class, id);
+		
 		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();		
 		// parse JSON data
 		try {

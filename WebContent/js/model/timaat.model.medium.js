@@ -188,46 +188,117 @@
 			this.listView.remove(); // TODO remove tags from medium_has_tags
 			$('#timaat-mediadatasets-media-metadata-form').data('medium', null);
 			// remove from media list
-			var index = TIMAAT.MediaDatasets.media.indexOf(this);
-			var mediumIdToDelete;
+			var index;
+			for (var i = 0; i < TIMAAT.MediaDatasets.media.length; i++) {
+				if (TIMAAT.MediaDatasets.media[i].model.id == this.model.id) {
+					index = i;	
+					break;				
+				}
+			}
 			if (index > -1) {
-				 console.log("TCL: Medium -> remove -> index", index);
-				mediumIdToDelete = TIMAAT.MediaDatasets.media[index].model.id
 				TIMAAT.MediaDatasets.media.splice(index, 1);
 				TIMAAT.MediaDatasets.media.model.splice(index, 1);
 			}
-			console.log("TCL: Medium -> remove -> mediumIdToDelete", mediumIdToDelete);
-			// remove from media model list
-			// var indexModel = TIMAAT.MediaDatasets.media.model.indexOf(this);
-      // console.log("TCL: Medium -> remove -> indexModel", indexModel);
-			// if (indexModel > -1) {
-      //   console.log("TCL: Medium -> remove -> indexModel", indexModel);
-				// TIMAAT.MediaDatasets.media.model.splice(index, 1);
-			// }
+			// remove from submedium list
 			switch (this.model.mediaType.id) {
+				case 1: 
+					// remove from audio list
+					var audioIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.audios.length; i++) {
+						if (TIMAAT.MediaDatasets.audios[i].model.id == this.model.id) {
+							audioIndex = i;
+							break;
+						}
+					}
+					if (audioIndex > -1) {
+						 TIMAAT.MediaDatasets.audios.splice(audioIndex, 1);
+						 TIMAAT.MediaDatasets.audios.model.splice(audioIndex, 1);
+					}
+				break;
+				case 2: 
+					// remove from document list
+					var documentIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.documents.length; i++) {
+						if (TIMAAT.MediaDatasets.documents[i].model.id == this.model.id) {
+							documentIndex = i;
+							break;
+						}
+					}
+					if (documentIndex > -1) {
+						 TIMAAT.MediaDatasets.documents.splice(documentIndex, 1);
+						 TIMAAT.MediaDatasets.documents.model.splice(documentIndex, 1);
+					}
+				break;
+				case 3: 
+					// remove from image list
+					var imageIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.images.length; i++) {
+						if (TIMAAT.MediaDatasets.images[i].model.id == this.model.id) {
+							imageIndex = i;
+							break;
+						}
+					}
+					if (imageIndex > -1) {
+						 TIMAAT.MediaDatasets.images.splice(imageIndex, 1);
+						 TIMAAT.MediaDatasets.images.model.splice(imageIndex, 1);
+					}
+				break;
+				case 4: 
+					// remove from software list
+					var softwareIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.softwares.length; i++) {
+						if (TIMAAT.MediaDatasets.softwares[i].model.id == this.model.id) {
+							softwareIndex = i;
+							break;
+						}
+					}
+					if (softwareIndex > -1) {
+						 TIMAAT.MediaDatasets.softwares.splice(softwareIndex, 1);
+						 TIMAAT.MediaDatasets.softwares.model.splice(softwareIndex, 1);
+					}
+				break;
+				case 5: 
+					// remove from text list
+					var textIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.texts.length; i++) {
+						if (TIMAAT.MediaDatasets.texts[i].model.id == this.model.id) {
+							textIndex = i;
+							break;
+						}
+					}
+					if (textIndex > -1) {
+						 TIMAAT.MediaDatasets.texts.splice(textIndex, 1);
+						 TIMAAT.MediaDatasets.texts.model.splice(textIndex, 1);
+					}
+				break;
 				case 6: 
 					// remove from video list
-					console.log("TCL: Medium -> remove -> video", this);
-					console.log("TCL: Medium -> remove -> TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 					var videoIndex;
-					// var index = TIMAAT.MediaDatasets.videos.indexOf(this);
 					for (var i = 0; i < TIMAAT.MediaDatasets.videos.length; i++) {
-						if (TIMAAT.MediaDatasets.videos[i].model.id == mediumIdToDelete) {
+						if (TIMAAT.MediaDatasets.videos[i].model.id == this.model.id) {
 							videoIndex = i;
 							break;
 						}
 					}
-          console.log("TCL: Medium -> remove -> videoIndex", videoIndex);
 					if (videoIndex > -1) {
 						 TIMAAT.MediaDatasets.videos.splice(videoIndex, 1);
 						 TIMAAT.MediaDatasets.videos.model.splice(videoIndex, 1);
 					}
-					// // remove from model list
-					// var indexModel = TIMAAT.MediaDatasets.videos.model.indexOf(this);
-          // console.log("TCL: Medium -> remove -> indexModel", indexModel);
-					// if (indexModel > -1) TIMAAT.MediaDatasets.videos.model.splice(index, 1);
-					// console.log("TCL: Medium -> remove -> TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
-			break;
+				break;
+				case 7: 
+					// remove from videogame list
+					var videogameIndex;
+					for (var i = 0; i < TIMAAT.MediaDatasets.videogames.length; i++) {
+						if (TIMAAT.MediaDatasets.videogames[i].model.id == this.model.id) {
+							videogameIndex = i;
+							break;
+						}
+					}
+					if (videogameIndex > -1) {
+						 TIMAAT.MediaDatasets.videogames.splice(videogameIndex, 1);
+						 TIMAAT.MediaDatasets.videogames.model.splice(videogameIndex, 1);
+					}
+				break;
 			}
 		}
 

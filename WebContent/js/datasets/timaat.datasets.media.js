@@ -832,26 +832,26 @@
 
 				if (audio) { // update audio
 					// medium data
-					audio.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					audio.model.medium.copyright = formDataObject.copyright;
-					audio.model.medium.remark = formDataObject.remark;
+					audio.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					audio.model.copyright = formDataObject.copyright;
+					audio.model.remark = formDataObject.remark;
 					// title data
-					audio.model.medium.title.name = formDataObject.primaryTitle;
-					audio.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					audio.model.title.name = formDataObject.primaryTitle;
+					audio.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < audio.model.medium.titles.length; i++) {
-						if (audio.model.medium.title.id == audio.model.medium.titles[i].id) {
-							audio.model.medium.titles[i] = audio.model.medium.title;
+					for (; i < audio.model.titles.length; i++) {
+						if (audio.model.title.id == audio.model.titles[i].id) {
+							audio.model.titles[i] = audio.model.title;
 							break;
 						}
 					}
 					// source data
-					audio.model.medium.sources[0].url = formDataObject.sourceUrl;
-					audio.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					audio.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					audio.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					audio.model.sources[0].url = formDataObject.sourceUrl;
+					audio.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					audio.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					audio.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// audio data
-					audio.model.length = TIMAAT.Util.parseTime(formDataObject.length);
+					audio.model.mediumAudio.length = TIMAAT.Util.parseTime(formDataObject.length);
 					// TODO: audiocodecinformation
 
 					audio.updateUI();
@@ -977,24 +977,24 @@
 
 				if (mediumDocument) { // update document
 					// medium data
-					mediumDocument.medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					mediumDocument.medium.model.copyright = formDataObject.copyright;
-					mediumDocument.medium.model.remark = formDataObject.remark;
+					mediumDocument.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					mediumDocument.model.copyright = formDataObject.copyright;
+					mediumDocument.model.remark = formDataObject.remark;
 					// title data
-					mediumDocument.medium.model.title.name = formDataObject.primaryTitle;
-					mediumDocument.medium.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					mediumDocument.model.title.name = formDataObject.primaryTitle;
+					mediumDocument.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < mediumDocument.model.medium.titles.length; i++) {
-						if (mediumDocument.model.medium.title.id == mediumDocument.model.medium.titles[i].id) {
-							mediumDocument.model.medium.titles[i] = mediumDocument.model.medium.title;
+					for (; i < mediumDocument.model.titles.length; i++) {
+						if (mediumDocument.model.title.id == mediumDocument.model.titles[i].id) {
+							mediumDocument.model.titles[i] = mediumDocument.model.title;
 							break;
 						}
 					}
 					// source data
-					mediumDocument.medium.model.sources[0].url = formDataObject.sourceUrl;
-					mediumDocument.medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					mediumDocument.medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					mediumDocument.medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					mediumDocument.model.sources[0].url = formDataObject.sourceUrl;
+					mediumDocument.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					mediumDocument.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					mediumDocument.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// document data
 					// currently empty
 
@@ -1116,28 +1116,28 @@
 
 				if (image) { // update image
 					// medium data
-					image.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					image.model.medium.copyright = formDataObject.copyright;
-					image.model.medium.remark = formDataObject.remark;
+					image.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					image.model.copyright = formDataObject.copyright;
+					image.model.remark = formDataObject.remark;
 					// title data
-					image.model.medium.title.name = formDataObject.primaryTitle;
-					image.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					image.model.title.name = formDataObject.primaryTitle;
+					image.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < image.model.medium.titles.length; i++) {
-						if (image.model.medium.title.id == image.model.medium.titles[i].id) {
-							image.model.medium.titles[i] = image.model.medium.title;
+					for (; i < image.model.titles.length; i++) {
+						if (image.model.title.id == image.model.titles[i].id) {
+							image.model.titles[i] = image.model.title;
 							break;
 						}
 					}
 					// source data
-					image.model.medium.sources[0].url = formDataObject.sourceUrl;
-					image.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					image.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					image.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					image.model.sources[0].url = formDataObject.sourceUrl;
+					image.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					image.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					image.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// image data
-					image.model.width = formDataObject.width;
-					image.model.height = formDataObject.height;
-					image.model.bitDepth = formDataObject.bitDepth;
+					image.model.mediumImage.width = formDataObject.width;
+					image.model.mediumImage.height = formDataObject.height;
+					image.model.mediumImage.bitDepth = formDataObject.bitDepth;
 
 					image.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype('image', image);
@@ -1259,25 +1259,26 @@
 
 				if (software) { // update software
 					// medium data
-					software.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					software.model.medium.copyright = formDataObject.copyright;
-					software.model.medium.remark = formDataObject.remark;
+					software.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					software.model.copyright = formDataObject.copyright;
+					software.model.remark = formDataObject.remark;
 					// title data
-					software.model.medium.title.name = formDataObject.primaryTitle;
-					software.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
-					for (; i < software.model.medium.titles.length; i++) {
-						if (software.model.medium.title.id == software.model.medium.titles[i].id) {
-							software.model.medium.titles[i] = software.model.medium.title;
+					software.model.title.name = formDataObject.primaryTitle;
+					software.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					var i = 0;
+					for (; i < software.model.titles.length; i++) {
+						if (software.model.title.id == software.model.titles[i].id) {
+							software.model.titles[i] = software.model.title;
 							break;
 						}
 					}
 					// source data
-					software.model.medium.sources[0].url = formDataObject.sourceUrl;
-					software.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					software.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					software.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					software.model.sources[0].url = formDataObject.sourceUrl;
+					software.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					software.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					software.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// software data
-					software.model.version = formDataObject.version;
+					software.model.mediumSoftware.version = formDataObject.version;
 
 					software.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype('software', software);
@@ -1396,26 +1397,26 @@
 
 				if (text) { // update text
 					// medium data
-					text.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					text.model.medium.copyright = formDataObject.copyright;
-					text.model.medium.remark = formDataObject.remark;
+					text.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					text.model.copyright = formDataObject.copyright;
+					text.model.remark = formDataObject.remark;
 					// title data
-					text.model.medium.title.name = formDataObject.primaryTitle;
-					text.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					text.model.title.name = formDataObject.primaryTitle;
+					text.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < text.model.medium.titles.length; i++) {
-						if (text.model.medium.title.id == text.model.medium.titles[i].id) {
-							text.model.medium.titles[i] = text.model.medium.title;
+					for (; i < text.model.titles.length; i++) {
+						if (text.model.title.id == text.model.titles[i].id) {
+							text.model.titles[i] = text.model.title;
 							break;
 						}
 					}
 					// source data
-					text.model.medium.sources[0].url = formDataObject.sourceUrl;
-					text.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					text.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					text.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					text.model.sources[0].url = formDataObject.sourceUrl;
+					text.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					text.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					text.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// text data
-					text.model.content = formDataObject.content;
+					text.model.mediumText.content = formDataObject.content;
 
 					text.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype('text', text);
@@ -1539,36 +1540,36 @@
 
 				if (video) { // update video
 					// medium data
-					video.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					video.model.medium.copyright = formDataObject.copyright;
-					video.model.medium.remark = formDataObject.remark;
+					video.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					video.model.copyright = formDataObject.copyright;
+					video.model.remark = formDataObject.remark;
 					// title data
-					video.model.medium.title.name = formDataObject.primaryTitle;
-					video.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					video.model.title.name = formDataObject.primaryTitle;
+					video.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < video.model.medium.titles.length; i++) {
-						if (video.model.medium.title.id == video.model.medium.titles[i].id) {
-							video.model.medium.titles[i] = video.model.medium.title;
+					for (; i < video.model.titles.length; i++) {
+						if (video.model.title.id == video.model.titles[i].id) {
+							video.model.titles[i] = video.model.title;
 							break;
 						}
 					}
 					// source data
-					video.model.medium.sources[0].url = formDataObject.sourceUrl;
-					video.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					video.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					video.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					video.model.sources[0].url = formDataObject.sourceUrl;
+					video.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					video.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					video.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// video data
-					video.model.length = TIMAAT.Util.parseTime(formDataObject.length);
-					video.model.videoCodec = formDataObject.videoCodec;
-					video.model.width = formDataObject.width;
-					video.model.height = formDataObject.height;
-					video.model.frameRate = formDataObject.frameRate;
-					video.model.dataRate = formDataObject.dataRate;
-					video.model.totalBitrate = formDataObject.totalBitrate;
-					video.model.isEpisode = (formDataObject.isEpisode) ? true : false;
+					video.model.mediumVideo.length = TIMAAT.Util.parseTime(formDataObject.length);
+					video.model.mediumVideo.videoCodec = formDataObject.videoCodec;
+					video.model.mediumVideo.width = formDataObject.width;
+					video.model.mediumVideo.height = formDataObject.height;
+					video.model.mediumVideo.frameRate = formDataObject.frameRate;
+					video.model.mediumVideo.dataRate = formDataObject.dataRate;
+					video.model.mediumVideo.totalBitrate = formDataObject.totalBitrate;
+					video.model.mediumVideo.isEpisode = (formDataObject.isEpisode) ? true : false;
 
 					video.updateUI();
-          console.log("TCL: video", video);
+					console.log("TCL: video", video);
 					TIMAAT.MediaDatasets.updateMediumSubtype('video', video);
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
 				} else { // create new video
@@ -1697,26 +1698,26 @@
 
 				if (videogame) { // update videogame
 					// medium data
-					videogame.model.medium.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					videogame.model.medium.copyright = formDataObject.copyright;
-					videogame.model.medium.remark = formDataObject.remark;
+					videogame.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+					videogame.model.copyright = formDataObject.copyright;
+					videogame.model.remark = formDataObject.remark;
 					// title data
-					videogame.model.medium.title.name = formDataObject.primaryTitle;
-					videogame.model.medium.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					videogame.model.title.name = formDataObject.primaryTitle;
+					videogame.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
 					var i = 0;
-					for (; i < videogame.model.medium.titles.length; i++) {
-						if (videogame.model.medium.title.id == videogame.model.medium.titles[i].id) {
-							videogame.model.medium.titles[i] = videogame.model.medium.title;
+					for (; i < videogame.model.titles.length; i++) {
+						if (videogame.model.title.id == videogame.model.titles[i].id) {
+							videogame.model.titles[i] = videogame.model.title;
 							break;
 						}
 					}
 					// source data
-					videogame.model.medium.sources[0].url = formDataObject.sourceUrl;
-					videogame.model.medium.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					videogame.model.medium.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					videogame.model.medium.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					videogame.model.sources[0].url = formDataObject.sourceUrl;
+					videogame.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+					videogame.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+					videogame.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
 					// videogame data
-					videogame.model.isEpisode = (formDataObject.isEpisode) ? true : false;
+					videogame.model.mediumVideogame.isEpisode = (formDataObject.isEpisode) ? true : false;
 
 					videogame.updateUI();
 					TIMAAT.MediaDatasets.updateMediumSubtype('videogame', videogame);
@@ -1865,8 +1866,8 @@
 			$('.media-data-tabs').hide();
     	// console.log("TCL: setMediumLists -> media", media);
 			if ( !media ) return;
+
 			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
-			
 			$('#timaat-mediadatasets-medium-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-medium-list').empty();
@@ -1890,7 +1891,7 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !audios ) return;
-
+			
 			$('#timaat-mediadatasets-audio-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-audio-list').empty();
@@ -1922,7 +1923,7 @@
 			documents.forEach(function(mediumDocument) { 
 				if ( mediumDocument.id > 0 ) {
 					newDocument = new TIMAAT.Medium(mediumDocument, 'document');
-					vids.push(newDocument);
+					docs.push(newDocument);
 				}
 			});
 			TIMAAT.MediaDatasets.documents = docs;
@@ -1934,6 +1935,7 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !images ) return;
+
 			$('#timaat-mediadatasets-image-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-image-list').empty();
@@ -1955,6 +1957,7 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !softwares ) return;
+
 			$('#timaat-mediadatasets-software-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-software-list').empty();
@@ -2141,8 +2144,8 @@
 				else {
 					$('#timaat-mediadatasets-media-metadata-mediatype-id').hide();
 				}
-				$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: "YYYY-MM-DD"});
-				$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: "YYYY-MM-DD HH:mm"});
+				$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+				$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit :input').prop("disabled", true);
@@ -2583,8 +2586,26 @@
 				// push new mediumSubtype to dataset model
 				console.log("TCL: newMediumModel", newMediumModel);
 				switch (mediumSubtype) {
+					case 'audio':
+						newMediumModel.mediumAudio = mediumSubtypeModel;
+					break;
+					case 'document':
+						newMediumModel.mediumDocument = mediumSubtypeModel;
+					break;
+					case 'image':
+						newMediumModel.mediumImage = mediumSubtypeModel;
+					break;
+					case 'software':
+						newMediumModel.mediumSoftware = mediumSubtypeModel;
+					break;
+				  case 'text':
+						newMediumModel.mediumText = mediumSubtypeModel;
+					break;
 					case 'video':
 						newMediumModel.mediumVideo = mediumSubtypeModel;
+					break;
+					case 'videogame':
+						newMediumModel.mediumVideogame = mediumSubtypeModel;
 					break;
 				};
 				console.log("TCL: newMediumModel", newMediumModel);
@@ -2654,6 +2675,7 @@
 
 				// update source
 				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
+				medium.model.sources[0] = tempSource;
 
 				// update data that is part of medium (includes updating last edited by/at)
 				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
@@ -2670,23 +2692,24 @@
 			// } catch(error) {
 			// 	console.log( "error: ", error);
 			// };
-			// medium.updateUI();
+			medium.updateUI();
 		},
 
-		updateMediumSubtype: async function(mediumSubtype, mediumSubtypeData) {
-			// console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, mediumSubtypeData);
-			// try {
-			// 	// update title
-			// 	console.log("TCL: update title via update submedium")
-			// 	var tempTitle = await TIMAAT.MediaService.updateTitle(mediumSubtypeData.model.medium.title);
-			// 	mediumSubtypeData.model.medium.title = tempTitle;
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// };
+		updateMediumSubtype: async function(mediumSubtype, medium) {
+			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, medium);
+			try {
+				// update title
+				console.log("TCL: update title via update submedium")
+				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
+				medium.model.title = tempTitle;
+			} catch(error) {
+				console.log( "error: ", error);
+			};
 
 			try {
 				// update source
-				var tempSource = await TIMAAT.MediaService.updateSource(mediumSubtypeData.model.medium.sources[0]);
+				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
+				medium.model.sources[0] = tempSource;
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2695,22 +2718,47 @@
 				// update data that is part of mediumSubtypeData
 				// console.log("TCL: mediumSubtype", mediumSubtype);
 				// console.log("TCL: mediumSubtypeData.model", mediumSubtypeData.model);
-				var tempMediumSubtypeData = mediumSubtypeData;
+				// var tempMediumSubtypeData = mediumSubtypeData;
 				// tempMediumSubtypeData.model.medium.sources = null;
-        // console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
-				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, tempMediumSubtypeData.model);
+				// console.log("TCL: tempMediumSubtypeData", tempMediumSubtypeData);
+				var tempSubtypeModel;
+				switch (mediumSubtype) {
+					case 'audio':
+						tempSubtypeModel = medium.model.mediumAudio;
+					break;
+					case 'document':
+						tempSubtypeModel = medium.model.mediumDocument;
+						break;
+					case 'image':
+						tempSubtypeModel = medium.model.mediumImage;
+						break;
+					case 'software':
+						tempSubtypeModel = medium.model.mediumSoftware;
+						break;
+					case 'text':
+						tempSubtypeModel = medium.model.mediumText;
+						break;
+					case 'video':
+						tempSubtypeModel = medium.model.mediumVideo;
+						break;
+					case 'videogame':
+						tempSubtypeModel = medium.model.mediumVideogame;
+						break;
+				}
+				var tempMediumSubtypeModel = await TIMAAT.MediaService.updateMediumSubtype(mediumSubtype, tempSubtypeModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 
 			try {
 				// update data that is part of medium and its translation
-				var mediumSubtypeMediumModel = mediumSubtypeData.model.medium;
+				// var mediumSubtypeMediumModel = mediumSubtypeData;
         // console.log("TCL: updateMediumSubtype: async function - mediumSubtypeMediumModel", mediumSubtypeMediumModel);
-				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(mediumSubtypeMediumModel);				
+				var tempMediumSubtypeModelUpdate = await TIMAAT.MediaService.updateMedium(medium.model);				
 			} catch(error) {
 				console.log( "error: ", error);
 			};
+			medium.updateUI();
 		},
 
 		updateTitle: async function(title, medium) {
@@ -2767,37 +2815,37 @@
 						TIMAAT.MediaDatasets.audios.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'audio');
 						TIMAAT.MediaDatasets.audios.push(newMedium);
-						break;
+					break;
 					case 'document':
 						TIMAAT.MediaDatasets.documents.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'document');
 						TIMAAT.MediaDatasets.documents.push(newMedium);
-						break;
+					break;
 					case 'image':
 						TIMAAT.MediaDatasets.images.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'image');
 						TIMAAT.MediaDatasets.images.push(newMedium);
-						break;
+					break;
 					case 'software':
 						TIMAAT.MediaDatasets.softwares.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'software');
 						TIMAAT.MediaDatasets.softwares.push(newMedium);
-						break;
+					break;
 					case 'text':
 						TIMAAT.MediaDatasets.texts.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'text');
 						TIMAAT.MediaDatasets.texts.push(newMedium);
-						break;
+					break;
 					case 'video':
 						TIMAAT.MediaDatasets.videos.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'video');
 						TIMAAT.MediaDatasets.videos.push(newMedium);
-						break;
+					break;
 					case 'videogame':
 						TIMAAT.MediaDatasets.videogames.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'videogame');
 						TIMAAT.MediaDatasets.videogames.push(newMedium);
-						break;
+					break;
 				}
 				TIMAAT.MediaDatasets.media.model.push(medium);
 				TIMAAT.MediaDatasets.media.push(newMedium);
