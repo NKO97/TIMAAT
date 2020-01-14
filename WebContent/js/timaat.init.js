@@ -93,7 +93,7 @@ require(['domReady',
 		  'TIMAAT-datasets', 'TIMAAT-actordatasets', 'TIMAAT-eventdatasets', 'TIMAAT-locationdatasets', 'TIMAAT-mediadatasets',
 		  'TIMAAT-service', 'TIMAAT-actorservice', 'TIMAAT-locationservice', 'TIMAAT-mediaservice', 'TIMAAT-eventservice',
 		  'TIMAAT-marker', 'TIMAAT-annotation', 'TIMAAT-categoryset', 'TIMAAT-analysissegment', 'TIMAAT-medium',
-		  'TIMAAT-mediatype', 'TIMAAT-audio', 'TIMAAT-document', 'TIMAAT-image', 'TIMAAT-software', 'TIMAAT-text', 'TIMAAT-video', 'TIMAAT-videogame', 
+		  'TIMAAT-mediatype',
 		  'TIMAAT-actor', 'TIMAAT-location', 'TIMAAT-locationtype', 'TIMAAT-country', 'TIMAAT-province', 'TIMAAT-county', 'TIMAAT-city', 'TIMAAT-street', 'TIMAAT-event', 
 		  
 		  ], function (moment) {
