@@ -133,6 +133,7 @@
 			// clear video UI list
 			$('#timaat-category-list').empty();
 			
+			/*
 			TIMAAT.Settings.categories.dt = $('#timaat-category-table').DataTable({
 		        "ajax": "api/category/set/"+setId+"/contents",
 				"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
@@ -164,7 +165,7 @@
 			});
 			
 			console.log("loading categoryset entries: ",setId);
-			
+			*/
 		},
 		
 		
