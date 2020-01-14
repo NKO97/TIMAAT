@@ -2132,7 +2132,7 @@
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').prop("disabled", false);
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit :input').prop("disabled", false);
 				$('.datasheet-form-buttons').hide()
-				$('#mediumFormHeader').html(mediumType+" Datasheet");
+				$('#mediumFormHeader').html(mediumType+" Datasheet (#"+ mediumTypeData.model.id+')');
 			}
 			else if (action == 'edit') {
 				$('.datasheet-form-buttons').hide();
