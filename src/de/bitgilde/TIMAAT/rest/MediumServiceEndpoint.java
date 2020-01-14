@@ -11,6 +11,7 @@ import java.security.Key;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -93,8 +94,8 @@ public class MediumServiceEndpoint{
 	@Path("list")
 	public Response getMediaList() {
 		System.out.println("MediumServiceEndpoint: getMediaList");
-		@SuppressWarnings("unchecked")
-		List<Medium> mlist = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList();
+		// @SuppressWarnings("unchecked")
+		List<Medium> mlist = castList(Medium.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList());
 
 		for (Medium m : mlist) {
 			MediumVideo video = m.getMediumVideo();
@@ -104,7 +105,7 @@ public class MediumServiceEndpoint{
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-//				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+				// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
@@ -194,19 +195,23 @@ public class MediumServiceEndpoint{
 	@Secured
 	@Path("video/list")
 	public Response getVideoList() {
-		// System.out.println("MediumServiceEndpoint: getMediaList");		
-		@SuppressWarnings("unchecked")
-		List<MediumVideo> mediumVideoList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList();
+		System.out.println("MediumServiceEndpoint: getVideoList");		
+		// @SuppressWarnings("unchecked")
+		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
 
-		for (MediumVideo m : mediumVideoList ) {
-			m.setStatus(videoStatus(m.getMediumId()));
-			m.setViewToken(issueFileToken(m.getMediumId()));
+		for (MediumVideo video : mediumVideoList ) {
+			video.setStatus(videoStatus(video.getMediumId()));
+			video.setViewToken(issueFileToken(video.getMediumId()));
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
-			m.getMedium().getMediumAnalysisLists().clear();
+			video.getMedium().getMediumAnalysisLists().clear();
 		}
 
 		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumVideo m : mediumVideoList ) mediumList.add(m.getMedium());
+		for ( MediumVideo video : mediumVideoList ) {
+			mediumList.add(video.getMedium());
+			// System.out.println("add medium of video: "+ video.getMediumId());
+		}
+
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -279,7 +284,7 @@ public class MediumServiceEndpoint{
 		newMedium.setCreatedAt(creationDate);
 		newMedium.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+			// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 			newMedium.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newMedium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -423,6 +428,7 @@ public class MediumServiceEndpoint{
 	@Path("audio/{id}")
 	@Secured
 	public Response createAudio(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumServiceEndpoint: createAudio jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio newAudio = null;
@@ -452,6 +458,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newAudio);
+		entityManager.refresh(newAudio.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newAudio.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.AUDIOCREATED);
 		System.out.println("MediumServiceEndpoint: audio created with id "+newAudio.getMediumId());
@@ -464,11 +472,13 @@ public class MediumServiceEndpoint{
 	@Path("audio/{id}")
 	@Secured
 	public Response updateAudio(@PathParam("id") int id, String jsonData) {
+
 		System.out.println("MediumServiceEndpoint: UPDATE AUDIO - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio updatedAudio = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAudio audio = entityManager.find(MediumAudio.class, id);
+		
 		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();		
 		// parse JSON data
 		try {
@@ -560,6 +570,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newDocument);
+		entityManager.refresh(newDocument.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newDocument.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.DOCUMENTCREATED);
 		System.out.println("MediumServiceEndpoint: document created with id "+newDocument.getMediumId());
@@ -665,6 +677,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newImage);
+		entityManager.refresh(newImage.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newImage.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.IMAGECREATED);
 		System.out.println("MediumServiceEndpoint: image created with id "+newImage.getMediumId());
@@ -773,6 +787,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newSoftware);
+		entityManager.refresh(newSoftware.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newSoftware.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.SOFTWARECREATED);
 		System.out.println("MediumServiceEndpoint: software created with id "+newSoftware.getMediumId());
@@ -881,6 +897,7 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newText);
+		entityManager.refresh(newText.getMedium());
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newText.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TEXTCREATED);
@@ -994,6 +1011,7 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newVideo);
+		entityManager.refresh(newVideo.getMedium());
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
@@ -1126,6 +1144,8 @@ public class MediumServiceEndpoint{
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newVideogame);
+		entityManager.refresh(newVideogame.getMedium());
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newVideogame.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOGAMECREATED);
 		System.out.println("MediumServiceEndpoint: videogame created with id "+newVideogame.getMediumId());
@@ -2281,5 +2301,12 @@ public class MediumServiceEndpoint{
 	
 	return mediumID;
 	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+    List<T> r = new ArrayList<T>(c.size());
+    for(Object o: c)
+      r.add(clazz.cast(o));
+    return r;
+}
 	
 }

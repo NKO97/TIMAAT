@@ -157,6 +157,8 @@
 						    TIMAAT.VideoChooser.loadCollections();
 							TIMAAT.Settings.loadCategorySets();
 							TIMAAT.Datasets.load();
+							// load categories
+							TIMAAT.Settings.loadCategories();
 						  })
 						  .fail(function(e) {
 	       				console.log("TCL: processLogin fail: e", e);

@@ -37,7 +37,7 @@
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/categoryset/all",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/all",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",

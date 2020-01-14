@@ -4,7 +4,13 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	var version = "v0.Sprint-5b7 (2020-01-10)";
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0');
+	var yyyy = today.getFullYear();	
+	today = yyyy + '-' + mm + '-' + dd;
+
+	var version = 'v0.Sprint-5b8 ('+today+')';
 
 	document.title = 'TIMAAT - Client '+version;
 	$('#timaat-version-info').text(version);
