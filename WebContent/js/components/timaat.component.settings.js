@@ -21,6 +21,7 @@
 	
 	TIMAAT.Settings = {
 		categorysets: null,
+		categories: {},
 		
 		init: function() {
     	// console.log("TCL: Settings: init: function()");
@@ -115,8 +116,58 @@
 					$('#timaat-categoryset-meta-submit').prop("disabled", true);
 					$('#timaat-categoryset-meta-submit').attr("disabled");
 				}
-			});
+			});			
 		},
+		
+		
+		loadCategories: function(set) {
+			var setId = 0;
+			if ( set && set.id ) setId = set.id;
+			
+			
+			if ( TIMAAT.Settings.categories.dt != null ) {
+				TIMAAT.Settings.categories.dt.destroy();
+				TIMAAT.Settings.categories.dt = null;
+			}
+
+			// clear video UI list
+			$('#timaat-category-list').empty();
+			
+			/*
+			TIMAAT.Settings.categories.dt = $('#timaat-category-table').DataTable({
+		        "ajax": "api/category/set/"+setId+"/contents",
+				"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"order": [[ 1, 'desc' ]],
+				"pagingType": "simple_numbers",
+				"columns": [
+				    { "orderable": false },
+				    null,
+				    { "orderable": false },
+				  ],
+				"language": {
+					"processing": "Lade Daten...",
+					"decimal": ",",
+					"thousands": ".",
+					"search": "Suche",
+					"lengthMenu": "Zeige _MENU_ Kategorien pro Seite",
+					"zeroRecords": "Keine Kategorien gefunden.",
+					"info": "Seite _PAGE_ von _PAGES_",
+					"infoEmpty": "Keine Kategorien verf&uuml;gbar.",
+					"infoFiltered": "(gefiltert, _MAX_ Kategorien gesamt)",
+					"paginate": {
+					            "first":      "Erste",
+					            "previous":   "Vorherige",
+					            "next":       "N&auml;chste",
+					            "last":       "Letzte"
+					        },
+				},
+				
+			});
+			
+			console.log("loading categoryset entries: ",setId);
+			*/
+		},
+		
 		
 		loadCategorySets: function() {
 			console.log("TCL: loadCategorySets: function()");

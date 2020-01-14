@@ -738,16 +738,45 @@
                   <div class="row timaat-settings-ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
                       <div class="card">
-                        <div class="card-header">Kategorie Sets
+                        <div class="card-header">Kategoriesets
                           <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <ul class="list-group list-group-flush">
+                                    <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+										<i class="fas fa-th"></i> Alle Kategorien
+									</li>
+                          </ul>
+                          <ul id="timaat-categoryset-list" class="list-group list-group-flush">
+                          </ul>
                           <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-categoryset-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
                     </div>		
+
+                    <div class="col-lg-8">
+                      <div class="card">
+                        <div class="card-header">Kategorien
+                          <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
+                          </div>
+                        <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
+						<table id="timaat-category-table" class="table table-striped table-bordered table-hover">
+				  			<thead class="thead-dark">
+				    			<tr>
+								    <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+				      				<th>Name</th>
+				      				<th style="max-width:150px;width:150px">Aktionen</th>
+				    			</tr>
+				  			</thead>
+				  			<tbody id="timaat-category-list">
+							</tbody>
+						</table>
+                        </div>
+                      </div>
+                    </div>		
+
+
                   </div> <!-- row -->	
                 </div>
                 <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">

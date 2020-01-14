@@ -88,11 +88,35 @@ public class CategorySetEndpoint {
 	// 	return Response.ok().entity(categorySets).build();
 	// }
 	
+	
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("set/{id}/contents")
+	public Response getCategorySetContents(@PathParam("id") int id) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		List<Category> categories = null;
+		try {
+			// get all Categories
+			categories = (List<Category>) entityManager
+				.createQuery("SELECT c FROM Category c")
+				.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("error: " + e);
+		};
+		
+		
+		
+		return Response.ok().entity(categories).build();
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("categoryset/all")
+	@Path("set/all")
 	public Response getAllCategorySets() {
 		// System.out.println("CategorySetEndpoint: getAllCategorySets");
 		List<CategorySet> categorySets = null;
