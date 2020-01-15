@@ -70,6 +70,8 @@
 			});
 			$('#timaat-mediadatasets-medium-categories').on('hidden.bs.popover', function () { 
 			});			
+			
+			$('#timaat-settings-categorylibrary').click(function(ev) { TIMAAT.Settings.loadCategories(null) });
 
 			// delete categoryset functionality
 			$('#timaat-categoryset-delete-submit').click(function(ev) {
@@ -120,29 +122,57 @@
 		},
 		
 		
-		loadCategories: function(set) {
+		loadCategories: function(set, force) {
 			var setId = 0;
 			if ( set && set.id ) setId = set.id;
 			
+			var oldSetId = 0;
+			if ( TIMAAT.Settings.categories.set ) oldSetId = TIMAAT.Settings.categories.set.id;
+			if ( setId == oldSetId && !force ) return;
 			
 			if ( TIMAAT.Settings.categories.dt != null ) {
 				TIMAAT.Settings.categories.dt.destroy();
 				TIMAAT.Settings.categories.dt = null;
 			}
+			TIMAAT.Settings.categories.set = set;
 
 			// clear video UI list
 			$('#timaat-category-list').empty();
 			
-			/*
 			TIMAAT.Settings.categories.dt = $('#timaat-category-table').DataTable({
-		        "ajax": "api/category/set/"+setId+"/contents",
-				"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				ajax: {
+			        url: "api/category/set/"+setId+"/contents",
+			        dataSrc: '',
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+
+			    },
+			    processing: true,
+		        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order": [[ 1, 'desc' ]],
 				"pagingType": "simple_numbers",
 				"columns": [
-				    { "orderable": false },
-				    null,
-				    { "orderable": false },
+				    {
+				    	data: "id",
+				    	"orderable": false,
+				    	render: function( data, type, row, meta ) {
+				    		return '<input class="category-item" id="category-item-'+data+'" data-id="'+data+'" type="checkbox">';
+				    	},
+				    },
+				    { data: "name" },
+				    {
+				    	data: "id",
+				    	"orderable": false,
+				    	render: function( data, type, row, meta ) {
+				    		if ( type == 'display' ) {
+					    		if ( TIMAAT.Settings.categories.set )
+					    			return '<button type="button" title="Aus Kategorieset entfernen" class="btn btn-outline-secondary btn-sm timaat-categoryset-collectionitemremove"><i class="fas fa-folder-minus"></i></button>';
+					    		else 
+					    			return '<button type="button" title="Kategorie löschen" class="btn btn-outline-danger btn-sm timaat-category-itemremove"><i class="fas fa-trash-alt"></i></button>';
+				    		} else return data;
+				    	},
+				    },
 				  ],
 				"language": {
 					"processing": "Lade Daten...",
@@ -162,10 +192,23 @@
 					        },
 				},
 				
+			})
+			// events
+			.on( 'draw', function () {
+				$('#timaat-category-list button').off('click').click(function(ev) {
+					
+				});
 			});
 			
-			console.log("loading categoryset entries: ",setId);
-			*/
+			$('#timaat-categoryset-list li.categoryset-item').removeClass('active');
+			$('#timaat-categoryset-list li.categoryset-item button').addClass('btn-outline');
+			
+			if ( setId ) {
+				$('#timaat-settings-categorylibrary').removeClass('active');
+				$('#timaat-categoryset-list li.categoryset-item-'+setId).addClass('active');
+				$('#timaat-categoryset-list li.categoryset-item-'+setId+' button').removeClass('btn-outline');
+			} else $('#timaat-settings-categorylibrary').addClass('active');
+			
 		},
 		
 		
@@ -198,15 +241,15 @@
 		},
 		
 		_categorysetAdded: function(categoryset) {
-    console.log("TCL: _categorysetAdded: function(categoryset)");
-    console.log("TCL: categoryset", categoryset);
+			console.log("TCL: _categorysetAdded: function(categoryset)");
+			console.log("TCL: categoryset", categoryset);
 			TIMAAT.Settings.categorysets.model.push(categoryset);
 			TIMAAT.Settings.categorysets.push(new TIMAAT.CategorySet(categoryset));
 		},
 		
 		_categorysetRemoved: function(categoryset) {
-    console.log("TCL: _categorysetRemoved: function(categoryset)");
-    console.log("TCL: categoryset", categoryset);
+			console.log("TCL: _categorysetRemoved: function(categoryset)");
+			console.log("TCL: categoryset", categoryset);
 			// sync to server
 			TIMAAT.Service.removeCategorySet(categoryset);			
 			categoryset.remove();

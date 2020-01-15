@@ -29,7 +29,7 @@
 					// create and style list view element
 					var delcategoryset = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-categoryset-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 					if ( model.id < 0 ) delcategoryset = '';
-					this.listView = $('<li class="list-group-item"> '
+					this.listView = $('<li class="list-group-item categoryset-item list-group-item-action categoryset-item-'+model.id+'"> '
 							+ delcategoryset +
 							'<span class="timaat-categoryset-list-title"></span>' +
 							'<span class="text-nowrap timaat-categoryset-list-categories float-right text-muted"><i class=""></i></span><br> \
@@ -44,15 +44,6 @@
 					
 					var categoryset = this; // save categoryset for events
 					
-					this.listView.find('.timaat-categoryset-list-categories').popover({
-						placement: 'right',
-						title: 'Categories bearbeiten',
-						trigger: 'manual',
-						html: true,
-						content: '<div class="input-group"><input class="form-control timaat-category-input" type="text" value=""></div>',
-						container: 'body',
-						boundary: 'viewport',				
-					});
 					// attach user log info
 					// this.listView.find('.timaat-user-log').popover({
 					// 	placement: 'right',
@@ -76,39 +67,6 @@
 					// 	$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 					// });
 					// attach category editor
-					this.listView.find('.timaat-categoryset-list-categories').on('inserted.bs.popover', function () {
-						var categories = "";
-						categoryset.model.categories.forEach(function(item) { categories += ','+item.name });
-						categories = categories.substring(1);
-						$('.timaat-category-input').val(categories);
-					    $('.timaat-category-input').categoriesInput({
-					    	placeholder: 'Category hinzufügen',
-					    	onAddCategory: function(categoryinput,category) {
-					    		TIMAAT.Service.addCategory(categoryset, category, function(newcategory) {
-									categoryset.model.categories.push(newcategory);
-										console.log("TCL: CategorySet -> constructor -> categoryset.updateUI() - onAddCategory");
-					    			categoryset.updateUI();                
-					    		});
-
-					    	},
-					    	onRemoveCategory: function(categoryinput,category) {
-					    		TIMAAT.Service.removeCategory(categoryset, category, function(categoryname) {
-					    			// find category in model
-					    			var found = -1;
-					    			categoryset.model.categories.forEach(function(item, index) {
-					    				if ( item.name == categoryname ) found = index;
-					    			});
-									if (found > -1) categoryset.model.categories.splice(found, 1);
-										console.log("TCL: CategorySet -> constructor -> categoryset.updateUI() - onRemoveCategory");
-					    			categoryset.updateUI();                
-					    		});
-
-					    	},
-					    	onChange: function() {
-					    		if ( this.length == 1) $('#'+this[0].id+'_category').focus();
-					    	}
-					    });
-					});
 					// console.log("TCL: CategorySet -> constructor -> categoryset.updateUI()");
 					this.listView.find('.timaat-categoryset-list-categories').on('hidden.bs.popover', function () { categoryset.updateUI(); });
 					this.listView.find('.timaat-categoryset-list-categories').dblclick(function(ev) {ev.stopPropagation();});
@@ -123,8 +81,8 @@
 					$(this.listView).click(this, function(ev) {
 						ev.stopPropagation();
 						// show category editor - trigger popup
-						TIMAAT.UI.hidePopups();				
-						categoryset.listView.find('.timaat-categoryset-list-categories').popover('show');
+						TIMAAT.UI.hidePopups();
+						TIMAAT.Settings.loadCategories(model);
 					});
 					$(this.listView).dblclick(this, function(ev) {
 						ev.stopPropagation();
@@ -151,10 +109,12 @@
 					if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 					this.listView.find('.timaat-categoryset-list-title').text(name);
 					// category count
+					/*
 					var count = this.model.categorySetHasCategories.length + " Kategorien";
 					if ( this.model.categorySetHasCategories.length == 0 ) count = "keine Kategorien";
 					if ( this.model.categorySetHasCategories.length == 1 ) count = "eine Kategorie";
 					this.listView.find('.timaat-categoryset-list-count').text(count);
+					*/
 					// tags
 					/*
 					this.listView.find('.timaat-categoryset-list-tags i').attr('title', this.model.tags.length+" Tags");			

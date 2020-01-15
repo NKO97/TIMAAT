@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategoryPK;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -47,6 +49,7 @@ public class CategorySetEndpoint {
 	@Context
 	ServletContext ctx;
 
+	
 	// @SuppressWarnings("unchecked")
 	// @GET
   //   @Produces(MediaType.APPLICATION_JSON)
@@ -89,24 +92,37 @@ public class CategorySetEndpoint {
 	// }
 	
 	
+	@SuppressWarnings("unchecked")
 	@GET
+	@Secured
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("set/{id}/contents")
 	public Response getCategorySetContents(@PathParam("id") int id) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		List<Category> categories = null;
-		try {
-			// get all Categories
-			categories = (List<Category>) entityManager
-				.createQuery("SELECT c FROM Category c")
-				.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("error: " + e);
-		};
-		
-		
+		if ( id > 0 ) {
+			try {
+				// get all Categories
+				categories = (List<Category>) entityManager
+					.createQuery("SELECT cshc.category FROM CategorySetHasCategory cshc WHERE cshc.categorySet.id=:id")
+					.setParameter("id", id)
+					.getResultList();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("error: " + e);
+			};
+		} else {
+			try {
+				// get all Categories
+				categories = (List<Category>) entityManager
+					.createQuery("SELECT c FROM Category c")
+					.getResultList();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("error: " + e);
+			};
+		}
 		
 		return Response.ok().entity(categories).build();
 	}
@@ -159,7 +175,7 @@ public class CategorySetEndpoint {
 	@SuppressWarnings("unchecked")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("categoryset/{id}/category/{name}")
+	@Path("set/{id}/category/{name}")
 	@Secured
 	public Response addCategory(@PathParam("id") int id, @PathParam("name") String categorySetName, @PathParam("name") String categoryName) {
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -210,7 +226,7 @@ public class CategorySetEndpoint {
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("categoryset/{idcs}/category/{idc}")
+	@Path("set/{idcs}/category/{idc}")
 	@Secured
 	public Response removeCategory(@PathParam("idcs") int idcs, @PathParam("idc") int idc) {
 			EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -247,7 +263,7 @@ public class CategorySetEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("categoryset")
+	@Path("set")
 	public Response createCategorySet(String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		CategorySet newSet = null;
@@ -262,7 +278,17 @@ public class CategorySetEndpoint {
 		if ( newSet == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newSet.setId(0);
-		// newSet.setCategories(new ArrayList<Category>());
+		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		newSet.setCreatedAt(creationDate);
+		newSet.setLastEditedAt(creationDate);
+		if ( crc.getProperty("TIMAAT.userID") != null ) {
+			// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+			newSet.setCreatedByUserAccount(entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
+//			newSet.setLastEditedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error
+			return Response.serverError().build();
+		}
 		
 		// persist analysislist and polygons
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -282,7 +308,7 @@ public class CategorySetEndpoint {
 	@PATCH
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-	@Path("categoryset/{id}")
+	@Path("set/{id}")
 	@Secured
 	public Response updateCategoryset(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -301,7 +327,7 @@ public class CategorySetEndpoint {
 		}
 		if ( updateSet == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    	// update category set name
 		if ( updateSet.getName() != null ) categorySet.setName(updateSet.getName());
 
 		// TODO update log metadata in general log
@@ -322,7 +348,7 @@ public class CategorySetEndpoint {
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("categoryset/{id}")
+	@Path("set/{id}")
 	@Secured
 	public Response deleteCategoryset(@PathParam("id") int id) {
     	
@@ -332,6 +358,7 @@ public class CategorySetEndpoint {
 		
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		for ( CategorySetHasCategory cshc : categorySet.getCategorySetHasCategories() ) entityManager.remove(cshc);
 		entityManager.remove(categorySet);
 		entityTransaction.commit();
 

@@ -620,10 +620,10 @@
 			var model = {
 					"id": 0,
 					"name": name,
-					"categories": [],
+					"categorySetHasCategories": [],
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/categoryset/",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/",
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -641,14 +641,14 @@
 		},
 		
 		updateCategorySet(categoryset) {
-      console.log("TCL: updateCategorySet -> categoryset", categoryset);
+			console.log("TCL: updateCategorySet -> categoryset", categoryset);
 			var set = {
 					id: categoryset.model.id,
 					name: categoryset.model.name,
-					categories: []
+					categorySetHasCategories: []
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/categoryset/"+set.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+set.id,
 				type:"PATCH",
 				data: JSON.stringify(set),
 				contentType:"application/json; charset=utf-8",
@@ -671,9 +671,9 @@
 		},
 
 		removeCategorySet(categoryset) {
-      console.log("TCL: removeCategorySet -> categoryset", categoryset);
+			console.log("TCL: removeCategorySet -> categoryset", categoryset);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/categoryset/"+categoryset.model.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+categoryset.model.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

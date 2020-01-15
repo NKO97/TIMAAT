@@ -40,10 +40,12 @@ public class Category implements Serializable {
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="category")
+	@JsonIgnore
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="categories")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	public Category() {
@@ -108,6 +110,7 @@ public class Category implements Serializable {
 	}
 
 	// get all CategorySets this category is a member of
+	@JsonIgnore
 	public List<CategorySet> getCategorySets() { // TODO
 		// Find all CategorySetHasCategory where Category appears
 		// list all CategorySets found that way
