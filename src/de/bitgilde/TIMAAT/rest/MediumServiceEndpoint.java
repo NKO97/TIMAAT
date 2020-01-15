@@ -275,8 +275,8 @@ public class MediumServiceEndpoint{
 		}
 		// sanitize object data
 		newMedium.setId(0);
-		Title title = entityManager.find(Title.class, newMedium.getTitle().getId());
-		newMedium.setTitle(title);
+		Title displayTitle = entityManager.find(Title.class, newMedium.getDisplayTitle().getId());
+		newMedium.setDisplayTitle(displayTitle);
 		Source source = new Source();
 
 		// update log metadata
@@ -296,25 +296,25 @@ public class MediumServiceEndpoint{
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.persist(title);
+		entityManager.persist(displayTitle);
 		entityManager.persist(newMedium);
 		entityManager.flush();
-		newMedium.setTitle(title);
+		newMedium.setDisplayTitle(displayTitle);
 		entityTransaction.commit();
 		entityManager.refresh(newMedium);
-		entityManager.refresh(title);
+		entityManager.refresh(displayTitle);
 
 		// create medium_has_title-table entry
 		entityTransaction.begin();
-		newMedium.getTitles().add(title);
-		title.getMediums2().add(newMedium);
-		entityManager.merge(title);
+		newMedium.getTitles().add(displayTitle);
+		displayTitle.getMediums3().add(newMedium);
+		entityManager.merge(displayTitle);
 		entityManager.merge(newMedium);
-		entityManager.persist(title);
+		entityManager.persist(displayTitle);
 		entityManager.persist(newMedium);
 		entityTransaction.commit();
 		entityManager.refresh(newMedium);
-		entityManager.refresh(title);
+		entityManager.refresh(displayTitle);
 
 		// create sources entry of medium
 		entityTransaction.begin();
@@ -361,7 +361,8 @@ public class MediumServiceEndpoint{
 		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
-		if ( updatedMedium.getTitle() != null ) medium.setTitle(updatedMedium.getTitle());
+		if ( updatedMedium.getDisplayTitle() != null ) medium.setDisplayTitle(updatedMedium.getDisplayTitle());
+		medium.setOriginalTitle(updatedMedium.getOriginalTitle()); // originalTitle can be set to null
 
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -412,7 +413,7 @@ public class MediumServiceEndpoint{
 		// for (Title title:medium.getTitles()) {
 		// 	medium.getTitles().remove(title);
 		// }
-		entityManager.remove(medium.getTitle());
+		entityManager.remove(medium.getDisplayTitle());
 		entityManager.remove(medium);
 		entityTransaction.commit();
 		// add log entry
@@ -528,7 +529,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(audio);
-		entityManager.remove(audio.getMedium().getTitle());
+		entityManager.remove(audio.getMedium().getDisplayTitle());
 		entityManager.remove(audio.getMedium()); // remove audio, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -635,7 +636,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(document);
-		entityManager.remove(document.getMedium().getTitle());
+		entityManager.remove(document.getMedium().getDisplayTitle());
 		entityManager.remove(document.getMedium()); // remove document, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -745,7 +746,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(image);
-		entityManager.remove(image.getMedium().getTitle());
+		entityManager.remove(image.getMedium().getDisplayTitle());
 		entityManager.remove(image.getMedium()); // remove image, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -854,7 +855,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(software);
-		entityManager.remove(software.getMedium().getTitle());
+		entityManager.remove(software.getMedium().getDisplayTitle());
 		entityManager.remove(software.getMedium()); // remove software, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -964,7 +965,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(text);
-		entityManager.remove(text.getMedium().getTitle());
+		entityManager.remove(text.getMedium().getDisplayTitle());
 		entityManager.remove(text.getMedium()); // remove text, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -1099,7 +1100,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(video);
-		entityManager.remove(video.getMedium().getTitle());
+		entityManager.remove(video.getMedium().getDisplayTitle());
 		entityManager.remove(video.getMedium()); // remove video, then corresponding medium
 		entityTransaction.commit();
 		
@@ -1211,7 +1212,7 @@ public class MediumServiceEndpoint{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(videogame);
-		entityManager.remove(videogame.getMedium().getTitle());
+		entityManager.remove(videogame.getMedium().getDisplayTitle());
 		entityManager.remove(videogame.getMedium()); // remove videogame, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
@@ -1266,12 +1267,12 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
 
-		System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
+		// System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
 		
-		System.out.println("MediumServiceEndpoint: title created with id "+newTitle.getId());
-		System.out.println("MediumServiceEndpoint: title created with language id "+newTitle.getLanguage().getId());
+		System.out.println("MediumServiceEndpoint: create title: title created with id "+newTitle.getId());
+		System.out.println("MediumServiceEndpoint: create title: title created with language id "+newTitle.getLanguage().getId());
 
 		return Response.ok().entity(newTitle).build();
 	}
@@ -1325,7 +1326,7 @@ public class MediumServiceEndpoint{
 		// create medium_has_title-table entries
 		entityTransaction.begin();
 		medium.getTitles().add(newTitle);
-		newTitle.getMediums2().add(medium);
+		newTitle.getMediums3().add(medium);
 		entityManager.merge(newTitle);
 		entityManager.merge(medium);
 		entityManager.persist(newTitle);
@@ -1338,8 +1339,8 @@ public class MediumServiceEndpoint{
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
 		
-		System.out.println("MediumServiceEndpoint: title added with id "+newTitle.getId());
-		System.out.println("MediumServiceEndpoint: title added with language id "+newTitle.getLanguage().getId());
+		System.out.println("MediumServiceEndpoint: addTitle: title added with id "+newTitle.getId());
+		System.out.println("MediumServiceEndpoint: addTitle: title added with language id "+newTitle.getLanguage().getId());
 
 		return Response.ok().entity(newTitle).build();
 	}

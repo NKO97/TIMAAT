@@ -1119,7 +1119,7 @@
                           <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Medientitel</a>
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachspuren</a>
+                          <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -1162,12 +1162,12 @@
                         <div class="form-group datasheet-data title-data">
                           <div class="form-row">
                             <div class="col-md-9">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-title">Primary Title*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title" name="primaryTitle" placeholder="[Enter primary title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-title">Display Title*</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
                             </div>                            
                             <div class="col-md-3">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-title-language-id">Title's Language*</label>
-                              <select class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title-language-id" name="primaryTitleLanguageId" required>
+                              <select class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title-language-id" name="displayTitleLanguageId" required>
                                 <option value="" disabled selected hidden>[Choose title language...]</option>
                                 <!-- <option value="1">default-untranslated</option> -->
                                 <option value="2">English</option>
@@ -1356,16 +1356,19 @@
                             </div>
                           </div>
                           <div class="form-row">
-                            <div class="col-md-2">
-                              <h6 class="form-header">Primary title</h6>
+                            <div class="col-sm-2 col-md-1">
+                              <h6 class="form-header">Display title</h6>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-sm-2 col-md-1">
+                              <h6 class="form-header">Original title</h6>
+                            </div>
+                            <div class="col-sm-5 col-md-7">
                               <h6 class="form-header">Medium title</h6>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-sm-2 col-md-2">
                               <h6 class="form-header">Title's language</h6>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-sm-1 col-md-1">
                               <h6 class="form-header"></h6>
                             </div>
                           </div>

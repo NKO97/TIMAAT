@@ -183,13 +183,13 @@
 					medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					medium.model.copyright = formDataObject.copyright;
 					medium.model.remark = formDataObject.remark;
-					// title data
-					medium.model.title.name = formDataObject.primaryTitle;
-					medium.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					medium.model.displayTitle.name = formDataObject.displayTitle;
+					medium.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < medium.model.titles.length; i++) {
-						if (medium.model.title.id == medium.model.titles[i].id) {
-							medium.model.titles[i] = medium.model.title;
+						if (medium.model.displayTitle.id == medium.model.titles[i].id) {
+							medium.model.titles[i] = medium.model.displayTitle;
 							break;
 						}
 					}
@@ -215,9 +215,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 					};
 						// work: {
@@ -228,13 +228,20 @@
 					// 	id: 0,
 					// 	name: name,
 					// };
-					var title = {
+					var displayTitle = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
+					// var originalTitle = {
+					// 	id: 0,
+					// 	language: {
+					// 		id: 0,
+					// 	},
+					// 	name: "",
+					// };
 					var source = {
 						id: 0,
 						medium: {
@@ -247,7 +254,7 @@
 					};
 					// Medium has no translation table at the moment
 					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
-					await TIMAAT.MediaDatasets.createMedium(model, title, source);
+					await TIMAAT.MediaDatasets.createMedium(model, displayTitle, source);
 					var medium = TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				};
@@ -309,21 +316,27 @@
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					console.log("TCL: titlesInForm", titlesInForm);
-					var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isPrimaryTitle' occurence
+					var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isDisplayTitle' occurence
 					$('#dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
-							<div class="col-md-2 text-center">
+							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isPrimaryTitle"></label>
-									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="title">
+									<label class="sr-only" for="isDisplayTitle"></label>
+									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" placeholder="Is Display Title" data-role="displayTitle">
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-sm-2 col-md-1 text-center">
+								<div class="form-check">
+									<label class="sr-only" for="isOriginalTitle"></label>
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" placeholder="Is Original Title" data-role="originalTitle">
+								</div>
+							</div>
+							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
 								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
 							</div>
-							<div class="col-md-3">
+							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]" required>
 									<option value="2">English</option>
@@ -334,7 +347,7 @@
 									<option value="7">Arabic</option>
 								</select>
 							</div>
-							<div class="col-md-1 text-center">
+							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
 									<span class="fas fa-trash-alt"></span>
 								</button>
@@ -372,10 +385,10 @@
 			// Remove title button click
 			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
 				e.preventDefault();
-				var isPrimaryTitle = $(this).closest('.form-group').find('input[name=isPrimaryTitle]:checked').val();
-				if (isPrimaryTitle == "on") {
-					// TODO modal informing that primary title entry cannot be deleted					
-					console.log("CANNOT DELETE PRIMARY TITLE");
+				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
+				if (isDisplayTitle == "on") {
+					// TODO modal informing that display title entry cannot be deleted					
+					console.log("CANNOT DELETE DISPLAY TITLE");
 				}
 				else {
 					// TODO consider undo function or popup asking if user really wants to delete a title
@@ -442,20 +455,39 @@
 				var i = 0;
 				while ( i < formData.length) {
 					var element = {
-					isPrimaryTitle: false,
+					isDisplayTitle: false,
+					isOriginalTitle: false,
 					title: '',
 					titleLanguageId: 0,
 				};
-					if (formData[i].name == 'isPrimaryTitle' && formData[i].value == 'on' ) {
-						element.isPrimaryTitle = true;
-						element.title = formData[i+1].value;
-						element.titleLanguageId = formData[i+2].value;
-						i = i+3;
-					} else {
-						element.isPrimaryTitle = false;
-						element.title = formData[i].value;
-						element.titleLanguageId = formData[i+1].value;
-						i = i+2;
+					if (formData[i].name == 'isDisplayTitle' && formData[i].value == 'on' ) {
+						element.isDisplayTitle = true;
+						if (formData[i+1].name == 'isOriginalTitle' && formData[i+1].value == 'on' ) {
+							// display title set, original title set
+							element.isOriginalTitle = true;
+							element.title = formData[i+2].value;
+							element.titleLanguageId = formData[i+3].value;
+							i = i+4;
+						} else { // display title set, original title not set
+							element.isOriginalTitle = false;
+							element.title = formData[i+1].value;
+							element.titleLanguageId = formData[i+2].value;
+							i = i+3;
+						}
+					} else { // display title not set, original title set
+						element.isDisplayTitle = false;
+						if (formData[i].name == 'isOriginalTitle' && formData[i].value == 'on' ) {
+							element.isOriginalTitle = true;
+							element.title = formData[i+1].value;
+							element.titleLanguageId = formData[i+2].value;
+							i = i+3;
+						} else {
+							// display title not set, original title not set
+							element.isOriginalTitle = false;
+							element.title = formData[i].value;
+							element.titleLanguageId = formData[i+1].value;
+							i = i+2;
+						}
 					};
 					formTitleList[formTitleList.length] = element;
 				}
@@ -470,7 +502,25 @@
 							},
 							name: formTitleList[i].title,
 							};
-						await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						console.log("TCL: update existing titles");
+						// only update if anything changed
+						if (title != medium.model.titles[i]) {
+							await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						}
+						// update display title
+						var changed = false;
+						if (formTitleList[i].isDisplayTitle == true) {
+							medium.model.displayTitle = medium.model.titles[i];
+							changed = true;
+						}
+						// update original title
+						if (formTitleList[i].isOriginalTitle == true) {
+							medium.model.originalTitle = medium.model.titles[i];
+							changed = true;
+						}
+						if (changed == true) {
+							await TIMAAT.MediaDatasets.updateMedium(medium);
+						}
 					};
 				}
 				// update existing titles and add new ones
@@ -484,7 +534,11 @@
 							},
 							name: formTitleList[i].title,
 							};
-						await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						// only update if anything changed
+						if (title != medium.model.titles[i]) {
+							console.log("TCL: update existing titles (and add new ones)");
+							await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						}
 					};
 					i = medium.model.titles.length;
 					var newTitles = [];
@@ -498,7 +552,25 @@
 							};
 						newTitles.push(title);
 					}
+					console.log("TCL: (update existing titles and) add new ones");
 					await TIMAAT.MediaDatasets.addTitles(medium, newTitles);
+					i = 0;
+					for (; i < formTitleList.length; i++) {
+						// update display title
+						var changed = false;
+						if (formTitleList[i].isDisplayTitle == true) {
+							medium.model.displayTitle = medium.model.titles[i];
+							changed = true;
+						}
+						// update original title
+						if (formTitleList[i].isOriginalTitle == true) {
+							medium.model.originalTitle = medium.model.titles[i];
+							changed = true;
+						}
+						if (changed == true) {
+							await TIMAAT.MediaDatasets.updateMedium(medium);
+						}
+					}
 				}
 				// update existing titles and delete obsolete ones
 				else if (formTitleList.length < medium.model.titles.length) {
@@ -511,20 +583,35 @@
 							},
 							name: formTitleList[i].title,
 							};
-						await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						if (title != medium.model.titles[i]) {
+							console.log("TCL: update existing titles (and delete obsolete ones)");
+							await TIMAAT.MediaDatasets.updateTitle(title, medium);
+						}
+						// update display title
+						var changed = false;
+						if (formTitleList[i].isDisplayTitle == true) {
+							medium.model.displayTitle = medium.model.titles[i];
+							changed = true;
+						}
+						// update original title
+						if (formTitleList[i].isOriginalTitle == true) {
+							medium.model.originalTitle = medium.model.titles[i];
+							changed = true;
+						}
+						if (changed == true) {
+							await TIMAAT.MediaDatasets.updateMedium(medium);
+						}
 					};
 					var i = medium.model.titles.length - 1;
-					for (; i >=  formTitleList.length; i-- ) { // remove obsolete titles
+					for (; i >= formTitleList.length; i-- ) { // remove obsolete titles
+						if (medium.model.originalTitle.id == medium.model.titles[i].id) {
+							medium.model.originalTitle = null;
+							console.log("TCL: remove originalTitle before deleting title");		
+							await TIMAAT.MediaDatasets.updateMedium(medium);
+						}
+						console.log("TCL: (update existing titles and) delete obsolete ones");		
 						TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
-						medium.model.titles.pop();				
-					}
-				}
-				// set primary title
-				var i = 0;
-				for (; i < formTitleList.length; i++ ) {
-					if (formTitleList[i].isPrimaryTitle) {
-						medium.model.title = medium.model.titles[i];
-						await TIMAAT.MediaDatasets.updateMedium(medium);
+						medium.model.titles.pop();		
 					}
 				}
 				console.log("TCL: show medium title form");
@@ -835,13 +922,13 @@
 					audio.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					audio.model.copyright = formDataObject.copyright;
 					audio.model.remark = formDataObject.remark;
-					// title data
-					audio.model.title.name = formDataObject.primaryTitle;
-					audio.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					audio.model.displayTitle.name = formDataObject.displayTitle;
+					audio.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < audio.model.titles.length; i++) {
-						if (audio.model.title.id == audio.model.titles[i].id) {
-							audio.model.titles[i] = audio.model.title;
+						if (audio.model.displayTitle.id == audio.model.titles[i].id) {
+							audio.model.titles[i] = audio.model.displayTitle;
 							break;
 						}
 					}
@@ -877,9 +964,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -890,9 +977,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -980,13 +1067,13 @@
 					mediumDocument.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					mediumDocument.model.copyright = formDataObject.copyright;
 					mediumDocument.model.remark = formDataObject.remark;
-					// title data
-					mediumDocument.model.title.name = formDataObject.primaryTitle;
-					mediumDocument.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					mediumDocument.model.displayTitle.name = formDataObject.displayTitle;
+					mediumDocument.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < mediumDocument.model.titles.length; i++) {
-						if (mediumDocument.model.title.id == mediumDocument.model.titles[i].id) {
-							mediumDocument.model.titles[i] = mediumDocument.model.title;
+						if (mediumDocument.model.displayTitle.id == mediumDocument.model.titles[i].id) {
+							mediumDocument.model.titles[i] = mediumDocument.model.displayTitle;
 							break;
 						}
 					}
@@ -1016,9 +1103,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1029,9 +1116,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -1119,13 +1206,13 @@
 					image.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					image.model.copyright = formDataObject.copyright;
 					image.model.remark = formDataObject.remark;
-					// title data
-					image.model.title.name = formDataObject.primaryTitle;
-					image.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					image.model.displayTitle.name = formDataObject.displayTitle;
+					image.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < image.model.titles.length; i++) {
-						if (image.model.title.id == image.model.titles[i].id) {
-							image.model.titles[i] = image.model.title;
+						if (image.model.displayTitle.id == image.model.titles[i].id) {
+							image.model.titles[i] = image.model.displayTitle;
 							break;
 						}
 					}
@@ -1160,9 +1247,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1173,9 +1260,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -1262,13 +1349,13 @@
 					software.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					software.model.copyright = formDataObject.copyright;
 					software.model.remark = formDataObject.remark;
-					// title data
-					software.model.title.name = formDataObject.primaryTitle;
-					software.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					software.model.displayTitle.name = formDataObject.displayTitle;
+					software.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < software.model.titles.length; i++) {
-						if (software.model.title.id == software.model.titles[i].id) {
-							software.model.titles[i] = software.model.title;
+						if (software.model.displayTitle.id == software.model.titles[i].id) {
+							software.model.titles[i] = software.model.displayTitle;
 							break;
 						}
 					}
@@ -1299,9 +1386,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1312,9 +1399,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -1400,13 +1487,13 @@
 					text.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					text.model.copyright = formDataObject.copyright;
 					text.model.remark = formDataObject.remark;
-					// title data
-					text.model.title.name = formDataObject.primaryTitle;
-					text.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					text.model.displayTitle.name = formDataObject.displayTitle;
+					text.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < text.model.titles.length; i++) {
-						if (text.model.title.id == text.model.titles[i].id) {
-							text.model.titles[i] = text.model.title;
+						if (text.model.displayTitle.id == text.model.titles[i].id) {
+							text.model.titles[i] = text.model.displayTitle;
 							break;
 						}
 					}
@@ -1438,9 +1525,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1451,9 +1538,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -1543,13 +1630,13 @@
 					video.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					video.model.copyright = formDataObject.copyright;
 					video.model.remark = formDataObject.remark;
-					// title data
-					video.model.title.name = formDataObject.primaryTitle;
-					video.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					video.model.displayTitle.name = formDataObject.displayTitle;
+					video.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < video.model.titles.length; i++) {
-						if (video.model.title.id == video.model.titles[i].id) {
-							video.model.titles[i] = video.model.title;
+						if (video.model.displayTitle.id == video.model.titles[i].id) {
+							video.model.titles[i] = video.model.displayTitle;
 							break;
 						}
 					}
@@ -1599,9 +1686,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1612,9 +1699,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -1701,13 +1788,13 @@
 					videogame.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 					videogame.model.copyright = formDataObject.copyright;
 					videogame.model.remark = formDataObject.remark;
-					// title data
-					videogame.model.title.name = formDataObject.primaryTitle;
-					videogame.model.title.language.id = Number(formDataObject.primaryTitleLanguageId);
+					// display-title data
+					videogame.model.displayTitle.name = formDataObject.displayTitle;
+					videogame.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
 					var i = 0;
 					for (; i < videogame.model.titles.length; i++) {
-						if (videogame.model.title.id == videogame.model.titles[i].id) {
-							videogame.model.titles[i] = videogame.model.title;
+						if (videogame.model.displayTitle.id == videogame.model.titles[i].id) {
+							videogame.model.titles[i] = videogame.model.displayTitle;
 							break;
 						}
 					}
@@ -1738,9 +1825,9 @@
 						titles: [{
 							id: 0,
 							language: {
-								id: Number(formDataObject.primaryTitleLanguageId),
+								id: Number(formDataObject.displayTitleLanguageId),
 							},
-							name: formDataObject.primaryTitle,
+							name: formDataObject.displayTitle,
 						}],
 						// mediumTranslations: [],
 					};
@@ -1751,9 +1838,9 @@
 					var title = {
 						id: 0,
 						language: {
-							id: Number(formDataObject.primaryTitleLanguageId),
+							id: Number(formDataObject.displayTitleLanguageId),
 						},
-						name: formDataObject.primaryTitle,
+						name: formDataObject.displayTitle,
 					};
 					var source = {
 						id: 0,
@@ -2164,9 +2251,9 @@
 			if (isNaN(moment(data.releaseDate)))
 				$('#timaat-mediadatasets-media-metadata-releasedate').val('');
 				else $('#timaat-mediadatasets-media-metadata-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
-			// title data
-			$('#timaat-mediadatasets-media-metadata-title').val(data.title.name);
-			$('#timaat-mediadatasets-media-metadata-title-language-id').val(data.title.language.id);
+			// display-title data
+			$('#timaat-mediadatasets-media-metadata-title').val(data.displayTitle.name);
+			$('#timaat-mediadatasets-media-metadata-title-language-id').val(data.displayTitle.language.id);
 			// source data
 			if (data.sources[0].isPrimarySource)
 				$('#timaat-mediadatasets-media-metadata-source-isprimarysource').prop('checked', true);
@@ -2234,7 +2321,7 @@
 			$('#timaat-mediadatasets-medium-titles-form').show();
 			
 			// setup UI
-			// title data
+			// display-title data
 			var i = 0;
 			var numTitles = medium.model.titles.length;
       // console.log("TCL: medium.model.titles", medium.model.titles);
@@ -2243,17 +2330,23 @@
 				$('[data-role="dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
-							<div class="col-md-2 text-center">
+							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isPrimaryTitle"></label>
-									<input class="form-check-input isPrimaryTitle" type="radio" name="isPrimaryTitle" placeholder="Is Primary Title" data-role="primaryTitle[`+medium.model.titles[i].id+`]">
+									<label class="sr-only" for="isDisplayTitle"></label>
+									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" placeholder="Is Display Title" data-role="displayTitle[`+medium.model.titles[i].id+`]">
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-sm-2 col-md-1 text-center">
+								<div class="form-check">
+									<label class="sr-only" for="isOriginalTitle"></label>
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" placeholder="Is Original Title" data-role="originalTitle[`+medium.model.titles[i].id+`]">
+								</div>
+							</div>
+							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
 								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title[`+i+`]" required>
 							</div>
-							<div class="col-md-3">
+							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
@@ -2265,7 +2358,7 @@
 									<option value="7">Arabic</option>
 								</select>
 							</div>
-							<div class="col-md-1 text-center">
+							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
 									<span class="fas fa-trash-alt"></span>
 								</button>
@@ -2276,8 +2369,12 @@
 					$('[data-role="titleLanguageId['+medium.model.titles[i].language.id+']"')
 						.find('option[value='+medium.model.titles[i].language.id+']')
 						.attr("selected",true);
-					if (medium.model.titles[i].id == medium.model.title.id) {
-						$('[data-role="primaryTitle['+medium.model.titles[i].id+']"')
+					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
+						$('[data-role="displayTitle['+medium.model.titles[i].id+']"')
+							.prop("checked",true);							
+					}
+					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
+						$('[data-role="originalTitle['+medium.model.titles[i].id+']"')
 							.prop("checked",true);							
 					}
 					$('input[name="title['+i+']"').rules("add",
@@ -2500,15 +2597,15 @@
 			// This routine can be used to create empty media of a certain type
 			// console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
 			try {
-				// create title
-				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				// create display title
+				var newDisplayTitle = await TIMAAT.MediaService.createTitle(title);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {				
 				// create medium
 				var tempMediumModel = mediumModel;
-				tempMediumModel.title = newTitle;
+				tempMediumModel.displayTitle = newDisplayTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 			} catch(error) {
@@ -2542,14 +2639,14 @@
 			// console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title, source", mediumSubtypeModel, mediumModel, title, source);
 			try {
 				// create title
-				var newTitle = await TIMAAT.MediaService.createTitle(title);
+				var newDisplayTitle = await TIMAAT.MediaService.createTitle(title);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
 				// create medium
 				var tempMediumModel = mediumModel;
-				tempMediumModel.title = newTitle;
+				tempMediumModel.displayTitle = newDisplayTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
         console.log("TCL: newMediumModel", newMediumModel);
@@ -2667,11 +2764,17 @@
 		},
 
 		updateMedium: async function(medium) {
-		// console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
+		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", medium);
 			try {
-				// update primary title
-				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
-				medium.model.title = tempTitle;
+				// update display title
+				var tempDisplayTitle = await TIMAAT.MediaService.updateTitle(medium.model.displayTitle);
+				medium.model.displayTitle = tempDisplayTitle;
+
+				// update original title
+				if (medium.model.originalTitle) { // medium initially has no original title set
+					var tempOriginalTitle = await TIMAAT.MediaService.updateTitle(medium.model.originalTitle);
+					medium.model.originalTitle = tempOriginalTitle;
+				}
 
 				// update source
 				var tempSource = await TIMAAT.MediaService.updateSource(medium.model.sources[0]);
@@ -2698,10 +2801,16 @@
 		updateMediumSubtype: async function(mediumSubtype, medium) {
 			console.log("TCL: updateMediumSubtypeData async function -> mediumSubtype, mediumSubtypeData at beginning of update process: ", mediumSubtype, medium);
 			try {
-				// update title
+				// update display title
 				console.log("TCL: update title via update submedium")
-				var tempTitle = await TIMAAT.MediaService.updateTitle(medium.model.title);
-				medium.model.title = tempTitle;
+				var tempDisplayTitle = await TIMAAT.MediaService.updateTitle(medium.model.displayTitle);
+				medium.model.displayTitle = tempDisplayTitle;
+				// update original title
+				console.log("TCL: update title via update submedium")
+				if (medium.model.originalTitle) { // medium initially has no original title set
+					var tempOriginalTitle = await TIMAAT.MediaService.updateTitle(medium.model.originalTitle);
+					medium.model.originalTitle = tempOriginalTitle;
+				}
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2762,7 +2871,7 @@
 		},
 
 		updateTitle: async function(title, medium) {
-			// console.log("TCL: updateTitle: async function -> title at beginning of update process: ", title);
+			console.log("TCL: updateTitle: async function -> title at beginning of update process: ", title, medium);
 			try {
 				// update title
 				var tempTitle = await TIMAAT.MediaService.updateTitle(title);
@@ -2882,7 +2991,7 @@
 			// remove all titles from medium
 			var i = 0;
 			for (; i < medium.model.titles.length; i++ ) { // remove obsolete titles
-				if ( medium.model.titles[i].id != medium.model.title.id ) {
+				if ( medium.model.titles[i].id != medium.model.displayTitle.id ) {
 					TIMAAT.MediaService.removeTitle(medium.model.titles[i]);
 					medium.model.titles.splice(i,1);
 				}

@@ -663,7 +663,7 @@
 				);
 				videoelement.data('video',video);
 				
-				videoelement.find('.title').html(video.title.name);
+				videoelement.find('.title').html(video.displayTitle.name);
 				videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
 				videoelement.find('.producer').html(TIMAAT.VideoChooser._getProducer(video));
 				videoelement.find('.date').html(moment(video.releaseDate).format('YYYY-MM-DD'));
