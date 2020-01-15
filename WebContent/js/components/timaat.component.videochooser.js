@@ -655,9 +655,10 @@
 					    <td class="producer">xx.xx.xxxx xx:xx</td>\
 					    <td class="date">xx.xx.xxxx xx:xx</td>\
 					    <td class="actions">\
-					      <button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button> \
+					    <button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button> \
 						  <button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button> \
-						  <button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>\
+							<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button> \
+							<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>\
 						</td> \
 					</tr>'
 				);
@@ -702,6 +703,22 @@
 				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 //				TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 			});
+			videoelement.on('click', '.timaat-mediadatasets-media-metadata', function(event) {
+				event.stopPropagation();
+				// show tag editor - trigger popup
+				TIMAAT.UI.hidePopups();
+				TIMAAT.UI.showComponent('media');
+				$('.form').hide();
+				$('.media-nav-tabs').show();
+				$('.media-data-tabs').hide();
+				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
+				console.log("TCL: video", video);
+				var videoModel = {
+					model: video,
+				};
+				$('#timaat-mediadatasets-media-metadata-form').data('video', videoModel);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', videoModel);
+			})
 			videoelement.on('click', '.timaat-video-collectionitemremove', function(ev) {
 				var row = $(this).parents('tr');
 				TIMAAT.VideoChooser._removeCollectionItemRow(row);

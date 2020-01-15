@@ -29,10 +29,14 @@
 			// create and style list view element
 			// var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
       // console.log("TCL: Medium -> constructor -> mediumType", mediumType);
-			var deleteMediumButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
+			var deleteMediumButton = '<button type="button" title="Medium löschen" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
 			var uploadVideoButton = "";
 			if ( this.model.mediumVideo && model.mediumVideo.status == "nofile" ) {
-				uploadVideoButton = '<button type="button" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
+				uploadVideoButton = '<button type="button" title="Video hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
+			}
+			var annotateVideoButton = "";
+			if ( this.model.mediumVideo && model.mediumVideo.status != "nofile" && model.mediumVideo.status != "unavailable" ) {
+				annotateVideoButton = '<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>'
 			}
 			// console.log("TCL: Medium -> constructor -> uploadVideoButton", uploadVideoButton);
 			if ( model.id < 0 ) { 
@@ -62,6 +66,7 @@
 									<i class="fas fa-user"></i>							
 								</div>` +
 								uploadVideoButton +
+								annotateVideoButton +
 						  `</div>
 						</div>
 					</div>
@@ -160,13 +165,26 @@
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
+			// annotate handler
+			this.listView.find('.timaat-mediadatasets-medium-annotate').click(this, function(ev) {
+				ev.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.UI.showComponent('videoplayer');
+				console.log("TCL: Medium -> constructor -> medium", medium);
+				// setup video in player
+				TIMAAT.VideoPlayer.setupVideo(medium.model);
+				// load video annotations from server
+				TIMAAT.Service.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+			});
+
 			// remove handler
 			this.listView.find('.timaat-mediadatasets-medium-remove').click(this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-medium-delete').data('medium', medium);
 				$('#timaat-mediadatasets-medium-delete').modal('show');
 			});
+
 		}
 
 		updateUI() {
