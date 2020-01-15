@@ -7,12 +7,12 @@
       var mediumFormMetadata = $("#timaat-mediadatasets-media-metadata-form");
       var mediumFormMetadataValidator = $("#timaat-mediadatasets-media-metadata-form").validate({
         rules: {
-          primaryTitle: {
+          displayTitle: {
             required: true,
             minlength: 3,
             maxlength: 200
           },
-          primaryTitleLanguageId: {
+          displayTitleLanguageId: {
             required: true,
           },
           typeId: {
@@ -53,12 +53,12 @@
           }       
         },
         messages: {
-          primaryTitle: {
+          displayTitle: {
             required: "Enter a title (min length: 3)",
             minlength: "Title too short: min length is 3",
             maxlength: "Title is too long: max length is 200"
           },
-          primaryTitleLanguageId: {
+          displayTitleLanguageId: {
             required: "Please provide the title's language"
           },
           typeId: {

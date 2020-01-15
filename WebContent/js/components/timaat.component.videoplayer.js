@@ -712,7 +712,7 @@
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
 			$('.timaat-videoplayer-ui').show();
-			$('#timaat-videoplayer-video-title').html(video.title.name);
+			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.mediumVideo.viewToken;
 //			this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);

@@ -34,10 +34,16 @@ public class Title implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Medium
-	@OneToMany(mappedBy="title")
+	@OneToMany(mappedBy="title1")
 	@JsonIgnore
 	private List<Medium> mediums1;
 
+	//bi-directional many-to-one association to Medium
+	@OneToMany(mappedBy="title2")
+	@JsonIgnore
+	private List<Medium> mediums2;
+
+		
 	//bi-directional many-to-one association to Language
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	// @JsonBackReference(value = "Language-Title")
@@ -55,7 +61,7 @@ public class Title implements Serializable {
 			@JoinColumn(name="medium_id")
 			}
 		)
-	private List<Medium> mediums2;
+	private List<Medium> mediums3;
 
 	//bi-directional many-to-one association to Nasheed
 	// @OneToMany(mappedBy="title")
@@ -103,16 +109,38 @@ public class Title implements Serializable {
 
 	public Medium addMediums1(Medium mediums1) {
 		getMediums1().add(mediums1);
-		mediums1.setTitle(this);
+		mediums1.setDisplayTitle(this);
 
 		return mediums1;
 	}
 
 	public Medium removeMediums1(Medium mediums1) {
 		getMediums1().remove(mediums1);
-		mediums1.setTitle(null);
+		mediums1.setDisplayTitle(null);
 
 		return mediums1;
+	}
+
+	public List<Medium> getMediums2() {
+		return this.mediums2;
+	}
+
+	public void setMediums2(List<Medium> mediums2) {
+		this.mediums2 = mediums2;
+	}
+
+	public Medium addMediums2(Medium mediums2) {
+		getMediums2().add(mediums2);
+		mediums2.setOriginalTitle(this);
+
+		return mediums2;
+	}
+
+	public Medium removeMediums2(Medium mediums2) {
+		getMediums2().remove(mediums2);
+		mediums2.setOriginalTitle(null);
+
+		return mediums2;
 	}
 
 	public Language getLanguage() {
@@ -123,12 +151,12 @@ public class Title implements Serializable {
 		this.language = language;
 	}
 
-	public List<Medium> getMediums2() {
-		return this.mediums2;
+	public List<Medium> getMediums3() {
+		return this.mediums3;
 	}
 
-	public void setMediums2(List<Medium> mediums2) {
-		this.mediums2 = mediums2;
+	public void setMediums3(List<Medium> mediums3) {
+		this.mediums2 = mediums3;
 	}
 
 	// public List<Nasheed> getNasheeds1() {

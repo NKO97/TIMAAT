@@ -112,8 +112,8 @@
 				// work: {
 				// 	id: mediumModel.work.id,
 				// },
-				title: {
-					id: mediumModel.title.id,
+				displayTitle: {
+					id: mediumModel.displayTitle.id,
 				},
 			};
       console.log("TCL: createMedium -> newMediumModel", newMediumModel);
@@ -286,8 +286,10 @@
 			tempMediumModel.releaseDate = mediumModel.releaseDate;
 			tempMediumModel.remark = mediumModel.remark;
 			tempMediumModel.copyright = mediumModel.copyright;
-			tempMediumModel.title = mediumModel.title;
+			tempMediumModel.displayTitle = mediumModel.displayTitle;
+			tempMediumModel.originalTitle = mediumModel.originalTitle;
 			tempMediumModel.titles = mediumModel.titles;
+      console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
 			// delete tempMediumModel.ui;
 			return new Promise(resolve => {
 				$.ajax({

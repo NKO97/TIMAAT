@@ -173,7 +173,7 @@
 			// console.log("TCL: Medium -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
-			var name = this.model.title.name;
+			var name = this.model.displayTitle.name;
 			var type = this.model.mediaType.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').text(name);
