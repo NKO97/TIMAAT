@@ -21,27 +21,10 @@
 	
 	TIMAAT.Medium = class Medium {
 		constructor(model, mediumType) {
-			// console.log("TCL: Medium -> constructor -> model", model)
 			// setup model
 			this.model = model;
-			// console.log("TCL: Medium -> constructor -> model", model);
 			
 			// create and style list view element
-			// var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
-      // console.log("TCL: Medium -> constructor -> mediumType", mediumType);
-			var deleteMediumButton = '<button type="button" title="Medium löschen" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>';
-			var uploadVideoButton = "";
-			if ( this.model.mediumVideo && model.mediumVideo.status == "nofile" ) {
-				uploadVideoButton = '<button type="button" title="Video hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-video-list-upload float-left"><i class="fas fa-upload"></i></button>';
-			}
-			var annotateVideoButton = "";
-			if ( this.model.mediumVideo && model.mediumVideo.status != "nofile" && model.mediumVideo.status != "unavailable" ) {
-				annotateVideoButton = '<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>'
-			}
-			// console.log("TCL: Medium -> constructor -> uploadVideoButton", uploadVideoButton);
-			if ( model.id < 0 ) { 
-				deleteMediumButton = '';
-			};
 			var displayMediaType = "";
 			if (mediumType == 'medium') {
 				displayMediaType = 
@@ -52,22 +35,23 @@
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-2">
-							<div class=btn-group-vertical>` +
-								deleteMediumButton +
-							`</div>
+							<div class=btn-group-vertical>
+								<button type="button" title="Medium löschen" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>
+							</div>
 						</div>
 						<div class="col-lg-8">
-							<span class="timaat-mediadatasets-`+mediumType+`-list-name"></span>` +
+							<span class="timaat-mediadatasets-`+mediumType+`-list-name">
+							</span>` +
 							displayMediaType +
 						`</div>
 						<div class="col-lg-2 float-right">
 						  <div class=btn-group-vertical>
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
 									<i class="fas fa-user"></i>							
-								</div>` +
-								uploadVideoButton +
-								annotateVideoButton +
-						  `</div>
+								</div>
+								<button type="button" title="Video hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
+								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
+						  </div>
 						</div>
 					</div>
 				</li>`
@@ -78,36 +62,18 @@
 			var medium = this; // save medium for system events
 			
 			// attach video upload functionality
-			if ( mediumType == 'video' && model.status == 'nofile' ) {
-				var video = this.model.mediumVideo;
-				this.listView.find('.timaat-mediadatasets-video-list-upload').dropzone({
-					url: "/TIMAAT/api/medium/video/"+medium.model.id+"/upload",
-					createImageThumbnails: false,
-					acceptedFiles: 'video/mp4',
-					maxFilesize: 1024,
-					timeout: 60*60*1000, // 1 hour
-					maxFiles: 1,
-					headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
-					previewTemplate: '<div class="dz-preview dz-file-preview" style="margin-top:0px"> \
-						<div class="progress" style="height: 24px;"> \
-						  	<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span></div> \
-							</div> \
-						</div>',
-					complete: function(file) {
-							if ( file.status == "success" && file.accepted ) {
-								var newVideo = JSON.parse(file.xhr.response);
-								video.status = newVideo;
-								this.listView.find('.timaat-mediadatasets-video-list-upload').hide();
-								video.width = newVideo.width;
-								video.height = newVideo.height;
-								video.length = newVideo.length;
-								video.frameRate = newVideo.frameRate;
-							}
-							this.removeFile(file);
-					}
-				});
-				this.listView.find('.timaat-mediadatasets-video-list-upload i').on('click', function(ev) {$(this).parent().click();});
-			}
+			this.listView.find('.timaat-mediadatasets-medium-upload').on('click', this, function(ev) {
+				ev.stopPropagation();
+				// TIMAAT.UI.hidePopups();
+				medium.uploadVideo();
+				console.log("TCL: updateUI");
+				medium.updateUI();
+				// }
+			});
+
+			this.listView.find('.timaat-mediadatasets-medium-upload i').on('click', function(ev) {
+				$(this).parent().click();
+			});
 
 			this.updateUI(); 
 
@@ -166,7 +132,7 @@
 			});
 
 			// annotate handler
-			this.listView.find('.timaat-mediadatasets-medium-annotate').click(this, function(ev) {
+			this.listView.find('.timaat-mediadatasets-medium-annotate').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				TIMAAT.UI.showComponent('videoplayer');
@@ -178,7 +144,7 @@
 			});
 
 			// remove handler
-			this.listView.find('.timaat-mediadatasets-medium-remove').click(this, function(ev) {
+			this.listView.find('.timaat-mediadatasets-medium-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-medium-delete').data('medium', medium);
@@ -187,8 +153,45 @@
 
 		}
 
+		uploadVideo() {
+			if ( this.model.mediumVideo && this.model.mediumVideo.status == 'nofile' ) {
+				var medium = this;
+				var video = this.model.mediumVideo;
+				if (!this.listView.find('.timaat-mediadatasets-medium-upload').hasClass('dz-clickable') ) {
+					this.listView.find('.timaat-mediadatasets-medium-upload').dropzone({
+						url: "/TIMAAT/api/medium/video/"+this.model.id+"/upload",
+						createImageThumbnails: false,
+						acceptedFiles: 'video/mp4',
+						maxFilesize: 1024,
+						timeout: 60*60*1000, // 1 hour
+						maxFiles: 1,
+						headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
+						previewTemplate: `
+							<div class="dz-preview dz-file-preview"">
+								<div class="progress"">
+									<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span>
+									</div>
+								</div>
+							</div>`,
+						complete: function(file) {
+							if ( file.status == "success" && file.accepted ) {
+								var newVideo = JSON.parse(file.xhr.response);
+								video.status = newVideo.status;
+								video.width = newVideo.width;
+								video.height = newVideo.height;
+								video.length = newVideo.length;
+								video.frameRate = newVideo.frameRate;
+								medium.updateUI();
+							}
+							this.removeFile(file);
+						}
+					});
+				}
+			}
+		}
+
 		updateUI() {
-			// console.log("TCL: Medium -> updateUI -> updateUI() -> model", this.model);
+			console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
 			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
 			var name = this.model.displayTitle.name;
@@ -197,6 +200,27 @@
 			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').text(name);
 			if (mediumType == 'medium') {
 				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
+			}
+			if ( this.model.id < 0 ) { 
+				this.listView.find('.timaat-mediadatasets-medium-remove').hide();
+			} else {
+				this.listView.find('.timaat-mediadatasets-medium-remove').show();
+			}
+
+			if ( this.model.mediumVideo && this.model.mediumVideo.status == "nofile" ) {
+				console.log("TCL: show upload button");
+				this.listView.find('.timaat-mediadatasets-medium-upload').show();
+			} else {
+				console.log("TCL: hide upload button");
+				this.listView.find('.timaat-mediadatasets-medium-upload').hide();
+			}
+
+			if ( this.model.mediumVideo && this.model.mediumVideo.status != "nofile" && this.model.mediumVideo.status != "unavailable" ) {
+				console.log("TCL: show annotate button");
+				this.listView.find('.timaat-mediadatasets-medium-annotate').show();
+			} else {
+				console.log("TCL: hide annotate button");
+				this.listView.find('.timaat-mediadatasets-medium-annotate').hide();
 			}
 		}
 
@@ -216,6 +240,9 @@
 			if (index > -1) {
 				TIMAAT.MediaDatasets.media.splice(index, 1);
 				TIMAAT.MediaDatasets.media.model.splice(index, 1);
+				console.log("TCL: remove -> TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);
+				TIMAAT.MediaDatasets.mediaDatasets.splice(index, 1);
+				// TIMAAT.MediaDatasets.mediaDatasets.model.splice(index, 1);
 			}
 			// remove from submedium list
 			switch (this.model.mediaType.id) {

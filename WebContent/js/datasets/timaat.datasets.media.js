@@ -2601,12 +2601,12 @@
 		_mediumRemoved: async function(medium) {
     	// console.log("TCL: _mediumRemoved", medium);
 			// console.log("TCL: _mediumRemoved: function(medium)");
-			var i = 0;
-			for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
-				if (TIMAAT.MediaDatasets.mediaDatasets[i].id == medium.id) {
-					TIMAAT.MediaDatasets.mediaDatasets[i].splice(i,1);
-				}
-			}
+			// var i = 0;
+			// for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
+			// 	if (TIMAAT.MediaDatasets.mediaDatasets[i].id == medium.id) {
+			// 		TIMAAT.MediaDatasets.mediaDatasets[i].splice(i,1);
+			// 	}
+			// }
 			// sync to server
 			// remove medium from all collections it is part of
 			function isMediumInMediaCollectionHasMediums(medium, mchm) {

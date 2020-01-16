@@ -374,7 +374,8 @@
 						complete: function(file) {
 								if ( file.status == "success" && file.accepted ) {
 									var newvideo = JSON.parse(file.xhr.response);
-									video.mediumVideo.status = newvideo;
+                  console.log("TCL: newvideo", newvideo);
+									video.mediumVideo.status = newvideo.status;
 									video.ui.find('.timaat-video-upload').hide();
 									video.ui.find('.timaat-video-annotate').show();
 									video.ui.find('.timaat-video-status').show();
@@ -389,10 +390,9 @@
 								this.removeFile(file);
 						}
 					});
-					video.ui.find('.timaat-video-upload i').on('click', function(ev) {$(this).parent().click();});
 				}
-
-			}			
+				video.ui.find('.timaat-video-upload i').on('click', function(ev) {$(this).parent().click();});
+			}
 		},
 		
 		setCollection: function(collection) {
@@ -699,7 +699,7 @@
 				TIMAAT.VideoPlayer.setupVideo(video);
 				// load video annotations from server
 				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
-//				TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
+				// TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 			});
 			videoelement.on('click', '.timaat-mediadatasets-media-metadata', function(event) {
 				event.stopPropagation();
