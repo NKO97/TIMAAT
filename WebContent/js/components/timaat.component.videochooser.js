@@ -31,9 +31,7 @@
 			TIMAAT.Service.getMediaCollections(TIMAAT.VideoChooser.setupMediaCollections);			
 		},
 		
-		init: function() {
-			console.log("TCL: VideoChooser: init: function()");
-						
+		init: function() {		
 			// setup video chooser list and UI events
 			$('#timaat-videochooser-collectionlibrary').click(function(ev) {
 				console.log("TCL: TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);

@@ -920,24 +920,7 @@
 
 				if (audio) { // update audio
 					// medium data
-					audio.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					audio.model.copyright = formDataObject.copyright;
-					audio.model.remark = formDataObject.remark;
-					// display-title data
-					audio.model.displayTitle.name = formDataObject.displayTitle;
-					audio.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < audio.model.titles.length; i++) {
-						if (audio.model.displayTitle.id == audio.model.titles[i].id) {
-							audio.model.titles[i] = audio.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					audio.model.sources[0].url = formDataObject.sourceUrl;
-					audio.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					audio.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					audio.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					audio = TIMAAT.MediaDatasets.updateMediumModelData(audio, formDataObject);
 					// audio data
 					audio.model.mediumAudio.length = TIMAAT.Util.parseTime(formDataObject.length);
 					// TODO: audiocodecinformation
@@ -953,51 +936,15 @@
 						},
 						length: TIMAAT.Util.parseTime(formDataObject.length),
 					};
-
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 1 // 1 = Audio. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 1); // 1 = Audio. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or audio at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
-					// };
-					await TIMAAT.MediaDatasets.createMediumSubtype('audio', model, medium, title, source);
+					// };					
+					await TIMAAT.MediaDatasets.createMediumSubtype('audio', model, medium, displayTitle, source);
 					var audio = TIMAAT.MediaDatasets.audios[TIMAAT.MediaDatasets.audios.length-1];
 					console.log("TCL: audio", audio);
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', audio);
@@ -1065,24 +1012,7 @@
 
 				if (mediumDocument) { // update document
 					// medium data
-					mediumDocument.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					mediumDocument.model.copyright = formDataObject.copyright;
-					mediumDocument.model.remark = formDataObject.remark;
-					// display-title data
-					mediumDocument.model.displayTitle.name = formDataObject.displayTitle;
-					mediumDocument.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < mediumDocument.model.titles.length; i++) {
-						if (mediumDocument.model.displayTitle.id == mediumDocument.model.titles[i].id) {
-							mediumDocument.model.titles[i] = mediumDocument.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					mediumDocument.model.sources[0].url = formDataObject.sourceUrl;
-					mediumDocument.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					mediumDocument.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					mediumDocument.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					mediumDocument = TIMAAT.MediaDatasets.updateMediumModelData(mediumDocument, formDataObject);
 					// document data
 					// currently empty
 
@@ -1093,50 +1023,15 @@
 					var model = {
 						mediumId: 0,
 					};
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 2 // 2 = mediumDocument. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 2); // 2 = Document. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or document at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('document', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('document', model, medium, displayTitle, source);
 					var mediumDocument = TIMAAT.MediaDatasets.documents[TIMAAT.MediaDatasets.documents.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', mediumDocument);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', mediumDocument);
@@ -1204,24 +1099,7 @@
 
 				if (image) { // update image
 					// medium data
-					image.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					image.model.copyright = formDataObject.copyright;
-					image.model.remark = formDataObject.remark;
-					// display-title data
-					image.model.displayTitle.name = formDataObject.displayTitle;
-					image.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < image.model.titles.length; i++) {
-						if (image.model.displayTitle.id == image.model.titles[i].id) {
-							image.model.titles[i] = image.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					image.model.sources[0].url = formDataObject.sourceUrl;
-					image.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					image.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					image.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					image = TIMAAT.MediaDatasets.updateMediumModelData(image, formDataObject);
 					// image data
 					image.model.mediumImage.width = formDataObject.width;
 					image.model.mediumImage.height = formDataObject.height;
@@ -1237,50 +1115,15 @@
 						height: formDataObject.height,
 						bitDepth: formDataObject.bitDepth,
 					};
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 3 // 3 = image. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 3); // 3 = Image. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or image at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('image', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('image', model, medium, displayTitle, source);
 					var image = TIMAAT.MediaDatasets.images[TIMAAT.MediaDatasets.images.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', image);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', image);
@@ -1347,24 +1190,7 @@
 
 				if (software) { // update software
 					// medium data
-					software.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					software.model.copyright = formDataObject.copyright;
-					software.model.remark = formDataObject.remark;
-					// display-title data
-					software.model.displayTitle.name = formDataObject.displayTitle;
-					software.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < software.model.titles.length; i++) {
-						if (software.model.displayTitle.id == software.model.titles[i].id) {
-							software.model.titles[i] = software.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					software.model.sources[0].url = formDataObject.sourceUrl;
-					software.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					software.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					software.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					software = TIMAAT.MediaDatasets.updateMediumModelData(software, formDataObject);
 					// software data
 					software.model.mediumSoftware.version = formDataObject.version;
 
@@ -1376,50 +1202,15 @@
 						mediumId: 0,
 						version: formDataObject.version,
 					};
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 4 // 4 = Software. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 4); // 4 = Software. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or software at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('software', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('software', model, medium, displayTitle, source);
 					var software = TIMAAT.MediaDatasets.softwares[TIMAAT.MediaDatasets.softwares.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', software);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', software);
@@ -1485,24 +1276,7 @@
 
 				if (text) { // update text
 					// medium data
-					text.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					text.model.copyright = formDataObject.copyright;
-					text.model.remark = formDataObject.remark;
-					// display-title data
-					text.model.displayTitle.name = formDataObject.displayTitle;
-					text.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < text.model.titles.length; i++) {
-						if (text.model.displayTitle.id == text.model.titles[i].id) {
-							text.model.titles[i] = text.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					text.model.sources[0].url = formDataObject.sourceUrl;
-					text.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					text.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					text.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					text = TIMAAT.MediaDatasets.updateMediumModelData(text, formDataObject);
 					// text data
 					text.model.mediumText.content = formDataObject.content;
 
@@ -1514,51 +1288,15 @@
 						mediumId: 0,
 						content: formDataObject.content,
 					};
-
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 5 // 5 = Text. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 5); // 5 = Text. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or text at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('text', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('text', model, medium, displayTitle, source);
 					var text = TIMAAT.MediaDatasets.texts[TIMAAT.MediaDatasets.texts.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', text);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', text);
@@ -1628,24 +1366,7 @@
 
 				if (video) { // update video
 					// medium data
-					video.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					video.model.copyright = formDataObject.copyright;
-					video.model.remark = formDataObject.remark;
-					// display-title data
-					video.model.displayTitle.name = formDataObject.displayTitle;
-					video.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < video.model.titles.length; i++) {
-						if (video.model.displayTitle.id == video.model.titles[i].id) {
-							video.model.titles[i] = video.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					video.model.sources[0].url = formDataObject.sourceUrl;
-					video.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					video.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					video.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					video = TIMAAT.MediaDatasets.updateMediumModelData(video, formDataObject);
 					// video data
 					video.model.mediumVideo.length = TIMAAT.Util.parseTime(formDataObject.length);
 					video.model.mediumVideo.videoCodec = formDataObject.videoCodec;
@@ -1676,50 +1397,15 @@
 						isEpisode: (formDataObject.isEpisode) ? true : false,
 						status: "nofile"
 					};
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 6 // 6 = Video. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 6); // 6 = Video. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or video at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('video', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('video', model, medium, displayTitle, source);
 					var video = TIMAAT.MediaDatasets.videos[TIMAAT.MediaDatasets.videos.length-1];
           console.log("TCL: video", video);
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
@@ -1786,24 +1472,7 @@
 
 				if (videogame) { // update videogame
 					// medium data
-					videogame.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					videogame.model.copyright = formDataObject.copyright;
-					videogame.model.remark = formDataObject.remark;
-					// display-title data
-					videogame.model.displayTitle.name = formDataObject.displayTitle;
-					videogame.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < videogame.model.titles.length; i++) {
-						if (videogame.model.displayTitle.id == videogame.model.titles[i].id) {
-							videogame.model.titles[i] = videogame.model.displayTitle;
-							break;
-						}
-					}
-					// source data
-					videogame.model.sources[0].url = formDataObject.sourceUrl;
-					videogame.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					videogame.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					videogame.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					videogame = TIMAAT.MediaDatasets.updateMediumModelData(videogame, formDataObject);
 					// videogame data
 					videogame.model.mediumVideogame.isEpisode = (formDataObject.isEpisode) ? true : false;
 
@@ -1815,50 +1484,15 @@
 						mediumId: 0,
 						isEpisode: (formDataObject.isEpisode) ? true : false,
 					};
-					var medium = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: 7 // 7 = Videogame. TODO check clause to find proper id
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-						// mediumTranslations: [],
-					};
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var title = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var medium = TIMAAT.MediaDatasets.createMediumModel(formDataObject, 7); // 7 = Videogame. TODO check clause to find proper id
+					var displayTitle = TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// There are no translation data for medium or videogame at the moment
 					// var mediumTranslation = {
 					// 		id: 0,
 					// 		name: name,
 					// };					
-					await TIMAAT.MediaDatasets.createMediumSubtype('videogame', model, medium, title, source);
+					await TIMAAT.MediaDatasets.createMediumSubtype('videogame', model, medium, displayTitle, source);
 					var videogame = TIMAAT.MediaDatasets.videogames[TIMAAT.MediaDatasets.videogames.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', videogame);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', videogame);
@@ -3013,6 +2647,76 @@
 			}
 			mediumSubtypeData.remove();
 		},
+
+		updateMediumModelData: function(medium, formDataObject) {
+			// medium data
+			medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+			medium.model.copyright = formDataObject.copyright;
+			medium.model.remark = formDataObject.remark;
+			// display-title data
+			medium.model.displayTitle.name = formDataObject.displayTitle;
+			medium.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
+			var i = 0;
+			for (; i < medium.model.titles.length; i++) {
+				if (medium.model.displayTitle.id == medium.model.titles[i].id) {
+					medium.model.titles[i] = medium.model.displayTitle;
+					break;
+				}
+			}
+			// source data
+			medium.model.sources[0].url = formDataObject.sourceUrl;
+			medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+			medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+			medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+
+			return medium;
+		},
+
+		createMediumModel: function(formDataObject, mediaTypeId) {
+			var medium = {
+				id: 0,
+				remark: formDataObject.remark,
+				copyright: formDataObject.copyright,
+				releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
+				mediaType: {
+					id: mediaTypeId,
+				},
+				titles: [{
+					id: 0,
+					language: {
+						id: Number(formDataObject.displayTitleLanguageId),
+					},
+					name: formDataObject.displayTitle,
+				}],
+				// mediumTranslations: [],
+			};
+			return medium;
+		},
+
+		createDisplayTitleModel: function(formDataObject) {
+			var displayTitle = {
+				id: 0,
+				language: {
+					id: Number(formDataObject.displayTitleLanguageId),
+				},
+				name: formDataObject.displayTitle,
+			};
+			return displayTitle;
+		},
+
+		createSourceModel: function(formDataObject) {
+			var source = {
+				id: 0,
+				medium: {
+					id: 0,
+				},
+				isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
+				url: formDataObject.sourceUrl,
+				lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
+				isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
+			};
+			return source;
+		}
 
 	}
 	
