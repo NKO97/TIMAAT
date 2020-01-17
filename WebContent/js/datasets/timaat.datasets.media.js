@@ -30,7 +30,6 @@
 		videos: null,
 		videogames: null,	
 		titles: null,
-		mediaDatasets: null,
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
@@ -1595,17 +1594,15 @@
 			$('#timaat-mediadatasets-medium-list').empty();
 			// setup model
 			var meds = Array();
-			TIMAAT.MediaDatasets.mediaDatasets = new Array();
 			media.forEach(function(medium) { 
 				if ( medium.id > 0 ) {
 					meds.push(new TIMAAT.Medium(medium, 'medium'));
-					TIMAAT.MediaDatasets.mediaDatasets.push(medium);
 				}
 			});
 			TIMAAT.MediaDatasets.media = meds;
 			TIMAAT.MediaDatasets.media.model = media;
 			// also set up video chooser list
-			TIMAAT.VideoChooser.setMedia(TIMAAT.MediaDatasets.mediaDatasets);
+			// TIMAAT.VideoChooser.setMedia(TIMAAT.MediaDatasets.media.model);
 		},
 
 		setAudioLists: function(audios) {
@@ -1738,7 +1735,9 @@
 			TIMAAT.MediaDatasets.videos = vids;
 			TIMAAT.MediaDatasets.videos.model = videos;
 			// also set video chooser list
-			// TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.mediaDatasets);
+			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumLists);
+			TIMAAT.VideoChooser.setMedia(TIMAAT.MediaDatasets.videos.model);
+			TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 		},
 
 		setVideogameLists: function(videogames) {
@@ -2584,6 +2583,7 @@
 						TIMAAT.MediaDatasets.videos.model.push(medium);
 						var newMedium = new TIMAAT.Medium(medium, 'video');
 						TIMAAT.MediaDatasets.videos.push(newMedium);
+						TIMAAT.VideoChooser._addVideo(medium);
 					break;
 					case 'videogame':
 						TIMAAT.MediaDatasets.videogames.model.push(medium);
@@ -2601,12 +2601,6 @@
 		_mediumRemoved: async function(medium) {
     	// console.log("TCL: _mediumRemoved", medium);
 			// console.log("TCL: _mediumRemoved: function(medium)");
-			// var i = 0;
-			// for (; i < TIMAAT.MediaDatasets.mediaDatasets.length; i++) {
-			// 	if (TIMAAT.MediaDatasets.mediaDatasets[i].id == medium.id) {
-			// 		TIMAAT.MediaDatasets.mediaDatasets[i].splice(i,1);
-			// 	}
-			// }
 			// sync to server
 			// remove medium from all collections it is part of
 			function isMediumInMediaCollectionHasMediums(medium, mchm) {

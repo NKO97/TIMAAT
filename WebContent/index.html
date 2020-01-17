@@ -297,11 +297,11 @@
               </div>
             </div>
           </div>        
-            <div class="modal fade" id="timaat-videochooser-mediacollection-meta" tabindex="-1" role="dialog" aria-labelledby="mediacollectionMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-videochooser-mediacollection-meta" tabindex="-1" role="dialog" aria-labelledby="mediacollectionMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="mediacollectionMetaLabel">Mediensammlung hinzufügen</h5>
+                  <h5 class="modal-title" id="mediacollectionMetaLabel" title="Mediensammlung hinzufügen">Mediensammlung hinzufügen</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -321,94 +321,73 @@
               </div>
             </div>
           </div>		
-        
-        
-        
           <div class="row" style="padding-top: 1em;">
-			 <div class="col-3" style="padding-right:0">
-          		<div class="card">
-			<div class="card-header"><strong>Mediensammlungen</strong> <button type="button" onclick="TIMAAT.VideoChooser.addMediacollection()" class="btn btn-outline-success btn-sm float-right"><i class="fas fa-plus"></i></button></div>
-			<div class="card-body" style="padding:0">
-				<ul class="list-group">
-          <li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active">
-            <i class="fas fa-inbox"></i> Bibliothek
-          </li>
-        </ul>
-				<div id="timaat-mediacollection-list-loader" class="text-center card-body">
-                	<i class="fas fa-spinner fa-spin"></i> Lade Mediensammlungen...
-				</div>
-				<ul id="timaat-videochooser-collectionlist" class="list-group">
-				</ul>			
-			</div>
-		</div>
-          		
-          		
-          		
-          		
-          		
-          		
-          		
-          		
-          		
-          		
+			      <div class="col-3" style="padding-right:0">
+          	  <div class="card">
+			          <div class="card-header">
+                  <strong>Mediensammlungen</strong>
+                  <button type="button" onclick="TIMAAT.VideoChooser.addMediacollection()" class="btn btn-outline-success btn-sm float-right">
+                    <i class="fas fa-plus"></i>
+                  </button></div>
+			            <div class="card-body" style="padding:0">
+				            <ul class="list-group">
+                      <li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                        <i class="fas fa-inbox"></i> Bibliothek
+                      </li>
+                    </ul>
+				            <div id="timaat-mediacollection-list-loader" class="text-center card-body">
+                	    <i class="fas fa-spinner fa-spin"></i> Lade Mediensammlungen...
+				            </div>
+				            <ul id="timaat-videochooser-collectionlist" class="list-group">
+            				</ul>			
+			            </div>
+		          </div>	
           	</div>
             <!-- --------------------- -->
             <div class="col-9">
               <div class="card">
                 <div class="card-header">
-
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">Ausgew&auml;hlte
-											Videos </span>
-									</div>
-
-									<select id="timaat-videochooser-list-action"
-										class="custom-select" style="max-width: 10em">
-										<option value="add">hinzuf&uuml;gen zu</option>
-										<option id="timaat-videochooser-list-action-remove" value="remove">entfernen</option>
-									</select>
-
-									<div id="timaat-videochooser-list-target"
-										class="input-group-prepend">
-										<!-- <span class="input-group-text">Mediensammlung</span>  -->
-										<select id="timaat-videochooser-list-target-collection" class="custom-select">
-										</select>
-									</div>
-
-
-									<div class="input-group-append">
-										<button disabled id="timaat-videochooser-list-action-submit"
-											type="button" class="btn btn-success">Ausf&uuml;hren</button>
-									</div>
-
-								</div>
-
-
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Ausgewählte Videos </span>
+                    </div>
+                    <select id="timaat-videochooser-list-action"
+                      class="custom-select" style="max-width: 10em">
+                      <option value="add">hinzufügen zu</option>
+                      <option id="timaat-videochooser-list-action-remove" value="remove">entfernen</option>
+                    </select>
+                    <div id="timaat-videochooser-list-target"
+                      class="input-group-prepend">
+                      <!-- <span class="input-group-text">Mediensammlung</span>  -->
+                      <select id="timaat-videochooser-list-target-collection" class="custom-select">
+                      </select>
+                    </div>
+                    <div class="input-group-append">
+                      <button disabled id="timaat-videochooser-list-action-submit"
+                        type="button" class="btn btn-success">Ausführen</button>
+                    </div>
+                  </div>
                 </div>
                 <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
-                    <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
-                  </div>
-                
-					<div class="card-body" style="padding-left:0; padding-right:0;">
-
-						<table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
-				  			<thead class="thead-dark">
-				    			<tr>
-								    <th id="timaat-videochooser-list-selectall"><input type="checkbox" aria-label="Auswahl"></th>
-				      				<th>Vorschau</th>
-				      				<th>Titel</th>
-				      				<th>L&auml;nge</th>
-				      				<th>Produzent&nbsp;</th>
-				      				<th>Prod.&nbsp;Datum</th>
-				      				<th style="width:150px">Aktionen</th>
-				    			</tr>
-				  			</thead>
-				  			<tbody id="timaat-videochooser-list">
-							</tbody>
-						</table>
-					
-                	</div>
+                  <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
+                </div>
+                <div class="card-body" style="padding-left:0; padding-right:0;">
+                  <table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th id="timaat-videochooser-list-selectall"><input type="checkbox" aria-label="Auswahl"></th>
+                        <th>Vorschau</th>
+                        <th>Titel</th>
+                        <th>L&auml;nge</th>
+                        <th>Produzent&nbsp;</th>
+                        <th>Prod.&nbsp;Datum</th>
+                        <th style="width:150px">Aktionen</th>
+                      </tr>
+                    </thead>
+                    <tbody id="timaat-videochooser-list">
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>				
           </div>

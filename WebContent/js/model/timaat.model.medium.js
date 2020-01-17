@@ -208,18 +208,14 @@
 			}
 
 			if ( this.model.mediumVideo && this.model.mediumVideo.status == "nofile" ) {
-				console.log("TCL: show upload button");
 				this.listView.find('.timaat-mediadatasets-medium-upload').show();
 			} else {
-				console.log("TCL: hide upload button");
 				this.listView.find('.timaat-mediadatasets-medium-upload').hide();
 			}
 
 			if ( this.model.mediumVideo && this.model.mediumVideo.status != "nofile" && this.model.mediumVideo.status != "unavailable" ) {
-				console.log("TCL: show annotate button");
 				this.listView.find('.timaat-mediadatasets-medium-annotate').show();
 			} else {
-				console.log("TCL: hide annotate button");
 				this.listView.find('.timaat-mediadatasets-medium-annotate').hide();
 			}
 		}
@@ -240,9 +236,6 @@
 			if (index > -1) {
 				TIMAAT.MediaDatasets.media.splice(index, 1);
 				TIMAAT.MediaDatasets.media.model.splice(index, 1);
-				console.log("TCL: remove -> TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);
-				TIMAAT.MediaDatasets.mediaDatasets.splice(index, 1);
-				// TIMAAT.MediaDatasets.mediaDatasets.model.splice(index, 1);
 			}
 			// remove from submedium list
 			switch (this.model.mediaType.id) {

@@ -34,14 +34,16 @@
 		init: function() {		
 			// setup video chooser list and UI events
 			$('#timaat-videochooser-collectionlibrary').click(function(ev) {
-				console.log("TCL: TIMAAT.MediaDatasets.mediaDatasets", TIMAAT.MediaDatasets.mediaDatasets);
+				// console.log("TCL: TIMAAT.MediaDatasets.videos", TIMAAT.MediaDatasets.videos);
 				var videos = [];
-				TIMAAT.MediaDatasets.mediaDatasets.forEach(function(video) {
+				TIMAAT.MediaDatasets.videos.model.forEach(function(video) {
 					if (video.mediumVideo) {
 						videos.push(video);
 					}
 				});
-				TIMAAT.VideoChooser.setVideoList(videos);
+				// TIMAAT.VideoChooser.setVideoList(videos);
+				// console.log("TCL: TIMAAT.MediaDatasets.videos.model", TIMAAT.MediaDatasets.videos.model);
+				TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 				TIMAAT.VideoChooser.setCollection(null);
 			});
 
@@ -60,12 +62,14 @@
 				$("#timaat-mediacollection-meta-title").val(title).trigger('input');
 				$("#timaat-mediacollection-meta-comment").val(comment);				
 			});
+
 			$('#timaat-mediacollection-delete-submit').click(function(ev) {
 				var modal = $('#timaat-videochooser-mediacollection-delete');
 				var col = modal.data('mediacollection');
 				if (col) TIMAAT.VideoChooser._mediacollectionRemoved(col);
 				modal.modal('hide');
 			});
+
 			$('#timaat-mediacollection-meta-submit').click(function(ev) {
 				var modal = $('#timaat-videochooser-mediacollection-meta');
 				var col = modal.data('mediacollection');
@@ -80,6 +84,7 @@
 				}
 				modal.modal('hide');
 			});
+
 			$('#timaat-mediacollection-meta-title').on('input', function(ev) {
 				if ( $("#timaat-mediacollection-meta-title").val().length > 0 ) {
 					$('#timaat-mediacollection-meta-submit').prop("disabled", false);
@@ -300,7 +305,9 @@
 			});
 			TIMAAT.VideoChooser._sortCollections();
 			
-			if ( !TIMAAT.VideoChooser.videos && TIMAAT.VideoChooser.collections.length > 0 ) TIMAAT.VideoChooser.setCollection(TIMAAT.VideoChooser.collections[0]);
+			// if ( !TIMAAT.VideoChooser.videos && TIMAAT.VideoChooser.collections.length > 0 ) {
+			// 	TIMAAT.VideoChooser.setCollection(TIMAAT.VideoChooser.collections[0]);
+			// }
 		},
 
 		updateVideoStatus: function(video) {
@@ -404,9 +411,9 @@
 			$('#timaat-videochooser-table').hide();
 			$('#timaat-videochooser-list-action').val('add').change();
 			
-			$('#timaat-videochooser-collectionlibrary').removeClass("active");
+			// $('#timaat-videochooser-collectionlibrary').removeClass("active");
 			$('#timaat-videochooser-collectionlibrary').addClass("text-info");
-			$('#timaat-videochooser-collectionlist li').removeClass("active");
+			// $('#timaat-videochooser-collectionlist li').removeClass("active");
 			$('#timaat-videochooser-collectionlist li button').addClass("btn-outline");
 			
 			TIMAAT.VideoChooser.collection = collection;
@@ -415,15 +422,20 @@
 
 			if ( collection == null ) {
 				$('#timaat-videochooser-collectionlibrary').addClass("active");
+				$('li[id^="timaat-videochooser-collection-"]').removeClass("active");
 				$('#timaat-videochooser-collectionlibrary').removeClass("text-info");
 				if ( !TIMAAT.VideoChooser.videos ) return;
-				TIMAAT.VideoChooser.setVideoList(TIMAAT.VideoChooser.videos);
+				// TIMAAT.VideoChooser.setVideoList(TIMAAT.VideoChooser.videos);
+				TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 			} else {
+				$('#timaat-videochooser-collectionlibrary').removeClass("active");
 				$('#timaat-videochooser-collection-'+collection.id).addClass("active");
 				$('#timaat-videochooser-collection-'+collection.id+' button').removeClass("btn-outline");
 				// load and set collection videos
 				var videos = [];
-				collection.mediaCollectionHasMediums.forEach(function (video) { videos.push(video.medium); });
+				collection.mediaCollectionHasMediums.forEach(function (video) { 
+					videos.push(video.medium); 
+				});
 				TIMAAT.VideoChooser.setVideoList(videos);
 			}
 			
@@ -431,14 +443,10 @@
 			$('#timaat-videochooser-table').show();
 		},
 		
-		setMedia: function(media) {
-			if ( !media ) return;
-			if ( TIMAAT.VideoChooser.videos ) return;
+		setMedia: function() {
+			if (!TIMAAT.MediaDatasets.videos.model || TIMAAT.VideoChooser.videos) return;
 			
-			var videos = [];
-			media.forEach(function(medium) { if ( medium.mediumVideo ) videos.push(medium); });
-			
-			TIMAAT.VideoChooser.videos = videos;
+			TIMAAT.VideoChooser.videos = TIMAAT.MediaDatasets.videos.model;
 			
 			if ( !TIMAAT.VideoChooser.collection ) {
 				TIMAAT.VideoChooser.collection = 'init';
@@ -448,7 +456,7 @@
 		
 		setVideoList: function(videos) {
 			// console.log("TCL: setVideoList: function(videos)");
-			console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
+			// console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
 			
 			if ( TIMAAT.VideoChooser.dt != null ) {
@@ -468,14 +476,14 @@
 				"order": [[ 4, 'desc' ]],
 				"pagingType": "simple_numbers",
 				"columns": [
-				    { "orderable": false },
-				    { "orderable": false },
-				    null,
-				    null,
-				    null,
-				    null,
-				    { "orderable": false },
-				  ],
+					{ "orderable": false },
+					{ "orderable": false },
+					null,
+					null,
+					null,
+					null,
+					{ "orderable": false },
+				],
 				"language": {
 					"decimal": ",",
 					"thousands": ".",
@@ -486,15 +494,13 @@
 					"infoEmpty": "Keine Videos verf&uuml;gbar.",
 					"infoFiltered": "(gefiltert, _MAX_ Videos gesamt)",
 					"paginate": {
-					            "first":      "Erste",
-					            "previous":   "Vorherige",
-					            "next":       "N&auml;chste",
-					            "last":       "Letzte"
-					        },
-				},
-				
-			});
-						
+						"first":      "Erste",
+						"previous":   "Vorherige",
+						"next":       "N&auml;chste",
+						"last":       "Letzte"
+					},
+				},				
+			});						
 		},
 		
 		loadThumbnail: function (video) {
@@ -642,23 +648,28 @@
 				videoelement = video.ui;
 				
 			} else {
-				videoelement = $('<tr> \
-					    <td class="videochooser-item" id="videochooser-item-'+video.id+'"><input type="checkbox" aria-label="Checkbox"></td>\
-						<td style="padding:0; width: 150px;"> \
-						<div class="timaat-video-status"><i class="fas fa-cog fa-spin"></i></div> \
-					  	<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"> \
-						</td> \
-						<td class="title"></td>\
-						<td class="duration">00:00:00</td>\
-					    <td class="producer">xx.xx.xxxx xx:xx</td>\
-					    <td class="date">xx.xx.xxxx xx:xx</td>\
-					    <td class="actions">\
-					    <button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button> \
-						  <button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button> \
-							<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button> \
-							<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>\
-						</td> \
-					</tr>'
+				videoelement = $(
+					`<tr>
+						<td class="videochooser-item" id="videochooser-item-`+video.id+`"><input type="checkbox" aria-label="Checkbox"></td>
+						<td style="padding:0; width: 150px;">
+							<div class="timaat-video-status">
+								<i class="fas fa-cog fa-spin"></i>
+							</div>
+							<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>
+						</td>
+						<td class="title"></td>
+						<td class="duration">00:00:00</td>
+						<td class="producer">xx.xx.xxxx xx:xx</td>
+						<td class="date">xx.xx.xxxx xx:xx</td>
+						<td class="actions" style="padding:5px 5px">
+							<div>
+								<button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
+								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
+								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+								<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>
+							</div>
+						</td>
+					</tr>`
 				);
 				videoelement.data('video',video);
 				
@@ -674,8 +685,12 @@
 			});
 
 			videoelement.appendTo('#timaat-videochooser-list');
-			if ( !TIMAAT.VideoChooser.collection ) videoelement.find('.timaat-video-collectionitemremove').hide();
-			
+			if ( !TIMAAT.VideoChooser.collection ) {
+				videoelement.find('.timaat-video-collectionitemremove').hide();
+			} else {
+				videoelement.find('.timaat-video-collectionitemremove').show();
+			}
+      
 			video.ui = videoelement;
 			if ( video.mediumVideo.status != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
 			TIMAAT.VideoChooser.setVideoStatus(video);
@@ -710,7 +725,7 @@
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
 				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-				console.log("TCL: video", video);
+				// console.log("TCL: video", video);
 				var videoModel = {
 					model: video,
 				};
