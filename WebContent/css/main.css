@@ -602,6 +602,13 @@ select:invalid {
 	color: #acacac;
 }
 
+select:disabled {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	text-indent: 1px;
+	text-overflow: '';
+}
+
 .isDisabled {
   color: currentColor;
   cursor: not-allowed;
