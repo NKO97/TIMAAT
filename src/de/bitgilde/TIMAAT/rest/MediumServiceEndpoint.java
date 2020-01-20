@@ -1423,10 +1423,13 @@ public class MediumServiceEndpoint{
 		// System.out.println("MediumServiceEndpoint: addLanguageTrack: jsonData: "+jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		System.out.println("MediumServiceEndpoint: addLanguageTrack: find language");
 		Language language = entityManager.find(Language.class, languageId);
 		if (language == null) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("MediumServiceEndpoint: addLanguageTrack: find medium");
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if (medium == null) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("MediumServiceEndpoint: addLanguageTrack: find language type");
 		MediumLanguageType mediumLanguageType = entityManager.find(MediumLanguageType.class, mediumLanguageTypeId);
 		if (mediumLanguageType == null) return Response.status(Status.NOT_FOUND).build();
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: initialization complete");

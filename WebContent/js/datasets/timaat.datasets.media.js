@@ -401,7 +401,6 @@
 			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', async function(event) {
 				console.log("TCL: Titles form: submit");
 				// add rules to dynamically added form fields
-				console.log("TCL: Titles form: valid?");
 				// continue only if client side validation has passed
 				event.preventDefault();
 				var node = document.getElementById("new-title-fields");
@@ -643,45 +642,45 @@
 			});
 
 			// Add languageTrack button click
-			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', function(e) {
+			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', async function(e) {
 				e.preventDefault();
-				console.log("TCL: add languageTrack to list");
 				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
-				console.log("TCL: mediumLanguageTypeId: ", mediumLanguageTypeId);
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
-				console.log("TCL: languageId: ", languageId);
 				// if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
-					// var duplicate = false;
 					var medium = $('#timaat-mediadatasets-media-metadata-form').data('medium');
-          console.log("TCL: medium", medium);
-					// medium.model.mediumHasLanguages.forEach(function(entry) { // TODO this needs to check for current list, not mediumHasLanguages
-					// 	if (entry.id.mediumLanguageTypeId == mediumLanguageTypeId && entry.id.languageId == languageId) {
-					// 		duplicate = true;
-					// 	}
-					// });
-					// if (duplicate) {
-					// 	console.log("TCL: entry exists already.")
-					// 	return;
-					// } else {
-						var languageTracksInForm = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
-							console.log("TCL: languageTracksInForm", languageTracksInForm);
-						var i = Math.floor((languageTracksInForm.length -1) / 2 ); // length -1 as the 'add new track' row is still part of the form and has to be removed
-							console.log("TCL: i", i);
+					var languageTracksInForm = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
+					var newTrackEntry = {
+						mediumId: medium.model.id,
+						languageId: Number(languageTracksInForm[languageTracksInForm.length-1].value),
+						mediumLanguageTypeId: Number(languageTracksInForm[languageTracksInForm.length-2].value),
+					};
+					var duplicate = false;
+					var i = 0;
+					while ( i < medium.model.mediumHasLanguages.length) {
+						if (newTrackEntry.mediumLanguageTypeId == medium.model.mediumHasLanguages[i].id.mediumLanguageTypeId && newTrackEntry.languageId == medium.model.mediumHasLanguages[i].id.languageId) {
+							duplicate = true;
+							break;
+						}
+						i++;
+					}
+					if (!duplicate) {
+						var i = Math.floor((languageTracksInForm.length -2) / 2 ); // length -2 as the 'add new track' row is still part of the form and has to be removed
+							// console.log("TCL: i", i);
 						$('#dynamic-languagetrack-fields').append(
-							`<div class="form-group" data-role="languagetrack-entry">
+							`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
 							<div class="form-row">
 								<div class="col-md-5">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required disabled>
 										<option value="1">Audio track</option>
 										<option value="2">Subtitle track</option>
 									</select>
 								</div>
 								<div class="col-md-5">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required disabled>
 										<option value="2">English</option>
 										<option value="3">German</option>
 										<option value="4">French</option>
@@ -713,162 +712,43 @@
 							required: true,
 						});
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
-						listEntry.find('[data-role="languageTrackLanguageId"]').val('');	
-					}				
-				// }
-				else {
+						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
+						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
+						medium.updateUI();
+						TIMAAT.MediaDatasets.mediumFormLanguageTracks('edit', medium);
+					}
+					else { // duplicate entry
+						$('#timaat-mediadatasets-languagetrack-duplicate').modal("show");
+					}
+				}
+				else { // incomplete form data
 					// TODO open modal showing error that not all required fields are set.
 				}
 			});
 
 			// Remove languageTrack button click
-			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', function(e) {
+			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(e) {
 				e.preventDefault();
-					// TODO consider undo function or popup asking if user really wants to delete a languagetrack
-					console.log("DELETE languageTrack ENTRY");
-					$(this).closest('.form-group').remove();
+					var entry = $(this).closest('.form-group').attr("data-id");
+					var medium = $('#timaat-mediadatasets-media-metadata-form').data('medium');
+					var listEntry = $(this).closest('[data-role="dynamic-languagetrack-fields"]');
+					var mediumLanguageTypeId = listEntry.find('[name="languageTrackTypeId['+entry+']"]').val();
+					var languageId = listEntry.find('[name="languageTrackLanguageId['+entry+']"]').val();
+					var i = 0;
+					for (; i< medium.model.mediumHasLanguages.length; i++) {
+						if (medium.model.mediumHasLanguages[i].id.languageId == languageId
+						 && medium.model.mediumHasLanguages[i].id.mediumLanguageTypeId == mediumLanguageTypeId) {
+							await TIMAAT.MediaService.removeLanguageTrack(medium.model.mediumHasLanguages[i]);
+							medium.model.mediumHasLanguages.splice(i,1);
+							break;
+						}
+					}
+					medium.updateUI();
+					TIMAAT.MediaDatasets.mediumFormLanguageTracks('edit', medium);
 			});
 
-			// Submit medium languageTracks button functionality
-				$("#timaat-mediadatasets-medium-languagetracks-form-submit").on('click', async function(event) {
-				console.log("TCL: languageTracks form: submit");
-				// add rules to dynamically added form fields
-				console.log("TCL: languageTracks form: valid?");
-				// continue only if client side validation has passed
-				event.preventDefault();
-				var node = document.getElementById("new-languagetrack-fields");
-				while (node.lastChild) {
-					node.removeChild(node.lastChild)
-				};
-				// test if form is valid
-				// add empty 'add new trck' row to form
-				if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) {
-					$('[data-role="new-languagetrack-fields"]').append(
-						`<div class="form-group" data-role="languagetrack-entry">
-							<div class="form-row">
-								<div class="col-md-2 text-center">
-									<div class="form-check">
-										<span>Add new track:</span>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="sr-only">Track Type</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
-										<option value="" disabled selected hidden>[Choose track type...]</option>
-										<option value="1">Audio track</option>
-										<option value="2">Subtitle track</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<label class="sr-only">Track Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
-										<option value="" disabled selected hidden>[Choose languagetrack language...]</option>
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
-									</select>
-								</div>
-								<div class="col-md-2 text-center">
-									<button class="btn btn-primary" data-role="add">
-										<span class="fas fa-plus"></span>
-									</button>
-								</div>
-							</div>
-						</div>`
-					);					
-					return false;
-				}
-				console.log("TCL: languageTracks form: valid");
-
-				// the original medium model (in case of editing an existing medium)
-				var medium = $("#timaat-mediadatasets-medium-languagetracks-form").data("medium");			
-
-				// Create/Edit medium window submitted data
-				var formData = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
-        console.log("TCL: formData", formData);
-				var formLanguageTrackList = [];
-				var i = 0;
-				while ( i < formData.length) {
-					var element = {
-					languageTrackTypeId: 0,
-					languageTrackLanguageId: 0,
-					};
-					element.languageTrackTypeId = formData[i].value;
-					element.languageTrackLanguageId = formData[i+1].value;
-					i = i+2;
-					formLanguageTrackList[formLanguageTrackList.length] = element;
-				}
-				// only updates to existing languageTracks
-				if (formLanguageTrackList.length == medium.model.mediumHasLanguages.length) {
-					var i = 0;
-					for (; i < medium.model.mediumHasLanguages.length; i++ ) { // update existing languageTracks
-						var languageTrack = {
-							mediumId: Number(medium.model.id),
-							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
-							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
-						};
-						// console.log("TCL: medium.model.mediumHasLanguages[i].id", medium.model.mediumHasLanguages[i].id);
-						// console.log("TCL: languageTrack", languageTrack);
-						if (!(medium.model.mediumHasLanguages[i].id.languageId == languageTrack.languageId && medium.model.mediumHasLanguages[i].id.mediumLanguageTypeId == languageTrack.mediumLanguageTypeId)) {
-							await TIMAAT.MediaDatasets.updateLanguageTrack(i, languageTrack, medium);
-						}
-					};
-				}
-				// update existing languageTracks and add new ones
-				else if (formLanguageTrackList.length > medium.model.mediumHasLanguages.length) {
-					var i = 0;
-					for (; i < medium.model.mediumHasLanguages.length; i++ ) { // update existing languageTracks
-						var languageTrack = {
-							mediumId: Number(medium.model.id),
-							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
-							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
-						};
-						if (!(medium.model.mediumHasLanguages[i].id.languageId == languageTrack.languageId && medium.model.mediumHasLanguages[i].id.mediumLanguageTypeId == languageTrack.mediumLanguageTypeId)) {
-							await TIMAAT.MediaDatasets.updateLanguageTrack(i, languageTrack, medium);
-						}
-					};
-					i = medium.model.mediumHasLanguages.length;
-					var newLanguageTracks = [];
-					for (; i < formLanguageTrackList.length; i++) { // create new languageTracks
-						var languageTrack = {
-							mediumId: Number(medium.model.id),
-							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
-							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
-						};
-						newLanguageTracks.push(languageTrack);
-					}
-					// console.log("TCL: medium", medium);
-          // console.log("TCL: newLanguageTracks", newLanguageTracks);
-					await TIMAAT.MediaDatasets.addLanguageTracks(medium, newLanguageTracks);
-				}
-				// update existing languageTracks and delete obsolete ones
-				else if (formLanguageTrackList.length < medium.model.mediumHasLanguages.length) {
-					var i = 0;
-					for (; i < formLanguageTrackList.length; i++ ) { // update existing languageTracks
-						var languageTrack = {
-							mediumId: Number(medium.model.id),
-							languageId: Number(formLanguageTrackList[i].languageTrackLanguageId),
-							mediumLanguageTypeId: Number(formLanguageTrackList[i].languageTrackTypeId),
-						};
-						if (!(medium.model.mediumHasLanguages[i].id.languageId == languageTrack.languageId && medium.model.mediumHasLanguages[i].id.mediumLanguageTypeId == languageTrack.mediumLanguageTypeId)) {
-							await TIMAAT.MediaDatasets.updateLanguageTrack(i, languageTrack, medium);
-						}
-					};
-					var i = medium.model.mediumHasLanguages.length - 1;
-					for (; i >=  formLanguageTrackList.length; i-- ) { // remove obsolete languageTracks
-						console.log("TCL: remove track entry i: ", i);
-						await TIMAAT.MediaService.removeLanguageTrack(medium.model.mediumHasLanguages[i]);
-						medium.model.mediumHasLanguages.pop();
-					}
-				}
-				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', medium);
-			});
-
-			// Cancel add/edit button in languageTracks form functionality
-			$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').click( function(event) {
+			// Done button in languageTracks form functionality
+			$('#timaat-mediadatasets-medium-languagetracks-form-done').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-media-metadata-form').data('medium'));
 			});
 		},
@@ -1827,7 +1707,7 @@
 		},
 
 		mediumFormDatasheet: function(action, mediumType, mediumTypeData) {
-    	console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
+    	// console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
 			$('#timaat-mediadatasets-media-metadata-form').trigger('reset');
 			$('.datasheet-data').hide();
 			$('.title-data').show();
@@ -1875,7 +1755,7 @@
 				$('#timaat-mediadatasets-media-metadata-title').focus();
 			}
 
-			console.log("TCL: mediumTypeData", mediumTypeData);
+			// console.log("TCL: mediumTypeData", mediumTypeData);
 			// setup UI
 			var data = mediumTypeData.model;
 			// medium data
@@ -2106,12 +1986,9 @@
 			// languageTrack data
 			var i = 0;
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
-			// console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
 			for (; i< numLanguageTracks; i++) {
-				// console.log("TCL: TIMAAT.MediaDatasets.mediumHasLanguages[i]", medium.model.mediumHasLanguages[i]);
-				// console.log("TCL: medium.model.mediumHasLanguages[i].languageId", medium.model.mediumHasLanguages[i].languageId);
 				$('[data-role="dynamic-languagetrack-fields"]').append(
-					`<div class="form-group" data-role="languagetrack-entry">
+					`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track Type</label>
@@ -2162,8 +2039,7 @@
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", false);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-languagetracks-form-submit').hide();
-				$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').hide();
+				$('#timaat-mediadatasets-medium-languagetracks-form-done').hide();
 				$('[data-role="new-languagetrack-fields"').hide();
 				$('.languagetrack-form-divider').hide();
 				$('[data-role="remove"]').hide();
@@ -2171,29 +2047,31 @@
 				$('#mediumLanguageTracksLabel').html("Medium Spurliste");
 			}
 			else if (action == 'edit') {
-				$('#timaat-mediadatasets-medium-languagetracks-form-submit').show();
-				$('#timaat-mediadatasets-medium-languagetracks-form-dismiss').show();
+				$('#timaat-mediadatasets-medium-languagetracks-form-done').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", false);
+				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop("disabled", true);
+				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-language-id').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').hide();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", true);
 				$('[data-role="new-languagetrack-fields"').show();
 				$('.languagetrack-form-divider').show();
 				$('#mediumLanguageTracksLabel').html("Medium Spurliste bearbeiten");
-				$('#timaat-mediadatasets-medium-languagetracks-form-submit').html("Speichern");
-				// $('#timaat-mediadatasets-media-metadata-languagetrack').focus();
+				$('#timaat-mediadatasets-medium-languagetracks-form-done').html("Fertig");
 
 				// fields for new languageTrack entry
 				// add empty 'add new track' row to form when edit mode is enabled
 				$('[data-role="new-languagetrack-fields"]').append(
 					`<div class="form-group" data-role="languagetrack-entry">
 						<div class="form-row">
-							<div class="col-md-2 text-center">
+							<div class="col-md-12 text-left">
 								<div class="form-check">
 									<span>Add new Track:</span>
 								</div>
 							</div>
-							<div class="col-md-4">
+						</div>
+						<div class="form-row">
+							<div class="col-md-5">
 								<label class="sr-only">Track type</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
 									<option value="" disabled selected hidden>[Choose Track type...]</option>
@@ -2201,7 +2079,7 @@
 									<option value="2">Subtitle Track</option>
 								</select>
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-5">
 								<label class="sr-only">Track language</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
 									<option value="" disabled selected hidden>[Choose Track language...]</option>
@@ -2375,23 +2253,12 @@
 			};
 		},
 
-		addLanguageTracks: async function(medium, newLanguageTracks) {
-			// console.log("TCL: addLanguageTracks: async function -> newLanguageTracks", newLanguageTracks);
+		addLanguageTrack: async function(medium, newLanguageTrack) {
+			// console.log("TCL: addLanguageTrack: async function -> newLanguageTrack", newLanguageTrack);
 			try {
-				// create languageTrack
-				var i = 0;
-				for (; i < newLanguageTracks.length; i++) {
-					// var newLanguageTrack = await TIMAAT.MediaService.createLanguageTrack(newLanguageTracks[i]);
-					// console.log("TCL: newLanguageTracks[i]", newLanguageTracks[i]);
-					var addedLanguageTrackModel = await TIMAAT.MediaService.addLanguageTrack(newLanguageTracks[i]);
-          // console.log("TCL: addedLanguageTrackModel", addedLanguageTrackModel);
-					addedLanguageTrackModel.id = newLanguageTracks[i];
-          // console.log("TCL: addedLanguageTrackModel", addedLanguageTrackModel);
-					medium.model.mediumHasLanguages.push(addedLanguageTrackModel);
-					console.log("TCL: medium.model.mediumHasLanguages", medium.model.mediumHasLanguages);
-					console.log("TCL: medium.model.mediumHasLanguages.length", medium.model.mediumHasLanguages.length);	
-				}
-				// await TIMAAT.MediaDatasets.updateMedium(medium);
+				var addedLanguageTrackModel = await TIMAAT.MediaService.addLanguageTrack(newLanguageTrack);
+				addedLanguageTrackModel.id = newLanguageTrack;
+				medium.model.mediumHasLanguages.push(addedLanguageTrackModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -2515,22 +2382,6 @@
 					if (medium.model.titles[i].id == title.id)
 						medium.model.titles[i] = tempTitle;
 				}
-
-				// update data that is part of medium (includes updating last edited by/at)
-				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
-				// var tempMediumModel = await TIMAAT.MediaService.updateMedium(medium.model);
-			} catch(error) {
-				console.log( "error: ", error);
-			};
-		},
-
-		updateLanguageTrack: async function(i, newTrack, medium) {
-			// console.log("TCL: updateLanguageTrack: async function -> i, newTrack, medium at beginning of update process: ", i, newTrack, medium);
-			try {
-				// update languageTrack
-				var tempLanguageTrack = await TIMAAT.MediaService.updateLanguageTrack(medium.model.mediumHasLanguages[i], newTrack);
-				tempLanguageTrack.id = newTrack;
-				medium.model.mediumHasLanguages[i] = tempLanguageTrack;
 
 				// update data that is part of medium (includes updating last edited by/at)
 				// console.log("TCL: updateMedium: async function - medium.model", medium.model);

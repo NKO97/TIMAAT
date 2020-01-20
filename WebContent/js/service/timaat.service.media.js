@@ -234,7 +234,7 @@
 		},
 
 		async addLanguageTrack(track) {
-      console.log("TCL: async addLanguageTrack -> track", track);
+      // console.log("TCL: async addLanguageTrack -> track", track);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.mediumId+"/languagetrack/"+track.mediumLanguageTypeId+"/"+track.languageId,
@@ -246,7 +246,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(trackData) {
-					console.log("TCL: addTrack -> trackData", trackData);
+					// console.log("TCL: addTrack -> trackData", trackData);
 					resolve(trackData);
 				}).fail(function(error) {
 					console.log( "error: ", error );
@@ -394,30 +394,6 @@
 			});
 		},
 
-		async updateLanguageTrack(oldTrack, track) {
-			console.log("TCL: async updateTrack -> track", track);
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+oldTrack.id.mediumId+"/languagetrack/"+oldTrack.id.mediumLanguageTypeId+"/"+oldTrack.id.languageId,
-					type:"PATCH",
-					data: JSON.stringify(track),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(updateData) {
-					console.log("TCL: async updateLanguageTrack -> updateData", updateData);
-					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
-				});
-			}).catch((error) => {
-				console.log( "error: ", error);
-			});
-		},
-
 		async updateSource(source) {
 			// console.log("TCL: async updateSource -> source", source);
 			return new Promise(resolve => {
@@ -494,7 +470,7 @@
 		},
 
 		async removeLanguageTrack(track) {
-			console.log("TCL: removeLanguageTrack -> track", track);
+			// console.log("TCL: removeLanguageTrack -> track", track);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.id.mediumId+"/languagetrack/"+track.id.mediumLanguageTypeId+"/"+track.id.languageId,
@@ -504,7 +480,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: removed language track from medium_has_language.");
+					// console.log("TCL: removed language track from medium_has_language.");
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error", e );
