@@ -23,10 +23,10 @@ public class AcademicTitle implements Serializable {
 
 	private String title;
 
-	//bi-directional many-to-one association to Person
+	//bi-directional many-to-one association to ActorPerson
 	@OneToMany(mappedBy="academicTitle")
-	@JsonManagedReference(value = "AcademicTitle-Person")
-	private List<Person> persons;
+	@JsonManagedReference(value = "AcademicTitle-ActorPerson")
+	private List<ActorPerson> actorPersons;
 
 	public AcademicTitle() {
 	}
@@ -47,26 +47,26 @@ public class AcademicTitle implements Serializable {
 		this.title = title;
 	}
 
-	public List<Person> getPersons() {
-		return this.persons;
+	public List<ActorPerson> getPersons() {
+		return this.actorPersons;
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setPersons(List<ActorPerson> actorPersons) {
+		this.actorPersons = actorPersons;
 	}
 
-	public Person addPerson(Person person) {
-		getPersons().add(person);
-		person.setAcademicTitle(this);
+	public ActorPerson addPerson(ActorPerson actorPerson) {
+		getPersons().add(actorPerson);
+		actorPerson.setAcademicTitle(this);
 
-		return person;
+		return actorPerson;
 	}
 
-	public Person removePerson(Person person) {
-		getPersons().remove(person);
-		person.setAcademicTitle(null);
+	public ActorPerson removePerson(ActorPerson actorPerson) {
+		getPersons().remove(actorPerson);
+		actorPerson.setAcademicTitle(null);
 
-		return person;
+		return actorPerson;
 	}
 
 }

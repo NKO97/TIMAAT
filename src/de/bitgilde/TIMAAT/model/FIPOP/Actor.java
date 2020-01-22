@@ -41,6 +41,16 @@ public class Actor implements Serializable {
 
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
+
+	//bi-directional many-to-one association to Name
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="display_name_actor_name_id")
+	private ActorName name1;
+
+	//bi-directional many-to-one association to Name
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="birth_name_actor_name_id")
+	private ActorName name2;
 	
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
@@ -58,6 +68,15 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany(mappedBy="actors")
+	@JoinTable(
+		name="actor_has_role"
+		, joinColumns={
+			@JoinColumn(name="actor_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="role_id")
+			}
+		)
 	private List<Role> roles;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
@@ -85,23 +104,23 @@ public class Actor implements Serializable {
 
 	//bi-directional one-to-one association to Collective
 	@OneToOne(mappedBy="actor")
-	private Collective collective;
+	private ActorCollective collective;
 
 	//bi-directional many-to-one association to GreimasActantialModelHasActor
 	// @OneToMany(mappedBy="actor")
 	// private List<GreimasActantialModelHasActor> greimasActantialModelHasActors;
 
-	//bi-directional one-to-one association to Person
+	//bi-directional one-to-one association to ActorPerson
 	@OneToOne(mappedBy="actor")
-	private Person person;
+	private ActorPerson actorPerson;
 
 	//bi-directional many-to-one association to SiocUserAccount
 	// @OneToMany(mappedBy="actor")
 	// private List<SiocUserAccount> siocUserAccounts;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypePerson
+	//bi-directional many-to-one association to SpatialSemanticsTypeActorPerson
 	// @OneToMany(mappedBy="actor")
-	// private List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons;
+	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
 
 	public Actor() {
 	}
@@ -271,6 +290,24 @@ public class Actor implements Serializable {
 		return actorName;
 	}
 
+	// display name
+	public ActorName getDisplayName() {
+		return this.name1;
+	}
+
+	public void setDisplayName(ActorName name) {
+		this.name1 = name;
+	}
+
+	// birth name
+	public ActorName getBirthName() {
+		return this.name2;
+	}
+
+	public void setBirthName(ActorName name) {
+		this.name2 = name;
+	}
+
 	public List<ActorRelatesToActor> getActorRelatesToActors1() {
 		return this.actorRelatesToActors1;
 	}
@@ -323,11 +360,11 @@ public class Actor implements Serializable {
 		this.annotations = annotations;
 	}
 
-	public Collective getCollective() {
+	public ActorCollective getCollective() {
 		return this.collective;
 	}
 
-	public void setCollective(Collective collective) {
+	public void setCollective(ActorCollective collective) {
 		this.collective = collective;
 	}
 
@@ -353,12 +390,12 @@ public class Actor implements Serializable {
 	// 	return greimasActantialModelHasActor;
 	// }
 
-	public Person getPerson() {
-		return this.person;
+	public ActorPerson getPerson() {
+		return this.actorPerson;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setPerson(ActorPerson actorPerson) {
+		this.actorPerson = actorPerson;
 	}
 
 	// public List<SiocUserAccount> getSiocUserAccounts() {
@@ -383,26 +420,26 @@ public class Actor implements Serializable {
 	// 	return siocUserAccount;
 	// }
 
-	// public List<SpatialSemanticsTypePerson> getSpatialSemanticsTypePersons() {
-	// 	return this.spatialSemanticsTypePersons;
+	// public List<SpatialSemanticsTypeActorPerson> getSpatialSemanticsTypeActorPersons() {
+	// 	return this.spatialSemanticsTypeActorPersons;
 	// }
 
-	// public void setSpatialSemanticsTypePersons(List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons) {
-	// 	this.spatialSemanticsTypePersons = spatialSemanticsTypePersons;
+	// public void setSpatialSemanticsTypeActorPersons(List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons) {
+	// 	this.spatialSemanticsTypeActorPersons = spatialSemanticsTypeActorPersons;
 	// }
 
-	// public SpatialSemanticsTypePerson addSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
-	// 	getSpatialSemanticsTypePersons().add(spatialSemanticsTypePerson);
-	// 	spatialSemanticsTypePerson.setActor(this);
+	// public SpatialSemanticsTypeActorPerson addSpatialSemanticsTypeActorPerson(SpatialSemanticsTypeActorPerson spatialSemanticsTypeActorPerson) {
+	// 	getSpatialSemanticsTypeActorPersons().add(spatialSemanticsTypeActorPerson);
+	// 	spatialSemanticsTypeActorPerson.setActor(this);
 
-	// 	return spatialSemanticsTypePerson;
+	// 	return spatialSemanticsTypeActorPerson;
 	// }
 
-	// public SpatialSemanticsTypePerson removeSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
-	// 	getSpatialSemanticsTypePersons().remove(spatialSemanticsTypePerson);
-	// 	spatialSemanticsTypePerson.setActor(null);
+	// public SpatialSemanticsTypeActorPerson removeSpatialSemanticsTypeActorPerson(SpatialSemanticsTypeActorPerson spatialSemanticsTypeActorPerson) {
+	// 	getSpatialSemanticsTypeActorPersons().remove(spatialSemanticsTypeActorPerson);
+	// 	spatialSemanticsTypeActorPerson.setActor(null);
 
-	// 	return spatialSemanticsTypePerson;
+	// 	return spatialSemanticsTypeActorPerson;
 	// }
 
 }

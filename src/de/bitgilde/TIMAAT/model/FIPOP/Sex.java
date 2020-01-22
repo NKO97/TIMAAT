@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -20,10 +21,11 @@ public class Sex implements Serializable {
 	@Id
 	private int id;
 
-	//bi-directional many-to-one association to Person
+	//bi-directional many-to-one association to ActorPerson
 	@OneToMany(mappedBy="sex")
-	@JsonManagedReference(value = "Sex-Person")
-	private List<Person> persons;
+	// @JsonManagedReference(value = "Sex-ActorPerson")
+	@JsonIgnore
+	private List<ActorPerson> actorPersons;
 
 	//bi-directional many-to-one association to SexTranslation
 	@OneToMany(mappedBy="sex")
@@ -41,26 +43,26 @@ public class Sex implements Serializable {
 		this.id = id;
 	}
 
-	public List<Person> getPersons() {
-		return this.persons;
+	public List<ActorPerson> getActorPersons() {
+		return this.actorPersons;
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setActorPersons(List<ActorPerson> actorPersons) {
+		this.actorPersons = actorPersons;
 	}
 
-	public Person addPerson(Person person) {
-		getPersons().add(person);
-		person.setSex(this);
+	public ActorPerson addActorPerson(ActorPerson actorPerson) {
+		getActorPersons().add(actorPerson);
+		actorPerson.setSex(this);
 
-		return person;
+		return actorPerson;
 	}
 
-	public Person removePerson(Person person) {
-		getPersons().remove(person);
-		person.setSex(null);
+	public ActorPerson removeActorPerson(ActorPerson actorPerson) {
+		getActorPersons().remove(actorPerson);
+		actorPerson.setSex(null);
 
-		return person;
+		return actorPerson;
 	}
 
 	public List<SexTranslation> getSexTranslations() {

@@ -132,6 +132,10 @@
           mediumFormLanguageTracks.submit();
         },
       });
+      var actorFormMetadata = $("#timaat-actordatasets-actors-metadata-form");
+      var actorFormMetadataValidator = $("#timaat-actordatasets-actors-metadata-form").validate({
+        // TODO Form validation rules
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

@@ -70,8 +70,6 @@
 				},
 			}).done(function(data) {
       	console.log("TCL: listMediumSubtype -> data", data);
-      	// console.log("TCL: listMediumSubtype -> mediumSuptype, data", mediumSubtype, data);
-				
 				callback(data);
 			})
 			.fail(function(e) {
@@ -79,25 +77,6 @@
 				console.log( "error", e );
 			});			
 		},
-
-		// listMediumTitles(medium, callback) {
-		// 	// console.log("TCL: listMedia -> callback", callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/titles/list",
-		// 		type:"GET",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-    //   	// console.log("TCL: listMedia -> data", data);
-		// 		callback(data);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 	});			
-		// },
 
 		async createMedium(mediumModel) {
 			console.log("TCL: async createMedium -> mediumModel", mediumModel);
@@ -344,10 +323,6 @@
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
 			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
-			
-			// delete tempSubtypeModel.ui;
-			// delete tempSubtypeModel.mediumVideo;
-			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,

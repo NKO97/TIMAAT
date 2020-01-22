@@ -215,12 +215,12 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                     </div>"
-                  title="Medien">
+                  title="Media">
                   <i class="fas fa-photo-video"></i>
                 </a>
               </li> 
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors isDisabled">
-                <!-- <a href="#actors"
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
+                <a href="#actors"
                   onclick="TIMAAT.UI.showComponent('actors')"
                   data-toggle="popover"
                   data-trigger="hover"
@@ -231,7 +231,7 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                     </div>" 
-                  title="Akteure"> -->
+                  title="Actors">
                   <i class="fas fa-users"></i>
                 </a>
               </li>
@@ -956,7 +956,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Medien</a>
+                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="audios-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
@@ -986,7 +986,7 @@
                     <!-- Media lists -->
                     <div class="col-md-4">
                       <div class="card media-cards media-card">
-                        <div class="card-header">Medien
+                        <div class="card-header">Media
                           <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button> -->
@@ -1115,7 +1115,7 @@
                           <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datenblatt</a>
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Medientitel</a>
+                          <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Mediumtitles</a>
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
                           <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
@@ -1465,8 +1465,220 @@
               </div>
             </div>
           </div>
+          <div class="row" style="padding-top: 1em;">
+            <div class="col-md-12">
+              <!-- Nav bar tabs -->
+              <ul class="nav nav-pills" id="actors-tabs" role="tablist">
+                <li class="nav-item active">
+                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true"><i class="fas fa-photo-video"></i> Actors</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false"><i class="fas fa-file-person"></i> Persons</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="collectives-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('collective')" data-toggle="tab" href="#collectives" role="tab" aria-controls="collectives" aria-selected="false"><i class="fas fa-file-pdf"></i> Collectives</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="actorsTabsContent">
+                <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <!-- Actors lists -->
+                    <div class="col-md-4">
+                      <div class="card actors-cards actors-card">
+                        <div class="card-header">Actors
+                          <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button> -->
+                        </div>
+                        <div class="timaat-actordatasets-actor-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-actordatasets-actor-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                      <div class="card actors-cards persons-card">
+                        <div class="card-header">Persons
+                          <button type="button" id="timaat-actordatasets-person-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Person">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-actordatasets-person-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-actordatasets-person-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                      <div class="card actors-cards collectives-card">
+                        <div class="card-header">Collectives
+                          <button type="button" id="timaat-actordatasets-collective-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Collective">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-actordatasets-collective-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-actordatasets-collective-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-actordatasets-collective-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Actors data -->
+                    <div class="col-md-8" id="timaat-actordatasets-actors-tabs">
+                      <ul class="nav nav-tabs actors-nav-tabs">
+                        <li class="nav-item actors-data-tabs actor-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-metadata-form" href="#actorDatasheet">Datenblatt</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs person-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-person-metadata-form" href="#personDatasheet">Datenblatt</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs collective-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-collective-metadata-form" href="#collectiveDatasheet">Datenblatt</a>
+                        </li>
+                      </ul>
+                      <!-- Data tab content -->
+                      <!-- datasheet form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actors-metadata-form" name="timaat-actordatasets-actors-metadata-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorFormHeader">Actor</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-actor-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-person-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-collective-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Actor data -->
+                        <div class="form-group datasheet-data title-data">
+                          <div class="form-row">
+                            <div class="col-md-9">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-title">Display Title*</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
+                            </div>                            
+                            <div class="col-md-3">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-title-language-id">Title's Language*</label>
+                              <select class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-title-language-id" name="displayTitleLanguageId" required>
+                                <option value="" disabled selected hidden>[Choose title language...]</option>
+                                <!-- <option value="1">default-untranslated</option> -->
+                                <option value="2">English</option>
+                                <option value="3">German</option>
+                                <option value="4">French</option>
+                                <option value="5">Spanish</option>
+                                <option value="6">Russian</option>
+                                <option value="7">Arabic</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group datasheet-data actortype-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-actortype-id">Actor Type*</label>
+                          <select class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-actortype-id" name="typeId" required>
+                            <option value="" disabled selected hidden>[Choose actor type...]</option>
+                            <option value="1">Person</option>
+                            <option value="2">Collective</option>
+                          </select>
+                        </div>
+                        <div class="form-group datasheet-data actor-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-releasedate">Release Date</label>
+                          <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
+                        </div>
+                        <div class="form-group datasheet-data person-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-length">Länge</label>
+                          <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-length" name="length" placeholder="[Length]" aria-describedby="Length">
+                        </div>
+                        <div class="form-group datasheet-data person-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-personcodec">Person Codec</label>
+                          <input class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-personcodec" name="personCodec" placeholder="[Person Codec]" aria-describedby="Person Codec">
+                        </div>
+                        <div class="form-group datasheet-data actor-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-copyright">Copyright</label>
+                          <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
+                        </div>
+                        <div class="form-group datasheet-data actor-data">
+                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actors-metadata-remark">Remark</label>
+                          <textarea class="form-control form-control-sm" id="timaat-actordatasets-actors-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
+                        </div>
+                        <div class="actor-datasheet-form-submit datasheet-form-buttons">
+                          <button type="button" class="btn btn-primary" id="timaat-actordatasets-actor-metadata-form-submit" name="submit" type="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-actor-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                        </div>
+                        <div class="person-datasheet-form-submit datasheet-form-buttons">
+                          <button type="button" class="btn btn-primary" id="timaat-actordatasets-person-metadata-form-submit" name="submit" type="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-person-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                        </div>
+                        <div class="collective-datasheet-form-submit datasheet-form-buttons">
+                          <button type="button" class="btn btn-primary" id="timaat-actordatasets-collective-metadata-form-submit" name="submit" type="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-collective-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                        </div>
+                      </form>
+                      <!-- names form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-names-form" name="timaat-actordatasets-actor-names-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-name caps-name" id="actorNamesLabel">Actor names</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-names-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="col-sm-2 col-md-1">
+                              <h6 class="form-header">Display name</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-1">
+                              <h6 class="form-header">Birth name</h6>
+                            </div>
+                            <div class="col-sm-5 col-md-7">
+                              <h6 class="form-header">Name</h6>
+                            </div>
+                            <!-- <div class="col-sm-2 col-md-2">
+                              <h6 class="form-header">Name's language</h6>
+                            </div> -->
+                            <div class="col-sm-1 col-md-1">
+                              <h6 class="form-header"></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-names-container">
+                          <div data-role="dynamic-name-fields" id="dynamic-name-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="name-form-divider">
+                          <br>
+                          <hr>                            
+                          </div>
+                          <div data-role="new-name-fields" id="new-name-fields">
+                            <!-- one row for new name information that shall be added to the names list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="timaat-actordatasets-actor-names-form-submit" name="submit" type="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-names-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
           <!-- add Actor -->
-          <div class="modal fade" id="timaat-actordatasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
+          <!-- <div class="modal fade" id="timaat-actordatasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -1479,19 +1691,6 @@
                   <div class="input-group mb-3">
                     <input type="text" class="form-control form-control-sm" id="timaat-actor-meta-title" placeholder="Title" aria-label="Title">
                   </div>
-                  <!-- <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Von</span>
-                    </div>
-                    <input type="date" class="form-control form-control-sm" id="timaat-actor-meta-start" aria-label="Actor Start Date">
-                    <div class="input-group-prepend">  
-                      <span class="input-group-text">Bis</span> 
-                    </div>         
-                    <input type="date" class="form-control form-control-sm" id="timaat-actor-meta-end" aria-label="Evend End Date">
-                  </div>
-                  <div class="input-group mb-3">
-                    <textarea class="form-control form-control-sm" aria-label="Beschreibung" id="timaat-actor-meta-description" placeholder="Beschreibung eingeben"></textarea>
-                  </div> -->   
                 </div>   
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
@@ -1502,21 +1701,12 @@
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
-              <!-- Nav bar tabs -->
-              <!-- <ul class="nav nav-tabs" id="actors-tabs" role="tablist">
-                <li class="nav-item">          
-                  <a class="nav-link active" href="#actors">
-                    <i class="fas fa-users"></i> Akteure
-                  </a>
-                </li>
-              </ul>   -->
               <div class="tab-content" id="content">
-                <!-- Actors UI -->
                 <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Akteure
+                        <div class="card-header">Actors
                           <button type="button" id="timaat-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -1533,7 +1723,7 @@
                 </div>
               </div> 
             </div>
-          </div>
+          </div> -->
         </div>
         <!-------------------------------------------------------------------->
         <!-- Locations                                                      -->

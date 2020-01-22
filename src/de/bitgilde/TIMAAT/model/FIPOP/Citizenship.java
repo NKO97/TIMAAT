@@ -27,9 +27,9 @@ public class Citizenship implements Serializable {
 	@ManyToMany(mappedBy="citizenships")
 	private List<Country> countries;
 
-	//bi-directional many-to-many association to Person
+	//bi-directional many-to-many association to ActorPerson
 	@ManyToMany(mappedBy="citizenships")
-	private List<Person> persons;
+	private List<ActorPerson> actorPersons;
 
 	public Citizenship() {
 	}
@@ -72,12 +72,12 @@ public class Citizenship implements Serializable {
 		this.countries = countries;
 	}
 
-	public List<Person> getPersons() {
-		return this.persons;
+	public List<ActorPerson> getPersons() {
+		return this.actorPersons;
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setPersons(List<ActorPerson> actorPersons) {
+		this.actorPersons = actorPersons;
 	}
 
 }

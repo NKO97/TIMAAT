@@ -340,11 +340,11 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<NoiseTypeTranslation> noiseTypeTranslations;
 
-	//bi-directional many-to-one association to PersonTranslation
+	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-PersonTranslation")
-	private List<PersonTranslation> personTranslations;
+	// 	@JsonManagedReference(value = "Language-ActorPersonTranslation")
+	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="language")
@@ -446,10 +446,10 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<SoundEffectTypeTranslation> soundEffectTypeTranslations;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypePersonTranslation
+	//bi-directional many-to-one association to SpatialSemanticsTypeActorPersonTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
-	// private List<SpatialSemanticsTypePersonTranslation> spatialSemanticsTypePersonTranslations;
+	// private List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypeSpaceTranslation
 	// @OneToMany(mappedBy="language")
@@ -1856,26 +1856,26 @@ public class Language implements Serializable {
 	// 	return noiseTypeTranslation;
 	// }
 
-	public List<PersonTranslation> getPersonTranslations() {
-		return this.personTranslations;
+	public List<ActorPersonTranslation> getActorPersonTranslations() {
+		return this.actorPersonTranslations;
 	}
 
-	public void setPersonTranslations(List<PersonTranslation> personTranslations) {
-		this.personTranslations = personTranslations;
+	public void setActorPersonTranslations(List<ActorPersonTranslation> actorPersonTranslations) {
+		this.actorPersonTranslations = actorPersonTranslations;
 	}
 
-	public PersonTranslation addPersonTranslation(PersonTranslation personTranslation) {
-		getPersonTranslations().add(personTranslation);
-		personTranslation.setLanguage(this);
+	public ActorPersonTranslation addActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().add(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(this);
 
-		return personTranslation;
+		return actorPersonTranslation;
 	}
 
-	public PersonTranslation removePersonTranslation(PersonTranslation personTranslation) {
-		getPersonTranslations().remove(personTranslation);
-		personTranslation.setLanguage(null);
+	public ActorPersonTranslation removeActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().remove(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(null);
 
-		return personTranslation;
+		return actorPersonTranslation;
 	}
 
 	public List<PhoneNumberTypeTranslation> getPhoneNumberTypeTranslations() {
@@ -2296,26 +2296,26 @@ public class Language implements Serializable {
 	// 	return soundEffectTypeTranslation;
 	// }
 
-	// public List<SpatialSemanticsTypePersonTranslation> getSpatialSemanticsTypePersonTranslations() {
-	// 	return this.spatialSemanticsTypePersonTranslations;
+	// public List<SpatialSemanticsTypeActorPersonTranslation> getSpatialSemanticsTypeActorPersonTranslations() {
+	// 	return this.spatialSemanticsTypeActorPersonTranslations;
 	// }
 
-	// public void setSpatialSemanticsTypePersonTranslations(List<SpatialSemanticsTypePersonTranslation> spatialSemanticsTypePersonTranslations) {
-	// 	this.spatialSemanticsTypePersonTranslations = spatialSemanticsTypePersonTranslations;
+	// public void setSpatialSemanticsTypeActorPersonTranslations(List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations) {
+	// 	this.spatialSemanticsTypeActorPersonTranslations = spatialSemanticsTypeActorPersonTranslations;
 	// }
 
-	// public SpatialSemanticsTypePersonTranslation addSpatialSemanticsTypePersonTranslation(SpatialSemanticsTypePersonTranslation spatialSemanticsTypePersonTranslation) {
-	// 	getSpatialSemanticsTypePersonTranslations().add(spatialSemanticsTypePersonTranslation);
-	// 	spatialSemanticsTypePersonTranslation.setLanguage(this);
+	// public SpatialSemanticsTypeActorPersonTranslation addSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
+	// 	getSpatialSemanticsTypeActorPersonTranslations().add(spatialSemanticsTypeActorPersonTranslation);
+	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(this);
 
-	// 	return spatialSemanticsTypePersonTranslation;
+	// 	return spatialSemanticsTypeActorPersonTranslation;
 	// }
 
-	// public SpatialSemanticsTypePersonTranslation removeSpatialSemanticsTypePersonTranslation(SpatialSemanticsTypePersonTranslation spatialSemanticsTypePersonTranslation) {
-	// 	getSpatialSemanticsTypePersonTranslations().remove(spatialSemanticsTypePersonTranslation);
-	// 	spatialSemanticsTypePersonTranslation.setLanguage(null);
+	// public SpatialSemanticsTypeActorPersonTranslation removeSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
+	// 	getSpatialSemanticsTypeActorPersonTranslations().remove(spatialSemanticsTypeActorPersonTranslation);
+	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(null);
 
-	// 	return spatialSemanticsTypePersonTranslation;
+	// 	return spatialSemanticsTypeActorPersonTranslation;
 	// }
 
 	// public List<SpatialSemanticsTypeSpaceTranslation> getSpatialSemanticsTypeSpaceTranslations() {

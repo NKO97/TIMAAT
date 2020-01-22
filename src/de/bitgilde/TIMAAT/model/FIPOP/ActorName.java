@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="actor_name")
-@NamedQuery(name="Actorname.findAll", query="SELECT a FROM ActorName a")
+@NamedQuery(name="ActorName.findAll", query="SELECT a FROM ActorName a")
 public class ActorName implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -96,7 +96,6 @@ public class ActorName implements Serializable {
 		this.actor = actor;
 	}
 
-
 	public int getIsPrimary() {
 		return isPrimary;
 	}
@@ -104,7 +103,5 @@ public class ActorName implements Serializable {
 	public void setIsPrimary(int isPrimary) {
 		this.isPrimary = isPrimary;
 	}
-	
-	
 
 }

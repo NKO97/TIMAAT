@@ -179,25 +179,7 @@
 
 				if (medium) { // update medium
 					// medium data
-					medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-					medium.model.copyright = formDataObject.copyright;
-					medium.model.remark = formDataObject.remark;
-					// display-title data
-					medium.model.displayTitle.name = formDataObject.displayTitle;
-					medium.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
-					var i = 0;
-					for (; i < medium.model.titles.length; i++) {
-						if (medium.model.displayTitle.id == medium.model.titles[i].id) {
-							medium.model.titles[i] = medium.model.displayTitle;
-							break;
-						}
-					}
-					// medium.model.mediaType.id = Number(formDataObject.typeId); // Do not change type 
-					// source data
-					medium.model.sources[0].url = formDataObject.sourceUrl;
-					medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-					medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-					medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+					medium = TIMAAT.MediaDatasets.updateMediumModelData(medium, formDataObject);
 
 					medium.updateUI();
 					await TIMAAT.MediaDatasets.updateMedium(medium);
@@ -1575,7 +1557,7 @@
 
 		setTextLists: function(texts) {
 			console.log("TCL: setTextLists -> texts", texts);
-			$('.form').hide();
+			$('.form');
 			$('.media-data-tabs').hide();
 			if ( !texts ) return;
 			$('#timaat-mediadatasets-text-list-loader').remove();
@@ -1644,9 +1626,9 @@
 		setMediumTitleList: function(medium) {
 			// console.log("TCL: setMediumTitleList -> medium", medium);
 			if ( !medium ) return;
-			$('#timaat-title-list-loader').remove();
+			$('#timaat-mediadatasets-media-title-list-loader').remove();
 			// clear old UI list
-			$('#timaat-title-list').empty();
+			$('#timaat-mediadatasets-media-title-list').empty();
 			// setup model
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
@@ -1985,6 +1967,7 @@
 			// setup UI
 			// languageTrack data
 			var i = 0;
+			console.log("TCL: medium", medium);
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
 			for (; i< numLanguageTracks; i++) {
 				$('[data-role="dynamic-languagetrack-fields"]').append(
@@ -2392,11 +2375,9 @@
 		},
 
 		_mediumAdded: async function(medium) {
-			// console.log("TCL: _mediumAdded: function(medium)");
 			console.log("TCL: medium", medium);
 			TIMAAT.MediaDatasets.media.model.push(medium);
 			TIMAAT.MediaDatasets.media.push(new TIMAAT.Medium(medium, 'medium'));
-			// TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', medium);
 		},
 
 		_mediumSubtypeAdded: async function(mediumSubtype, medium) {
