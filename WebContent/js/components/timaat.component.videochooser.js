@@ -700,6 +700,7 @@
 			videoelement.on('click', '.timaat-video-thumbnail', function(ev) {
 				videoelement.find('.timaat-video-annotate').click();
 			});
+
 			videoelement.on('click', '.timaat-video-annotate', function(ev) {
 				if ( video.mediumVideo.status && video.mediumVideo.status == 'nofile' ) {
 					// start upload process
@@ -716,6 +717,7 @@
 				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 				// TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 			});
+
 			videoelement.on('click', '.timaat-mediadatasets-media-metadata', function(event) {
 				event.stopPropagation();
 				// show tag editor - trigger popup
@@ -725,13 +727,19 @@
 				$('.media-nav-tabs').show();
 				$('.media-data-tabs').hide();
 				$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-				// console.log("TCL: video", video);
-				var videoModel = {
-					model: video,
-				};
-				$('#timaat-mediadatasets-media-metadata-form').data('video', videoModel);
-				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', videoModel);
-			})
+				var id = video.id;
+				var selectedVideo;
+				var i = 0;
+				for (; i < TIMAAT.MediaDatasets.media.length; i++) {
+					if (TIMAAT.MediaDatasets.media[i].model.id == id) {
+						selectedVideo = TIMAAT.MediaDatasets.media[i];
+						break;
+					}
+				}
+				$('#timaat-mediadatasets-media-metadata-form').data('medium', selectedVideo);
+				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
+			});
+
 			videoelement.on('click', '.timaat-video-collectionitemremove', function(ev) {
 				var row = $(this).parents('tr');
 				TIMAAT.VideoChooser._removeCollectionItemRow(row);
@@ -743,6 +751,7 @@
 				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
 				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.mediumVideo.viewToken);
 			});
+			
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
 				if ( video.mediumVideo.status && video.mediumVideo.status == "nofile" ) return;
 				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
