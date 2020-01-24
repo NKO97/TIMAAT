@@ -166,7 +166,6 @@
 
 		async createTitle(title) {
 			// console.log("TCL: async createTitle -> title", title);
-			// console.log("TCL: async createTitle -> JSON.stringify(title)", JSON.stringify(title));
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,

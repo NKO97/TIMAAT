@@ -156,7 +156,7 @@ public class Title implements Serializable {
 	}
 
 	public void setMediums3(List<Medium> mediums3) {
-		this.mediums2 = mediums3;
+		this.mediums3 = mediums3;
 	}
 
 	// public List<Nasheed> getNasheeds1() {

@@ -2131,7 +2131,7 @@
     	console.log("TCL: mediumSubtype", mediumSubtype);
     	console.log("TCL: mediumModel", mediumModel);
 			// createMediumSubtype: async function(mediumModel, mediumModelTranslation, mediumSubtypeModel) { // mediumSubtype has no translation table at the moment
-			// console.log("TCL: createMediumSubtype: async function-> mediumSubtypeModel, mediumModel, title, source", mediumSubtypeModel, mediumModel, title, source);
+			// console.log("TCL: createMediumSubtype: async function-> mediumSubtype, mediumSubtypeModel, mediumModel, title, source", mediumSubtype, mediumSubtypeModel, mediumModel, title, source);
 			try {
 				// create title
 				var newDisplayTitle = await TIMAAT.MediaService.createTitle(title);

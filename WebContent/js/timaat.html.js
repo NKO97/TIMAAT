@@ -132,8 +132,8 @@
           mediumFormLanguageTracks.submit();
         },
       });
-      var actorFormMetadata = $("#timaat-actordatasets-actors-metadata-form");
-      var actorFormMetadataValidator = $("#timaat-actordatasets-actors-metadata-form").validate({
+      var actorFormMetadata = $("#timaat-actordatasets-actor-metadata-form");
+      var actorFormMetadataValidator = $("#timaat-actordatasets-actor-metadata-form").validate({
         // TODO Form validation rules
       });
 

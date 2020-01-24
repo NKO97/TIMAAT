@@ -25,12 +25,6 @@ public class ActorName implements Serializable {
 	@Column(name="name")
 	private String name;
 
-	@Column(name="is_primary")
-	private int isPrimary;
-
-	@Column(name="text_direction")
-	private String textDirection;
-
 	@Temporal(TemporalType.DATE)
 	@Column(name="used_since")
 	private Date usedSince;
@@ -56,14 +50,6 @@ public class ActorName implements Serializable {
 		this.id = id;
 	}
 
-	public String getTextDirection() {
-		return this.textDirection;
-	}
-
-	public void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -94,14 +80,6 @@ public class ActorName implements Serializable {
 
 	public void setActor(Actor actor) {
 		this.actor = actor;
-	}
-
-	public int getIsPrimary() {
-		return isPrimary;
-	}
-
-	public void setIsPrimary(int isPrimary) {
-		this.isPrimary = isPrimary;
 	}
 
 }

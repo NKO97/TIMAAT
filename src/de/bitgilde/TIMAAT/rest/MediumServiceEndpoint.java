@@ -1271,7 +1271,9 @@ public class MediumServiceEndpoint{
 
 		// System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
 		
 		System.out.println("MediumServiceEndpoint: create title: title created with id "+newTitle.getId());
 		System.out.println("MediumServiceEndpoint: create title: title created with language id "+newTitle.getLanguage().getId());
@@ -1340,7 +1342,8 @@ public class MediumServiceEndpoint{
 		System.out.println("MediumServiceEndpoint: addTitle: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
 		
 		System.out.println("MediumServiceEndpoint: addTitle: title added with id "+newTitle.getId());
 		System.out.println("MediumServiceEndpoint: addTitle: title added with language id "+newTitle.getLanguage().getId());
@@ -1754,8 +1757,8 @@ public class MediumServiceEndpoint{
 			 */
 			// persist mediumvideo changes
 			// TODO load from config
-			MediaType mt = entityManager.find(MediaType.class, 6);
-			Language lang = entityManager.find(Language.class, 1);
+			// MediaType mt = entityManager.find(MediaType.class, 6);
+			// Language lang = entityManager.find(Language.class, 1);
 
 			/*
 			Title title = new Title();
