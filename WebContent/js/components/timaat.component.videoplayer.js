@@ -57,7 +57,7 @@
 			              '    <i class="fa fa-plus"></i>'+
 			              '</button>'+
 			              '<button id="timaat-videoplayer-annotation-remove-button" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="btn btn-light">'+
-			              '    <i class="fa fa-minus"></i>'+
+			              '    <i class="fa fa-trash-alt"></i>'+
 			              '</button>',
 			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
 			    style   :
