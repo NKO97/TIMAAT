@@ -485,7 +485,7 @@
 		},
 		
 		removeSegment(segment) {
-      console.log("TCL: removeSegment -> segment", segment);
+			console.log("TCL: removeSegment -> segment", segment);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/segment/"+segment.model.id,
 				type:"DELETE",
@@ -511,11 +511,11 @@
 		},
 
 		addTag(set, tagname, callback) {
-      // console.log("TCL: addTag -> addTag(set, tagname, callback)");
-      // console.log("TCL: addTag -> set", set);
-      // console.log("TCL: addTag -> tagname", tagname);
-      // console.log("TCL: addTag -> callback", callback);
-      // console.log("TCL: addTag -> set, tagname, callback", set, tagname, callback);
+			// console.log("TCL: addTag -> addTag(set, tagname, callback)");
+			// console.log("TCL: addTag -> set", set);
+			// console.log("TCL: addTag -> tagname", tagname);
+			// console.log("TCL: addTag -> callback", callback);
+			// console.log("TCL: addTag -> set, tagname, callback", set, tagname, callback);
 			var serviceEndpoint = "annotation";
 			if ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categoryset"; 
 			else if ( set.constructor === TIMAAT.Actor ) serviceEndpoint = "actor";
@@ -568,9 +568,48 @@
 				console.log( e.responseText );
 			});			
 		},
+
+		addCategory(set, catname, callback) {
+			var serviceEndpoint = "category";
+
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+				type:"POST",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				TIMAAT.Service.updateCategorySets(catname);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+
+		removeCategory(set, catname, callback) {
+			var serviceEndpoint = "category"; // set/{id}/category/{name}
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+				type:"DELETE",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				TIMAAT.Service.updateCategorySets(catname);
+				callback(catname);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
 		
 		addMediumTag(medium, tagname, callback) {
-      console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
+			console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
 				type:"POST",
@@ -590,7 +629,7 @@
 		},
 		
 		removeMediumTag(medium, tagname, callback) {
-      console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
+			console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
 				type:"DELETE",
@@ -608,7 +647,7 @@
 		},
 		
 		updateCategorySets(categoryname) {
-      console.log("TCL: updateCategorySets -> categoryname", categoryname);
+			console.log("TCL: updateCategorySets -> categoryname", categoryname);
 			// TODO implement for updating unassigned categories
 		},
 			
@@ -670,8 +709,8 @@
 			});
 		},
 
-		removeCategorySet(categoryset) {
-			console.log("TCL: removeCategorySet -> categoryset", categoryset);
+		deleteCategorySet(categoryset) {
+			console.log("TCL: deleteCategorySet -> categoryset", categoryset);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+categoryset.model.id,
 				type:"DELETE",
@@ -687,6 +726,25 @@
 			});
 		},	
 
+		deleteCategory(id) {
+			console.log("TCL: removeCategory -> id", id);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},	
+		
+		
+		
 	}
 	
 }, window));

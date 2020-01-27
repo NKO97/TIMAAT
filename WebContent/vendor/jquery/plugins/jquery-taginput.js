@@ -16,12 +16,16 @@
 		
 		this.each(function() {
 			var id = $(this).attr('id');
-			
+
 			var tagslist = $(this).val().split(_getDelimiter(delimiter[id]));
-			
 			if (tagslist[0] === '') tagslist = [];
 
 			value = jQuery.trim(value);
+
+			var settings = inputSettings[id];
+			if (settings.whitelist && settings.whitelist.indexOf(value) === -1) {
+				return false;
+			}
 			
 			if ((inputSettings[id].unique && $(this).tagExist(value)) || !_validateTag(value, inputSettings[id], tagslist, delimiter[id])) {
 				$('#' + id + '_tag').addClass('error');
@@ -66,7 +70,6 @@
 		
 		this.each(function() {
 			var id = $(this).attr('id');
-
 			var old = $(this).val().split(_getDelimiter(delimiter[id]));
 
 			$('#' + id + '_tagsinput .tag').remove();
@@ -115,7 +118,8 @@
 			hide: true,
 			delimiter: ',',
 			unique: true,
-			removeWithBackspace: true
+			removeWithBackspace: true,
+			whitelist: null
 		}, options);
 
 		var uniqueIdCounter = 0;
@@ -146,7 +150,8 @@
 				maxChars: settings.maxChars,
 				limit: settings.limit,
 				validationPattern: settings.validationPattern,
-				unique: settings.unique
+				unique: settings.unique,
+				whitelist: settings.whitelist
 			};
 
 			if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {

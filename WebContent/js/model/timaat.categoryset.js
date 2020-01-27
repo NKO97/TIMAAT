@@ -78,11 +78,12 @@
 					// });
 					
 					// attach event handlers
+					var _set = this;
 					$(this.listView).click(this, function(ev) {
 						ev.stopPropagation();
 						// show category editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.Settings.loadCategories(model);
+						TIMAAT.Settings.loadCategories(_set);
 					});
 					$(this.listView).dblclick(this, function(ev) {
 						ev.stopPropagation();

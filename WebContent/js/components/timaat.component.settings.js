@@ -24,7 +24,7 @@
 		categories: {},
 		
 		init: function() {
-    	// console.log("TCL: Settings: init: function()");
+			// console.log("TCL: Settings: init: function()");
 			// attach category editor
 			$('#timaat-mediadatasets-medium-categories').popover({
 				placement: 'right',
@@ -72,6 +72,14 @@
 			});			
 			
 			$('#timaat-settings-categorylibrary').click(function(ev) { TIMAAT.Settings.loadCategories(null) });
+
+			// delete category functionality
+			$('#timaat-category-delete-submit').click(function(ev) {
+				var modal = $('#timaat-settings-category-delete');
+				var category = modal.data('category');
+				if (category) TIMAAT.Settings._categoryDeleted(category);
+				modal.modal('hide');
+			});
 
 			// delete categoryset functionality
 			$('#timaat-categoryset-delete-submit').click(function(ev) {
@@ -124,16 +132,16 @@
 		
 		loadCategories: function(set, force) {
 			var setId = 0;
-			if ( set && set.id ) setId = set.id;
+			if ( set && set.model && set.model.id ) setId = set.model.id;
 			
 			var oldSetId = 0;
-			if ( TIMAAT.Settings.categories.set ) oldSetId = TIMAAT.Settings.categories.set.id;
+			if ( TIMAAT.Settings.categories.set ) oldSetId = TIMAAT.Settings.categories.set.model.id;
 			if ( setId == oldSetId && !force ) return;
 			
 			if ( TIMAAT.Settings.categories.dt != null ) {
 				TIMAAT.Settings.categories.dt.destroy();
 				TIMAAT.Settings.categories.dt = null;
-			}
+			}			
 			TIMAAT.Settings.categories.set = set;
 
 			// clear video UI list
@@ -148,6 +156,7 @@
 					},
 
 			    },
+			    rowId: 'id',
 			    processing: true,
 		        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order": [[ 1, 'desc' ]],
@@ -167,9 +176,9 @@
 				    	render: function( data, type, row, meta ) {
 				    		if ( type == 'display' ) {
 					    		if ( TIMAAT.Settings.categories.set )
-					    			return '<button type="button" title="Aus Kategorieset entfernen" class="btn btn-outline-secondary btn-sm timaat-categoryset-collectionitemremove"><i class="fas fa-folder-minus"></i></button>';
+					    			return '<button type="button" data-action="remove" data-id="'+data+'" title="Aus Kategorieset entfernen" class="btn btn-outline-secondary btn-sm timaat-categoryset-collectionitemremove"><i class="fas fa-folder-minus"></i></button>';
 					    		else 
-					    			return '<button type="button" title="Kategorie löschen" class="btn btn-outline-danger btn-sm timaat-category-itemremove"><i class="fas fa-trash-alt"></i></button>';
+					    			return '<button type="button" data-action="delete" data-id="'+data+'" title="Kategorie löschen" class="btn btn-outline-danger btn-sm timaat-category-itemremove"><i class="fas fa-trash-alt"></i></button>';
 				    		} else return data;
 				    	},
 				    },
@@ -196,7 +205,22 @@
 			// events
 			.on( 'draw', function () {
 				$('#timaat-category-list button').off('click').click(function(ev) {
-					
+					var action = $(this).data('action');
+					var id = $(this).data('id');
+					var catname = TIMAAT.Settings.categories.dt.row("#"+id).data().name;
+					if ( action == 'remove' ) {
+						// remove category from set
+						TIMAAT.Service.removeCategory(TIMAAT.Settings.categories.set, catname, function(cat) {
+							console.log("removed ", cat);
+							TIMAAT.Settings.categories.dt.row("#"+id).remove();
+							TIMAAT.Settings.categories.dt.draw();
+						})
+					} else if ( action == 'delete' ) {
+						// delete category from system
+						TIMAAT.UI.hidePopups();				
+						$('#timaat-settings-category-delete').data('category', id);
+						$('#timaat-settings-category-delete').modal('show');
+					}
 				});
 			});
 			
@@ -251,11 +275,20 @@
 			console.log("TCL: _categorysetRemoved: function(categoryset)");
 			console.log("TCL: categoryset", categoryset);
 			// sync to server
-			TIMAAT.Service.removeCategorySet(categoryset);			
+			TIMAAT.Service.deleteCategorySet(categoryset);			
 			categoryset.remove();
 			if ( TIMAAT.VideoPlayer.curCategorySet == categoryset ) TIMAAT.VideoPlayer.setCategorySet(null);
-
+		},
+		
+		_categoryDeleted: function(category) {
+			console.log("TCL: _categoryDeleted: function(category)");
+			console.log("TCL: category", category);
+			// sync to server
+			TIMAAT.Service.deleteCategory(category);
+			TIMAAT.Settings.categories.dt.row("#"+category).remove();
+			TIMAAT.Settings.categories.dt.draw();
 		}
+
 		
 		
 	}

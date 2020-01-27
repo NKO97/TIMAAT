@@ -172,6 +172,30 @@ public class CategorySetEndpoint {
 		return Response.ok().entity(categorySets).build();
 	}
 	
+	
+	@DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	@Secured
+	public Response deleteCategory(@PathParam("id") int id) {
+    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Category category = entityManager.find(Category.class, id);
+    	if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		for ( CategorySetHasCategory cshc : category.getCategorySetHasCategories() ) entityManager.remove(cshc);
+		entityManager.remove(category);
+		entityTransaction.commit();
+
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYDELETED);
+
+		return Response.ok().build();
+	}
+
+	
 	@SuppressWarnings("unchecked")
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -226,34 +250,38 @@ public class CategorySetEndpoint {
 	
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("set/{idcs}/category/{idc}")
+	@Path("set/{idcs}/category/{catname}")
 	@Secured
-	public Response removeCategory(@PathParam("idcs") int idcs, @PathParam("idc") int idc) {
-			EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-			CategorySetHasCategoryPK cshckey = new CategorySetHasCategoryPK(idcs, idc);
+	public Response removeCategory(@PathParam("idcs") int idcs, @PathParam("catname") String catname) {
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		
+		Category cat = null;
+		try {
+			cat = (Category) entityManager.createQuery("SELECT c from Category c WHERE c.name=:name")
+					.setParameter("name", catname)
+					.getSingleResult();
+		} catch(Exception e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		int idc = cat.getId();
+		CategorySetHasCategoryPK cshckey = new CategorySetHasCategoryPK(idcs, idc);
     	CategorySetHasCategory categorySetHasCategory = entityManager.find(CategorySetHasCategory.class, cshckey);
     	if ( categorySetHasCategory == null ) return Response.status(Status.NOT_FOUND).build();
     	
-    	// check if categorySet already has category
-    	// Category category = null;
-    	// for ( Category csCategory : categorySet.getCategories() ) {
-    	// 	if ( csCategory.getName().compareTo(categoryName) == 0 ) category = csCategory;
-    	// }
     	if ( categorySetHasCategory != null ) {
+    	
+    	cat = categorySetHasCategory.getCategory();
+    	CategorySet set = categorySetHasCategory.getCategorySet();
+
         // detach category from categorySet and vice versa    	
     		EntityTransaction entityTransaction = entityManager.getTransaction();
     		entityTransaction.begin();
-    		// categorySet.getCategorySetHasCategories().remove(category);
-				// category.getCategorySets().remove(categorySet);
-				categorySetHasCategory.removeCategorySetHasCategory(categorySetHasCategory);
-    		// entityManager.merge(category);
-				// entityManager.merge(categorySet);
-				entityManager.merge(categorySetHasCategory);
-    		// entityManager.persist(categorySet);
-				// entityManager.persist(category);
-				entityManager.persist(categorySetHasCategory);
+    		entityManager.persist(cat);
+    		entityManager.persist(set);
+    		entityManager.remove(categorySetHasCategory);
     		entityTransaction.commit();
-    		entityManager.refresh(categorySetHasCategory);
+    		entityManager.refresh(cat);
+    		entityManager.refresh(set);
     	}
  	
 		return Response.ok().build();
