@@ -254,6 +254,7 @@
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'text', comment);
 						TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
+						TIMAAT.VideoPlayer.inspector.close();
 					} else {
 						TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
 					}
@@ -1105,7 +1106,8 @@
 			$('#timaat-analysislist-chooser').val(analysislist.id);
 
 			$('#timaat-analysislist-chooser').trigger('change');
-			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+//			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			TIMAAT.VideoPlayer.inspector.close();
 
 			$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
@@ -1116,6 +1118,8 @@
 			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');			
 			$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", false);
 			$('#timaat-videoplayer-annotation-quickadd-button').removeAttr("disabled");
+			
+
 		},
 		
 		_analysislistRemoved: function(analysislist) {
