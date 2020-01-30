@@ -20,6 +20,10 @@ public class ActorPersonIsMemberOfActorCollectivePK implements Serializable {
 
 	public ActorPersonIsMemberOfActorCollectivePK() {
 	}
+	// public ActorPersonIsMemberOfActorCollectivePK(int actorId, int collectiveId) {
+	// 	this.actorPersonActorId = actorId;
+	// 	this.memberOfActorCollectiveActorId = collectiveId;
+	// }
 	public int getActorPersonActorId() {
 		return this.actorPersonActorId;
 	}

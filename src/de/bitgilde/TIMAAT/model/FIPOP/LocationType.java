@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="location_type")
-@NamedQuery(name="LocationType.findAll", query="SELECT l FROM LocationType l")
+@NamedQuery(name="LocationType.findAll", query="SELECT lt FROM LocationType lt")
 public class LocationType implements Serializable {
 	private static final long serialVersionUID = 1L;
 

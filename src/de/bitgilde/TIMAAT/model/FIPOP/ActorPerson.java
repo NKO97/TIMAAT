@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="actor_person")
-@NamedQuery(name="ActorPerson.findAll", query="SELECT p FROM ActorPerson p")
+@NamedQuery(name="ActorPerson.findAll", query="SELECT ap FROM ActorPerson ap")
 public class ActorPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -45,23 +46,24 @@ public class ActorPerson implements Serializable {
 	//bi-directional one-to-one association to Actor
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="actor_id")
-	@JsonIgnore
+	@JsonIgnore // ActorPerson is accessed through Actor --> avoid reference cycle
 	private Actor actor;
 
 	//bi-directional many-to-one association to Location
-	@ManyToOne
-	@JoinColumn(name="place_of_birth_location_id")
-    @JsonBackReference(value = "Location-ActorPerson1")
-	private Location location1;
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="place_of_birth_city_location_id")
+	// @JsonBackReference(value = "City-ActorPerson1")
+	private City placeOfBirthCityLocation;
 
 	//bi-directional many-to-one association to Location
-	@ManyToOne
-	@JoinColumn(name="place_of_death_location_id")
-    @JsonBackReference(value = "Location-ActorPerson2")
-	private Location location2;
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="place_of_death_city_location_id")
+  // @JsonBackReference(value = "City-ActorPerson2")
+	private City placeOfDeathCityLocation;
 
 	//bi-directional many-to-one association to Sex
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="sex_id")
 	// @JsonBackReference(value = "Sex-ActorPerson")
 	private Sex sex;
 
@@ -81,8 +83,8 @@ public class ActorPerson implements Serializable {
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorPerson")
 	// @JsonManagedReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollective")
-	@JsonIgnore
-	private List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
+	// @JsonIgnore
+	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="actorPerson")
@@ -154,20 +156,20 @@ public class ActorPerson implements Serializable {
 		this.actor = actor;
 	}
 
-	public Location getLocation1() {
-		return this.location1;
+	public City getPlaceOfBirth() {
+		return this.placeOfBirthCityLocation;
 	}
 
-	public void setLocation1(Location location1) {
-		this.location1 = location1;
+	public void setPlaceOfBirth(City placeOfBirthCityLocation) {
+		this.placeOfBirthCityLocation = placeOfBirthCityLocation;
 	}
 
-	public Location getLocation2() {
-		return this.location2;
+	public City getPlaceOfDeath() {
+		return this.placeOfDeathCityLocation;
 	}
 
-	public void setLocation2(Location location2) {
-		this.location2 = location2;
+	public void setPlaceOfDeath(City placeOfDeathCityLocation) {
+		this.placeOfDeathCityLocation = placeOfDeathCityLocation;
 	}
 
 	public Sex getSex() {
@@ -186,11 +188,11 @@ public class ActorPerson implements Serializable {
 		this.citizenships = citizenships;
 	}
 
-	public List<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
+	public Set<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
 		return this.actorPersonIsMemberOfActorCollectives;
 	}
 
-	public void setActorPersonIsMemberOfActorCollectives(List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
+	public void setActorPersonIsMemberOfActorCollectives(Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
 		this.actorPersonIsMemberOfActorCollectives = actorPersonIsMemberOfActorCollectives;
 	}
 
@@ -207,6 +209,14 @@ public class ActorPerson implements Serializable {
 
 		return actorPersonIsMemberOfActorCollective;
 	}
+
+	// public void addCollectives(List<ActorCollective> actorCollectives) {
+
+	// }
+
+	// public void addCollective(ActorCollective actorCollective) {
+	// 	ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = new ActorPersonIsMemberOfActorCollective(this, actorCollective);
+	// }
 
 	public List<ActorPersonTranslation> getActorPersonTranslations() {
 		return this.actorPersonTranslations;

@@ -30,7 +30,7 @@
 			if (actorType == 'actor') {
 				displayActorType =
 				`<br><br>
-				<span class="timaar-actordatasets-actor-list-actortype"></span>`;
+				<span class="timaat-actordatasets-actor-list-actortype"></span>`;
 			}
 			this.listView = $(
 				`<li class="list-group-item">
@@ -158,7 +158,7 @@
 				$('.actors-data-tabs').hide();
 				$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
 				$('#timaat-actordatasets-actor-metadata-form').data('actor', actor);
-				TIMAAT.MediaDatasets.actorFormDatasheet("show", actorType, actor);
+				TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
 				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			});
 
@@ -175,11 +175,13 @@
 		updateUI() {
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
+			console.log("TCL: Actor -> updateUI -> this", this);
 			var actorType = $('#timaat-actordatasets-actor-metadata-form').data('actorType');
+			// var name = this.model.displayName.name;
 			var name = this.model.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-actordatasets-'+actorType+'-list-title').text(name);
+			this.listView.find('.timaat-actordatasets-'+actorType+'-list-name').text(name);
 			if (actorType == 'actor') {
 				this.listView.find('.timaat-actordatasets-actor-list-actortype').html(type);
 			}

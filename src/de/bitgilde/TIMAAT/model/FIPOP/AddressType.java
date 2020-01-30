@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="address_type")
-@NamedQuery(name="AddressType.findAll", query="SELECT a FROM AddressType a")
+@NamedQuery(name="AddressType.findAll", query="SELECT at FROM AddressType at")
 public class AddressType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -50,18 +50,18 @@ public class AddressType implements Serializable {
 		this.actorHasAddresses = actorHasAddresses;
 	}
 
-	public ActorHasAddress addActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().add(actorHasAddress);
-		actorHasAddress.setAddressType(this);
+	public ActorHasAddress addActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().add(primaryAddress);
+		primaryAddress.setAddressType(this);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
-	public ActorHasAddress removeActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().remove(actorHasAddress);
-		actorHasAddress.setAddressType(null);
+	public ActorHasAddress removeActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().remove(primaryAddress);
+		primaryAddress.setAddressType(null);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
 	public List<AddressTypeTranslation> getAddressTypeTranslations() {

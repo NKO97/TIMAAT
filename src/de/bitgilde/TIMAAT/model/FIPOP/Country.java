@@ -25,6 +25,7 @@ public class Country implements Serializable {
 	//bi-directional one-to-one association to Location
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="location_id")
+	@JsonIgnore
 	private Location location;
 
 	@Column(name="country_calling_code")

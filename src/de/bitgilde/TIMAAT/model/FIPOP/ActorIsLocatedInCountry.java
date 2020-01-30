@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="actor_is_located_in_country")
-@NamedQuery(name="ActorIsLocatedInCountry.findAll", query="SELECT a FROM ActorIsLocatedInCountry a")
+@NamedQuery(name="ActorIsLocatedInCountry.findAll", query="SELECT ailic FROM ActorIsLocatedInCountry ailic")
 public class ActorIsLocatedInCountry implements Serializable {
 	private static final long serialVersionUID = 1L;
 

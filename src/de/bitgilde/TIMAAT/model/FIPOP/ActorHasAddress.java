@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="actor_has_address")
-@NamedQuery(name="ActorHasAddress.findAll", query="SELECT a FROM ActorHasAddress a")
+@NamedQuery(name="ActorHasAddress.findAll", query="SELECT aha FROM ActorHasAddress aha")
 public class ActorHasAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -22,8 +22,8 @@ public class ActorHasAddress implements Serializable {
 	private ActorHasAddressPK id;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="used_since")
-	private Date usedSince;
+	@Column(name="used_from")
+	private Date usedFrom;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="used_until")
@@ -56,12 +56,12 @@ public class ActorHasAddress implements Serializable {
 		this.id = id;
 	}
 
-	public Date getUsedSince() {
-		return this.usedSince;
+	public Date getUsedFrom() {
+		return this.usedFrom;
 	}
 
-	public void setUsedSince(Date usedSince) {
-		this.usedSince = usedSince;
+	public void setUsedFrom(Date usedFrom) {
+		this.usedFrom = usedFrom;
 	}
 
 	public Date getUsedUntil() {

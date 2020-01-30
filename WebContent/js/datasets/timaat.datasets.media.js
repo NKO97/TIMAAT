@@ -185,59 +185,15 @@
 					await TIMAAT.MediaDatasets.updateMedium(medium);
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				} else { // create new medium
-					var model = {
-						id: 0,
-						remark: formDataObject.remark,
-						copyright: formDataObject.copyright,
-						releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						mediaType: {
-							id: Number(formDataObject.typeId),
-						},
-						titles: [{
-							id: 0,
-							language: {
-								id: Number(formDataObject.displayTitleLanguageId),
-							},
-							name: formDataObject.displayTitle,
-						}],
-					};
-						// work: {
-						// 	id: 1,  // TODO implement work
-						// },
-						// mediumTranslations: [],
-					// var modelTranslation = {
-					// 	id: 0,
-					// 	name: name,
-					// };
-					var displayTitle = {
-						id: 0,
-						language: {
-							id: Number(formDataObject.displayTitleLanguageId),
-						},
-						name: formDataObject.displayTitle,
-					};
-					// var originalTitle = {
-					// 	id: 0,
-					// 	language: {
-					// 		id: 0,
-					// 	},
-					// 	name: "",
-					// };
-					var source = {
-						id: 0,
-						medium: {
-							id: 0,
-						},
-						isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
-						url: formDataObject.sourceUrl,
-						lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),            
-						isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
-					};
+					var model = await TIMAAT.MediaDatasets.createMediumModel(formDataObject, formDataObject.typeId)
+					var displayTitle = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var source = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					// Medium has no translation table at the moment
-					// TIMAAT.MediaDatasets.createMedium(model, modelTranslation, TIMAAT.MediaDatasets._mediumAdded);
+
 					await TIMAAT.MediaDatasets.createMedium(model, displayTitle, source);
 					var medium = TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length-1];
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
+					// $('#timaat-mediadatasets-media-metadata-form').data('medium', medium); //? needed or not?
 				};
 			});
 
@@ -1220,14 +1176,16 @@
 
 				// Create/Edit video window submitted data
 				var formData = $("#timaat-mediadatasets-media-metadata-form").serializeArray();
+        console.log("TCL: formData", formData);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
+				console.log("TCL: formDataObject", formDataObject);
 
 				if (video) { // update video
 					// medium data
-					video = TIMAAT.MediaDatasets.updateMediumModelData(video, formDataObject);
+					video = await TIMAAT.MediaDatasets.updateMediumModelData(video, formDataObject);
 					// video data
 					video.model.mediumVideo.length = TIMAAT.Util.parseTime(formDataObject.length);
 					video.model.mediumVideo.videoCodec = formDataObject.videoCodec;
@@ -1245,7 +1203,7 @@
 				} else { // create new video
 					var model = {
 						mediumId: 0,
-						audioCodecInformation: { // TODO get correct video information
+						audioCodecInformation: { // TODO get correct audio codec information
 							id: 1,
 						},
 						length: TIMAAT.Util.parseTime(formDataObject.length),
@@ -1268,7 +1226,6 @@
 					// };					
 					await TIMAAT.MediaDatasets.createMediumSubtype('video', model, medium, displayTitle, source);
 					var video = TIMAAT.MediaDatasets.videos[TIMAAT.MediaDatasets.videos.length-1];
-          console.log("TCL: video", video);
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', video);
 					$('#timaat-mediadatasets-media-metadata-form').data('medium', video);
 				}
@@ -1676,7 +1633,7 @@
 			$('.datasheet-form-edit-button').hide();
 			$('.datasheet-form-buttons').hide()
 			$('.'+mediumType+'-datasheet-form-submit').show();
-			$('#timaat-mediadatasets-media-metadata-form :input').prop("disabled", false);
+			$('#timaat-mediadatasets-media-metadata-form :input').prop('disabled', false);
 			$('#timaat-mediadatasets-media-metadata-title').focus();
 
 			// setup form
@@ -1685,7 +1642,7 @@
 			$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
 			$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
 			$('#timaat-mediadatasets-media-metadata-source-isprimarysource').prop('checked', true);
-			$('#timaat-mediadatasets-media-metadata-source-isstillavailable').prop('checked', false);
+			// $('#timaat-mediadatasets-media-metadata-source-isstillavailable').prop('checked', false);
 		},
 
 		mediumFormDatasheet: function(action, mediumType, mediumTypeData) {
@@ -2091,7 +2048,7 @@
 			// NO MEDIUM SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
 			// This routine can be used to create empty media of a certain type
 			// console.log("TCL: createMedium: async function -> mediumModel, title, source", mediumModel, title, source);
-			try {
+			try { // TODO needs to be called after createMedium once m-n-table is refactored to 1-n table
 				// create display title
 				var newDisplayTitle = await TIMAAT.MediaService.createTitle(title);
 			} catch(error) {
@@ -2505,7 +2462,7 @@
 				copyright: formDataObject.copyright,
 				releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
 				mediaType: {
-					id: mediaTypeId,
+					id: Number(mediaTypeId),
 				},
 				titles: [{
 					id: 0,

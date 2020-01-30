@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name="actor_person_translation")
-@NamedQuery(name="ActorPersonTranslation.findAll", query="SELECT p FROM ActorPersonTranslation p")
+@NamedQuery(name="ActorPersonTranslation.findAll", query="SELECT apt FROM ActorPersonTranslation apt")
 public class ActorPersonTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class ActorPersonTranslation implements Serializable {
 	@ManyToOne
 	// @JsonBackReference(value = "ActorPerson-ActorPersonTranslation")
 	@JsonIgnore
-	@JoinColumn(name="actor_person_id")
+	@JoinColumn(name="actor_person_actor_id")
 	private ActorPerson actorPerson;
 
 	public ActorPersonTranslation() {

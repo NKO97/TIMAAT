@@ -571,7 +571,7 @@ input.table-control {
 }
 
 .form-group {
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 }
 
 .form-control input {
@@ -654,4 +654,22 @@ select:disabled {
 
 .col-form-label.sm {
 	line-height: 1;
+}
+
+fieldset {
+	font-family: sans-serif;
+	border: 2px solid #acacac;
+	/* background: #ddd; */
+	border-radius: 5px;
+	padding: 3px;
+}
+
+fieldset legend {
+	background: #eeeeee;
+	/* color: #fff; */
+	padding: 0px 10px;
+	font-size: 18px;
+	border-radius: 5px;
+	/* box-shadow: 0 0 0 5px #ddd; */
+	/* margin-left: 10px; */
 }

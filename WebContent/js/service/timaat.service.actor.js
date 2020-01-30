@@ -82,15 +82,10 @@
 			console.log("TCL: async createActor -> actorModel", actorModel);
 			var newActorModel = {
 				id: 0,
-				// remark: actorModel.remark,
-				// releaseDate: actorModel.releaseDate,
-				// copyright: actorModel.copyright,
 				actorType: {
 					id: actorModel.actorType.id,
 				},
-				displayName: {
-					id: actorModel.displayName.id,
-				},
+				isFictional: actorModel.isFictional,
 			};
       console.log("TCL: createActor -> newActorModel", newActorModel);
 			return new Promise(resolve => {
@@ -108,30 +103,6 @@
 					resolve(actorData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
-				});
-			}).catch((error) => {
-				console.log( "error: ", error );
-			});
-		},
-
-		// not yet needed (no translation data or translation table available at the moment)
-		async createActorTranslation(model, modelTranslation) {
-			// console.log("TCL: createActorTranslation -> model, modelTranslation", model, modelTranslation);			
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+model.id+"/translation/"+modelTranslation.id,
-					type:"POST",
-					data: JSON.stringify(modelTranslation),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(translationData) {
-					// console.log("TCL: createActorTranslation -> translationData", translationData);
-					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
 				});
 			}).catch((error) => {
 				console.log( "error: ", error );
@@ -161,8 +132,30 @@
 			});
 		},
 
+		async createPersonTranslation(model, modelTranslation) {
+      console.log("TCL: createPersonTranslation -> async createPersonTranslation(model, modelTranslation)",  model, modelTranslation);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.person.protocol+'//'+window.person.host+"/TIMAAT/api/person/"+model.id+"/translation/"+modelTranslation.id,
+					type:"POST",
+					data: JSON.stringify(modelTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
 		async createName(name) {
-			// console.log("TCL: async createName -> name", name);
+			console.log("TCL: async createName -> name", name);
 			// console.log("TCL: async createName -> JSON.stringify(name)", JSON.stringify(name));
 			return new Promise(resolve => {
 				$.ajax({
@@ -201,6 +194,78 @@
 				}).done(function(nameData) {
 					console.log("TCL: addName -> nameData", nameData);
 					resolve(nameData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createAddress(address) {
+			console.log("TCL: async createAddress -> address", address);
+			// console.log("TCL: async createAddress -> JSON.stringify(address)", JSON.stringify(address));
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/address/"+address.id,
+					type:"POST",
+					data: JSON.stringify(address),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(addressData) {
+					// console.log("TCL: createAddress -> addressData", addressData);
+					resolve(addressData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createEmailAddress(emailAddress) {
+			console.log("TCL: async createEmailAddress -> emailAddress", emailAddress);
+			// console.log("TCL: async createEmailAddress -> JSON.stringify(emailAddress)", JSON.stringify(emailAddress));
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailAddress/"+emailAddress.id,
+					type:"POST",
+					data: JSON.stringify(emailAddress),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(emailAddressData) {
+					// console.log("TCL: createEmailAddress -> emailAddressData", emailAddressData);
+					resolve(emailAddressData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createPhoneNumber(phoneNumber) {
+			console.log("TCL: async createPhoneNumber -> phoneNumber", phoneNumber);
+			// console.log("TCL: async createPhoneNumber -> JSON.stringify(phoneNumber)", JSON.stringify(phoneNumber));
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phoneNumber/"+phoneNumber.id,
+					type:"POST",
+					data: JSON.stringify(phoneNumber),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(phoneNumberData) {
+					// console.log("TCL: createPhoneNumber -> phoneNumberData", phoneNumberData);
+					resolve(phoneNumberData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});

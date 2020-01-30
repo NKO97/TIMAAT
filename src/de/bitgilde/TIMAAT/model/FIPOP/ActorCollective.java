@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="actor_collective")
-@NamedQuery(name="ActorCollective.findAll", query="SELECT c FROM ActorCollective c")
+@NamedQuery(name="ActorCollective.findAll", query="SELECT ac FROM ActorCollective ac")
 public class ActorCollective implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,9 +38,9 @@ public class ActorCollective implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorCollective")
-	@JsonIgnore
+	// @JsonIgnore
 	// @JsonManagedReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollective")
-	private List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
+	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	public ActorCollective() {
 	}
@@ -76,11 +77,11 @@ public class ActorCollective implements Serializable {
 		this.actor = actor;
 	}
 
-	public List<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
+	public Set<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
 		return this.actorPersonIsMemberOfActorCollectives;
 	}
 
-	public void setActorPersonIsMemberOfActorCollectives(List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
+	public void setActorPersonIsMemberOfActorCollectives(Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
 		this.actorPersonIsMemberOfActorCollectives = actorPersonIsMemberOfActorCollectives;
 	}
 

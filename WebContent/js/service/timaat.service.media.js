@@ -69,7 +69,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	console.log("TCL: listMediumSubtype -> data", data);
+      	// console.log("TCL: listMediumSubtype -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -165,7 +165,7 @@
 		},
 
 		async createTitle(title) {
-			// console.log("TCL: async createTitle -> title", title);
+			console.log("TCL: async createTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -236,7 +236,7 @@
 		},
 
 		async createSource(source) {
-			// console.log("TCL: async createSource -> source", source);
+			console.log("TCL: async createSource -> source", source);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,

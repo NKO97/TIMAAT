@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -29,8 +30,9 @@ public class Street implements Serializable {
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
-	@JsonBackReference(value = "Location-Street")
+	// @JsonBackReference(value = "Location-Street")
 	@PrimaryKeyJoinColumn(name="location_id")
+	@JsonIgnore
 	private Location location;
 
 	public Street() {

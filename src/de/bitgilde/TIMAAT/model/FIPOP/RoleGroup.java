@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="role_group")
-@NamedQuery(name="RoleGroup.findAll", query="SELECT r FROM RoleGroup r")
+@NamedQuery(name="RoleGroup.findAll", query="SELECT rg FROM RoleGroup rg")
 public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 

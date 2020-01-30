@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="actor_has_email_address")
-@NamedQuery(name="ActorHasEmailAddress.findAll", query="SELECT a FROM ActorHasEmailAddress a")
+@NamedQuery(name="ActorHasEmailAddress.findAll", query="SELECT ahea FROM ActorHasEmailAddress ahea")
 public class ActorHasEmailAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 

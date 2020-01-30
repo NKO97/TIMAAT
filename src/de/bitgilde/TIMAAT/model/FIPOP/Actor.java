@@ -23,12 +23,13 @@ public class Actor implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="is_fictional")
-	private int isFictional;
+	@Column(name="is_fictional", columnDefinition = "BOOLEAN")
+	private Boolean isFictional;
 
-	//bi-directional many-to-many association to ActorType
-	@ManyToMany(mappedBy="actors")	
-	private List<ActorType> actorTypes;
+	//bi-directional many-to-one association to ActorType
+	@ManyToOne
+	@JoinColumn(name="actor_type_id")
+	private ActorType actorType;
 
 	@JoinColumn(name="created_by_user_account_id")
 	private UserAccount createdByUserAccount;
@@ -44,13 +45,23 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-one association to Name
 	@ManyToOne(cascade=CascadeType.PERSIST)
-	@JoinColumn(name="display_name_actor_name_id")
-	private ActorName name1;
-
-	//bi-directional many-to-one association to Name
-	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="birth_name_actor_name_id")
-	private ActorName name2;
+	private ActorName actorName;
+
+	//bi-directional many-to-one association to Address
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="primary_address_id")
+	private Address primaryAddress;
+
+	//bi-directional many-to-one association to EmailAddress
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="primary_email_address_id")
+	private EmailAddress actorHasEmailAddress;
+
+	//bi-directional many-to-one association to PhoneNumber
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="primary_phone_number_id")
+	private PhoneNumber actorHasPhoneNumber;
 	
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
@@ -104,7 +115,7 @@ public class Actor implements Serializable {
 
 	//bi-directional one-to-one association to Collective
 	@OneToOne(mappedBy="actor")
-	private ActorCollective collective;
+	private ActorCollective actorCollective;
 
 	//bi-directional many-to-one association to GreimasActantialModelHasActor
 	// @OneToMany(mappedBy="actor")
@@ -122,6 +133,9 @@ public class Actor implements Serializable {
 	// @OneToMany(mappedBy="actor")
 	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
 
+	@Transient
+	private ActorName displayName; 
+
 	public Actor() {
 	}
 
@@ -133,11 +147,11 @@ public class Actor implements Serializable {
 		this.id = id;
 	}
 
-	public int getIsFictional() {
+	public Boolean getIsFictional() {
 		return this.isFictional;
 	}
 
-	public void setIsFictional(int isFictional) {
+	public void setIsFictional(Boolean isFictional) {
 		this.isFictional = isFictional;
 	}
 
@@ -178,12 +192,12 @@ public class Actor implements Serializable {
 		this.lastEditedAt = lastEditedAt;
 	}
 
-	public List<ActorType> getActorTypes() {
-		return this.actorTypes;
+	public ActorType getActorType() {
+		return this.actorType;
 	}
 
-	public void setActorTypes(List<ActorType> actorTypes) {
-		this.actorTypes = actorTypes;
+	public void setActorType(ActorType actorType) {
+		this.actorType = actorType;
 	}
 
 	public List<ActorHasAddress> getActorHasAddresses() {
@@ -194,18 +208,26 @@ public class Actor implements Serializable {
 		this.actorHasAddresses = actorHasAddresses;
 	}
 
-	public ActorHasAddress addActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().add(actorHasAddress);
-		actorHasAddress.setActor(this);
+	public ActorHasAddress addActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().add(primaryAddress);
+		primaryAddress.setActor(this);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
-	public ActorHasAddress removeActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().remove(actorHasAddress);
-		actorHasAddress.setActor(null);
+	public ActorHasAddress removeActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().remove(primaryAddress);
+		primaryAddress.setActor(null);
 
-		return actorHasAddress;
+		return primaryAddress;
+	}
+
+	public Address getPrimaryAddress() {
+		return this.primaryAddress;
+	}
+
+	public void setPrimaryAddress(Address primaryAddress) {
+		this.primaryAddress = primaryAddress;
 	}
 
 	public List<ActorHasEmailAddress> getActorHasEmailAddresses() {
@@ -230,12 +252,28 @@ public class Actor implements Serializable {
 		return actorHasEmailAddress;
 	}
 
+	public EmailAddress getPrimaryEmailAddress() {
+		return this.actorHasEmailAddress;
+	}
+
+	public void setPrimaryEmailAddress(EmailAddress actorHasEmailAddress) {
+		this.actorHasEmailAddress = actorHasEmailAddress;
+	}
+
 	public List<PhoneNumber> getPhoneNumbers() {
 		return this.phoneNumbers;
 	}
 
 	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
+	}
+
+	public PhoneNumber getPrimaryPhoneNumber() {
+		return this.actorHasPhoneNumber;
+	}
+
+	public void setPrimaryPhoneNumber(PhoneNumber actorHasPhoneNumber) {
+		this.actorHasPhoneNumber = actorHasPhoneNumber;
 	}
 
 	public List<Role> getRoles() {
@@ -290,22 +328,22 @@ public class Actor implements Serializable {
 		return actorName;
 	}
 
-	// display name
-	public ActorName getDisplayName() {
-		return this.name1;
-	}
-
-	public void setDisplayName(ActorName name) {
-		this.name1 = name;
-	}
-
 	// birth name
 	public ActorName getBirthName() {
-		return this.name2;
+		return this.actorName;
 	}
 
-	public void setBirthName(ActorName name) {
-		this.name2 = name;
+	public void setBirthName(ActorName birthName) {
+		this.actorName = birthName;
+	}
+
+	// display name
+	public ActorName getDisplayName() {
+		return this.displayName;
+	}
+
+	public void setDisplayName(ActorName displayName) {
+		this.displayName = displayName;
 	}
 
 	public List<ActorRelatesToActor> getActorRelatesToActors1() {
@@ -361,11 +399,11 @@ public class Actor implements Serializable {
 	}
 
 	public ActorCollective getCollective() {
-		return this.collective;
+		return this.actorCollective;
 	}
 
-	public void setCollective(ActorCollective collective) {
-		this.collective = collective;
+	public void setCollective(ActorCollective actorCollective) {
+		this.actorCollective = actorCollective;
 	}
 
 	// public List<GreimasActantialModelHasActor> getGreimasActantialModelHasActors() {

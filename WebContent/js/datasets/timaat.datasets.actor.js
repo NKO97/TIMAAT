@@ -150,39 +150,35 @@
 
 				if (actor) { // update actor
 					// actor data
-					actor = TIMAAT.ActorDatasets.updateActorModelData(actor, formDataObject);
+					actor = await TIMAAT.ActorDatasets.updateActorModelData(actor, formDataObject);
 
 					actor.updateUI();
 					await TIMAAT.ActorDatasets.updateActor(actor);
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
 				} else { // create new actor
-					var model = {
-						id: 0,
-						// remark: formDataObject.remark,
-						// copyright: formDataObject.copyright,
-						// releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
-						actorType: {
-							id: Number(formDataObject.typeId),
-						},
-						names: [{
-							id: 0,
-							// language: {
-							// 	id: Number(formDataObject.displayNameLanguageId),
-							// },
-							name: formDataObject.displayName,
-						}],
-					};
-					var displayName = {
-						id: 0,
-						// language: {
-						// 	id: Number(formDataObject.displayNameLanguageId),
-						// },
-						name: formDataObject.displayName,
-					};
-					// await TIMAAT.ActorDatasets.createActor(model, displayName, source);
-					await TIMAAT.ActorDatasets.createActor(model, displayName, );
-					var actor = TIMAAT.ActorDatasets.actor[TIMAAT.ActorDatasets.actor.length-1];
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
+					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, formDataObject.typeId);
+					var displayName = await TIMAAT.ActorDatasets.createDisplayNameModel(formDataObject);
+					var primaryAddress = await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					var primaryEmail = await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					var primaryPhoneNumber = await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+					var actorType;
+					var actorSubtypeModel;
+					switch (formDataObject.typeId) {
+						case "1": 
+							actorType = "person";
+							actorSubtypeModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
+						break;
+						case "2": 
+							actorType = "collective";
+							actorSubtypeModel = await TIMAAT.ActorDatasets.createCollectiveModel(formDataObject);
+						break;
+					}
+					if (actorType) {
+						await TIMAAT.ActorDatasets.createActor(actorType, actorModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
+						var actor = TIMAAT.ActorDatasets.actor[TIMAAT.ActorDatasets.actor.length-1];
+						TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
+						// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
+					}
 				};
 			});
 
@@ -294,28 +290,43 @@
 
 				// Create/Edit person window submitted data
 				var formData = $("#timaat-actordatasets-actor-metadata-form").serializeArray();
+        console.log("TCL: formData", formData);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
+				formDataObject.isFictional = (formDataObject.personIsFictional) ? true : false;
+				formDataObject.sexId = (formDataObject.sexId) ? formDataObject.sexId : 4; // set default to 'unknown' (id 4)
+				formDataObject.displayName = formDataObject.personDisplayName;
+				formDataObject.nameUsedFrom = moment.utc(formDataObject.personNameUsedFrom, "YYY-MM-DD");
+				formDataObject.nameUsedUntil = moment.utc(formDataObject.personNameUsedUntil, "YYY-MM-DD");
+				console.log("TCL: formDataObject", formDataObject);
 
 				if (person) { // update person
 					// actor data
-					person = TIMAAT.ActorDatasets.updateActorModelData(person, formDataObject);
+					person = await TIMAAT.ActorDatasets.updateActorModelData(person, formDataObject);
 					// person data
-					// person.model.actorPerson.length = TIMAAT.Util.parseTime(formDataObject.length);
+					person.model.actorPerson.academicTitle = formDataObject.academicTitle; //? title or title.id?
+					person.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYY-MM-DD");
+					person.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
+					person.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYY-MM-DD");
+					person.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
+					person.model.actorPerson.sex.id = Number(formDataObject.sexId);
+					person.model.actorPerson.citizenship.name = formDataObject.citizenshipName; //? correct structure?
+					person.model.actorPerson.specialFeatures = formDataObject.specialFeatures;
 
 					person.updateUI();
-					TIMAAT.ActorDatasets.updateActorSubtype('person', person);
+					await TIMAAT.ActorDatasets.updateActorSubtype('person', person);
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 				} else { // create new person
-					var model = {
-						actorId: 0,
-					};
-					var actor = TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
-					var displayTitle = TIMAAT.ActorDatasets.createDisplayTitleModel(formDataObject);
-					var source = TIMAAT.ActorDatasets.createSourceModel(formDataObject);			
-					await TIMAAT.ActorDatasets.createActorSubtype('person', model, actor, displayTitle, source);
+					var personModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
+					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
+					var displayName = await TIMAAT.ActorDatasets.createDisplayNameModel(formDataObject);
+					var primaryAddress = await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					var primaryEmail = await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					var primaryPhoneNumber = await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+					
+					await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
 					var person = TIMAAT.ActorDatasets.persons[TIMAAT.ActorDatasets.persons.length-1];
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 					$('#timaat-actordatasets-actor-metadata-form').data('actor', person);
@@ -332,6 +343,92 @@
 
 			// Cancel add/edit button in content form functionality
 			$('#timaat-actordatasets-person-metadata-form-dismiss').click( function(event) {
+				$('.form').hide();
+			});
+		},
+
+		initCollectives: function() {
+			// nav-bar functionality
+			$('#actors-tab-collective-metadata-form').click(function(event) {
+				$('.nav-tabs a[href="#collectiveDatasheet"]').tab('show');
+				$('.form').hide();
+				$('#timaat-actordatasets-actor-metadata-form').show();
+				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+			
+			// delete collective button functionality (in collective list)
+			$('#timaat-actordatasets-collective-delete-submit').click(function(ev) {
+				var modal = $('#timaat-actordatasets-collective-delete');
+				var collective = modal.data('collective');
+				if (collective) TIMAAT.ActorDatasets._actorSubtypeRemoved('collective', collective);
+				modal.modal('hide');
+				$('#timaat-actordatasets-actor-metadata-form').hide();
+				$('.actors-data-tabs').hide();
+				$('.form').hide();
+			});
+
+			// add collective button functionality (opens form)
+			// $('#timaat-actordatasets-collective-add').attr('onclick','TIMAAT.ActorDatasets.addActor("collective")');
+			$('#timaat-actordatasets-collective-add').click(function(event) {
+				$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
+				TIMAAT.ActorDatasets.addActor("collective");
+			});
+
+			// collective form handlers
+			// Submit collective data button functionality
+			$('#timaat-actordatasets-collective-metadata-form-submit').on('click', async function(event) {
+				// continue only if client side validation has passed
+				event.preventDefault();
+				if (!$("#timaat-actordatasets-actor-metadata-form").valid()) return false;
+
+				// the original collective model (in case of editing an existing collective)
+				var collective = $('#timaat-actordatasets-actor-metadata-form').data('actor');		
+
+				// Create/Edit collective window submitted data
+				var formData = $("#timaat-actordatasets-actor-metadata-form").serializeArray();
+				var formDataObject = {};
+				$(formData).each(function(i, field){
+					formDataObject[field.name] = field.value;
+				});
+				formDataObject.isFictional = (formDataObject.collectiveIsFictional) ? true : false;
+				formDataObject.sexId = (formDataObject.sexId) ? formDataObject.sexId : 4; // set default to 'unknown' (id 4)
+				formDataObject.displayName = formDataObject.collectiveDisplayName;
+				formDataObject.nameUsedFrom = moment.utc(formDataObject.collectivenNameUsedFrom, "YYY-MM-DD");
+				formDataObject.nameUsedUntil = moment.utc(formDataObject.collectiveNameUsedUntil, "YYY-MM-DD");
+
+				if (collective) { // update collective
+					// actor data
+					collective = await TIMAAT.ActorDatasets.updateActorModelData(collective, formDataObject);
+					// collective data
+
+					collective.updateUI();
+					await TIMAAT.ActorDatasets.updateActorSubtype('collective', collective);
+					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
+				} else { // create new collective
+					var collectiveModel = await TIMAAT.ActorDatasets.createCollectiveModel(formDataObject);
+					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 2); // 2 = Collective. TODO check clause to find proper id
+					var displayName = await TIMAAT.ActorDatasets.createDisplayNameModel(formDataObject);
+					var primaryAddress = await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					var primaryEmail = await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					var primaryPhoneNumber = await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+
+					await TIMAAT.ActorDatasets.createActor('collective', actorModel, collectiveModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
+					var collective = TIMAAT.ActorDatasets.collectives[TIMAAT.ActorDatasets.collectives.length-1];
+					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
+					$('#timaat-actordatasets-actor-metadata-form').data('actor', collective);
+				}
+			});
+
+			// edit content form button handler
+			$('#timaat-actordatasets-collective-metadata-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.ActorDatasets.actorFormDatasheet('edit', 'collective', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+				// collective.listView.find('.timaat-actordatasets-collective-list-tags').popover('show');
+			});
+
+			// Cancel add/edit button in content form functionality
+			$('#timaat-actordatasets-collective-metadata-form-dismiss').click( function(event) {
 				$('.form').hide();
 			});
 		},
@@ -372,7 +469,7 @@
 				if (name != '' && languageId != null) {
 					var namesInForm = $("#timaat-actordatasets-actor-names-form").serializeArray();
 					console.log("TCL: namesInForm", namesInForm);
-					var i = Math.floor((namesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new name' row; latter -1 to compensate for single 'isDisplayName' occurence
+					var i = Math.floor((namesInForm.length - 1) / 2) - 1; //* first -1 is to account for 'add new name' row; latter -1 to compensate for single 'isDisplayName' occurence
 					// TODO this formula may not work with the originalTital radiobutton addition
 					$('#dynamic-name-fields').append(
 						`<div class="form-group" data-role="name-entry">
@@ -680,91 +777,6 @@
 			});
 		},
 
-		initCollectives: function() {
-			// nav-bar functionality
-			$('#actors-tab-collective-metadata-form').click(function(event) {
-				$('.nav-tabs a[href="#collectiveDatasheet"]').tab('show');
-				$('.form').hide();
-				$('#timaat-actordatasets-actor-metadata-form').show();
-				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
-			});
-			
-			// delete collective button functionality (in collective list)
-			$('#timaat-actordatasets-collective-delete-submit').click(function(ev) {
-				var modal = $('#timaat-actordatasets-collective-delete');
-				var collective = modal.data('collective');
-				if (collective) TIMAAT.ActorDatasets._actorSubtypeRemoved('collective', collective);
-				modal.modal('hide');
-				$('#timaat-actordatasets-actor-metadata-form').hide();
-				$('.actors-data-tabs').hide();
-				$('.form').hide();
-			});
-
-			// add collective button functionality (opens form)
-			// $('#timaat-actordatasets-collective-add').attr('onclick','TIMAAT.ActorDatasets.addActor("collective")');
-			$('#timaat-actordatasets-collective-add').click(function(event) {
-				$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
-				TIMAAT.ActorDatasets.addActor("collective");
-			});
-
-			// collective form handlers
-			// Submit collective data button functionality
-			$('#timaat-actordatasets-collective-metadata-form-submit').on('click', async function(event) {
-				// continue only if client side validation has passed
-				event.preventDefault();
-				if (!$("#timaat-actordatasets-actor-metadata-form").valid()) return false;
-
-				// the original collective model (in case of editing an existing collective)
-				var collective = $('#timaat-actordatasets-actor-metadata-form').data('actor');		
-
-				// Create/Edit collective window submitted data
-				var formData = $("#timaat-actordatasets-actor-metadata-form").serializeArray();
-				var formDataObject = {};
-				$(formData).each(function(i, field){
-					formDataObject[field.name] = field.value;
-				});
-
-				if (collective) { // update collective
-					// actor data
-					collective = TIMAAT.ActorDatasets.updateActorModelData(collective, formDataObject);
-					// collective data
-					// collective.model.actorCollective.length = TIMAAT.Util.parseTime(formDataObject.length);
-
-					collective.updateUI();
-					TIMAAT.ActorDatasets.updateActorSubtype('collective', collective);
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
-				} else { // create new collective
-					var model = {
-						actorId: 0,
-						collectiveCodecInformation: { // TODO get correct collective information
-							id: 1,
-						},
-						length: TIMAAT.Util.parseTime(formDataObject.length),
-					};
-					var actor = TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Collective. TODO check clause to find proper id
-					var displayTitle = TIMAAT.ActorDatasets.createDisplayTitleModel(formDataObject);
-					var source = TIMAAT.ActorDatasets.createSourceModel(formDataObject);			
-					await TIMAAT.ActorDatasets.createActorSubtype('collective', model, actor, displayTitle, source);
-					var collective = TIMAAT.ActorDatasets.collectives[TIMAAT.ActorDatasets.collectives.length-1];
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
-					$('#timaat-actordatasets-actor-metadata-form').data('actor', collective);
-				}
-			});
-
-			// edit content form button handler
-			$('#timaat-actordatasets-collective-metadata-form-edit').on('click', function(event) {
-				event.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				TIMAAT.ActorDatasets.actorFormDatasheet('edit', 'collective', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
-				// collective.listView.find('.timaat-actordatasets-collective-list-tags').popover('show');
-			});
-
-			// Cancel add/edit button in content form functionality
-			$('#timaat-actordatasets-collective-metadata-form-dismiss').click( function(event) {
-				$('.form').hide();
-			});
-		},
-
 		load: function() {
 			TIMAAT.ActorDatasets.loadActors();
 			TIMAAT.ActorDatasets.loadActorTypes();
@@ -830,11 +842,19 @@
 			var acts = Array();
 			actors.forEach(function(actor) { 
 				if ( actor.id > 0 ) {
+					console.log("TCL: actor", actor);
+					// actor.actorNames.forEach(function(name) {
+					// 	if (name.isDisplayName) {
+					// 		actor.displayName = name;
+					// 		return; // only one displayName exists/needs to be found
+					// 	}
+					// })
 					acts.push(new TIMAAT.Actor(actor, 'actor'));
 				}
 			});
 			TIMAAT.ActorDatasets.actors = acts;
 			TIMAAT.ActorDatasets.actors.model = actors;
+      console.log("TCL: TIMAAT.ActorDatasets.actors", TIMAAT.ActorDatasets.actors);
 			// also set up video chooser list
 			// TIMAAT.VideoChooser.setActors(TIMAAT.ActorDatasets.actors.model);
 		},
@@ -853,12 +873,20 @@
 			var newPerson;
 			persons.forEach(function(person) { 
 				if (person.id > 0) {
+					console.log("TCL: person", person);
+					// person.actorNames.forEach(function(name) {
+					// 	if (name.isDisplayName) {
+					// 		person.displayName = name;
+					// 		return; // only one displayName exists/needs to be found
+					// 	}
+					// })
 					newPerson = new TIMAAT.Actor(person, 'person');
 					pers.push(newPerson);
 				}
 			});
 			TIMAAT.ActorDatasets.persons = pers;
 			TIMAAT.ActorDatasets.persons.model = persons;
+      console.log("TCL: TIMAAT.ActorDatasets.persons", TIMAAT.ActorDatasets.persons);
 		},
 
 		setCollectiveLists: function(collectives) {
@@ -875,12 +903,20 @@
 			var newCollective;
 			collectives.forEach(function(collective) { 
 				if (collective.id > 0) {
+					console.log("TCL: collective", collective);
+					// collective.actorNames.forEach(function(name) {
+					// 	if (name.isDisplayName) {
+					// 		collective.displayName = name;
+					// 		return; // only one displayName exists/needs to be found
+					// 	}
+					// })
 					newCollective = new TIMAAT.Actor(collective, 'collective');
 					colls.push(newCollective);
 				}
 			});
 			TIMAAT.ActorDatasets.collectives = colls;
 			TIMAAT.ActorDatasets.collectives.model = collectives;
+      console.log("TCL: TIMAAT.ActorDatasets.collectives", TIMAAT.ActorDatasets.collectives);
 		},
 
 		setActorNameList: function(actor) {
@@ -917,25 +953,23 @@
 			else {
 				$('.actortype-data').hide();
 			}
-			// $('.source-data').show();
 			$('.'+actorType+'-data').show();
 			$('.datasheet-form-edit-button').hide();
 			$('.datasheet-form-buttons').hide()
 			$('.'+actorType+'-datasheet-form-submit').show();
-			$('#timaat-actordatasets-actor-metadata-form :input').prop("disabled", false);
+			$('#timaat-actordatasets-actor-metadata-form :input').prop('disabled', false);
 			$('#timaat-actordatasets-actor-metadata-name').focus();
 
 			// setup form
 			$('#actorFormHeader').html(actorType+" hinzufügen");
 			$('#timaat-actordatasets-'+actorType+'-metadata-form-submit').html("Hinzufügen");
-			// $('#timaat-actordatasets-actor-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			// $('#timaat-actordatasets-actor-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
-			// $('#timaat-actordatasets-actor-metadata-source-isprimarysource').prop('checked', true);
-			// $('#timaat-actordatasets-actor-metadata-source-isstillavailable').prop('checked', false);
+			$('#timaat-actordatasets-'+actorType+'-metadata-isfictional').prop('checked', false);
+			$('#timaat-actordatasets-'+actorType+'-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+			$('#timaat-actordatasets-'+actorType+'-metadata-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
 		},
 
 		actorFormDatasheet: function(action, actorType, actorTypeData) {
-    	// console.log("TCL: action, actorType, actorTypeData", action, actorType, actorTypeData);
+    	console.log("TCL: action, actorType, actorTypeData", action, actorType, actorTypeData);
 			$('#timaat-actordatasets-actor-metadata-form').trigger('reset');
 			$('.datasheet-data').hide();
 			$('.name-data').show();
@@ -949,7 +983,6 @@
 			if (actorType == "collective") {
 				$('.person-data').hide(); // to display academic title in same row with actor name data
 			}
-			// $('.source-data').show();
 			$('.'+actorType+'-data').show();
 			actorFormMetadataValidator.resetForm();
 			$('.'+actorType+'-data-tab').show();
@@ -986,35 +1019,27 @@
 				$('#timaat-actordatasets-actor-metadata-name').focus();
 			}
 
-			// console.log("TCL: actorTypeData", actorTypeData);
+			console.log("TCL: actorTypeData", actorTypeData);
 			// setup UI
 			var data = actorTypeData.model;
 			// actor data
 			$('#timaat-actordatasets-actor-metadata-actortype-id').val(data.actorType.id);
-			// $('#timaat-actordatasets-actor-metadata-remark').val(data.remark);
-			// $('#timaat-actordatasets-actor-metadata-copyright').val(data.copyright);
-			// if (isNaN(moment(data.releaseDate)))
-			// 	$('#timaat-actordatasets-actor-metadata-releasedate').val('');
-			// 	else $('#timaat-actordatasets-actor-metadata-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
 			// display-name data
-			$('#timaat-actordatasets-actor-metadata-name').val(data.displayName.name);
-			// $('#timaat-actordatasets-actor-metadata-name-language-id').val(data.displayName.language.id);
-			// source data
-			// if (data.sources[0].isPrimarySource)
-			// 	$('#timaat-actordatasets-actor-metadata-source-isprimarysource').prop('checked', true);
-			// 	else $('#timaat-actordatasets-actor-metadata-source-isprimarysource').prop('checked', false);
-			// $('#timaat-actordatasets-actor-metadata-source-url').val(data.sources[0].url);
-			// if (isNaN(moment.utc(data.sources[0].lastAccessed))) 
-			// 	$('#timaat-actordatasets-actor-metadata-source-lastaccessed').val('');
-			// 	else $('#timaat-actordatasets-actor-metadata-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
-			// if (data.sources[0].isStillAvailable)
-			// 	$('#timaat-actordatasets-actor-metadata-source-isstillavailable').prop('checked', true);
-			// 	else $('#timaat-actordatasets-actor-metadata-source-isstillavailable').prop('checked', false);
+			// $('#timaat-actordatasets-actor-metadata-name').val(data.displayName.name);
+			$('#timaat-actordatasets-actor-metadata-name').val(data.name);
 			// actor subtype specific data
 			switch (actorType) {
 				case 'person':
+					if(isNaN(moment(data.dateOfBirth)))
+						$('#timaat-actordatasets-person-metadata-dateofbirth').val('');
+						else $('#timaat-actordatasets-person-metadata-dateofbirth').val(moment.utc(actorTypeData.model.actorPerson.dateOfBirth).format('YYYY-MM-DD'));
+					if(isNaN(moment(data.dayOfDeath)))
+						$('#timaat-actordatasets-person-metadata-dayofdeath').val('');
+						$('#timaat-actordatasets-person-metadata-dayofdeath').val(moment.utc(actorTypeData.model.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
+					// TODO all person data
 				break;
 				case "collective":
+					// TODO all collective data
 				break;
 			}
 			$('#timaat-actordatasets-actor-metadata-form').data(actorType, actorTypeData);
@@ -1168,90 +1193,82 @@
 			}
 		},
 
-		// createActor: async function(actorModel, name, source) {
-		createActor: async function(actorModel, name) {
-			// createActor: async function(actorModel, actorModelTranslation) { // actor has no translation table at the moment
-			// NO ACTOR SHOULD BE CREATED DIRECTLY. CREATE VIDEO, IMAGE, ETC. INSTEAD
-			// This routine can be used to create empty actor of a certain type
-			// console.log("TCL: createActor: async function -> actorModel, name, source", actorModel, name, source);
+		createActor: async function(actorType, actorModel, actorSubtypeModel, displayName, address, email, phoneNumber) {
+			console.log("TCL: createActor: async function(actorType, actorModel, displayName, address, email, phoneNumber)", actorType, actorModel, displayName, address, email, phoneNumber);
 			try {
-				// create display name
-				var newDisplayName = await TIMAAT.ActorService.createName(name);
+				// create primary address
+				var newPrimaryAddress = null;
+				if (address.length > 0) {
+					newPrimaryAddress = await TIMAAT.ActorService.createAddress(address);
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// create primary email
+				var newPrimaryEmailAddress = null;
+				if (email.length > 0) {
+					newPrimaryEmailAddress = await TIMAAT.ActorService.createEmail(email);
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			try {
+				// create primary phone number
+				var newPrimaryPhoneNumber = null;
+				if (phoneNumber.length > 0) {
+					newPrimaryPhoneNumber = await TIMAAT.ActorService.createPhoneNumber(phoneNumber);
+				}
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {				
 				// create actor
 				var tempActorModel = actorModel;
-				tempActorModel.displayName = newDisplayName;
-				// tempActorModel.source = source;
+				// tempActorModel.displayName = newDisplayName;
+				tempActorModel.primaryAddress = (newPrimaryAddress) ? newPrimaryAddress : "" ;
+				tempActorModel.primaryEmailAddress = (newPrimaryEmailAddress) ? newPrimaryEmailAddress : "";
+				tempActorModel.primaryPhoneNumber = (newPrimaryPhoneNumber) ? newPrimaryPhoneNumber : "";
 				var newActorModel = await TIMAAT.ActorService.createActor(tempActorModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			// try {
-			// 	// update source (createActor created an empty source)
-			// 	source.id = newActorModel.sources[0].id;
-			// 	var updatedSource = await TIMAAT.ActorService.updateSource(source);
-			// 	newActorModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
-
-			// 	// create actor translation with actor id
-			// 	// var newTranslationData = await TIMAAT.ActorService.createActorTranslation(newActorModel, actorModelTranslation);
-			// 	// newActorModel.actorTranslations[0] = newTranslationData;
-				
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// };
 			try {
-				// push new actor to dataset model
-				await TIMAAT.ActorDatasets._actorAdded(newActorModel);
-			} catch(error) {
-				console.log( "error: ", error);
-			};
-		},
-
-		// createActorSubtype: async function(actorSubtype, actorSubtypeModel, actorModel, name, source) {
-		createActorSubtype: async function(actorSubtype, actorSubtypeModel, actorModel, name) {
-    	console.log("TCL: actorSubtype", actorSubtype);
-    	console.log("TCL: actorModel", actorModel);
-			// createActorSubtype: async function(actorModel, actorModelTranslation, actorSubtypeModel) { // actorSubtype has no translation table at the moment
-			// console.log("TCL: createActorSubtype: async function-> actorSubtypeModel, actorModel, name, source", actorSubtypeModel, actorModel, name, source);
-			try {
-				// create name
-				var newDisplayName = await TIMAAT.ActorService.createName(name);
+				// create display name
+				var newDisplayName = await TIMAAT.ActorService.addName(newActorModel.id, displayName);
+				newActorModel.displayName = newDisplayName;
+				newActorModel.names[0] = newDisplayName;
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
-				// create actor
-				var tempActorModel = actorModel;
-				tempActorModel.displayName = newDisplayName;
-				// tempActorModel.source = source;
-				var newActorModel = await TIMAAT.ActorService.createActor(tempActorModel);
-        console.log("TCL: newActorModel", newActorModel);
+				// create person translation with person id
+				if (actorType == "person" && actorSubtypeModel.personTranslations != null) {
+					await TIMAAT.ActorService.createPersonTranslation(newActorModel, actorSubtypeModel.personTranslations);
+					actorSubtypeModel.personTranslations[0] = personModelTranslation;
+				}
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			// try {
-			// 	// update source (createActor created an empty source)
-			// 	source.id = newActorModel.sources[0].id;
-			// 	var updatedSource = await TIMAAT.ActorService.updateSource(source);
-			// 	newActorModel.sources[0] = updatedSource; // TODO refactor once several sources can be added
+			// 	// update displayName (createActor created an empty displayName)
+			// 	displayName.id = newActorModel.names[0].id;
+			// 	var updatedDisplayName = await TIMAAT.MediaService.updateName(displayName);
+			// 	newActorModel.names[0] = updatedDisplayName; // TODO refactor once several names can be added				
 			// } catch(error) {
 			// 	console.log( "error: ", error);
 			// };
 			try {
 				// create actorSubtype with actor id
 				actorSubtypeModel.actorId = newActorModel.id;
-				var newActorSubtypeModel = await TIMAAT.ActorService.createActorSubtype(actorSubtype, newActorModel, actorSubtypeModel);
-        console.log("TCL: newActorSubtypeModel", newActorSubtypeModel);
+				var newActorSubtypeModel = await TIMAAT.ActorService.createActorSubtype(actorType, newActorModel, actorSubtypeModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
-				// push new actorSubtype to dataset model
+				// push new actor to dataset model
 				console.log("TCL: newActorModel", newActorModel);
-				switch (actorSubtype) {
+				switch (actorType) {
 					case 'person':
 						newActorModel.actorPerson = actorSubtypeModel;
 					break;
@@ -1260,7 +1277,7 @@
 					break;
 				};
 				console.log("TCL: newActorModel", newActorModel);
-				await TIMAAT.ActorDatasets._actorSubtypeAdded(actorSubtype, newActorModel);
+				await TIMAAT.ActorDatasets._actorAdded(actorType, newActorModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -1309,8 +1326,8 @@
 					}
 	
 					// update source
-					var tempSource = await TIMAAT.ActorService.updateSource(actor.model.sources[0]);
-					actor.model.sources[0] = tempSource;
+					// var tempSource = await TIMAAT.ActorService.updateSource(actor.model.sources[0]);
+					// actor.model.sources[0] = tempSource;
 	
 					// update data that is part of actor (includes updating last edited by/at)
 					// console.log("TCL: updateActor: async function - actor.model", actor.model);
@@ -1346,22 +1363,16 @@
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-
-			try {
-				// update source
-				var tempSource = await TIMAAT.ActorService.updateSource(actor.model.sources[0]);
-				actor.model.sources[0] = tempSource;
-			} catch(error) {
-				console.log( "error: ", error);
-			};
+			// try {
+			// 	// update source
+			// 	var tempSource = await TIMAAT.ActorService.updateSource(actor.model.sources[0]);
+			// 	actor.model.sources[0] = tempSource;
+			// } catch(error) {
+			// 	console.log( "error: ", error);
+			// };
 
 			try {
 				// update data that is part of actorSubtypeData
-				// console.log("TCL: actorSubtype", actorSubtype);
-				// console.log("TCL: actorSubtypeData.model", actorSubtypeData.model);
-				// var tempActorSubtypeData = actorSubtypeData;
-				// tempActorSubtypeData.model.actor.sources = null;
-				// console.log("TCL: tempActorSubtypeData", tempActorSubtypeData);
 				var tempSubtypeModel;
 				switch (actorSubtype) {
 					case 'person':
@@ -1407,13 +1418,7 @@
 			};
 		},
 
-		_actorAdded: function(actor) {
-    	console.log("TCL: actor", actor);
-			TIMAAT.ActorDatasets.actors.model.push(actor);
-			TIMAAT.ActorDatasets.actors.push(new TIMAAT.Actor(actor, 'actor'));
-		},
-
-		_actorSubtypeAdded: async function(actorSubtype, actor) {
+		_actorAdded: function(actorSubtype, actor) {
 			try {
 				console.log("TCL: _actorSubtypeAdded: function(actorSubtype, actor)");
 				// console.log("TCL: actorSubtype", actorSubtype);
@@ -1481,13 +1486,10 @@
 
 		updateActorModelData: function(actor, formDataObject) {
 			// actor data
-			actor.model.isFictional = formDataObject.isFictional;
-			// actor.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-			// actor.model.copyright = formDataObject.copyright;
-			// actor.model.remark = formDataObject.remark;
-			// display-title data
+			actor.model.isFictional = (formDataObject.isFictional == "on") ? true : false;
 			actor.model.displayName.name = formDataObject.displayName;
-			actor.model.displayName.language.id = Number(formDataObject.displayNameLanguageId);
+			actor.model.displayName.usedFrom = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
+			actor.model.displayName.usedUntil = moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD");
 			var i = 0;
 			for (; i < actor.model.names.length; i++) {
 				if (actor.model.displayName.id == actor.model.names[i].id) {
@@ -1495,46 +1497,202 @@
 					break;
 				}
 			}
-			// source data
-			// actor.model.sources[0].url = formDataObject.sourceUrl;
-			// actor.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-			// actor.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-			// actor.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+			// phone number data
+			actor.model.phoneNumber.iddPrefix = formDataObject.iddPrefix;
+			actor.model.phoneNumber.areaCode = formDataObject.areaCode;
+			actor.model.phoneNumber.number = formDataObject.phoneNumber;
+			actor.model.phoneNumber.type = formDataObject.phoneNumberTypeId;
+			for (; i < actor.model.phoneNumbers.length; i++) {
+				if (actor.model.primaryPhoneNumber.id == actor.model.phoneNumbers[i].id) {
+					actor.model.phoneNumbers[i] = actor.model.primaryPhoneNumber;
+					break;
+				}
+			}
+			// address data
+			actor.model.address.street = formDataObject.street;
+			actor.model.address.streetNumber = formDataObject.streetNumber;
+			actor.model.address.streetAddition = formDataObject.streetAddition;
+			actor.model.address.postalCode = formDataObject.postalCode;
+			actor.model.address.postOfficeBox = formDataObject.postOfficeBox;
+			actor.model.address.type = formDataObject.addressTypeId;
+			actor.model.address.usedFrom = moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD");
+			actor.model.address.usedUntil = moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD");
+			for (; i < actor.model.names.length; i++) {
+				if (actor.model.name.id == actor.model.names[i].id) {
+					actor.model.names[i] = actor.model.name;
+					break;
+				}
+			}
+			// email address data
+			actor.model.email.address = formDataObject.emailAddress;
+			actor.model.email.type = formDataObject.emailTypeId;
 
 			return actor;
 		},
 
 		createActorModel: function(formDataObject, actorTypeId) {
+		console.log("TCL: formDataObject", formDataObject);
 			var actor = {
 				id: 0,
-				// remark: formDataObject.remark,
-				// copyright: formDataObject.copyright,
-				// releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
+				isFictional: (formDataObject.isFictional == "on") ? true : false,
 				actorType: {
-					id: actorTypeId,
+					id: Number(actorTypeId),
+				},
+				displayName: {
+					name: formDataObject.displayName,
 				},
 				names: [{
 					id: 0,
-					// language: {
-					// 	id: Number(formDataObject.displayNameLanguageId),
-					// },
 					name: formDataObject.displayName,
+					UsedFrom: moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD"),
+					UsedUntil: moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD"),
 				}],
-				// actorTranslations: [],
+				actorHasPhoneNumbers: [],
+				// phoneNumbers: [{
+				// 	id: 0,
+				// 	iddPrefix: formDataObject.iddPrefix,
+				// 	areaCode: formDataObject.areaCode,
+				// 	number: formDataObject.phoneNumber,
+				// 	type: Number(formDataObject.phoneNumberTypeId),
+				// }],
+				actorHasAddresses: [],
+				// addresses: [{
+				// 	id: 0,
+				// 	street: formDataObject.street,
+				// 	streetNumber: formDataObject.streetNumber,
+				// 	streetAddition: formDataObject.streetAddition,
+				// 	postalCode: formDataObject.postalCode,
+				// 	postOfficeBox: formDataObject.postOfficeBox,
+				// 	type: Number(formDataObject.addressTypeId),
+				// 	usedFrom: moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD"),
+				// 	usedUntil: moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD"),
+				// }],
+				actorHasEmailAddresses: [],
+				// emails: [{
+				// 	id: 0,
+				// 	address: formDataObject.emailAddress,
+				// 	type: Number(formDataObject.emailTypeId),
+				// }],
 			};
 			return actor;
 		},
 
-		createDisplayNameModel: function(formDataObject) {
-			var displayName = {
-				id: 0,
-				// language: {
-				// 	id: Number(formDataObject.displayNameLanguageId),
-				// },
-				name: formDataObject.displayName,
+		createPersonModel: function(formDataObject) {
+    	console.log("TCL: formDataObject", formDataObject);
+			var personModel = {
+				actorId: 0,
+				academicTitle: (formDataObject.academicTitle) ? formDataObject.academicTitle : null,
+				dateOfBirth: moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD"),
+				placeOfBirth: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
+				dayOfDeath: moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD"),
+				placeOfDeath: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
+				sex: {
+					id: Number(formDataObject.sexId),
+				},
+				actorPersonTranslations: (formDataObject.specialFeatures == "") ? null : [{
+					id: 0,
+					language: {
+						id: 1 // TODO change to correct language
+					},
+					specialFeatures: formDataObject.specialFeatures,
+				}]
 			};
-			return displayName;
+      console.log("TCL: personModel", personModel);
+			return personModel;
 		},
+
+		createCollectiveModel: function(formDataObject) {
+    console.log("TCL: createCollectiveModel: formDataObject", formDataObject);
+			var collectiveModel = {
+				actorId: 0,
+			};
+			return collectiveModel;
+		},
+
+		createDisplayNameModel: function(formDataObject) {
+    console.log("TCL: createDisplayNameModel: formDataObject", formDataObject);
+			var name = {
+				id: 0,
+				name: formDataObject.displayName,
+				usedFrom: moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD"),
+				usedUntil: moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD"),
+				isDisplayName: true,
+			};
+			return name;
+		},
+
+		createAddressModel: function(formDataObject) {
+    	console.log("TCL: createAddressModel: formDataObject", formDataObject);
+			var primaryAddress = {};
+			if (!(formDataObject.street == "" 
+					&& formDataObject.streetNumber == "" 
+					&& formDataObject.streetAddition == "" 
+					&& formDataObject.postalCode == "" 
+					&& formDataObject.postOfficeBox == ""
+					&& formDataObject.addressTypeId == ""
+					&& formDataObject.addressUsedFrom == ""
+					&& formDataObject.addressUsedUntil == "")) {
+				primaryAddress = {
+					street: formDataObject.street,
+					streetNumber: formDataObject.streetNumber,
+					streetAddition: formDataObject.streetAddition,
+					postalCode: formDataObject.postalCode,
+					postOfficeBox: formDataObject.postOfficeBox,
+					type: Number(formDataObject.addressTypeId),
+					usedFrom: moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD"),
+					usedUntil: moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD")
+				};
+        console.log("TCL: primaryAddress", primaryAddress);
+			}
+			return primaryAddress; 
+		},
+
+		createEmailModel: function(formDataObject) {
+    console.log("TCL: createEmailModel: formDataObject", formDataObject);
+			var primaryEmail = {};
+			if (!(formDataObject.emailAddress == ""
+					&& formDataObject.emailTypeId == "")) {
+				primaryEmail = {
+					email: formDataObject.emailAddress,
+					type: Number(formDataObject.emailTypeId),
+				};
+        console.log("TCL: primaryEmail", primaryEmail);
+			}
+			return primaryEmail
+		},
+
+		createPhoneNumberModel: function(formDataObject) {
+    console.log("TCL: createPhoneNumberModel: formDataObject", formDataObject);
+			var primaryPhoneNumber = {};
+			if (!(formDataObject.phoneNumber == ""
+					&& formDataObject.phoneNumberTypeId == ""
+					&& formDataObject.iddPrefix == ""
+					&& formDataObject.areaCode == "")) {
+				primaryPhoneNumber = {
+				number: formDataObject.phoneNumber,
+				areaCode: formDataObject.areaCode,
+				iddPrefix: formDataObject.iddPrefix,
+				type: Number(formDataObject.phoneNumberTypeId),
+			};
+        console.log("TCL: primaryPhoneNumber", primaryPhoneNumber);
+			}
+			return primaryPhoneNumber;
+		},
+
+		createCitizenshipModel: function(formDataObject) {
+    console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
+			var citizenshipModel = {};
+			if(!(formDataObject.citizenshipName == "")) {
+				citizenshipModel = {
+					id: 0,
+					language: {
+						id: 0,
+					},
+					name: formDataObject.citizenshipName,
+				}
+			}
+			return citizenshipModel
+		}
 
 	}
 	

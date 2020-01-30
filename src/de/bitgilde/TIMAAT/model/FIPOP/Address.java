@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -42,6 +43,11 @@ public class Address implements Serializable {
 	@ManyToOne
 	@JsonBackReference(value = "Street-Address")
 	private Street street;
+
+	//bi-directional many-to-one association to Medium
+	@OneToMany(mappedBy="primaryAddress")
+	@JsonIgnore
+	private List<Actor> actors;
 
 	public Address() {
 	}
@@ -94,18 +100,18 @@ public class Address implements Serializable {
 		this.actorHasAddresses = actorHasAddresses;
 	}
 
-	public ActorHasAddress addActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().add(actorHasAddress);
-		actorHasAddress.setAddress(this);
+	public ActorHasAddress addActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().add(primaryAddress);
+		primaryAddress.setAddress(this);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
-	public ActorHasAddress removeActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().remove(actorHasAddress);
-		actorHasAddress.setAddress(null);
+	public ActorHasAddress removeActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().remove(primaryAddress);
+		primaryAddress.setAddress(null);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
 	public Street getStreet() {
@@ -114,6 +120,28 @@ public class Address implements Serializable {
 
 	public void setStreet(Street street) {
 		this.street = street;
+	}
+
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public Actor addActors(Actor actors) {
+		getActors().add(actors);
+		actors.setPrimaryAddress(this);
+
+		return actors;
+	}
+
+	public Actor removeActors(Actor actors) {
+		getActors().remove(actors);
+		actors.setPrimaryAddress(null);
+
+		return actors;
 	}
 
 }

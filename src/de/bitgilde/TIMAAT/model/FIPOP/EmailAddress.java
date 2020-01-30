@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="email_address")
-@NamedQuery(name="EmailAddress.findAll", query="SELECT e FROM EmailAddress e")
+@NamedQuery(name="EmailAddress.findAll", query="SELECT ea FROM EmailAddress ea")
 public class EmailAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 

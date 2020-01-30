@@ -315,12 +315,10 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newMedium);
 		entityManager.refresh(displayTitle);
 
-		// create sources entry of medium
+		// create source entry of medium
 		entityTransaction.begin();
 		newMedium.getSources().add(source);
 		source.setMedium(newMedium);
-		// entityManager.merge(source);
-		// entityManager.merge(newMedium);
 		entityManager.persist(source);
 		entityManager.persist(newMedium);
 		entityTransaction.commit();
@@ -328,7 +326,9 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(source);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newMedium.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.MEDIUMCREATED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
 		System.out.println("MediumServiceEndpoint: createMedium - done");
 		return Response.ok().entity(newMedium).build();
 	}
@@ -1017,7 +1017,8 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newVideo.getMedium());
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
+		UserLogManager.getLogger()
+									.addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
 		System.out.println("MediumServiceEndpoint: video created with id "+newVideo.getMediumId());
 
 		return Response.ok().entity(newVideo).build();
@@ -1229,7 +1230,7 @@ public class MediumServiceEndpoint{
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response createTitle(@PathParam("medium_id") int mediumId, @PathParam("id") int id, String jsonData) {
+	public Response createTitle(@PathParam("medium_id") int mediumId, @PathParam("id") int id, String jsonData) { // TODO mediumId not existant here, yet
 
 		System.out.println("MediumServiceEndpoint: createTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1591,6 +1592,7 @@ public class MediumServiceEndpoint{
 		return Response.ok().build();
 	}
 
+	// Currently not in use
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)

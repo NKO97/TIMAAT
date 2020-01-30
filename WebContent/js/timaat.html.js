@@ -134,7 +134,42 @@
       });
       var actorFormMetadata = $("#timaat-actordatasets-actor-metadata-form");
       var actorFormMetadataValidator = $("#timaat-actordatasets-actor-metadata-form").validate({
-        // TODO Form validation rules
+        rules: {
+          displayName: {
+            required: true,
+            minlength: 3,
+            maxlength: 200
+          },
+          typeId: {
+            required: true,
+          }     
+        },
+        messages: {
+          displayName: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          },
+          typeId: {
+            required: "Please provide the type of the actor"
+          }
+        },
+        submitHandler: function(actorFormMetadata) {
+          actorFormMetadata.submit();
+        },
+      });
+      var actorFormNames = $("#timaat-mediadatasets-actor-names-form");
+      var actorFormNamesValidator = $("#timaat-mediadatasets-actor-names-form").validate({
+        rules: {
+          name: {
+            required: true,
+            minlength: 3,
+            maxlength: 200,
+          },
+        },
+        submitHandler: function(actorFormNames) {
+          actorFormNames.submit();
+        },
       });
 
       function allocateArray(strOrArr) {

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="email_address_type_translation")
-@NamedQuery(name="EmailAddressTypeTranslation.findAll", query="SELECT e FROM EmailAddressTypeTranslation e")
+@NamedQuery(name="EmailAddressTypeTranslation.findAll", query="SELECT eatt FROM EmailAddressTypeTranslation eatt")
 public class EmailAddressTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 

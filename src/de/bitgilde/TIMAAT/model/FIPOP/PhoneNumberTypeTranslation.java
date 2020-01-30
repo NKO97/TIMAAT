@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="phone_number_type_translation")
-@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT p FROM PhoneNumberTypeTranslation p")
+@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT pntt FROM PhoneNumberTypeTranslation pntt")
 public class PhoneNumberTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
