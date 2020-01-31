@@ -24,7 +24,7 @@
 			// console.log("TCL: Actor -> constructor -> model", model)
 			// setup model
 			this.model = model;
-      console.log("TCL: Actor -> constructor -> this", this);
+      // console.log("TCL: Actor -> constructor -> this", this);
 
 			// create and style list view element
 			var displayActorTypeIcon = '';
@@ -182,7 +182,7 @@
 		updateUI() {
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
-			console.log("TCL: Actor -> updateUI -> this", this);
+			// console.log("TCL: Actor -> updateUI -> this", this);
 			var actorType = $('#timaat-actordatasets-actor-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
 			var name = this.model.displayName.name;

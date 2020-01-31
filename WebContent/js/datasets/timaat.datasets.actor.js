@@ -25,7 +25,7 @@
 		persons: null,
 		collectives: null,
 		names: null,
-		
+
 		init: function() {   
 			TIMAAT.ActorDatasets.initActors();
 			TIMAAT.ActorDatasets.initPersons();
@@ -147,6 +147,9 @@
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
+				formDataObject.isFictional = (formDataObject.isFictional) ? true : false;
+				formDataObject.nameUsedFrom = moment.utc(formDataObject.nameUsedFrom, "YYY-MM-DD");
+				formDataObject.nameUsedUntil = moment.utc(formDataObject.nameUsedUntil, "YYY-MM-DD");
 
 				if (actor) { // update actor
 					// actor data
@@ -174,7 +177,7 @@
 						break;
 					}
 					if (actorType) {
-						await TIMAAT.ActorDatasets.createActor(actorType, actorModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
+						await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
 						var actor = TIMAAT.ActorDatasets.actor[TIMAAT.ActorDatasets.actor.length-1];
 						TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
 						// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
@@ -294,12 +297,8 @@
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
-				});
-				formDataObject.isFictional = (formDataObject.personIsFictional) ? true : false;
+				});				
 				formDataObject.sexId = (formDataObject.sexId) ? formDataObject.sexId : 4; // set default to 'unknown' (id 4)
-				formDataObject.displayName = formDataObject.personDisplayName;
-				formDataObject.nameUsedFrom = moment.utc(formDataObject.personNameUsedFrom, "YYY-MM-DD");
-				formDataObject.nameUsedUntil = moment.utc(formDataObject.personNameUsedUntil, "YYY-MM-DD");
 				// console.log("TCL: formDataObject", formDataObject);
 
 				if (person) { // update person
@@ -313,7 +312,7 @@
 					person.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
 					person.model.actorPerson.sex.id = Number(formDataObject.sexId);
 					person.model.actorPerson.citizenship[0].name = formDataObject.citizenshipName; //? correct structure?
-					person.model.actorPerson.specialFeatures = formDataObject.specialFeatures;
+					person.model.actorPerson.actorPersonTranslations.specialFeatures = formDataObject.specialFeatures;
 
 					person.updateUI();
 					await TIMAAT.ActorDatasets.updateActorSubtype('person', person);
@@ -390,11 +389,6 @@
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
-				formDataObject.isFictional = (formDataObject.collectiveIsFictional) ? true : false;
-				formDataObject.sexId = (formDataObject.sexId) ? formDataObject.sexId : 4; // set default to 'unknown' (id 4)
-				formDataObject.displayName = formDataObject.collectiveDisplayName;
-				formDataObject.nameUsedFrom = moment.utc(formDataObject.collectivenNameUsedFrom, "YYY-MM-DD");
-				formDataObject.nameUsedUntil = moment.utc(formDataObject.collectiveNameUsedUntil, "YYY-MM-DD");
 
 				if (collective) { // update collective
 					// actor data
@@ -954,6 +948,9 @@
 				$('.actortype-data').hide();
 			}
 			$('.'+actorType+'-data').show();
+			if (actorType == "collective") {
+				$('.person-data').hide(); // to display academic title in same row with actor name data
+			}
 			$('.datasheet-form-edit-button').hide();
 			$('.datasheet-form-buttons').hide()
 			$('.'+actorType+'-datasheet-form-submit').show();
@@ -980,13 +977,14 @@
 			else {
 				$('.actortype-data').hide();
 			}
-			if (actorType == "collective") {
-				$('.person-data').hide(); // to display academic title in same row with actor name data
-			}
+		
 			$('.'+actorType+'-data').show();
 			actorFormMetadataValidator.resetForm();
 			$('.'+actorType+'-data-tab').show();
 			$('.name-data-tab').show();
+			if (actorType == "collective") {
+				$('.person-data').hide(); // to display academic title in same row with actor name data
+			}
 			$('.nav-tabs a[href="#'+actorType+'Datasheet"]').focus();
 			$('#timaat-actordatasets-actor-metadata-form').show();
 

@@ -1625,24 +1625,49 @@
                           </div>
                         </div>
                         <!-- Actor data -->
-                        <!-- <div class="form-group datasheet-data actor-data"> <!~~ actor is fictional information ~~>
-                          <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-isfictional">Is fictional</label>
-                          <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-isfictional" name="releaseDate" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
-                        </div> -->
-                        <!-- actor and collective share most name data (all but title) -->
-                        <div class="form-group datasheet-data person-data"> <!-- person name information for person (including isFictional flag) -->
+                        <div class="form-group datasheet-data actor-data"> <!-- actor isFictional information -->
                           <fieldset>
-                              <legend>Name</legend>
+                            <legend>Name</legend>
                             <div class="form-row">
-                              <div class="col-md-1">
+                              <div class="col-md-2 person-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-title">Title</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-title" name="title" placeholder="[Enter Title]" aria-describedby="Title">
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name">Display Name*</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name" name="displayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name-usedfrom">Name used from</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name-usedfrom" name="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
+                              </div>
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name-useduntil">Name used until</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name-useduntil" name="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-isfictional">Is fictional</label>
+                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-isfictional" name="releaseDate" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div> 
+                        <!-- actor and collective share most name data (all but title) -->
+                        <!-- <div class="form-group datasheet-data person-data"> <!~~ person name information for person (including isFictional flag) ~~>
+                          <fieldset>
+                            <legend>Name</legend>
+                            <div class="form-row">
+                              <!~~ <div class="col-md-1">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-isfictional">Is fictional</label>
                                 <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-isfictional" name="personIsFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
-                              </div>
-                              <div class="col-md-1">
+                              </div> ~~>
+                              <!~~ <div class="col-md-1">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-academictitle">Title</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-academictitle" name="academicTitle" placeholder="[Enter academic Title]" aria-describedby="Academic title">
-                              </div>
-                              <div class="col-md-6">
+                              </div> ~~>
+                              <!~~ <div class="col-md-6">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-name">Display Name*</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-name" name="personDisplayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
                               </div>
@@ -1653,19 +1678,19 @@
                               <div class="col-md-2">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-name-useduntil">Name used until</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-name-useduntil" name="personNameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
-                              </div>
+                              </div> ~~>
                             </div>
                           </fieldset>
-                        </div>
-                        <div class="form-group datasheet-data collective-data"> <!-- collective name information for person (including isFictional flag) -->
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data collective-data"> <!~~ collective name information for person (including isFictional flag) ~~>
                           <fieldset>
                             <legend>Name</legend>
                             <div class="form-row">
-                              <div class="col-md-1">
+                              <!~~ <div class="col-md-1">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-isfictional">Is fictional</label>
                                 <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-isfictional" name="collectiveIsFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
-                              </div>
-                              <div class="col-md-7">
+                              </div> ~~>
+                              <!~~ <div class="col-md-7">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-name">Display Name*</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-name" name="collectiveDisplayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
                               </div>
@@ -1676,10 +1701,10 @@
                               <div class="col-md-2">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-name-useduntil">Name used until</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-name-useduntil" name="CollectiveNameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
-                              </div>
+                              </div> ~~>
                             </div>
                            </fieldset>
-                        </div>
+                        </div> -->
                         <div class="form-group datasheet-data actortype-data"> <!-- actor type information -->
                           <fieldset>
                             <legend>Actor type</legend>
