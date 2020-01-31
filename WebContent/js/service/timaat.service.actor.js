@@ -58,7 +58,7 @@
 		},
 
 		listActorSubtype(actorSubtype, callback) {
-			console.log("TCL: listActorSubtype", actorSubtype);
+			// console.log("TCL: listActorSubtype", actorSubtype);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/list",
 				type:"GET",

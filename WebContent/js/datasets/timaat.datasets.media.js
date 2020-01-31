@@ -1425,7 +1425,7 @@
 		},
 
 		setAudioLists: function(audios) {
-			console.log("TCL: setAudioLists -> audios", audios);
+			// console.log("TCL: setAudioLists -> audios", audios);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !audios ) return;
@@ -1447,7 +1447,7 @@
 		},
 
 		setDocumentLists: function(documents) {
-			console.log("TCL: setDocumentLists -> documents", documents);
+			// console.log("TCL: setDocumentLists -> documents", documents);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !documents ) return;
@@ -1469,7 +1469,7 @@
 		},
 
 		setImageLists: function(images) {
-			console.log("TCL: setImageLists -> images", images);
+			// console.log("TCL: setImageLists -> images", images);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !images ) return;
@@ -1491,7 +1491,7 @@
 		},
 
 		setSoftwareLists: function(softwares) {
-			console.log("TCL: setSoftwareLists -> softwares", softwares);
+			// console.log("TCL: setSoftwareLists -> softwares", softwares);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !softwares ) return;
@@ -1513,7 +1513,7 @@
 		},
 
 		setTextLists: function(texts) {
-			console.log("TCL: setTextLists -> texts", texts);
+			// console.log("TCL: setTextLists -> texts", texts);
 			$('.form');
 			$('.media-data-tabs').hide();
 			if ( !texts ) return;
@@ -1534,7 +1534,7 @@
 		},
 		
 		setVideoLists: function(videos) {
-			console.log("TCL: setVideoLists -> videos", videos);
+			// console.log("TCL: setVideoLists -> videos", videos);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !videos ) return;
@@ -1560,7 +1560,7 @@
 		},
 
 		setVideogameLists: function(videogames) {
-			console.log("TCL: setVideogameLists -> videogames", videogames);
+			// console.log("TCL: setVideogameLists -> videogames", videogames);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( !videogames ) return;
@@ -1721,35 +1721,35 @@
 			// medium subtype specific data
 			switch (mediumType) {
 				case 'audio':
-					$("#timaat-mediadatasets-audio-metadata-length").val(mediumTypeData.model.mediumAudio.length);
+					$("#timaat-mediadatasets-audio-metadata-length").val(data.mediumAudio.length);
 				break;
 				case "mediumDocument":
 				break;
 				case 'image':
-					$("#timaat-mediadatasets-image-metadata-width").val(mediumTypeData.model.mediumImage.width);
-					$("#timaat-mediadatasets-image-metadata-height").val(mediumTypeData.model.mediumImage.height);
-					$("#timaat-mediadatasets-image-metadata-bitdepth").val(mediumTypeData.model.mediumImage.bitDepth);
+					$("#timaat-mediadatasets-image-metadata-width").val(data.mediumImage.width);
+					$("#timaat-mediadatasets-image-metadata-height").val(data.mediumImage.height);
+					$("#timaat-mediadatasets-image-metadata-bitdepth").val(data.mediumImage.bitDepth);
 				break;
 				case 'software':
-					$("#timaat-mediadatasets-software-metadata-version").val(mediumTypeData.model.mediumSoftware.version);
+					$("#timaat-mediadatasets-software-metadata-version").val(data.mediumSoftware.version);
 				break;
 				case 'text':
-					$("#timaat-mediadatasets-text-metadata-content").val(mediumTypeData.model.mediumText.content);
+					$("#timaat-mediadatasets-text-metadata-content").val(data.mediumText.content);
 				break;
 				case 'video':
-					$('#timaat-mediadatasets-video-metadata-length').val(mediumTypeData.model.mediumVideo.length);
-					$('#timaat-mediadatasets-video-metadata-videocodec').val(mediumTypeData.model.mediumVideo.videoCodec);
-					$('#timaat-mediadatasets-video-metadata-width').val(mediumTypeData.model.mediumVideo.width);
-					$('#timaat-mediadatasets-video-metadata-height').val(mediumTypeData.model.mediumVideo.height);
-					$('#timaat-mediadatasets-video-metadata-framerate').val(mediumTypeData.model.mediumVideo.frameRate);
-					$('#timaat-mediadatasets-video-metadata-datarate').val(mediumTypeData.model.mediumVideo.dataRate);
-					$('#timaat-mediadatasets-video-metadata-totalbitrate').val(mediumTypeData.model.mediumVideo.totalBitrate);
-					if (mediumTypeData.model.mediumVideo.isEpisode)
+					$('#timaat-mediadatasets-video-metadata-length').val(data.mediumVideo.length);
+					$('#timaat-mediadatasets-video-metadata-videocodec').val(data.mediumVideo.videoCodec);
+					$('#timaat-mediadatasets-video-metadata-width').val(data.mediumVideo.width);
+					$('#timaat-mediadatasets-video-metadata-height').val(data.mediumVideo.height);
+					$('#timaat-mediadatasets-video-metadata-framerate').val(data.mediumVideo.frameRate);
+					$('#timaat-mediadatasets-video-metadata-datarate').val(data.mediumVideo.dataRate);
+					$('#timaat-mediadatasets-video-metadata-totalbitrate').val(data.mediumVideo.totalBitrate);
+					if (data.mediumVideo.isEpisode)
 						$('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', true);
 						else $('#timaat-mediadatasets-video-metadata-isepisode').prop('checked', false);
 				break;
 				case 'videogame':
-					if (mediumTypeData.model.mediumVideogame.isEpisode)
+					if (data.mediumVideogame.isEpisode)
 					$("#timaat-mediadatasets-videogame-metadata-isepisode").prop('checked', true);
 					else $("#timaat-mediadatasets-videogame-metadata-isepisode").prop('checked', false);
 				break;

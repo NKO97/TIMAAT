@@ -110,7 +110,7 @@
 		},
 		
 		getMediaCollections(callback) {
-			console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
+			// console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/list",
 				type:"GET",

@@ -57,7 +57,7 @@
 		},
 
 		listLocationSubtype(locationSubtype, callback) {
-      console.log("TCL: listLocationSubtype -> locationSubtype", locationSubtype);
+      // console.log("TCL: listLocationSubtype -> locationSubtype", locationSubtype);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/list",
 				type:"GET",
@@ -67,7 +67,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      console.log("TCL: listLocationSubtype -> data", data);
+      // console.log("TCL: listLocationSubtype -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
