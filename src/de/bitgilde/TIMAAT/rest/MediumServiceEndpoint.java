@@ -535,8 +535,9 @@ public class MediumServiceEndpoint{
 		entityManager.remove(audio.getMedium()); // remove audio, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.AUDIODELETED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.AUDIODELETED);
 		System.out.println("MediumServiceEndpoint: deleteAudio - audio deleted");  
 		return Response.ok().build();
 	}

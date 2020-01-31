@@ -3,7 +3,6 @@
 	<persistence-unit name="FIPOP-JPA" transaction-type="RESOURCE_LOCAL">
 	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:/FIPOP</jta-data-source>   
-		<class>de.bitgilde.TIMAAT.model.FIPOP.AcademicTitle</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Actor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipTypeTranslation</class>

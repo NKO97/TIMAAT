@@ -25,7 +25,7 @@
 		persons: null,
 		collectives: null,
 		names: null,
-
+		
 		init: function() {   
 			TIMAAT.ActorDatasets.initActors();
 			TIMAAT.ActorDatasets.initPersons();
@@ -290,7 +290,7 @@
 
 				// Create/Edit person window submitted data
 				var formData = $("#timaat-actordatasets-actor-metadata-form").serializeArray();
-        console.log("TCL: formData", formData);
+        // console.log("TCL: formData", formData);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -300,19 +300,19 @@
 				formDataObject.displayName = formDataObject.personDisplayName;
 				formDataObject.nameUsedFrom = moment.utc(formDataObject.personNameUsedFrom, "YYY-MM-DD");
 				formDataObject.nameUsedUntil = moment.utc(formDataObject.personNameUsedUntil, "YYY-MM-DD");
-				console.log("TCL: formDataObject", formDataObject);
+				// console.log("TCL: formDataObject", formDataObject);
 
 				if (person) { // update person
 					// actor data
 					person = await TIMAAT.ActorDatasets.updateActorModelData(person, formDataObject);
 					// person data
-					person.model.actorPerson.academicTitle = formDataObject.academicTitle; //? title or title.id?
+					person.model.actorPerson.title = formDataObject.title;
 					person.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYY-MM-DD");
 					person.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
 					person.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYY-MM-DD");
 					person.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
 					person.model.actorPerson.sex.id = Number(formDataObject.sexId);
-					person.model.actorPerson.citizenship.name = formDataObject.citizenshipName; //? correct structure?
+					person.model.actorPerson.citizenship[0].name = formDataObject.citizenshipName; //? correct structure?
 					person.model.actorPerson.specialFeatures = formDataObject.specialFeatures;
 
 					person.updateUI();
@@ -843,12 +843,12 @@
 			actors.forEach(function(actor) { 
 				if ( actor.id > 0 ) {
 					console.log("TCL: actor", actor);
-					// actor.actorNames.forEach(function(name) {
-					// 	if (name.isDisplayName) {
-					// 		actor.displayName = name;
-					// 		return; // only one displayName exists/needs to be found
-					// 	}
-					// })
+					actor.actorNames.forEach(function(name) {
+						if (name.isDisplayName) {
+							actor.displayName = name;
+							return; // only one displayName exists/needs to be found
+						}
+					})
 					acts.push(new TIMAAT.Actor(actor, 'actor'));
 				}
 			});
@@ -874,12 +874,12 @@
 			persons.forEach(function(person) { 
 				if (person.id > 0) {
 					console.log("TCL: person", person);
-					// person.actorNames.forEach(function(name) {
-					// 	if (name.isDisplayName) {
-					// 		person.displayName = name;
-					// 		return; // only one displayName exists/needs to be found
-					// 	}
-					// })
+					person.actorNames.forEach(function(name) {
+						if (name.isDisplayName) {
+							person.displayName = name;
+							return; // only one displayName exists/needs to be found
+						}
+					})
 					newPerson = new TIMAAT.Actor(person, 'person');
 					pers.push(newPerson);
 				}
@@ -904,12 +904,12 @@
 			collectives.forEach(function(collective) { 
 				if (collective.id > 0) {
 					console.log("TCL: collective", collective);
-					// collective.actorNames.forEach(function(name) {
-					// 	if (name.isDisplayName) {
-					// 		collective.displayName = name;
-					// 		return; // only one displayName exists/needs to be found
-					// 	}
-					// })
+					collective.actorNames.forEach(function(name) {
+						if (name.isDisplayName) {
+							collective.displayName = name;
+							return; // only one displayName exists/needs to be found
+						}
+					})
 					newCollective = new TIMAAT.Actor(collective, 'collective');
 					colls.push(newCollective);
 				}
@@ -1009,8 +1009,7 @@
 				else {
 					$('#timaat-actordatasets-actor-metadata-actortype-id').hide();
 				}
-				// $('#timaat-actordatasets-actor-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-				// $('#timaat-actordatasets-actor-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit :input').prop("disabled", true);
@@ -1032,13 +1031,13 @@
 				case 'person':
 					if(isNaN(moment(data.dateOfBirth)))
 						$('#timaat-actordatasets-person-metadata-dateofbirth').val('');
-						else $('#timaat-actordatasets-person-metadata-dateofbirth').val(moment.utc(actorTypeData.model.actorPerson.dateOfBirth).format('YYYY-MM-DD'));
+						else $('#timaat-actordatasets-person-metadata-dateofbirth').val(moment.utc(data.actorPerson.dateOfBirth).format('YYYY-MM-DD'));
 					if(isNaN(moment(data.dayOfDeath)))
 						$('#timaat-actordatasets-person-metadata-dayofdeath').val('');
-						$('#timaat-actordatasets-person-metadata-dayofdeath').val(moment.utc(actorTypeData.model.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
+						else $('#timaat-actordatasets-person-metadata-dayofdeath').val(moment.utc(data.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
 					// TODO all person data
 				break;
-				case "collective":
+				case 'collective':
 					// TODO all collective data
 				break;
 			}
@@ -1222,7 +1221,7 @@
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			try {				
+			try {
 				// create actor
 				var tempActorModel = actorModel;
 				// tempActorModel.displayName = newDisplayName;
@@ -1230,14 +1229,17 @@
 				tempActorModel.primaryEmailAddress = (newPrimaryEmailAddress) ? newPrimaryEmailAddress : "";
 				tempActorModel.primaryPhoneNumber = (newPrimaryPhoneNumber) ? newPrimaryPhoneNumber : "";
 				var newActorModel = await TIMAAT.ActorService.createActor(tempActorModel);
+        console.log("TCL: newActorModel", newActorModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
 			try {
 				// create display name
 				var newDisplayName = await TIMAAT.ActorService.addName(newActorModel.id, displayName);
+        console.log("TCL: newDisplayName", newDisplayName);
 				newActorModel.displayName = newDisplayName;
-				newActorModel.names[0] = newDisplayName;
+				newActorModel.actorNames[0] = newDisplayName;
+        console.log("TCL: newActorModel", newActorModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -1302,9 +1304,9 @@
 				for (; i <newNames.length; i++) {
 					// var newName = await TIMAAT.ActorService.createName(newNames[i]);
 					var addedNameModel = await TIMAAT.ActorService.addName(actor.model.id, newNames[i]);
-					actor.model.names.push(addedNameModel);
-					console.log("TCL: actor.model.names", actor.model.names);
-					console.log("TCL: actor.model.names.length", actor.model.names.length);	
+					actor.model.actorNames.push(addedNameModel);
+					console.log("TCL: actor.model.names", actor.model.actorNames);
+					console.log("TCL: actor.model.names.length", actor.model.actorNames.length);	
 				}
 				// await TIMAAT.ActorDatasets.updateActor(actor);
 			} catch(error) {
@@ -1405,9 +1407,9 @@
 				var tempName = await TIMAAT.ActorService.updateName(name);
 				console.log("TCL: tempName", tempName);
 				var i = 0;
-				for (; i < actor.model.names.length; i++) {
-					if (actor.model.names[i].id == name.id)
-						actor.model.names[i] = tempName;
+				for (; i < actor.model.actorNames.length; i++) {
+					if (actor.model.actorNames[i].id == name.id)
+						actor.model.actorNames[i] = tempName;
 				}
 
 				// update data that is part of actor (includes updating last edited by/at)
@@ -1459,14 +1461,6 @@
 			// }
 
 			TIMAAT.ActorService.removeActor(actor);
-			// remove all names from actor
-			var i = 0;
-			for (; i < actor.model.names.length; i++ ) { // remove obsolete names
-				if ( actor.model.names[i].id != actor.model.displayName.id ) {
-					TIMAAT.ActorService.removeName(actor.model.names[i]);
-					actor.model.names.splice(i,1);
-				}
-			}
 			actor.remove();
 		},
 
@@ -1474,13 +1468,6 @@
 			console.log("TCL: _actorSubtypeRemoved: function(actorSubtype, actorSubtypeData)", actorSubtype, actorSubtypeData);
 			// sync to server
 			TIMAAT.ActorService.removeActorSubtype(actorSubtype, actorSubtypeData);
-			var i = 0;
-			for (; i < actorSubtypeData.model.actor.names.length; i++ ) { // remove obsolete names
-				if ( actorSubtypeData.model.actor.names[i].id != actorSubtypeData.model.actor.name.id ) {
-					TIMAAT.ActorService.removeName(actorSubtypeData.model.actor.names[i]);
-					actorSubtypeData.model.actor.names.splice(i,1);
-				}
-			}
 			actorSubtypeData.remove();
 		},
 
@@ -1491,9 +1478,9 @@
 			actor.model.displayName.usedFrom = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
 			actor.model.displayName.usedUntil = moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD");
 			var i = 0;
-			for (; i < actor.model.names.length; i++) {
-				if (actor.model.displayName.id == actor.model.names[i].id) {
-					actor.model.names[i] = actor.model.displayName;
+			for (; i < actor.model.actorNames.length; i++) {
+				if (actor.model.displayName.id == actor.model.actorNames[i].id) {
+					actor.model.actorNames[i] = actor.model.displayName;
 					break;
 				}
 			}
@@ -1517,9 +1504,9 @@
 			actor.model.address.type = formDataObject.addressTypeId;
 			actor.model.address.usedFrom = moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD");
 			actor.model.address.usedUntil = moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD");
-			for (; i < actor.model.names.length; i++) {
-				if (actor.model.name.id == actor.model.names[i].id) {
-					actor.model.names[i] = actor.model.name;
+			for (; i < actor.model.actorNames.length; i++) {
+				if (actor.model.name.id == actor.model.actorNames[i].id) {
+					actor.model.actorNames[i] = actor.model.name;
 					break;
 				}
 			}
@@ -1531,8 +1518,8 @@
 		},
 
 		createActorModel: function(formDataObject, actorTypeId) {
-		console.log("TCL: formDataObject", formDataObject);
-			var actor = {
+		// console.log("TCL: createActorModel: formDataObject", formDataObject);
+			var actorModel = {
 				id: 0,
 				isFictional: (formDataObject.isFictional == "on") ? true : false,
 				actorType: {
@@ -1541,13 +1528,14 @@
 				displayName: {
 					name: formDataObject.displayName,
 				},
-				names: [{
-					id: 0,
-					name: formDataObject.displayName,
-					UsedFrom: moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD"),
-					UsedUntil: moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD"),
-				}],
-				actorHasPhoneNumbers: [],
+				actorNames: [{}],
+				// actorNames: [{
+				// 	id: 0,
+				// 	name: formDataObject.displayName,
+				// 	UsedFrom: moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD"),
+				// 	UsedUntil: moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD"),
+				// }],
+				actorHasPhoneNumbers: [{}],
 				// phoneNumbers: [{
 				// 	id: 0,
 				// 	iddPrefix: formDataObject.iddPrefix,
@@ -1555,7 +1543,7 @@
 				// 	number: formDataObject.phoneNumber,
 				// 	type: Number(formDataObject.phoneNumberTypeId),
 				// }],
-				actorHasAddresses: [],
+				actorHasAddresses: [{}],
 				// addresses: [{
 				// 	id: 0,
 				// 	street: formDataObject.street,
@@ -1567,21 +1555,22 @@
 				// 	usedFrom: moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD"),
 				// 	usedUntil: moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD"),
 				// }],
-				actorHasEmailAddresses: [],
+				actorHasEmailAddresses: [{}],
 				// emails: [{
 				// 	id: 0,
 				// 	address: formDataObject.emailAddress,
 				// 	type: Number(formDataObject.emailTypeId),
 				// }],
 			};
-			return actor;
+			console.log("TCL: actorModel", actorModel);
+			return actorModel;
 		},
 
 		createPersonModel: function(formDataObject) {
-    	console.log("TCL: formDataObject", formDataObject);
+    	// console.log("TCL: createPersonModel: formDataObject", formDataObject);
 			var personModel = {
 				actorId: 0,
-				academicTitle: (formDataObject.academicTitle) ? formDataObject.academicTitle : null,
+				title: formDataObject.title,
 				dateOfBirth: moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD"),
 				placeOfBirth: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
 				dayOfDeath: moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD"),
@@ -1602,15 +1591,16 @@
 		},
 
 		createCollectiveModel: function(formDataObject) {
-    console.log("TCL: createCollectiveModel: formDataObject", formDataObject);
+    // console.log("TCL: createCollectiveModel: formDataObject", formDataObject);
 			var collectiveModel = {
 				actorId: 0,
 			};
+			console.log("TCL: collectiveModel", collectiveModel);
 			return collectiveModel;
 		},
 
 		createDisplayNameModel: function(formDataObject) {
-    console.log("TCL: createDisplayNameModel: formDataObject", formDataObject);
+    // console.log("TCL: createDisplayNameModel: formDataObject", formDataObject);
 			var name = {
 				id: 0,
 				name: formDataObject.displayName,
@@ -1618,11 +1608,12 @@
 				usedUntil: moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD"),
 				isDisplayName: true,
 			};
+      console.log("TCL: name", name);
 			return name;
 		},
 
 		createAddressModel: function(formDataObject) {
-    	console.log("TCL: createAddressModel: formDataObject", formDataObject);
+    	// console.log("TCL: createAddressModel: formDataObject", formDataObject);
 			var primaryAddress = {};
 			if (!(formDataObject.street == "" 
 					&& formDataObject.streetNumber == "" 
@@ -1648,7 +1639,7 @@
 		},
 
 		createEmailModel: function(formDataObject) {
-    console.log("TCL: createEmailModel: formDataObject", formDataObject);
+    // console.log("TCL: createEmailModel: formDataObject", formDataObject);
 			var primaryEmail = {};
 			if (!(formDataObject.emailAddress == ""
 					&& formDataObject.emailTypeId == "")) {
@@ -1662,7 +1653,7 @@
 		},
 
 		createPhoneNumberModel: function(formDataObject) {
-    console.log("TCL: createPhoneNumberModel: formDataObject", formDataObject);
+    // console.log("TCL: createPhoneNumberModel: formDataObject", formDataObject);
 			var primaryPhoneNumber = {};
 			if (!(formDataObject.phoneNumber == ""
 					&& formDataObject.phoneNumberTypeId == ""
@@ -1680,7 +1671,7 @@
 		},
 
 		createCitizenshipModel: function(formDataObject) {
-    console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
+    // console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
 			var citizenshipModel = {};
 			if(!(formDataObject.citizenshipName == "")) {
 				citizenshipModel = {
@@ -1690,6 +1681,7 @@
 					},
 					name: formDataObject.citizenshipName,
 				}
+				console.log("TCL: citizenshipModel", citizenshipModel);
 			}
 			return citizenshipModel
 		}

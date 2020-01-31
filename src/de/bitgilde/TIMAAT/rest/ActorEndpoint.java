@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.model.FIPOP.AcademicTitle;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorName;
@@ -156,7 +155,7 @@ public class ActorEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newActor == null ) {
-			System.out.println("ActorServiceEndpoint: createActor - newActor == 0");
+			System.out.println("ActorServiceEndpoint: createActor - newActor == null");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
@@ -396,8 +395,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PERSONDELETED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.PERSONDELETED);
 		System.out.println("ActorServiceEndpoint: deletePerson - person deleted");  
 		return Response.ok().build();
 	}

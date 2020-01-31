@@ -86,11 +86,20 @@
 					id: actorModel.actorType.id,
 				},
 				isFictional: actorModel.isFictional,
+				// primaryAddress: {
+				// 	id: actorModel.primaryAddress.id,
+				// },
+				// primaryEmail: {
+				// 	id: actorModel.primaryEmail.id,
+				// },
+				// primaryPhoneNumber: {
+				// 	id: actorModel.primaryPhoneNumber.id,
+				// }
 			};
       console.log("TCL: createActor -> newActorModel", newActorModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/0",
 					type:"POST",
 					data: JSON.stringify(newActorModel),
 					contentType:"application/json; charset=utf-8",

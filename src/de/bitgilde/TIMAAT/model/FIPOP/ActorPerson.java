@@ -37,11 +37,7 @@ public class ActorPerson implements Serializable {
 	// @OneToMany(mappedBy="actorPerson")
 	// private List<LineupMember> lineupMembers;
 
-	//bi-directional many-to-one association to AcademicTitle
-	@ManyToOne
-	@JoinColumn(name="academic_title_id")
-	@JsonBackReference(value = "AcademicTitle-ActorPerson")
-	private AcademicTitle academicTitle;
+	private String title;
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
@@ -140,12 +136,12 @@ public class ActorPerson implements Serializable {
 	// 	return lineupMember;
 	// }
 
-	public AcademicTitle getAcademicTitle() {
-		return this.academicTitle;
+	public String getTitle() {
+		return this.title;
 	}
 
-	public void setAcademicTitle(AcademicTitle academicTitle) {
-		this.academicTitle = academicTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Actor getActor() {

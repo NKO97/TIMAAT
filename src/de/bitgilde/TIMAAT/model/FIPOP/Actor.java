@@ -155,10 +155,10 @@ public class Actor implements Serializable {
 		this.isFictional = isFictional;
 	}
 
-	public String getName() {
-		if ( this.actorNames != null && this.actorNames.size() > 0 ) return this.actorNames.get(0).getName(); // TODO get correct list item
-		return null;
-	}
+	// public String getName() {
+	// 	if ( this.actorNames != null && this.actorNames.size() > 0 ) return this.actorNames.get(0).getName(); // TODO get correct list item
+	// 	return null;
+	// }
 
 	public UserAccount getCreatedByUserAccount() {
 		return this.createdByUserAccount;
@@ -428,11 +428,11 @@ public class Actor implements Serializable {
 	// 	return greimasActantialModelHasActor;
 	// }
 
-	public ActorPerson getPerson() {
+	public ActorPerson getActorPerson() {
 		return this.actorPerson;
 	}
 
-	public void setPerson(ActorPerson actorPerson) {
+	public void setActorPerson(ActorPerson actorPerson) {
 		this.actorPerson = actorPerson;
 	}
 

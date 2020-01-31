@@ -98,7 +98,7 @@
       console.log("TCL: createMedium -> newMediumModel", newMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/0",
 					type:"POST",
 					data: JSON.stringify(newMediumModel),
 					contentType:"application/json; charset=utf-8",

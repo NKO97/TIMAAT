@@ -24,13 +24,20 @@
 			// console.log("TCL: Actor -> constructor -> model", model)
 			// setup model
 			this.model = model;
+      console.log("TCL: Actor -> constructor -> this", this);
 
 			// create and style list view element
-			var displayActorType = "";
-			if (actorType == 'actor') {
-				displayActorType =
-				`<br><br>
-				<span class="timaat-actordatasets-actor-list-actortype"></span>`;
+			var displayActorTypeIcon = '';
+			if (actorType == 'actor') { // only display icon in actor list
+				displayActorTypeIcon = '  <i class="fas fa-id-badge"></i>'; // default actor icon
+				switch(this.model.actorType.id) {
+					case 1: 
+						displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
+					break;
+					case 2: 
+						displayActorTypeIcon = '  <i class="far fa-users"></i>';
+					break;
+				}
 			}
 			this.listView = $(
 				`<li class="list-group-item">
@@ -40,11 +47,11 @@
 								<button type="button" title="Akteur löschen" class="btn btn-outline btn-danger btn-sm timaat-actordatasets-actor-remove float-left" id="timaat-actordatasets-actor-remove"><i class="fas fa-trash-alt"></i></button>
 							</div>
 						</div>
-						<div class="col-lg-8">
-							<span class="timaat-actordatasets-`+actorType+`-list-name">
-							</span>` +
-							displayActorType +
-						`</div>
+						<div class="col-lg-8">` +
+							displayActorTypeIcon +
+							`  <span class="timaat-actordatasets-`+actorType+`-list-name">
+							</span>
+						</div>
 						<div class="col-lg-2 float-right">
 						  <div class=btn-group-vertical>
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
@@ -178,7 +185,7 @@
 			console.log("TCL: Actor -> updateUI -> this", this);
 			var actorType = $('#timaat-actordatasets-actor-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
-			var name = this.model.name;
+			var name = this.model.displayName.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-actordatasets-'+actorType+'-list-name').text(name);
@@ -203,9 +210,10 @@
 		}
 
 		remove() {
-			// console.log("TCL: Actor -> remove -> remove()");
+			console.log("TCL: Actor -> remove -> remove()");
 			// remove actor from UI
 			this.listView.remove(); // TODO remove tags from actor_has_tags
+      console.log("TCL: Actor -> remove -> this", this);
 			$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
 			// remove from actors list
 			var index;
