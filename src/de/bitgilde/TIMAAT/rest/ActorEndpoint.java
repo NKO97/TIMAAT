@@ -39,7 +39,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
 import de.bitgilde.TIMAAT.model.FIPOP.Address;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
-import de.bitgilde.TIMAAT.model.FIPOP.Location;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -211,9 +210,8 @@ public class ActorEndpoint {
 		if ( updatedActor == null ) return Response.notModified().build();
 
     // update actor
-    // if ( updatedActor.getName() != null ) actor.setName(updatedActor.getName());
-		// if ( updatedActor.getDisplayName() != null ) actor.setDisplayName(updatedActor.getDisplayName());
-		actor.setBirthName(updatedActor.getBirthName()); // birthName can be set to null
+		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
+		if (updatedActor.getBirthName() != null ) actor.setBirthName(updatedActor.getBirthName());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -318,8 +316,8 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: createPerson add log entry");
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PERSONCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.PERSONCREATED);
 		System.out.println("ActorServiceEndpoint: person created with id "+newPerson.getActorId());
 		return Response.ok().entity(newPerson).build();
 	}
@@ -348,8 +346,14 @@ public class ActorEndpoint {
 		
 		// update person
 		// System.out.println("ActorServiceEndpoint: UPDATE PERSON - person.id:"+person.getActorId());
-		// if ( updatedPerson.getLength() > 0) person.setLength(updatedPerson.getLength());
-		// if ( updatedPerson.getPersonCodecInformation() != null ) person.setPersonCodecInformation(updatedPerson.getPersonCodecInformation());
+		person.setTitle(updatedPerson.getTitle());
+		person.setDateOfBirth(updatedPerson.getDateOfBirth());
+		// TODO update place of birth
+		person.setDayOfDeath(updatedPerson.getDayOfDeath());
+		// TODO update place of death
+		if ( updatedPerson.getSex() != null) person.setSex(updatedPerson.getSex());
+		// TODO update person is member of collective
+		// TODO update person translations -> special features
 		
 		// update log metadata
 		person.getActor().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -367,8 +371,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PERSONEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.PERSONEDITED);
 		System.out.println("ActorServiceEndpoint: UPDATE PERSON - update complete");	
 		return Response.ok().entity(person).build();
 	}
@@ -624,8 +628,8 @@ public class ActorEndpoint {
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newName.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORNAMECREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTORNAMECREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ACTORNAMECREATED);
 		
 		System.out.println("ActorServiceEndpoint: create name: name created with id "+newName.getId());
 		// System.out.println("ActorServiceEndpoint: create name: name created with language id "+newName.getLanguage().getId());
@@ -696,8 +700,8 @@ public class ActorEndpoint {
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newName.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORNAMECREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTORNAMECREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ACTORNAMECREATED);
 
 		System.out.println("ActorServiceEndpoint: addName: name added with id "+newName.getId());
 		// System.out.println("ActorServiceEndpoint: addName: name added with language id "+newName.getLanguage().getId());
@@ -728,7 +732,9 @@ public class ActorEndpoint {
 		// update name
 		// System.out.println("ActorServiceEndpoint: UPDATE NAME - language id:"+updatedName.getLanguage().getId());	
 		if ( updatedName.getName() != null ) name.setName(updatedName.getName());
-		// if ( updatedName.getLanguage() != null ) name.setLanguage(updatedName.getLanguage());
+		if ( updatedName.getIsDisplayName() != null) name.setIsDisplayName(updatedName.getIsDisplayName());
+		name.setUsedFrom(updatedName.getUsedFrom());
+		name.setUsedUntil(updatedName.getUsedUntil());
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -740,8 +746,8 @@ public class ActorEndpoint {
 		// System.out.println("ActorServiceEndpoint: UPDATE NAME - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTORNAMEEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ACTORNAMEEDITED);
 		System.out.println("ActorServiceEndpoint: UPDATE NAME - update complete");	
 		return Response.ok().entity(name).build();
 	}

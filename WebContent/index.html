@@ -1115,10 +1115,10 @@
                           <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datenblatt</a>
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Mediumtitles</a>
+                          <a class="nav-link nav-link-media" id="media-tab-medium-titles-form" href="#mediumTitles">Mediumtitles</a>
                         </li>
                         <li class="nav-item media-data-tabs languagetrack-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
+                          <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -1625,7 +1625,7 @@
                           </div>
                         </div>
                         <!-- Actor data -->
-                        <div class="form-group datasheet-data actor-data"> <!-- actor isFictional information -->
+                        <div class="form-group datasheet-data actor-data"> <!-- actor base information -->
                           <fieldset>
                             <legend>Name</legend>
                             <div class="form-row">
@@ -1649,62 +1649,11 @@
                               </div>
                               <div class="col-md-2">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-isfictional">Is fictional</label>
-                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-isfictional" name="releaseDate" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
+                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-isfictional" name="isFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
                               </div>
                             </div>
                           </fieldset>
-                        </div> 
-                        <!-- actor and collective share most name data (all but title) -->
-                        <!-- <div class="form-group datasheet-data person-data"> <!~~ person name information for person (including isFictional flag) ~~>
-                          <fieldset>
-                            <legend>Name</legend>
-                            <div class="form-row">
-                              <!~~ <div class="col-md-1">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-isfictional">Is fictional</label>
-                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-isfictional" name="personIsFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
-                              </div> ~~>
-                              <!~~ <div class="col-md-1">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-academictitle">Title</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-academictitle" name="academicTitle" placeholder="[Enter academic Title]" aria-describedby="Academic title">
-                              </div> ~~>
-                              <!~~ <div class="col-md-6">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-name">Display Name*</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-name" name="personDisplayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
-                              </div>
-                              <div class="col-md-2">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-name-usedfrom">Name used from</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-name-usedfrom" name="personNameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
-                              </div>
-                              <div class="col-md-2">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-name-useduntil">Name used until</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-name-useduntil" name="personNameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
-                              </div> ~~>
-                            </div>
-                          </fieldset>
-                        </div> -->
-                        <!-- <div class="form-group datasheet-data collective-data"> <!~~ collective name information for person (including isFictional flag) ~~>
-                          <fieldset>
-                            <legend>Name</legend>
-                            <div class="form-row">
-                              <!~~ <div class="col-md-1">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-isfictional">Is fictional</label>
-                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-isfictional" name="collectiveIsFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
-                              </div> ~~>
-                              <!~~ <div class="col-md-7">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-name">Display Name*</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-name" name="collectiveDisplayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
-                              </div>
-                              <div class="col-md-2">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-name-usedfrom">Name used from</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-name-usedfrom" name="collectiveNameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
-                              </div>
-                              <div class="col-md-2">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-name-useduntil">Name used until</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-name-useduntil" name="CollectiveNameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
-                              </div> ~~>
-                            </div>
-                           </fieldset>
-                        </div> -->
+                        </div>
                         <div class="form-group datasheet-data actortype-data"> <!-- actor type information -->
                           <fieldset>
                             <legend>Actor type</legend>
@@ -1716,7 +1665,7 @@
                             </select>
                           </fieldset>
                         </div>                        
-                        <div class="form-group datasheet-data person-data"> <!-- person information -->
+                        <div class="form-group datasheet-data person-data"> <!-- person bio information -->
                           <fieldset>
                             <legend>Bio</legend>
                             <div class="form-row">
@@ -1748,7 +1697,7 @@
                                   <option value="4">Unknown</option>
                                 </select>
                               </div>
-                              <div class="col-md-9">
+                              <!-- <div class="col-md-9">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-citizenship-name">Citizenship</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-citizenship-name" name="citizenshipName" placeholder="[Enter citizenship]" aria-describedby="Citizenship">
                               </div>
@@ -1757,7 +1706,7 @@
                               <div class="col-md-12">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-specialfeatures">Special features</label>
                                 <textarea class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-specialfeatures" name="specialFeatures" placeholder="[Enter special features]" aria-describedby="Special features"></textarea>
-                              </div>
+                              </div> -->
                             </div>
                           </fieldset>
                         </div>                        
@@ -1792,7 +1741,7 @@
                             </div>
                           </div>
                         </div> -->
-                        <div class="form-group datasheet-data actor-data"> <!-- actor phone number information -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-phone-data"> <!~~ actor phone number information ~~>
                           <fieldset>
                             <legend>Phone number</legend>
                             <div class="form-row">
@@ -1814,9 +1763,9 @@
                               </div>
                             </div>
                           </fieldset>
-                        </div>
-                        <div class="form-group datasheet-data actor-data"> <!-- actor address information -->
-                          <fieldset>  <!-- TODO additional address fields like city -->
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-address-data"> <!~~ actor address information ~~>
+                          <fieldset>  <!~~ TODO additional address fields like city ~~>
                             <legend>Address</legend>
                             <div class="form-row">
                               <div class="col-md-4">
@@ -1855,8 +1804,8 @@
                               </div>
                             </div>
                           </fieldset>
-                        </div>
-                        <div class="form-group datasheet-data actor-data"> <!-- actor email address information -->
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-email-data"> <!~~ actor email address information ~~>
                           <fieldset>
                             <legend>Email</legend>
                             <div class="form-row">
@@ -1870,7 +1819,7 @@
                               </div>
                             </div>
                           </fieldset>
-                        </div>
+                        </div> -->
                         <!-- <div class="form-group datasheet-data actor-data"> <!~~ actor location information ~~>
                           <div class="form-row">
                             <div class="col-md-8">
@@ -1923,32 +1872,35 @@
                         </div>
                       </form>
                       <!-- names form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-names-form" name="timaat-actordatasets-actor-names-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-actordatasets-actor-actornames-form" name="timaat-actordatasets-actor-actornames-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-name caps-name" id="actorNamesLabel">Actor names</h5>
+                              <h5 class="form-title caps-title" id="actorNamesLabel">Actor names</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-names-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-actornames-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
                           </div>
                           <div class="form-row">
-                            <div class="col-sm-2 col-md-2">
+                            <div class="col-sm-1 col-md-1">
                               <h6 class="form-header">Display name</h6>
                             </div>
-                            <div class="col-sm-2 col-md-2">
+                            <div class="col-sm-1 col-md-1">
                               <h6 class="form-header">Birth name</h6>
                             </div>
-                            <div class="col-sm-7 col-md-7">
+                            <div class="col-sm-5 col-md-5">
                               <h6 class="form-header">Name</h6>
                             </div>
-                            <!-- <div class="col-sm-2 col-md-2">
-                              <h6 class="form-header">Name's language</h6>
-                            </div> -->
-                            <div class="col-sm-1 col-md-1">
+                            <div class="col-sm-2 col-md-2">
+                              <h6 class="form-header">Used from</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                              <h6 class="form-header">Used until</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-1">
                               <h6 class="form-header"></h6>
                             </div>
                           </div>
@@ -1969,8 +1921,8 @@
                             </div>
                           </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-names-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-names-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-actornames-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-actornames-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                     </div>
                   </div>

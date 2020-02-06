@@ -52,7 +52,7 @@
 				console.log("TCL: listActors -> data", data);
 				callback(data);
 			}).fail(function(e) {
-//				console.log(e.responseText);
+				// console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},
@@ -108,7 +108,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(actorData) {
-					console.log("TCL: createActor -> returning actorData", actorData);
+					// console.log("TCL: createActor -> returning actorData", actorData);
 					resolve(actorData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
@@ -119,7 +119,7 @@
 		},
 
 		async createActorSubtype(actorSubtype, actorModel, subtypeModel) {
-      console.log("TCL: createActorSubtype -> actorSubtype, actorModel, subtypeModel", actorSubtype, actorModel, subtypeModel);			
+      // console.log("TCL: createActorSubtype -> actorSubtype, actorModel, subtypeModel", actorSubtype, actorModel, subtypeModel);			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/"+actorModel.id,
@@ -131,7 +131,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(subtypeData) {
-					console.log("TCL: createActorSubtype - returning subtypeData", subtypeData);
+					// console.log("TCL: createActorSubtype - returning subtypeData", subtypeData);
 					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -142,7 +142,7 @@
 		},
 
 		async createPersonTranslation(model, modelTranslation) {
-      console.log("TCL: createPersonTranslation -> async createPersonTranslation(model, modelTranslation)",  model, modelTranslation);
+      // console.log("TCL: createPersonTranslation -> async createPersonTranslation(model, modelTranslation)",  model, modelTranslation);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.person.protocol+'//'+window.person.host+"/TIMAAT/api/person/"+model.id+"/translation/"+modelTranslation.id,
@@ -164,7 +164,7 @@
 		},
 
 		async createName(name) {
-			console.log("TCL: async createName -> name", name);
+			// console.log("TCL: async createName -> name", name);
 			// console.log("TCL: async createName -> JSON.stringify(name)", JSON.stringify(name));
 			return new Promise(resolve => {
 				$.ajax({
@@ -188,8 +188,7 @@
 		},
 
 		async addName(actorId, name) {
-      // console.log("TCL: addName -> actorId", actorId);
-			// console.log("TCL: async addName -> name", name);
+      console.log("TCL: addName -> actorId, name", actorId, name);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
@@ -201,7 +200,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(nameData) {
-					console.log("TCL: addName -> nameData", nameData);
+					// console.log("TCL: addName -> nameData", nameData);
 					resolve(nameData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -212,8 +211,7 @@
 		},
 
 		async createAddress(address) {
-			console.log("TCL: async createAddress -> address", address);
-			// console.log("TCL: async createAddress -> JSON.stringify(address)", JSON.stringify(address));
+			// console.log("TCL: async createAddress -> address", address);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/address/"+address.id,
@@ -236,8 +234,7 @@
 		},
 
 		async createEmailAddress(emailAddress) {
-			console.log("TCL: async createEmailAddress -> emailAddress", emailAddress);
-			// console.log("TCL: async createEmailAddress -> JSON.stringify(emailAddress)", JSON.stringify(emailAddress));
+			// console.log("TCL: async createEmailAddress -> emailAddress", emailAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailAddress/"+emailAddress.id,
@@ -260,8 +257,7 @@
 		},
 
 		async createPhoneNumber(phoneNumber) {
-			console.log("TCL: async createPhoneNumber -> phoneNumber", phoneNumber);
-			// console.log("TCL: async createPhoneNumber -> JSON.stringify(phoneNumber)", JSON.stringify(phoneNumber));
+			// console.log("TCL: async createPhoneNumber -> phoneNumber", phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phoneNumber/"+phoneNumber.id,
@@ -284,14 +280,12 @@
 		},
 
 		async updateActor(actorModel) {
-			console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
+			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
 			var tempActorModel = {};
-			// tempActorModel.releaseDate = actorModel.releaseDate;
-			// tempActorModel.remark = actorModel.remark;
-			// tempActorModel.copyright = actorModel.copyright;
-			tempActorModel.displayName = actorModel.displayName;
+			// tempActorModel.displayName = actorModel.displayName;
+			tempActorModel.isFictional = actorModel.isFictional;
 			tempActorModel.birthName = actorModel.birthName;
-			tempActorModel.names = actorModel.names;
+			// tempActorModel.actorNames = actorModel.actorNames;
       console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;
 			return new Promise(resolve => {
@@ -305,7 +299,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateActor -> returning updateData", updateData);
+					// console.log("TCL: async updateActor -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -358,7 +352,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
+					// console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -370,7 +364,7 @@
 		},
 
 		async updateName(name) {
-			console.log("TCL: async updateName -> name", name);
+			// console.log("TCL: async updateName -> name", name);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/name/"+name.id,
@@ -382,7 +376,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateName -> updateData", updateData);
+					// console.log("TCL: async updateName -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -392,6 +386,7 @@
 				console.log( "error: ", error);
 			});
 		},
+
 		removeActor(actor) {
 			console.log("TCL: removeActor -> actor", actor);
 			$.ajax({
@@ -410,7 +405,7 @@
 		},
 
 		removeActorSubtype(subtype, subtypeData) {
-      console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
+      // console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+subtype+"/"+subtypeData.model.actorId,
 				type:"DELETE",
@@ -427,7 +422,7 @@
 		},
 
 		removeName(name) {
-			console.log("TCL: removeName -> name", name);
+			// console.log("TCL: removeName -> name", name);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/name/"+name.id,
 				type:"DELETE",

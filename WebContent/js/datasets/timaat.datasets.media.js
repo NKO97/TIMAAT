@@ -218,7 +218,7 @@
 		},
 
 		initTitles: function() {
-			$('#media-tab-titles-form').click(function(event) {
+			$('#media-tab-medium-titles-form').click(function(event) {
 				$('.nav-tabs a[href="#mediumTitles"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.setMediumTitleList($('#timaat-mediadatasets-media-metadata-form').data('medium'))
@@ -235,8 +235,8 @@
 			});
 
 			// Add title button click
-			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(e) {
-				e.preventDefault();
+			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(event) {
+				event.preventDefault();
 				console.log("TCL: add title to list");
 				var listEntry = $(this).closest('[data-role="new-title-fields"]');
 				var title = '';
@@ -253,8 +253,11 @@
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					console.log("TCL: titlesInForm", titlesInForm);
-					var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isDisplayTitle' occurence
-					// TODO this formula may not work with the originalTital radiobutton addition
+					var indexName = titlesInForm[titlesInForm.length-2].name; // find last used index. Extra -1 for 1 element in add new title row
+					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
+					var i = Number(indexString)+1;
+					// var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isDisplayTitle' occurence
+					// -TODO this formula may not work with the originalTitel radiobutton addition
 					$('#dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -272,7 +275,7 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
@@ -321,8 +324,8 @@
 			});
 
 			// Remove title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(e) {
-				e.preventDefault();
+			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
+				event.preventDefault();
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
 					// TODO modal informing that display title entry cannot be deleted					
@@ -339,7 +342,6 @@
 			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', async function(event) {
 				console.log("TCL: Titles form: submit");
 				// add rules to dynamically added form fields
-				// continue only if client side validation has passed
 				event.preventDefault();
 				var node = document.getElementById("new-title-fields");
 				while (node.lastChild) {
@@ -347,38 +349,7 @@
 				};
 				// test if form is valid 
 				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) {
-					$('[data-role="new-title-fields"]').append(
-						`<div class="form-group" data-role="title-entry">
-							<div class="form-row">
-								<div class="col-md-2 text-center">
-									<div class="form-check">
-										<span>Add new title:</span>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label class="sr-only">Title</label>
-									<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
-								</div>
-								<div class="col-md-3">
-									<label class="sr-only">Title's Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
-										<option value="" disabled selected hidden>[Choose title language...]</option>
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
-									</select>
-								</div>
-								<div class="col-md-1 text-center">
-									<button class="btn btn-primary" data-role="add">
-										<span class="fas fa-plus"></span>
-									</button>
-								</div>
-							</div>
-						</div>`
-					);					
+					$('[data-role="new-title-fields"]').append(TIMAAT.MediaDatasets.titleFormTitleToAppend());
 					return false;
 				}
 				console.log("TCL: Titles form: valid");
@@ -392,11 +363,11 @@
 				var i = 0;
 				while ( i < formData.length) {
 					var element = {
-					isDisplayTitle: false,
-					isOriginalTitle: false,
-					title: '',
-					titleLanguageId: 0,
-				};
+						isDisplayTitle: false,
+						isOriginalTitle: false,
+						title: '',
+						titleLanguageId: 0,
+					};
 					if (formData[i].name == 'isDisplayTitle' && formData[i].value == 'on' ) {
 						element.isDisplayTitle = true;
 						if (formData[i+1].name == 'isOriginalTitle' && formData[i+1].value == 'on' ) {
@@ -428,6 +399,7 @@
 					};
 					formTitleList[formTitleList.length] = element;
 				}
+				
 				// only updates to existing titles
 				if (formTitleList.length == medium.model.titles.length) {
 					var i = 0;
@@ -438,7 +410,7 @@
 								id: Number(formTitleList[i].titleLanguageId),
 							},
 							name: formTitleList[i].title,
-							};
+						};
 						console.log("TCL: update existing titles");
 						// only update if anything changed
 						if (title != medium.model.titles[i]) {
@@ -446,6 +418,7 @@
 						}
 						// update display title
 						var changed = false;
+						// TODO check whether following conditions actually mean display title or original title were changed
 						if (formTitleList[i].isDisplayTitle == true) {
 							medium.model.displayTitle = medium.model.titles[i];
 							changed = true;
@@ -470,7 +443,7 @@
 								id: Number(formTitleList[i].titleLanguageId),
 							},
 							name: formTitleList[i].title,
-							};
+						};
 						// only update if anything changed
 						if (title != medium.model.titles[i]) {
 							console.log("TCL: update existing titles (and add new ones)");
@@ -486,7 +459,7 @@
 								id: Number(formTitleList[i].titleLanguageId),
 							},
 							name: formTitleList[i].title,
-							};
+						};
 						newTitles.push(title);
 					}
 					console.log("TCL: (update existing titles and) add new ones");
@@ -519,7 +492,7 @@
 								id: Number(formTitleList[i].titleLanguageId),
 							},
 							name: formTitleList[i].title,
-							};
+						};
 						if (title != medium.model.titles[i]) {
 							console.log("TCL: update existing titles (and delete obsolete ones)");
 							await TIMAAT.MediaDatasets.updateTitle(title, medium);
@@ -563,7 +536,7 @@
 
 		initLanguageTracks: function() {
 			// languagetrack tab click handling
-			$('#media-tab-languagetracks-form').click(function(event) {
+			$('#media-tab-medium-languagetracks-form').click(function(event) {
 				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.setMediumLanguageTrackList($('#timaat-mediadatasets-media-metadata-form').data('medium'))
@@ -1589,9 +1562,11 @@
 			// setup model
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
-				if ( title.mediumId > 0 )
-					mediumTitles.model.titles.push(title); 
+				if ( title.id > 0 )
+					mediumTitles.push(title); 
 			});
+			TIMAAT.MediaDatasets.titles = mediumTitles;
+      console.log("TCL: TIMAAT.MediaDatasets.titles", TIMAAT.MediaDatasets.titles);
 		},
 
 		setMediumLanguageTrackList: function(medium) {
@@ -1662,6 +1637,7 @@
 			mediumFormMetadataValidator.resetForm();
 			$('.'+mediumType+'-data-tab').show();
 			$('.title-data-tab').show();
+			$('.languagetrack-data-tab').show();
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
 			$('#timaat-mediadatasets-media-metadata-form').show();
 
@@ -1869,38 +1845,7 @@
 				$('#timaat-mediadatasets-media-metadata-title').focus();
 
 				// fields for new title entry
-				$('[data-role="new-title-fields"]').append(
-					`<div class="form-group" data-role="title-entry">
-						<div class="form-row">
-							<div class="col-md-2 text-center">
-								<div class="form-check">
-									<span>Add new title:</span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title" required>
-							</div>
-							<div class="col-md-3">
-								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
-									<option value="" disabled selected hidden>[Choose title language...]</option>
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
-								</select>
-							</div>
-							<div class="col-md-1 text-center">
-								<button class="btn btn-primary" data-role="add">
-									<span class="fas fa-plus"></span>
-								</button>
-							</div>
-						</div>
-					</div>`
-				);
+				$('[data-role="new-title-fields"]').append(TIMAAT.MediaDatasets.titleFormTitleToAppend());
 				$('#timaat-mediadatasets-medium-titles-form').data('medium', medium);
 			}
 		},
@@ -2499,6 +2444,41 @@
 				isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
 			};
 			return source;
+		},
+
+		titleFormTitleToAppend: function() {
+			var titleToAppend =
+			`<div class="form-group" data-role="title-entry">
+							<div class="form-row">
+								<div class="col-md-2 text-center">
+									<div class="form-check">
+										<span>Add new title:</span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only">Title</label>
+									<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" data-role="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								</div>
+								<div class="col-md-3">
+									<label class="sr-only">Title's Language</label>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+										<option value="" disabled selected hidden>[Choose title language...]</option>
+										<option value="2">English</option>
+										<option value="3">German</option>
+										<option value="4">French</option>
+										<option value="5">Spanish</option>
+										<option value="6">Russian</option>
+										<option value="7">Arabic</option>
+									</select>
+								</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-primary" data-role="add">
+										<span class="fas fa-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>`;
+						return titleToAppend;
 		}
 
 	}

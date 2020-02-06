@@ -2,14 +2,16 @@ requirejs.config({
 	baseUrl: 'js',
 	paths: {
 		"argon2":					'../vendor/argon2/argon2-asm.min',
-		"bootstrap":				'../vendor/bootstrap/js/bootstrap.bundle.min',
-		"datatables":				'../vendor/datatables/datatables.min',
 		"jquery": 					'../vendor/jquery/jquery.min',
 		"jquery-ui":				'../vendor/jquery/plugins/jquery-ui/jquery-ui.min',
 		"jquery-validate":			'../vendor/jquery/plugins/jquery.validate',
 		"jquery-datetime":			'../vendor/jquery/plugins/jquery-datetimepicker/jquery.datetimepicker.full',
 		"jquery-tinycolorpicker":	'../vendor/tinycolorpicker/jquery.tinycolorpicker',
 		"jquery-dropzone":			'../vendor/dropzone/dropzone',
+		"bootstrap":				'../vendor/bootstrap/js/bootstrap.bundle.min',
+		"datatables":				'../vendor/datatables/datatables.min',
+		"datatables.net" : '../vendor/datatables/DataTables-1.10.20/js/jquery.dataTables.min',
+		"datatables.net-bs" : '../vendor/dataTables/DataTables-1.10.20/js/dataTables.bootstrap.min',
 		"leaflet":					'../vendor/leaflet/leaflet',
 		"leaflet-editable":			'../vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable',
 		"leaflet-pathdrag":			'../vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag',
@@ -54,6 +56,7 @@ requirejs.config({
 
 	}, 
 	shim: {
+		'jquery': { exports: 'jquery' },
 		'jquery-ui': { deps: [ 'jquery' ], exports: 'jQuery.ui' },
 		'jquery-validate': { deps: [ 'jquery' ], exports: 'jQuery.validate' },
 		'jquery-datetime': { deps: [ 'jquery' ], exports: 'jQuery.datetimepicker' },

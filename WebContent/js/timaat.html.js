@@ -114,6 +114,13 @@
             required: true,
           },
         },
+        messages: {
+          displayTitle: {
+            required: "Enter a title (min length: 3)",
+            minlength: "Title too short: min length is 3",
+            maxlength: "Title is too long: max length is 200"
+          },
+        },
         submitHandler: function(mediumFormTitles) {
           mediumFormTitles.submit();
         },
@@ -158,14 +165,21 @@
           actorFormMetadata.submit();
         },
       });
-      var actorFormNames = $("#timaat-mediadatasets-actor-names-form");
-      var actorFormNamesValidator = $("#timaat-mediadatasets-actor-names-form").validate({
+      var actorFormNames = $("#timaat-actordatasets-actor-actornames-form");
+      var actorFormNamesValidator = $("#timaat-actordatasets-actor-actornames-form").validate({
         rules: {
-          name: {
+          actorName: {
             required: true,
             minlength: 3,
             maxlength: 200,
-          },
+          }
+        },
+        messages: {
+          actorName: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          }
         },
         submitHandler: function(actorFormNames) {
           actorFormNames.submit();
