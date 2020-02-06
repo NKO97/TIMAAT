@@ -269,7 +269,7 @@ public class MediumServiceEndpoint{
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newMedium == null ) {
-			System.out.println("MediumServiceEndpoint: createMedium - newMedium == 0");
+			System.out.println("MediumServiceEndpoint: createMedium - newMedium == null");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data

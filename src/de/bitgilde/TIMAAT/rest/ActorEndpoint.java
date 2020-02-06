@@ -329,7 +329,7 @@ public class ActorEndpoint {
 	@Secured
 	public Response updatePerson(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("ActorServiceEndpoint: UPDATE PERSON - jsonData: " + jsonData);
+		System.out.println("ActorServiceEndpoint: updatePerson jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorPerson updatedPerson = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -340,12 +340,17 @@ public class ActorEndpoint {
 		try {
 			updatedPerson = mapper.readValue(jsonData, ActorPerson.class);
 		} catch (IOException e) {
+			System.out.println("ActorServiceEndpoint: updatePerson - IOException");
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedPerson == null ) return Response.notModified().build();    	
+		if ( updatedPerson == null ) {
+			System.out.println("ActorServiceEndpoint: updatePerson - updatedPerson == null");
+			return Response.notModified().build();   
+		} 	
 		
 		// update person
-		// System.out.println("ActorServiceEndpoint: UPDATE PERSON - person.id:"+person.getActorId());
+		System.out.println("ActorServiceEndpoint: updatePerson update data");
 		person.setTitle(updatedPerson.getTitle());
 		person.setDateOfBirth(updatedPerson.getDateOfBirth());
 		// TODO update place of birth
@@ -354,14 +359,17 @@ public class ActorEndpoint {
 		if ( updatedPerson.getSex() != null) person.setSex(updatedPerson.getSex());
 		// TODO update person is member of collective
 		// TODO update person translations -> special features
-		
+
+		System.out.println("ActorServiceEndpoint: updatePerson update log entry");
 		// update log metadata
 		person.getActor().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			person.getActor().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+		}
+
+		System.out.println("ActorServiceEndpoint: updatePerson persist person");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(person);
@@ -373,7 +381,7 @@ public class ActorEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																UserLogManager.LogEvents.PERSONEDITED);
-		System.out.println("ActorServiceEndpoint: UPDATE PERSON - update complete");	
+		System.out.println("ActorServiceEndpoint: updatePerson - update complete");	
 		return Response.ok().entity(person).build();
 	}
 

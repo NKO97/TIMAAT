@@ -325,9 +325,9 @@
 					var personModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
 					var displayName = await TIMAAT.ActorDatasets.createDisplayNameModel(formDataObject);
-					var primaryAddress = null // await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
-					var primaryEmail = null // await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
-					var primaryPhoneNumber = null // await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+					var primaryAddress = null //TODO  await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					var primaryEmail = null // TODO await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					var primaryPhoneNumber = null // TODO await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
 					// var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
 					// if (citizenshipModel != null) {
 					// 	personModel.citizenships = citizenshipModel;
@@ -820,7 +820,7 @@
 			var acts = Array();
 			actors.forEach(function(actor) { 
 				if ( actor.id > 0 ) {
-					console.log("TCL: actor", actor);
+					// console.log("TCL: actor", actor);
 					actor.actorNames.forEach(function(name) {
 						if (name.isDisplayName) {
 							actor.displayName = name;
@@ -851,7 +851,7 @@
 			var newPerson;
 			persons.forEach(function(person) { 
 				if (person.id > 0) {
-					console.log("TCL: person", person);
+					// console.log("TCL: person", person);
 					person.actorNames.forEach(function(name) {
 						if (name.isDisplayName) {
 							person.displayName = name;
@@ -949,8 +949,8 @@
 			$('#timaat-actordatasets-actor-metadata-isfictional').prop('checked', false);
 			$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
 			$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-person-metadata-name-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-person-metadata-name-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+			$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+			$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
 		},
 
 		actorFormDatasheet: function(action, actorType, actorTypeData) {
@@ -997,8 +997,8 @@
 				}
 				$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
 				$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-person-metadata-name-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-person-metadata-name-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
+				$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
+				$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit :input').prop("disabled", true);
@@ -1199,10 +1199,6 @@
 			try {
 				// create actor
 				var tempActorModel = actorModel;
-				// tempActorModel.displayName = newDisplayName;
-				// tempActorModel.primaryAddress = (newPrimaryAddress) ? newPrimaryAddress : "" ;
-				// tempActorModel.primaryEmailAddress = (newPrimaryEmailAddress) ? newPrimaryEmailAddress : "";
-				// tempActorModel.primaryPhoneNumber = (newPrimaryPhoneNumber) ? newPrimaryPhoneNumber : "";
 				var newActorModel = await TIMAAT.ActorService.createActor(tempActorModel);
         console.log("TCL: newActorModel", newActorModel);
 			} catch(error) {
@@ -1211,7 +1207,6 @@
 			try {
 				// create display name
 				var newDisplayName = await TIMAAT.ActorService.addName(newActorModel.id, displayName);
-        console.log("TCL: newDisplayName", newDisplayName);
 				newActorModel.displayName = newDisplayName;
 				newActorModel.actorNames[0] = newDisplayName;
         console.log("TCL: newActorModel", newActorModel);
@@ -1227,14 +1222,6 @@
 			} catch(error) {
 				console.log( "error: ", error);
 			};
-			// try {
-			// 	// update displayName (createActor created an empty displayName)
-			// 	displayName.id = newActorModel.actorNames[0].id;
-			// 	var updatedDisplayName = await TIMAAT.MediaService.updateName(displayName);
-			// 	newActorModel.actorNames[0] = updatedDisplayName; // TODO refactor once several names can be added				
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// };
 			try {
 				// create actorSubtype with actor id
 				actorSubtypeModel.actorId = newActorModel.id;
@@ -1311,6 +1298,12 @@
 					switch (actorSubtype) {
 						case 'person':
 							tempSubtypeModel = actor.model.actorPerson;
+							// TODO remove once implemented
+							delete tempSubtypeModel.placeOfBirth;
+							delete tempSubtypeModel.placeOfDeath;
+							delete tempSubtypeModel.actorPersonIsMemberOfActorCollectives;
+							delete tempSubtypeModel.actorPersonTranslations;
+							delete tempSubtypeModel.citizenships;
 						break;
 						case 'collective':
 							tempSubtypeModel = actor.model.actorCollective;
@@ -1547,9 +1540,13 @@
 				actorId: 0,
 				title: formDataObject.title,
 				dateOfBirth: moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD"),
-				placeOfBirth: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
+				placeOfBirth: {
+					id: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
+					},
 				dayOfDeath: moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD"),
-				placeOfDeath: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
+				placeOfDeath: {
+					id: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
+				},
 				sex: {
 					id: Number(formDataObject.sexId),
 				},
