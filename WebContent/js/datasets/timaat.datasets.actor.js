@@ -1041,6 +1041,9 @@
 					$('#timaat-actordatasets-person-metadata-placeofdeath').val(data.actorPerson.placeOfDeath);
 					$('#timaat-actordatasets-person-metadata-sex-type').val(data.actorPerson.sex.id);
 					// $('#timaat-actordatasets-person-metadata-specialfeatures').val(data.actorPerson.actorPersonTranslations.specialFeatures);
+					// TODO remove once location is properly connected
+					$('#timaat-actordatasets-person-metadata-placeofbirth').prop("disabled", true);
+					$('#timaat-actordatasets-person-metadata-placeofdeath').prop("disabled", true);
 				break;
 				case 'collective':
 					// TODO all collective data
