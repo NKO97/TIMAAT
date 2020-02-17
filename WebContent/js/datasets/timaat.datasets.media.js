@@ -247,17 +247,16 @@
 				}));
 				if (listEntry.find('select').each(function(){
 					languageId = $(this).val();
-          console.log("TCL: languageId", languageId);
 				}));
-				// if (!$("#timaat-mediadatasets-medium-titles-form").valid()) return false;
+				// if (!$("#timaat-mediadatasets-medium-titles-form").valid()) 
+					// return false;
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					console.log("TCL: titlesInForm", titlesInForm);
-					var indexName = titlesInForm[titlesInForm.length-2].name; // find last used index. Extra -1 for 1 element in add new title row
+					var numberOfTitleElements = 1;
+					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used index. Extra -1 for 1 element in add new title row
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
-					// var i = Math.floor((titlesInForm.length - 1) / 2) - 1; // first -1 is to account for 'add new title' row; latter -1 to compensate for single 'isDisplayTitle' occurence
-					// -TODO this formula may not work with the originalTitel radiobutton addition
 					$('#dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -270,7 +269,7 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" placeholder="Is Original Title" data-role="originalTitle">
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
@@ -1762,18 +1761,18 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayTitle"></label>
-									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" placeholder="Is Display Title" data-role="displayTitle[`+medium.model.titles[i].id+`]">
+									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" data-role="displayTitle[`+medium.model.titles[i].id+`]" placeholder="Is Display Title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" placeholder="Is Original Title" data-role="originalTitle[`+medium.model.titles[i].id+`]">
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle[`+medium.model.titles[i].id+`]" placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" data-role="title[`+i+`]" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>

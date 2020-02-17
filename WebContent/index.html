@@ -1924,6 +1924,77 @@
                         <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-actornames-form-submit" name="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-actornames-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
+                      <!-- address form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-addresses-form" name="timaat-actordatasets-actor-addresses-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorAddressesLabel">Actor addresses</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-addresses-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- <div class="form-group">
+                            <div class="form-row">
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street name</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street number</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street addition</h6>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-sm-5 col-md-5">
+                                <h6 class="form-header">Postal code</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">City</h6>
+                              </div>
+                              <div class="col-sm-5 col-md-5">
+                                <h6 class="form-header">Post office box</h6>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address type</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address used from</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address used until</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                        <div class="actor-addresses-container">
+                          <div data-role="dynamic-address-fields" id="dynamic-address-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="address-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorhasaddress-fields" id="new-actorhasaddress-fields">
+                            <!-- one row for new name information that shall be added to the addresses list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-addresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
                     </div>
                   </div>
                 </div>

@@ -185,6 +185,46 @@
           actorFormNames.submit();
         },
       });
+      var actorFormAddresses = $("#timaat-actordatasets-actor-addresses-form");
+      var actorFormAddressesValidator = $("#timaat-actordatasets-actor-addresses-form").validate({
+        rules: {
+          streetNumber: {
+            maxlength: 10,
+          },
+          streetAddition: {
+            maxlength: 50,
+          },
+          postalCode: {
+            maxlength: 8,
+          },
+          postOfficeBox: {
+            maxlength: 10,
+          },
+          addressType: {
+            required: true,
+          }
+        },
+        messages: {
+          streetNumber: {
+            maxlength: "Street number is too long: max length is 10"
+          },
+          streetAddition: {
+            maxlength: "Street addtition is too long: max length is 50"
+          },
+          postalCode: {
+            maxlength: "Postal code is too long: max length is 8"
+          },
+          postOfficeBox: {
+            maxlength: "Post office box is too long: max length is 10"
+          },
+          addressType: {
+            required: "Select an address type"
+          }
+        },
+        submitHandler: function(actorFormAddresses) {
+          actorFormAddresses.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

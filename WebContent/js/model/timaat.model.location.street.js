@@ -108,7 +108,7 @@
 		updateUI() {
 			// console.log("TCL: Street -> updateUI -> updateUI()");
 			// title
-			var name = this.model.location.locationTranslations[0].name;
+			// var name = this.model.location.locationTranslations[0].name; // TODO reenable once working again
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-street-list-name').text(name);
 		}

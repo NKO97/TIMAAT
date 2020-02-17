@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -19,11 +19,12 @@ public class AddressType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="addressType")
-	@JsonManagedReference(value = "AddressType-ActorHasAddress")
+	@JsonIgnore
 	private List<ActorHasAddress> actorHasAddresses;
 
 	//bi-directional many-to-one association to AddressTypeTranslation

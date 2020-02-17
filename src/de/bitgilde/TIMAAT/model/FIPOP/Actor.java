@@ -65,7 +65,6 @@ public class Actor implements Serializable {
 	
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
-	@JsonManagedReference(value = "Actor-ActorHasAddress")
 	private List<ActorHasAddress> actorHasAddresses;
 
 	//bi-directional many-to-one association to ActorHasEmailAddress

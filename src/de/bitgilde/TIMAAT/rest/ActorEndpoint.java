@@ -26,21 +26,26 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorName;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPerson;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
 import de.bitgilde.TIMAAT.model.FIPOP.Address;
+import de.bitgilde.TIMAAT.model.FIPOP.AddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
+import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -114,6 +119,16 @@ public class ActorEndpoint {
 		List<Actor> actorList = new ArrayList<Actor>();
 		for ( ActorCollective actorCollective : actorCollectiveList ) actorList.add(actorCollective.getActor());
 		return Response.ok().entity(actorList).build();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("addresstype/list")
+	public Response getAddresstypeList() {
+		System.out.println("ActorServiceEndpoint: getAddressTypeList");		
+		List<AddressType> addressTypeList = castList(AddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("AddressType.findAll").getResultList());
+		return Response.ok().entity(addressTypeList).build();
 	}
 
 	@GET
@@ -212,6 +227,7 @@ public class ActorEndpoint {
     // update actor
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
 		if (updatedActor.getBirthName() != null ) actor.setBirthName(updatedActor.getBirthName());
+		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -827,8 +843,8 @@ public class ActorEndpoint {
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ADDRESSCREATED);
 		
 		System.out.println("ActorServiceEndpoint: create address: address created with id "+newAddress.getId());
 		// System.out.println("ActorServiceEndpoint: create address: address created with language id "+newAddress.getLanguage().getId());
@@ -845,66 +861,70 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Address newAddress = null;
+		Address address = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
 		// parse JSON data
 		try {
-			newAddress = mapper.readValue(jsonData, Address.class);
+			address = mapper.readValue(jsonData, Address.class);
 		} catch (IOException e) {
 			System.out.println("ActorServiceEndpoint: addAddress: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newAddress == null ) {
-			System.out.println("ActorServiceEndpoint: addAddress: newAddress == null !");
+		if ( address == null ) {
+			// System.out.println("ActorServiceEndpoint: addAddress: address == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("ActorServiceEndpoint: addAddress: address: "+newAddress.getAddress());
+		// System.out.println("ActorServiceEndpoint: addAddress: address: "+address.getAddress());
 		// sanitize object data
-		newAddress.setId(0);
-		// Language language = entityManager.find(Language.class, newAddress.getLanguage().getId());
-		// newAddress.setLanguage(language);
+		address.setId(0);
+
+		Street street = entityManager.find(Street.class, address.getStreet().getLocationId());
+		// System.out.println("ActorServiceEndpoint: addAddress: street: "+address.getStreet().getLocationId());
+		address.setStreet(street);
+		Actor actor = entityManager.find(Actor.class, actorId);
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
 		// Not necessary, a address will always be created in conjunction with a actor
-		System.out.println("ActorServiceEndpoint: addAddress: persist address");
+		// System.out.println("ActorServiceEndpoint: addAddress: persist address");
 
 		// persist address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		// entityManager.persist(language);
-		entityManager.persist(newAddress);
+		entityManager.persist(street);
+		entityManager.persist(address);
 		entityManager.flush();
-		// newAddress.setLanguage(language);
+		address.setStreet(street);
 		entityTransaction.commit();
-		entityManager.refresh(newAddress);
-		// entityManager.refresh(language);
+		entityManager.refresh(address);
+		entityManager.refresh(street);
 
-		// create actor_has_address-table entries
-		// entityTransaction.begin();
-		// actor.getAddresss().add(newAddress);
-		// newAddress.getActors3().add(actor);
-		// entityManager.merge(newAddress);
-		// entityManager.merge(actor);
-		// entityManager.persist(newAddress);
-		// entityManager.persist(actor);
-		// entityTransaction.commit();
-		// entityManager.refresh(actor);
-		// entityManager.refresh(newAddress);
+		// System.out.println("ActorServiceEndpoint: addAddress: persist actorHasAddress");
+	// create actor_has_address-table entries
+		ActorHasAddress actorHasAddress = new ActorHasAddress(actor, address);
+		entityTransaction.begin();
+		actor.getActorHasAddresses().add(actorHasAddress);
+		address.getActorHasAddresses().add(actorHasAddress);
+		entityManager.merge(address);
+		entityManager.merge(actor);
+		entityManager.persist(actor);
+		entityManager.persist(address);
+		entityTransaction.commit();
+		entityManager.refresh(actor);
+		entityManager.refresh(address);
 
-		System.out.println("ActorServiceEndpoint: addAddress: add log entry");	
+		// System.out.println("ActorServiceEndpoint: addAddress: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ADDRESSCREATED);
 
-		System.out.println("ActorServiceEndpoint: addAddress: address added with id "+newAddress.getId());
-		// System.out.println("ActorServiceEndpoint: addAddress: address added with language id "+newAddress.getLanguage().getId());
+		// System.out.println("ActorServiceEndpoint: addAddress: address added with id "+address.getId());
 
-		return Response.ok().entity(newAddress).build();
+		return Response.ok().entity(address).build();
 	}
 
 	@PATCH
@@ -915,6 +935,7 @@ public class ActorEndpoint {
 	public Response updateAddress(@PathParam("id") int id, String jsonData) {
 		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address updatedAddress = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Address address = entityManager.find(Address.class, id);
@@ -924,14 +945,15 @@ public class ActorEndpoint {
 		try {
 			updatedAddress = mapper.readValue(jsonData, Address.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedAddress == null ) return Response.notModified().build();
 		// update address
 		if ( updatedAddress.getPostOfficeBox() != null ) address.setPostOfficeBox(updatedAddress.getPostOfficeBox());
 		if ( updatedAddress.getPostalCode() != null ) address.setPostalCode(updatedAddress.getPostalCode());
-		if ( updatedAddress.getStreetAddressAddition() != null ) address.setStreetAddressAddition(updatedAddress.getStreetAddressAddition());
-		if ( updatedAddress.getStreetAddressNumber() != null ) address.setStreetAddressNumber(updatedAddress.getStreetAddressNumber());
+		if ( updatedAddress.getStreetAddition() != null ) address.setStreetAddition(updatedAddress.getStreetAddition());
+		if ( updatedAddress.getStreetNumber() != null ) address.setStreetNumber(updatedAddress.getStreetNumber());
 		if ( updatedAddress.getStreet() != null ) address.setStreet(updatedAddress.getStreet());
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -948,6 +970,61 @@ public class ActorEndpoint {
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSEDITED);
 		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - update complete");	
 		return Response.ok().entity(address).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{actor_id}/address/{address_id}")
+	@Secured
+	public Response updateActorHasAddress(@PathParam("actor_id") int actorId, @PathParam("address_id") int addressId, String jsonData) {
+
+		System.out.println("ActorServiceEndpoint: updateActorHasAddress - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    mapper.setSerializationInclusion(Include.NON_NULL);
+		ActorHasAddress updatedActorHasAddress = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		Address address = entityManager.find(Address.class, addressId);
+		ActorHasAddress ahakey = new ActorHasAddress(actor, address);
+		ActorHasAddress actorHasAddress = entityManager.find(ActorHasAddress.class, ahakey.getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - actorId :"+actorHasAddress.getActor().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - addressId :"+actorHasAddress.getAddress().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - parse json data");
+
+		// parse JSON data
+		try {
+			updatedActorHasAddress = mapper.readValue(jsonData, ActorHasAddress.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedActorHasAddress == null ) return Response.notModified().build();
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - update data");	
+		// update actorHasAddress
+		actorHasAddress.setUsedFrom(updatedActorHasAddress.getUsedFrom());
+		actorHasAddress.setUsedUntil(updatedActorHasAddress.getUsedUntil());
+		actorHasAddress.setAddressType(updatedActorHasAddress.getAddressType());
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - addressTypeId :"+actorHasAddress.getAddressType().getId());
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - persist");	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(actorHasAddress);
+		entityManager.persist(actorHasAddress);
+		entityTransaction.commit();
+		entityManager.refresh(actorHasAddress);
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasAddress - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSEDITED);
+		System.out.println("ActorServiceEndpoint: updateActorHasAddress - update complete");	
+		return Response.ok().entity(actorHasAddress).build();
 	}
 
 	@DELETE

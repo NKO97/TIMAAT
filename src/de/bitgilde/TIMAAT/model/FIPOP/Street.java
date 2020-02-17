@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -24,14 +23,13 @@ public class Street implements Serializable {
 
 	//bi-directional many-to-one association to Address
 	@OneToMany(mappedBy="street")
-	@JsonManagedReference(value = "Street-Address")
+	@JsonIgnore
 	private List<Address> addresses;
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
-	// @JsonBackReference(value = "Location-Street")
 	@PrimaryKeyJoinColumn(name="location_id")
-	@JsonIgnore
+	@JsonIgnore // LocationStreet is accessed through Location --> avoid reference cycle
 	private Location location;
 
 	public Street() {
@@ -43,14 +41,6 @@ public class Street implements Serializable {
 
 	public void setLocationId(int locationId) {
 		this.locationId = locationId;
-	}
-
-	public int getId() { // TODO not necessary with getLocationId?
-		return this.getLocation().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setLocationId?
-		this.getLocation().setId(id);
 	}
 
 	public List<Address> getAddresses() {
