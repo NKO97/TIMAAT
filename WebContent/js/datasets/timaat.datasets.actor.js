@@ -646,8 +646,11 @@
 						}
 						var birthNameChanged = false;
 						// update birth name
-						if (formNameList[i].isBirthName == true) {
+						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
 							actor.model.birthName = actor.model.actorNames[i];
+							birthNameChanged = true;
+						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
 						if ( birthNameChanged || displayNameChanged) {
@@ -698,8 +701,11 @@
 						}
 						// update birth name
 						var birthNameChanged = false;
-						if (formNameList[i].isBirthName == true) {
+						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
 							actor.model.birthName = actor.model.actorNames[i];
+							birthNameChanged = true;
+						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
 						if ( birthNameChanged || displayNameChanged) {
@@ -733,8 +739,11 @@
 						}
 						// update birth name
 						var birthNameChanged = false;
-						if (formNameList[i].isBirthName == true) {
+						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
 							actor.model.birthName = actor.model.actorNames[i];
+							birthNameChanged = true;
+						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
 						if (birthNameChanged || displayNameChanged) {
@@ -987,8 +996,11 @@
 						// }
 						var primaryAddressChanged = false;
 						// update primary actorHasAddress
-						if (formActorHasAddressesList[i].isPrimaryAddress == true) {
+						if (formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId) {
 							actor.model.primaryAddress = actor.model.actorHasAddresses[i].address;
+							primaryAddressChanged = true;
+						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
+							actor.model.primaryAddress = null;
 							primaryAddressChanged = true;
 						}
 						if (primaryAddressChanged) {
@@ -1023,8 +1035,11 @@
 					for (; i < formActorHasAddressesList.length; i++) {
 						// update primary address
 						var primaryAddressChanged = false;
-						if (formActorHasAddressesList[i].isPrimaryAddress == true) {
+						if (formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId) {
 							actor.model.primaryAddress = actor.model.actorHasAddresses[i].address;
+							primaryAddressChanged = true;
+						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
+							actor.model.primaryAddress = null;
 							primaryAddressChanged = true;
 						}
 						if (primaryAddressChanged) {

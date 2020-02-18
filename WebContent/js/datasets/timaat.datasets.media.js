@@ -416,18 +416,21 @@
 							await TIMAAT.MediaDatasets.updateTitle(title, medium);
 						}
 						// update display title
-						var changed = false;
-						// TODO check whether following conditions actually mean display title or original title were changed
-						if (formTitleList[i].isDisplayTitle == true) {
+						var displayTitleChanged = false;
+						if (formTitleList[i].isDisplayTitle) {
 							medium.model.displayTitle = medium.model.titles[i];
-							changed = true;
+							displayTitleChanged = true;
 						}
+						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle == true) {
+						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
 							medium.model.originalTitle = medium.model.titles[i];
-							changed = true;
+							originalTitleChanged = true;
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+							actor.model.originalTitle = null;
+							originalTitleChanged = true;
 						}
-						if (changed == true) {
+						if (displayTitleChanged || originalTitleChanged ) {
 							await TIMAAT.MediaDatasets.updateMedium(medium);
 						}
 					};
@@ -466,17 +469,21 @@
 					i = 0;
 					for (; i < formTitleList.length; i++) {
 						// update display title
-						var changed = false;
-						if (formTitleList[i].isDisplayTitle == true) {
+						var displayTitleChanged = false;
+						if (formTitleList[i].isDisplayTitle) {
 							medium.model.displayTitle = medium.model.titles[i];
-							changed = true;
+							displayTitleChanged = true;
 						}
+						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle == true) {
+						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
 							medium.model.originalTitle = medium.model.titles[i];
-							changed = true;
+							originalTitleChanged = true;
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+							actor.model.originalTitle = null;
+							originalTitleChanged = true;
 						}
-						if (changed == true) {
+						if (displayTitleChanged || originalTitleChanged ) {
 							await TIMAAT.MediaDatasets.updateMedium(medium);
 						}
 					}
@@ -497,17 +504,21 @@
 							await TIMAAT.MediaDatasets.updateTitle(title, medium);
 						}
 						// update display title
-						var changed = false;
-						if (formTitleList[i].isDisplayTitle == true) {
+						var displayTitleChanged = false;
+						if (formTitleList[i].isDisplayTitle) {
 							medium.model.displayTitle = medium.model.titles[i];
-							changed = true;
+							displayTitleChanged = true;
 						}
+						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle == true) {
+						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
 							medium.model.originalTitle = medium.model.titles[i];
-							changed = true;
+							originalTitleChanged = true;
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+							actor.model.originalTitle = null;
+							originalTitleChanged = true;
 						}
-						if (changed == true) {
+						if (displayTitleChanged || originalTitleChanged ) {
 							await TIMAAT.MediaDatasets.updateMedium(medium);
 						}
 					};
