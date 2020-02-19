@@ -335,9 +335,9 @@
 					var personModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
 					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
-					var primaryAddress = null; //TODO  await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
-					var primaryEmail = null; // TODO await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
-					var primaryPhoneNumber = null; // TODO await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+					// var primaryAddress = null; //TODO  await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					// var primaryEmail = null; // TODO await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					// var primaryPhoneNumber = null; // TODO await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
 					// var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
 					// if (citizenshipModel != null) {
 					// 	personModel.citizenships = citizenshipModel;
@@ -413,6 +413,8 @@
 					// actor data
 					collective = await TIMAAT.ActorDatasets.updateActorModelData(collective, formDataObject);
 					// collective data
+					collective.model.actorCollective.founded = formDataObject.founded;
+					collective.model.actorCollective.disbanded = formDataObject.disbanded;
 
 					collective.updateUI();
 					console.log("TCL actorType, actor", 'collective', collective);
@@ -422,9 +424,9 @@
 					var collectiveModel = await TIMAAT.ActorDatasets.createCollectiveModel(formDataObject);
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 2); // 2 = Collective. TODO check clause to find proper id
 					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
-					var primaryAddress = null; // await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
-					var primaryEmail = null; // await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
-					var primaryPhoneNumber = null; // await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
+					// var primaryAddress = null; // await TIMAAT.ActorDatasets.createAddressModel(formDataObject);
+					// var primaryEmail = null; // await TIMAAT.ActorDatasets.createEmailModel(formDataObject);
+					// var primaryPhoneNumber = null; // await TIMAAT.ActorDatasets.createPhoneNumberModel(formDataObject);
 
 					await TIMAAT.ActorDatasets.createActor('collective', actorModel, collectiveModel, displayName);
 					// await TIMAAT.ActorDatasets.createActor('collective', actorModel, collectiveModel, displayName, primaryAddress, primaryEmail, primaryPhoneNumber);
@@ -2688,33 +2690,6 @@
 			console.log("TCL: createActor: async function(actorType, actorModel, displayName)", actorType, actorModel, displayName);
 			// createActor: async function(actorType, actorModel, actorSubtypeModel, displayName, address, email, phoneNumber) {
 			// 	console.log("TCL: createActor: async function(actorType, actorModel, displayName, address, email, phoneNumber)", actorType, actorModel, displayName, address, email, phoneNumber);
-			// // try {
-			// 	// create primary address
-			// 	var newPrimaryAddress = null;
-			// 	if (address.length > 0) {
-			// 		newPrimaryAddress = await TIMAAT.ActorService.createAddress(address);
-			// 	}
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// }
-			// try {
-			// 	// create primary email
-			// 	var newPrimaryEmailAddress = null;
-			// 	if (email.length > 0) {
-			// 		newPrimaryEmailAddress = await TIMAAT.ActorService.createEmail(email);
-			// 	}
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// }
-			// try {
-			// 	// create primary phone number
-			// 	var newPrimaryPhoneNumber = null;
-			// 	if (phoneNumber.length > 0) {
-			// 		newPrimaryPhoneNumber = await TIMAAT.ActorService.createPhoneNumber(phoneNumber);
-			// 	}
-			// } catch(error) {
-			// 	console.log( "error: ", error);
-			// }
 			try {
 				// create actor
 				var tempActorModel = actorModel;
@@ -2744,6 +2719,10 @@
 			try {
 				// create actorSubtype with actor id
 				actorSubtypeModel.actorId = newActorModel.id;
+				if (actorType == 'person') {
+					delete actorSubtypeModel.placeOfBirth; // TODO implement
+					delete actorSubtypeModel.placeOfDeath; // TODO implement
+				}
 				var newActorSubtypeModel = await TIMAAT.ActorService.createActorSubtype(actorType, newActorModel, actorSubtypeModel);
 			} catch(error) {
 				console.log( "error: ", error);

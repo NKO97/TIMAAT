@@ -313,6 +313,7 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: createPerson jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ActorPerson newPerson = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -332,8 +333,8 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: createPerson sanitize object data");
 		// sanitize object data
 		// TODO link to locations
-		// Location placeOfBirth = entityManager.find(Location.class, newPerson.getPlaceOfBirth().getId());
-		// Location placeOfDeath = entityManager.find(Location.class, newPerson.getPlaceOfDeath().getId());
+		// Location placeOfBirth = entityManager.find(Location.class, newPerson.getPlaceOfBirth().getLocationId());
+		// Location placeOfDeath = entityManager.find(Location.class, newPerson.getPlaceOfDeath().getLocationId());
 		Sex sex = entityManager.find(Sex.class, newPerson.getSex().getId());
 		newPerson.setSex(sex);
 
@@ -346,12 +347,10 @@ public class ActorEndpoint {
 		entityTransaction.begin();
 		// entityManager.persist(placeOfBirth);
 		// entityManager.persist(placeOfDeath);
-		// entityManager.persist(sex);
 		entityManager.persist(newPerson);
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newPerson);
-		// entityManager.refresh(sex);
 		// entityManager.refresh(placeOfBirth);
 		// entityManager.refresh(placeOfDeath);
 		entityManager.refresh(newPerson.getActor());
