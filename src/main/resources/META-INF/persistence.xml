@@ -11,6 +11,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddressPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddressPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasPhoneNumber</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasPhoneNumberPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountry</class>

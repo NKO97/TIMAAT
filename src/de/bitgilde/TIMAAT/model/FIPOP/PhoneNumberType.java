@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -19,16 +19,16 @@ public class PhoneNumberType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	//bi-directional many-to-one association to PhoneNumber
+	//bi-directional many-to-one association to ActorHasPhoneNumber
 	@OneToMany(mappedBy="phoneNumberType")
-	@JsonManagedReference(value = "PhoneNumberType-PhoneNumber")
-	private List<PhoneNumber> phoneNumbers;
+	@JsonIgnore
+	private List<ActorHasPhoneNumber> actorHasPhoneNumbers;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="phoneNumberType")
-	// @JsonManagedReference(value = "PhoneNumberType-PhoneNumberTypeTranslation")
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
 	public PhoneNumberType() {
@@ -42,26 +42,26 @@ public class PhoneNumberType implements Serializable {
 		this.id = id;
 	}
 
-	public List<PhoneNumber> getPhoneNumbers() {
-		return this.phoneNumbers;
+	public List<ActorHasPhoneNumber> getActorHasPhoneNumbers() {
+		return this.actorHasPhoneNumbers;
 	}
 
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
+	public void setActorHasPhoneNumbers(List<ActorHasPhoneNumber> actorHasPhoneNumbers) {
+		this.actorHasPhoneNumbers = actorHasPhoneNumbers;
 	}
 
-	public PhoneNumber addPhoneNumber(PhoneNumber phoneNumber) {
-		getPhoneNumbers().add(phoneNumber);
-		phoneNumber.setPhoneNumberType(this);
+	public ActorHasPhoneNumber addActorHasPhoneNumber(ActorHasPhoneNumber actorHasPhoneNumber) {
+		getActorHasPhoneNumbers().add(actorHasPhoneNumber);
+		actorHasPhoneNumber.setPhoneNumberType(this);
 
-		return phoneNumber;
+		return actorHasPhoneNumber;
 	}
 
-	public PhoneNumber removePhoneNumber(PhoneNumber phoneNumber) {
-		getPhoneNumbers().remove(phoneNumber);
-		phoneNumber.setPhoneNumberType(null);
+	public ActorHasPhoneNumber removeActorHasPhoneNumber(ActorHasPhoneNumber actorHasPhoneNumber) {
+		getActorHasPhoneNumbers().remove(actorHasPhoneNumber);
+		actorHasPhoneNumber.setPhoneNumberType(null);
 
-		return phoneNumber;
+		return actorHasPhoneNumber;
 	}
 
 	public List<PhoneNumberTypeTranslation> getPhoneNumberTypeTranslations() {

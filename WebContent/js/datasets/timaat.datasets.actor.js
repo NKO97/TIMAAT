@@ -30,6 +30,7 @@
 		emailAddresses: null,
 		emailAddressTypes: null,
 		phoneNumbers: null,
+		phoneNumberTypes: null,
 
 		init: function() {   
 			TIMAAT.ActorDatasets.initActors();
@@ -1355,7 +1356,7 @@
 						var actorHasEmailAddress = TIMAAT.ActorDatasets.createActorHasEmailAddressModel(formActorHasEmailAddressesList[i], actor.model.id, 0);
 						newActorHasEmailAddresses.push(actorHasEmailAddress);
 					}
-					console.log("TCL: (update existing addresses and) add new ones");
+					console.log("TCL: (update existing actorHasEmailAddresses and) add new ones");
 					await TIMAAT.ActorDatasets.addActorHasEmailAddresses(actor, newActorHasEmailAddresses);
 					// for the whole list check new primary actorHasEmailAddress
 					i = 0;
@@ -1401,7 +1402,7 @@
 					for (; i >= formActorHasEmailAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
 						if (actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].emailAddress.id) {
 							actor.model.primaryEmailAddress = null;
-							console.log("TCL: remove primaryActorHasAddress before deleting email address");		
+							console.log("TCL: remove primaryActorHasEmailAddress before deleting email address");		
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
 						console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");		
@@ -1409,11 +1410,11 @@
 						actor.model.actorHasEmailAddresses.pop();
 					}
 				}
-				console.log("TCL: show actor address form");
+				console.log("TCL: show actor email address form");
 				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', actor);
 			});
 
-			// Cancel add/edit button in addresses form functionality
+			// Cancel add/edit button in email addresses form functionality
 			$('#timaat-actordatasets-actor-emailaddresses-form-dismiss').click( function(event) {
 				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
 			});
@@ -1485,7 +1486,326 @@
 		},
 
 		initPhoneNumbers: function() {
+			$('#actors-tab-actor-phonenumbers-form').click(function(event) {
+				$('.nav-tabs a[href="#actorPhoneNumbers"]').tab('show');
+				$('.form').hide();
+				TIMAAT.ActorDatasets.setActorHasPhoneNumberList($('#timaat-actordatasets-actor-metadata-form').data('actor'))
+				$('#timaat-actordatasets-actor-phonenumbers-form').show();
+				TIMAAT.ActorDatasets.actorFormPhoneNumbers('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+			
+			// edit phonenumbers form button handler
+			$('#timaat-actordatasets-actor-phonenumbers-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.ActorDatasets.actorFormPhoneNumbers('edit', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
+			});
 
+			// Add phone number button click
+			$(document).on('click','[data-role="new-actorhasphonenumber-fields"] > .form-group [data-role="add"]', function(event) {
+				event.preventDefault();
+				console.log("TCL: add phone number to list");
+				var listEntry = $(this).closest('[data-role="new-actorhasphonenumber-fields"]');
+				var newPhoneNumber = [];
+				var phoneNumberTypeId = 1;
+				if (listEntry.find('select').each(function(){
+					phoneNumberTypeId = $(this).val();
+				}));
+				if (listEntry.find('input').each(function(){           
+					newPhoneNumber.push($(this).val());
+				}));
+				if (!$("#timaat-actordatasets-actor-phonenumbers-form").valid()) 
+					return false;
+				console.log("TCL: newPhoneNumber", newPhoneNumber);
+				if (newPhoneNumber != '') { // TODO is '' proper check?
+					var phoneNumbersinForm = $("#timaat-actordatasets-actor-phonenumbers-form").serializeArray();
+					console.log("TCL: phoneNumbersinForm", phoneNumbersinForm);
+					var i;
+					var numberOfPhoneNumberElements = 2;
+					if (phoneNumbersinForm.length > numberOfPhoneNumberElements) {
+						var indexName = phoneNumbersinForm[phoneNumbersinForm.length-numberOfPhoneNumberElements-1].name; // find last used indexed name (first prior to new phone number fields)
+						var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
+						i = Number(indexString)+1;
+					}
+					else {
+						i = 0;
+					}
+					// console.log("TCL: i", i);
+					$('#dynamic-actorhasphonenumber-fields').append(
+						`<div class="form-group" data-role="phonenumber-entry">
+							<div class="form-row">
+									<div class="col-md-2 text-center">
+										<div class="form-check">
+											<input class="form-check-input isPrimaryPhoneNumber" type="radio" name="isPrimaryPhoneNumber" data-role="primaryPhoneNumber" placeholder="Is primary phone number">
+											<label class="sr-only" for="isPrimaryPhoneNumber"></label>
+										</div>
+									</div>
+									<div class="col-md-3">
+									<label class="sr-only">Phone number type*</label>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+i+`]" required>
+										<option value="" disabled selected hidden>[Choose phone number type...]</option>
+										<option value="1"> </option>
+										<option value="2">mobile</option>
+										<option value="3">home</option>
+										<option value="4">work</option>
+										<option value="5">pager</option>
+										<option value="6">other</option>
+										<option value="7">custom</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only">Phone number</label>
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number">
+								</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-danger" data-role="remove">
+										<span class="fas fa-trash-alt"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+					);
+					($('[data-role="phoneNumberTypeId['+i+']"]'))
+						.find('option[value='+phoneNumberTypeId+']')
+						.attr("selected",true);
+					$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30 });
+					if (listEntry.find('input').each(function(){
+						// console.log("TCL: find(input) $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+					if (listEntry.find('select').each(function(){
+						// console.log("TCL: find(select) $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+				}
+				else {
+					// TODO open modal showing error that not all required fields are set.
+				}
+			});
+
+			// Remove phone number button click
+			$(document).on('click','[data-role="dynamic-actorhasphonenumber-fields"] > .form-group [data-role="remove"]', function(event) {
+				event.preventDefault();
+					$(this).closest('.form-group').remove();
+			});
+
+			// Submit actor phonenumbers button functionality
+			$("#timaat-actordatasets-actor-phonenumbers-form-submit").on('click', async function(event) {
+				// console.log("TCL: Phone numberes form: submit");
+				// add rules to dynamically added form fields
+				event.preventDefault();
+				var node = document.getElementById("new-actorhasphonenumber-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild)
+				}
+				// test if form is valid 
+				if (!$("#timaat-actordatasets-actor-phonenumbers-form").valid()) {
+					$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());				
+					return false;
+				}
+
+				// the original actor model (in case of editing an existing actor)
+				var actor = $("#timaat-actordatasets-actor-phonenumbers-form").data("actor");
+				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
+
+				// Create/Edit actor window submitted data
+				var formData = $("#timaat-actordatasets-actor-phonenumbers-form").serializeArray();
+				var formActorHasPhoneNumbersList = [];
+				var i = 0;
+				while ( i < formData.length) { // fill formActorHasPhoneNumbersList with data
+					var element = {
+						isPrimaryPhoneNumber: false,
+						phoneNumberTypeId: 0,
+						phoneNumber: '',
+					};
+						console.log("TCL: formData", formData);
+						if (formData[i].name == 'isPrimaryPhoneNumber' && formData[i].value == 'on' ) {
+							element.isPrimaryPhoneNumber = true;
+							element.phoneNumberTypeId = formData[i+1].value;
+							element.phoneNumber = formData[i+2].value;
+							i = i+3;
+						} else {
+							element.isPrimaryPhoneNumber = false;
+							element.phoneNumberTypeId = formData[i].value;
+							element.phoneNumber = formData[i+1].value;
+							i = i+2;
+						}
+					formActorHasPhoneNumbersList[formActorHasPhoneNumbersList.length] = element;
+				}
+				// console.log("TCL: formActorHasPhoneNumbersList", formActorHasPhoneNumbersList);
+
+				// only updates to existing actorHasPhoneNumber entries
+				if (formActorHasPhoneNumbersList.length == actor.model.actorHasPhoneNumbers.length) {
+					var i = 0;
+					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
+						var updatedActorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						// only update if anything changed
+						// if (updatedActorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
+							console.log("TCL: update existing phone number");
+							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(updatedActorHasPhoneNumber, actor);
+						// }
+						var primaryPhoneNumberChanged = false;
+						// update primary actorHasPhoneNumber
+						if (formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && (actor.model.primaryPhoneNumber == null || actor.model.primaryPhoneNumber.id != actor.model.actorHasPhoneNumbers[i].id.phoneNumberId)) {
+							actor.model.primaryPhoneNumber = actor.model.actorHasPhoneNumbers[i].phoneNumber;
+							primaryPhoneNumberChanged = true;
+						} else if (!formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].id.phoneNumberId) {
+							actor.model.primaryPhoneNumber = null;
+							primaryPhoneNumberChanged = true;
+						}
+						if (primaryPhoneNumberChanged) {
+							console.log("TCL actorType, actor", actorType, actor);
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+					}
+				}
+				// update existing actorHasPhoneNumbers and add new ones
+				else if (formActorHasPhoneNumbersList.length > actor.model.actorHasPhoneNumbers.length) {
+					var i = 0;
+					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
+						console.log("TCL: actor", actor);
+						var actorHasPhoneNumber = {}; 
+						actorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						// only update if anything changed
+						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
+							console.log("TCL: update existing actorHasPhoneNumbers (and add new ones)");
+							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(actorHasPhoneNumber, actor);
+						// }
+					}
+					i = actor.model.actorHasPhoneNumbers.length;
+					var newActorHasPhoneNumbers = [];
+					for (; i < formActorHasPhoneNumbersList.length; i++) { // create new actorHasPhoneNumbers
+						var actorHasPhoneNumber = TIMAAT.ActorDatasets.createActorHasPhoneNumberModel(formActorHasPhoneNumbersList[i], actor.model.id, 0);
+						newActorHasPhoneNumbers.push(actorHasPhoneNumber);
+					}
+					console.log("TCL: (update existing actorHasPhoneNumbers and) add new ones");
+					await TIMAAT.ActorDatasets.addActorHasPhoneNumbers(actor, newActorHasPhoneNumbers);
+					// for the whole list check new primary actorHasPhoneNumber
+					i = 0;
+					for (; i < formActorHasPhoneNumbersList.length; i++) {
+						// update primary phone number
+						var primaryPhoneNumberChanged = false;
+						if (formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && (actor.model.primaryPhoneNumber == null || actor.model.primaryPhoneNumber.id != actor.model.actorHasPhoneNumbers[i].id.phoneNumberId)) {
+							actor.model.primaryPhoneNumber = actor.model.actorHasPhoneNumbers[i].phoneNumber;
+							primaryPhoneNumberChanged = true;
+						} else if (!formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].id.phoneNumberId) {
+							actor.model.primaryPhoneNumber = null;
+							primaryPhoneNumberChanged = true;
+						}
+						if (primaryPhoneNumberChanged) {
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+							break; // only one primary actorHasPhoneNumber needs to be found
+						}
+					}
+				}
+				// update existing actorHasPhoneNumbers and delete obsolete ones
+				else if (formActorHasPhoneNumbersList.length < actor.model.actorHasPhoneNumbers.length) {
+					var i = 0;
+					for (; i < formActorHasPhoneNumbersList.length; i++ ) { // update existing actorHasPhoneNumbers
+						var actorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
+							console.log("TCL: update existing actorHasPhoneNumbers (and delete obsolete ones)");
+							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(actorHasPhoneNumber, actor);
+						// }
+						// update primary phone number
+						var primaryPhoneNumberChanged = false;
+						if (formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && (actor.model.primaryPhoneNumber == null || actor.model.primaryPhoneNumber.id != actor.model.actorHasPhoneNumbers[i].id.phoneNumberId)) {
+							actor.model.primaryPhoneNumber = actor.model.actorHasPhoneNumbers[i].phoneNumber;
+							primaryPhoneNumberChanged = true;
+						} else if (!formActorHasPhoneNumbersList[i].isPrimaryPhoneNumber && actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].id.phoneNumberId) {
+							actor.model.primaryPhoneNumber = null;
+							primaryPhoneNumberChanged = true;
+						}
+						if (primaryPhoneNumberChanged) {
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+					}
+					var i = actor.model.actorHasPhoneNumbers.length - 1;
+					for (; i >= formActorHasPhoneNumbersList.length; i-- ) { // remove obsolete phone numbers starting at end of list
+						if (actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].phoneNumber.id) {
+							actor.model.primaryPhoneNumber = null;
+							console.log("TCL: remove primaryActorHasPhoneNumber before deleting phone number");		
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+						console.log("TCL: (update existing actorHasPhoneNumbers and) delete obsolete ones");		
+						TIMAAT.ActorService.removePhoneNumber(actor.model.actorHasPhoneNumbers[i].phoneNumber);
+						actor.model.actorHasPhoneNumbers.pop();
+					}
+				}
+				console.log("TCL: show actor phone number form");
+				TIMAAT.ActorDatasets.actorFormPhoneNumbers('show', actor);
+			});
+
+			// Cancel add/edit button in phone numbers form functionality
+			$('#timaat-actordatasets-actor-phonenumbers-form-dismiss').click( function(event) {
+				TIMAAT.ActorDatasets.actorFormPhoneNumbers('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+		},
+
+		initPhoneNumberTypes: function() {
+			// console.log("TCL: ActorDatasets: initPhoneNumberTypes: function()");		
+			// delete phoneNumberType functionality
+			$('#timaat-phonenumbertype-delete-submit').click(function(ev) {
+				var modal = $('#timaat-actordatasets-phonenumbertype-delete');
+				var phoneNumberType = modal.data('phoneNumberType');
+				if (phoneNumberType) TIMAAT.ActorDatasets._phoneNumberTypeRemoved(phoneNumberType);
+				modal.modal('hide');
+			});
+			// add phoneNumberType button
+			$('#timaat-phonenumbertype-add').attr('onclick','TIMAAT.ActorDatasets.addPhoneNumberType()');
+
+			// add/edit phoneNumberType functionality
+			$('#timaat-actordatasets-phonenumbertype-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit phoneNumberType window setup
+				var modal = $(this);
+				var phoneNumberType = modal.data('phoneNumberType');				
+				var heading = (phoneNumberType) ? "PhoneNumberType bearbeiten" : "PhoneNumberType hinzufügen";
+				var submit = (phoneNumberType) ? "Speichern" : "Hinzufügen";
+				var type = (phoneNumberType) ? phoneNumberType.model.type : 0;
+				// setup UI
+				$('#phoneNumberTypeMetaLabel').html(heading);
+				$('#timaat-actordatasets-phonenumbertype-meta-submit').html(submit);
+				$("#timaat-actordatasets-phonenumbertype-meta-name").val(type).trigger('input');
+			});
+
+			// Submit phoneNumberType data
+			$('#timaat-actordatasets-phonenumbertype-meta-submit').click(function(ev) {
+				// Create/Edit phoneNumberType window submitted data validation
+				var modal = $('#timaat-actordatasets-phonenumbertype-meta');
+				var phoneNumberType = modal.data('phoneNumberType');
+				var type = $("#timaat-actordatasets-phonenumbertype-meta-name").val();
+
+				if (phoneNumberType) {
+					phoneNumberType.model.actor.phoneNumberTypeTranslations[0].type = type;
+					phoneNumberType.updateUI();
+					TIMAAT.ActorService.updatePhoneNumberType(phoneNumberType);
+					TIMAAT.ActorService.updatePhoneNumberTypeTranslation(phoneNumberType);
+				} else { // create new phoneNumberType
+					var model = {
+						id: 0,
+						phoneNumberTypeTranslations: [],
+					};
+					var modelTranslation = {
+						id: 0,
+						type: type,
+					}
+					TIMAAT.ActorService.createPhoneNumberType(model, modelTranslation, TIMAAT.ActorDatasets._phoneNumberTypeAdded); // TODO add phoneNumberType parameters
+				}
+				modal.modal('hide');
+			});
+
+			// validate phoneNumberType data	
+			// TODO validate all required fields				
+			$('#timaat-actordatasets-phonenumbertype-meta-name').on('input', function(ev) {
+				if ( $("#timaat-actordatasets-phonenumbertype-meta-name").val().length > 0 ) {
+					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop("disabled", false);
+					$('#timaat-actordatasets-phonenumbertype-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop("disabled", true);
+					$('#timaat-actordatasets-phonenumbertype-meta-submit').attr("disabled");
+				}
+			});
 		},
 
 		load: function() {
@@ -1494,6 +1814,7 @@
 			TIMAAT.ActorDatasets.loadAllActorSubtypes();
 			TIMAAT.ActorDatasets.loadAddressTypes();
 			TIMAAT.ActorDatasets.loadEmailAddressTypes();
+			TIMAAT.ActorDatasets.loadPhoneNumberTypes();
 		},
 
 		loadActorTypes: function() {
@@ -1534,6 +1855,10 @@
 
 		loadEmailAddressTypes: function() {
 			TIMAAT.ActorService.listEmailAddressTypes(TIMAAT.ActorDatasets.setEmailAddressTypeLists);
+		},
+
+		loadPhoneNumberTypes: function() {
+			TIMAAT.ActorService.listPhoneNumberTypes(TIMAAT.ActorDatasets.setPhoneNumberTypeLists);
 		},
 
 		setActorTypeLists: function(actorTypes) {
@@ -1678,7 +2003,7 @@
 		},
 
 		setActorHasEmailAddressList: function(actor) {
-			console.log("TCL: setActorHasAddressList -> actor", actor);
+			console.log("TCL: setActorHasEmailAddressList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-emailaddress-list-loader').remove();
 			// clear old UI list
@@ -1691,6 +2016,22 @@
 			});
 			TIMAAT.ActorDatasets.actorHasEmailAddresses = actorHasEmailAddrs;
       console.log("TCL: TIMAAT.ActorDatasets.actorHasEmailAddresses", TIMAAT.ActorDatasets.actorHasEmailAddresses);
+		},
+
+		setActorHasPhoneNumberList: function(actor) {
+			console.log("TCL: setActorHasPhoneNumberList -> actor", actor);
+			if ( !actor ) return;
+			$('#timaat-actordatasets-actor-phonenumber-list-loader').remove();
+			// clear old UI list
+			$('#timaat-actordatasets-actor-phonenumber-list').empty();
+			// setup model
+			var actorHasPhoneNmbrs = Array();
+			actor.model.actorHasPhoneNumbers.forEach(function(actorHasPhoneNumber) { 
+				if ( actorHasPhoneNumber.id.actorId > 0 && actorHasPhoneNumber.id.emailAddressId > 0 )
+				actorHasPhoneNmbrs.push(actorHasPhoneNumber); 
+			});
+			TIMAAT.ActorDatasets.actorHasPhoneNumbers = actorHasPhoneNmbrs;
+      console.log("TCL: TIMAAT.ActorDatasets.actorHasPhoneNumbers", TIMAAT.ActorDatasets.actorHasPhoneNumbers);
 		},
 
 		setAddressTypeLists: function(addressTypes) {
@@ -1710,7 +2051,7 @@
 		},
 
 		setEmailAddressTypeLists: function(emailAddressTypes) {
-			console.log("TCL: setAddressTypeList -> emailaddressTypes", emailAddressTypes);
+			console.log("TCL: setAddressTypeList -> emailAddressTypes", emailAddressTypes);
 			if ( !emailAddressTypes ) return;
 			$('#timaat-actordatasets-emailaddresstype-list-loader').remove();
 			// clear old UI list
@@ -1725,20 +2066,20 @@
       // console.log("TCL: TIMAAT.ActorDatasets.emailAddressTypes", TIMAAT.ActorDatasets.emailAddressTypes);
 		},
 
-		setActorPhoneNumberList: function(actor) {
-			console.log("TCL: setActorPhoneNumberList -> actor", actor);
-			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-phonenumber-list-loader').remove();
+		setPhoneNumberTypeLists: function(phoneNumberTypes) {
+			console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
+			if ( !phoneNumberTypes ) return;
+			$('#timaat-actordatasets-phonenumbertype-list-loader').remove();
 			// clear old UI list
-			$('#timaat-actordatasets-actor-phonenumber-list').empty();
+			$('#timaat-actordatasets-phonenumbertype-list').empty();
 			// setup model
-			var phoneNumbers = Array();
-			actor.model.phoneNumbers.forEach(function(phoneNumber) { 
-				if ( phoneNumber.id > 0 )
-					phoneNumbers.push(phoneNumber); 
+			var phoneNmbrTypes = Array();
+			phoneNumberTypes.forEach(function(phoneNumberType) { 
+				if ( phoneNumberType.id > 0 )
+					phoneNmbrTypes.push(phoneNumberType); 
 			});
-			TIMAAT.ActorDatasets.phoneNumbers = phoneNumbers;
-      console.log("TCL: TIMAAT.ActorDatasets.phoneNumbers", TIMAAT.ActorDatasets.phoneNumbers);
+			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNmbrTypes;
+      // console.log("TCL: TIMAAT.ActorDatasets.phoneNumberTypes", TIMAAT.ActorDatasets.phoneNumberTypes);
 		},
 		
 		addActor: function(actorType) {	
@@ -1801,6 +2142,7 @@
 			$('.name-data-tab').show();
 			$('.address-data-tab').show();
 			$('.emailaddress-data-tab').show();
+			$('.phonenumber-data-tab').show();
 
 			if (actorType == "collective") {
 				$('.person-data').hide(); // to display title in same row with actor name data
@@ -2223,7 +2565,7 @@
 				$('.emailaddress-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
-				$('#actorEmailAddressesLabel').html("Actor Emailaddressenliste");
+				$('#actorEmailAddressesLabel').html("Actor email list");
 			}
 			else if (action == 'edit') {
 				$('#timaat-actordatasets-actor-emailaddresses-form-submit').show();
@@ -2234,7 +2576,7 @@
 				$('#timaat-actordatasets-actor-emailaddresses-form-edit :input').prop("disabled", true);
 				$('[data-role="new-actorhasemailaddress-fields"').show();
 				$('.emailaddress-form-divider').show();
-				$('#actorEmailAddressesLabel').html("Actor Emailaddressenliste bearbeiten");
+				$('#actorEmailAddressesLabel').html("Edit Actor email list");
 				$('#timaat-actordatasets-actor-emailaddresses-form-submit').html("Speichern");
 				$('#timaat-actordatasets-actor-metadata-emailaddress').focus();
 
@@ -2246,7 +2588,100 @@
 		},
 
 		actorFormPhoneNumbers: function(action, actor) {
+    	console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
+			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+			var node = document.getElementById("new-actorhasphonenumber-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+			$('#timaat-actordatasets-actor-phonenumbers-form').trigger('reset');
+			actorFormPhoneNumbersValidator.resetForm();
+			// $('.actor-data-tab').show();
+			$('.nav-tabs a[href="#actorPhoneNumbers"]').focus();
+			$('#timaat-actordatasets-actor-phonenumbers-form').show();
+			
+			// setup UI
+			var i = 0;
+			var numPhoneNumbers = actor.model.actorHasPhoneNumbers.length;
+      // console.log("TCL: actor.model.actorHasPhoneNumbers", actor.model.actorHasPhoneNumbers);
+			for (; i< numPhoneNumbers; i++) {
+				$('[data-role="dynamic-actorhasphonenumber-fields"]').append(
+					`<div class="form-group" data-role="phonenumber-entry">
+							<div class="form-row">
+									<div class="col-md-2 text-center">
+										<div class="form-check">
+											<input class="form-check-input isPrimaryPhoneNumber" type="radio" name="isPrimaryPhoneNumber" data-role="primaryPhoneNumber[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" placeholder="Is primary phone number">
+											<label class="sr-only" for="isPrimaryPhoneNumber"></label>
+										</div>
+									</div>
+									<div class="col-md-3">
+									<label class="sr-only">Phone number type*</label>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+`]" required>
+										<option value="" disabled selected hidden>[Choose phone number type...]</option>
+										<option value="1"> </option>
+										<option value="2">mobile</option>
+										<option value="3">home</option>
+										<option value="4">work</option>
+										<option value="5">pager</option>
+										<option value="6">other</option>
+										<option value="7">custom</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only">Phone number</label>
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+i+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
+								</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-danger" data-role="remove">
+										<span class="fas fa-trash-alt"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+				);
+				if (actor.model.primaryPhoneNumber && actor.model.actorHasPhoneNumbers[i].id.phoneNumberId == actor.model.primaryPhoneNumber.id) {
+					$('[data-role="primaryPhoneNumber['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"]')
+						.prop("checked",true);
+				}
+				$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30});
+				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']"')
+					.find('option[value='+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']')
+					.attr("selected",true);
+			}
+			if ( action == 'show') {
+				$('#timaat-actordatasets-actor-phonenumbers-form :input').prop("disabled", true);
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit').show();
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit').prop("disabled", false);
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-phonenumbers-form-submit').hide();
+				$('#timaat-actordatasets-actor-phonenumbers-form-dismiss').hide();
+				$('[data-role="new-actorhasphonenumber-fields"').hide();
+				$('.phonenumber-form-divider').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
+				$('#actorPhoneNumbersLabel').html("Actor phone number list");
+			}
+			else if (action == 'edit') {
+				$('#timaat-actordatasets-actor-phonenumbers-form-submit').show();
+				$('#timaat-actordatasets-actor-phonenumbers-form-dismiss').show();
+				$('#timaat-actordatasets-actor-phonenumbers-form :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit').hide();
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit').prop("disabled", true);
+				$('#timaat-actordatasets-actor-phonenumbers-form-edit :input').prop("disabled", true);
+				$('[data-role="new-actorhasphonenumber-fields"').show();
+				$('.phonenumber-form-divider').show();
+				$('#actorPhoneNumbersLabel').html("Edit Actor phone number list");
+				$('#timaat-actordatasets-actor-phonenumbers-form-submit').html("Speichern");
+				$('#timaat-actordatasets-actor-metadata-phonenumber').focus();
 
+				// fields for new phone number entry
+				$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());
+				console.log("TCL: actor", actor);
+				$('#timaat-actordatasets-actor-phonenumbers-form').data('actor', actor);
+			}
 		},
 
 		createActor: async function(actorType, actorModel, actorSubtypeModel, displayName) {
@@ -2410,12 +2845,26 @@
 			}
 		},
 
-		createPhoneNumber: async function(phoneNumberModel) {
-
-		},
-
-		addPhoneNumbers: async function(actor, newPhoneNumbers) {
-
+		addActorHasPhoneNumbers: async function(actor, newActorHasPhoneNumbers) {
+			console.log("TCL: addActorHasPhoneNumbers: async function -> actor, newActorHasPhoneNumbers", actor, newActorHasPhoneNumbers);
+			try {
+				// create phone number
+				var i = 0;
+				for (; i < newActorHasPhoneNumbers.length; i++) {
+					// modify models for backend
+					var tempPhoneNumber = newActorHasPhoneNumbers[i].phoneNumber;
+					var tempActorHasPhoneNumber = newActorHasPhoneNumbers[i];
+					delete tempActorHasPhoneNumber.phoneNumber;
+					
+					var addedPhoneNumberModel = await TIMAAT.ActorService.addPhoneNumber(actor.model.id, tempPhoneNumber);
+					var addedActorHasPhoneNumberModel = await TIMAAT.ActorService.updateActorHasPhoneNumber(actor.model.id, addedPhoneNumberModel.id, tempActorHasPhoneNumber);
+					addedActorHasPhoneNumberModel.phoneNumber = {};
+					addedActorHasPhoneNumberModel.phoneNumber = addedPhoneNumberModel;
+					actor.model.actorHasPhoneNumbers.push(addedActorHasPhoneNumberModel);
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
 		},
 
 		updateActor: async function(actorSubtype, actor) {
@@ -2535,16 +2984,40 @@
 				var tempEmailAddress = actorHasEmailAddress.emailAddress;
 				// modify models for backend
 				delete tempActorHasEmailAddress.emailAddress;
-				var updatedTempAddress = await TIMAAT.ActorService.updateEmailAddress(tempEmailAddress);
+				var updatedTempEmailAddress = await TIMAAT.ActorService.updateEmailAddress(tempEmailAddress);
 				tempActorHasEmailAddress.id.actorId = actor.model.id;
-				tempActorHasEmailAddress.id.emailAddressId = updatedTempAddress.id;
-				var updatedTempActorHasAddress = await TIMAAT.ActorService.updateActorHasEmailAddress(actorHasEmailAddress.id.actorId, actorHasEmailAddress.id.emailAddressId, tempActorHasEmailAddress);
-				updatedTempActorHasAddress.emailAddress = updatedTempAddress;
+				tempActorHasEmailAddress.id.emailAddressId = updatedTempEmailAddress.id;
+				var updatedTempActorHasEmailAddress = await TIMAAT.ActorService.updateActorHasEmailAddress(actorHasEmailAddress.id.actorId, actorHasEmailAddress.id.emailAddressId, tempActorHasEmailAddress);
+				updatedTempActorHasEmailAddress.emailAddress = updatedTempEmailAddress;
 
 				var i = 0;
 				for (; i < actor.model.actorHasEmailAddresses.length; i++) {
 					if (actor.model.actorHasEmailAddresses[i].id == actorHasEmailAddress.id)
-						actor.model.actorHasEmailAddresses[i] = updatedTempActorHasAddress;
+						actor.model.actorHasEmailAddresses[i] = updatedTempActorHasEmailAddress;
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
+		},
+
+		updateActorHasPhoneNumber: async function(actorHasPhoneNumber, actor) {
+			console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
+			try {
+				// update address
+				var tempActorHasPhoneNumber = actorHasPhoneNumber;
+				var tempPhoneNumber = actorHasPhoneNumber.phoneNumber;
+				// modify models for backend
+				delete tempActorHasPhoneNumber.phoneNumber;
+				var updatedTempPhoneNumber = await TIMAAT.ActorService.updatePhoneNumber(tempPhoneNumber);
+				tempActorHasPhoneNumber.id.actorId = actor.model.id;
+				tempActorHasPhoneNumber.id.phoneNumberId = updatedTempPhoneNumber.id;
+				var updatedTempActorHasPhoneNumber = await TIMAAT.ActorService.updateActorHasPhoneNumber(actorHasPhoneNumber.id.actorId, actorHasPhoneNumber.id.phoneNumberId, tempActorHasPhoneNumber);
+				updatedTempActorHasPhoneNumber.phoneNumber = updatedTempPhoneNumber;
+
+				var i = 0;
+				for (; i < actor.model.actorHasPhoneNumbers.length; i++) {
+					if (actor.model.actorHasPhoneNumbers[i].id == actorHasPhoneNumber.id)
+						actor.model.actorHasPhoneNumbers[i] = updatedTempActorHasPhoneNumber;
 				}
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2625,62 +3098,6 @@
 				case 'collective':
 				break;
 			}
-			// phone number data
-			// if (!(formDataObject.phoneNumber == ""
-			// 		&& formDataObject.phoneNumberTypeId == ""
-			// 		&& formDataObject.iddPrefix == ""
-			// 		&& formDataObject.areaCode == ""
-			// 		&& actor.model.primaryPhoneNumber == null)) {
-			// 	actor.model.primaryPhoneNumber.iddPrefix = formDataObject.iddPrefix;
-			// 	actor.model.primaryPhoneNumber.areaCode = formDataObject.areaCode;
-			// 	actor.model.primaryPhoneNumber.number = formDataObject.phoneNumber;
-			// 	actor.model.primaryPhoneNumber.type = formDataObject.phoneNumberTypeId;
-			// 	for (; i < actor.model.actorHasPhoneNumbers.length; i++) {
-			// 		if (actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].id) {
-			// 			actor.model.actorHasPhoneNumbers[i] = actor.model.primaryPhoneNumber;
-			// 			break;
-			// 		}
-			// 	}
-			// }
-			// address data
-			// if (!(formDataObject.street == "" 
-			// 		&& formDataObject.streetNumber == "" 
-			// 		&& formDataObject.streetAddition == "" 
-			// 		&& formDataObject.postalCode == "" 
-			// 		&& formDataObject.postOfficeBox == ""
-			// 		&& formDataObject.addressTypeId == ""
-			// 		&& formDataObject.addressUsedFrom == ""
-			// 		&& formDataObject.addressUsedUntil == ""
-			// 		&& actor.model.primaryAddress == null)) {
-			// 	actor.model.primaryAddress.street = formDataObject.street;
-			// 	actor.model.primaryAddress.streetNumber = formDataObject.streetNumber;
-			// 	actor.model.primaryAddress.streetAddition = formDataObject.streetAddition;
-			// 	actor.model.primaryAddress.postalCode = formDataObject.postalCode;
-			// 	actor.model.primaryAddress.postOfficeBox = formDataObject.postOfficeBox;
-			// 	actor.model.primaryAddress.type = formDataObject.addressTypeId;
-			// 	actor.model.primaryAddress.usedFrom = moment.utc(formDataObject.addressUsedFrom, "YYYY-MM-DD");
-			// 	actor.model.primaryAddress.usedUntil = moment.utc(formDataObject.addressUsedUntil, "YYYY-MM-DD");
-			// 	for (; i < actor.model.actorHasAddresses.length; i++) {
-			// 		if (actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id) {
-			// 			actor.model.actorHasAddresses[i] = actor.model.primaryAddress;
-			// 			break;
-			// 		}
-			// 	}
-			// }
-			// email address data
-			// if (!(formDataObject.emailAddress == ""
-			// 		&& formDataObject.emailTypeId == ""
-			// 		&& actor.model.primaryEmailAddress == null)) {
-			// 	actor.model.primaryEmailAddress.address = formDataObject.emailAddress;
-			// 	actor.model.primaryEmailAddress.type = formDataObject.emailTypeId;
-			// 	for (; i < actor.model.actorHasEmailAddresses.length; i++) {
-			// 		if (actor.model.primaryAddress.id == actor.model.actorHasEmailAddresses[i].id) {
-			// 			actor.model.actorHasEmailAddresses[i] = actor.model.primaryAddress;
-			// 			break;
-			// 		}
-			// 	}
-			// }
-
 			return actor;
 		},
 
@@ -2814,22 +3231,26 @@
 			return updatedModel;
 		},
 
-		createPhoneNumberModel: function(formDataObject) {
-    // console.log("TCL: createPhoneNumberModel: formDataObject", formDataObject);
-			var primaryPhoneNumber = {};
-			if (!(formDataObject.phoneNumber == ""
-					&& formDataObject.phoneNumberTypeId == ""
-					&& formDataObject.iddPrefix == ""
-					&& formDataObject.areaCode == "")) {
-				primaryPhoneNumber = {
-				number: formDataObject.phoneNumber,
-				areaCode: formDataObject.areaCode,
-				iddPrefix: formDataObject.iddPrefix,
-				type: Number(formDataObject.phoneNumberTypeId),
-			}
-        console.log("TCL: primaryPhoneNumber", primaryPhoneNumber);
-			}
-			return primaryPhoneNumber;
+		createActorHasPhoneNumberModel: function(data, actorId, phoneNumberId) {
+    	// console.log("TCL: data, actorId, phoneNumberId", data, actorId, phoneNumberId);
+			var actorHasPhoneNumberModel = {};
+			actorHasPhoneNumberModel.id = {
+				actorId: actorId,
+				phoneNumberId: phoneNumberId
+			};
+			actorHasPhoneNumberModel.phoneNumber = {
+				id: phoneNumberId,
+				phoneNumber: data.phoneNumber,
+			};
+			actorHasPhoneNumberModel.phoneNumberType = TIMAAT.ActorDatasets.phoneNumberTypes[Number(data.phoneNumberTypeId)-1];
+			return actorHasPhoneNumberModel;
+		},
+
+		updateActorHasPhoneNumberModel: function(originalModel, data) {
+			var updatedModel = originalModel;
+			updatedModel.phoneNumberType = TIMAAT.ActorDatasets.phoneNumberTypes[Number(data.phoneNumberTypeId)-1];
+			updatedModel.phoneNumber.phoneNumber = data.phoneNumber;
+			return updatedModel;
 		},
 
 		createCitizenshipModel: function(formDataObject) {
@@ -2982,6 +3403,42 @@
 					</div>
 				</div>`;
 			return emailAddressToAppend;
+		},
+
+		appendNewPhoneNumberField: function() {
+			var phoneNumberToAppend = 
+				`<div class="form-group" data-role="phonenumber-entry">
+					<div class="form-row">
+						<div class="col-md-2 text-center">
+							<div class="form-check">
+								<span>Add new phone number:</span>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="sr-only">Phone number type*</label>
+							<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId" data-role="phoneNumberTypeId" required>
+								<option value="" disabled selected hidden>[Choose phone number type...]</option>
+								<option value="1"> </option>
+								<option value="2">mobile</option>
+										<option value="3">home</option>
+										<option value="4">work</option>
+										<option value="5">pager</option>
+										<option value="6">other</option>
+										<option value="7">custom</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="sr-only">Phone number</label>
+							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number">
+						</div>
+						<div class="col-md-1">
+							<button class="btn btn-primary" data-role="add">
+								<span class="fas fa-plus"></span>
+							</button>
+						</div>
+					</div>
+				</div>`;
+			return phoneNumberToAppend;
 		},
 
 	}

@@ -72,8 +72,8 @@ public class Actor implements Serializable {
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
 	//bi-directional many-to-many association to PhoneNumber
-	@ManyToMany(mappedBy="actors")
-	private List<PhoneNumber> phoneNumbers;
+	@OneToMany(mappedBy="actor")
+	private List<ActorHasPhoneNumber> actorHasPhoneNumbers;
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany(mappedBy="actors")
@@ -258,12 +258,26 @@ public class Actor implements Serializable {
 		this.actorHasEmailAddress = actorHasEmailAddress;
 	}
 
-	public List<PhoneNumber> getPhoneNumbers() {
-		return this.phoneNumbers;
+	public List<ActorHasPhoneNumber> getActorHasPhoneNumbers() {
+		return this.actorHasPhoneNumbers;
 	}
 
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
+	public void setActorHasPhoneNumbers(List<ActorHasPhoneNumber> actorHasPhoneNumbers) {
+		this.actorHasPhoneNumbers = actorHasPhoneNumbers;
+	}
+
+	public ActorHasPhoneNumber addActorHasPhoneNumber(ActorHasPhoneNumber actorHasPhoneNumber) {
+		getActorHasPhoneNumbers().add(actorHasPhoneNumber);
+		actorHasPhoneNumber.setActor(this);
+
+		return actorHasPhoneNumber;
+	}
+
+	public ActorHasPhoneNumber removeActorHasPhoneNumber(ActorHasPhoneNumber actorHasPhoneNumber) {
+		getActorHasPhoneNumbers().remove(actorHasPhoneNumber);
+		actorHasPhoneNumber.setActor(null);
+
+		return actorHasPhoneNumber;
 	}
 
 	public PhoneNumber getPrimaryPhoneNumber() {

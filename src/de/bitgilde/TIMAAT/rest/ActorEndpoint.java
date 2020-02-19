@@ -36,6 +36,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddress;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorHasPhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorName;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPerson;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation;
@@ -46,6 +47,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
+import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -140,6 +142,16 @@ public class ActorEndpoint {
 	public Response getEmailAddresstypeList() {
 		System.out.println("ActorServiceEndpoint: getEmailAddressTypeList");		
 		List<EmailAddressType> emailAddressTypeList = castList(EmailAddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("EmailAddressType.findAll").getResultList());
+		return Response.ok().entity(emailAddressTypeList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("phonenumbertype/list")
+	public Response getPhoneNumbertypeList() {
+		System.out.println("ActorServiceEndpoint: getPhoneNumberTypeList");		
+		List<PhoneNumberType> emailAddressTypeList = castList(PhoneNumberType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("PhoneNumberType.findAll").getResultList());
 		return Response.ok().entity(emailAddressTypeList).build();
 	}
 
@@ -242,6 +254,7 @@ public class ActorEndpoint {
 		if (updatedActor.getBirthName() != null ) actor.setBirthName(updatedActor.getBirthName());
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
+		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -1334,10 +1347,10 @@ public class ActorEndpoint {
 		newPhoneNumber.setId(0);
 
 		// update log metadata
-		// Not necessary, a phonenumber will always be created in conjunction with a actor
-		System.out.println("ActorServiceEndpoint: createPhoneNumber: persist phonenumber");
+		// Not necessary, an email address will always be created in conjunction with an actor
+		System.out.println("ActorServiceEndpoint: createPhoneNumber: persist email address");
 
-		// persist phonenumber
+		// persist email address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newPhoneNumber);
@@ -1348,12 +1361,12 @@ public class ActorEndpoint {
 		// System.out.println("ActorServiceEndpoint: createPhoneNumber: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
-									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.EMAILCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILCREATED);
+									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.PHONENUMBERCREATED);
 		
-		System.out.println("ActorServiceEndpoint: create phonenumber: phonenumber created with id "+newPhoneNumber.getId());
-		// System.out.println("ActorServiceEndpoint: create phonenumber: phonenumber created with language id "+newPhoneNumber.getLanguage().getId());
+		System.out.println("ActorServiceEndpoint: create email address: email address created with id "+newPhoneNumber.getId());
+		// System.out.println("ActorServiceEndpoint: create email address: email address created with language id "+newPhoneNumber.getLanguage().getId());
 
 		return Response.ok().entity(newPhoneNumber).build();
 	}
@@ -1367,66 +1380,65 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: addPhoneNumber: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		PhoneNumber newPhoneNumber = null;
+		PhoneNumber phoneNumber = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
 		// parse JSON data
 		try {
-			newPhoneNumber = mapper.readValue(jsonData, PhoneNumber.class);
+			phoneNumber = mapper.readValue(jsonData, PhoneNumber.class);
 		} catch (IOException e) {
 			System.out.println("ActorServiceEndpoint: addPhoneNumber: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newPhoneNumber == null ) {
-			System.out.println("ActorServiceEndpoint: addPhoneNumber: newPhoneNumber == null !");
+		if ( phoneNumber == null ) {
+			// System.out.println("ActorServiceEndpoint: addPhoneNumber: phoneNumber == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("ActorServiceEndpoint: addPhoneNumber: phonenumber: "+newPhoneNumber.getPhoneNumber());
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: phoneNumber: "+phoneNumber.getPhoneNumber());
 		// sanitize object data
-		newPhoneNumber.setId(0);
-		// Language language = entityManager.find(Language.class, newPhoneNumber.getLanguage().getId());
-		// newPhoneNumber.setLanguage(language);
+		phoneNumber.setId(0);
+
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: street: "+phoneNumber.getStreet().getLocationId());
+		Actor actor = entityManager.find(Actor.class, actorId);
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
-		// Not necessary, a phonenumber will always be created in conjunction with a actor
-		System.out.println("ActorServiceEndpoint: addPhoneNumber: persist phonenumber");
+		// Not necessary, a phoneNumber will always be created in conjunction with a actor
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: persist phoneNumber");
 
-		// persist phonenumber
+		// persist phoneNumber
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		// entityManager.persist(language);
-		entityManager.persist(newPhoneNumber);
+		entityManager.persist(phoneNumber);
 		entityManager.flush();
-		// newPhoneNumber.setLanguage(language);
 		entityTransaction.commit();
-		entityManager.refresh(newPhoneNumber);
-		// entityManager.refresh(language);
+		entityManager.refresh(phoneNumber);
 
-		// create actor_has_phonenumber-table entries
-		// entityTransaction.begin();
-		// actor.getPhoneNumbers().add(newPhoneNumber);
-		// newPhoneNumber.getActors3().add(actor);
-		// entityManager.merge(newPhoneNumber);
-		// entityManager.merge(actor);
-		// entityManager.persist(newPhoneNumber);
-		// entityManager.persist(actor);
-		// entityTransaction.commit();
-		// entityManager.refresh(actor);
-		// entityManager.refresh(newPhoneNumber);
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: persist actorHasPhoneNumber");
+		// create actor_has_phoneNumber-table entries
+		ActorHasPhoneNumber actorHasPhoneNumber = new ActorHasPhoneNumber(actor, phoneNumber);
+		entityTransaction.begin();
+		actor.getActorHasPhoneNumbers().add(actorHasPhoneNumber);
+		phoneNumber.getActorHasPhoneNumbers().add(actorHasPhoneNumber);
+		entityManager.merge(phoneNumber);
+		entityManager.merge(actor);
+		entityManager.persist(actor);
+		entityManager.persist(phoneNumber);
+		entityTransaction.commit();
+		entityManager.refresh(actor);
+		entityManager.refresh(phoneNumber);
 
-		System.out.println("ActorServiceEndpoint: addPhoneNumber: add log entry");	
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
-									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.EMAILCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILCREATED);
+									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.PHONENUMBERCREATED);
 
-		System.out.println("ActorServiceEndpoint: addPhoneNumber: phonenumber added with id "+newPhoneNumber.getId());
-		// System.out.println("ActorServiceEndpoint: addPhoneNumber: phonenumber added with language id "+newPhoneNumber.getLanguage().getId());
+		// System.out.println("ActorServiceEndpoint: addPhoneNumber: phoneNumber added with id "+phoneNumber.getId());
 
-		return Response.ok().entity(newPhoneNumber).build();
+		return Response.ok().entity(phoneNumber).build();
 	}
 
 	@PATCH
@@ -1435,23 +1447,24 @@ public class ActorEndpoint {
 	@Path("phonenumber/{id}")
 	@Secured
 	public Response updatePhoneNumber(@PathParam("id") int id, String jsonData) {
-		System.out.println("ActorServiceEndpoint: UPDATE PHONENUMBER - jsonData: " + jsonData);
+		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		PhoneNumber updatedPhoneNumber = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, id);
 		if ( phoneNumber == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("ActorServiceEndpoint: UPDATE PHONENUMBER - old phonenumber :"+phonenumber.getPhoneNumber());		
+		// System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - old phoneNumber :"+phoneNumber.getPhoneNumber());		
 		// parse JSON data
 		try {
 			updatedPhoneNumber = mapper.readValue(jsonData, PhoneNumber.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedPhoneNumber == null ) return Response.notModified().build();
-		// update phonenumber
-		if ( updatedPhoneNumber.getAreaCode() > 0 ) phoneNumber.setAreaCode(updatedPhoneNumber.getAreaCode());
-		if ( updatedPhoneNumber.getPhoneNumber() > 0 ) phoneNumber.setPhoneNumber(updatedPhoneNumber.getPhoneNumber());
+		// update phoneNumber
+		if ( updatedPhoneNumber.getPhoneNumber() != null ) phoneNumber.setPhoneNumber(updatedPhoneNumber.getPhoneNumber());
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1460,13 +1473,66 @@ public class ActorEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(phoneNumber);
 
-		// System.out.println("ActorServiceEndpoint: UPDATE PHONENUMBER - only logging remains");	
+		// System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILEDITED);
-		System.out.println("ActorServiceEndpoint: UPDATE PHONENUMBER - update complete");	
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PHONENUMBEREDITED);
+		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - update complete");	
 		return Response.ok().entity(phoneNumber).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{actor_id}/phonenumber/{phonenumber_id}")
+	@Secured
+	public Response updateActorHasPhoneNumber(@PathParam("actor_id") int actorId, @PathParam("phonenumber_id") int phoneNumberId, String jsonData) {
+
+		System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    mapper.setSerializationInclusion(Include.NON_NULL);
+		ActorHasPhoneNumber updatedActorHasPhoneNumber = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, phoneNumberId);
+		ActorHasPhoneNumber ahekey = new ActorHasPhoneNumber(actor, phoneNumber);
+		ActorHasPhoneNumber actorHasPhoneNumber = entityManager.find(ActorHasPhoneNumber.class, ahekey.getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - actorId :"+actorHasPhoneNumber.getActor().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - phoneNumberId :"+actorHasPhoneNumber.getPhoneNumber().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - parse json data");
+
+		// parse JSON data
+		try {
+			updatedActorHasPhoneNumber = mapper.readValue(jsonData, ActorHasPhoneNumber.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedActorHasPhoneNumber == null ) return Response.notModified().build();
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - update data");	
+		// update actorHasPhoneNumber
+		actorHasPhoneNumber.setPhoneNumberType(updatedActorHasPhoneNumber.getPhoneNumberType());
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - phoneNumberTypeId :"+actorHasPhoneNumber.getPhoneNumberType().getId());
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - persist");	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(actorHasPhoneNumber);
+		entityManager.persist(actorHasPhoneNumber);
+		entityTransaction.commit();
+		entityManager.refresh(actorHasPhoneNumber);
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PHONENUMBEREDITED);
+		System.out.println("ActorServiceEndpoint: updateActorHasPhoneNumber - update complete");	
+		return Response.ok().entity(actorHasPhoneNumber).build();
 	}
 
 	@DELETE
@@ -1477,21 +1543,20 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: deletePhoneNumber");	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
-		PhoneNumber PhoneNumber = entityManager.find(PhoneNumber.class, id);
-		if ( PhoneNumber == null ) return Response.status(Status.NOT_FOUND).build();
+		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, id);
+		if ( phoneNumber == null ) return Response.status(Status.NOT_FOUND).build();
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.remove(PhoneNumber);
+		entityManager.remove(phoneNumber);
 		entityTransaction.commit();
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILDELETED);
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.PHONENUMBERDELETED);
 		System.out.println("ActorServiceEndpoint: deletePhoneNumber - delete complete");	
 		return Response.ok().build();
 	}
-
 
 
 

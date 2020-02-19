@@ -247,6 +247,22 @@
           actorFormEmailAddresses.submit();
         },
       });
+      var actorFormPhoneNumbers = $("#timaat-actordatasets-actor-phonenumbers-form");
+      var actorFormPhoneNumbersValidator = $("#timaat-actordatasets-actor-phonenumbers-form").validate({
+        rules: {
+          emailAddressType: {
+            required: true,
+          }
+        },
+        messages: {
+          emailAddressType: {
+            required: "Select an email address type"
+          }
+        },
+        submitHandler: function(actorFormPhoneNumbers) {
+          actorFormPhoneNumbers.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

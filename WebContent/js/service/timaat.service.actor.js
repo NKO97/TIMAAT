@@ -116,6 +116,25 @@
 			});			
 		},
 
+		listPhoneNumberTypes(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phonenumbertype/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				console.log("TCL: listPhoneNumberTypes -> data", data);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log(e.responseText);
+				console.log( "error", e );
+			});			
+		},
+
 		async createActor(actorModel) {
 			console.log("TCL: async createActor -> actorModel", actorModel);
 			var newActorModel = {
@@ -390,7 +409,7 @@
 			// console.log("TCL: async createPhoneNumber -> phoneNumber", phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phoneNumber/"+phoneNumber.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phonenumber/"+phoneNumber.id,
 					type:"POST",
 					data: JSON.stringify(phoneNumber),
 					contentType:"application/json; charset=utf-8",
@@ -413,7 +432,7 @@
       console.log("TCL: addPhoneNumber -> actorId, phoneNumber", actorId, phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phoneNumber/"+phoneNumber.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phonenumber/"+phoneNumber.id,
 					type:"POST",
 					data: JSON.stringify(phoneNumber),
 					contentType:"application/json; charset=utf-8",
@@ -430,7 +449,30 @@
 			}).catch((error) => {
 				console.log( "error: ", error );
 			});
-		},		
+		},
+
+		async addActorHasPhoneNumber(actorId, actorHasPhoneNumber) {
+      console.log("TCL: addActorHasPhoneNumber -> actorId, actorHasPhoneNumber", actorId, actorHasPhoneNumber);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasphonenumber/"+actorHasPhoneNumber.phoneNumber.id,
+					type:"POST",
+					data: JSON.stringify(actorHasPhoneNumber),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(actorHasPhoneNumberData) {
+					// console.log("TCL: addActorHasPhoneNumber -> actorHasPhoneNumberData", actorHasPhoneNumberData);
+					resolve(actorHasPhoneNumberData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},	
 
 		async updateActor(actorModel) {
 			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
@@ -440,6 +482,7 @@
 			tempActorModel.birthName = actorModel.birthName;
 			tempActorModel.primaryAddress = actorModel.primaryAddress;
 			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
+			tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
 			// tempActorModel.actorNames = actorModel.actorNames;
       console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;
@@ -642,7 +685,7 @@
 			// console.log("TCL: async updatePhoneNumber -> phoneNumber", phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phoneNumber/"+phoneNumber.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phonenumber/"+phoneNumber.id,
 					type:"PATCH",
 					data: JSON.stringify(phoneNumber),
 					contentType:"application/json; charset=utf-8",
@@ -652,6 +695,30 @@
 					},
 				}).done(function(updateData) {
 					// console.log("TCL: async updatePhoneNumber -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateActorHasPhoneNumber(actorId, phoneNumberId, actorHasPhoneNumber) {
+			console.log("TCL: async updateActorHasPhoneNumber -> actorHasPhoneNumber", actorHasPhoneNumber);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phonenumber/"+phoneNumberId,
+					type:"PATCH",
+					data: JSON.stringify(actorHasPhoneNumber),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					// console.log("TCL: async updateActorHasPhoneNumber -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -750,7 +817,7 @@
 		removePhoneNumber(phoneNumber) {
 			// console.log("TCL: removePhoneNumber -> phoneNumber", phoneNumber);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phoneNumber/"+phoneNumber.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phonenumber/"+phoneNumber.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
