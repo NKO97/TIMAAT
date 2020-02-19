@@ -423,10 +423,10 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
+						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
 							actor.model.originalTitle = null;
 							originalTitleChanged = true;
 						}
@@ -476,10 +476,10 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
+						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
 							actor.model.originalTitle = null;
 							originalTitleChanged = true;
 						}
@@ -511,10 +511,10 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && actor.model.originalTitle != actor.model.titles[i].id) {
+						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle.id == actor.model.titles[i].id) {
+						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
 							actor.model.originalTitle = null;
 							originalTitleChanged = true;
 						}

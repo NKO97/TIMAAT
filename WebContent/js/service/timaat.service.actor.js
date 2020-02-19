@@ -97,6 +97,25 @@
 			});			
 		},
 
+		listEmailAddressTypes(callback) {
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailaddresstype/list",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				console.log("TCL: listEmailAddressTypes -> data", data);
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log(e.responseText);
+				console.log( "error", e );
+			});			
+		},
+
 		async createActor(actorModel) {
 			console.log("TCL: async createActor -> actorModel", actorModel);
 			var newActorModel = {
@@ -276,7 +295,7 @@
 		},
 
 		async addActorHasAddress(actorId, actorHasAddress) {
-      console.log("TCL: addAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
+      console.log("TCL: addActorHasAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasaddress/"+actorHasAddress.address.id,
@@ -302,7 +321,7 @@
 			// console.log("TCL: async createEmailAddress -> emailAddress", emailAddress);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailAddress/"+emailAddress.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailaddress/"+emailAddress.id,
 					type:"POST",
 					data: JSON.stringify(emailAddress),
 					contentType:"application/json; charset=utf-8",
@@ -322,10 +341,10 @@
 		},
 
 		async addEmailAddress(actorId, emailAddress) {
-      console.log("TCL: addAddress -> actorId, emailAddress", actorId, emailAddress);
+      console.log("TCL: addEmailAddress -> actorId, emailAddress", actorId, emailAddress);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/emailAddress/"+emailAddress.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/emailaddress/"+emailAddress.id,
 					type:"POST",
 					data: JSON.stringify(emailAddress),
 					contentType:"application/json; charset=utf-8",
@@ -334,8 +353,31 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(emailAddressData) {
-					// console.log("TCL: addAddress -> emailAddressData", emailAddressData);
+					// console.log("TCL: addEmailAddress -> emailAddressData", emailAddressData);
 					resolve(emailAddressData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async addActorHasEmailAddress(actorId, actorHasEmailAddress) {
+      console.log("TCL: addActorHasEmailAddress -> actorId, actorHasEmailAddress", actorId, actorHasEmailAddress);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasemailaddress/"+actorHasEmailAddress.emailAddress.id,
+					type:"POST",
+					data: JSON.stringify(actorHasEmailAddress),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(actorHasEmailAddressData) {
+					// console.log("TCL: addActorHasEmailAddress -> actorHasEmailAddressData", actorHasEmailAddressData);
+					resolve(actorHasEmailAddressData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -368,7 +410,7 @@
 		},
 
 		async addPhoneNumber(actorId, phoneNumber) {
-      console.log("TCL: addAddress -> actorId, phoneNumber", actorId, phoneNumber);
+      console.log("TCL: addPhoneNumber -> actorId, phoneNumber", actorId, phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phoneNumber/"+phoneNumber.id,
@@ -380,7 +422,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(phoneNumberData) {
-					// console.log("TCL: addAddress -> phoneNumberData", phoneNumberData);
+					// console.log("TCL: addPhoneNumber -> phoneNumberData", phoneNumberData);
 					resolve(phoneNumberData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -397,6 +439,7 @@
 			tempActorModel.isFictional = actorModel.isFictional;
 			tempActorModel.birthName = actorModel.birthName;
 			tempActorModel.primaryAddress = actorModel.primaryAddress;
+			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
 			// tempActorModel.actorNames = actorModel.actorNames;
       console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;
@@ -551,7 +594,7 @@
 			// console.log("TCL: async updateEmailAddress -> emailAddress", emailAddress);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailAddress/"+emailAddress.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailaddress/"+emailAddress.id,
 					type:"PATCH",
 					data: JSON.stringify(emailAddress),
 					contentType:"application/json; charset=utf-8",
@@ -561,6 +604,30 @@
 					},
 				}).done(function(updateData) {
 					// console.log("TCL: async updateEmailAddress -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
+		async updateActorHasEmailAddress(actorId, emailAddressId, actorHasEmailAddress) {
+			console.log("TCL: async updateActorHasEmailAddress -> actorHasEmailAddress", actorHasEmailAddress);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/emailaddress/"+emailAddressId,
+					type:"PATCH",
+					data: JSON.stringify(actorHasEmailAddress),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					// console.log("TCL: async updateActorHasEmailAddress -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -666,7 +733,7 @@
 		removeEmailAddress(emailAddress) {
 			// console.log("TCL: removeEmailAddress -> emailAddress", emailAddress);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailAddress/"+emailAddress.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/emailaddress/"+emailAddress.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

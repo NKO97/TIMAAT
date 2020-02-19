@@ -1587,8 +1587,8 @@
                         <li class="nav-item actors-data-tabs address-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-addresses-form" href="#actorAddresses">Adressen</a>
                         </li>
-                        <li class="nav-item actors-data-tabs email-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-emails-form" href="#actorEmails">Email-Adressen</a>
+                        <li class="nav-item actors-data-tabs emailaddress-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-emailaddresses-form" href="#actorEmailAddresses">Emails</a>
                         </li>
                         <li class="nav-item actors-data-tabs phonenumber-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-phonenumbers-form" href="#actorPhoneNumbers">Telefonnummern</a>
@@ -1977,7 +1977,7 @@
                           </div> -->
                         </div>
                         <div class="actor-addresses-container">
-                          <div data-role="dynamic-address-fields" id="dynamic-address-fields">
+                          <div data-role="dynamic-actorhasaddress-fields" id="dynamic-actorhasaddress-fields">
                             <div class="form-group">                              
                             </div>
                           <!-- additional name form content will be created dynamically --> 
@@ -1994,6 +1994,52 @@
                         </div>
                         <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-addresses-form-submit" name="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- email address form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-emailaddresses-form" name="timaat-actordatasets-actor-emailaddresses-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorEmailAddressesLabel">Actor email addresses</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-emailaddresses-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="form-row">
+                              <div class="col-sm-1 col-md-2">
+                                <h6 class="form-header">Primary Email</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-3">
+                                <h6 class="form-header">Email Type*</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-7">
+                                <h6 class="form-header">Email*</h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-emailaddresses-container">
+                          <div data-role="dynamic-actorhasemailaddress-fields" id="dynamic-actorhasemailaddress-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="emailaddress-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorhasemailaddress-fields" id="new-actorhasemailaddress-fields">
+                            <!-- one row for new name information that shall be added to the emailaddresses list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-emailaddresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-emailaddresses-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                     </div>
                   </div>

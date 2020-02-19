@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -19,13 +19,14 @@ public class EmailAddress implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String email;
 
 	//bi-directional many-to-one association to ActorHasEmailAddress
 	@OneToMany(mappedBy="emailAddress")
-	@JsonManagedReference(value = "EmailAddress-ActorHasEmailAddress")
+	@JsonIgnore
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
 	//bi-directional many-to-one association to SiocUserAccount

@@ -35,6 +35,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorName;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPerson;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation;
@@ -42,6 +43,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
 import de.bitgilde.TIMAAT.model.FIPOP.Address;
 import de.bitgilde.TIMAAT.model.FIPOP.AddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
+import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
@@ -134,6 +136,16 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("emailaddresstype/list")
+	public Response getEmailAddresstypeList() {
+		System.out.println("ActorServiceEndpoint: getEmailAddressTypeList");		
+		List<EmailAddressType> emailAddressTypeList = castList(EmailAddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("EmailAddressType.findAll").getResultList());
+		return Response.ok().entity(emailAddressTypeList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("{id}/names/list")
 	public Response getNamesList(@PathParam("id") int id) {
 		// // System.out.println("ActorServiceEndpoint: getNamesList");
@@ -210,6 +222,7 @@ public class ActorEndpoint {
 	public Response updateActor(@PathParam("id") int id, String jsonData) {
 		System.out.println("ActorServiceEndpoint: UPDATE ACTOR - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Actor updatedActor = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
@@ -228,6 +241,7 @@ public class ActorEndpoint {
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
 		if (updatedActor.getBirthName() != null ) actor.setBirthName(updatedActor.getBirthName());
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
+		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -750,6 +764,7 @@ public class ActorEndpoint {
 		try {
 			updatedName = mapper.readValue(jsonData, ActorName.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedName == null ) return Response.notModified().build();
@@ -902,7 +917,7 @@ public class ActorEndpoint {
 		entityManager.refresh(street);
 
 		// System.out.println("ActorServiceEndpoint: addAddress: persist actorHasAddress");
-	// create actor_has_address-table entries
+		// create actor_has_address-table entries
 		ActorHasAddress actorHasAddress = new ActorHasAddress(actor, address);
 		entityTransaction.begin();
 		actor.getActorHasAddresses().add(actorHasAddress);
@@ -1079,10 +1094,10 @@ public class ActorEndpoint {
 		newEmailAddress.setId(0);
 
 		// update log metadata
-		// Not necessary, a emailaddress will always be created in conjunction with a actor
-		System.out.println("ActorServiceEndpoint: createEmailAddress: persist emailaddress");
+		// Not necessary, an email address will always be created in conjunction with an actor
+		System.out.println("ActorServiceEndpoint: createEmailAddress: persist email address");
 
-		// persist emailaddress
+		// persist email address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newEmailAddress);
@@ -1093,12 +1108,12 @@ public class ActorEndpoint {
 		// System.out.println("ActorServiceEndpoint: createEmailAddress: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
-									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.EMAILCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILCREATED);
+									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.EMAILCREATED);
 		
-		System.out.println("ActorServiceEndpoint: create emailaddress: emailaddress created with id "+newEmailAddress.getId());
-		// System.out.println("ActorServiceEndpoint: create emailaddress: emailaddress created with language id "+newEmailAddress.getLanguage().getId());
+		System.out.println("ActorServiceEndpoint: create email address: email address created with id "+newEmailAddress.getId());
+		// System.out.println("ActorServiceEndpoint: create email address: email address created with language id "+newEmailAddress.getLanguage().getId());
 
 		return Response.ok().entity(newEmailAddress).build();
 	}
@@ -1112,66 +1127,65 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: addEmailAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		EmailAddress newEmailAddress = null;
+		EmailAddress emailAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
 		// parse JSON data
 		try {
-			newEmailAddress = mapper.readValue(jsonData, EmailAddress.class);
+			emailAddress = mapper.readValue(jsonData, EmailAddress.class);
 		} catch (IOException e) {
 			System.out.println("ActorServiceEndpoint: addEmailAddress: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newEmailAddress == null ) {
-			System.out.println("ActorServiceEndpoint: addEmailAddress: newEmailAddress == null !");
+		if ( emailAddress == null ) {
+			// System.out.println("ActorServiceEndpoint: addEmailAddress: emailAddress == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("ActorServiceEndpoint: addEmailAddress: emailaddress: "+newEmailAddress.getEmailAddress());
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: emailAddress: "+emailAddress.getEmailAddress());
 		// sanitize object data
-		newEmailAddress.setId(0);
-		// Language language = entityManager.find(Language.class, newEmailAddress.getLanguage().getId());
-		// newEmailAddress.setLanguage(language);
+		emailAddress.setId(0);
+
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: street: "+emailAddress.getStreet().getLocationId());
+		Actor actor = entityManager.find(Actor.class, actorId);
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
-		// Not necessary, a emailaddress will always be created in conjunction with a actor
-		System.out.println("ActorServiceEndpoint: addEmailAddress: persist emailaddress");
+		// Not necessary, a emailAddress will always be created in conjunction with a actor
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: persist emailAddress");
 
-		// persist emailaddress
+		// persist emailAddress
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		// entityManager.persist(language);
-		entityManager.persist(newEmailAddress);
+		entityManager.persist(emailAddress);
 		entityManager.flush();
-		// newEmailAddress.setLanguage(language);
 		entityTransaction.commit();
-		entityManager.refresh(newEmailAddress);
-		// entityManager.refresh(language);
+		entityManager.refresh(emailAddress);
 
-		// create actor_has_emailaddress-table entries
-		// entityTransaction.begin();
-		// actor.getEmailAddresss().add(newEmailAddress);
-		// newEmailAddress.getActors3().add(actor);
-		// entityManager.merge(newEmailAddress);
-		// entityManager.merge(actor);
-		// entityManager.persist(newEmailAddress);
-		// entityManager.persist(actor);
-		// entityTransaction.commit();
-		// entityManager.refresh(actor);
-		// entityManager.refresh(newEmailAddress);
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: persist actorHasEmailAddress");
+		// create actor_has_emailAddress-table entries
+		ActorHasEmailAddress actorHasEmailAddress = new ActorHasEmailAddress(actor, emailAddress);
+		entityTransaction.begin();
+		actor.getActorHasEmailAddresses().add(actorHasEmailAddress);
+		emailAddress.getActorHasEmailAddresses().add(actorHasEmailAddress);
+		entityManager.merge(emailAddress);
+		entityManager.merge(actor);
+		entityManager.persist(actor);
+		entityManager.persist(emailAddress);
+		entityTransaction.commit();
+		entityManager.refresh(actor);
+		entityManager.refresh(emailAddress);
 
-		System.out.println("ActorServiceEndpoint: addEmailAddress: add log entry");	
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
-									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.EMAILCREATED);
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILCREATED);
+									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.EMAILCREATED);
 
-		System.out.println("ActorServiceEndpoint: addEmailAddress: emailaddress added with id "+newEmailAddress.getId());
-		// System.out.println("ActorServiceEndpoint: addEmailAddress: emailaddress added with language id "+newEmailAddress.getLanguage().getId());
+		// System.out.println("ActorServiceEndpoint: addEmailAddress: emailAddress added with id "+emailAddress.getId());
 
-		return Response.ok().entity(newEmailAddress).build();
+		return Response.ok().entity(emailAddress).build();
 	}
 
 	@PATCH
@@ -1180,22 +1194,24 @@ public class ActorEndpoint {
 	@Path("emailaddress/{id}")
 	@Secured
 	public Response updateEmailAddress(@PathParam("id") int id, String jsonData) {
-		System.out.println("ActorServiceEndpoint: UPDATE EMAILADDRESS - jsonData: " + jsonData);
+		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EmailAddress updatedEmailAddress = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		EmailAddress emailAddress = entityManager.find(EmailAddress.class, id);
 		if ( emailAddress == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("ActorServiceEndpoint: UPDATE EMAILADDRESS - old emailaddress :"+emailaddress.getEmailAddress());		
+		// System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - old emailAddress :"+emailAddress.getEmailAddress());		
 		// parse JSON data
 		try {
 			updatedEmailAddress = mapper.readValue(jsonData, EmailAddress.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedEmailAddress == null ) return Response.notModified().build();
-		// update emailaddress
-		if ( updatedEmailAddress.getEmail() != null ) emailAddress.setEmail(updatedEmailAddress.getEmail());
+		// update emailAddress
+		if ( updatedEmailAddress.getEmail() != null) emailAddress.setEmail(updatedEmailAddress.getEmail());
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1204,13 +1220,66 @@ public class ActorEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(emailAddress);
 
-		// System.out.println("ActorServiceEndpoint: UPDATE EMAILADDRESS - only logging remains");	
+		// System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILEDITED);
-		System.out.println("ActorServiceEndpoint: UPDATE EMAILADDRESS - update complete");	
+		System.out.println("ActorServiceEndpoint: UPDATE ADDRESS - update complete");	
 		return Response.ok().entity(emailAddress).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{actor_id}/emailaddress/{emailaddress_id}")
+	@Secured
+	public Response updateActorHasEmailAddress(@PathParam("actor_id") int actorId, @PathParam("emailaddress_id") int emailAddressId, String jsonData) {
+
+		System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    mapper.setSerializationInclusion(Include.NON_NULL);
+		ActorHasEmailAddress updatedActorHasEmailAddress = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		EmailAddress emailAddress = entityManager.find(EmailAddress.class, emailAddressId);
+		ActorHasEmailAddress ahekey = new ActorHasEmailAddress(actor, emailAddress);
+		ActorHasEmailAddress actorHasEmailAddress = entityManager.find(ActorHasEmailAddress.class, ahekey.getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - actorId :"+actorHasEmailAddress.getActor().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - emailAddressId :"+actorHasEmailAddress.getEmailAddress().getId());
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - parse json data");
+
+		// parse JSON data
+		try {
+			updatedActorHasEmailAddress = mapper.readValue(jsonData, ActorHasEmailAddress.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedActorHasEmailAddress == null ) return Response.notModified().build();
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - update data");	
+		// update actorHasEmailAddress
+		actorHasEmailAddress.setEmailAddressType(updatedActorHasEmailAddress.getEmailAddressType());
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - emailAddressTypeId :"+actorHasEmailAddress.getEmailAddressType().getId());
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - persist");	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(actorHasEmailAddress);
+		entityManager.persist(actorHasEmailAddress);
+		entityTransaction.commit();
+		entityManager.refresh(actorHasEmailAddress);
+
+		// System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILEDITED);
+		System.out.println("ActorServiceEndpoint: updateActorHasEmailAddress - update complete");	
+		return Response.ok().entity(actorHasEmailAddress).build();
 	}
 
 	@DELETE

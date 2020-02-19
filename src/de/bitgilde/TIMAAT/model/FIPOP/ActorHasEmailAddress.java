@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -21,22 +21,27 @@ public class ActorHasEmailAddress implements Serializable {
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JsonBackReference(value = "Actor-ActorHasEmailAddress")
+	@JoinColumn(name="actor_id")
+	@JsonIgnore
 	private Actor actor;
 
 	//bi-directional many-to-one association to EmailAddress
 	@ManyToOne
 	@JoinColumn(name="email_address_id")
-	@JsonBackReference(value = "EmailAddress-ActorHasEmailAddress")
 	private EmailAddress emailAddress;
 
 	//bi-directional many-to-one association to EmailAddressType
 	@ManyToOne
 	@JoinColumn(name="email_address_type_id")
-	@JsonBackReference(value = "EmailAddressType-ActorHasEmailAddress")
 	private EmailAddressType emailAddressType;
 
 	public ActorHasEmailAddress() {
+	}
+
+	public ActorHasEmailAddress(Actor actor, EmailAddress emailAddress) {
+		this.actor = actor;
+		this.emailAddress = emailAddress;
+		this.id = new ActorHasEmailAddressPK(actor.getId(), emailAddress.getId());
 	}
 
 	public ActorHasEmailAddressPK getId() {

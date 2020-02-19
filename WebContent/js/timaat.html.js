@@ -225,6 +225,28 @@
           actorFormAddresses.submit();
         },
       });
+      var actorFormEmailAddresses = $("#timaat-actordatasets-actor-emailaddresses-form");
+      var actorFormEmailAddressesValidator = $("#timaat-actordatasets-actor-emailaddresses-form").validate({
+        rules: {
+          email: {
+            email: true
+          },
+          emailAddressType: {
+            required: true,
+          }
+        },
+        messages: {
+          email: {
+            email: "Enter a valid email"
+          },
+          emailAddressType: {
+            required: "Select an email address type"
+          }
+        },
+        submitHandler: function(actorFormEmailAddresses) {
+          actorFormEmailAddresses.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

@@ -28,6 +28,7 @@
 		actorHasAddresses: null,
 		addressTypes: null,
 		emailAddresses: null,
+		emailAddressTypes: null,
 		phoneNumbers: null,
 
 		init: function() {   
@@ -474,10 +475,13 @@
           console.log("TCL: $(this).val()", $(this).val());
           console.log("TCL: newName", newName);
 				}));
+				if (!$("#timaat-actordatasets-actornames-form").valid()) 
+					return false;
 				if (newName != '') { // TODO is '' proper check?
 					var namesInForm = $("#timaat-actordatasets-actor-actornames-form").serializeArray();
-          console.log("TCL: namesInForm", namesInForm);
-					var indexName = namesInForm[namesInForm.length-4].name; // find last used index. Extra -1 for 1 element in add new name row
+					console.log("TCL: namesInForm", namesInForm);
+					var numberOfNameElements = 3;
+					var indexName = namesInForm[namesInForm.length-numberOfNameElements-1].name; // find last used indexed name (first prior to new address fields)
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
 					// console.log("TCL: namesInForm", namesInForm);
@@ -646,10 +650,10 @@
 						}
 						var birthNameChanged = false;
 						// update birth name
-						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
+						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
-						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
@@ -701,10 +705,10 @@
 						}
 						// update birth name
 						var birthNameChanged = false;
-						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
+						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
-						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
@@ -739,10 +743,10 @@
 						}
 						// update birth name
 						var birthNameChanged = false;
-						if (formNameList[i].isBirthName && actor.model.birthName.id != actor.model.actorNames[i].id) {
+						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
-						} else if (!formNameList[i].isBirthName && actor.model.birthName.id == actor.model.actorNames[i].id) {
+						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
@@ -822,7 +826,7 @@
 						i = 0;
 					}
 					// console.log("TCL: i", i);
-					$('#dynamic-address-fields').append(
+					$('#dynamic-actorhasaddress-fields').append(
 						`<div class="form-group" data-role="address-entry">
 							<div class="form-row">
 								<div class="col-md-11">
@@ -913,7 +917,7 @@
 			});
 
 			// Remove address button click
-			$(document).on('click','[data-role="dynamic-address-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','[data-role="dynamic-actorhasaddress-fields"] > .form-group [data-role="remove"]', function(event) {
 				event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
@@ -996,10 +1000,10 @@
 						// }
 						var primaryAddressChanged = false;
 						// update primary actorHasAddress
-						if (formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId) {
+						if (formActorHasAddressesList[i].isPrimaryAddress && (actor.model.primaryAddress == null || actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId)) {
 							actor.model.primaryAddress = actor.model.actorHasAddresses[i].address;
 							primaryAddressChanged = true;
-						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
+						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress != null && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
 							actor.model.primaryAddress = null;
 							primaryAddressChanged = true;
 						}
@@ -1035,10 +1039,10 @@
 					for (; i < formActorHasAddressesList.length; i++) {
 						// update primary address
 						var primaryAddressChanged = false;
-						if (formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId) {
+						if (formActorHasAddressesList[i].isPrimaryAddress && (actor.model.primaryAddress == null || actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId)) {
 							actor.model.primaryAddress = actor.model.actorHasAddresses[i].address;
 							primaryAddressChanged = true;
-						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
+						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress != null && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
 							actor.model.primaryAddress = null;
 							primaryAddressChanged = true;
 						}
@@ -1059,10 +1063,10 @@
 						// }
 						// update primary address
 						var primaryAddressChanged = false;
-						if (formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId) {
+						if (formActorHasAddressesList[i].isPrimaryAddress && (actor.model.primaryAddress == null || actor.model.primaryAddress.id != actor.model.actorHasAddresses[i].id.addressId)) {
 							actor.model.primaryAddress = actor.model.actorHasAddresses[i].address;
 							primaryAddressChanged = true;
-						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
+						} else if (!formActorHasAddressesList[i].isPrimaryAddress && actor.model.primaryAddress != null && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].id.addressId) {
 							actor.model.primaryAddress = null;
 							primaryAddressChanged = true;
 						}
@@ -1158,7 +1162,326 @@
 		},
 
 		initEmailAddresses: function() {
+			$('#actors-tab-actor-emailaddresses-form').click(function(event) {
+				$('.nav-tabs a[href="#actorEmailAddresses"]').tab('show');
+				$('.form').hide();
+				TIMAAT.ActorDatasets.setActorHasEmailAddressList($('#timaat-actordatasets-actor-metadata-form').data('actor'))
+				$('#timaat-actordatasets-actor-emailaddresses-form').show();
+				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+			
+			// edit email addresses form button handler
+			$('#timaat-actordatasets-actor-emailaddresses-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.ActorDatasets.actorFormEmailAddresses('edit', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
+			});
 
+			// Add email address button click
+			$(document).on('click','[data-role="new-actorhasemailaddress-fields"] > .form-group [data-role="add"]', function(event) {
+				event.preventDefault();
+				console.log("TCL: add email address to list");
+				var listEntry = $(this).closest('[data-role="new-actorhasemailaddress-fields"]');
+				var newEmailAddress = [];
+				var emailAddressTypeId = 1;
+				if (listEntry.find('select').each(function(){
+					emailAddressTypeId = $(this).val();
+				}));
+				if (listEntry.find('input').each(function(){           
+					newEmailAddress.push($(this).val());
+				}));
+				if (!$("#timaat-actordatasets-actor-emailaddresses-form").valid()) 
+					return false;
+				console.log("TCL: newEmailAddress", newEmailAddress);
+				if (newEmailAddress != '') { // TODO is '' proper check?
+					var emailAddressesinForm = $("#timaat-actordatasets-actor-emailaddresses-form").serializeArray();
+					console.log("TCL: emailAddressesinForm", emailAddressesinForm);
+					var i;
+					var numberOfEmailAddressElements = 2;
+					if (emailAddressesinForm.length > numberOfEmailAddressElements) {
+						var indexName = emailAddressesinForm[emailAddressesinForm.length-numberOfEmailAddressElements-1].name; // find last used indexed name (first prior to new address fields)
+						var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
+						i = Number(indexString)+1;
+					}
+					else {
+						i = 0;
+					}
+					// console.log("TCL: i", i);
+					$('#dynamic-actorhasemailaddress-fields').append(
+						`<div class="form-group" data-role="emailaddress-entry">
+							<div class="form-row">
+									<div class="col-md-2 text-center">
+										<div class="form-check">
+											<input class="form-check-input isPrimaryEmailAddress" type="radio" name="isPrimaryEmailAddress" data-role="primaryEmailAddress" placeholder="Is primary email address">
+											<label class="sr-only" for="isPrimaryEmailAddress"></label>
+										</div>
+									</div>
+									<div class="col-md-3">
+									<label class="sr-only">Email address type*</label>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+i+`]" required>
+										<option value="" disabled selected hidden>[Choose email type...]</option>
+										<option value="1"> </option>
+										<option value="2">home</option>
+										<option value="3">work</option>
+										<option value="4">other</option>
+										<option value="5">mobile</option>
+										<option value="6">custom</option>
+									</select>
+								</div>
+									<div class="col-md-6">
+										<label class="sr-only">Email address</label>
+										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email[`+i+`]" data-role="email[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address">
+									</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-danger" data-role="remove">
+										<span class="fas fa-trash-alt"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+					);
+					$('input[name="actorEmailAddress['+i+']"').rules("add", { required: true, minlength: 6, maxlength: 255});
+					($('[data-role="emailAddressTypeId['+i+']"]'))
+						.find('option[value='+emailAddressTypeId+']')
+						.attr("selected",true);
+					$('input[name="email['+i+']"').rules("add", { required: true, email: true});
+					if (listEntry.find('input').each(function(){
+						// console.log("TCL: find(input) $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+					if (listEntry.find('select').each(function(){
+						// console.log("TCL: find(select) $(this).val()", $(this).val());
+						$(this).val('');
+					}));
+				}
+				else {
+					// TODO open modal showing error that not all required fields are set.
+				}
+			});
+
+			// Remove email address button click
+			$(document).on('click','[data-role="dynamic-actorhasemailaddress-fields"] > .form-group [data-role="remove"]', function(event) {
+				event.preventDefault();
+					$(this).closest('.form-group').remove();
+			});
+
+			// Submit actor email addresses button functionality
+			$("#timaat-actordatasets-actor-emailaddresses-form-submit").on('click', async function(event) {
+				// console.log("TCL: Email addresses form: submit");
+				// add rules to dynamically added form fields
+				event.preventDefault();
+				var node = document.getElementById("new-actorhasemailaddress-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild)
+				}
+				// test if form is valid 
+				if (!$("#timaat-actordatasets-actor-emailaddresses-form").valid()) {
+					$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());				
+					return false;
+				}
+
+				// the original actor model (in case of editing an existing actor)
+				var actor = $("#timaat-actordatasets-actor-emailaddresses-form").data("actor");
+				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
+
+				// Create/Edit actor window submitted data
+				var formData = $("#timaat-actordatasets-actor-emailaddresses-form").serializeArray();
+				var formActorHasEmailAddressesList = [];
+				var i = 0;
+				while ( i < formData.length) { // fill formActorHasEmailAddressesList with data
+					var element = {
+						isPrimaryEmailAddress: false,
+						emailAddressTypeId: 0,
+						email: '',
+					};
+						console.log("TCL: formData", formData);
+						if (formData[i].name == 'isPrimaryEmailAddress' && formData[i].value == 'on' ) {
+							element.isPrimaryEmailAddress = true;
+							element.emailAddressTypeId = formData[i+1].value;
+							element.email = formData[i+2].value;
+							i = i+3;
+						} else {
+							element.isPrimaryEmailAddress = false;
+							element.emailAddressTypeId = formData[i].value;
+							element.email = formData[i+1].value;
+							i = i+2;
+						}
+					formActorHasEmailAddressesList[formActorHasEmailAddressesList.length] = element;
+				}
+				// console.log("TCL: formActorHasEmailAddressesList", formActorHasEmailAddressesList);
+
+				// only updates to existing actorHasEmailAddress entries
+				if (formActorHasEmailAddressesList.length == actor.model.actorHasEmailAddresses.length) {
+					var i = 0;
+					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
+						var updatedActorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						// only update if anything changed
+						// if (updatedActorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
+							console.log("TCL: update existing email address");
+							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(updatedActorHasEmailAddress, actor);
+						// }
+						var primaryEmailAddressChanged = false;
+						// update primary actorHasEmailAddress
+						if (formActorHasEmailAddressesList[i].isPrimaryEmailAddress && (actor.model.primaryEmailAddress == null || actor.model.primaryEmailAddress.id != actor.model.actorHasEmailAddresses[i].id.emailAddressId)) {
+							actor.model.primaryEmailAddress = actor.model.actorHasEmailAddresses[i].emailAddress;
+							primaryEmailAddressChanged = true;
+						} else if (!formActorHasEmailAddressesList[i].isPrimaryEmailAddress && actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].id.emailAddressId) {
+							actor.model.primaryEmailAddress = null;
+							primaryEmailAddressChanged = true;
+						}
+						if (primaryEmailAddressChanged) {
+							console.log("TCL actorType, actor", actorType, actor);
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+					}
+				}
+				// update existing actorHasEmailAddresses and add new ones
+				else if (formActorHasEmailAddressesList.length > actor.model.actorHasEmailAddresses.length) {
+					var i = 0;
+					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
+						console.log("TCL: actor", actor);
+						var actorHasEmailAddress = {}; 
+						actorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						// only update if anything changed
+						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
+							console.log("TCL: update existing actorHasEmailAddresses (and add new ones)");
+							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(actorHasEmailAddress, actor);
+						// }
+					}
+					i = actor.model.actorHasEmailAddresses.length;
+					var newActorHasEmailAddresses = [];
+					for (; i < formActorHasEmailAddressesList.length; i++) { // create new actorHasEmailAddresses
+						var actorHasEmailAddress = TIMAAT.ActorDatasets.createActorHasEmailAddressModel(formActorHasEmailAddressesList[i], actor.model.id, 0);
+						newActorHasEmailAddresses.push(actorHasEmailAddress);
+					}
+					console.log("TCL: (update existing addresses and) add new ones");
+					await TIMAAT.ActorDatasets.addActorHasEmailAddresses(actor, newActorHasEmailAddresses);
+					// for the whole list check new primary actorHasEmailAddress
+					i = 0;
+					for (; i < formActorHasEmailAddressesList.length; i++) {
+						// update primary email address
+						var primaryEmailAddressChanged = false;
+						if (formActorHasEmailAddressesList[i].isPrimaryEmailAddress && (actor.model.primaryEmailAddress == null || actor.model.primaryEmailAddress.id != actor.model.actorHasEmailAddresses[i].id.emailAddressId)) {
+							actor.model.primaryEmailAddress = actor.model.actorHasEmailAddresses[i].emailAddress;
+							primaryEmailAddressChanged = true;
+						} else if (!formActorHasEmailAddressesList[i].isPrimaryEmailAddress && actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].id.emailAddressId) {
+							actor.model.primaryEmailAddress = null;
+							primaryEmailAddressChanged = true;
+						}
+						if (primaryEmailAddressChanged) {
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+							break; // only one primary actorHasEmailAddress needs to be found
+						}
+					}
+				}
+				// update existing actorHasEmailAddresses and delete obsolete ones
+				else if (formActorHasEmailAddressesList.length < actor.model.actorHasEmailAddresses.length) {
+					var i = 0;
+					for (; i < formActorHasEmailAddressesList.length; i++ ) { // update existing actorHasEmailAddresses
+						var actorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
+							console.log("TCL: update existing actorHasEmailAddresses (and delete obsolete ones)");
+							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(actorHasEmailAddress, actor);
+						// }
+						// update primary address
+						var primaryEmailAddressChanged = false;
+						if (formActorHasEmailAddressesList[i].isPrimaryEmailAddress && (actor.model.primaryEmailAddress == null || actor.model.primaryEmailAddress.id != actor.model.actorHasEmailAddresses[i].id.emailAddressId)) {
+							actor.model.primaryEmailAddress = actor.model.actorHasEmailAddresses[i].emailAddress;
+							primaryEmailAddressChanged = true;
+						} else if (!formActorHasEmailAddressesList[i].isPrimaryEmailAddress && actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].id.emailAddressId) {
+							actor.model.primaryEmailAddress = null;
+							primaryEmailAddressChanged = true;
+						}
+						if (primaryEmailAddressChanged) {
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+					}
+					var i = actor.model.actorHasEmailAddresses.length - 1;
+					for (; i >= formActorHasEmailAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
+						if (actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].emailAddress.id) {
+							actor.model.primaryEmailAddress = null;
+							console.log("TCL: remove primaryActorHasAddress before deleting email address");		
+							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+						}
+						console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");		
+						TIMAAT.ActorService.removeEmailAddress(actor.model.actorHasEmailAddresses[i].emailAddress);
+						actor.model.actorHasEmailAddresses.pop();
+					}
+				}
+				console.log("TCL: show actor address form");
+				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', actor);
+			});
+
+			// Cancel add/edit button in addresses form functionality
+			$('#timaat-actordatasets-actor-emailaddresses-form-dismiss').click( function(event) {
+				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+		},
+
+		initEmailAddressTypes: function() {
+			// console.log("TCL: ActorDatasets: initEmailAddressTypes: function()");		
+			// delete emailAddressType functionality
+			$('#timaat-emailaddresstype-delete-submit').click(function(ev) {
+				var modal = $('#timaat-actordatasets-emailaddresstype-delete');
+				var emailAddressType = modal.data('emailAddressType');
+				if (emailAddressType) TIMAAT.ActorDatasets._emailAddressTypeRemoved(emailAddressType);
+				modal.modal('hide');
+			});
+			// add emailAddressType button
+			$('#timaat-emailaddresstype-add').attr('onclick','TIMAAT.ActorDatasets.addEmailAddressType()');
+
+			// add/edit emailAddressType functionality
+			$('#timaat-actordatasets-emailaddresstype-meta').on('show.bs.modal', function (ev) {
+				// Create/Edit emailAddressType window setup
+				var modal = $(this);
+				var emailAddressType = modal.data('emailAddressType');				
+				var heading = (emailAddressType) ? "EmailAddressType bearbeiten" : "EmailAddressType hinzufügen";
+				var submit = (emailAddressType) ? "Speichern" : "Hinzufügen";
+				var type = (emailAddressType) ? emailAddressType.model.type : 0;
+				// setup UI
+				$('#emailAddressTypeMetaLabel').html(heading);
+				$('#timaat-actordatasets-emailaddresstype-meta-submit').html(submit);
+				$("#timaat-actordatasets-emailaddresstype-meta-name").val(type).trigger('input');
+			});
+
+			// Submit emailAddressType data
+			$('#timaat-actordatasets-emailaddresstype-meta-submit').click(function(ev) {
+				// Create/Edit emailAddressType window submitted data validation
+				var modal = $('#timaat-actordatasets-emailaddresstype-meta');
+				var emailAddressType = modal.data('emailAddressType');
+				var type = $("#timaat-actordatasets-emailaddresstype-meta-name").val();
+
+				if (emailAddressType) {
+					emailAddressType.model.actor.emailAddressTypeTranslations[0].type = type;
+					emailAddressType.updateUI();
+					TIMAAT.ActorService.updateEmailAddressType(emailAddressType);
+					TIMAAT.ActorService.updateEmailAddressTypeTranslation(emailAddressType);
+				} else { // create new emailAddressType
+					var model = {
+						id: 0,
+						emailAddressTypeTranslations: [],
+					};
+					var modelTranslation = {
+						id: 0,
+						type: type,
+					}
+					TIMAAT.ActorService.createEmailAddressType(model, modelTranslation, TIMAAT.ActorDatasets._emailAddressTypeAdded); // TODO add emailAddressType parameters
+				}
+				modal.modal('hide');
+			});
+
+			// validate emailAddressType data	
+			// TODO validate all required fields				
+			$('#timaat-actordatasets-emailaddresstype-meta-name').on('input', function(ev) {
+				if ( $("#timaat-actordatasets-emailaddresstype-meta-name").val().length > 0 ) {
+					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop("disabled", false);
+					$('#timaat-actordatasets-emailaddresstype-meta-submit').removeAttr("disabled");
+				} else {
+					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop("disabled", true);
+					$('#timaat-actordatasets-emailaddresstype-meta-submit').attr("disabled");
+				}
+			});
 		},
 
 		initPhoneNumbers: function() {
@@ -1170,6 +1493,7 @@
 			TIMAAT.ActorDatasets.loadActorTypes();
 			TIMAAT.ActorDatasets.loadAllActorSubtypes();
 			TIMAAT.ActorDatasets.loadAddressTypes();
+			TIMAAT.ActorDatasets.loadEmailAddressTypes();
 		},
 
 		loadActorTypes: function() {
@@ -1206,6 +1530,10 @@
 
 		loadAddressTypes: function() {
 			TIMAAT.ActorService.listAddressTypes(TIMAAT.ActorDatasets.setAddressTypeLists);
+		},
+
+		loadEmailAddressTypes: function() {
+			TIMAAT.ActorService.listEmailAddressTypes(TIMAAT.ActorDatasets.setEmailAddressTypeLists);
 		},
 
 		setActorTypeLists: function(actorTypes) {
@@ -1349,6 +1677,22 @@
       console.log("TCL: TIMAAT.ActorDatasets.actorHasAddresses", TIMAAT.ActorDatasets.actorHasAddresses);
 		},
 
+		setActorHasEmailAddressList: function(actor) {
+			console.log("TCL: setActorHasAddressList -> actor", actor);
+			if ( !actor ) return;
+			$('#timaat-actordatasets-actor-emailaddress-list-loader').remove();
+			// clear old UI list
+			$('#timaat-actordatasets-actor-emailaddress-list').empty();
+			// setup model
+			var actorHasEmailAddrs = Array();
+			actor.model.actorHasEmailAddresses.forEach(function(actorHasEmailAddress) { 
+				if ( actorHasEmailAddress.id.actorId > 0 && actorHasEmailAddress.id.emailAddressId > 0 )
+				actorHasEmailAddrs.push(actorHasEmailAddress); 
+			});
+			TIMAAT.ActorDatasets.actorHasEmailAddresses = actorHasEmailAddrs;
+      console.log("TCL: TIMAAT.ActorDatasets.actorHasEmailAddresses", TIMAAT.ActorDatasets.actorHasEmailAddresses);
+		},
+
 		setAddressTypeLists: function(addressTypes) {
 			console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
 			if ( !addressTypes ) return;
@@ -1363,23 +1707,22 @@
 			});
 			TIMAAT.ActorDatasets.addressTypes = addrTypes;
       // console.log("TCL: TIMAAT.ActorDatasets.addressTypes", TIMAAT.ActorDatasets.addressTypes);
-
 		},
 
-		setActorEmailAddressList: function(actor) {
-			console.log("TCL: setActorEmailAddressList -> actor", actor);
-			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-emailaddress-list-loader').remove();
+		setEmailAddressTypeLists: function(emailAddressTypes) {
+			console.log("TCL: setAddressTypeList -> emailaddressTypes", emailAddressTypes);
+			if ( !emailAddressTypes ) return;
+			$('#timaat-actordatasets-emailaddresstype-list-loader').remove();
 			// clear old UI list
-			$('#timaat-actordatasets-actor-emailaddress-list').empty();
+			$('#timaat-actordatasets-emailaddresstype-list').empty();
 			// setup model
-			var emailAddresses = Array();
-			actor.model.emailAddresses.forEach(function(emailAddress) { 
-				if ( emailAddress.id > 0 )
-					emailAddresses.push(emailAddress); 
+			var emailAddrTypes = Array();
+			emailAddressTypes.forEach(function(emailAddressType) { 
+				if ( emailAddressType.id > 0 )
+					emailAddrTypes.push(emailAddressType); 
 			});
-			TIMAAT.ActorDatasets.emailAddresses = emailAddresses;
-      console.log("TCL: TIMAAT.ActorDatasets.emailAddresses", TIMAAT.ActorDatasets.emailAddresses);
+			TIMAAT.ActorDatasets.emailAddressTypes = emailAddrTypes;
+      // console.log("TCL: TIMAAT.ActorDatasets.emailAddressTypes", TIMAAT.ActorDatasets.emailAddressTypes);
 		},
 
 		setActorPhoneNumberList: function(actor) {
@@ -1457,6 +1800,7 @@
 			$('.'+actorType+'-data-tab').show();
 			$('.name-data-tab').show();
 			$('.address-data-tab').show();
+			$('.emailaddress-data-tab').show();
 
 			if (actorType == "collective") {
 				$('.person-data').hide(); // to display title in same row with actor name data
@@ -1660,7 +2004,7 @@
 
 		actorFormAddresses: function(action, actor) {
     	console.log("TCL: actorFormAddresses: action, actor", action, actor);
-			var node = document.getElementById("dynamic-address-fields");
+			var node = document.getElementById("dynamic-actorhasaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
 			}
@@ -1679,7 +2023,7 @@
 			var numAddresses = actor.model.actorHasAddresses.length;
       // console.log("TCL: actor.model.actorHasAddresses", actor.model.actorHasAddresses);
 			for (; i< numAddresses; i++) {
-				$('[data-role="dynamic-address-fields"]').append(
+				$('[data-role="dynamic-actorhasaddress-fields"]').append(
 					`<div class="form-group" data-role="address-entry">
 						<div class="form-row">
 							<div class="col-md-11">
@@ -1806,7 +2150,99 @@
 		},
 
 		actorFormEmailAddresses: function(action, actor) {
+    	console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
+			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+			var node = document.getElementById("new-actorhasemailaddress-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+			$('#timaat-actordatasets-actor-emailaddresses-form').trigger('reset');
+			actorFormEmailAddressesValidator.resetForm();
+			// $('.actor-data-tab').show();
+			$('.nav-tabs a[href="#actorEmailAddresses"]').focus();
+			$('#timaat-actordatasets-actor-emailaddresses-form').show();
+			
+			// setup UI
+			var i = 0;
+			var numEmailAddresses = actor.model.actorHasEmailAddresses.length;
+      // console.log("TCL: actor.model.actorHasEmailAddresses", actor.model.actorHasEmailAddresses);
+			for (; i< numEmailAddresses; i++) {
+				$('[data-role="dynamic-actorhasemailaddress-fields"]').append(
+					`<div class="form-group" data-role="emailaddress-entry">
+							<div class="form-row">
+									<div class="col-md-2 text-center">
+										<div class="form-check">
+											<input class="form-check-input isPrimaryEmailAddress" type="radio" name="isPrimaryEmailAddress" data-role="primaryEmailAddress[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" placeholder="Is primary email address">
+											<label class="sr-only" for="isPrimaryEmailAddress"></label>
+										</div>
+									</div>
+									<div class="col-md-3">
+									<label class="sr-only">Email address type*</label>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+actor.model.actorHasEmailAddresses[i].emailAddressType.id+`]" required>
+										<option value="" disabled selected hidden>[Choose email type...]</option>
+										<option value="1"> </option>
+										<option value="2">home</option>
+										<option value="3">work</option>
+										<option value="4">other</option>
+										<option value="5">mobile</option>
+										<option value="6">custom</option>
+									</select>
+								</div>
+									<div class="col-md-6">
+										<label class="sr-only">Email address</label>
+										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email[`+i+`]" data-role="email[`+i+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
+									</div>
+								<div class="col-md-1 text-center">
+									<button class="btn btn-danger" data-role="remove">
+										<span class="fas fa-trash-alt"></span>
+									</button>
+								</div>
+							</div>
+						</div>`
+				);
+				if (actor.model.primaryEmailAddress && actor.model.actorHasEmailAddresses[i].id.emailAddressId == actor.model.primaryEmailAddress.id) {
+					$('[data-role="primaryEmailAddress['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"]')
+						.prop("checked",true);
+				}
+				$('input[name="email['+i+']"').rules("add", { required: true, email: true});
+				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']"')
+					.find('option[value='+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']')
+					.attr("selected",true);
+			}
+			if ( action == 'show') {
+				$('#timaat-actordatasets-actor-emailaddresses-form :input').prop("disabled", true);
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit').show();
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit').prop("disabled", false);
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-emailaddresses-form-submit').hide();
+				$('#timaat-actordatasets-actor-emailaddresses-form-dismiss').hide();
+				$('[data-role="new-actorhasemailaddress-fields"').hide();
+				$('.emailaddress-form-divider').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
+				$('#actorEmailAddressesLabel').html("Actor Emailaddressenliste");
+			}
+			else if (action == 'edit') {
+				$('#timaat-actordatasets-actor-emailaddresses-form-submit').show();
+				$('#timaat-actordatasets-actor-emailaddresses-form-dismiss').show();
+				$('#timaat-actordatasets-actor-emailaddresses-form :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit').hide();
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit').prop("disabled", true);
+				$('#timaat-actordatasets-actor-emailaddresses-form-edit :input').prop("disabled", true);
+				$('[data-role="new-actorhasemailaddress-fields"').show();
+				$('.emailaddress-form-divider').show();
+				$('#actorEmailAddressesLabel').html("Actor Emailaddressenliste bearbeiten");
+				$('#timaat-actordatasets-actor-emailaddresses-form-submit').html("Speichern");
+				$('#timaat-actordatasets-actor-metadata-emailaddress').focus();
 
+				// fields for new email address entry
+				$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());
+				console.log("TCL: actor", actor);
+				$('#timaat-actordatasets-actor-emailaddresses-form').data('actor', actor);
+			}
 		},
 
 		actorFormPhoneNumbers: function(action, actor) {
@@ -1929,7 +2365,7 @@
 			try {
 				// create address
 				var i = 0;
-				for (; i <newActorHasAddresses.length; i++) {
+				for (; i < newActorHasAddresses.length; i++) {
 					// modify models for backend
 					var tempAddress = newActorHasAddresses[i].address;
 					var tempActorHasAddress = newActorHasAddresses[i];
@@ -1952,12 +2388,26 @@
 			}
 		},
 
-		createEmailAddress: async function(emailAddressModel) {
-
-		},
-
-		addEmailAddresses: async function(actor, newEmailAddresses) {
-
+		addActorHasEmailAddresses: async function(actor, newActorHasEmailAddresses) {
+			console.log("TCL: addActorHasEmailAddresses: async function -> actor, newActorHasEmailAddresses", actor, newActorHasEmailAddresses);
+			try {
+				// create email address
+				var i = 0;
+				for (; i < newActorHasEmailAddresses.length; i++) {
+					// modify models for backend
+					var tempEmailAddress = newActorHasEmailAddresses[i].emailAddress;
+					var tempActorHasEmailAddress = newActorHasEmailAddresses[i];
+					delete tempActorHasEmailAddress.emailAddress;
+					
+					var addedEmailAddressModel = await TIMAAT.ActorService.addEmailAddress(actor.model.id, tempEmailAddress);
+					var addedActorHasEmailAddressModel = await TIMAAT.ActorService.updateActorHasEmailAddress(actor.model.id, addedEmailAddressModel.id, tempActorHasEmailAddress);
+					addedActorHasEmailAddressModel.emailAddress = {};
+					addedActorHasEmailAddressModel.emailAddress = addedEmailAddressModel;
+					actor.model.actorHasEmailAddresses.push(addedActorHasEmailAddressModel);
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
 		},
 
 		createPhoneNumber: async function(phoneNumberModel) {
@@ -1984,6 +2434,12 @@
 				if (actor.model.primaryAddress) { // actor initially has no primary address set
 					var tempPrimaryAddress = await TIMAAT.ActorService.updateAddress(actor.model.primaryAddress);
 					actor.model.primaryAddress = tempPrimaryAddress;
+				}
+
+				// update primary email address
+				if (actor.model.primaryEmailAddress) { // actor initially has no primary email address set
+					var tempPrimaryEmailAddress = await TIMAAT.ActorService.updateEmailAddress(actor.model.primaryEmailAddress);
+					actor.model.primaryEmailAddress = tempPrimaryEmailAddress;
 				}
 
 				} catch(error) {
@@ -2065,6 +2521,30 @@
 				for (; i < actor.model.actorHasAddresses.length; i++) {
 					if (actor.model.actorHasAddresses[i].id == actorHasAddress.id)
 						actor.model.actorHasAddresses[i] = updatedTempActorHasAddress;
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
+		},
+
+		updateActorHasEmailAddress: async function(actorHasEmailAddress, actor) {
+			console.log("TCL: updateActorHasEmailAddress: async function -> actorHasEmailAddress at beginning of update process: ", actorHasEmailAddress, actor);
+			try {
+				// update address
+				var tempActorHasEmailAddress = actorHasEmailAddress;
+				var tempEmailAddress = actorHasEmailAddress.emailAddress;
+				// modify models for backend
+				delete tempActorHasEmailAddress.emailAddress;
+				var updatedTempAddress = await TIMAAT.ActorService.updateEmailAddress(tempEmailAddress);
+				tempActorHasEmailAddress.id.actorId = actor.model.id;
+				tempActorHasEmailAddress.id.emailAddressId = updatedTempAddress.id;
+				var updatedTempActorHasAddress = await TIMAAT.ActorService.updateActorHasEmailAddress(actorHasEmailAddress.id.actorId, actorHasEmailAddress.id.emailAddressId, tempActorHasEmailAddress);
+				updatedTempActorHasAddress.emailAddress = updatedTempAddress;
+
+				var i = 0;
+				for (; i < actor.model.actorHasEmailAddresses.length; i++) {
+					if (actor.model.actorHasEmailAddresses[i].id == actorHasEmailAddress.id)
+						actor.model.actorHasEmailAddresses[i] = updatedTempActorHasAddress;
 				}
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2312,18 +2792,26 @@
 			return updatedModel;
 		},
 
-		createEmailModel: function(formDataObject) {
-    // console.log("TCL: createEmailModel: formDataObject", formDataObject);
-			var primaryEmail = {};
-			if (!(formDataObject.emailAddress == ""
-					&& formDataObject.emailTypeId == "")) {
-				primaryEmail = {
-					email: formDataObject.emailAddress,
-					type: Number(formDataObject.emailTypeId),
-				};
-        console.log("TCL: primaryEmail", primaryEmail);
-			}
-			return primaryEmail
+		createActorHasEmailAddressModel: function(data, actorId, emailAddressId) {
+    	// console.log("TCL: data, actorId, emailAddressId", data, actorId, emailAddressId);
+			var actorHasEmailAddressModel = {};
+			actorHasEmailAddressModel.id = {
+				actorId: actorId,
+				emailAddressId: emailAddressId
+			};
+			actorHasEmailAddressModel.emailAddress = {
+				id: emailAddressId,
+				email: data.email,
+			};
+			actorHasEmailAddressModel.emailAddressType = TIMAAT.ActorDatasets.emailAddressTypes[Number(data.emailAddressTypeId)-1];
+			return actorHasEmailAddressModel;
+		},
+
+		updateActorHasEmailAddressModel: function(originalModel, data) {
+			var updatedModel = originalModel;
+			updatedModel.emailAddressType = TIMAAT.ActorDatasets.emailAddressTypes[Number(data.emailAddressTypeId)-1];
+			updatedModel.emailAddress.email = data.email;
+			return updatedModel;
 		},
 
 		createPhoneNumberModel: function(formDataObject) {
@@ -2459,6 +2947,41 @@
 				</div>
 			</div>`;
 			return addressToAppend;
+		},
+
+		appendNewEmailAddressField: function() {
+			var emailAddressToAppend = 
+				`<div class="form-group" data-role="emailaddress-entry">
+					<div class="form-row">
+						<div class="col-md-2 text-center">
+							<div class="form-check">
+								<span>Add new email:</span>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="sr-only">Email address type*</label>
+							<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId" data-role="emailAddressTypeId" required>
+								<option value="" disabled selected hidden>[Choose email type...]</option>
+								<option value="1"> </option>
+								<option value="2">home</option>
+								<option value="3">work</option>
+								<option value="4">other</option>
+								<option value="5">mobile</option>
+								<option value="6">custom</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label class="sr-only">Email address</label>
+							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email" data-role="email" placeholder="[Enter email address]" aria-describedby="Email address">
+						</div>
+						<div class="col-md-1">
+							<button class="btn btn-primary" data-role="add">
+								<span class="fas fa-plus"></span>
+							</button>
+						</div>
+					</div>
+				</div>`;
+			return emailAddressToAppend;
 		},
 
 	}
