@@ -488,9 +488,9 @@ public class ActorEndpoint {
 		entityManager.refresh(newTranslation);
 		entityManager.refresh(person);
 		
-		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.PERSONCREATED); // TODO own log person required?
+		// add log entry (always in conjunction with person)
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.PERSONCREATED);
 		System.out.println("PersonEndpoint: person translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();

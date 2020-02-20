@@ -36,14 +36,6 @@ public class Province implements Serializable {
 		this.locationId = locationId;
 	}
 
-	public int getId() { // TODO not necessary with getLocationId?
-		return this.getLocation().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setLocationId?
-		this.getLocation().setId(id);
-	}
-
 	public Location getLocation() {
 		return this.location;
 	}

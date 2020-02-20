@@ -400,9 +400,9 @@ public class LocationEndpoint {
 		entityManager.refresh(newTranslation);
 		entityManager.refresh(location);
 		
-		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.LOCATIONCREATED); // TODO own log location required?
+		// add log entry (always in conjunction with location creation)
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.LOCATIONCREATED);
 		System.out.println("LocationEndpoint: location translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();

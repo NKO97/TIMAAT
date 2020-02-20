@@ -71,14 +71,6 @@ public class Country implements Serializable {
 		this.locationId = locationId;
 	}
 
-	public int getId() { // TODO not necessary with getLocationId?
-		return this.getLocation().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setLocationId?
-		this.getLocation().setId(id);
-	}
-
 	public String getName() {
 		return this.getLocation().getLocationTranslations().get(0).getName(); // TODO get correct list item
 	}
