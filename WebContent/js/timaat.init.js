@@ -12,7 +12,7 @@ requirejs.config({
 		"datatables":				'../vendor/datatables/datatables.min',
 		"datatables.net" : '../vendor/datatables/DataTables-1.10.20/js/jquery.dataTables.min',
 		"datatables.net-bs" : '../vendor/dataTables/DataTables-1.10.20/js/dataTables.bootstrap.min',
-		"moment":					'../vendor/moment/moment',
+		"moment":					'../vendor/moment/moment-with-locales',
 		"leaflet":					'../vendor/leaflet/leaflet',
 		"leaflet-editable":			'../vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable',
 		"leaflet-pathdrag":			'../vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag',
@@ -71,7 +71,12 @@ requirejs.config({
 		'leaflet-pathdrag': { deps: ['leaflet'], exports: 'L.PathDraggable' },
 		'leaflet-customcontrol': { deps: ['leaflet'], },
 		'leaflet-sidebar': { deps: ['leaflet'], },
-	}
+	},
+	packages: [{
+		name: 'moment',
+		location: '../vendor/moment',
+		main: 'moment'
+	}],
 });
 
 require(['domReady',
