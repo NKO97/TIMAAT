@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 /**
- * The persistent class for the collective database table.
+ * The persistent class for the actor_collective database table.
  * 
  */
 @Entity
@@ -32,13 +32,12 @@ public class ActorCollective implements Serializable {
 	//bi-directional one-to-one association to Actor
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="actor_id")
-	@JsonIgnore
+	@JsonIgnore // ActorCollective is accessed through Actor --> avoid reference cycle
 	private Actor actor;
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorCollective")
 	// @JsonIgnore
-	// @JsonManagedReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollective")
 	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	public ActorCollective() {

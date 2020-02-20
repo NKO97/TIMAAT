@@ -35,7 +35,7 @@
 						displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
 					break;
 					case 2: 
-						displayActorTypeIcon = '  <i class="far fa-users"></i>';
+						displayActorTypeIcon = '  <i class="fas fa-users"></i>';
 					break;
 				}
 			}

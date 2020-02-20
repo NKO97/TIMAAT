@@ -93,7 +93,6 @@ public class MediumServiceEndpoint{
 	@Path("list")
 	public Response getMediaList() {
 		System.out.println("MediumServiceEndpoint: getMediaList");
-		// @SuppressWarnings("unchecked")
 		List<Medium> mlist = castList(Medium.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList());
 
 		for (Medium m : mlist) {

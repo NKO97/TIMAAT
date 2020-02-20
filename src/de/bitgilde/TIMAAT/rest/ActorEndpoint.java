@@ -75,17 +75,7 @@ public class ActorEndpoint {
 	public Response getActorList() {
 		System.out.println("ActorServiceEndpoint: getActorList");			
 		List<Actor> actorList = castList(Actor.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Actor.findAll").getResultList());
-		
-		//? Working or necessary?
-		// for (Actor actor : actorList) {
-		// 		List<ActorName> actorNamesList = actor.getActorNames();
-		// 	 for (ActorName actorName : actorNamesList) {
-		// 			if (actorName.getIsDisplayName()) {
-		// 				actor.setDisplayName(actorName);
-		// 				break;
-		// 			}
-		// 	 }
-		// }
+
 		return Response.ok().entity(actorList).build();
 	}
 
@@ -107,8 +97,8 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: getPersonList");	
 		List<ActorPerson> actorPersonList = castList(ActorPerson.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorPerson.findAll").getResultList());
 		List<Actor> actorList = new ArrayList<Actor>();
-		for ( ActorPerson m : actorPersonList ) {
-			actorList.add(m.getActor());
+		for ( ActorPerson actorPerson : actorPersonList ) {
+			actorList.add(actorPerson.getActor());
 		}
 		return Response.ok().entity(actorList).build();
 	}
@@ -121,7 +111,9 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: getCollectiveList");	
 		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
 		List<Actor> actorList = new ArrayList<Actor>();
-		for ( ActorCollective actorCollective : actorCollectiveList ) actorList.add(actorCollective.getActor());
+		for ( ActorCollective actorCollective : actorCollectiveList ) {
+			actorList.add(actorCollective.getActor());
+		}
 		return Response.ok().entity(actorList).build();
 	}
 	
@@ -298,8 +290,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTORDELETED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.ACTORDELETED);
 		System.out.println("ActorServiceEndpoint: deleteActor - delete complete");
 		return Response.ok().build();
 	}
@@ -545,7 +537,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry(newCollective.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COLLECTIVECREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+																UserLogManager.LogEvents.COLLECTIVECREATED);
 		System.out.println("ActorServiceEndpoint: collective created with id "+newCollective.getActorId());
 		return Response.ok().entity(newCollective).build();
 	}
@@ -568,15 +561,16 @@ public class ActorEndpoint {
 		try {
 			updatedCollective = mapper.readValue(jsonData, ActorCollective.class);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedCollective == null ) return Response.notModified().build();    	
 		
 		// update collective
 		// System.out.println("ActorServiceEndpoint: UPDATE COLLECTIVE - collective.id:"+collective.getActorId());
-		// if ( updatedCollective.getLength() > 0) collective.setLength(updatedCollective.getLength());
-		// if ( updatedCollective.getCollectiveCodecInformation() != null ) collective.setCollectiveCodecInformation(updatedCollective.getCollectiveCodecInformation());
-		
+		collective.setFounded(updatedCollective.getFounded());
+		collective.setDisbanded(updatedCollective.getDisbanded());
+
 		// update log metadata
 		collective.getActor().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -593,8 +587,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.COLLECTIVEEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.COLLECTIVEEDITED);
 		System.out.println("ActorServiceEndpoint: UPDATE COLLECTIVE - update complete");	
 		return Response.ok().entity(collective).build();
 	}
@@ -621,8 +615,8 @@ public class ActorEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.COLLECTIVEDELETED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.COLLECTIVEDELETED);
 		System.out.println("ActorServiceEndpoint: deleteCollective - collective deleted");  
 		return Response.ok().build();
 	}

@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 /**
- * The persistent class for the person database table.
+ * The persistent class for the actor_person database table.
  * 
  */
 @Entity

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the _is_member_of_collective database table.
+ * The primary key class for the _is_member_of_actor_collective database table.
  * 
  */
 @Embeddable
@@ -20,9 +20,9 @@ public class ActorPersonIsMemberOfActorCollectivePK implements Serializable {
 
 	public ActorPersonIsMemberOfActorCollectivePK() {
 	}
-	// public ActorPersonIsMemberOfActorCollectivePK(int actorId, int collectiveId) {
-	// 	this.actorPersonActorId = actorId;
-	// 	this.memberOfActorCollectiveActorId = collectiveId;
+	// public ActorPersonIsMemberOfActorCollectivePK(int actorId, int actorCollectiveId) {
+	// 	this.actorPersonActorId = actorPersonId;
+	// 	this.memberOfActorCollectiveActorId = actorCollectiveId;
 	// }
 	public int getActorPersonActorId() {
 		return this.actorPersonActorId;

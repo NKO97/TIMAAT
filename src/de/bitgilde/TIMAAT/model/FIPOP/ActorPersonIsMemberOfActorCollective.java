@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the actor_person_is_member_of_collective database table.
+ * The persistent class for the actor_person_is_member_of_actor_collective database table.
  * 
  */
 @Entity

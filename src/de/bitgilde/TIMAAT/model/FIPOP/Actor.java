@@ -410,11 +410,11 @@ public class Actor implements Serializable {
 		this.annotations = annotations;
 	}
 
-	public ActorCollective getCollective() {
+	public ActorCollective getActorCollective() {
 		return this.actorCollective;
 	}
 
-	public void setCollective(ActorCollective actorCollective) {
+	public void setActorCollective(ActorCollective actorCollective) {
 		this.actorCollective = actorCollective;
 	}
 
