@@ -392,7 +392,6 @@ public class ActorEndpoint {
 		// TODO update place of death
 		if ( updatedPerson.getSex() != null) person.setSex(updatedPerson.getSex());
 		// TODO update person is member of collective
-		// TODO update person translations -> special features
 
 		System.out.println("ActorServiceEndpoint: updatePerson update log entry");
 		// update log metadata
@@ -494,6 +493,77 @@ public class ActorEndpoint {
 		System.out.println("PersonEndpoint: person translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{person_id}/translation/{id}")
+	public Response updateActorPersonTranslation(@PathParam("person_id") int personid, @PathParam("id") int id, String jsonData) {
+
+		System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - jsonData"+ jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		ActorPersonTranslation updatedTranslation = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		ActorPersonTranslation personTranslation = entityManager.find(ActorPersonTranslation.class, id);
+
+		if ( personTranslation == null ) return Response.status(Status.NOT_FOUND).build();
+		// parse JSON data
+		try {
+			updatedTranslation = mapper.readValue(jsonData, ActorPersonTranslation.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedTranslation == null ) return Response.notModified().build();	
+
+		// update person translation
+		if ( updatedTranslation.getSpecialFeatures() != null ) personTranslation.setSpecialFeatures(updatedTranslation.getSpecialFeatures());
+
+		// persist person translation
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(personTranslation);
+		entityManager.persist(personTranslation);
+		entityTransaction.commit();
+		entityManager.refresh(personTranslation);
+
+		// add log entry (always in conjunction with person)
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.PERSONEDITED);
+		System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - updated");
+
+		return Response.ok().entity(personTranslation).build();
+
+	}
+
+	// not needed yet (should be necessary once several translations for an person exist and individual ones need to be removed)
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{person_id}/translation/{id}")
+	@Secured
+	public Response deleteActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id) {	
+
+		System.out.println("ActorPersonEndpoint: deleteActorPersonTranslation");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		ActorPersonTranslation personTranslation = entityManager.find(ActorPersonTranslation.class, id);
+
+		if ( personTranslation == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// sanitize person translation
+		ActorPerson person = personTranslation.getActorPerson();
+
+		// persist person translation
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(personTranslation);
+		entityTransaction.commit();
+		entityManager.refresh(person);
+
+		// add log entry (always in conjunction with person)
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.PERSONDELETED);
+		return Response.ok().build();
 
 	}
 

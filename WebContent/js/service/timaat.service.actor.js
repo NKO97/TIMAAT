@@ -198,11 +198,11 @@
 			});
 		},
 
-		async createPersonTranslation(model, modelTranslation) {
-      // console.log("TCL: createPersonTranslation -> async createPersonTranslation(model, modelTranslation)",  model, modelTranslation);
+		async createActorPersonTranslation(model, modelTranslation) {
+      // console.log("TCL: createActorPersonTranslation -> async createActorPersonTranslation(model, modelTranslation)",  model, modelTranslation);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.person.protocol+'//'+window.person.host+"/TIMAAT/api/person/"+model.id+"/translation/"+modelTranslation.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+model.id+"/translation/"+modelTranslation.id,
 					type:"POST",
 					data: JSON.stringify(modelTranslation),
 					contentType:"application/json; charset=utf-8",
@@ -550,7 +550,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					// console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
+					console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -558,6 +558,29 @@
 				});
 			}).catch((error) => {
 				console.log( "error: ", error);
+			});
+		},
+
+		async updateActorPersonTranslation(actorId, personTranslation) {
+      // console.log("TCL: async updateActorLocationTranslation -> actorId, updatedActorLocationTranslation", actorId, personTranslation);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/translation/"+personTranslation.id,
+					type:"PATCH",
+					data: JSON.stringify(personTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(translationData) {
+					resolve(translationData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
 			});
 		},
 

@@ -17,6 +17,7 @@ public class ActorPersonTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="special_features")
@@ -24,12 +25,10 @@ public class ActorPersonTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-ActorPersonTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to ActorPerson
 	@ManyToOne
-	// @JsonBackReference(value = "ActorPerson-ActorPersonTranslation")
 	@JsonIgnore
 	@JoinColumn(name="actor_person_actor_id")
 	private ActorPerson actorPerson;
