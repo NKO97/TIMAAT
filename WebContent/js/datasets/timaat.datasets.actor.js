@@ -325,9 +325,6 @@
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
 					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 					// var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
-					// if (citizenshipModel != null) {
-					// 	personModel.citizenships = citizenshipModel;
-					// };
 					
 					await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayName, personTranslationModel);
 					var person = TIMAAT.ActorDatasets.persons[TIMAAT.ActorDatasets.persons.length-1];
@@ -428,7 +425,7 @@
 			});
 		},
 
-		initNames: function() {
+			initNames: function() {
 			$('#actors-tab-actor-names-form').click(function(event) {
 				$('.nav-tabs a[href="#actorNames"]').tab('show');
 				$('.form').hide();
@@ -456,7 +453,7 @@
           console.log("TCL: $(this).val()", $(this).val());
           console.log("TCL: newName", newName);
 				}));
-				if (!$("#timaat-actordatasets-actornames-form").valid()) 
+				if (!$("#timaat-actordatasets-actor-actornames-form").valid()) 
 					return false;
 				if (newName != '') { // TODO is '' proper check?
 					var namesInForm = $("#timaat-actordatasets-actor-actornames-form").serializeArray();
@@ -2014,6 +2011,10 @@
       console.log("TCL: TIMAAT.ActorDatasets.actorHasPhoneNumbers", TIMAAT.ActorDatasets.actorHasPhoneNumbers);
 		},
 
+		setCitizenshipsList: function(actor) {
+
+		},
+
 		setAddressTypeLists: function(addressTypes) {
 			console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
 			if ( !addressTypes ) return;
@@ -2894,10 +2895,14 @@
 				}
 
 				try {
-					// update data that is part of person translation
-					// TODO: send request for each translation or for all translations
-					var tempActorPersonTranslation = await TIMAAT.ActorService.updateActorPersonTranslation(actor.model.id, actor.model.actorPerson.actorPersonTranslations[0]);
-					// actor.model.actorPersonTranslations[0].specialFeatures = tempActorPersonTranslation.specialFeatures;			
+					switch (actorSubtype) {
+						case 'person':
+							// update data that is part of person translation
+							// TODO: send request for each translation or for all translations
+							var tempActorPersonTranslation = await TIMAAT.ActorService.updateActorPersonTranslation(actor.model.id, actor.model.actorPerson.actorPersonTranslations[0]);
+							// actor.model.actorPersonTranslations[0].specialFeatures = tempActorPersonTranslation.specialFeatures;			
+						break;
+					}
 				} catch(error) {
 					console.log( "error: ", error);
 				};
@@ -3125,7 +3130,7 @@
 					id: Number(formDataObject.sexId),
 				},
 				actorPersonTranslations: [],
-				// citizenships : null
+				citizenships : []
 			};
       console.log("TCL: personModel", personModel);
 			return personModel;
@@ -3246,9 +3251,7 @@
 
 		createCitizenshipModel: function(formDataObject) {
     // console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
-			var citizenshipModel = null;
-			if(!(formDataObject.citizenshipName == "")) {
-				citizenshipModel = [{
+			var citizenshipModel = [{
 					id: 0,
 					citizenshipTranslation: {
 						id: 0,
@@ -3259,7 +3262,6 @@
 					}
 				}];
 				console.log("TCL: citizenshipModel", citizenshipModel);
-			}
 			return citizenshipModel;
 		},
 
