@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="address_type_translation")
-@NamedQuery(name="AddressTypeTranslation.findAll", query="SELECT a FROM AddressTypeTranslation a")
+@NamedQuery(name="AddressTypeTranslation.findAll", query="SELECT att FROM AddressTypeTranslation att")
 public class AddressTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class AddressTypeTranslation implements Serializable {
 	//bi-directional many-to-one association to AddressType
 	@ManyToOne
 	@JoinColumn(name="address_type_id")
-	@JsonBackReference(value = "AddressType-AddressTypeTranslation")
+	@JsonIgnore
 	private AddressType addressType;
 
 	//bi-directional many-to-one association to Language

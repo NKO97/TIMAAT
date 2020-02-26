@@ -20,15 +20,24 @@ public class ActorHasEmailAddressPK implements Serializable {
 
 	public ActorHasEmailAddressPK() {
 	}
+
+	public ActorHasEmailAddressPK(int actorId, int emailAddressId) {
+		this.actorId = actorId;
+		this.emailAddressId = emailAddressId;
+	}
+
 	public int getActorId() {
 		return this.actorId;
 	}
+
 	public void setActorId(int actorId) {
 		this.actorId = actorId;
 	}
+	
 	public int getEmailAddressId() {
 		return this.emailAddressId;
 	}
+
 	public void setEmailAddressId(int emailAddressId) {
 		this.emailAddressId = emailAddressId;
 	}

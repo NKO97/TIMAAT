@@ -202,9 +202,9 @@ public class Annotation implements Serializable {
 	@JsonManagedReference(value = "Annotation-SelectorSvg")
 	private List<SelectorSvg> selectorSvgs;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypePerson
+	//bi-directional many-to-one association to SpatialSemanticsTypeActorPerson
 	// @OneToMany(mappedBy="annotation")
-	// private List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons;
+	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypeSpace
 	// @OneToMany(mappedBy="annotation")
@@ -551,26 +551,26 @@ public class Annotation implements Serializable {
 		this.analysisListID = analysisListID;
 	}
 
-	// public List<SpatialSemanticsTypePerson> getSpatialSemanticsTypePersons() {
-	// 	return this.spatialSemanticsTypePersons;
+	// public List<SpatialSemanticsTypeActorPerson> getSpatialSemanticsTypeActorPersons() {
+	// 	return this.spatialSemanticsTypeActorPersons;
 	// }
 
-	// public void setSpatialSemanticsTypePersons(List<SpatialSemanticsTypePerson> spatialSemanticsTypePersons) {
-	// 	this.spatialSemanticsTypePersons = spatialSemanticsTypePersons;
+	// public void setSpatialSemanticsTypeActorPersons(List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons) {
+	// 	this.spatialSemanticsTypeActorPersons = spatialSemanticsTypeActorPersons;
 	// }
 
-	// public SpatialSemanticsTypePerson addSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
-	// 	getSpatialSemanticsTypePersons().add(spatialSemanticsTypePerson);
-	// 	spatialSemanticsTypePerson.setAnnotation(this);
+	// public SpatialSemanticsTypeActorPerson addSpatialSemanticsTypeActorPerson(SpatialSemanticsTypeActorPerson spatialSemanticsTypeActorPerson) {
+	// 	getSpatialSemanticsTypeActorPersons().add(spatialSemanticsTypeActorPerson);
+	// 	spatialSemanticsTypeActorPerson.setAnnotation(this);
 
-	// 	return spatialSemanticsTypePerson;
+	// 	return spatialSemanticsTypeActorPerson;
 	// }
 
-	// public SpatialSemanticsTypePerson removeSpatialSemanticsTypePerson(SpatialSemanticsTypePerson spatialSemanticsTypePerson) {
-	// 	getSpatialSemanticsTypePersons().remove(spatialSemanticsTypePerson);
-	// 	spatialSemanticsTypePerson.setAnnotation(null);
+	// public SpatialSemanticsTypeActorPerson removeSpatialSemanticsTypeActorPerson(SpatialSemanticsTypeActorPerson spatialSemanticsTypeActorPerson) {
+	// 	getSpatialSemanticsTypeActorPersons().remove(spatialSemanticsTypeActorPerson);
+	// 	spatialSemanticsTypeActorPerson.setAnnotation(null);
 
-	// 	return spatialSemanticsTypePerson;
+	// 	return spatialSemanticsTypeActorPerson;
 	// }
 
 	// public List<SpatialSemanticsTypeSpace> getSpatialSemanticsTypeSpaces() {

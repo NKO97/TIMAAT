@@ -114,6 +114,13 @@
             required: true,
           },
         },
+        messages: {
+          displayTitle: {
+            required: "Enter a title (min length: 3)",
+            minlength: "Title too short: min length is 3",
+            maxlength: "Title is too long: max length is 200"
+          },
+        },
         submitHandler: function(mediumFormTitles) {
           mediumFormTitles.submit();
         },
@@ -130,6 +137,130 @@
         },
         submitHandler: function(mediumFormLanguageTracks) {
           mediumFormLanguageTracks.submit();
+        },
+      });
+      var actorFormMetadata = $("#timaat-actordatasets-actor-metadata-form");
+      var actorFormMetadataValidator = $("#timaat-actordatasets-actor-metadata-form").validate({
+        rules: {
+          displayName: {
+            required: true,
+            minlength: 3,
+            maxlength: 200
+          },
+          typeId: {
+            required: true,
+          }     
+        },
+        messages: {
+          displayName: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          },
+          typeId: {
+            required: "Please provide the type of the actor"
+          }
+        },
+        submitHandler: function(actorFormMetadata) {
+          actorFormMetadata.submit();
+        },
+      });
+      var actorFormNames = $("#timaat-actordatasets-actor-actornames-form");
+      var actorFormNamesValidator = $("#timaat-actordatasets-actor-actornames-form").validate({
+        rules: {
+          actorName: {
+            required: true,
+            minlength: 3,
+            maxlength: 200,
+          }
+        },
+        messages: {
+          actorName: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          }
+        },
+        submitHandler: function(actorFormNames) {
+          actorFormNames.submit();
+        },
+      });
+      var actorFormAddresses = $("#timaat-actordatasets-actor-addresses-form");
+      var actorFormAddressesValidator = $("#timaat-actordatasets-actor-addresses-form").validate({
+        rules: {
+          streetNumber: {
+            maxlength: 10,
+          },
+          streetAddition: {
+            maxlength: 50,
+          },
+          postalCode: {
+            maxlength: 8,
+          },
+          postOfficeBox: {
+            maxlength: 10,
+          },
+          addressType: {
+            required: true,
+          }
+        },
+        messages: {
+          streetNumber: {
+            maxlength: "Street number is too long: max length is 10"
+          },
+          streetAddition: {
+            maxlength: "Street addtition is too long: max length is 50"
+          },
+          postalCode: {
+            maxlength: "Postal code is too long: max length is 8"
+          },
+          postOfficeBox: {
+            maxlength: "Post office box is too long: max length is 10"
+          },
+          addressType: {
+            required: "Select an address type"
+          }
+        },
+        submitHandler: function(actorFormAddresses) {
+          actorFormAddresses.submit();
+        },
+      });
+      var actorFormEmailAddresses = $("#timaat-actordatasets-actor-emailaddresses-form");
+      var actorFormEmailAddressesValidator = $("#timaat-actordatasets-actor-emailaddresses-form").validate({
+        rules: {
+          email: {
+            email: true
+          },
+          emailAddressType: {
+            required: true,
+          }
+        },
+        messages: {
+          email: {
+            email: "Enter a valid email"
+          },
+          emailAddressType: {
+            required: "Select an email address type"
+          }
+        },
+        submitHandler: function(actorFormEmailAddresses) {
+          actorFormEmailAddresses.submit();
+        },
+      });
+      var actorFormPhoneNumbers = $("#timaat-actordatasets-actor-phonenumbers-form");
+      var actorFormPhoneNumbersValidator = $("#timaat-actordatasets-actor-phonenumbers-form").validate({
+        rules: {
+          emailAddressType: {
+            required: true,
+          }
+        },
+        messages: {
+          emailAddressType: {
+            required: "Select an email address type"
+          }
+        },
+        submitHandler: function(actorFormPhoneNumbers) {
+          actorFormPhoneNumbers.submit();
         },
       });
 

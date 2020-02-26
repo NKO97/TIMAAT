@@ -3,19 +3,25 @@
 	<persistence-unit name="FIPOP-JPA" transaction-type="RESOURCE_LOCAL">
 	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:/FIPOP</jta-data-source>   
-		<class>de.bitgilde.TIMAAT.model.FIPOP.AcademicTitle</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Actor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorCollective</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddressPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasEmailAddressPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasPhoneNumber</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasPhoneNumberPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorHasRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountry</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorIsLocatedInCountryPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorName</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorPerson</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorPersonIsMemberOfActorCollective</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorPersonIsMemberOfActorCollectivePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorRelatesToActorPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorType</class>
@@ -39,7 +45,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Citizenship</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.City</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Collective</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Country</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddress</class>
@@ -85,6 +90,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumDocument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguagePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumImage</class>
@@ -98,10 +105,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImagePK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Person</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollective</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonIsMemberOfCollectivePK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.PersonTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
@@ -138,8 +141,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRolePK</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

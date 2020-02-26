@@ -20,15 +20,24 @@ public class ActorHasAddressPK implements Serializable {
 
 	public ActorHasAddressPK() {
 	}
+	
+	public ActorHasAddressPK(int actorId, int addressId) {
+		this.actorId = actorId;
+		this.addressId = addressId;
+	}
+
 	public int getActorId() {
 		return this.actorId;
 	}
+
 	public void setActorId(int actorId) {
 		this.actorId = actorId;
 	}
+
 	public int getAddressId() {
 		return this.addressId;
 	}
+
 	public void setAddressId(int addressId) {
 		this.addressId = addressId;
 	}

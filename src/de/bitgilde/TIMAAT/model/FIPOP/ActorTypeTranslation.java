@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name="actor_type_translation")
-@NamedQuery(name="ActorTypeTranslation.findAll", query="SELECT a FROM ActorTypeTranslation a")
+@NamedQuery(name="ActorTypeTranslation.findAll", query="SELECT att FROM ActorTypeTranslation att")
 public class ActorTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -20,19 +20,24 @@ public class CategorySetHasCategoryPK implements Serializable {
 
 	public CategorySetHasCategoryPK() {
 	}
+	
 	public CategorySetHasCategoryPK(int categorySetId, int categoryId) {
 		this.categorySetId = categorySetId;
 		this.categoryId = categoryId;
 	}
+
 	public int getCategorySetId() {
 		return this.categorySetId;
 	}
+
 	public void setCategorySetId(int categorySetId) {
 		this.categorySetId = categorySetId;
 	}
+	
 	public int getCategoryId() {
 		return this.categoryId;
 	}
+
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}

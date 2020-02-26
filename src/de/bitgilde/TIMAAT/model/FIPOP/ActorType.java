@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -11,24 +14,17 @@ import java.util.List;
  */
 @Entity
 @Table(name="actor_type")
-@NamedQuery(name="ActorType.findAll", query="SELECT a FROM ActorType a")
+@NamedQuery(name="ActorType.findAll", query="SELECT at FROM ActorType at")
 public class ActorType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	//bi-directional many-to-many association to Actor
-	@ManyToMany
-	@JoinTable(
-		name="actor_has_actor_type"
-		, joinColumns={
-			@JoinColumn(name="actor_type_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="actor_id")
-			}
-		)
+	//bi-directional one-to-many association to Actor
+	@OneToMany(mappedBy = "actorType")
+	@JsonIgnore
 	private List<Actor> actors;
 
 	//bi-directional many-to-one association to ActorTypeTranslation

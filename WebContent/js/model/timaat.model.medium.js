@@ -191,7 +191,7 @@
 		}
 
 		updateUI() {
-//			console.log("TCL: Medium -> updateUI -> updateUI()");
+			// console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
 			var mediumType = $('#timaat-mediadatasets-media-metadata-form').data('mediumType');
 			var name = this.model.displayTitle.name;

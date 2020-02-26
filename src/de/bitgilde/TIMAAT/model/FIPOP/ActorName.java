@@ -4,8 +4,10 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -14,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="actor_name")
-@NamedQuery(name="Actorname.findAll", query="SELECT a FROM ActorName a")
+@NamedQuery(name="ActorName.findAll", query="SELECT an FROM ActorName an")
 public class ActorName implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -25,25 +27,26 @@ public class ActorName implements Serializable {
 	@Column(name="name")
 	private String name;
 
-	@Column(name="is_primary")
-	private int isPrimary;
-
-	@Column(name="text_direction")
-	private String textDirection;
+	@Column(name="is_display_name", columnDefinition = "BOOLEAN")
+	private Boolean isDisplayName;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="used_since")
-	private Date usedSince;
+	@Column(name="used_from")
+	private Date usedFrom;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="used_until")
 	private Date usedUntil;
 
 	//bi-directional many-to-one association to Actor
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JsonBackReference(value = "Actor-ActorName")
 	private Actor actor;
 
+	//bi-directional many-to-one association to Actor
+	@OneToMany(mappedBy="actorName")
+	@JsonIgnore
+	private List<Actor> actors;
 
 	public ActorName() {
 	}
@@ -56,14 +59,6 @@ public class ActorName implements Serializable {
 		this.id = id;
 	}
 
-	public String getTextDirection() {
-		return this.textDirection;
-	}
-
-	public void setTextDirection(String textDirection) {
-		this.textDirection = textDirection;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -72,12 +67,20 @@ public class ActorName implements Serializable {
 		this.name = name;
 	}
 
-	public Date getUsedSince() {
-		return this.usedSince;
+	public Boolean getIsDisplayName() {
+		return isDisplayName;
 	}
 
-	public void setUsedSince(Date usedSince) {
-		this.usedSince = usedSince;
+	public void setIsDisplayName(Boolean isDisplayName) {
+		this.isDisplayName = isDisplayName;
+	}
+
+	public Date getUsedFrom() {
+		return this.usedFrom;
+	}
+
+	public void setUsedFrom(Date usedFrom) {
+		this.usedFrom = usedFrom;
 	}
 
 	public Date getUsedUntil() {
@@ -88,6 +91,28 @@ public class ActorName implements Serializable {
 		this.usedUntil = usedUntil;
 	}
 
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public Actor addActors(Actor actors) {
+		getActors().add(actors);
+		actors.setBirthName(this);
+
+		return actors;
+	}
+
+	public Actor removeActors(Actor actors) {
+		getActors().remove(actors);
+		actors.setBirthName(null);
+
+		return actors;
+	}
+
 	public Actor getActor() {
 		return this.actor;
 	}
@@ -95,16 +120,5 @@ public class ActorName implements Serializable {
 	public void setActor(Actor actor) {
 		this.actor = actor;
 	}
-
-
-	public int getIsPrimary() {
-		return isPrimary;
-	}
-
-	public void setIsPrimary(int isPrimary) {
-		this.isPrimary = isPrimary;
-	}
-	
-	
 
 }

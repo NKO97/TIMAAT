@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="actor_actor_relationship_type")
-@NamedQuery(name="ActorActorRelationshipType.findAll", query="SELECT a FROM ActorActorRelationshipType a")
+@NamedQuery(name="ActorActorRelationshipType.findAll", query="SELECT aart FROM ActorActorRelationshipType aart")
 public class ActorActorRelationshipType implements Serializable {
 	private static final long serialVersionUID = 1L;
 

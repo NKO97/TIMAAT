@@ -97,6 +97,7 @@ public class TIMAATApp extends Application {
         resources.add(de.bitgilde.TIMAAT.rest.filter.CORSFilter.class);
         resources.add(de.bitgilde.TIMAAT.rest.filter.RangeResponseFilter.class);
         resources.add(MultiPartFeature.class);
+        resources.add(de.bitgilde.TIMAAT.rest.ActorEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.AnalysislistEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.AnnotationEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.AuthenticationEndpoint.class);

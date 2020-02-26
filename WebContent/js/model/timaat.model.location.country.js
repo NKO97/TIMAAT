@@ -109,7 +109,8 @@
 		updateUI() {
 			// console.log("TCL: Country -> updateUI -> updateUI()");
 			// title
-			var name = this.model.location.locationTranslations[0].name;
+			// console.log("TCL: Country -> updateUI -> this", this);
+			var name = this.model.locationTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-country-list-name').text(name);
 		}

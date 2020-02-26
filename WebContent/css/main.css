@@ -247,7 +247,9 @@ body.timaat-login-modal-open #wrapper {
 #timaat-mediadatasets-text-list li,
 #timaat-mediadatasets-video-list li,
 #timaat-mediadatasets-videogame-list li,
-#timaat-actor-list li {
+#timaat-actordatasets-actor-list li,
+#timaat-actordatasets-person-list li,
+#timaat-actordatasets-collective-list li {
 	cursor: pointer;
 	font-size: 90%;
 }
@@ -268,7 +270,9 @@ body.timaat-login-modal-open #wrapper {
 #timaat-mediadatasets-text-list li:hover,
 #timaat-mediadatasets-video-list li:hover,
 #timaat-mediadatasets-videogame-list li:hover,
-#timaat-actor-list li:hover {
+#timaat-actordatasets-actor-list li:hover,
+#timaat-actordatasets-person-list li:hover,
+#timaat-actordatasets-colective-list li:hover {
 	background-color: #e5e5e5;
 }
 
@@ -289,7 +293,9 @@ body.timaat-login-modal-open #wrapper {
 .timaat-mediadatasets-text-list-selected,
 .timaat-mediadatasets-video-list-selected,
 .timaat-mediadatasets-videogame-list-selected,
-.timaat-actor-list-selected {
+.timaat-actordatasets-actor-list-selected,
+.timaat-actordatasets-person-list-selected,
+.timaat-actordatasets-collective-list-selected {
 	background-color: #c9e2ff;
 }
 
@@ -310,7 +316,9 @@ body.timaat-login-modal-open #wrapper {
 .timaat-mediadatasets-text-list-selected:hover,
 .timaat-mediadatasets-video-list-selected:hover,
 .timaat-mediadatasets-videogame-list-selected:hover,
-.timaat-actor-list-selected:hover {
+.timaat-actordatasets-actor-list-selected:hover,
+.timaat-actordatasets-person-list-selected:hover,
+.timaat-actordatasets-collective-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
 
@@ -330,7 +338,9 @@ body.timaat-login-modal-open #wrapper {
 .timaat-mediadatasets-text-chooser,
 .timaat-mediadatasets-video-chooser,
 .timaat-mediadatasets-videogame-chooser,
-.timaat-actor-chooser {
+.timaat-actordatasets-actor-chooser,
+.timaat-actordatasets-person-chooser,
+.timaat-actordatasets-collective-chooser {
 	margin-top: 0.5em;
 }
 
@@ -350,7 +360,9 @@ body.timaat-login-modal-open #wrapper {
 .timaat-mediadatasets-text-remove,
 .timaat-mediadatasets-video-remove,
 .timaat-mediadatasets-videogame-remove,
-.timaat-actor-remove {
+.timaat-actordatasets-actor-remove,
+.timaat-actordatasets-person-remove,
+.timaat-actordatasets-collective-remove {
 	margin-right: 1em;
 }
 
@@ -616,6 +628,12 @@ select:disabled {
 	text-decoration: none;
 }
 
+.vertical-aligned {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 [data-role="add"], [data-role="remove"] {
   line-height: 1;
 }
@@ -654,4 +672,22 @@ select:disabled {
 
 .col-form-label.sm {
 	line-height: 1;
+}
+
+fieldset {
+	font-family: sans-serif;
+	border: 2px solid #acacac;
+	/* background: #ddd; */
+	border-radius: 5px;
+	padding: 3px;
+}
+
+fieldset legend {
+	background: #eeeeee;
+	/* color: #fff; */
+	padding: 0px 10px;
+	font-size: 18px;
+	border-radius: 5px;
+	/* box-shadow: 0 0 0 5px #ddd; */
+	/* margin-left: 10px; */
 }

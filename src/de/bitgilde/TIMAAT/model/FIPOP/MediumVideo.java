@@ -61,11 +61,9 @@ public class MediumVideo implements Serializable {
 	@JsonIgnore // MediumVideo is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
-	// new
 	@Transient
 	private String status;
 
-	// new
 	@Transient
 	private String viewToken;
 

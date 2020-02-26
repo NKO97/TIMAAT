@@ -575,7 +575,10 @@
 							locationType: {
 								id: 5 // 5 = Street. TODO check clause to find proper id
 							},
-						locationTranslations: [],
+						locationTranslations: [{
+							id: 282, // TODO change (temp value so actor can work)
+							name: name,
+						}],
 					};
 					var locationTranslation = {
 							id: 0,
@@ -748,6 +751,7 @@
 			// setup model
 			var locs = Array();
 			streets.forEach(function(street) { 
+      	// console.log("TCL: street", street);
 				if ( street.id > 0 )
 					locs.push(new TIMAAT.Street(street));
 			});

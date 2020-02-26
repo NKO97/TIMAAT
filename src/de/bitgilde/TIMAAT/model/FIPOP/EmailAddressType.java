@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -14,21 +14,21 @@ import java.util.List;
  */
 @Entity
 @Table(name="email_address_type")
-@NamedQuery(name="EmailAddressType.findAll", query="SELECT e FROM EmailAddressType e")
+@NamedQuery(name="EmailAddressType.findAll", query="SELECT eat FROM EmailAddressType eat")
 public class EmailAddressType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-one association to ActorHasEmailAddress
 	@OneToMany(mappedBy="emailAddressType")
-	@JsonManagedReference(value = "EmailAddressType-ActorHasEmailAddress")
+	@JsonIgnore
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
 	//bi-directional many-to-one association to EmailAddressTypeTranslation
 	@OneToMany(mappedBy="emailAddressType")
-	// @JsonManagedReference(value = "EmailAddressType-EmailAddressTypeTranslation")
 	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
 	public EmailAddressType() {

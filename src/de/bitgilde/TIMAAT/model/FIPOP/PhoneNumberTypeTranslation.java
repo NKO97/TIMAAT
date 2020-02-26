@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="phone_number_type_translation")
-@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT p FROM PhoneNumberTypeTranslation p")
+@NamedQuery(name="PhoneNumberTypeTranslation.findAll", query="SELECT pntt FROM PhoneNumberTypeTranslation pntt")
 public class PhoneNumberTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,13 +23,12 @@ public class PhoneNumberTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-PhoneNumberTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to PhoneNumberType
 	@ManyToOne
 	@JoinColumn(name="phone_number_type_id")
-	@JsonBackReference(value = "PhoneNumberType-PhoneNumberTypeTranslation")
+	@JsonIgnore
 	private PhoneNumberType phoneNumberType;
 
 	public PhoneNumberTypeTranslation() {

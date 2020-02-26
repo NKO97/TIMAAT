@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the province database table.
@@ -20,6 +22,7 @@ public class Province implements Serializable {
 	//bi-directional one-to-one association to Location
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="location_id")
+	@JsonIgnore
 	private Location location;
 
 	public Province() {
@@ -31,14 +34,6 @@ public class Province implements Serializable {
 
 	public void setLocationId(int locationId) {
 		this.locationId = locationId;
-	}
-
-	public int getId() { // TODO not necessary with getLocationId?
-		return this.getLocation().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setLocationId?
-		this.getLocation().setId(id);
 	}
 
 	public Location getLocation() {

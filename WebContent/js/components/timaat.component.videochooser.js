@@ -627,10 +627,11 @@
 			video.mediumHasActorWithRoles.forEach(function(role) {
 				if ( role.role.id == 112 ) actor = role.actor; // 112 == Producer, according to TIMAAT DB definition
 			});
-			if ( !actor || !actor.actorNames || actor.actorNames.length < 1 ) return producer;
-			actor.actorNames.forEach(function(name) {
-				if ( name.isPrimary && name.name ) producer = name.name; 
-			});
+			if ( !actor || !actor.displayName ) return producer;
+			// actor.actorNames.forEach(function(name) {
+				// if ( actor.displayName.name.isPrimary && name.name ) producer = name.name; 
+			producer = actor.displayName.name; 
+			// });
 			return producer;
 		},
 		

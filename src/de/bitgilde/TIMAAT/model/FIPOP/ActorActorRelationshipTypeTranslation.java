@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="actor_actor_relationship_type_translation")
-@NamedQuery(name="ActorActorRelationshipTypeTranslation.findAll", query="SELECT a FROM ActorActorRelationshipTypeTranslation a")
+@NamedQuery(name="ActorActorRelationshipTypeTranslation.findAll", query="SELECT aartt FROM ActorActorRelationshipTypeTranslation aartt")
 public class ActorActorRelationshipTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,8 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="post_office_box")
@@ -27,21 +27,25 @@ public class Address implements Serializable {
 	@Column(name="postal_code")
 	private String postalCode;
 
-	@Column(name="street_address_addition")
-	private String streetAddressAddition;
+	@Column(name="street_addition")
+	private String streetAddition;
 
-	@Column(name="street_address_number")
-	private String streetAddressNumber;
+	@Column(name="street_number")
+	private String streetNumber;
 
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="address")
-	@JsonManagedReference(value = "Address-ActorHasAddress")
+	@JsonIgnore
 	private List<ActorHasAddress> actorHasAddresses;
 
 	//bi-directional many-to-one association to Street
 	@ManyToOne
-	@JsonBackReference(value = "Street-Address")
 	private Street street;
+
+	//bi-directional many-to-one association to Medium
+	@OneToMany(mappedBy="primaryAddress")
+	@JsonIgnore
+	private List<Actor> actors;
 
 	public Address() {
 	}
@@ -70,20 +74,20 @@ public class Address implements Serializable {
 		this.postalCode = postalCode;
 	}
 
-	public String getStreetAddressAddition() {
-		return this.streetAddressAddition;
+	public String getStreetAddition() {
+		return this.streetAddition;
 	}
 
-	public void setStreetAddressAddition(String streetAddressAddition) {
-		this.streetAddressAddition = streetAddressAddition;
+	public void setStreetAddition(String streetAddition) {
+		this.streetAddition = streetAddition;
 	}
 
-	public String getStreetAddressNumber() {
-		return this.streetAddressNumber;
+	public String getStreetNumber() {
+		return this.streetNumber;
 	}
 
-	public void setStreetAddressNumber(String streetAddressNumber) {
-		this.streetAddressNumber = streetAddressNumber;
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
 	}
 
 	public List<ActorHasAddress> getActorHasAddresses() {
@@ -94,18 +98,18 @@ public class Address implements Serializable {
 		this.actorHasAddresses = actorHasAddresses;
 	}
 
-	public ActorHasAddress addActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().add(actorHasAddress);
-		actorHasAddress.setAddress(this);
+	public ActorHasAddress addActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().add(primaryAddress);
+		primaryAddress.setAddress(this);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
-	public ActorHasAddress removeActorHasAddress(ActorHasAddress actorHasAddress) {
-		getActorHasAddresses().remove(actorHasAddress);
-		actorHasAddress.setAddress(null);
+	public ActorHasAddress removeActorHasAddress(ActorHasAddress primaryAddress) {
+		getActorHasAddresses().remove(primaryAddress);
+		primaryAddress.setAddress(null);
 
-		return actorHasAddress;
+		return primaryAddress;
 	}
 
 	public Street getStreet() {
@@ -114,6 +118,28 @@ public class Address implements Serializable {
 
 	public void setStreet(Street street) {
 		this.street = street;
+	}
+
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public Actor addActors(Actor actors) {
+		getActors().add(actors);
+		actors.setPrimaryAddress(this);
+
+		return actors;
+	}
+
+	public Actor removeActors(Actor actors) {
+		getActors().remove(actors);
+		actors.setPrimaryAddress(null);
+
+		return actors;
 	}
 
 }

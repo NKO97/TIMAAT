@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class Country implements Serializable {
 	//bi-directional one-to-one association to Location
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="location_id")
+	@JsonIgnore
 	private Location location;
 
 	@Column(name="country_calling_code")
@@ -60,11 +60,6 @@ public class Country implements Serializable {
 		)
 	private List<Citizenship> citizenships;
 
-	//bi-directional many-to-one association to PhoneNumber
-	@OneToMany(mappedBy="country")
-	@JsonManagedReference(value = "Country-PhoneNumber")
-	private List<PhoneNumber> phoneNumbers;
-
 	public Country() {
 	}
 
@@ -74,14 +69,6 @@ public class Country implements Serializable {
 
 	public void setLocationId(int locationId) {
 		this.locationId = locationId;
-	}
-
-	public int getId() { // TODO not necessary with getLocationId?
-		return this.getLocation().getId();
-	}
-
-	public void setId(int id) { // TODO not necessary with setLocationId?
-		this.getLocation().setId(id);
 	}
 
 	public String getName() {
@@ -168,28 +155,6 @@ public class Country implements Serializable {
 
 	public void setCitizenships(List<Citizenship> citizenships) {
 		this.citizenships = citizenships;
-	}
-
-	public List<PhoneNumber> getPhoneNumbers() {
-		return this.phoneNumbers;
-	}
-
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
-	}
-
-	public PhoneNumber addPhoneNumber(PhoneNumber phoneNumber) {
-		getPhoneNumbers().add(phoneNumber);
-		phoneNumber.setCountry(this);
-
-		return phoneNumber;
-	}
-
-	public PhoneNumber removePhoneNumber(PhoneNumber phoneNumber) {
-		getPhoneNumbers().remove(phoneNumber);
-		phoneNumber.setCountry(null);
-
-		return phoneNumber;
 	}
 
 	public List<LocationTranslation> getLocationTranslations() {

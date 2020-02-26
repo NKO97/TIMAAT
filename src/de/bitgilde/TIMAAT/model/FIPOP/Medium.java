@@ -17,8 +17,6 @@ import java.util.List;
  * 
  */
 @Entity
-// @JsonInclude(value=Include.NON_NULL, content=Include.NON_NULL) //new
-// @SecondaryTable(name="medium_video", pkJoinColumns=@PrimaryKeyJoinColumn(name="medium_id")) // new
 @NamedQuery(name="Medium.findAll", query="SELECT m FROM Medium m")
 public class Medium implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -120,23 +118,6 @@ public class Medium implements Serializable {
 	//bi-directional one-to-one association to MediumDocument
 	@OneToOne(mappedBy="medium")
 	private MediumDocument mediumDocument;
-
-	// TOOD replace with proper medium_video table data
-	// new
-	// @Embedded
-	// @AttributeOverrides({
-	// 		@AttributeOverride(name="audio_codec_information_id", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="data_rate", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="episode_information_id", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="frame_rate", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="height", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="is_episode", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="length", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="total_bitrate", column=@Column(table="MediumVideo")),
-	// 		@AttributeOverride(name="video_vodec", column=@Column(table="MediumVideo")),
-	// @AttributeOverride(name="width", column=@Column(table="MediumVideo")),
-	// })
-	// private MediumVideo mediumVideo;
 
 	//bi-directional one-to-one association to MediumVideo
 	@OneToOne(mappedBy="medium")

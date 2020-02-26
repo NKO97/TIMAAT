@@ -45,17 +45,14 @@ public class Location implements Serializable {
 	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to City
-	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private City city;
 
 	//bi-directional one-to-one association to Country
-	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Country country;
 
 	//bi-directional one-to-one association to County
-	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private County county;
 
@@ -94,27 +91,26 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
-    // @JsonManagedReference(value = "Location-LocationTranslation")
+	@JsonManagedReference(value = "Location-LocationTranslation")
 	private List<LocationTranslation> locationTranslations;
 
-	//bi-directional many-to-one association to Person
-	@OneToMany(mappedBy="location1")
-    @JsonManagedReference(value = "Location-Person1")
-	private List<Person> persons1;
+	// //bi-directional many-to-one association to ActorPerson
+	// @OneToMany(mappedBy="location1")
+  //   @JsonManagedReference(value = "Location-ActorPerson1")
+	// private List<ActorPerson> actorPersons1;
 
-	//bi-directional many-to-one association to Person
-	@OneToMany(mappedBy="location2")
-    @JsonManagedReference(value = "Location-Person2")
-	private List<Person> persons2;
+	// //bi-directional many-to-one association to ActorPerson
+	// @OneToMany(mappedBy="location2")
+  //   @JsonManagedReference(value = "Location-ActorPerson2")
+	// private List<ActorPerson> actorPersons2;
 
 	//bi-directional one-to-one association to Province
-	@JsonIgnore
 	@OneToOne(mappedBy="location")
 	private Province province;
 
 	//bi-directional one-to-one association to Street
 	@OneToOne(mappedBy="location")
-	@JsonManagedReference(value = "Location-Street")
+	// @JsonManagedReference(value = "Location-Street")
 	private Street street;
 
 	//bi-directional many-to-many association to Territory
@@ -286,49 +282,49 @@ public class Location implements Serializable {
 		return locationTranslation;
 	}
 
-	public List<Person> getPersons1() {
-		return this.persons1;
-	}
+	// public List<ActorPerson> getActorPersons1() {
+	// 	return this.actorPersons1;
+	// }
 
-	public void setPersons1(List<Person> persons1) {
-		this.persons1 = persons1;
-	}
+	// public void setActorPersons1(List<ActorPerson> actorPersons1) {
+	// 	this.actorPersons1 = actorPersons1;
+	// }
 
-	public Person addPersons1(Person persons1) {
-		getPersons1().add(persons1);
-		persons1.setLocation1(this);
+	// public ActorPerson addActorPersons1(ActorPerson actorPersons1) {
+	// 	getActorPersons1().add(actorPersons1);
+	// 	actorPersons1.setPlaceOfBirth(this);
 
-		return persons1;
-	}
+	// 	return actorPersons1;
+	// }
 
-	public Person removePersons1(Person persons1) {
-		getPersons1().remove(persons1);
-		persons1.setLocation1(null);
+	// public ActorPerson removeActorPersons1(ActorPerson actorPersons1) {
+	// 	getActorPersons1().remove(actorPersons1);
+	// 	actorPersons1.setPlaceOfBirth(null);
 
-		return persons1;
-	}
+	// 	return actorPersons1;
+	// }
 
-	public List<Person> getPersons2() {
-		return this.persons2;
-	}
+	// public List<ActorPerson> getActorPersons2() {
+	// 	return this.actorPersons2;
+	// }
 
-	public void setPersons2(List<Person> persons2) {
-		this.persons2 = persons2;
-	}
+	// public void setActorPersons2(List<ActorPerson> actorPersons2) {
+	// 	this.actorPersons2 = actorPersons2;
+	// }
 
-	public Person addPersons2(Person persons2) {
-		getPersons2().add(persons2);
-		persons2.setLocation2(this);
+	// public ActorPerson addActorPersons2(ActorPerson actorPersons2) {
+	// 	getActorPersons2().add(actorPersons2);
+	// 	actorPersons2.setPlaceOfDeath(this);
 
-		return persons2;
-	}
+	// 	return actorPersons2;
+	// }
 
-	public Person removePersons2(Person persons2) {
-		getPersons2().remove(persons2);
-		persons2.setLocation2(null);
+	// public ActorPerson removeActorPersons2(ActorPerson actorPersons2) {
+	// 	getActorPersons2().remove(actorPersons2);
+	// 	actorPersons2.setPlaceOfDeath(null);
 
-		return persons2;
-	}
+	// 	return actorPersons2;
+	// }
 
 	public Province getProvince() {
 		return this.province;

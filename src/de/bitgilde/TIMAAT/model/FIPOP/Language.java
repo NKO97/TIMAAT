@@ -33,7 +33,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-ActorActorRelationshipTypeTranslation")
 	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to ActorTypeTranslation
@@ -44,7 +43,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to AddressTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-AddressTypeTranslation")
 	private List<AddressTypeTranslation> addressTypeTranslations;
 
 	//bi-directional many-to-one association to AmbienceSubtypeTranslation
@@ -152,7 +150,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-CitizenshipTranslation")
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-one association to ConceptColorTranslation
@@ -183,31 +180,26 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to EmailAddressTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-EmailAddressTypeTranslation")
 	private List<EmailAddressTypeTranslation> emailAddressTypeTranslations;
 
 	//bi-directional many-to-one association to EventDomainTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-EventDomainTranslation")
 	private List<EventDomainTranslation> eventDomainTranslations;
 
 	//bi-directional many-to-one association to EventEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-EventEventRelationshipTypeTranslation")
 	private List<EventEventRelationshipTypeTranslation> eventEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-EventTranslation")
 	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to EventTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-EventTypeTranslation")
 	private List<EventTypeTranslation> eventTypeTranslations;
 
 	//bi-directional many-to-one association to FrequencyOfEventsTranslation
@@ -238,13 +230,11 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-LocationTranslation")
 	private List<LocationTranslation> locationTranslations;
 
 	//bi-directional many-to-one association to LocationTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-LocationTypeTranslation")
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
 	//bi-directional many-to-one association to MartinezScheffelUnreliableNarrationTranslation
@@ -265,7 +255,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to MediaTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-MediaTypeTranslation")
 	private List<MediaTypeTranslation> mediaTypeTranslations;
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
@@ -277,7 +266,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-MediumEventRelationshipTypeTranslation")
 	private List<MediumEventRelationshipTypeTranslation> mediumEventRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to MediumHasLanguage
@@ -340,16 +328,14 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<NoiseTypeTranslation> noiseTypeTranslations;
 
-	//bi-directional many-to-one association to PersonTranslation
+	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-PersonTranslation")
-	private List<PersonTranslation> personTranslations;
+	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-PhoneNumberTypeTranslation")
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
 	//bi-directional many-to-one association to RatingCategoryTranslation
@@ -365,13 +351,11 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to RoleGroupTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-RoleGroupTranslation")
 	private List<RoleGroupTranslation> roleGroupTranslations;
 
 	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to SegmentSelectorTypeTranslation
@@ -383,7 +367,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to SexTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-SexTranslation")
 	private List<SexTranslation> sexTranslations;
 
 	//bi-directional many-to-one association to SiocContainer
@@ -446,10 +429,10 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<SoundEffectTypeTranslation> soundEffectTypeTranslations;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypePersonTranslation
+	//bi-directional many-to-one association to SpatialSemanticsTypeActorPersonTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
-	// private List<SpatialSemanticsTypePersonTranslation> spatialSemanticsTypePersonTranslations;
+	// private List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations;
 
 	//bi-directional many-to-one association to SpatialSemanticsTypeSpaceTranslation
 	// @OneToMany(mappedBy="language")
@@ -475,7 +458,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-TerritoryTranslation")
 	private List<TerritoryTranslation> territoryTranslations;
 
 	//bi-directional many-to-one association to TimeOfTheNarratingTranslation
@@ -486,7 +468,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to Title
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-Title")
 	private List<Title> titles;
 
 	//bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation
@@ -1856,26 +1837,26 @@ public class Language implements Serializable {
 	// 	return noiseTypeTranslation;
 	// }
 
-	public List<PersonTranslation> getPersonTranslations() {
-		return this.personTranslations;
+	public List<ActorPersonTranslation> getActorPersonTranslations() {
+		return this.actorPersonTranslations;
 	}
 
-	public void setPersonTranslations(List<PersonTranslation> personTranslations) {
-		this.personTranslations = personTranslations;
+	public void setActorPersonTranslations(List<ActorPersonTranslation> actorPersonTranslations) {
+		this.actorPersonTranslations = actorPersonTranslations;
 	}
 
-	public PersonTranslation addPersonTranslation(PersonTranslation personTranslation) {
-		getPersonTranslations().add(personTranslation);
-		personTranslation.setLanguage(this);
+	public ActorPersonTranslation addActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().add(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(this);
 
-		return personTranslation;
+		return actorPersonTranslation;
 	}
 
-	public PersonTranslation removePersonTranslation(PersonTranslation personTranslation) {
-		getPersonTranslations().remove(personTranslation);
-		personTranslation.setLanguage(null);
+	public ActorPersonTranslation removeActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().remove(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(null);
 
-		return personTranslation;
+		return actorPersonTranslation;
 	}
 
 	public List<PhoneNumberTypeTranslation> getPhoneNumberTypeTranslations() {
@@ -2296,26 +2277,26 @@ public class Language implements Serializable {
 	// 	return soundEffectTypeTranslation;
 	// }
 
-	// public List<SpatialSemanticsTypePersonTranslation> getSpatialSemanticsTypePersonTranslations() {
-	// 	return this.spatialSemanticsTypePersonTranslations;
+	// public List<SpatialSemanticsTypeActorPersonTranslation> getSpatialSemanticsTypeActorPersonTranslations() {
+	// 	return this.spatialSemanticsTypeActorPersonTranslations;
 	// }
 
-	// public void setSpatialSemanticsTypePersonTranslations(List<SpatialSemanticsTypePersonTranslation> spatialSemanticsTypePersonTranslations) {
-	// 	this.spatialSemanticsTypePersonTranslations = spatialSemanticsTypePersonTranslations;
+	// public void setSpatialSemanticsTypeActorPersonTranslations(List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations) {
+	// 	this.spatialSemanticsTypeActorPersonTranslations = spatialSemanticsTypeActorPersonTranslations;
 	// }
 
-	// public SpatialSemanticsTypePersonTranslation addSpatialSemanticsTypePersonTranslation(SpatialSemanticsTypePersonTranslation spatialSemanticsTypePersonTranslation) {
-	// 	getSpatialSemanticsTypePersonTranslations().add(spatialSemanticsTypePersonTranslation);
-	// 	spatialSemanticsTypePersonTranslation.setLanguage(this);
+	// public SpatialSemanticsTypeActorPersonTranslation addSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
+	// 	getSpatialSemanticsTypeActorPersonTranslations().add(spatialSemanticsTypeActorPersonTranslation);
+	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(this);
 
-	// 	return spatialSemanticsTypePersonTranslation;
+	// 	return spatialSemanticsTypeActorPersonTranslation;
 	// }
 
-	// public SpatialSemanticsTypePersonTranslation removeSpatialSemanticsTypePersonTranslation(SpatialSemanticsTypePersonTranslation spatialSemanticsTypePersonTranslation) {
-	// 	getSpatialSemanticsTypePersonTranslations().remove(spatialSemanticsTypePersonTranslation);
-	// 	spatialSemanticsTypePersonTranslation.setLanguage(null);
+	// public SpatialSemanticsTypeActorPersonTranslation removeSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
+	// 	getSpatialSemanticsTypeActorPersonTranslations().remove(spatialSemanticsTypeActorPersonTranslation);
+	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(null);
 
-	// 	return spatialSemanticsTypePersonTranslation;
+	// 	return spatialSemanticsTypeActorPersonTranslation;
 	// }
 
 	// public List<SpatialSemanticsTypeSpaceTranslation> getSpatialSemanticsTypeSpaceTranslations() {

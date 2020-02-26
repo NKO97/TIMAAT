@@ -3,20 +3,21 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
- * The persistent class for the person_translation database table.
+ * The persistent class for the actor_person_translation database table.
  * 
  */
 @Entity
-@Table(name="person_translation")
-@NamedQuery(name="PersonTranslation.findAll", query="SELECT p FROM PersonTranslation p")
-public class PersonTranslation implements Serializable {
+@Table(name="actor_person_translation")
+@NamedQuery(name="ActorPersonTranslation.findAll", query="SELECT apt FROM ActorPersonTranslation apt")
+public class ActorPersonTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="special_features")
@@ -24,15 +25,15 @@ public class PersonTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-PersonTranslation")
 	private Language language;
 
-	//bi-directional many-to-one association to Person
+	//bi-directional many-to-one association to ActorPerson
 	@ManyToOne
-	@JsonBackReference(value = "Person-PersonTranslation")
-	private Person person;
+	@JsonIgnore
+	@JoinColumn(name="actor_person_actor_id")
+	private ActorPerson actorPerson;
 
-	public PersonTranslation() {
+	public ActorPersonTranslation() {
 	}
 
 	public int getId() {
@@ -59,12 +60,12 @@ public class PersonTranslation implements Serializable {
 		this.language = language;
 	}
 
-	public Person getPerson() {
-		return this.person;
+	public ActorPerson getActorPerson() {
+		return this.actorPerson;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setActorPerson(ActorPerson actorPerson) {
+		this.actorPerson = actorPerson;
 	}
 
 }

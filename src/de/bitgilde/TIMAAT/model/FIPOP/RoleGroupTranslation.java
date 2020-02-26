@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="role_group_translation")
-@NamedQuery(name="RoleGroupTranslation.findAll", query="SELECT r FROM RoleGroupTranslation r")
+@NamedQuery(name="RoleGroupTranslation.findAll", query="SELECT rgt FROM RoleGroupTranslation rgt")
 public class RoleGroupTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 

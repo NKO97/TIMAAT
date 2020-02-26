@@ -52,7 +52,7 @@
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
     
-    <style type='text/css'>
+    <style type="text/css">
       body { margin:0; padding:0; }
       #tooltip {
         display: none;
@@ -135,9 +135,9 @@
       -->
     </div>
     <div id="wrapper" class="toggled">
-    <div class="navigation">
-      <!-- Navigation -->
-      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navigation">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
           <a class="navbar-brand"><img src="img/bitgilde-small.png" style="height: 32px;float: left;margin-top:-6px;padding-right: 15px;" title="bitGilde IT Solutions UG" alt="bitGilde Logo" /> TIMAAT - Time-based Image Area Annotation Tool</a>
         </div>
@@ -215,12 +215,12 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                     </div>"
-                  title="Medien">
+                  title="Media">
                   <i class="fas fa-photo-video"></i>
                 </a>
               </li> 
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors isDisabled">
-                <!-- <a href="#actors"
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
+                <a href="#actors"
                   onclick="TIMAAT.UI.showComponent('actors')"
                   data-toggle="popover"
                   data-trigger="hover"
@@ -231,7 +231,7 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                     </div>" 
-                  title="Akteure"> -->
+                  title="Actors">
                   <i class="fas fa-users"></i>
                 </a>
               </li>
@@ -249,7 +249,7 @@
                     </div>"
                   title="Orte"> -->
                   <i class="fas fa-map-marked-alt"></i>
-                </a>
+                <!-- </a> -->
               </li>              
               <li class="timaat-sidebar-tab timaat-sidebar-tab-events isDisabled">
                 <!-- <a href="#events"
@@ -265,14 +265,14 @@
                     </div>"
                   title="Ereignisse"> -->
                   <i class="fas fa-calendar-alt"></i>
-                </a>
+                <!-- </a> -->
               </li>
             </ul>
           </div>
           <!-- /.navbar-static-side -->
         </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
       <div id="page-wrapper">
         <!-------------------------------------------------------------------->
         <!-- Video-Library                                                  -->
@@ -498,7 +498,7 @@
 		<div class="input-group-prepend">
 			<span class="input-group-text">Start</span>
 		</div>
-		<input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start"placeholder="00:00:00" aria-label="Start Timecode" />
+		<input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
 		<div class="input-group-append">
 			<button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
 		</div>
@@ -793,23 +793,23 @@
           <div> <!-- delete modals-->
             <!-- delete medium -->
             <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="mediumDeleteLabel">Medium löschen</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      Möchten Sie das ausgewählte Medium löschen?
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                      <button type="button" class="btn btn-danger" id="timaat-mediadatasets-medium-delete-submit">Medium löschen</button>
-                    </div>
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="mediumDeleteLabel">Medium löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Möchten Sie das ausgewählte Medium löschen?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-medium-delete-submit">Medium löschen</button>
                   </div>
                 </div>
+              </div>
             </div> 
             <!-- delete audio -->
             <div class="modal fade" id="timaat-mediadatasets-audio-delete" tabindex="-1" role="dialog" aria-labelledby="audioDeleteLabel" aria-hidden="true">
@@ -977,7 +977,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Medien</a>
+                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="audios-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
@@ -1007,12 +1007,12 @@
                     <!-- Media lists -->
                     <div class="col-md-4">
                       <div class="card media-cards media-card">
-                        <div class="card-header">Medien
+                        <div class="card-header">Media
                           <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button> -->
                         </div>
-                        <div class="timaat-mediadatasets-medium-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-medium-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-medium-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1025,7 +1025,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-audio-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-audio-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-audio-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1038,7 +1038,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-document-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-document-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-document-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1051,7 +1051,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-image-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-image-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-image-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1064,7 +1064,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-software-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-software-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-software-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1077,7 +1077,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-text-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-text-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-text-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1090,7 +1090,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-video-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-video-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-video-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1103,7 +1103,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-videogame-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-mediadatasets-videogame-list-wrapper" style="max-height: 480px">
                           <div id="timaat-mediadatasets-videogame-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1136,10 +1136,10 @@
                           <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datenblatt</a>
                         </li>
                         <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-titles-form" href="#mediumTitles">Medientitel</a>
+                          <a class="nav-link nav-link-media" id="media-tab-medium-titles-form" href="#mediumTitles">Mediumtitles</a>
                         </li>
-                        <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
+                        <li class="nav-item media-data-tabs languagetrack-data-tab">
+                          <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Sprachen</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -1151,28 +1151,28 @@
                               <h5 class="form-title caps-title" id="mediumFormHeader">Medium</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-medium-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-medium-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-audio-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-audio-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-document-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-document-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-image-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-image-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-software-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-software-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-text-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-text-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-video-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-video-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-videogame-metadata-form-edit" title= "Datensatz bearbeiten" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-videogame-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -1329,38 +1329,41 @@
                           <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-remark">Remark</label>
                           <textarea class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                         </div>
-                        <div class="medium-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-medium-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="audio-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-audio-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-audio-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="document-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-document-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-document-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="image-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-image-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-image-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="software-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-software-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-software-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="text-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-text-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-text-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="video-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-video-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-video-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
-                        <div class="videogame-datasheet-form-submit datasheet-form-buttons">
-                          <button type="button" class="btn btn-primary" id="timaat-mediadatasets-videogame-metadata-form-submit" name="submit" type="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-videogame-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <!-- <div class="form-buttons"> -->
+                          <div class="medium-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-medium-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="audio-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-audio-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-audio-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="document-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-document-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-document-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="image-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-image-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-image-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="software-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-software-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-software-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="text-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-text-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-text-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="video-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-video-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-video-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="videogame-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-videogame-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-videogame-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                        <!-- </div> -->
                       </form>
                       <!-- titles form -->
                       <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
@@ -1409,7 +1412,7 @@
                             </div>
                           </div>
                         </div>
-                        <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit" type="submit">Speichern</button>
+                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- language tracks form -->
@@ -1453,7 +1456,7 @@
                             </div>
                           </div>
                         </div>
-                        <button type="button" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done" type="submit">Fertig</button>
+                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Fertig</button>
                       </form>
                     </div>
                   </div>
@@ -1466,95 +1469,651 @@
         <!-- Actors                                                         -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-actors">
-          <!-- delete actor -->
-          <div class="modal fade" id="timaat-actordatasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="actorDeleteLabel">Akteur löschen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Möchten Sie den ausgewählten Akteur löschen?
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-danger" id="timaat-actor-delete-submit">Akteur löschen</button>
+          <div> <!-- delete modals-->
+            <!-- delete actor -->
+            <div class="modal fade" id="timaat-actordatasets-actor-delete" tabindex="-1" role="dialog" aria-labelledby="actorDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="actorDeleteLabel">Akteur löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Möchten Sie den ausgewählten Akteur löschen?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-actordatasets-actor-delete-submit">Akteur löschen</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- add Actor -->
-          <div class="modal fade" id="timaat-actordatasets-actor-meta" tabindex="-1" role="dialog" aria-labelledby="actorMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="actorMetaLabel">Akteur hinzufügen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+            <!-- delete person -->
+            <div class="modal fade" id="timaat-actordatasets-person-delete" tabindex="-1" role="dialog" aria-labelledby="personDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="personDeleteLabel">Person löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Möchten Sie die ausgewählte Person löschen?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-actordatasets-person-delete-submit">Person löschen</button>
+                  </div>
                 </div>
-                <div class="modal-body">
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control form-control-sm" id="timaat-actor-meta-title" placeholder="Title" aria-label="Title">
+              </div>
+            </div>
+            <!-- delete collective -->
+            <div class="modal fade" id="timaat-actordatasets-collective-delete" tabindex="-1" role="dialog" aria-labelledby="collectiveDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="collectiveDeleteLabel">Kollektiv löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                  <!-- <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Von</span>
-                    </div>
-                    <input type="date" class="form-control form-control-sm" id="timaat-actor-meta-start" aria-label="Actor Start Date">
-                    <div class="input-group-prepend">  
-                      <span class="input-group-text">Bis</span> 
-                    </div>         
-                    <input type="date" class="form-control form-control-sm" id="timaat-actor-meta-end" aria-label="Evend End Date">
+                  <div class="modal-body">
+                    Möchten Sie das ausgewählte Kollektiv löschen?
                   </div>
-                  <div class="input-group mb-3">
-                    <textarea class="form-control form-control-sm" aria-label="Beschreibung" id="timaat-actor-meta-description" placeholder="Beschreibung eingeben"></textarea>
-                  </div> -->   
-                </div>   
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-actor-meta-submit" disabled>Hinzufügen</button>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-actordatasets-collective-delete-submit">Kollektiv löschen</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="row" style="padding-top: 1em;">
-            <div class="col-lg-12">
+            <div class="col-md-12">
               <!-- Nav bar tabs -->
-              <!-- <ul class="nav nav-tabs" id="actors-tabs" role="tablist">
-                <li class="nav-item">          
-                  <a class="nav-link active" href="#actors">
-                    <i class="fas fa-users"></i> Akteure
-                  </a>
+              <ul class="nav nav-pills" id="actors-tabs" role="tablist">
+                <li class="nav-item active">
+                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true"><i class="fas fa-id-badge"></i> Actors</a>
                 </li>
-              </ul>   -->
-              <div class="tab-content" id="content">
-                <!-- Actors UI -->
+                <li class="nav-item">
+                  <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false"><i class="fas fa-address-card"></i> Persons</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="collectives-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('collective')" data-toggle="tab" href="#collectives" role="tab" aria-controls="collectives" aria-selected="false"><i class="fas fa-users"></i> Collectives</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="actorsTabsContent">
                 <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors-tab">
                   <div class="row ui" style="padding-top: 1em;">
-                    <div class="col-lg-6">
-                      <div class="card">
-                        <div class="card-header">Akteure
-                          <button type="button" id="timaat-actor-add" class="btn btn-outline btn-success btn-sm float-right">
+                    <!-- Actors lists -->
+                    <div class="col-md-4">
+                      <div class="card actors-cards actors-card">
+                        <div class="card-header">Actors
+                          <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button> -->
+                        </div>
+                        <div class="timaat-actordatasets-actor-list-wrapper" style="max-height: 480px">
+                          <div id="timaat-actordatasets-actor-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                      <div class="card actors-cards persons-card">
+                        <div class="card-header">Persons
+                          <button type="button" id="timaat-actordatasets-person-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Person">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-actor-list-wrapper" style="max-height: 480px;min-height: 100px">
-                          <div id="timaat-actor-list-loader" class="text-center card-body bg-info text-white">
+                        <div class="timaat-actordatasets-person-list-wrapper" style="max-height: 480px">
+                          <div id="timaat-actordatasets-person-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actor-list" class="list-group list-group-flush"></ul>
+                          <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                      <div class="card actors-cards collectives-card">
+                        <div class="card-header">Collectives
+                          <button type="button" id="timaat-actordatasets-collective-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Collective">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-actordatasets-collective-list-wrapper" style="max-height: 480px">
+                          <div id="timaat-actordatasets-collective-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <ul id="timaat-actordatasets-collective-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
                     </div>
+                    <!-- Actors data -->
+                    <div class="col-md-8" id="timaat-actordatasets-actors-tabs">
+                      <ul class="nav nav-tabs actors-nav-tabs">
+                        <li class="nav-item actors-data-tabs actor-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-metadata-form" href="#actorDatasheet">Datasheet</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs person-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-person-metadata-form" href="#personDatasheet">Datasheet</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs collective-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-collective-metadata-form" href="#collectiveDatasheet">Datasheet</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs name-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-names-form" href="#actorNames">Names</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs address-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-addresses-form" href="#actorAddresses">Addresses</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs emailaddress-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-emailaddresses-form" href="#actorEmailAddresses">Emails</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs phonenumber-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-phonenumbers-form" href="#actorPhoneNumbers">Phone Numbers</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs memberofcollective-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-memberofcollectives-form" href="#actorMemberOfCollectives">Memberships</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs actoractorrelationship-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-actorrelationships-form" href="#actorActorRelatiohships">Actor Relationships</a>
+                        </li>
+                        <li class="nav-item actors-data-tabs locatedincountry-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-locatedincountry-form" href="#actorLocatedInCountries">Whereabouts</a>
+                        </li>
+                      </ul>
+                      <!-- Data tab content -->
+                      <!-- datasheet form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-metadata-form" name="timaat-actordatasets-actor-metadata-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorFormHeader">Actor</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-actor-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-person-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-collective-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Actor data -->
+                        <div class="form-group datasheet-data actor-data"> <!-- actor base information -->
+                          <fieldset>
+                            <legend>Name</legend>
+                            <div class="form-row">
+                              <div class="col-md-2 person-data person-title-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-title">Title</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-title" name="title" placeholder="[Enter Title]" aria-describedby="Title">
+                              </div>
+                              <div class="col">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name">Display Name*</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name" name="displayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name-usedfrom">Name used from</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name-usedfrom" name="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
+                              </div>
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name-useduntil">Name used until</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name-useduntil" name="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-isfictional">Is fictional</label>
+                                <input type="checkbox" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-isfictional" name="isFictional" placeholder="[Is actor fictional]" aria-describedby="Is actor fictional">
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="form-group datasheet-data actortype-data"> <!-- actor type information -->
+                          <fieldset>
+                            <legend>Actor type</legend>
+                            <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-actortype-id">Actor Type*</label>
+                            <select class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-actortype-id" name="typeId" required>
+                              <option value="" disabled selected hidden>[Choose actor type...]</option>
+                              <option value="1">Person</option>
+                              <option value="2">Collective</option>
+                            </select>
+                          </fieldset>
+                        </div>                        
+                        <div class="form-group datasheet-data person-data"> <!-- person bio information -->
+                          <fieldset>
+                            <legend>Bio</legend>
+                            <div class="form-row">
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-dateofbirth">Date of birth</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-dateofbirth" name="dateOfBirth" placeholder="[Enter date of birth]" aria-describedby="Date of birth">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-placeofbirth">Place of birth</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-placeofbirth" name="placeOfBirth" placeholder="[Enter place of birth]" aria-describedby="Place of birth" readonly>
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-dayofdeath">Day of death</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-dayofdeath" name="dayOfDeath" placeholder="[Enter day of death]" aria-describedby="Day of death">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-placeofdeath">Place of death</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-placeofdeath" name="placeOfDeath" placeholder="[Enter place of death]" aria-describedby="Place of death" readonly>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-sex-type">Sex</label>
+                                <select class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-sex-type" name="sexId">
+                                  <option value="" disabled selected hidden>[Choose sex...]</option>
+                                  <option value="1">Male</option>
+                                  <option value="2">Female</option>
+                                  <option value="3">Other</option>
+                                  <option value="4">Unknown</option>
+                                </select>
+                              </div>
+                              <div class="col-md-9">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-citizenship-name">Citizenship</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-citizenship-name" name="citizenshipName" placeholder="[Enter citizenship]" aria-describedby="Citizenship">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-12">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-specialfeatures">Special features</label>
+                                <textarea class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-specialfeatures" name="specialFeatures" placeholder="[Enter special features]" aria-describedby="Special features"></textarea>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>                        
+                        <div class="form-group datasheet-data collective-data"> <!-- collective information -->
+                          <fieldset>
+                            <legend>Period of activity</legend>
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-founded">Founded</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-founded" name="founded" placeholder="[Enter founded date]" aria-describedby="Founded date">
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-collective-metadata-disbanded">Disbanded</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-collective-metadata-disbanded" name="disbanded" placeholder="[Enter disbanded date]" aria-describedby="Disbanded date">
+                                </div>
+                              </div>
+                          </fieldset>
+                        </div>
+                        <!-- <div class="form-group datasheet-data person-data"> <!~~ person is member of collective data ~~>
+                          <div class="form-row">
+                            <div class="col-md-8">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-memberof">Member of collective</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-memberof" name="memberOfCollective" placeholder="[Enter collective]" aria-describedby="Member of collective">
+                            </div>
+                            <div class="col-md-2">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-joined">Joined Collective</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-joined" name="joined" placeholder="[Enter join date]" aria-describedby="Join date">
+                            </div>
+                            <div class="col-md-2">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-left">Left Collective</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-left" name="left" placeholder="[Enter leave date]" aria-describedby="Leave date">
+                            </div>
+                          </div>
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-phone-data"> <!~~ actor phone number information ~~>
+                          <fieldset>
+                            <legend>Phone number</legend>
+                            <div class="form-row">
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-phonenumber-iddprefix">IDD prefix</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-phonenumber-iddprefix" name="iddPrefix" placeholder="[Enter idd prefix]" aria-describedby="International direct dialing prefix">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-phonenumber-areacode">Area code</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-phonenumber-areacode" name="areaCode" placeholder="[Enter area code]" aria-describedby="Area code">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-phonenumber">Number</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-phonenumber" name="phoneNumber" placeholder="[Enter phone number]" aria-describedby="Phone number">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-phonenumber-type">Type</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-phonenumber-type" name="phoneNumberTypeId" placeholder="[Enter phone number type]" aria-describedby="Phone number type">
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-address-data"> <!~~ actor address information ~~>
+                          <fieldset>  <!~~ TODO additional address fields like city ~~>
+                            <legend>Address</legend>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-street">Street</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-street" name="street" placeholder="[Enter street]" aria-describedby="Street">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-streetnumber">Street number</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-streetnumber" name="streetNumber" placeholder="[Enter street number]" aria-describedby="Street number">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-streetaddition">Street addition</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-streetaddition" name="streetAddition" placeholder="[Enter street addition]" aria-describedby="Street addition">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-postalcode">Postal code</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-postalcode" name="postalCode" placeholder="[Enter postal code]" aria-describedby="Postal code">
+                              </div>
+                              <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-postofficebox">Post office box</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-postofficebox" name="postOfficeBox" placeholder="[Enter post office box]" aria-describedby="Post office box">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-type">Address Type</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-type" name="addressTypeId" placeholder="[Enter address type]" aria-describedby="Address type">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-usedfrom">Address used from</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-usedfrom" name="addressUsedFrom" placeholder="[Enter address used from]" aria-describedby="Address used from">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-address-useduntil">Address used until</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-address-useduntil" name="addressUsedUntil" placeholder="[Enter address used until]" aria-describedby="Address used until">
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data actor-email-data"> <!~~ actor email address information ~~>
+                          <fieldset>
+                            <legend>Email</legend>
+                            <div class="form-row">
+                              <div class="col-md-8">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-emailaddress-email">Email</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-email-address" name="emailAddress" placeholder="[Enter email address]" aria-describedby="Email">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-emailaddress-type">Email type</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-email-type" name="emailTypeId" placeholder="[Enter email type]" aria-describedby="Email type">
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data"> <!~~ actor location information ~~>
+                          <div class="form-row">
+                            <div class="col-md-8">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-locatedincountry-country">Located in country</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-locatedincountry-country" name="locatedInCountry" placeholder="[Enter country]" aria-describedby="Enter country">
+                            </div>
+                            <div class="col-md-2">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-locatedincountry-from">From</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-locatedincountry" name="locatedincountry" placeholder="[Enter from date]" aria-describedby="Phone number">
+                            </div>
+                            <div class="col-md-2">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-locatedincountry-until">Until</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-locatedincountry-type" name="locatedincountryType" placeholder="[Enter until date]" aria-describedby="Phone number type">
+                            </div>
+                          </div>
+                        </div> -->
+                        <!-- <div class="form-group datasheet-data actor-data"> <!~~ actor roles information ~~>
+                          <div class="form-row">
+                            <div class="col-md-12">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-actorhasrole">Actor has role</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-actorhasrole" name="actorHasRole" placeholder="[Enter actor's role]" aria-describedby="Actor's role">
+                            </div>
+                          </div>
+                        </div>  -->
+                        <!-- <div class="form-group datasheet-data actor-data"> <!~~ actor relates to actor information ~~>
+                          <div class="form-row">
+                            <div class="col-md-6">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-actorrelatestoactor-actor">Actor relates to actor</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-actorrelatestoactor-actor" name="actorRelatesToActorActor" placeholder="[Enter actor]" aria-describedby="Relates to actor">
+                            </div>
+                            <div class="col-md-6">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-actorrelatestoactor-type">Type of relationship</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-actorrelatestoactor-type" name="actorRelatesToActorType" placeholder="[Enter relationship type]" aria-describedby="Relationship type">
+                            </div>
+                          </div>
+                        </div> -->
+                        <div> <!-- Form buttons -->
+                          <div class="actor-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-actor-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="person-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-actordatasets-person-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-person-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="collective-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-actordatasets-collective-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-collective-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                        </div>
+                      </form>
+                      <!-- names form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-actornames-form" name="timaat-actordatasets-actor-actornames-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorNamesLabel">Actor names</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-actornames-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="col-sm-1 col-md-1">
+                              <h6 class="form-header">Display name</h6>
+                            </div>
+                            <div class="col-sm-1 col-md-1">
+                              <h6 class="form-header">Birth name</h6>
+                            </div>
+                            <div class="col-sm-5 col-md-5">
+                              <h6 class="form-header">Name</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                              <h6 class="form-header">Used from</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                              <h6 class="form-header">Used until</h6>
+                            </div>
+                            <div class="col-sm-2 col-md-1">
+                              <h6 class="form-header"></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-names-container">
+                          <div data-role="dynamic-name-fields" id="dynamic-name-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="name-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-name-fields" id="new-name-fields">
+                            <!-- one row for new name information that shall be added to the names list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-actornames-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-actornames-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- address form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-addresses-form" name="timaat-actordatasets-actor-addresses-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorAddressesLabel">Actor addresses</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-addresses-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <!-- <div class="form-group">
+                            <div class="form-row">
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street name</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street number</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header">Street addition</h6>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-sm-5 col-md-5">
+                                <h6 class="form-header">Postal code</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">City</h6>
+                              </div>
+                              <div class="col-sm-5 col-md-5">
+                                <h6 class="form-header">Post office box</h6>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address type</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address used from</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Address used until</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                        <div class="actor-addresses-container">
+                          <div data-role="dynamic-actorhasaddress-fields" id="dynamic-actorhasaddress-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="address-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorhasaddress-fields" id="new-actorhasaddress-fields">
+                            <!-- one row for new name information that shall be added to the addresses list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-addresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- email address form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-emailaddresses-form" name="timaat-actordatasets-actor-emailaddresses-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorEmailAddressesLabel">Actor email addresses</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-emailaddresses-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="form-row">
+                              <div class="col-sm-1 col-md-2">
+                                <h6 class="form-header">Primary Email</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-3">
+                                <h6 class="form-header">Email Type*</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-7">
+                                <h6 class="form-header">Email*</h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-emailaddresses-container">
+                          <div data-role="dynamic-actorhasemailaddress-fields" id="dynamic-actorhasemailaddress-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="emailaddress-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorhasemailaddress-fields" id="new-actorhasemailaddress-fields">
+                            <!-- one row for new name information that shall be added to the emailaddresses list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-emailaddresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-emailaddresses-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- phone number form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-phonenumbers-form" name="timaat-actordatasets-actor-phonenumbers-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorPhoneNumbersLabel">Actor phone numbers</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-phonenumbers-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="form-row">
+                              <div class="col-sm-1 col-md-2">
+                                <h6 class="form-header">Primary Phone Number</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-3">
+                                <h6 class="form-header">Phone Number Type*</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-7">
+                                <h6 class="form-header">Phone Number*</h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-phonenumbers-container">
+                          <div data-role="dynamic-actorhasphonenumber-fields" id="dynamic-actorhasphonenumber-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="phonenumber-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorhasphonenumber-fields" id="new-actorhasphonenumber-fields">
+                            <!-- one row for new name information that shall be added to the phonenumbers list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-phonenumbers-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
-          </div>
+          </div> 
         </div>
         <!-------------------------------------------------------------------->
         <!-- Locations                                                      -->
@@ -1907,7 +2466,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-location-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-location-list-wrapper" style="max-height: 480px">
                           <div id="timaat-location-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1927,7 +2486,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-country-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-country-list-wrapper" style="max-height: 480px">
                           <div id="timaat-country-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1947,7 +2506,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-province-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-province-list-wrapper" style="max-height: 480px">
                           <div id="timaat-province-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1967,7 +2526,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-county-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-county-list-wrapper" style="max-height: 480px">
                           <div id="timaat-county-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1987,7 +2546,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-city-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-city-list-wrapper" style="max-height: 480px">
                           <div id="timaat-city-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -2007,7 +2566,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-street-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-street-list-wrapper" style="max-height: 480px">
                           <div id="timaat-street-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -2107,7 +2666,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-event-list-wrapper" style="max-height: 480px;min-height: 100px">
+                        <div class="timaat-event-list-wrapper" style="max-height: 480px">
                           <div id="timaat-event-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -2117,18 +2676,17 @@
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
         <!-------------------------------------------------------------------->
-      </div>
-      <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
+      </div> <!-- /#page-wrapper -->
+    </div> <!-- /#wrapper -->
     <div id="timaat-video-seek-bar-preview" class="popover fade bs-popover-top" style="max-width:128px" role="tooltip">
       <div class="arrow" style="left:49px;">
-      </div><img class="popover-body" style="width:128px;"src="img/preview-placeholder.png" alt="Vorschau"/>
+      </div>
+      <img class="popover-body" style="width:128px;" src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
 
   </body>

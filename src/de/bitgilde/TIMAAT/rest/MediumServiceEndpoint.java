@@ -86,7 +86,6 @@ public class MediumServiceEndpoint{
 	ContainerRequestContext containerRequestContext;
 	@Context
 	ServletContext servletContext;
-
 	
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -94,7 +93,6 @@ public class MediumServiceEndpoint{
 	@Path("list")
 	public Response getMediaList() {
 		System.out.println("MediumServiceEndpoint: getMediaList");
-		// @SuppressWarnings("unchecked")
 		List<Medium> mlist = castList(Medium.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList());
 
 		for (Medium m : mlist) {
@@ -270,7 +268,7 @@ public class MediumServiceEndpoint{
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newMedium == null ) {
-			System.out.println("MediumServiceEndpoint: createMedium - newMedium == 0");
+			System.out.println("MediumServiceEndpoint: createMedium - newMedium == null");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
@@ -316,12 +314,10 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newMedium);
 		entityManager.refresh(displayTitle);
 
-		// create sources entry of medium
+		// create source entry of medium
 		entityTransaction.begin();
 		newMedium.getSources().add(source);
 		source.setMedium(newMedium);
-		// entityManager.merge(source);
-		// entityManager.merge(newMedium);
 		entityManager.persist(source);
 		entityManager.persist(newMedium);
 		entityTransaction.commit();
@@ -329,7 +325,9 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(source);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newMedium.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.MEDIUMCREATED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
 		System.out.println("MediumServiceEndpoint: createMedium - done");
 		return Response.ok().entity(newMedium).build();
 	}
@@ -391,8 +389,9 @@ public class MediumServiceEndpoint{
 		}
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.MEDIUMEDITED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);
 		System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - update complete");
 		return Response.ok().entity(medium).build();
 	}
@@ -416,9 +415,11 @@ public class MediumServiceEndpoint{
 		entityManager.remove(medium.getDisplayTitle());
 		entityManager.remove(medium);
 		entityTransaction.commit();
+
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
-																						UserLogManager.LogEvents.MEDIUMDELETED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMDELETED);
 		System.out.println("MediumServiceEndpoint: deleteMedium - delete complete");	
 		return Response.ok().build();
 	}
@@ -520,7 +521,7 @@ public class MediumServiceEndpoint{
 	@Path("audio/{id}")
 	@Secured
 	public Response deleteAudio(@PathParam("id") int id) {  
-		System.out.println("AudioEndpoint: deleteAudio with id: "+ id);
+		System.out.println("MediumServiceEndpoint: deleteAudio with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -533,9 +534,10 @@ public class MediumServiceEndpoint{
 		entityManager.remove(audio.getMedium()); // remove audio, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.AUDIODELETED);
-		System.out.println("AudioEndpoint: deleteAudio - audio deleted");  
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																UserLogManager.LogEvents.AUDIODELETED);
+		System.out.println("MediumServiceEndpoint: deleteAudio - audio deleted");  
 		return Response.ok().build();
 	}
 
@@ -1015,7 +1017,8 @@ public class MediumServiceEndpoint{
 		entityManager.refresh(newVideo.getMedium());
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
+		UserLogManager.getLogger()
+									.addLogEntry(newVideo.getMedium().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.VIDEOCREATED);
 		System.out.println("MediumServiceEndpoint: video created with id "+newVideo.getMediumId());
 
 		return Response.ok().entity(newVideo).build();
@@ -1227,7 +1230,7 @@ public class MediumServiceEndpoint{
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response createTitle(@PathParam("medium_id") int mediumId, @PathParam("id") int id, String jsonData) {
+	public Response createTitle(@PathParam("id") int id, String jsonData) {
 
 		System.out.println("MediumServiceEndpoint: createTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1269,7 +1272,9 @@ public class MediumServiceEndpoint{
 
 		// System.out.println("MediumServiceEndpoint: createTitle: add log entry");	
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
 		
 		System.out.println("MediumServiceEndpoint: create title: title created with id "+newTitle.getId());
 		System.out.println("MediumServiceEndpoint: create title: title created with language id "+newTitle.getLanguage().getId());
@@ -1337,7 +1342,9 @@ public class MediumServiceEndpoint{
 
 		System.out.println("MediumServiceEndpoint: addTitle: add log entry");	
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry(newTitle.getMediums1().get(0).getCreatedByUserAccount().getId(), UserLogManager.LogEvents.TITLECREATED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
 		
 		System.out.println("MediumServiceEndpoint: addTitle: title added with id "+newTitle.getId());
 		System.out.println("MediumServiceEndpoint: addTitle: title added with language id "+newTitle.getLanguage().getId());
@@ -1387,8 +1394,9 @@ public class MediumServiceEndpoint{
 
 		// System.out.println("MediumServiceEndpoint: UPDATE TITLE - only logging remains");	
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.TITLEEDITED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEEDITED);
 		System.out.println("MediumServiceEndpoint: UPDATE TITLE - update complete");	
 		return Response.ok().entity(title).build();
 	}
@@ -1397,20 +1405,21 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-		public Response deleteTitle(@PathParam("id") int id) {    
-	System.out.println("MediumServiceEndpoint: deleteTitle");	
-	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-	Title title = entityManager.find(Title.class, id);
-	if ( title == null ) return Response.status(Status.NOT_FOUND).build();
-	EntityTransaction entityTransaction = entityManager.getTransaction();
-	entityTransaction.begin();
-	entityManager.remove(title);
-	entityTransaction.commit();
-	// add log entry
-	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																					UserLogManager.LogEvents.TITLEDELETED);
-	System.out.println("MediumServiceEndpoint: deleteTitle - delete complete");	
-	return Response.ok().build();
+	public Response deleteTitle(@PathParam("id") int id) {    
+		System.out.println("MediumServiceEndpoint: deleteTitle");	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Title title = entityManager.find(Title.class, id);
+		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(title);
+		entityTransaction.commit();
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEDELETED);
+		System.out.println("MediumServiceEndpoint: deleteTitle - delete complete");	
+		return Response.ok().build();
 	}
 
 	@POST
@@ -1583,6 +1592,7 @@ public class MediumServiceEndpoint{
 		return Response.ok().build();
 	}
 
+	// Currently not in use
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -1749,8 +1759,8 @@ public class MediumServiceEndpoint{
 			 */
 			// persist mediumvideo changes
 			// TODO load from config
-			MediaType mt = entityManager.find(MediaType.class, 6);
-			Language lang = entityManager.find(Language.class, 1);
+			// MediaType mt = entityManager.find(MediaType.class, 6);
+			// Language lang = entityManager.find(Language.class, 1);
 
 			/*
 			Title title = new Title();

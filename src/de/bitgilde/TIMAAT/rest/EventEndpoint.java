@@ -263,9 +263,10 @@ public class EventEndpoint {
 		entityManager.refresh(newTranslation);
 		entityManager.refresh(event);
 		// System.out.println("persistence completed!");
-		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
-																						UserLogManager.LogEvents.EVENTCREATED); // TODO own log event required?
+
+		// add log entry (always in conjunction with event creation)
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.EVENTCREATED);
 		System.out.println("EventEndpoint: event translation created with id "+newTranslation.getId());
 		return Response.ok().entity(newTranslation).build();
 	}
