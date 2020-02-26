@@ -3,7 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,9 @@ import java.util.Set;
 @Entity
 @Table(name="actor_person")
 @NamedQuery(name="ActorPerson.findAll", query="SELECT ap FROM ActorPerson ap")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+									property  = "actorId", 
+									scope     = ActorPerson.class)
 public class ActorPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,19 +52,16 @@ public class ActorPerson implements Serializable {
 	//bi-directional many-to-one association to Location
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="place_of_birth_city_location_id")
-	// @JsonBackReference(value = "City-ActorPerson1")
 	private City placeOfBirthCityLocation;
 
 	//bi-directional many-to-one association to Location
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="place_of_death_city_location_id")
-  // @JsonBackReference(value = "City-ActorPerson2")
 	private City placeOfDeathCityLocation;
 
 	//bi-directional many-to-one association to Sex
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="sex_id")
-	// @JsonBackReference(value = "Sex-ActorPerson")
 	private Sex sex;
 
 	//bi-directional many-to-many association to Citizenship
@@ -73,17 +75,15 @@ public class ActorPerson implements Serializable {
 			@JoinColumn(name="citizenship_id")
 			}
 		)
-	private List<Citizenship> citizenships;
+	private Set<Citizenship> citizenships;
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorPerson")
-	// @JsonManagedReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollective")
 	// @JsonIgnore
 	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="actorPerson")
-	// @JsonManagedReference(value = "ActorPerson-ActorPersonTranslation")
 	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	public ActorPerson() {
@@ -175,11 +175,11 @@ public class ActorPerson implements Serializable {
 		this.sex = sex;
 	}
 
-	public List<Citizenship> getCitizenships() {
+	public Set<Citizenship> getCitizenships() {
 		return this.citizenships;
 	}
 
-	public void setCitizenships(List<Citizenship> citizenships) {
+	public void setCitizenships(Set<Citizenship> citizenships) {
 		this.citizenships = citizenships;
 	}
 

@@ -91,7 +91,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="location")
-    // @JsonManagedReference(value = "Location-LocationTranslation")
+	@JsonManagedReference(value = "Location-LocationTranslation")
 	private List<LocationTranslation> locationTranslations;
 
 	// //bi-directional many-to-one association to ActorPerson

@@ -1230,7 +1230,7 @@ public class MediumServiceEndpoint{
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response createTitle(@PathParam("medium_id") int mediumId, @PathParam("id") int id, String jsonData) { // TODO mediumId not existant here, yet
+	public Response createTitle(@PathParam("id") int id, String jsonData) {
 
 		System.out.println("MediumServiceEndpoint: createTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();

@@ -472,7 +472,53 @@
 			}).catch((error) => {
 				console.log( "error: ", error );
 			});
-		},	
+		},
+
+		async createCitizenship(citizenship) {
+      console.log("TCL: createCitizenship -> citizenship", citizenship);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenship.id+"/"+citizenship.citizenshipTranslations[0].language.id,
+					type:"POST",
+					data: JSON.stringify(citizenship),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(citizenshipData) {
+					// console.log("TCL: createCitizenship -> citizenshipData", citizenshipData);
+					resolve(citizenshipData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+		
+		async addCitizenship(actorId, citizenship) {
+      console.log("TCL: addCitizenship -> actorId, citizenship", actorId, citizenship);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/citizenship/"+citizenship.id,
+					type:"POST",
+					data: JSON.stringify(citizenship),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(citizenshipData) {
+					// console.log("TCL: addCitizenship -> citizenshipData", citizenshipData);
+					resolve(citizenshipData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
 
 		async updateActor(actorModel) {
 			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
@@ -752,6 +798,30 @@
 			});
 		},
 
+		async updateCitizenshipTranslation(citizenshipTranslation, languageId) {
+			console.log("TCL: async updateCitizenship -> citizenshipTranslation, languageId", citizenshipTranslation, languageId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenshipTranslation.id+"/"+languageId,
+					type:"PATCH",
+					data: JSON.stringify(citizenshipTranslation),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					// console.log("TCL: async updateCitizenship -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
 		removeActor(actor) {
 			console.log("TCL: removeActor -> actor", actor);
 			$.ajax({
@@ -853,6 +923,24 @@
 				console.log( e.responseText );
 			});
 		},
+
+		removeCitizenship(citizenship) {
+			console.log("TCL: removeCitizenship -> citizenship", citizenship);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenship.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
 
 	}	
 }, window));

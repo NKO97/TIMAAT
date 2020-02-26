@@ -3,7 +3,13 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -12,24 +18,34 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Citizenship.findAll", query="SELECT c FROM Citizenship c")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+									property  = "id", 
+									scope     = Citizenship.class)
 public class Citizenship implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-one association to CitizenshipTranslation
-	@OneToMany(mappedBy="citizenship")
-	// @JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
+	@OneToMany(mappedBy="citizenship", cascade = CascadeType.PERSIST)
+	@JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-many association to Country
 	@ManyToMany(mappedBy="citizenships")
+	@JsonIgnore
 	private List<Country> countries;
 
 	//bi-directional many-to-many association to ActorPerson
 	@ManyToMany(mappedBy="citizenships")
-	private List<ActorPerson> actorPersons;
+	@JsonIgnore
+	private Set<ActorPerson> actorPersons;
+
+	// tables cannot contain identifier id alone, or a query exception is thrown
+	@Column(columnDefinition = "BOOLEAN")
+	private Boolean dummy;
 
 	public Citizenship() {
 	}
@@ -72,11 +88,11 @@ public class Citizenship implements Serializable {
 		this.countries = countries;
 	}
 
-	public List<ActorPerson> getPersons() {
+	public Set<ActorPerson> getPersons() {
 		return this.actorPersons;
 	}
 
-	public void setPersons(List<ActorPerson> actorPersons) {
+	public void setPersons(Set<ActorPerson> actorPersons) {
 		this.actorPersons = actorPersons;
 	}
 
