@@ -423,11 +423,11 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
-							actor.model.originalTitle = null;
+						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
+							medium.model.originalTitle = null;
 							originalTitleChanged = true;
 						}
 						if (displayTitleChanged || originalTitleChanged ) {
@@ -476,11 +476,11 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
-							actor.model.originalTitle = null;
+						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
+							medium.model.originalTitle = null;
 							originalTitleChanged = true;
 						}
 						if (displayTitleChanged || originalTitleChanged ) {
@@ -511,11 +511,11 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (actor.model.originalTitle == null || actor.model.originalTitle != actor.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
-						} else if (!formTitleList[i].isOriginalTitle && actor.model.originalTitle != null && actor.model.originalTitle.id == actor.model.titles[i].id) {
-							actor.model.originalTitle = null;
+						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
+							medium.model.originalTitle = null;
 							originalTitleChanged = true;
 						}
 						if (displayTitleChanged || originalTitleChanged ) {
@@ -2131,7 +2131,7 @@
 		},
 
 		addTitles: async function(medium, newTitles) {
-			// console.log("TCL: addTitles: async function -> medium, newTitles", medium, newTitles);
+			console.log("TCL: addTitles: async function -> medium, newTitles", medium, newTitles);
 			try {
 				// create title
 				var i = 0;

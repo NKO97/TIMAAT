@@ -188,8 +188,7 @@
 		},
 
 		async addTitle(mediumId, title) {
-      // console.log("TCL: addTitle -> mediumId", mediumId);
-			// console.log("TCL: async addTitle -> title", title);
+      console.log("TCL: addTitle -> mediumId, title", mediumId, title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
