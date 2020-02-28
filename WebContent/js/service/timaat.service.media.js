@@ -49,7 +49,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listMedia -> data", data);
+				// console.log("TCL: listMedia -> data", data);
 				callback(data);
 			}).fail(function(e) {
 				console.log(e.responseText);
@@ -79,7 +79,7 @@
 		},
 
 		async createMedium(mediumModel) {
-			console.log("TCL: async createMedium -> mediumModel", mediumModel);
+			// console.log("TCL: async createMedium -> mediumModel", mediumModel);
 			var newMediumModel = {
 				id: 0,
 				remark: mediumModel.remark,
@@ -95,7 +95,7 @@
 					id: mediumModel.displayTitle.id,
 				},
 			};
-      console.log("TCL: createMedium -> newMediumModel", newMediumModel);
+      // console.log("TCL: createMedium -> newMediumModel", newMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/0",
@@ -107,7 +107,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(mediumData) {
-					console.log("TCL: createMedium -> returning mediumData", mediumData);
+					// console.log("TCL: createMedium -> returning mediumData", mediumData);
 					resolve(mediumData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText);
@@ -142,7 +142,7 @@
 		},
 
 		async createMediumSubtype(mediumSubtype, mediumModel, subtypeModel) {
-      console.log("TCL: createMediumSubtype -> mediumSubtype, mediumModel, subtypeModel", mediumSubtype, mediumModel, subtypeModel);			
+      // console.log("TCL: createMediumSubtype -> mediumSubtype, mediumModel, subtypeModel", mediumSubtype, mediumModel, subtypeModel);			
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+mediumModel.id,
@@ -154,7 +154,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(subtypeData) {
-					console.log("TCL: createMediumSubtype - returning subtypeData", subtypeData);
+					// console.log("TCL: createMediumSubtype - returning subtypeData", subtypeData);
 					resolve(subtypeData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -165,7 +165,7 @@
 		},
 
 		async createTitle(title) {
-			console.log("TCL: async createTitle -> title", title);
+			// console.log("TCL: async createTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -188,7 +188,7 @@
 		},
 
 		async addTitle(mediumId, title) {
-      console.log("TCL: addTitle -> mediumId, title", mediumId, title);
+      // console.log("TCL: addTitle -> mediumId, title", mediumId, title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
@@ -200,7 +200,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(titleData) {
-					console.log("TCL: addTitle -> titleData", titleData);
+					// console.log("TCL: addTitle -> titleData", titleData);
 					resolve(titleData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -235,7 +235,7 @@
 		},
 
 		async createSource(source) {
-			console.log("TCL: async createSource -> source", source);
+			// console.log("TCL: async createSource -> source", source);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/source/"+source.id,
@@ -247,7 +247,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(sourceData) {
-					console.log("TCL: createSource -> sourceData", sourceData);
+					// console.log("TCL: createSource -> sourceData", sourceData);
 					resolve(sourceData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -258,7 +258,7 @@
 		},
 
 		async updateMedium(mediumModel) {
-			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
+			// console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = {};
 			tempMediumModel.releaseDate = mediumModel.releaseDate;
 			tempMediumModel.remark = mediumModel.remark;
@@ -266,8 +266,7 @@
 			tempMediumModel.displayTitle = mediumModel.displayTitle;
 			tempMediumModel.originalTitle = mediumModel.originalTitle;
 			tempMediumModel.titles = mediumModel.titles;
-      console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
-			// delete tempMediumModel.ui;
+      // console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
@@ -279,7 +278,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMedium -> returning updateData", updateData);
+					// console.log("TCL: async updateMedium -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -320,7 +319,7 @@
 		},
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
+			// console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,
@@ -332,7 +331,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMediumSubtype -> returning updateData", updateData);
+					// console.log("TCL: async updateMediumSubtype -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -344,7 +343,7 @@
 		},
 
 		async updateTitle(title) {
-			console.log("TCL: async updateTitle -> title", title);
+			// console.log("TCL: MediaService: async updateTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
@@ -356,7 +355,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateTitle -> updateData", updateData);
+					// console.log("TCL: async updateTitle -> updateData", updateData);
 					resolve(updateData);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -392,7 +391,7 @@
 		},
 
 		removeMedium(medium) {
-			console.log("TCL: removeMedium -> medium", medium);
+			// console.log("TCL: removeMedium -> medium", medium);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.model.id,
 				type:"DELETE",
@@ -409,7 +408,7 @@
 		},
 
 		removeMediumSubtype(subtype, subtypeData) {
-      console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
+      // console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+subtype+"/"+subtypeData.model.mediumId,
 				type:"DELETE",
@@ -426,7 +425,7 @@
 		},
 
 		removeTitle(title) {
-			console.log("TCL: removeTitle -> title", title);
+			// console.log("TCL: removeTitle -> title", title);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
 				type:"DELETE",

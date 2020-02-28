@@ -28,11 +28,11 @@
 			TIMAAT.MediaDatasets.init();
 		},
 
-		load: function() {
+		load: async function() {
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();
 			TIMAAT.LocationDatasets.load();   
-			TIMAAT.MediaDatasets.load();
+			await TIMAAT.MediaDatasets.load();
 		},
 
 	}

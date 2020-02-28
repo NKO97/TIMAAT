@@ -49,10 +49,10 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listActors -> data", data);
+				// console.log("TCL: listActors -> data", data);
 				callback(data);
 			}).fail(function(e) {
-				// console.log(e.responseText);
+				console.log(e.responseText);
 				console.log( "error", e );
 			});			
 		},
@@ -69,7 +69,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	console.log("TCL: listActorSubtype -> data", data);
+      	// console.log("TCL: listActorSubtype -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -88,7 +88,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listAddressTypes -> data", data);
+				// console.log("TCL: listAddressTypes -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -107,7 +107,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listEmailAddressTypes -> data", data);
+				// console.log("TCL: listEmailAddressTypes -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -126,7 +126,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listPhoneNumberTypes -> data", data);
+				// console.log("TCL: listPhoneNumberTypes -> data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -136,7 +136,7 @@
 		},
 
 		async createActor(actorModel) {
-			console.log("TCL: async createActor -> actorModel", actorModel);
+			// console.log("TCL: async createActor -> actorModel", actorModel);
 			var newActorModel = {
 				id: 0,
 				actorType: {
@@ -245,7 +245,7 @@
 		},
 
 		async addName(actorId, name) {
-      console.log("TCL: addName -> actorId, name", actorId, name);
+      // console.log("TCL: addName -> actorId, name", actorId, name);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
@@ -291,7 +291,7 @@
 		},
 
 		async addAddress(actorId, address) {
-      console.log("TCL: addAddress -> actorId, address", actorId, address);
+      // console.log("TCL: addAddress -> actorId, address", actorId, address);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/address/"+address.id,
@@ -314,7 +314,7 @@
 		},
 
 		async addActorHasAddress(actorId, actorHasAddress) {
-      console.log("TCL: addActorHasAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
+      // console.log("TCL: addActorHasAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasaddress/"+actorHasAddress.address.id,
@@ -360,7 +360,7 @@
 		},
 
 		async addEmailAddress(actorId, emailAddress) {
-      console.log("TCL: addEmailAddress -> actorId, emailAddress", actorId, emailAddress);
+      // console.log("TCL: addEmailAddress -> actorId, emailAddress", actorId, emailAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/emailaddress/"+emailAddress.id,
@@ -383,7 +383,7 @@
 		},
 
 		async addActorHasEmailAddress(actorId, actorHasEmailAddress) {
-      console.log("TCL: addActorHasEmailAddress -> actorId, actorHasEmailAddress", actorId, actorHasEmailAddress);
+      // console.log("TCL: addActorHasEmailAddress -> actorId, actorHasEmailAddress", actorId, actorHasEmailAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasemailaddress/"+actorHasEmailAddress.emailAddress.id,
@@ -429,7 +429,7 @@
 		},
 
 		async addPhoneNumber(actorId, phoneNumber) {
-      console.log("TCL: addPhoneNumber -> actorId, phoneNumber", actorId, phoneNumber);
+      // console.log("TCL: addPhoneNumber -> actorId, phoneNumber", actorId, phoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phonenumber/"+phoneNumber.id,
@@ -452,7 +452,7 @@
 		},
 
 		async addActorHasPhoneNumber(actorId, actorHasPhoneNumber) {
-      console.log("TCL: addActorHasPhoneNumber -> actorId, actorHasPhoneNumber", actorId, actorHasPhoneNumber);
+      // console.log("TCL: addActorHasPhoneNumber -> actorId, actorHasPhoneNumber", actorId, actorHasPhoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasphonenumber/"+actorHasPhoneNumber.phoneNumber.id,
@@ -475,7 +475,7 @@
 		},
 
 		async createCitizenship(citizenship) {
-      console.log("TCL: createCitizenship -> citizenship", citizenship);
+      // console.log("TCL: createCitizenship -> citizenship", citizenship);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenship.id+"/"+citizenship.citizenshipTranslations[0].language.id,
@@ -498,7 +498,7 @@
 		},
 		
 		async addCitizenship(actorId, citizenship) {
-      console.log("TCL: addCitizenship -> actorId, citizenship", actorId, citizenship);
+      // console.log("TCL: addCitizenship -> actorId, citizenship", actorId, citizenship);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/citizenship/"+citizenship.id,
@@ -530,7 +530,7 @@
 			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
 			tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
 			// tempActorModel.actorNames = actorModel.actorNames;
-      console.log("TCL: updateActor -> tempActorModel", tempActorModel);
+      // console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
@@ -584,7 +584,7 @@
 		},
 
 		async updateActorSubtype(actorSubtype, subtypeModel) {
-			console.log("TCL: updateActorSubtype -> actorSubtype, subtypeModel", actorSubtype, subtypeModel);
+			// console.log("TCL: updateActorSubtype -> actorSubtype, subtypeModel", actorSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/"+subtypeModel.actorId,
@@ -655,7 +655,7 @@
 		},
 
 		async updateAddress(address) {
-			console.log("TCL: async updateAddress -> address", address);
+			// console.log("TCL: async updateAddress -> address", address);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/address/"+address.id,
@@ -679,7 +679,7 @@
 		},
 
 		async updateActorHasAddress(actorId, addressId, actorHasAddress) {
-			console.log("TCL: async updateActorHasAddress -> actorHasAddress", actorHasAddress);
+			// console.log("TCL: async updateActorHasAddress -> actorHasAddress", actorHasAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/address/"+addressId,
@@ -727,7 +727,7 @@
 		},
 
 		async updateActorHasEmailAddress(actorId, emailAddressId, actorHasEmailAddress) {
-			console.log("TCL: async updateActorHasEmailAddress -> actorHasEmailAddress", actorHasEmailAddress);
+			// console.log("TCL: async updateActorHasEmailAddress -> actorHasEmailAddress", actorHasEmailAddress);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/emailaddress/"+emailAddressId,
@@ -775,7 +775,7 @@
 		},
 
 		async updateActorHasPhoneNumber(actorId, phoneNumberId, actorHasPhoneNumber) {
-			console.log("TCL: async updateActorHasPhoneNumber -> actorHasPhoneNumber", actorHasPhoneNumber);
+			// console.log("TCL: async updateActorHasPhoneNumber -> actorHasPhoneNumber", actorHasPhoneNumber);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/phonenumber/"+phoneNumberId,
@@ -799,7 +799,7 @@
 		},
 
 		async updateCitizenshipTranslation(citizenshipTranslation, languageId) {
-			console.log("TCL: async updateCitizenship -> citizenshipTranslation, languageId", citizenshipTranslation, languageId);
+			// console.log("TCL: async updateCitizenship -> citizenshipTranslation, languageId", citizenshipTranslation, languageId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenshipTranslation.id+"/"+languageId,
@@ -823,7 +823,7 @@
 		},
 
 		removeActor(actor) {
-			console.log("TCL: removeActor -> actor", actor);
+			// console.log("TCL: removeActor -> actor", actor);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actor.model.id,
 				type:"DELETE",
@@ -874,7 +874,7 @@
 		},
 
 		removeAddress(address) {
-			console.log("TCL: removeAddress -> address", address);
+			// console.log("TCL: removeAddress -> address", address);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/address/"+address.id,
 				type:"DELETE",
@@ -925,7 +925,7 @@
 		},
 
 		removeCitizenship(citizenship) {
-			console.log("TCL: removeCitizenship -> citizenship", citizenship);
+			// console.log("TCL: removeCitizenship -> citizenship", citizenship);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/citizenship/"+citizenship.id,
 				type:"DELETE",

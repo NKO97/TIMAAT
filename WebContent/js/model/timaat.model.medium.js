@@ -229,8 +229,8 @@
 			var index;
 			for (var i = 0; i < TIMAAT.MediaDatasets.media.length; i++) {
 				if (TIMAAT.MediaDatasets.media[i].model.id == this.model.id) {
-					index = i;	
-					break;				
+					index = i;
+					break;
 				}
 			}
 			if (index > -1) {

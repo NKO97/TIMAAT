@@ -27,12 +27,14 @@
 				$('[data-toggle="popover"]').popover();
 				
 				// init components
-				TIMAAT.VideoChooser.init();	   
+				TIMAAT.Datasets.init();
+				TIMAAT.VideoChooser.init();	 
 				TIMAAT.VideoPlayer.init();
 				TIMAAT.Settings.init();
-				TIMAAT.Datasets.init();
 				
+				// After login show media library
 				TIMAAT.UI.showComponent('videochooser');
+
 				$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 				$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 				$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);

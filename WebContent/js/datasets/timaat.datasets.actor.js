@@ -181,14 +181,13 @@
 						case "1": 
 							actorType = "person";
 							actorSubtypeTranslationModel = await TIMAAT.ActorDatasets.createActorPersonTranslationModel(formDataObject);
-							actorSubtypeModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
 							citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
 						break;
 						case "2": 
 							actorType = "collective";
-							actorSubtypeModel = await TIMAAT.ActorDatasets.createCollectiveModel(formDataObject);
 						break;
 					}
+					actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, actorType);
 					if (actorType) {
 						await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayName, actorSubtypeTranslationModel, citizenshipModel);
 						var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
@@ -323,7 +322,7 @@
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 				} else { // create new person
 					var personTranslationModel = await TIMAAT.ActorDatasets.createActorPersonTranslationModel(formDataObject);
-					var personModel = await TIMAAT.ActorDatasets.createPersonModel(formDataObject);
+					var personModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, 'person');
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
 					var displayNameModel = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 					var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
@@ -402,7 +401,7 @@
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
 				} else { // create new collective
 					// var collectiveTranslationModel = await TIMAAT.ActorDatasets.createCollectiveTranslationModel(formDataObject);
-					var collectiveModel = await TIMAAT.ActorDatasets.createCollectiveModel(formDataObject);
+					var collectiveModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, 'collective');
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 2); // 2 = Collective. TODO check clause to find proper id
 					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 
@@ -972,7 +971,7 @@
 				if (formActorHasAddressesList.length == actor.model.actorHasAddresses.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasAddresses.length; i++ ) { // update existing actorHasAddresses
-						var updatedActorHasAddress = TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
+						var updatedActorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// only update if anything changed
 						// if (updatedActorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing address");
@@ -999,7 +998,7 @@
 					for (; i < actor.model.actorHasAddresses.length; i++ ) { // update existing actorHasAddresses
 						console.log("TCL: actor", actor);
 						var actorHasAddress = {}; 
-						actorHasAddress = TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
+						actorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasAddresses (and add new ones)");
@@ -1036,7 +1035,7 @@
 				else if (formActorHasAddressesList.length < actor.model.actorHasAddresses.length) {
 					var i = 0;
 					for (; i < formActorHasAddressesList.length; i++ ) { // update existing actorHasAddresses
-						var actorHasAddress = TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
+						var actorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// if (actorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasAddresses (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasAddress(actorHasAddress, actor);
@@ -1295,7 +1294,7 @@
 				if (formActorHasEmailAddressesList.length == actor.model.actorHasEmailAddresses.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
-						var updatedActorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						var updatedActorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// only update if anything changed
 						// if (updatedActorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing email address");
@@ -1322,7 +1321,7 @@
 					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
 						console.log("TCL: actor", actor);
 						var actorHasEmailAddress = {}; 
-						actorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						actorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasEmailAddresses (and add new ones)");
@@ -1332,7 +1331,7 @@
 					i = actor.model.actorHasEmailAddresses.length;
 					var newActorHasEmailAddresses = [];
 					for (; i < formActorHasEmailAddressesList.length; i++) { // create new actorHasEmailAddresses
-						var actorHasEmailAddress = TIMAAT.ActorDatasets.createActorHasEmailAddressModel(formActorHasEmailAddressesList[i], actor.model.id, 0);
+						var actorHasEmailAddress = await TIMAAT.ActorDatasets.createActorHasEmailAddressModel(formActorHasEmailAddressesList[i], actor.model.id, 0);
 						newActorHasEmailAddresses.push(actorHasEmailAddress);
 					}
 					console.log("TCL: (update existing actorHasEmailAddresses and) add new ones");
@@ -1359,7 +1358,7 @@
 				else if (formActorHasEmailAddressesList.length < actor.model.actorHasEmailAddresses.length) {
 					var i = 0;
 					for (; i < formActorHasEmailAddressesList.length; i++ ) { // update existing actorHasEmailAddresses
-						var actorHasEmailAddress = TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
+						var actorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasEmailAddresses (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(actorHasEmailAddress, actor);
@@ -1618,7 +1617,7 @@
 				if (formActorHasPhoneNumbersList.length == actor.model.actorHasPhoneNumbers.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
-						var updatedActorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						var updatedActorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// only update if anything changed
 						// if (updatedActorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
 							console.log("TCL: update existing phone number");
@@ -1645,7 +1644,7 @@
 					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
 						console.log("TCL: actor", actor);
 						var actorHasPhoneNumber = {}; 
-						actorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						actorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// only update if anything changed
 						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasPhoneNumbers (and add new ones)");
@@ -1655,7 +1654,7 @@
 					i = actor.model.actorHasPhoneNumbers.length;
 					var newActorHasPhoneNumbers = [];
 					for (; i < formActorHasPhoneNumbersList.length; i++) { // create new actorHasPhoneNumbers
-						var actorHasPhoneNumber = TIMAAT.ActorDatasets.createActorHasPhoneNumberModel(formActorHasPhoneNumbersList[i], actor.model.id, 0);
+						var actorHasPhoneNumber = await TIMAAT.ActorDatasets.createActorHasPhoneNumberModel(formActorHasPhoneNumbersList[i], actor.model.id, 0);
 						newActorHasPhoneNumbers.push(actorHasPhoneNumber);
 					}
 					console.log("TCL: (update existing actorHasPhoneNumbers and) add new ones");
@@ -1682,7 +1681,7 @@
 				else if (formActorHasPhoneNumbersList.length < actor.model.actorHasPhoneNumbers.length) {
 					var i = 0;
 					for (; i < formActorHasPhoneNumbersList.length; i++ ) { // update existing actorHasPhoneNumbers
-						var actorHasPhoneNumber = TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
+						var actorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
 							console.log("TCL: update existing actorHasPhoneNumbers (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(actorHasPhoneNumber, actor);
@@ -1859,7 +1858,7 @@
 		setActorLists: function(actors) {
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
-    	// console.log("TCL: setActorLists -> actors", actors);
+    	console.log("TCL: setActorLists -> actors", actors);
 			if ( !actors ) return;
 
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
@@ -1948,7 +1947,7 @@
 		},
 
 		setActorNameList: function(actor) {
-			console.log("TCL: setActorNameList -> actor", actor);
+			// console.log("TCL: setActorNameList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-name-list-loader').remove();
 			// clear old UI list
@@ -1960,11 +1959,11 @@
 					names.push(name); 
 			});
 			TIMAAT.ActorDatasets.names = names;
-      console.log("TCL: TIMAAT.ActorDatasets.names", TIMAAT.ActorDatasets.names);
+      // console.log("TCL: TIMAAT.ActorDatasets.names", TIMAAT.ActorDatasets.names);
 		},
 
 		setActorHasAddressList: function(actor) {
-			console.log("TCL: setActorHasAddressList -> actor", actor);
+			// console.log("TCL: setActorHasAddressList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-address-list-loader').remove();
 			// clear old UI list
@@ -1978,11 +1977,11 @@
 				actorHasAddrs.push(actorHasAddress); 
 			});
 			TIMAAT.ActorDatasets.actorHasAddresses = actorHasAddrs;
-      console.log("TCL: TIMAAT.ActorDatasets.actorHasAddresses", TIMAAT.ActorDatasets.actorHasAddresses);
+      // console.log("TCL: TIMAAT.ActorDatasets.actorHasAddresses", TIMAAT.ActorDatasets.actorHasAddresses);
 		},
 
 		setActorHasEmailAddressList: function(actor) {
-			console.log("TCL: setActorHasEmailAddressList -> actor", actor);
+			// console.log("TCL: setActorHasEmailAddressList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-emailaddress-list-loader').remove();
 			// clear old UI list
@@ -1994,11 +1993,11 @@
 				actorHasEmailAddrs.push(actorHasEmailAddress); 
 			});
 			TIMAAT.ActorDatasets.actorHasEmailAddresses = actorHasEmailAddrs;
-      console.log("TCL: TIMAAT.ActorDatasets.actorHasEmailAddresses", TIMAAT.ActorDatasets.actorHasEmailAddresses);
+      // console.log("TCL: TIMAAT.ActorDatasets.actorHasEmailAddresses", TIMAAT.ActorDatasets.actorHasEmailAddresses);
 		},
 
 		setActorHasPhoneNumberList: function(actor) {
-			console.log("TCL: setActorHasPhoneNumberList -> actor", actor);
+			// console.log("TCL: setActorHasPhoneNumberList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-phonenumber-list-loader').remove();
 			// clear old UI list
@@ -2010,7 +2009,7 @@
 				actorHasPhoneNmbrs.push(actorHasPhoneNumber); 
 			});
 			TIMAAT.ActorDatasets.actorHasPhoneNumbers = actorHasPhoneNmbrs;
-      console.log("TCL: TIMAAT.ActorDatasets.actorHasPhoneNumbers", TIMAAT.ActorDatasets.actorHasPhoneNumbers);
+      // console.log("TCL: TIMAAT.ActorDatasets.actorHasPhoneNumbers", TIMAAT.ActorDatasets.actorHasPhoneNumbers);
 		},
 
 		setCitizenshipsList: function(actor) {
@@ -2018,7 +2017,7 @@
 		},
 
 		setAddressTypeLists: function(addressTypes) {
-			console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
+			// console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
 			if ( !addressTypes ) return;
 			$('#timaat-actordatasets-addresstype-list-loader').remove();
 			// clear old UI list
@@ -2034,7 +2033,7 @@
 		},
 
 		setEmailAddressTypeLists: function(emailAddressTypes) {
-			console.log("TCL: setAddressTypeList -> emailAddressTypes", emailAddressTypes);
+			// console.log("TCL: setAddressTypeList -> emailAddressTypes", emailAddressTypes);
 			if ( !emailAddressTypes ) return;
 			$('#timaat-actordatasets-emailaddresstype-list-loader').remove();
 			// clear old UI list
@@ -2050,7 +2049,7 @@
 		},
 
 		setPhoneNumberTypeLists: function(phoneNumberTypes) {
-			console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
+			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
 			$('#timaat-actordatasets-phonenumbertype-list-loader').remove();
 			// clear old UI list
@@ -3121,7 +3120,7 @@
 			return actor;
 		},
 
-		createActorModel: function(formDataObject, actorTypeId) {
+		createActorModel: async function(formDataObject, actorTypeId) {
 		// console.log("TCL: createActorModel: formDataObject", formDataObject);
 			var actorModel = {
 				id: 0,
@@ -3144,30 +3143,40 @@
 			return actorModel;
 		},
 
-		createPersonModel: function(formDataObject) {
-    	console.log("TCL: createPersonModel: formDataObject", formDataObject);
-			var personModel = {
-				actorId: 0,
-				title: formDataObject.title,
-				dateOfBirth: moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD"),
-				placeOfBirth: {
-					id: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
-					},
-				dayOfDeath: moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD"),
-				placeOfDeath: {
-					id: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
-				},
-				sex: {
-					id: Number(formDataObject.sexId),
-				},
-				actorPersonTranslations: [],
-				citizenships : []
-			};
-      console.log("TCL: personModel", personModel);
-			return personModel;
+		createActorSubtypeModel: async function(formDataObject, actorType) {
+			var actorSubtypeModel = {};
+			switch(actorType) {
+				case 'person':
+					actorSubtypeModel = {
+						actorId: 0,
+						title: formDataObject.title,
+						dateOfBirth: moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD"),
+						placeOfBirth: {
+							id: (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth),
+							},
+						dayOfDeath: moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD"),
+						placeOfDeath: {
+							id: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
+						},
+						sex: {
+							id: Number(formDataObject.sexId),
+						},
+						actorPersonTranslations: [],
+						citizenships : []
+					};
+				break;
+				case 'collective':
+					actorSubtypeModel	= {
+						actorId: 0,
+						founded: moment.utc(formDataObject.founded, "YYYY-MM-DD"),
+						disbanded: moment.utc(formDataObject.disbanded, "YYYY-MM-DD"),
+					};
+				break;
+			}
+			return actorSubtypeModel;
 		},
 
-		createActorPersonTranslationModel: function(formDataObject) {
+		createActorPersonTranslationModel: async function(formDataObject) {
 			var personTranslationModel = [{
 					id: 0,
 					language: {
@@ -3178,18 +3187,7 @@
 			return personTranslationModel;
 		},
 
-		createCollectiveModel: function(formDataObject) {
-			// console.log("TCL: createCollectiveModel: formDataObject", formDataObject);
-				var collectiveModel = {
-					actorId: 0,
-					founded: moment.utc(formDataObject.founded, "YYYY-MM-DD"),
-					disbanded: moment.utc(formDataObject.disbanded, "YYYY-MM-DD"),
-				};
-				console.log("TCL: collectiveModel", collectiveModel);
-				return collectiveModel;
-			},
-
-		createNameModel: function(formDataObject) {
+		createNameModel: async function(formDataObject) {
     // console.log("TCL: createNameModel: formDataObject", formDataObject);
 			var name = {
 				id: 0,
@@ -3202,7 +3200,7 @@
 			return name;
 		},
 
-		createActorHasAddressModel: function(data, actorId, addressId) {
+		createActorHasAddressModel: async function(data, actorId, addressId) {
     	// console.log("TCL: data, actorId, addressId", data, actorId, addressId);
 			var actorHasAddressModel = {};
 			actorHasAddressModel.id = {
@@ -3224,7 +3222,7 @@
 			return actorHasAddressModel;
 		},
 
-		updateActorHasAddressModel: function(originalModel, data) {
+		updateActorHasAddressModel: async function(originalModel, data) {
 			var updatedModel = originalModel;
 			updatedModel.usedFrom = data.addressUsedFrom;
 			updatedModel.usedUntil = data.addressUsedUntil;
@@ -3236,7 +3234,7 @@
 			return updatedModel;
 		},
 
-		createActorHasEmailAddressModel: function(data, actorId, emailAddressId) {
+		createActorHasEmailAddressModel: async function(data, actorId, emailAddressId) {
     	// console.log("TCL: data, actorId, emailAddressId", data, actorId, emailAddressId);
 			var actorHasEmailAddressModel = {};
 			actorHasEmailAddressModel.id = {
@@ -3251,14 +3249,14 @@
 			return actorHasEmailAddressModel;
 		},
 
-		updateActorHasEmailAddressModel: function(originalModel, data) {
+		updateActorHasEmailAddressModel: async function(originalModel, data) {
 			var updatedModel = originalModel;
 			updatedModel.emailAddressType = TIMAAT.ActorDatasets.emailAddressTypes[Number(data.emailAddressTypeId)-1];
 			updatedModel.emailAddress.email = data.email;
 			return updatedModel;
 		},
 
-		createActorHasPhoneNumberModel: function(data, actorId, phoneNumberId) {
+		createActorHasPhoneNumberModel: async function(data, actorId, phoneNumberId) {
     	// console.log("TCL: data, actorId, phoneNumberId", data, actorId, phoneNumberId);
 			var actorHasPhoneNumberModel = {};
 			actorHasPhoneNumberModel.id = {
@@ -3273,14 +3271,14 @@
 			return actorHasPhoneNumberModel;
 		},
 
-		updateActorHasPhoneNumberModel: function(originalModel, data) {
+		updateActorHasPhoneNumberModel: async function(originalModel, data) {
 			var updatedModel = originalModel;
 			updatedModel.phoneNumberType = TIMAAT.ActorDatasets.phoneNumberTypes[Number(data.phoneNumberTypeId)-1];
 			updatedModel.phoneNumber.phoneNumber = data.phoneNumber;
 			return updatedModel;
 		},
 
-		createCitizenshipModel: function(formDataObject) {
+		createCitizenshipModel: async function(formDataObject) {
     // console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
 			var citizenshipModel = {
 					id: 0,
