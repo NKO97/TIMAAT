@@ -233,10 +233,24 @@ p + p {
 	overflow-x: hidden;
 }
 
+.list-group-item {
+	max-height: 150px;
+	overflow: hidden;
+	padding-left: 5px;
+	padding-right: 10px;
+}
+
 #timaat-mediadatasets-media-metadata-form,
 #timaat-mediadatasets-medium-titles-form,
 #timaat-mediadatasets-medium-languagetracks-form {
-	display:none;
+	display: none;
+}
+
+.timaat-datasets-list-wrapper {
+	height: 100%;
+	width: 100%;
+	max-height: 768px;
+	overflow-y: auto;
 }
 
 #timaat-annotation-list li, 

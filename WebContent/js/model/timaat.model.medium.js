@@ -25,27 +25,43 @@
 			this.model = model;
 			
 			// create and style list view element
-			var displayMediaType = "";
-			if (mediumType == 'medium') {
-				displayMediaType = 
-				`<br><br>
-				<span class="timaat-mediadatasets-medium-list-mediatype"></span>`;
+			var displayMediumTypeIcon = '';
+			if (mediumType == 'medium') { // only display icon in media list
+				displayMediumTypeIcon = '  <i class="fas fa-photo-video"></i>'; // default media icon
+				switch (this.model.mediaType.mediaTypeTranslations[0].type) {
+					case 'audio':
+						displayMediumTypeIcon = '  <i class="far fa-file-audio"></i>';
+					break;
+					case 'document':
+						displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i>';
+					break;
+					case 'image':
+						displayMediumTypeIcon = '  <i class="far fa-file-image"></i>';
+					break;
+					case 'software':
+						displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i>';
+					break;
+					case 'text':
+						displayMediumTypeIcon = '  <i class="far fa-file-alt"></i>';
+					break;
+					case 'video':
+						displayMediumTypeIcon = '  <i class="far fa-file-video"></i>';
+					break;
+					case 'videogame':
+						displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i>';
+					break;
+				}
 			}
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
-						<div class="col-lg-2">
-							<div class=btn-group-vertical>
-								<button type="button" title="Medium löschen" class="btn btn-outline btn-danger btn-sm timaat-mediadatasets-medium-remove float-left" id="timaat-mediadatasets-medium-remove"><i class="fas fa-trash-alt"></i></button>
-							</div>
+						<div class="col-lg-10">` +
+							displayMediumTypeIcon +
+							`  <span class="timaat-mediadatasets-`+mediumType+`-list-name">
+							</span>
 						</div>
-						<div class="col-lg-8">
-							<span class="timaat-mediadatasets-`+mediumType+`-list-name">
-							</span>` +
-							displayMediaType +
-						`</div>
 						<div class="col-lg-2 float-right">
-						  <div class=btn-group-vertical>
+						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
 									<i class="fas fa-user"></i>							
 								</div>
@@ -143,14 +159,6 @@
 				TIMAAT.Service.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 			});
 
-			// remove handler
-			this.listView.find('.timaat-mediadatasets-medium-remove').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-medium-delete').data('medium', medium);
-				$('#timaat-mediadatasets-medium-delete').modal('show');
-			});
-
 		}
 
 		uploadVideo() {
@@ -200,11 +208,6 @@
 			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').text(name);
 			if (mediumType == 'medium') {
 				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
-			}
-			if ( this.model.id < 0 ) { 
-				this.listView.find('.timaat-mediadatasets-medium-remove').hide();
-			} else {
-				this.listView.find('.timaat-mediadatasets-medium-remove').show();
 			}
 
 			if ( this.model.mediumVideo && this.model.mediumVideo.status == "nofile" ) {

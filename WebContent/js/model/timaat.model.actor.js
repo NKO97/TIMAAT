@@ -21,20 +21,19 @@
 	
 	TIMAAT.Actor = class Actor {
 		constructor(model, actorType) {
-			// console.log("TCL: Actor -> constructor -> model", model)
+      console.log("TCL: Actor -> constructor -> model, actorType", model, actorType);
 			// setup model
 			this.model = model;
-      // console.log("TCL: Actor -> constructor -> this", this);
 
 			// create and style list view element
 			var displayActorTypeIcon = '';
 			if (actorType == 'actor') { // only display icon in actor list
 				displayActorTypeIcon = '  <i class="fas fa-id-badge"></i>'; // default actor icon
-				switch(this.model.actorType.id) {
-					case 1: 
+				switch(this.model.actorType.actorTypeTranslations[0].type) {
+					case 'person': 
 						displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
 					break;
-					case 2: 
+					case 'collective': 
 						displayActorTypeIcon = '  <i class="fas fa-users"></i>';
 					break;
 				}
@@ -42,18 +41,13 @@
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
-						<div class="col-lg-2">
-							<div class=btn-group-vertical>
-								<button type="button" title="Akteur löschen" class="btn btn-outline btn-danger btn-sm timaat-actordatasets-actor-remove float-left" id="timaat-actordatasets-actor-remove"><i class="fas fa-trash-alt"></i></button>
-							</div>
-						</div>
-						<div class="col-lg-8">` +
+						<div class="col-lg-10">` +
 							displayActorTypeIcon +
 							`  <span class="timaat-actordatasets-`+actorType+`-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
-						  <div class=btn-group-vertical>
+						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
 									<i class="fas fa-user"></i>							
 								</div>
@@ -169,14 +163,6 @@
 				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			});
 
-			// remove handler
-			this.listView.find('.timaat-actordatasets-actor-remove').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-actor-delete').data('actor', actor);
-				$('#timaat-actordatasets-actor-delete').modal('show');
-			});
-
 		}
 
 		updateUI() {
@@ -192,11 +178,7 @@
 			if (actorType == 'actor') {
 				this.listView.find('.timaat-actordatasets-actor-list-actortype').html(type);
 			}
-			if ( this.model.id < 0 ) { 
-				this.listView.find('.timaat-actordatasets-actor-remove').hide();
-			} else {
-				this.listView.find('.timaat-actordatasets-actor-remove').show();
-			}
+
 			// tag count
 			// var count = this.model.tags.length + " Tags";
 			// if ( this.model.tags.length == 0 ) count = "keine Tags";

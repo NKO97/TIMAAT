@@ -122,7 +122,15 @@
 				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'actor', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
 			});
 			
-			// delete actor button functionality (in actor list)
+			// delete medium button (in form) handler
+			$('#timaat-actordatasets-actor-remove').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				$('#timaat-actordatasets-actor-delete').data('actor', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+				$('#timaat-actordatasets-actor-delete').modal('show');
+			});
+
+			// confirm delete actor modal functionality
 			$('#timaat-actordatasets-actor-delete-submit').click(function(ev) {
 				var modal = $('#timaat-actordatasets-actor-delete');
 				var actor = modal.data('actor');
@@ -1881,7 +1889,7 @@
 			});
 			TIMAAT.ActorDatasets.actors = acts;
 			TIMAAT.ActorDatasets.actors.model = actors;
-      console.log("TCL: TIMAAT.ActorDatasets.actors", TIMAAT.ActorDatasets.actors);
+      // console.log("TCL: TIMAAT.ActorDatasets.actors", TIMAAT.ActorDatasets.actors);
 			// also set up video chooser list
 			// TIMAAT.VideoChooser.setActors(TIMAAT.ActorDatasets.actors.model);
 		},
@@ -2080,8 +2088,7 @@
 			$('.actor-data').show();
 			if (actorType == "actor") {
 				$('.actortype-data').show();
-			}
-			else {
+			}	else {
 				$('.actortype-data').hide();
 			}
 			$('.'+actorType+'-data').show();
@@ -2089,6 +2096,7 @@
 				$('.person-title-data').hide(); // to display title in same row with actor name data
 			}
 			$('.datasheet-form-edit-button').hide();
+			$('.datasheet-form-delete-button').hide();
 			$('.datasheet-form-buttons').hide()
 			$('.'+actorType+'-datasheet-form-submit').show();
 			$('#timaat-actordatasets-actor-metadata-form :input').prop('disabled', false);
@@ -2114,8 +2122,7 @@
 			$('.actor-data').show();
 			if (actorType == "actor") {
 				$('.actortype-data').show();
-			}
-			else {
+			}	else {
 				$('.actortype-data').hide();
 			}		
 			$('.'+actorType+'-data').show();
@@ -2140,17 +2147,18 @@
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').show();
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').prop("disabled", false);
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit :input').prop("disabled", false);
+				$('.datasheet-form-delete-button').show();
+				$('#timaat-actordatasets-actor-remove').prop("disabled", false);
+				$('#timaat-actordatasets-actor-remove :input').prop("disabled", false);
 				$('.datasheet-form-buttons').hide()
 				$('#actorFormHeader').html(actorType+" Datasheet (#"+ actorTypeData.model.id+')');
-			}
-			else if (action == 'edit') {
+			}	else if (action == 'edit') {
 				$('.datasheet-form-buttons').hide();
 				$('.'+actorType+'-datasheet-form-submit').show();
 				$('#timaat-actordatasets-actor-metadata-form :input').prop("disabled", false);
 				if (actorType == "actor") {
 					$('#timaat-actordatasets-actor-metadata-actortype-id').prop("disabled", true);
-				}
-				else {
+				}	else {
 					$('#timaat-actordatasets-actor-metadata-actortype-id').hide();
 				}
 				$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
@@ -2162,6 +2170,9 @@
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit :input').prop("disabled", true);
+				$('.datasheet-form-delete-button').hide();
+				$('#timaat-actordatasets-actor-remove').prop("disabled", true);
+				$('#timaat-actordatasets-actor-remove :input').prop("disabled", true);
 				$('#actorFormHeader').html(actorType+" bearbeiten");
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-submit').html("Speichern");
 				$('#timaat-actordatasets-actor-metadata-name').focus();

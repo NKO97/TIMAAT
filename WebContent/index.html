@@ -1015,7 +1015,7 @@
                             <i class="fas fa-plus"></i>
                           </button> -->
                         </div>
-                        <div class="timaat-mediadatasets-medium-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-medium-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1028,7 +1028,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-audio-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-audio-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1041,7 +1041,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-document-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-document-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1054,7 +1054,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-image-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-image-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1067,7 +1067,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-software-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-software-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1080,7 +1080,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-text-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-text-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1093,7 +1093,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-video-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-video-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1106,7 +1106,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-mediadatasets-videogame-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-mediadatasets-videogame-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1154,30 +1154,36 @@
                               <h5 class="form-title caps-title" id="mediumFormHeader">Medium</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-medium-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-audio-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-document-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-image-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-software-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-text-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-video-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-videogame-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
+                              <div class="btn-group-horizontal">
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-medium-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-audio-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-document-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-image-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-software-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-text-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-video-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-mediadatasets-videogame-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                &nbsp;
+                                <button type="button" class="btn btn-outline btn-danger btn-sm float-right datasheet-form-delete-button" id="timaat-mediadatasets-medium-remove" title="Medium löschen">
+                                  <i class="fas fa-trash-alt"></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1559,7 +1565,7 @@
                             <i class="fas fa-plus"></i>
                           </button> -->
                         </div>
-                        <div class="timaat-actordatasets-actor-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-actordatasets-actor-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1572,7 +1578,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-actordatasets-person-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-actordatasets-person-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1585,7 +1591,7 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-actordatasets-collective-list-wrapper" style="max-height: 480px">
+                        <div class="timaat-datasets-list-wrapper">
                           <div id="timaat-actordatasets-collective-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
@@ -1636,15 +1642,21 @@
                               <h5 class="form-title caps-title" id="actorFormHeader">Actor</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-actor-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-person-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-collective-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
+                              <div class="btn-group-horizontal">
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-actor-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-person-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" id="timaat-actordatasets-collective-metadata-form-edit" title="Datensatz bearbeiten" name="edit">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                                &nbsp;
+                                <button type="button" class="btn btn-outline btn-danger float-right btn-sm datasheet-form-remove-button" id="timaat-actordatasets-actor-remove" title="Akteur löschen">
+                                  <i class="fas fa-trash-alt"></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
