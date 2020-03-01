@@ -123,15 +123,8 @@ require(['domReady',
 				editable: true,		
 			});
 			
-			window.map = map; // TODO refactor	
-			map.on('layeradd', function(ev) {
-				if ( ev.layer.options.data ) 
-					ev.layer.eachLayer(function (layer) {
-						if ( !layer.options.editable ) layer.enableEdit();
-						layer.options.editable = true;
-					});
-			});
-			
+			window.map = map; // TODO refactor
+
 			var bounds = [[450,0], [0,800]];
 			map.setMaxBounds(bounds);
 			map.fitBounds(bounds);	

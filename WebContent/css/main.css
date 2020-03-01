@@ -465,6 +465,35 @@ a.dropdown-item {
 .timaat-timeline-markerhead.picture {
 	border-radius: 25px;
 }
+
+.timaat-timeline-marker-start {
+	float: left;
+	width: 10px;
+	height: 20px;
+	background-image: url('../img/range-marker-start.png');
+	background-repeat: no-repeat;
+	background-size: 9px 10px;
+	border-right: 1px solid #535649;
+	margin-left: -11px;
+	margin-top: -15px;
+	background-position-y: bottom;
+	background-position-x: 1px;
+}
+
+.timaat-timeline-marker-end {
+	float: right;
+	width: 10px;
+	height: 20px;
+	background-image: url('../img/range-marker-end.png');
+	background-repeat: no-repeat;
+	background-size: 9px 10px;
+	border-left: 1px solid #535649;
+	margin-right: -9px;
+	margin-top: -15px;
+	background-position-y: bottom;
+	background-position-x: -1px;
+}
+
 .sidebar {
 	position: absolute;
 	left: 0;

@@ -91,7 +91,25 @@
 		                      }, this);
 		            return container;
 		        }
-		    });			
+		    });
+
+			map.on('layeradd', function(ev) {
+				if ( ev.layer.options.data ) 
+					ev.layer.eachLayer(function (layer) {
+						if ( ev.layer.options.annotation ) {
+							if ( ev.layer.options.annotation.isSelected() ) layer.enableEdit();
+							else {
+								layer.disableEdit();
+								layer.dragging.disable();
+								layer.dragging._draggable = null;
+							}
+						}
+					});
+			});
+
+			
+			
+			
 			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
 			    position: 'topleft',
 			    content : '<button id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-success">'+
@@ -209,6 +227,7 @@
 				}
 			});
 
+			// TODO refactor into own inspector class
 			// setup sidebar inspector controls
 			TIMAAT.VideoPlayer.inspector = L.control.sidebar({
 			    autopan: false,
@@ -220,6 +239,16 @@
 					item: null,
 					type: null
 			}
+			TIMAAT.VideoPlayer.inspector.updateItem = function() {
+				if ( !TIMAAT.VideoPlayer.inspector.state.item ) return;
+				if (  TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
+					var start = TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.inspector.state.item.startTime,true);
+					var end = TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.inspector.state.item.endTime,true);
+					// update UI
+					$("#timaat-inspector-meta-start").val(start);
+					$("#timaat-inspector-meta-end").val(end);	
+				}
+			};
 
 			$('#timaat-inspector-meta-submit').click(function(ev) {
 				// TODO refactor, move to inspector function
@@ -240,6 +269,7 @@
 						anno.svg.color = color;
 						anno.model.selectorSvgs[0].colorRgba = color;
 						if ( color.length < 7 ) anno.model.selectorSvgs[0].colorRgba+="4C";
+						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
 						TIMAAT.Service.createAnnotation(title, comment, startTime, endTime, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
@@ -287,14 +317,23 @@
 					$('#timaat-inspector-meta-submit').attr("disabled");
 				}
 			});
-			$('#timaat-inspector-meta-start,#timaat-inspector-meta-end').on('blur', function(ev) {
+			
+			var metatimechange = function(ev) {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 				startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 				endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
 				$("#timaat-inspector-meta-start").val(TIMAAT.Util.formatTime(startTime, true));
-				$("#timaat-inspector-meta-end").val(TIMAAT.Util.formatTime(endTime, true));				
-			});
+				$("#timaat-inspector-meta-end").val(TIMAAT.Util.formatTime(endTime, true));			
+				
+				if ( TIMAAT.VideoPlayer.inspector.state.item && TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
+					TIMAAT.VideoPlayer.inspector.state.item.startTime = startTime;
+					TIMAAT.VideoPlayer.inspector.state.item.endTime = endTime;
+					TIMAAT.VideoPlayer.inspector.state.item.marker.updateView();
+				}
+			};
+			$('#timaat-inspector-meta-start,#timaat-inspector-meta-end').on({'blur': metatimechange, 'change':metatimechange} );
+			
 			$('#timaat-inspector-meta-setstart').click(function() {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
@@ -309,7 +348,7 @@
 			$('#timaat-inspector-meta-setend').click(function() {
 				var endTime = TIMAAT.VideoPlayer.video.currentTime;
 				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime,true));
-				$('#timaat-inspector-meta-start').trigger('blur');				
+				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 
 			
@@ -489,7 +528,7 @@
 			
 			$('#timaat-inspector-meta-duration').change(function(ev) {
 				var time = parseInt($(this).val());
-				if ( ! isNaN(time) ) TIMAAT.VideoPlayer.inspectorMetaEnd(time);				
+				if ( ! isNaN(time) ) TIMAAT.VideoPlayer.inspectorMetaEnd(time);
 				$(this).parent().click();
 			});
 
@@ -823,6 +862,7 @@
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			
+			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.setInspectorMetadata(TIMAAT.VideoPlayer.curList, 'analysislist');			
 
 			// setup annotations UI
@@ -847,6 +887,7 @@
 		addAnalysislist: function() {
 			console.log("TCL: addAnalysislist: function()");
 			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.setInspectorMetadata(null, 'analysislist');			
 		},
 		
@@ -863,6 +904,7 @@
 		editAnalysislist: function() {
 			console.log("TCL: editAnalysislist: function()");
 			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.setInspectorMetadata(TIMAAT.VideoPlayer.curList, 'analysislist');
 			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 		},
@@ -914,7 +956,7 @@
 			console.log("TCL: updateAnnotations: function()");
 			if ( this.annotationList == null ) return;
 			this.annotationList.forEach(function(annotation) {
-				if ( annotation.isActive() && annotation.hasChanges() ) {
+				if ( annotation.isSelected() && annotation.hasChanges() ) {
 					annotation.saveChanges();
 					TIMAAT.Service.updateAnnotation(annotation);
 					// update UI
@@ -978,6 +1020,13 @@
 			endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
 			$("#timaat-inspector-meta-start").val(TIMAAT.Util.formatTime(startTime, true));
 			$("#timaat-inspector-meta-end").val(TIMAAT.Util.formatTime(endTime, true));
+			
+			if ( TIMAAT.VideoPlayer.inspector.state.item && TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
+				TIMAAT.VideoPlayer.inspector.state.item.startTime = startTime;
+				TIMAAT.VideoPlayer.inspector.state.item.endTime = endTime;
+				TIMAAT.VideoPlayer.inspector.state.item.marker.updateView();
+			}
+
 		},
 		
 		setCategorySet: function(categoryset) {
@@ -995,6 +1044,7 @@
 		addAnalysisSegment: function() {
 			console.log("TCL: addAnalysisSegment: function()");
 			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.setInspectorMetadata(null,'analysissegment');
 //			$('#timaat-videoplayer-segment-meta').data('segment', null);
 //			$('#timaat-videoplayer-segment-meta').modal('show');
@@ -1028,6 +1078,7 @@
 			$("#timaat-annotation-list li").sort(function (a, b) {
 				if ( (parseFloat($(b).attr('data-starttime'))) < (parseFloat($(a).attr('data-starttime'))) ) return 1;
 				if ( (parseFloat($(b).attr('data-starttime'))) > (parseFloat($(a).attr('data-starttime'))) ) return -1;
+				if ( !$(b).hasClass('timaat-annotation-list-segment') &&  $(a).hasClass('timaat-annotation-list-segment') ) return -1;
 				return 0;
 			}).appendTo('#timaat-annotation-list');			
 		},
@@ -1043,8 +1094,9 @@
 			
 			this.annotationList.forEach(function(annotation) {
 				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-				if ( TIMAAT.VideoPlayer.curAnnotation == annotation && !annotation.isActive() ) TIMAAT.VideoPlayer.selectAnnotation(null);
-				if ( annotation.isActive() && annotation.hasChanges() ) hasChanges = true;
+				// update  behavior model --> annotation is only selected by user, regardless of timeline status
+//				if ( TIMAAT.VideoPlayer.curAnnotation == annotation && !annotation.isActive() ) TIMAAT.VideoPlayer.selectAnnotation(null);
+				if ( annotation.isSelected() && annotation.hasChanges() ) hasChanges = true;
 			});
 			if ( hasChanges ) $('#timaat-videoplayer-save-polygons-button').show(); else $('#timaat-videoplayer-save-polygons-button').hide();
 		},
@@ -1053,7 +1105,7 @@
 			// console.log("TCL: updateUI: function()");
 			var hasChanges = false;
 			this.annotationList.forEach(function(annotation) {
-				if ( annotation.isActive() && annotation.hasChanges() ) hasChanges = true;
+				if ( annotation.isSelected() && annotation.hasChanges() ) hasChanges = true;
 			});
 			
 			if ( hasChanges ) $('#timaat-videoplayer-save-polygons-button').show(); else $('#timaat-videoplayer-save-polygons-button').hide();
@@ -1189,7 +1241,8 @@
 			TIMAAT.VideoPlayer.curList.segments.push(segment);
 			segment.addUI();
 
-			TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+			TIMAAT.VideoPlayer.selectAnnotation(null);
+			TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');
 			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 
 			// update UI

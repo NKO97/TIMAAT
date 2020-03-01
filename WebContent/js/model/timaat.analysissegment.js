@@ -72,22 +72,26 @@
 					this.listView.click(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 					});
 					this.timelineView.click(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 					});
 					this.listView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					this.timelineView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
+						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});

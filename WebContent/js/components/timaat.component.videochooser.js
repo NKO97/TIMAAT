@@ -400,9 +400,9 @@
 			$('#timaat-videochooser-table').hide();
 			$('#timaat-videochooser-list-action').val('add').change();
 			
-			// $('#timaat-videochooser-collectionlibrary').removeClass("active");
+			$('#timaat-videochooser-collectionlibrary').removeClass("active");
 			$('#timaat-videochooser-collectionlibrary').addClass("text-info");
-			// $('#timaat-videochooser-collectionlist li').removeClass("active");
+			$('#timaat-videochooser-collectionlist li').removeClass("active");
 			$('#timaat-videochooser-collectionlist li button').addClass("btn-outline");
 			
 			TIMAAT.VideoChooser.collection = collection;

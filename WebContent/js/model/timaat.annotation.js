@@ -31,7 +31,11 @@
 					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth;
 					this.svg.color = this.model.selectorSvgs[0].colorRgba;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
-					this.svg.layer = L.layerGroup(null, {data:'annotationlayer'});
+					this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
+
+					this._startTime = this.model.startTime;
+					this._endTime = this.model.endTime;
+					
 					
 					// create and style list view element
 					this.listView = $('<li class="list-group-item" style="padding:0"> \
@@ -72,7 +76,7 @@
 						TIMAAT.UI.hidePopups();
 					});
 					this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-		      console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
+						console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 						$('.timaat-user-log-details').html(
 								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+anno.model.createdByUserAccount.id+'">[ID '+anno.model.createdByUserAccount.id+']</span></b><br>\
 								 '+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
@@ -165,16 +169,17 @@
 					this.svg.model.forEach(function(svgitem) {
 						var item = anno._parseSVG(svgitem);
 						anno.addSVGItem(item);
+						item.dragging.disable();
 					});
 					
 					// attach event handlers
 					$(this.listView).click(this, function(ev) {
-						TIMAAT.VideoPlayer.jumpVisible(ev.data.model.startTime, ev.data.model.endTime);
+						TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 						TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 						TIMAAT.VideoPlayer.pause();
 					});
 					$(this.listView).dblclick(this, function(ev) {
-						TIMAAT.VideoPlayer.jumpVisible(ev.data.model.startTime, ev.data.model.endTime);
+						TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 						TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
@@ -183,9 +188,33 @@
 					this.changed = false;
 
 				}
+		
+		
+		  get startTime() {
+			  return this._startTime;
+		  }
+			
+		  set startTime(startTime) {
+			  this._startTime = Math.min(startTime, TIMAAT.VideoPlayer.duration);
+			  this._startTime = Math.max(0, this._startTime);
+			  this._endTime = Math.max(startTime, this._endTime);
+			  if ( this._startTime != this.model.startTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+			  if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+		  };
+		  
+		  get endTime() {
+			  return this._endTime;
+		  }
+			
+		  set endTime(endTime) {
+			  this._endTime = Math.min(endTime, TIMAAT.VideoPlayer.duration);
+			  this._endTime = Math.max(this._startTime, this._endTime);
+			  if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+		  };	
+
 				
 				updateUI() {
-		      console.log("TCL: Annotation -> updateUI -> updateUI()");
+					console.log("TCL: Annotation -> updateUI -> updateUI()");
 					this.listView.attr('data-starttime', this.model.startTime);
 					this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
 					var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
@@ -209,7 +238,7 @@
 				}
 				
 				remove() {
-		      console.log("TCL: Annotation -> remove -> remove()");
+					console.log("TCL: Annotation -> remove -> remove()");
 					// remove annotation from UI
 					this.listView.remove();
 					map.removeLayer(this.svg.layer);
@@ -217,7 +246,7 @@
 				}
 				
 				addSVGItem (item) {
-		      console.log("TCL: Annotation -> addSVGItem -> item", item);
+					console.log("TCL: Annotation -> addSVGItem -> item", item);
 					if ( !item || this.svg.items.includes(item) ) return;
 					this.svg.items.push(item);
 					this.svg.layer.addLayer(item);
@@ -241,14 +270,14 @@
 						
 					});
 					item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
-		      console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 					item.on('dragend', function(ev) {anno.setChanged;TIMAAT.VideoPlayer.updateUI();});
-		      console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
-					
+					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+
 				}
 						
 				removeSVGItem (item) {
-		      console.log("TCL: Annotation -> removeSVGItem -> item", item);
+					console.log("TCL: Annotation -> removeSVGItem -> item", item);
 					if ( !item || !this.svg.items.includes(item) ) return;
 					this.svg.layer.removeLayer(item);
 					var index = this.svg.items.indexOf(item);
@@ -286,8 +315,10 @@
 					if ( !this.changed ) return;
 					this.svg.layer.clearLayers();
 					this.svg.items = Array();
+					this._startTime = this.model.startTime;
+					this._endTime = this.model.endTime;
 					
-					var anno = this;
+ 					var anno = this;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.model.forEach(function(svgitem) {
 						var item = anno._parseSVG(svgitem);
@@ -308,56 +339,88 @@
 				}
 				
 				saveChanges() {
-		      console.log("TCL: Annotation -> saveChanges -> saveChanges()");
+					console.log("TCL: Annotation -> saveChanges -> saveChanges()");
 					this._syncToModel();
 					this.changed = false;
 				}
 
 				updateStatus(time) {
-		      console.log("TCL: Annotation -> updateStatus -> time", time);
+					console.log("TCL: Annotation -> updateStatus -> time", time);
 					var active = false;
-					if ( time >= this.model.startTime && time <= this.model.endTime ) active = true;
+					if ( time >= this.startTime && time <= this.endTime ) active = true;
 					this.setActive(active);
 				}
 				
 				isActive() {
-		      console.log("TCL: Annotation -> isActive -> isActive()");
+					console.log("TCL: Annotation -> isActive -> isActive()");
 					return this.active;
 				}
 				
 				setActive(active) {
-		      console.log("TCL: Annotation -> setActive -> active", active);
+					console.log("TCL: Annotation -> setActive -> active", active);
 					if ( this.active == active ) return;
 					this.active = active;
 					if ( active ) {
 						this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
+						
+						if ( this.selected ) {
+
+						} else {
+							map.addLayer(this.svg.layer);
+						}
+						
+						// scroll list
+						this._scrollIntoView(this.listView);
+						
+					} else {
+						this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
+						
+						if ( this.selected ) {
+
+						} else {
+							map.removeLayer(this.svg.layer);
+						}
+//						if ( !this.isSelected() ) map.editTools.editLayer.removeLayer(this.svg.layer);
+
+					}
+				}
+						
+				setSelected(selected) {
+					console.log("TCL: Annotation -> setSelected -> selected", selected);
+					if ( this.selected == selected ) return;			
+					this.selected = selected;
+					if ( selected ) {
+
+						this.listView.addClass('timaat-annotation-list-selected');
+
+						map.removeLayer(this.svg.layer);
 						map.editTools.editLayer.addLayer(this.svg.layer);
 						this.svg.items.forEach(function(item) {
 							item.dragging._draggable = null;
 							item.dragging.addHooks();
 						});
-						// scroll list
-						this._scrollIntoView(this.listView);
 						
-					} else {
+					}
+					else {
 						this.discardChanges();
-						this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
-						map.editTools.editLayer.removeLayer(this.svg.layer);
-					}
-				}
+						this.listView.removeClass('timaat-annotation-list-selected');
 						
-				setSelected(selected) {
-		      console.log("TCL: Annotation -> setSelected -> selected", selected);
-					if ( this.selected == selected ) return;			
-					this.selected = selected;
-					if ( selected ) {
-						this.listView.addClass('timaat-annotation-list-selected');
+						map.editTools.editLayer.removeLayer(this.svg.layer);
+						if ( this.active ) map.addLayer(this.svg.layer);
+						
+						this.svg.items.forEach(function(item) {item.dragging.disable()});
+
 					}
-					else this.listView.removeClass('timaat-annotation-list-selected');
+					if ( this.marker ) this.marker.updateView();
+				}
+
+				isSelected() {
+					console.log("TCL: Annotation -> isSelected -> isSelected()");
+					return this.selected;
 				}
 				
 				_scrollIntoView(listItem) {
-		      console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
+					console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
 					var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
 					var listHeight = $('.timaat-annotation-list-wrapper').height();
 					var elementTop = listItem.position().top;
@@ -401,6 +464,8 @@
 				_syncToModel() {
 					console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 					var jsonData = [];
+					this.model.startTime = this._startTime;
+					this.model.endTime = this._endTime;
 					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
 					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;

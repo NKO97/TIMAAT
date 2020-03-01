@@ -25,13 +25,87 @@
 			    this.parent = annotation;
 			    this.annotation = annotation.model;
 			    this.annotationID = annotation.model.id;
-			    this._from = Math.min(annotation.model.startTime, TIMAAT.VideoPlayer.duration);
-			    this._to = Math.max(annotation.model.startTime, annotation.model.endTime);
+			    this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
+			    this._to = Math.max(annotation.startTime, annotation.model.endTime);
 			    this._color = '#'+annotation.model.selectorSvgs[0].colorRgba;
 			    
 			    // construct marker element
-			    this.element = $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerhead"></div></div>');
+			    this.element = $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>');
 			    this.element.attr('id','timaat-marker-'+this.annotationID);
+			    
+			    this.regionstart = $(this.element.find('.timaat-timeline-marker-start'));
+			    this.regionend = $(this.element.find('.timaat-timeline-marker-end'));
+			    
+			    var marker = this;
+			    var _markerlength;
+			    this.regionstart.draggable({
+			    	axis: "x",
+			    	containment: "#timaat-timeline-marker-pane",
+			    	start: function(ev,ui) {
+			    		_markerlength = Math.max(0.0, marker.regionend.position().left);
+			    		if (_markerlength > 0 ) _markerlength += 1;
+						TIMAAT.VideoPlayer.pause();
+			    	},
+			    	drag: function(ev,ui) {
+			    		if ( ui.position.left > _markerlength ) ui.position.left = _markerlength;
+			    		
+			    		var width = $('#timaat-video-seek-bar').width();
+			    		var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
+			    		var newoffset = Math.max(0.0, offset+ui.position.left);
+			    		var newfrom = newoffset * TIMAAT.VideoPlayer.duration / width;
+
+			    		TIMAAT.VideoPlayer.jumpTo(newfrom);
+			    		
+			    	},
+			    	stop: function(ev, ui) {
+			    		var width = $('#timaat-video-seek-bar').width();
+			    		var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
+			    		var newoffset = Math.max(0.0, offset+ui.position.left);
+			    		var newfrom = newoffset * TIMAAT.VideoPlayer.duration / width;
+
+			    		marker.parent.startTime = newfrom;
+			    		marker.updateView();
+			    		TIMAAT.VideoPlayer.inspector.updateItem();
+			    		
+			    		$(this).attr('style', 'position:relative');
+			    		
+			    	},
+			    });
+			    this.regionend.draggable({
+			    	axis: "x",
+			    	containment: "#timaat-timeline-marker-pane",
+			    	start: function(ev,ui) {
+						TIMAAT.VideoPlayer.pause();
+			    		_markerlength = -Math.max(0.0, $(this).position().left);
+			    		if (_markerlength < 0 ) _markerlength -= 1;
+			    	},
+			    	drag: function(ev,ui) {
+			    		if ( ui.position.left < _markerlength ) ui.position.left = _markerlength;
+			    		
+			    		var width = $('#timaat-video-seek-bar').width();
+			    		var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
+			    		var newoffset = Math.max(0.0, offset+ui.position.left);
+			    		var newlength = (ui.position.left-_markerlength) * TIMAAT.VideoPlayer.duration / width;
+
+						TIMAAT.VideoPlayer.jumpTo(marker.from+newlength);
+						
+
+			    	},
+			    	stop: function(ev, ui) {
+			    		var width = $('#timaat-video-seek-bar').width();
+			    		var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
+			    		var newoffset = Math.max(0.0, offset+ui.position.left);
+			    		var newlength = (ui.position.left-_markerlength) * TIMAAT.VideoPlayer.duration / width;
+
+			    		marker.parent.endTime = marker.from+newlength;
+						TIMAAT.VideoPlayer.jumpTo(marker.from+newlength);
+			    		marker.updateView();
+			    		TIMAAT.VideoPlayer.inspector.updateItem();
+
+			    		$(this).attr('style', 'position:relative');
+			    	},
+			    });
+
 			    
 			    this._updateElementColor();
 			    this._updateElementOffset();
@@ -47,32 +121,32 @@
 			  }
 			  
 			  get from() {
-		      console.log("TCL: Marker -> getfrom -> from()");
-				return this._from;
-				}
+				  console.log("TCL: Marker -> getfrom -> from()");
+				  return this._from;
+			  }
 				
 			  set from(from) {
-					console.log("TCL: Marker -> setfrom -> from", from);
+				  console.log("TCL: Marker -> setfrom -> from", from);
 				  this._from = Math.min(from, TIMAAT.VideoPlayer.duration);
 				  this._to = Math.max(from, this._to);
 				  this._updateElementOffset();
 			  };
 			  
 			  get to() {
-		   		console.log("TCL: Marker -> getto -> to()");
-				  return this.to;
+				  console.log("TCL: Marker -> getto -> to()");
+				  return this._to;
 				}
 				
 			  set to(to) {
-		   		console.log("TCL: Marker -> setto -> to", to);
+				  console.log("TCL: Marker -> setto -> to", to);
 				  this._from = Math.min(this._from, TIMAAT.VideoPlayer.duration);
 				  this._to = Math.max(this._from, to);
 				  this._updateElementOffset();
 				};	
 				  
 			  setRange(from, to) {
-				console.log("TCL: Marker -> setRange -> from", from);
-				console.log("TCL: Marker -> setRange -> to", to);
+				  console.log("TCL: Marker -> setRange -> from", from);
+				  console.log("TCL: Marker -> setRange -> to", to);
 				  this._from = Math.min(from, TIMAAT.VideoPlayer.duration);
 				  this._to = Math.max(from, to);
 				  this._updateElementOffset();
@@ -84,28 +158,38 @@
 			  }
 			  
 			  remove() {
-		      console.log("TCL: Marker -> remove -> remove()");
+				  console.log("TCL: Marker -> remove -> remove()");
 				  this.element.remove();
 			  }
 			  
 			  updateView() {
-		      console.log("TCL: Marker -> updateView -> updateView()");
-				  this._from = this.parent.model.startTime;
-				  this._to = this.parent.model.endTime;
+				  console.log("TCL: Marker -> updateView -> updateView()");
+				  this._from = this.parent.startTime;
+				  this._to = this.parent.endTime;
 				  this._color = '#'+this.parent.svg.color;
 				  this._updateElementColor();
 				  this._updateElementOffset();
+				  
+				  if ( this.parent.isSelected() ) {
+					  this.regionstart.attr('style','position:relative;');
+					  this.regionstart.show();
+					  this.regionend.attr('style','position:relative;');
+					  this.regionend.show();
+				  } else {
+					  this.regionstart.hide();
+					  this.regionend.hide();
+				  }
 			  }
 
 			  _updateElementColor() {
-		      console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
-		      this.element.css('background-color', this.hexToRgbA (this._color, 0.3));
-			    this.element.css('border-left-color', this._color);
-			    this.element.find('.timaat-timeline-markerhead').css('background-color', this._color);	  	
+				  console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
+				  this.element.css('background-color', this.hexToRgbA (this._color, 0.3));
+				  this.element.css('border-left-color', this._color);
+				  this.element.find('.timaat-timeline-markerhead').css('background-color', this._color);	  	
 			  }
 			  
 			  _updateElementOffset() {
-		      console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
+				  console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
 				  var magicoffset = 1; // TODO replace input slider
 
 				  var width =  $('#timaat-video-seek-bar').width();
