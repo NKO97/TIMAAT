@@ -6,7 +6,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -24,16 +23,15 @@ public class Event implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="begins_at_date")
-	private Date beginsAtDate;
+
+	@Column(name="began_at")
+	private Timestamp beganAt;
 
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="ends_at_date")
-	private Date endsAtDate;
+	@Column(name="ended_at")
+	private Timestamp endedAt;
 
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
@@ -125,12 +123,12 @@ public class Event implements Serializable {
 		this.id = id;
 	}
 
-	public Date getBeginsAtDate() {
-		return this.beginsAtDate;
+	public Timestamp getBeginsAtDate() {
+		return this.beganAt;
 	}
 
-	public void setBeginsAtDate(Date beginsAtDate) {
-		this.beginsAtDate = beginsAtDate;
+	public void setBeginsAtDate(Timestamp beganAt) {
+		this.beganAt = beganAt;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -141,12 +139,12 @@ public class Event implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public Date getEndsAtDate() {
-		return this.endsAtDate;
+	public Timestamp getEndsAtDate() {
+		return this.endedAt;
 	}
 
-	public void setEndsAtDate(Date endsAtDate) {
-		this.endsAtDate = endsAtDate;
+	public void setEndsAtDate(Timestamp endedAt) {
+		this.endedAt = endedAt;
 	}
 
 	public Timestamp getLastEditedAt() {

@@ -21,12 +21,10 @@ public class ActorHasAddress implements Serializable {
 	@EmbeddedId
 	private ActorHasAddressPK id;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="used_from")
+	@Column(name="used_from", columnDefinition = "DATE")
 	private Date usedFrom;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="used_until")
+	@Column(name="used_until", columnDefinition = "DATE")
 	private Date usedUntil;
 
 	//bi-directional many-to-one association to Actor

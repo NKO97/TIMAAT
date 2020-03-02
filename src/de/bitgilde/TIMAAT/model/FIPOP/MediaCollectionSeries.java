@@ -20,14 +20,12 @@ public class MediaCollectionSeries implements Serializable {
 	@Column(name="media_collection_id", unique=true, nullable=false)
 	private int mediaCollectionId;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="end_year")
+	@Column(name="end_year", columnDefinition = "DATE")
 	private Date endYear;
 
 	private int seasons;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="start_year")
+	@Column(name="start_year", columnDefinition = "DATE")
 	private Date startYear;
 
 	//bi-directional one-to-one association to MediaCollection

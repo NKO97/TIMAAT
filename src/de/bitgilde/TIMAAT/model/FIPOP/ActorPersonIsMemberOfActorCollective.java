@@ -22,12 +22,10 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 	@EmbeddedId
 	private ActorPersonIsMemberOfActorCollectivePK id;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="joined_at")
+	@Column(name="joined_at", columnDefinition = "DATE")
 	private Date joinedAt;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="left_at")
+	@Column(name="left_at", columnDefinition = "DATE")
 	private Date leftAt;
 
 	//bi-directional many-to-one association to ActorCollective

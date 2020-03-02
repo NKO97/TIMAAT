@@ -106,37 +106,37 @@ public class AnnotationEndpoint {
 		newAnno.setLayerVisual((byte) 1);
 		
 		// create IRI
-		String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
-				"://"+
-				containerRequestContext.getUriInfo().getBaseUri().getHost()+
-				":"+
-				containerRequestContext.getUriInfo().getBaseUri().getPort()+
-				containerRequestContext.getUriInfo().getBaseUri().getPath()+
-				"iri/"+Math.random(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
-		Iri iri = new Iri();
-		iri.setId(0);
-		iri.setIri(iristring);
+		// String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
+		// 		"://"+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getHost()+
+		// 		":"+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getPort()+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getPath()+
+		// 		"iri/"+Math.random(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
+		// Iri iri = new Iri();
+		// iri.setId(0);
+		// iri.setIri(iristring);
 		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.persist(iri);
-		entityManager.flush();
-		entityTransaction.commit();
-		entityManager.refresh(iri);
-		iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
-				"://"+
-				containerRequestContext.getUriInfo().getBaseUri().getHost()+
-				":"+
-				containerRequestContext.getUriInfo().getBaseUri().getPort()+
-				containerRequestContext.getUriInfo().getBaseUri().getPath()+
-				"iri/"+iri.getId(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
-		iri.setIri(iristring);
-		entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.persist(iri);
-		entityManager.flush();
-		entityTransaction.commit();
-		entityManager.refresh(iri);		
-		newAnno.setIri(iri);
+		// entityTransaction.begin();
+		// entityManager.persist(iri);
+		// entityManager.flush();
+		// entityTransaction.commit();
+		// entityManager.refresh(iri);
+		// iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
+		// 		"://"+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getHost()+
+		// 		":"+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getPort()+
+		// 		containerRequestContext.getUriInfo().getBaseUri().getPath()+
+		// 		"iri/"+iri.getId(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
+		// iri.setIri(iristring);
+		// entityTransaction = entityManager.getTransaction();
+		// entityTransaction.begin();
+		// entityManager.persist(iri);
+		// entityManager.flush();
+		// entityTransaction.commit();
+		// entityManager.refresh(iri);		
+		// newAnno.setIri(iri);
 		
 		// create UUID
 		Uuid uuid = new Uuid();
@@ -145,8 +145,9 @@ public class AnnotationEndpoint {
 		newAnno.setUuid(uuid);
 		
 		// update log metadata
-		newAnno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-		newAnno.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		newAnno.setCreatedAt(creationDate);
+		newAnno.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));

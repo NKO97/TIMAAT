@@ -29,12 +29,10 @@ public class ActorPerson implements Serializable {
 	@Column(name="actor_id")
 	private int actorId;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="date_of_birth")
+	@Column(name="date_of_birth", columnDefinition = "DATE")
 	private Date dateOfBirth;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="day_of_death")
+	@Column(name="day_of_death", columnDefinition = "DATE")
 	private Date dayOfDeath;
 
 	//bi-directional many-to-one association to LineupMember

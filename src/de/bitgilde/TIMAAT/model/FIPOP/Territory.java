@@ -19,10 +19,10 @@ public class Territory implements Serializable {
 	@Id
 	private int id;
 
-	@Temporal(TemporalType.DATE)
+	@Column(columnDefinition = "DATE")
 	private Date from;
 
-	@Temporal(TemporalType.DATE)
+	@Column(columnDefinition = "DATE")
 	private Date until;
 
 	//bi-directional many-to-many association to Location

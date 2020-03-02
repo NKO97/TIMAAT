@@ -23,10 +23,10 @@ public class ActorCollective implements Serializable {
 	@Column(name="actor_id")
 	private int actorId;
 
-	@Temporal(TemporalType.DATE)
+	@Column(columnDefinition = "DATE")
 	private Date disbanded;
 
-	@Temporal(TemporalType.DATE)
+	@Column(columnDefinition = "DATE")
 	private Date founded;
 
 	//bi-directional one-to-one association to Actor
