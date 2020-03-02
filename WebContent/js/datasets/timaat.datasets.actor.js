@@ -308,7 +308,7 @@
 				event.preventDefault();
 				if (!$("#timaat-actordatasets-actor-metadata-form").valid()) return false;
 
-				// the birth person model (in case of editing an existing person)
+				// the actor person model (in case of editing an existing person)
 				var person = $('#timaat-actordatasets-actor-metadata-form').data('actor');		
 
 				// Create/Edit person window submitted data
@@ -390,7 +390,7 @@
 				event.preventDefault();
 				if (!$("#timaat-actordatasets-actor-metadata-form").valid()) return false;
 
-				// the birth collective model (in case of editing an existing collective)
+				// the actor collective model (in case of editing an existing collective)
 				var collective = $('#timaat-actordatasets-actor-metadata-form').data('actor');		
 
 				// Create/Edit collective window submitted data
@@ -638,9 +638,11 @@
 						var birthNameChanged = false;
 						// update birth name
 						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+              console.log("TCL: actor.model.birthName", actor.model.birthName);
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
 						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
+              console.log("TCL: actor.model.birthName", actor.model.birthName);
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
@@ -2268,7 +2270,7 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`] placeholder="Is birth Name"">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" placeholder="Is birth Name"">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
@@ -2293,11 +2295,11 @@
 					);
 					if (actor.model.actorNames[i].id == actor.model.displayName.id) {
 						$('[data-role="displayName['+actor.model.actorNames[i].id+']"]')
-							.prop("checked",true);
+							.prop("checked", true);
 					}
 					if (actor.model.birthName && actor.model.actorNames[i].id == actor.model.birthName.id) {
 						$('[data-role="birthName['+actor.model.actorNames[i].id+']"]')
-							.prop("checked",true);
+							.prop("checked", true);
 					}
 					if (actor.model.actorNames[i].usedFrom) {
 						$('[data-role="nameUsedFrom['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));

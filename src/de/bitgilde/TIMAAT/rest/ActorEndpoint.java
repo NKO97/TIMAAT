@@ -245,7 +245,7 @@ public class ActorEndpoint {
 
     // update actor
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
-		if (updatedActor.getBirthName() != null ) actor.setBirthName(updatedActor.getBirthName());
+		actor.setBirthName(updatedActor.getBirthName());
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
 		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
@@ -367,6 +367,7 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: updatePerson jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ActorPerson updatedPerson = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		ActorPerson person = entityManager.find(ActorPerson.class, id);

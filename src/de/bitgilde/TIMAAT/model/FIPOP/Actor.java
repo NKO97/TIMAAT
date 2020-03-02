@@ -132,7 +132,7 @@ public class Actor implements Serializable {
 	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
 
 	@Transient
-	private ActorName displayName; 
+	private ActorName displayName;
 
 	public Actor() {
 	}

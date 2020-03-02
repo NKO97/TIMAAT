@@ -458,7 +458,7 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
@@ -511,7 +511,7 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
@@ -546,7 +546,7 @@
 						}
 						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle != medium.model.titles[i].id)) {
+						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
