@@ -35,7 +35,7 @@
 			$('#timaat-videochooser-collectionlibrary').click(function(ev) {
 				TIMAAT.VideoChooser.setMedia();
 				TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
-				// TIMAAT.VideoChooser.setCollection(null);
+				TIMAAT.VideoChooser.setCollection(null);
 			});
 
 			moment.locale('de');
