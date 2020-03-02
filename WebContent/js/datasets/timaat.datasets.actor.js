@@ -522,8 +522,8 @@
 						// console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
 					}));
-					$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-					$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+					$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				}
 				else {
 					// TODO open modal showing error that not all required fields are set.
@@ -895,8 +895,8 @@
 						// console.log("TCL: find(select) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
-					$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-					$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+					$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				}
 				else {
 					// TODO open modal showing error that not all required fields are set.
@@ -2106,12 +2106,12 @@
 			$('#actorFormHeader').html(actorType+" hinzufügen");
 			$('#timaat-actordatasets-'+actorType+'-metadata-form-submit').html("Hinzufügen");
 			$('#timaat-actordatasets-actor-metadata-isfictional').prop('checked', false);
-			$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-collective-metadata-founded').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-			$('#timaat-actordatasets-collective-metadata-disbanded').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
+			$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-actordatasets-collective-metadata-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-actordatasets-collective-metadata-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 		},
 
 		actorFormDatasheet: function(action, actorType, actorTypeData) {
@@ -2161,12 +2161,12 @@
 				}	else {
 					$('#timaat-actordatasets-actor-metadata-actortype-id').hide();
 				}
-				$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-collective-metadata-founded').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
-				$('#timaat-actordatasets-collective-metadata-disbanded').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false, format: 'YYYY-MM-DD'});
+				$('#timaat-actordatasets-actor-metadata-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-actordatasets-actor-metadata-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-actordatasets-person-metadata-dateofbirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-actordatasets-person-metadata-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-actordatasets-collective-metadata-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-actordatasets-collective-metadata-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-actordatasets-'+actorType+'-metadata-form-edit :input').prop("disabled", true);
@@ -2345,8 +2345,8 @@
 				// fields for new name entry
 				$('[data-role="new-name-fields"]').append(TIMAAT.ActorDatasets.appendNewNameField());
 
-				$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-				$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+				$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
 				$('#timaat-actordatasets-actor-actornames-form').data('actor', actor);
 			}
@@ -2491,8 +2491,8 @@
 				// fields for new address entry
 				$('[data-role="new-actorhasaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());
 
-				$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-				$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
+				$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
 				console.log("TCL: actor", actor);
 				$('#timaat-actordatasets-actor-addresses-form').data('actor', actor);

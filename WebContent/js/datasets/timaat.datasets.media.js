@@ -1602,8 +1602,8 @@
 			// setup form
 			$('#mediumFormHeader').html(mediumType+" hinzufügen");
 			$('#timaat-mediadatasets-'+mediumType+'-metadata-form-submit').html("Hinzufügen");
-			$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-			$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+			$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-mediadatasets-media-metadata-source-isprimarysource').prop('checked', true);
 			// $('#timaat-mediadatasets-media-metadata-source-isstillavailable').prop('checked', false);
 		},
@@ -1649,8 +1649,8 @@
 				}	else {
 					$('#timaat-mediadatasets-media-metadata-mediatype-id').hide();
 				}
-				$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, scrollMonth: false, scrollInput: false,format: 'YYYY-MM-DD'});
-				$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+				$('#timaat-mediadatasets-media-metadata-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-mediadatasets-media-metadata-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('.datasheet-form-edit-button').hide();
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit').prop("disabled", true);
 				$('#timaat-mediadatasets-'+mediumType+'-metadata-form-edit :input').prop("disabled", true);
