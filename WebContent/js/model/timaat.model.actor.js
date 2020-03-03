@@ -21,7 +21,7 @@
 	
 	TIMAAT.Actor = class Actor {
 		constructor(model, actorType) {
-      console.log("TCL: Actor -> constructor -> model, actorType", model, actorType);
+      // console.log("TCL: Actor -> constructor -> model, actorType", model, actorType);
 			// setup model
 			this.model = model;
 

@@ -459,8 +459,8 @@
 				var newName = [];
 				if (listEntry.find('input').each(function(){           
 					newName.push($(this).val());
-          console.log("TCL: $(this).val()", $(this).val());
-          console.log("TCL: newName", newName);
+          // console.log("TCL: $(this).val()", $(this).val());
+          // console.log("TCL: newName", newName);
 				}));
 				if (!$("#timaat-actordatasets-actor-actornames-form").valid()) 
 					return false;
@@ -624,7 +624,7 @@
 							usedFrom: formNameList[i].usedFrom,
 							usedUntil: formNameList[i].usedUntil,
 						};
-						// only update if anything changed
+						// only update if anything changed // TODO check will always pass due to different data formats
 						if (name != actor.model.actorNames[i]) {
 							console.log("TCL: update existing name");
 							await TIMAAT.ActorDatasets.updateName(name, actor);
@@ -638,16 +638,14 @@
 						var birthNameChanged = false;
 						// update birth name
 						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
-              console.log("TCL: actor.model.birthName", actor.model.birthName);
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
 						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
-              console.log("TCL: actor.model.birthName", actor.model.birthName);
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
 						if ( birthNameChanged || displayNameChanged) {
-							console.log("TCL actorType, actor", actorType, actor);
+							// console.log("TCL actorType, actor", actorType, actor);
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
 					}
@@ -663,7 +661,7 @@
 							usedFrom: formNameList[i].usedFrom,
 							usedUntil: formNameList[i].usedUntil,
 						};
-						// only update if anything changed
+						// only update if anything changed // TODO check will always pass due to different data formats
 						if (name != actor.model.actorNames[i]) {
 							console.log("TCL: update existing names (and add new ones)");
 							await TIMAAT.ActorDatasets.updateName(name, actor);
@@ -701,11 +699,10 @@
 							actor.model.birthName = null;
 							birthNameChanged = true;
 						}
+						// only update if anything changed // TODO check will always pass due to different data formats
 						if ( birthNameChanged || displayNameChanged) {
-							console.log("TCL actorType, actor", actorType, actor);
+							// console.log("TCL actorType, actor", actorType, actor);
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
-							break; // only one birthName needs to be found
-							// TODO break still valid with birthName and displayName?
 						}
 					}
 				}
@@ -2776,7 +2773,7 @@
 			try {
 				// create name
 				var newNameModel = await TIMAAT.ActorService.createName(nameModel.model);
-        console.log("TCL: newNameModel", newNameModel);
+        // console.log("TCL: newNameModel", newNameModel);
 			} catch(error) {
 				console.log( "error: ", error);
 			}
@@ -2791,10 +2788,7 @@
 					// var newName = await TIMAAT.ActorService.createName(newNames[i]);
 					var addedNameModel = await TIMAAT.ActorService.addName(actor.model.id, newNames[i]);
 					actor.model.actorNames.push(addedNameModel);
-					console.log("TCL: actor.model.actorNames", actor.model.actorNames);
-					console.log("TCL: actor.model.actorNames.length", actor.model.actorNames.length);	
 				}
-				// await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 			} catch(error) {
 				console.log( "error: ", error);
 			}
