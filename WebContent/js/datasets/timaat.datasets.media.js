@@ -755,7 +755,7 @@
 
 				if (audio) { // update audio
 					// medium data
-					audio = TIMAAT.MediaDatasets.updateMediumModelData(audio, formDataObject);
+					audio = await TIMAAT.MediaDatasets.updateMediumModelData(audio, formDataObject);
 					// audio data
 					audio.model.mediumAudio.length = TIMAAT.Util.parseTime(formDataObject.length);
 					// TODO: audiocodecinformation
@@ -837,7 +837,7 @@
 
 				if (mediumDocument) { // update document
 					// medium data
-					mediumDocument = TIMAAT.MediaDatasets.updateMediumModelData(mediumDocument, formDataObject);
+					mediumDocument = await TIMAAT.MediaDatasets.updateMediumModelData(mediumDocument, formDataObject);
 					// document data
 					// currently empty
 
@@ -922,7 +922,7 @@
 
 				if (image) { // update image
 					// medium data
-					image = TIMAAT.MediaDatasets.updateMediumModelData(image, formDataObject);
+					image = await TIMAAT.MediaDatasets.updateMediumModelData(image, formDataObject);
 					// image data
 					image.model.mediumImage.width = formDataObject.width;
 					image.model.mediumImage.height = formDataObject.height;
@@ -1004,7 +1004,7 @@
 
 				if (software) { // update software
 					// medium data
-					software = TIMAAT.MediaDatasets.updateMediumModelData(software, formDataObject);
+					software = await TIMAAT.MediaDatasets.updateMediumModelData(software, formDataObject);
 					// software data
 					software.model.mediumSoftware.version = formDataObject.version;
 
@@ -1083,7 +1083,7 @@
 
 				if (text) { // update text
 					// medium data
-					text = TIMAAT.MediaDatasets.updateMediumModelData(text, formDataObject);
+					text = await TIMAAT.MediaDatasets.updateMediumModelData(text, formDataObject);
 					// text data
 					text.model.mediumText.content = formDataObject.content;
 
@@ -1255,7 +1255,7 @@
 
 				if (videogame) { // update videogame
 					// medium data
-					videogame = TIMAAT.MediaDatasets.updateMediumModelData(videogame, formDataObject);
+					videogame = await TIMAAT.MediaDatasets.updateMediumModelData(videogame, formDataObject);
 					// videogame data
 					videogame.model.mediumVideogame.isEpisode = (formDataObject.isEpisode) ? true : false;
 
@@ -2355,7 +2355,7 @@
 			return medium;
 		},
 
-		createMediumModel:async function(formDataObject, mediaTypeId) {
+		createMediumModel: async function(formDataObject, mediaTypeId) {
 			var medium = {
 				id: 0,
 				remark: formDataObject.remark,
