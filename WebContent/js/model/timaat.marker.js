@@ -27,7 +27,8 @@
 			    this.annotationID = annotation.model.id;
 			    this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
 			    this._to = Math.max(annotation.startTime, annotation.model.endTime);
-			    this._color = '#'+annotation.model.selectorSvgs[0].colorRgba;
+			    this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
+			    this._opacity = annotation.model.selectorSvgs[0].colorRgba.substring(6,8);
 			    
 			    // construct marker element
 			    this.element = $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>');
@@ -153,7 +154,7 @@
 			  }
 			  
 			  get color() {
-		   		console.log("TCL: Marker -> getcolor -> color()");
+				  console.log("TCL: Marker -> getcolor -> color()");
 				  return this._color;
 			  }
 			  
@@ -183,7 +184,8 @@
 
 			  _updateElementColor() {
 				  console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
-				  this.element.css('background-color', this.hexToRgbA (this._color, 0.3));
+				  console.log(this._color+"4C");
+				  this.element.css('background-color', this.hexToRgbA(this._color,0.3));
 				  this.element.css('border-left-color', this._color);
 				  this.element.find('.timaat-timeline-markerhead').css('background-color', this._color);	  	
 			  }
@@ -203,13 +205,13 @@
 				  console.log("TCL: Marker -> hexToRgbA -> hex", hex);
 				  console.log("TCL: Marker -> hexToRgbA -> opacity", opacity);
 				  var c;
-				  if(/^#([A-Fa-f0-9]{4}){1,2}$/.test(hex)) {
+				  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
 					  c = hex.substring(1).split('');
-					  if ( c.length == 4 ) {
+					  if ( c.length == 3 ) {
 						  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
 					  }
 					  c = '0x'+c.join('');
-					  return 'rgba('+[(c>>24)&255, (c>>16)&255, (c>>8)&255].join(',')+','+opacity+')';
+					  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
 				  }
 				  throw new Error('Bad Hex');
 			  }

@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
-import de.bitgilde.TIMAAT.model.FIPOP.Iri;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
