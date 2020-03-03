@@ -393,7 +393,7 @@ public class ActorEndpoint {
 		// TODO update place of birth
 		person.setDayOfDeath(updatedPerson.getDayOfDeath());
 		// TODO update place of death
-		if ( updatedPerson.getSex() != null) person.setSex(updatedPerson.getSex());
+		person.setSex(updatedPerson.getSex());
 		// TODO update person is member of collective
 
 		System.out.println("ActorServiceEndpoint: updatePerson update log entry");

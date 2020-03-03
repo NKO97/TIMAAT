@@ -197,7 +197,6 @@
 					var displayTitle = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
 					var source = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					var mediumType;
-					var mediumSubtypeModel;
 					switch(formDataObject.typeId) {
 						case "1":
 							mediumType = "audio";
@@ -221,7 +220,7 @@
 							mediumType = "videogame";							
 						break;
 					}
-					mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataObject, mediumType);
+					var mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataObject, mediumType);
 
 					await TIMAAT.MediaDatasets.createMedium(mediumType, mediumModel, mediumSubtypeModel, displayTitle, source);
 					var medium = TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length-1];
@@ -2332,6 +2331,7 @@
 		},
 
 		updateMediumModelData: async function(medium, formDataObject) {
+    	// console.log("TCL: medium, formDataObject", medium, formDataObject);
 			// medium data
 			medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 			medium.model.copyright = formDataObject.copyright;

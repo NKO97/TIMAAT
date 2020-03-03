@@ -1669,11 +1669,7 @@
                           <fieldset>
                             <legend>Name</legend>
                             <div class="form-row">
-                              <div class="col-md-2 person-data person-title-data">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-title">Title</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-title" name="title" placeholder="[Enter Title]" aria-describedby="Title">
-                              </div>
-                              <div class="col">
+                              <div class="col-md-12">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-actor-metadata-name">Display Name*</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-actor-metadata-name" name="displayName" placeholder="[Enter display name]" aria-describedby="Primary Name" minlength="3" maxlength="200" required>
                               </div>
@@ -1710,6 +1706,26 @@
                             <legend>Bio</legend>
                             <div class="form-row">
                               <div class="col-md-2">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-title">Title</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-title" name="title" placeholder="[Enter Title]" aria-describedby="Title">
+                              </div>
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-sex-type">Sex</label>
+                                <select class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-sex-type" name="sexId">
+                                  <option value="" disabled selected hidden>[Choose sex...]</option>
+                                  <option value="1">Male</option>
+                                  <option value="2">Female</option>
+                                  <option value="3">Other</option>
+                                  <option value="4">Unknown</option>
+                                </select>
+                              </div>
+                              <div class="col-md-7">
+                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-citizenship-name">Citizenship</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-citizenship-name" name="citizenshipName" placeholder="[Enter citizenship]" aria-describedby="Citizenship">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-2">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-dateofbirth">Date of birth</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-dateofbirth" name="dateOfBirth" placeholder="[Enter date of birth]" aria-describedby="Date of birth">
                               </div>
@@ -1724,22 +1740,6 @@
                               <div class="col-md-4">
                                 <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-placeofdeath">Place of death</label>
                                 <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-placeofdeath" name="placeOfDeath" placeholder="[Enter place of death]" aria-describedby="Place of death" readonly>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                              <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-sex-type">Sex</label>
-                                <select class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-sex-type" name="sexId">
-                                  <option value="" disabled selected hidden>[Choose sex...]</option>
-                                  <option value="1">Male</option>
-                                  <option value="2">Female</option>
-                                  <option value="3">Other</option>
-                                  <option value="4">Unknown</option>
-                                </select>
-                              </div>
-                              <div class="col-md-9">
-                                <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-citizenship-name">Citizenship</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-citizenship-name" name="citizenshipName" placeholder="[Enter citizenship]" aria-describedby="Citizenship">
                               </div>
                             </div>
                             <div class="form-row">

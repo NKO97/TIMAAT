@@ -173,16 +173,14 @@
 					// actor data
 					actor = await TIMAAT.ActorDatasets.updateActorModelData(actor, formDataObject);
 					// person data on actor dataseheet
-					console.log("TCL: formDataObject", formDataObject);
+
 					actor.updateUI();
-					console.log("TCL actorType, actor: ", actor.model.actorType.actorTypeTranslations[0].type, actor);
 					TIMAAT.ActorDatasets.updateActor(actor.model.actorType.actorTypeTranslations[0].type, actor);
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
 				} else { // create new actor
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, formDataObject.typeId);
 					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 					var actorType;
-					var actorSubtypeModel;
 					var actorSubtypeTranslationModel = null;
 					var citizenshipModel = null;
 					switch (formDataObject.typeId) {
@@ -195,13 +193,12 @@
 							actorType = "collective";
 						break;
 					}
-					actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, actorType);
-					if (actorType) {
-						await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayName, actorSubtypeTranslationModel, citizenshipModel);
-						var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
-						TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
-						// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
-					}
+					var actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, actorType);
+
+					await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayName, actorSubtypeTranslationModel, citizenshipModel);
+					var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
+					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
+					// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
 				}
 			});
 
@@ -318,12 +315,23 @@
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});				
-				formDataObject.sexId = (formDataObject.sexId) ? formDataObject.sexId : 4; // set default to 'unknown' (id 4)
+				formDataObject.sexId = (formDataObject.sexId == "") ? null : Number(formDataObject.sexId);
 				console.log("TCL: formDataObject", formDataObject);
 
 				if (person) { // update person
-					// update actor + person data
+					// update actor
 					person = await TIMAAT.ActorDatasets.updateActorModelData(person, formDataObject);
+					// update person data
+					actor.model.actorPerson.title = formDataObject.title;
+					actor.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
+					actor.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
+					actor.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
+					actor.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
+					actor.model.actorPerson.sex.id =  (formDataObject.sexId == "") ? null : Number(formDataObject.sexId);
+					actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName;
+					actor.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
+
+          console.log("TCL: person", person);
 					person.updateUI();
 					console.log("TCL actorType, actor", 'person', person);
 					TIMAAT.ActorDatasets.updateActor('person', person);
@@ -401,8 +409,12 @@
 				});
 
 				if (collective) { // update collective
-					// update actor + collective  data
+					// update actor
 					collective = await TIMAAT.ActorDatasets.updateActorModelData(collective, formDataObject);
+					// update collective data
+					actor.model.actorCollective.founded = moment.utc(formDataObject.founded, "YYYY-MM-DD");
+					actor.model.actorCollective.disbanded = moment.utc(formDataObject.disbanded, "YYYY-MM-DD");
+
 					collective.updateUI();
 					console.log("TCL actorType, actor", 'collective', collective);
 					TIMAAT.ActorDatasets.updateActor('collective', collective);
@@ -2091,9 +2103,6 @@
 				$('.actortype-data').hide();
 			}
 			$('.'+actorType+'-data').show();
-			if (actorType == "collective") {
-				$('.person-title-data').hide(); // to display title in same row with actor name data
-			}
 			$('.datasheet-form-edit-button').hide();
 			$('.datasheet-form-delete-button').hide();
 			$('.datasheet-form-buttons').hide()
@@ -2134,9 +2143,6 @@
 			$('.emailaddress-data-tab').show();
 			$('.phonenumber-data-tab').show();
 
-			if (actorType == "collective") {
-				$('.person-title-data').hide(); // to display title in same row with actor name data
-			}
 			$('.nav-tabs a[href="#'+actorType+'Datasheet"]').focus();
 			$('#timaat-actordatasets-actor-metadata-form').show();
 
@@ -2196,14 +2202,6 @@
 
 			// actor subtype specific data
 			switch (actorType) {
-				case 'actor':
-					if (actorTypeData.model.actorType.actorTypeTranslations[0].type == 'person') {
-						$('.person-title-data').show();
-						$('#timaat-actordatasets-person-metadata-title').val(data.actorPerson.title);
-					} else if (actorTypeData.model.actorType.actorTypeTranslations[0].type == 'collective') {
-						$('.person-title-data').hide();
-					}
-				break;
 				case 'person':
 					$('#timaat-actordatasets-person-metadata-title').val(data.actorPerson.title);
 					if(isNaN(moment(data.actorPerson.dateOfBirth)))
@@ -2911,6 +2909,7 @@
 							tempSubtypeModel = actor.model.actorCollective;
 						break;
 					}
+					// console.log("TCL: tempSubtypeModel", tempSubtypeModel);
 					var tempActorSubtypeModel = await TIMAAT.ActorService.updateActorSubtype(actorSubtype, tempSubtypeModel);
 				} catch(error) {
 					console.log( "error: ", error);
@@ -3105,25 +3104,6 @@
 					break;
 				}
 			}
-			// subtype data
-			switch (actor.model.actorType.actorTypeTranslations[0].type) {
-				case 'person':
-					// person data
-					actor.model.actorPerson.title = formDataObject.title;
-					actor.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
-					actor.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
-					actor.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
-					actor.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
-					actor.model.actorPerson.sex.id = Number(formDataObject.sexId);
-					actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName;
-					actor.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
-				break;
-				case 'collective':
-					// collective data
-					actor.model.actorCollective.founded = moment.utc(formDataObject.founded, "YYYY-MM-DD");
-					actor.model.actorCollective.disbanded = moment.utc(formDataObject.disbanded, "YYYY-MM-DD");
-				break;
-			}
 			return actor;
 		},
 
@@ -3166,7 +3146,7 @@
 							id: (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath),
 						},
 						sex: {
-							id: Number(formDataObject.sexId),
+							id: (formDataObject.sexId == "") ? null : Number(formDataObject.sexId),
 						},
 						actorPersonTranslations: [],
 						citizenships : []
