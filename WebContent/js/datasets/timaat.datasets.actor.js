@@ -1015,7 +1015,7 @@
 					i = actor.model.actorHasAddresses.length;
 					var newActorHasAddresses = [];
 					for (; i < formActorHasAddressesList.length; i++) { // create new actorHasAddresses
-						var actorHasAddress = TIMAAT.ActorDatasets.createActorHasAddressModel(formActorHasAddressesList[i], actor.model.id, 0);
+						var actorHasAddress = await TIMAAT.ActorDatasets.createActorHasAddressModel(formActorHasAddressesList[i], actor.model.id, 0);
 						newActorHasAddresses.push(actorHasAddress);
 					}
 					console.log("TCL: (update existing addresses and) add new ones");

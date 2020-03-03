@@ -31,11 +31,13 @@ public class City implements Serializable {
 	//bi-directional many-to-one association to ActorPerson
 	@OneToMany(mappedBy="placeOfBirthCityLocation")
 	// @JsonManagedReference(value = "City-ActorPerson1")
+	@JsonIgnore
 	private List<ActorPerson> actorPersons1;
 
 	//bi-directional many-to-one association to ActorPerson
 	@OneToMany(mappedBy="placeOfDeathCityLocation")
-  // @JsonManagedReference(value = "City-ActorPerson2")
+	// @JsonManagedReference(value = "City-ActorPerson2")
+	@JsonIgnore
 	private List<ActorPerson> actorPersons2;
 
 	public City() {

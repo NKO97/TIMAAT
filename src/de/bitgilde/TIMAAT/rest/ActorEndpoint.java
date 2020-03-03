@@ -901,6 +901,7 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: createAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address newAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
@@ -954,6 +955,7 @@ public class ActorEndpoint {
 
 		System.out.println("ActorServiceEndpoint: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address address = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
@@ -966,7 +968,7 @@ public class ActorEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( address == null ) {
-			// System.out.println("ActorServiceEndpoint: addAddress: address == null !");
+			System.out.println("ActorServiceEndpoint: addAddress: address == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// System.out.println("ActorServiceEndpoint: addAddress: address: "+address.getAddress());
@@ -980,7 +982,7 @@ public class ActorEndpoint {
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
-		// Not necessary, a address will always be created in conjunction with a actor
+		// Not necessary, an address will always be created in conjunction with a actor
 		// System.out.println("ActorServiceEndpoint: addAddress: persist address");
 
 		// persist address
