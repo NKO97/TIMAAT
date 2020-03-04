@@ -28,8 +28,8 @@
 					this.marker = new TIMAAT.Marker(this);
 					this.svg = Object();
 					this.svg.items = Array();
-					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth;
-					this.svg.color = this.model.selectorSvgs[0].colorRgba;
+					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
+					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
 

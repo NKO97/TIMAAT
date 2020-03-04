@@ -266,7 +266,7 @@
 						anno.model.comment = comment;
 						anno.model.startTime = startTime;
 						anno.model.endTime = endTime;
-						anno.svg.color = color;
+						anno.svg.color = color.substring(0,6);
 						anno.model.selectorSvgs[0].colorRgba = color;
 						if ( color.length < 7 ) anno.model.selectorSvgs[0].colorRgba+="4C";
 						anno.saveChanges();
@@ -714,6 +714,7 @@
 			console.log("TCL: setupVideo: function(video) ");
 			console.log("TCL: video", video);
 			// setup model
+			if ( video.mediumVideo.length < 0 ) video.mediumVideo.length += 3600; // temp fix for DB problems
 			this.model.video = video;
 			this.duration = video.mediumVideo.length;			
 			// remove all annotations and markers

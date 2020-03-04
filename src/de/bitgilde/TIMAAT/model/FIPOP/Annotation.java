@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,22 +48,24 @@ public class Annotation implements Serializable {
 	@Column(name="layer_visual")
 	private int layerVisual;
 
-	@Column(name="sequence_end_time")
+	@Column(name="sequence_end_time", columnDefinition = "TIME")
 	@JsonIgnore
 	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	private Time sequenceEndTime;
+	@Temporal(TemporalType.TIME)
+	private Date sequenceEndTime;
 
-	@Column(name="sequence_start_time")
+	@Column(name="sequence_start_time", columnDefinition = "TIME")
 	@JsonIgnore
-//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	private Time sequenceStartTime;
+	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
+	@Temporal(TemporalType.TIME)
+	private Date sequenceStartTime;
 	
 	@JsonProperty("startTime")
 	@Transient
 	private float startTime;
 
 	@JsonProperty("endTime")
-	@Transient
+	@Transient	
 	private float endTime;
 
 	//bi-directional many-to-one association to AnalysisContentAudio
@@ -253,7 +257,7 @@ public class Annotation implements Serializable {
 		this.layerVisual = layerVisual;
 	}
 
-	public Time getSequenceEndTime() {
+	public Date getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
@@ -261,17 +265,18 @@ public class Annotation implements Serializable {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public Time getSequenceStartTime() {
+	public Date getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
 	public void setSequenceStartTime(Time sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
 	}
-	
+	 
 	public float getStartTime() {
+		
 		if ( this.sequenceStartTime == null ) return -1;
-		return sequenceStartTime.getTime()/1000f;
+		return (sequenceStartTime.getTime()+Calendar.getInstance().get(Calendar.ZONE_OFFSET))/1000f;
 	}
 	
 	@JsonIgnore
@@ -281,13 +286,14 @@ public class Annotation implements Serializable {
 
 	public void setStartTime(float startTime) {
 		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new java.sql.Time(0);
+//		this.sequenceStartTime.setTime((long)((startTime-Calendar.getInstance().get(Calendar.ZONE_OFFSET))*1000f));
 		this.sequenceStartTime.setTime((long)(startTime*1000f));
 		this.startTime = startTime;
 	}
 
 	public float getEndTime() {
 		if ( sequenceEndTime == null ) return -1;
-		return sequenceEndTime.getTime()/1000f;
+		return (sequenceEndTime.getTime()+Calendar.getInstance().get(Calendar.ZONE_OFFSET))/1000f;
 	}
 
 	@JsonIgnore
@@ -297,6 +303,7 @@ public class Annotation implements Serializable {
 
 	public void setEndTime(float endTime) {
 		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new java.sql.Time(0);
+//		this.sequenceEndTime.setTime((long)((endTime-Calendar.getInstance().get(Calendar.ZONE_OFFSET))*1000f));
 		this.sequenceEndTime.setTime((long)(endTime*1000f));
 		this.endTime = endTime;
 	}
