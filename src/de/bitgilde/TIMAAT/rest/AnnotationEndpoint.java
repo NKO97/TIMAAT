@@ -195,15 +195,15 @@ public class AnnotationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateAnnotation(@PathParam("id") int id, String jsonData) {
+		System.out.println("AnnotationServiceEndpoint: updateAnnotation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation updatedAnno = null;
-
-    	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Annotation annotation = entityManager.find(Annotation.class, id);
-    	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		
-    	// parse JSON data
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Annotation annotation = entityManager.find(Annotation.class, id);
+		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// parse JSON data
 		try {
 			updatedAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
@@ -211,12 +211,16 @@ public class AnnotationEndpoint {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
-		    	
+					
+		System.out.println("AnnotationServiceEndpoint: updateAnnotation: update annotation data");
     	// update annotation
 		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
 		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
-		if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
-		if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
+		// if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
+		// if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
+		
+		if ( updatedAnno.getSequenceStartTime() != null) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
+		if ( updatedAnno.getSequenceEndTime() != null ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
 
 		if ( updatedAnno.getSelectorSvgs() != null 
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 
@@ -228,6 +232,7 @@ public class AnnotationEndpoint {
 				 && (updatedAnno.getSelectorSvgs().size() > 0) 
 				 && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null ) annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
 
+		System.out.println("AnnotationServiceEndpoint: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -235,7 +240,8 @@ public class AnnotationEndpoint {
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
-		
+
+		System.out.println("AnnotationServiceEndpoint: updateAnnotation: persist data");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(annotation);

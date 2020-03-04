@@ -356,6 +356,8 @@
 				analysisListID: list,
 				startTime: startTime,
 				endTime: endTime,
+				sequenceStartTime: startTime * 1000,
+				sequenceEndTime: endTime * 1000,
 //				actors: [],
 //				annotations1: [],
 //				annotations2: [],

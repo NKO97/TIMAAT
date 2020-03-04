@@ -49,16 +49,16 @@ public class Annotation implements Serializable {
 	private int layerVisual;
 
 	@Column(name="sequence_end_time", columnDefinition = "TIME")
-	@JsonIgnore
+	// @JsonIgnore
 	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	@Temporal(TemporalType.TIME)
-	private Date sequenceEndTime;
+	// @Temporal(TemporalType.TIME)
+	private Time sequenceEndTime;
 
 	@Column(name="sequence_start_time", columnDefinition = "TIME")
-	@JsonIgnore
+	// @JsonIgnore
 	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	@Temporal(TemporalType.TIME)
-	private Date sequenceStartTime;
+	// @Temporal(TemporalType.TIME)
+	private Time sequenceStartTime;
 	
 	@JsonProperty("startTime")
 	@Transient
@@ -257,7 +257,7 @@ public class Annotation implements Serializable {
 		this.layerVisual = layerVisual;
 	}
 
-	public Date getSequenceEndTime() {
+	public Time getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
@@ -265,7 +265,7 @@ public class Annotation implements Serializable {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public Date getSequenceStartTime() {
+	public Time getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
