@@ -28,7 +28,6 @@
 			    this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
 			    this._to = Math.max(annotation.startTime, annotation.model.sequenceEndTime/1000.0);
 			    this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
-			    this._opacity = annotation.model.selectorSvgs[0].colorRgba.substring(6,8);
 			    
 			    // construct marker element
 			    this.element = $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>');

@@ -257,18 +257,18 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
 					var anno = TIMAAT.VideoPlayer.inspector.state.item;
 					var title = $("#timaat-inspector-meta-title").val();
+					var opacity = $("#timaat-inspector-meta-opacity").val();
 					var comment = $("#timaat-inspector-meta-comment").val();
 					var startTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-start").val());
 					var endTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-end").val());
-					var color = TIMAAT.VideoPlayer.UI.cp.colorHex.substring(1)+"4C"; // TODO refactor
+					var color = TIMAAT.VideoPlayer.UI.cp.colorHex.substring(1);
 					if (anno) {
 						anno.model.title = title;
 						anno.model.comment = comment;
 						anno.model.sequenceStartTime = startTime*1000.0;
 						anno.model.sequenceEndTime = endTime*1000.0;
-						anno.svg.color = color.substring(0,6);
-						anno.model.selectorSvgs[0].colorRgba = color;
-						if ( color.length < 7 ) anno.model.selectorSvgs[0].colorRgba+="4C";
+						anno.svg.color = color;
+						anno.opacity = opacity;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
@@ -317,6 +317,16 @@
 					$('#timaat-inspector-meta-submit').attr("disabled");
 				}
 			});
+
+			var sliderupdate = function(ev) {
+				if ( TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
+					var anno = TIMAAT.VideoPlayer.inspector.state.item;
+					var opacity = $("#timaat-inspector-meta-opacity").val();
+					anno.opacity = opacity;
+				}
+			};
+			$('#timaat-inspector-meta-opacity').on({ 'change':sliderupdate,'input':sliderupdate});
+			
 			
 			var metatimechange = function(ev) {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
@@ -581,6 +591,7 @@
 				// annotations
 				if ( type == 'annotation' ) {
 					$('#timaat-inspector-meta-color-group').show();
+					$('#timaat-inspector-meta-opacity-group').show();
 					$('#timaat-inspector-meta-timecode-group').show();
 					$('#timaat-inspector-meta-comment-group').show();
 					var anno = item;
@@ -589,6 +600,7 @@
 					var color = (anno) ? anno.svg.color : TIMAAT.VideoPlayer.UI.cp.colorHex.substring(1);
 					color = color.substring(0,6);
 					var title = (anno) ? anno.model.title : "";
+					var opacity = (anno) ? anno.opacity : "0.3";
 					var comment = (anno) ? anno.model.comment : "";
 					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
 					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
@@ -597,6 +609,7 @@
 					$('#timaat-inspector-meta-submit').html(submit);
 					TIMAAT.VideoPlayer.UI.cp.setColor('#'+color);
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
+					$("#timaat-inspector-meta-opacity").val(opacity);
 					$("#timaat-inspector-meta-comment").val(comment);
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);	
@@ -605,6 +618,7 @@
 				// analysis lists
 				if ( type == 'analysislist' ) {
 					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-timecode-group').hide();
 					$('#timaat-inspector-meta-comment-group').show();
 					var list = item;
@@ -622,6 +636,7 @@
 				// analysis segments
 				if ( type == 'analysissegment' ) {
 					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-timecode-group').show();
 					$('#timaat-inspector-meta-comment-group').hide();
 					var segment = item;

@@ -30,6 +30,7 @@
 					this.svg.items = Array();
 					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
 					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
+					this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
 
@@ -189,6 +190,17 @@
 
 				}
 		
+		  get opacity() {
+			  return this._opacity;
+		  }
+			
+		  set opacity(opacity) {
+			  this._opacity = Math.min(1.0, Math.max(0.0,opacity));
+			  this.setChanged();
+			  TIMAAT.VideoPlayer.updateUI();
+			  this.updateUI();
+		  };
+
 		
 		  get startTime() {
 			  return this._startTime;
@@ -230,7 +242,7 @@
 					// update svg
 					var anno = this;
 					this.svg.items.forEach(function(item) {
-					        item.setStyle({color:'#'+anno.svg.color, weight: anno.svg.strokeWidth, fillOpacity: 0.2});
+					        item.setStyle({color:'#'+anno.svg.color, weight: anno.svg.strokeWidth, fillOpacity: anno.opacity});
 					});
 					
 					// update marker
@@ -317,6 +329,8 @@
 					this.svg.items = Array();
 					this._startTime = this.model.sequenceStartTime/1000.0;
 					this._endTime = this.model.sequenceEndTime/1000.0;
+					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
+					this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
 					
  					var anno = this;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
@@ -335,6 +349,7 @@
 					}
 					
 					this.changed = false;
+					this.updateUI();
 
 				}
 				
@@ -469,6 +484,7 @@
 					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
 					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+					this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
 					this.svg.items.forEach(function(item) {
 						if ( item instanceof L.Rectangle ) {
 							var jsonItem = {

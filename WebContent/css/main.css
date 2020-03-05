@@ -98,6 +98,11 @@ p + p {
 	margin-top: 1em;
 }
 
+#timaat-inspector-meta-opacity {
+	margin-top: 4px;
+	width: 100%;
+}
+
 .timmat-video-thumbnail {
 	cursor: ew-resize;
 }
