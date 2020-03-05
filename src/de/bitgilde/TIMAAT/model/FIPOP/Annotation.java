@@ -12,10 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -48,26 +45,12 @@ public class Annotation implements Serializable {
 	@Column(name="layer_visual")
 	private int layerVisual;
 
-	@Column(name="sequence_end_time", columnDefinition = "TIME")
-	// @JsonIgnore
-	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	// @Temporal(TemporalType.TIME)
-	private Time sequenceEndTime;
+	@Column(name="sequence_start_time", columnDefinition = "INT")
+	private long sequenceStartTime;
 
-	@Column(name="sequence_start_time", columnDefinition = "TIME")
-	// @JsonIgnore
-	//	@JsonFormat(pattern = "HH:mm:ss[.SSS]Z")
-	// @Temporal(TemporalType.TIME)
-	private Time sequenceStartTime;
+	@Column(name="sequence_end_time", columnDefinition = "INT")
+	private long sequenceEndTime;
 	
-	@JsonProperty("startTime")
-	@Transient
-	private float startTime;
-
-	@JsonProperty("endTime")
-	@Transient	
-	private float endTime;
-
 	//bi-directional many-to-one association to AnalysisContentAudio
 	@ManyToOne
 	@JoinColumn(name="analysis_content_audio_id")
@@ -257,55 +240,20 @@ public class Annotation implements Serializable {
 		this.layerVisual = layerVisual;
 	}
 
-	public Time getSequenceEndTime() {
+	public long getSequenceEndTime() {
 		return this.sequenceEndTime;
 	}
 
-	public void setSequenceEndTime(Time sequenceEndTime) {
+	public void setSequenceEndTime(long sequenceEndTime) {
 		this.sequenceEndTime = sequenceEndTime;
 	}
 
-	public Time getSequenceStartTime() {
+	public long getSequenceStartTime() {
 		return this.sequenceStartTime;
 	}
 
-	public void setSequenceStartTime(Time sequenceStartTime) {
+	public void setSequenceStartTime(long sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
-	}
-	 
-	public float getStartTime() {
-		
-		if ( this.sequenceStartTime == null ) return -1;
-		return (sequenceStartTime.getTime()+Calendar.getInstance().get(Calendar.ZONE_OFFSET))/1000f;
-	}
-	
-	@JsonIgnore
-	public float getStartTimeProp() {
-		return this.startTime;
-	}
-
-	public void setStartTime(float startTime) {
-		if ( this.sequenceStartTime == null ) this.sequenceStartTime = new java.sql.Time(0);
-//		this.sequenceStartTime.setTime((long)((startTime-Calendar.getInstance().get(Calendar.ZONE_OFFSET))*1000f));
-		this.sequenceStartTime.setTime((long)(startTime*1000f));
-		this.startTime = startTime;
-	}
-
-	public float getEndTime() {
-		if ( sequenceEndTime == null ) return -1;
-		return (sequenceEndTime.getTime()+Calendar.getInstance().get(Calendar.ZONE_OFFSET))/1000f;
-	}
-
-	@JsonIgnore
-	public float getEndTimeProp() {
-		return this.endTime;
-	}
-
-	public void setEndTime(float endTime) {
-		if ( this.sequenceEndTime == null ) this.sequenceEndTime = new java.sql.Time(0);
-//		this.sequenceEndTime.setTime((long)((endTime-Calendar.getInstance().get(Calendar.ZONE_OFFSET))*1000f));
-		this.sequenceEndTime.setTime((long)(endTime*1000f));
-		this.endTime = endTime;
 	}
 
 	public AnalysisContentAudio getAnalysisContentAudio() {
@@ -314,7 +262,7 @@ public class Annotation implements Serializable {
 
 	public void setAnalysisContentAudio(AnalysisContentAudio analysisContentAudio) {
 		this.analysisContentAudio = analysisContentAudio;
-	}
+	} 
 
 	public AnalysisContentVisual getAnalysisContentVisual() {
 		return this.analysisContentVisual;

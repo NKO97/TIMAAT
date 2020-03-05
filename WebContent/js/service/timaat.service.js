@@ -354,10 +354,8 @@
 			var model = { 	
 				id: 0, 
 				analysisListID: list,
-				startTime: startTime,
-				endTime: endTime,
-				sequenceStartTime: startTime * 1000,
-				sequenceEndTime: endTime * 1000,
+				sequenceStartTime: startTime,
+				sequenceEndTime: endTime,
 //				actors: [],
 //				annotations1: [],
 //				annotations2: [],

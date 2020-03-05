@@ -219,8 +219,8 @@ public class AnnotationEndpoint {
 		// if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
 		// if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
 		
-		if ( updatedAnno.getSequenceStartTime() != null) annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
-		if ( updatedAnno.getSequenceEndTime() != null ) annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
+		annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
+		annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
 
 		if ( updatedAnno.getSelectorSvgs() != null 
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 
@@ -240,16 +240,14 @@ public class AnnotationEndpoint {
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
-
+ 
 		System.out.println("AnnotationServiceEndpoint: updateAnnotation: persist data");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(annotation);
 		entityManager.persist(annotation);
 		entityTransaction.commit();
-		System.out.println(annotation.getSequenceStartTime().getTime());
 		entityManager.refresh(annotation);
-		System.out.println(annotation.getSequenceStartTime().getTime());
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(annotation.getLastEditedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONEDITED);

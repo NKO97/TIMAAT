@@ -33,8 +33,8 @@
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
 
-					this._startTime = this.model.startTime;
-					this._endTime = this.model.endTime;
+					this._startTime = this.model.sequenceStartTime/1000.0;
+					this._endTime = this.model.sequenceEndTime/1000.0;
 					
 					
 					// create and style list view element
@@ -215,10 +215,10 @@
 				
 				updateUI() {
 					console.log("TCL: Annotation -> updateUI -> updateUI()");
-					this.listView.attr('data-starttime', this.model.startTime);
+					this.listView.attr('data-starttime', this.model.sequenceStartTime);
 					this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-					var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
-					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
+					var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
+					if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
 					this.listView.find('.timaat-annotation-list-time').html(timeString);
 					this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 					// categories
@@ -315,8 +315,8 @@
 					if ( !this.changed ) return;
 					this.svg.layer.clearLayers();
 					this.svg.items = Array();
-					this._startTime = this.model.startTime;
-					this._endTime = this.model.endTime;
+					this._startTime = this.model.sequenceStartTime/1000.0;
+					this._endTime = this.model.sequenceEndTime/1000.0;
 					
  					var anno = this;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
@@ -464,8 +464,8 @@
 				_syncToModel() {
 					console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 					var jsonData = [];
-					this.model.startTime = this._startTime;
-					this.model.endTime = this._endTime;
+					this.model.sequenceStartTime = this._startTime*1000.0;
+					this.model.sequenceEndTime = this._endTime*1000.0;
 					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
 					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;

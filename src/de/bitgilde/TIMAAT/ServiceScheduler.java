@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 bitGilde IT Solutions UG (haftungsbeschränkt)
+ * Copyright 2019,2020 bitGilde IT Solutions UG (haftungsbeschränkt)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

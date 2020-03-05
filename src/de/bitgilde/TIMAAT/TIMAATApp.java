@@ -74,6 +74,7 @@ public class TIMAATApp extends Application {
         dbProps.put("javax.persistence.jdbc.driver", timaatProps.getProp(PropertyConstants.DATABASE_DRIVER));
         dbProps.put("javax.persistence.jdbc.user", timaatProps.getProp(PropertyConstants.DATABASE_USER));
         dbProps.put("javax.persistence.jdbc.password", timaatProps.getProp(PropertyConstants.DATABASE_PASSWORD));
+//        dbProps.put("eclipselink.target-database", "MySQL");
                 
         try {
             // obtain entity manager factory with provided connection settings

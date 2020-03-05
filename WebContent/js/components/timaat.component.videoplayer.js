@@ -264,15 +264,15 @@
 					if (anno) {
 						anno.model.title = title;
 						anno.model.comment = comment;
-						anno.model.startTime = startTime;
-						anno.model.endTime = endTime;
+						anno.model.sequenceStartTime = startTime*1000.0;
+						anno.model.sequenceEndTime = endTime*1000.0;
 						anno.svg.color = color.substring(0,6);
 						anno.model.selectorSvgs[0].colorRgba = color;
 						if ( color.length < 7 ) anno.model.selectorSvgs[0].colorRgba+="4C";
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
-						TIMAAT.Service.createAnnotation(title, comment, startTime, endTime, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
+						TIMAAT.Service.createAnnotation(title, comment, startTime*1000.0, endTime*1000.0, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
 				}
 				// analysis lists
@@ -590,8 +590,8 @@
 					color = color.substring(0,6);
 					var title = (anno) ? anno.model.title : "";
 					var comment = (anno) ? anno.model.comment : "";
-					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.startTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
-					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
+					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
+					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
@@ -925,8 +925,8 @@
 			TIMAAT.Service.createAnnotation(
 					"Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime), 
 					"Lesezeichen, noch zu bearbeiten",
-					TIMAAT.VideoPlayer.video.currentTime,
-					TIMAAT.VideoPlayer.video.currentTime,
+					TIMAAT.VideoPlayer.video.currentTime*1000.0,
+					TIMAAT.VideoPlayer.video.currentTime*1000.0,
 					"5555554C", 
 					1, 
 					TIMAAT.VideoPlayer.curList.id, 
