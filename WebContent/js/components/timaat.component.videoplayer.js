@@ -92,6 +92,11 @@
 		            return container;
 		        }
 		    });
+			
+			// polygon layer
+			var annoLayer = new L.LayerGroup();
+			map.annoLayer = annoLayer;
+			map.addLayer(annoLayer);
 
 			map.on('layeradd', function(ev) {
 				if ( ev.layer.options.data ) 
@@ -850,11 +855,15 @@
 		setupAnnotations: function(annotations) {
 			console.log("TCL: setupAnnotations: function(annotations)");
 			console.log("TCL: annotations", annotations);
+			if ( TIMAAT.VideoPlayer.curAnnotation ) TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+
 			// setup model
 			TIMAAT.VideoPlayer.model.annotations = annotations;
 			// close UI tag editors if any
-			TIMAAT.UI.hidePopups();			
-			// clear old list contents if any
+			TIMAAT.UI.hidePopups();
+			// clear polygon UI
+//			map.
+			// clear old list contents if any			
 			if ( TIMAAT.VideoPlayer.curList != null && TIMAAT.VideoPlayer.curList.segments != null) {
 				TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
 					segment.removeUI();

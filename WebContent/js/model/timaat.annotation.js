@@ -253,7 +253,7 @@
 					console.log("TCL: Annotation -> remove -> remove()");
 					// remove annotation from UI
 					this.listView.remove();
-					map.removeLayer(this.svg.layer);
+					map.annoLayer.removeLayer(this.svg.layer);
 					this.marker.remove();
 				}
 				
@@ -381,7 +381,7 @@
 						if ( this.selected ) {
 
 						} else {
-							map.addLayer(this.svg.layer);
+							map.annoLayer.addLayer(this.svg.layer);
 						}
 						
 						// scroll list
@@ -393,7 +393,7 @@
 						if ( this.selected ) {
 
 						} else {
-							map.removeLayer(this.svg.layer);
+							map.annoLayer.removeLayer(this.svg.layer);
 						}
 //						if ( !this.isSelected() ) map.editTools.editLayer.removeLayer(this.svg.layer);
 
@@ -408,7 +408,7 @@
 
 						this.listView.addClass('timaat-annotation-list-selected');
 
-						map.removeLayer(this.svg.layer);
+						map.annoLayer.removeLayer(this.svg.layer);
 						map.editTools.editLayer.addLayer(this.svg.layer);
 						this.svg.items.forEach(function(item) {
 							item.dragging._draggable = null;
@@ -421,7 +421,7 @@
 						this.listView.removeClass('timaat-annotation-list-selected');
 						
 						map.editTools.editLayer.removeLayer(this.svg.layer);
-						if ( this.active ) map.addLayer(this.svg.layer);
+						if ( this.active ) map.annoLayer.addLayer(this.svg.layer);
 						
 						this.svg.items.forEach(function(item) {item.dragging.disable()});
 
