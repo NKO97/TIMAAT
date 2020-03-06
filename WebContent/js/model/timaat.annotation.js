@@ -305,18 +305,18 @@
 				}
 				
 				setChanged() {
-					console.log("TCL: Annotation -> setChanged -> setChanged()");
+//					console.log("TCL: Annotation -> setChanged -> setChanged()");
 					this.changed = true;
 				}
 				
 				hasChanges() {
-					console.log("TCL: Annotation -> hasChanges -> hasChanges()");
+//					console.log("TCL: Annotation -> hasChanges -> hasChanges()");
 					return this.changed;
 				}
 
 				
 				getModel() {
-					console.log("TCL: Annotation -> getModel -> getModel()");
+//					console.log("TCL: Annotation -> getModel -> getModel()");
 //					this.model.sequenceStartTime = TIMAAT.Util.formatTime(this.model.startTime, true);
 //					this.model.sequenceEndTime = TIMAAT.Util.formatTime(this.model.startTime, true);
 					return this.model;
@@ -360,19 +360,19 @@
 				}
 
 				updateStatus(time) {
-					console.log("TCL: Annotation -> updateStatus -> time", time);
+//					console.log("TCL: Annotation -> updateStatus -> time", time);
 					var active = false;
 					if ( time >= this.startTime && time <= this.endTime ) active = true;
 					this.setActive(active);
 				}
 				
 				isActive() {
-					console.log("TCL: Annotation -> isActive -> isActive()");
+//					console.log("TCL: Annotation -> isActive -> isActive()");
 					return this.active;
 				}
 				
 				setActive(active) {
-					console.log("TCL: Annotation -> setActive -> active", active);
+//					console.log("TCL: Annotation -> setActive -> active", active);
 					if ( this.active == active ) return;
 					this.active = active;
 					if ( active ) {
@@ -401,7 +401,7 @@
 				}
 						
 				setSelected(selected) {
-					console.log("TCL: Annotation -> setSelected -> selected", selected);
+//					console.log("TCL: Annotation -> setSelected -> selected", selected);
 					if ( this.selected == selected ) return;			
 					this.selected = selected;
 					if ( selected ) {
@@ -430,7 +430,7 @@
 				}
 
 				isSelected() {
-					console.log("TCL: Annotation -> isSelected -> isSelected()");
+//					console.log("TCL: Annotation -> isSelected -> isSelected()");
 					return this.selected;
 				}
 				

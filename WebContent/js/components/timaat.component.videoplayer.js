@@ -862,7 +862,9 @@
 			// close UI tag editors if any
 			TIMAAT.UI.hidePopups();
 			// clear polygon UI
-//			map.
+			map.annoLayer.eachLayer(function(layer) {layer.remove()});
+			map.editTools.editLayer.eachLayer(function(layer) {layer.remove()});
+
 			// clear old list contents if any			
 			if ( TIMAAT.VideoPlayer.curList != null && TIMAAT.VideoPlayer.curList.segments != null) {
 				TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
@@ -1006,8 +1008,8 @@
 		},
 				
 		selectAnnotation: function(annotation) {
-			console.log("TCL: selectAnnotation: function(annotation)");
-			console.log("TCL: annotation", annotation);
+//			console.log("TCL: selectAnnotation: function(annotation)");
+//			console.log("TCL: annotation", annotation);
 			if ( annotation ) TIMAAT.VideoPlayer.setInspectorMetadata(annotation, 'annotation');
 			else TIMAAT.VideoPlayer.setInspectorMetadata(null);
 			if ( this.curAnnotation == annotation && annotation != null ) return;
@@ -1099,13 +1101,36 @@
 		},
 		
 		sortListUI: function() {
-			console.log("TCL: sortListUI: function()");
+//			console.log("TCL: sortListUI: function()");
 			$("#timaat-annotation-list li").sort(function (a, b) {
 				if ( (parseFloat($(b).attr('data-starttime'))) < (parseFloat($(a).attr('data-starttime'))) ) return 1;
 				if ( (parseFloat($(b).attr('data-starttime'))) > (parseFloat($(a).attr('data-starttime'))) ) return -1;
 				if ( !$(b).hasClass('timaat-annotation-list-segment') &&  $(a).hasClass('timaat-annotation-list-segment') ) return -1;
 				return 0;
-			}).appendTo('#timaat-annotation-list');			
+			}).appendTo('#timaat-annotation-list');
+			
+			// sort annotation markers in timeline
+			var sortedList = TIMAAT.VideoPlayer.annotationList.concat();
+			sortedList.sort(function (a, b) {
+				if ( b.startTime < a.startTime ) return 1;
+				if ( b.startTime > a.startTime ) return -1;
+				return 0;
+			});
+			
+			if ( sortedList.length > 0 ) {
+				sortedList[0].marker.UIOffset = 0;
+				var maxOffset = 0;
+				for (var i=1; i < sortedList.length; i++) {
+					var curOffset = 0;
+					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime )
+						if ( curOffset == sortedList[a].marker.UIOffset ) curOffset++; // = sortedList[a].marker.UIOffset+1;
+					sortedList[i].marker.UIOffset = curOffset;
+					if ( curOffset > maxOffset ) maxOffset = curOffset;
+				}
+			}
+			$('#timaat-timeline-marker-pane').css('height', (15+(maxOffset*12))+'px');
+			
+			
 		},
 		
 		updateListUI: function() {
