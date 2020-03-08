@@ -24,6 +24,7 @@
 		      console.log("TCL: Annotation -> constructor -> model", model);
 					// setup model
 					this.active = false;
+					this.selected = false;
 					this.model = model;
 					this.svg = Object();
 					this.svg.items = Array();
@@ -188,6 +189,7 @@
 					
 					// create marker with UI
 					this.marker = new TIMAAT.Marker(this);
+					this.marker.updateView();
 
 
 					this.changed = false;
