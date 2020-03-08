@@ -473,6 +473,12 @@ a.dropdown-item {
 	margin-left: -2px;
 	background-color: #c80064;
 }
+
+.timaat-markerhead-polygon {
+	border-right: 5px solid transparent;
+	border-left: 5px solid transparent;
+	border-bottom: 10px solid rgba(255,255,255,0.5);
+}
 .timaat-timeline-markerhead.picture {
 	border-radius: 25px;
 }

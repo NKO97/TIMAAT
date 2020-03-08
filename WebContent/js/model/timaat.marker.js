@@ -119,6 +119,7 @@
 				  TIMAAT.VideoPlayer.jumpTo(ev.data.from);
 				  TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);
 			  });
+			  this._updateElementStyle();
 		  }
 
 		  
@@ -181,6 +182,7 @@
 			  this._color = '#'+this.parent.svg.color;
 			  this._updateElementColor();
 			  this._updateElementOffset();
+			  this._updateElementStyle();
 				  
 			  if ( this.parent.isSelected() ) {
 				  this.regionstart.attr('style','position:relative;');
@@ -214,6 +216,12 @@
 			  var startoffset = 20;
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
 		  
+		  }
+		  
+		  _updateElementStyle() {
+//			  console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
+			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon');
+			  if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 		  }
 		  
 		  hexToRgbA(hex, opacity) {

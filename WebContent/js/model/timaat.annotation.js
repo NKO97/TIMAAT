@@ -25,7 +25,6 @@
 					// setup model
 					this.active = false;
 					this.model = model;
-					this.marker = new TIMAAT.Marker(this);
 					this.svg = Object();
 					this.svg.items = Array();
 					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
@@ -48,6 +47,7 @@
 							</li>'
 					);
 					console.log("TCL: Annotation -> constructor -> this.updateUI()");
+
 					this.updateUI();
 					
 					var anno = this; // save annotation for events
@@ -186,6 +186,10 @@
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					
+					// create marker with UI
+					this.marker = new TIMAAT.Marker(this);
+
+
 					this.changed = false;
 
 				}
@@ -201,6 +205,21 @@
 			  this.updateUI();
 		  };
 
+		  get stroke() {
+			  return this.svg.strokeWidth;
+		  }
+			
+		  set stroke(stroke) {
+			  if ( stroke < 0 ) stroke = 0;
+			  if ( this.svg.strokeWidth != stroke ) {
+				  this.svg.strokeWidth = stroke;
+				  this.setChanged();
+				  TIMAAT.VideoPlayer.updateUI();
+				  this.updateUI();
+			  }
+		  };
+
+		  
 		
 		  get startTime() {
 			  return this._startTime;
@@ -224,6 +243,9 @@
 			  if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
 		  };	
 
+		  hasPolygons() {
+			  return this.svg.items.length > 0;
+		  }
 				
 				updateUI() {
 					console.log("TCL: Annotation -> updateUI -> updateUI()");
@@ -268,6 +290,7 @@
 					// update UI
 					this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
 					this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
+					if ( this.marker ) this.marker.updateView();
 					
 					// attach item event handlers
 					var anno = this;
@@ -277,7 +300,7 @@
 						if ( ev.originalEvent.altKey ) {
 							anno.removeSVGItem(ev.target);
 						  TIMAAT.VideoPlayer.updateUI();
-		        	console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+						  console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 						}
 						
 					});
@@ -301,6 +324,7 @@
 					if ( this.svg.items.length == 0 ) {
 						this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
 						this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
+						if ( this.marker ) this.marker.updateView();
 					}
 				}
 				
@@ -331,7 +355,8 @@
 					this._endTime = this.model.sequenceEndTime/1000.0;
 					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
 					this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
-					
+					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
+
  					var anno = this;
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 					this.svg.model.forEach(function(svgitem) {
@@ -426,6 +451,7 @@
 						this.svg.items.forEach(function(item) {item.dragging.disable()});
 
 					}
+					// update marker
 					if ( this.marker ) this.marker.updateView();
 				}
 
@@ -485,6 +511,8 @@
 					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 					this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
+					this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
+
 					this.svg.items.forEach(function(item) {
 						if ( item instanceof L.Rectangle ) {
 							var jsonItem = {

@@ -328,10 +328,22 @@
 					var anno = TIMAAT.VideoPlayer.inspector.state.item;
 					var opacity = $("#timaat-inspector-meta-opacity").val();
 					anno.opacity = opacity;
+					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
 				}
 			};
 			$('#timaat-inspector-meta-opacity').on({ 'change':sliderupdate,'input':sliderupdate});
 			
+			$('#timaat-inspector-meta-outline').on('click', function(ev) {
+				if ( TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
+					var anno = TIMAAT.VideoPlayer.inspector.state.item;
+					var stroke = $(this).hasClass('btn-primary') ? 0 : 2;
+					
+					if ( anno.opacity == 0 && stroke == 0 ) return; 
+					anno.stroke = stroke;
+					
+					TIMAAT.VideoPlayer._setInspectorStroke(anno.stroke);
+				}
+			});
 			
 			var metatimechange = function(ev) {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
@@ -583,6 +595,17 @@
 			}
 		},
 		
+		_setInspectorStroke: function(stroke) {
+			console.log("STROKE: ", stroke);
+			if ( stroke > 0 ) {
+				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-primary');
+				$('#timaat-inspector-meta-outline').find('i').attr('class', 'far fa-square');
+			} else {
+				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-outline-secondary');
+				$('#timaat-inspector-meta-outline').find('i').attr('class', 'fas fa-border-style');
+			}					
+		},
+		
 		setInspectorMetadata: function(item, type) {
 			TIMAAT.VideoPlayer.inspector.state.item = item;
 			TIMAAT.VideoPlayer.inspector.state.type = type;
@@ -605,7 +628,8 @@
 					var color = (anno) ? anno.svg.color : TIMAAT.VideoPlayer.UI.cp.colorHex.substring(1);
 					color = color.substring(0,6);
 					var title = (anno) ? anno.model.title : "";
-					var opacity = (anno) ? anno.opacity : "0.3";
+					var opacity = (anno) ? anno.opacity : 0.3;
+					var stroke = (anno) ? anno.stroke : 2;
 					var comment = (anno) ? anno.model.comment : "";
 					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
 					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
@@ -615,6 +639,7 @@
 					TIMAAT.VideoPlayer.UI.cp.setColor('#'+color);
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
 					$("#timaat-inspector-meta-opacity").val(opacity);
+					TIMAAT.VideoPlayer._setInspectorStroke(stroke);
 					$("#timaat-inspector-meta-comment").val(comment);
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);	

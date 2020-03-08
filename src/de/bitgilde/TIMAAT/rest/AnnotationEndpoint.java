@@ -226,8 +226,7 @@ public class AnnotationEndpoint {
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 
 			 && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null ) annotation.getSelectorSvgs().get(0).setColorRgba(updatedAnno.getSelectorSvgs().get(0).getColorRgba());
 		if ( updatedAnno.getSelectorSvgs() != null 
-				 && (updatedAnno.getSelectorSvgs().size() > 0) 
-				 && updatedAnno.getSelectorSvgs().get(0).getStrokeWidth() > 0 ) annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
+				 && (updatedAnno.getSelectorSvgs().size() > 0)) annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
 		if ( updatedAnno.getSelectorSvgs() != null 
 				 && (updatedAnno.getSelectorSvgs().size() > 0) 
 				 && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null ) annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
