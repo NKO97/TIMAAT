@@ -216,6 +216,9 @@ p + p {
 	 background-color: #6c757d !important;
 /*	 cursor: default !important; */
 }
+.timaat-annotation-list-type {
+	text-shadow: 1px 1px rgba(127,127,177,0.4);
+}
 
 .timaat-annotation-list-title,
 .timaat-annotation-segment-title {
@@ -455,6 +458,17 @@ a.dropdown-item {
 	float: left;
 	width: 0px;
 	border-left: 2px solid #c80064;
+}
+.timaat-timeline-marker-white {
+	box-shadow: -1px 0px 0px 0px grey;
+}
+
+.timaat-timeline-marker-white .timaat-timeline-markerbar {
+	border: 1px solid grey;
+}
+.timaat-timeline-marker-white .timaat-timeline-markerhead {
+	border: 1px solid grey;
+	border-left: 0px;
 }
 .timaat-timeline-markerbar {
 	pointer-events: all;

@@ -596,7 +596,6 @@
 		},
 		
 		_setInspectorStroke: function(stroke) {
-			console.log("STROKE: ", stroke);
 			if ( stroke > 0 ) {
 				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-primary');
 				$('#timaat-inspector-meta-outline').find('i').attr('class', 'far fa-square');

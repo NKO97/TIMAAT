@@ -199,7 +199,9 @@
 //			  console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
 			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._color,0.3));
 			  this.ui.element.css('border-left-color', this._color);
-			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', this._color);	  	
+			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', this._color);
+			  this.ui.element.removeClass('timaat-timeline-marker-white');
+			  if ( this._color.toLowerCase() == '#ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
 		  }
 			  
 		  _updateElementOffset() {
