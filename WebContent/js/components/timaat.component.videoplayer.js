@@ -192,23 +192,34 @@
 				TIMAAT.VideoPlayer.pause();		    	
 				x.layer.setStyle({color: '#'+TIMAAT.VideoPlayer.curAnnotation.svg.color, weight: TIMAAT.VideoPlayer.curAnnotation.svg.strokeWidth});
 			});
-			map.on('editable:vertex:dragend', function(x) {
+			map.on('editable:vertex:dragend', function(ev) {
 				if ( TIMAAT.VideoPlayer.curAnnotation ) {
-				TIMAAT.VideoPlayer.curAnnotation.setChanged();
-				console.log("TIMAAT.VideoPLayer.updateUI() - editable:vertex:dragend");
+					TIMAAT.VideoPlayer.curAnnotation.setChanged();
+					console.log("TIMAAT.VideoPLayer.updateUI() - editable:vertex:dragend");
 					TIMAAT.VideoPlayer.updateUI();		    		
 				}
-			});		    
+			});
+			map.on('editable:dragend', function(ev) {
+				if ( ev.layer && ev.layer instanceof L.Circle ) {
+					ev.layer.disableEdit();
+					ev.layer.enableEdit();
+				}
+			});
 			map.on('editable:drag', function(ev) {
 				var bounds = TIMAAT.VideoPlayer.confineBounds(ev.layer.getBounds(), ev.offset.x, ev.offset.y);
 				if ( ev.layer.setBounds ) ev.layer.setBounds(L.latLngBounds(bounds.getNorthEast(),bounds.getSouthWest())); else {
 					// TODO refactor
 					var latlngs = ( ev.layer.getLatLngs != null ) ? ev.layer.getLatLngs() : [ev.layer.getLatLng()];
 					$(latlngs[0]).each(function(item,latlng) {
-						if (latlng.lng < 0 ) latlng.lng = 0;
-						if (latlng.lat < 0 ) latlng.lat = 0;
-						if (latlng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latlng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
-						if (latlng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latlng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
+						var minLat = ( ev.layer instanceof L.Circle ) ? ev.layer.getRadius() : 0;
+						var minLng = ( ev.layer instanceof L.Circle ) ? ev.layer.getRadius() : 0;
+						var maxLat = ( ev.layer instanceof L.Circle ) ? (TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat-ev.layer.getRadius()) : TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
+						var maxLng = ( ev.layer instanceof L.Circle ) ? (TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng-ev.layer.getRadius()) : TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
+						if (latlng.lng < minLng ) latlng.lng = minLng;
+						if (latlng.lat < minLat ) latlng.lat = minLat;
+						if (latlng.lng > maxLng ) latlng.lng = maxLng;
+						if (latlng.lat > maxLat ) latlng.lat = maxLat;
+						if ( ev.layer instanceof L.Circle ) ev.layer.setLatLng(latlng);
 					});
 				}		   
 			});
