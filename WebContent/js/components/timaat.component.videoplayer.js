@@ -158,11 +158,21 @@
 							html: '<i class="fas fa-slash"></i>'
 					}
 			});
+			L.NewCircleControl = L.EditControl.extend({
+				type: 'circle',
+					options: {
+							position: 'topleft',
+							callback: TIMAAT.VideoPlayer.createCircle,
+							kind: 'Kreis-Annotation',
+							html: '<i class="far fa-circle"></i>'
+					}
+			});
 
 			var ctrl = new L.NewRectangleControl();
 			map.editCtrl = new Array();
 			map.editCtrl.push(ctrl);
 			map.editCtrl.push(new L.NewPolygonControl());
+			map.editCtrl.push(new L.NewCircleControl());
 			map.editCtrl.push(new L.NewLineControl());
 			
 			$(map.editCtrl).each(function(index,item) {map.addControl(item)});
@@ -193,7 +203,7 @@
 				var bounds = TIMAAT.VideoPlayer.confineBounds(ev.layer.getBounds(), ev.offset.x, ev.offset.y);
 				if ( ev.layer.setBounds ) ev.layer.setBounds(L.latLngBounds(bounds.getNorthEast(),bounds.getSouthWest())); else {
 					// TODO refactor
-					var latlngs = ev.layer.getLatLngs();
+					var latlngs = ( ev.layer.getLatLngs != null ) ? ev.layer.getLatLngs() : [ev.layer.getLatLng()];
 					$(latlngs[0]).each(function(item,latlng) {
 						if (latlng.lng < 0 ) latlng.lng = 0;
 						if (latlng.lat < 0 ) latlng.lat = 0;
@@ -217,7 +227,17 @@
 				if (latlng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latlng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
 				if (latlng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latlng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
 				ev.vertex.setLatLng(latlng);
-			});				
+
+				if ( TIMAAT.VideoPlayer.curTool == 'circle' || (ev.vertex.editor.feature.getRadius != null) ) {
+					if ( ev.vertex.editor.feature.getLatLng() == ev.vertex.latlng ) return;
+					var radius = map.distance(ev.vertex.editor.feature.getLatLng(),ev.vertex.latlng);
+					radius = Math.max(5,radius);
+					ev.vertex.editor.feature.setRadius( radius );
+//					console.log(ev.vertex, ev.vertex.editor.feature, ev.vertex.editor.feature.getRadius());
+				}
+								
+				
+			});
 			map.on('editable:drawing:end', function(x) {
 				$(map.editCtrl).each(function(index,item) {$(item._container).find('a').removeClass('bg-success');});
 				TIMAAT.VideoPlayer.curTool = null;
@@ -229,6 +249,7 @@
 					console.log("TCL: TIMAAT.VideoPlayer.updateUI() - if ( TIMAAT.VideoPlayer.curAnnotation )");
 					x.layer.dragging._draggable = null;
 					x.layer.dragging.addHooks();
+					x.layer.enableEdit();
 				}
 			});
 
@@ -699,6 +720,11 @@
 			TIMAAT.VideoPlayer.createShape('polygon');
 		},
 
+		createCircle: function() {
+			console.log("TCL: createCircle: function()");
+			TIMAAT.VideoPlayer.createShape('circle');
+		},
+
 		createRectangle: function() {
 			console.log("TCL: createRectangle: function()");
 			TIMAAT.VideoPlayer.createShape('rectangle');
@@ -720,6 +746,10 @@
 			case 'polygon':
 				TIMAAT.VideoPlayer.curTool = type;
 				map.editTools.startPolygon();
+				break;
+			case 'circle':
+				TIMAAT.VideoPlayer.curTool = type;
+				map.editTools.startCircle();
 				break;
 			case 'line':
 				TIMAAT.VideoPlayer.curTool = type;

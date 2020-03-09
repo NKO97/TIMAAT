@@ -444,6 +444,7 @@
 						this.svg.items.forEach(function(item) {
 							item.dragging._draggable = null;
 							item.dragging.addHooks();
+							item.enableEdit();
 						});
 						
 					}
@@ -454,7 +455,10 @@
 						map.editTools.editLayer.removeLayer(this.svg.layer);
 						if ( this.active ) map.annoLayer.addLayer(this.svg.layer);
 						
-						this.svg.items.forEach(function(item) {item.dragging.disable()});
+						this.svg.items.forEach(function(item) {
+							item.dragging.disable();
+							item.disableEdit();
+						});
 
 					}
 					// update marker
@@ -505,6 +509,12 @@
 								points.push([lat,lng]);
 							});
 							return L.polyline(points, {draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+						case "circle":
+							var lat = 450-(svgitem.y*factor*height);
+							var lng = svgitem.x*factor*width;
+							var radius = svgitem.radius * factor;
+
+							return L.circle([lat,lng], radius, {draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
 					}
 				}
 				
@@ -560,7 +570,20 @@
 								jsonItem.points.push([x,y]);
 							});
 							jsonData.push(jsonItem);
-						} 
+						} else if ( item instanceof L.Circle ) {
+							var jsonItem = {
+									type: 'circle',
+									x: parseFloat( (Math.abs(item.getLatLng().lng/factor) / width).toFixed(5) ),
+									y: parseFloat( (Math.abs((450-item.getLatLng().lat)/factor) / height).toFixed(5) ),
+									radius: parseFloat( (Math.abs(item.getRadius()/factor) ).toFixed(5) ),
+								}
+								// sanitize data
+								jsonItem.x = Math.max(0.0, Math.min(1.0,jsonItem.x));
+								jsonItem.y = Math.max(0.0, Math.min(1.0,jsonItem.y));
+								jsonItem.radius = Math.max(5.0, jsonItem.radius);
+								
+								jsonData.push(jsonItem);
+							} 
 						
 					});
 					this.model.selectorSvgs[0].svgData = JSON.stringify(jsonData);
