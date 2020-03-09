@@ -22,7 +22,8 @@
 	TIMAAT.Annotation = class Annotation {
 		constructor(model) {
 		      console.log("TCL: Annotation -> constructor -> model", model);
-					// setup model
+				// setup model
+		      	this._destroyed = false;
 					this.active = false;
 					this.selected = false;
 					this.model = model;
@@ -277,8 +278,10 @@
 					console.log("TCL: Annotation -> remove -> remove()");
 					// remove annotation from UI
 					this.listView.remove();
-					map.annoLayer.removeLayer(this.svg.layer);
 					this.marker.remove();
+					this.svg.layer.remove();
+					this.selected = false;
+					this._destroyed = true;
 				}
 				
 				addSVGItem (item) {
@@ -428,6 +431,7 @@
 				}
 						
 				setSelected(selected) {
+					if (this._destroyed) return;
 //					console.log("TCL: Annotation -> setSelected -> selected", selected);
 					if ( this.selected == selected ) return;			
 					this.selected = selected;
