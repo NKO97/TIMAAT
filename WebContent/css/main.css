@@ -470,6 +470,10 @@ a.dropdown-item {
 	border: 1px solid grey;
 	border-left: 0px;
 }
+.timaat-timeline-marker-white .timaat-markerhead-polygon {
+	background-image: url('../img/markerhead-polygons-black.png');
+}
+
 .timaat-timeline-markerbar {
 	pointer-events: all;
 	background-color: rgba(200,0,100,0.3);
@@ -489,9 +493,7 @@ a.dropdown-item {
 }
 
 .timaat-markerhead-polygon {
-	border-right: 5px solid transparent;
-	border-left: 5px solid transparent;
-	border-bottom: 10px solid rgba(255,255,255,0.5);
+	background-image: url('../img/markerhead-polygons-white.png');
 }
 .timaat-timeline-markerhead.picture {
 	border-radius: 25px;
