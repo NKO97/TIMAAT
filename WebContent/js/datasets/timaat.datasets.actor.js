@@ -322,14 +322,14 @@
 					// update actor
 					person = await TIMAAT.ActorDatasets.updateActorModelData(person, formDataObject);
 					// update person data
-					actor.model.actorPerson.title = formDataObject.title;
-					actor.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
-					actor.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
-					actor.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
-					actor.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
-					actor.model.actorPerson.sex.id =  (formDataObject.sexId == "") ? null : Number(formDataObject.sexId);
-					actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName;
-					actor.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
+					person.model.actorPerson.title = formDataObject.title;
+					person.model.actorPerson.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
+					person.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
+					person.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
+					person.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
+					person.model.actorPerson.sex.id =  (formDataObject.sexId == "") ? null : Number(formDataObject.sexId);
+					person.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName;
+					person.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
 
           console.log("TCL: person", person);
 					person.updateUI();
