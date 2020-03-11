@@ -275,27 +275,27 @@
 				var languageId = null;
 				if (listEntry.find('input').each(function(){           
 					title = $(this).val();
-          // console.log("TCL: title", title);
 				}));
 				if (listEntry.find('select').each(function(){
 					languageId = $(this).val();
 				}));
-				// if (!$("#timaat-mediadatasets-medium-titles-form").valid()) 
-					// return false;
+				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) 
+					return false;
 				if (title != '' && languageId != null) {
 					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
 					// console.log("TCL: titlesInForm", titlesInForm);
-					var numberOfTitleElements = 1;
-					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used index. Extra -1 for 1 element in add new title row
+					var numberOfTitleElements = 2;
+					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used indexed name
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
+          // console.log("i", i);
 					$('#dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayTitle"></label>
-									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" placeholder="Is Display Title" data-role="displayTitle">
+									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" data-role="displayTitle" placeholder="Is Display Title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
@@ -306,11 +306,11 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="newTitle[`+i+`]" data-role="newTitle[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+i+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="newTitleLanguageId[`+i+`]" data-role="newTitleLanguageId[`+i+`]" required>
 									<option value="2">English</option>
 									<option value="3">German</option>
 									<option value="4">French</option>
@@ -327,25 +327,13 @@
 						</div>
 					</div>`
 					);
-					($('[data-role="titleLanguageId['+i+']"]'))
-						.find('option[value='+languageId+']')
-						.attr("selected",true);
-					$('input[name="title['+i+']"').rules("add",
-					{
-						required: true,
-						minlength: 3,
-						maxlength: 200,
-					});
-				$('select[name="titleLanguageId['+i+']"').rules("add",
-					{
-						required: true,
-					});
+					$('input[name="newTitle['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('[data-role="newTitleLanguageId['+i+']"]').find('option[value='+languageId+']').attr("selected",true);
+					$('select[name="newTitleLanguageId['+i+']"').rules("add", { required: true, });
 					if (listEntry.find('input').each(function(){
-						// console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 					if (listEntry.find('select').each(function(){
-						// console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 				}
@@ -432,7 +420,7 @@
 					};
 					formTitleList[formTitleList.length] = element;
 				}
-				
+				// console.log("formTitleList", formTitleList);				
 				// only updates to existing titles
 				if (formTitleList.length == medium.model.titles.length) {
 					var i = 0;
@@ -628,14 +616,14 @@
 							<div class="form-row">
 								<div class="col-md-5">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required disabled>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required readonly="true">
 										<option value="1">Audio track</option>
 										<option value="2">Subtitle track</option>
 									</select>
 								</div>
 								<div class="col-md-5">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required disabled>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required readonly="true">
 										<option value="2">English</option>
 										<option value="3">German</option>
 										<option value="4">French</option>
@@ -652,20 +640,10 @@
 							</div>
 						</div>`
 						);
-						($('[data-role="languageTrackTypeId['+i+']"]'))
-							.find('option[value='+mediumLanguageTypeId+']')
-							.attr("selected",true);
-						($('[data-role="languageTrackLanguageId['+i+']"]'))
-							.find('option[value='+languageId+']')
-							.attr("selected",true);
-						$('select[name="languageTrackTypeId['+i+']"').rules("add",
-						{
-							required: true,
-						});
-					$('select[name="languageTrackLanguageId['+i+']"').rules("add",
-						{
-							required: true,
-						});
+						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr("selected",true);
+						$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
+						$('[data-role="languageTrackLanguageId['+i+']"]').find('option[value='+languageId+']').attr("selected",true);
+						$('select[name="languageTrackLanguageId['+i+']"').rules("add", { required: true, });
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
 						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
@@ -1764,11 +1742,11 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+i+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].language.id+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].id+`]" required>
 									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
 									<option value="2">English</option>
 									<option value="3">German</option>
@@ -1786,27 +1764,17 @@
 						</div>
 					</div>`
 					);
-					$('[data-role="titleLanguageId['+medium.model.titles[i].language.id+']"')
-						.find('option[value='+medium.model.titles[i].language.id+']')
-						.attr("selected",true);
 					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
-						$('[data-role="displayTitle['+medium.model.titles[i].id+']"')
-							.prop("checked",true);							
+						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop("checked",true);							
 					}
 					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
-						$('[data-role="originalTitle['+medium.model.titles[i].id+']"')
-							.prop("checked",true);							
+						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop("checked",true);							
 					}
-					$('input[name="title['+i+']"').rules("add",
-						{
-							required: true,
-							minlength: 3,
-							maxlength: 200,
-						});
-					$('select[name="titleLanguageId['+i+']"').rules("add",
-						{
-							required: true,
-						});
+					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('[data-role="titleLanguageId['+medium.model.titles[i].id+']"')
+					.find('option[value='+medium.model.titles[i].language.id+']')
+					.attr("selected",true);
+					$('select[name="titleLanguageId['+medium.model.titles[i].id+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
@@ -1897,17 +1865,11 @@
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
 						.attr("selected",true);
+					$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
 					$('[data-role="languageTrackLanguageId['+medium.model.mediumHasLanguages[i].language.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].language.id+']')
 						.attr("selected",true);
-					$('select[name="languageTrackTypeId['+i+']"').rules("add",
-						{
-							required: true,
-						});
-					$('select[name="languageTrackLanguageId['+i+']"').rules("add",
-						{
-							required: true,
-						});
+					$('select[name="languageTrackLanguageId['+i+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
@@ -2479,7 +2441,7 @@
 								</div>
 								<div class="col-md-3">
 									<label class="sr-only">Title's Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" required>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" data-role="titleLanguageId" required>
 										<option value="" disabled selected hidden>[Choose title language...]</option>
 										<option value="2">English</option>
 										<option value="3">German</option>

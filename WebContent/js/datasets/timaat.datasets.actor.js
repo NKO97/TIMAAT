@@ -491,26 +491,26 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayName"></label>
-									<input class="form-check-input isDisplayName" type="radio" name="isDisplayName" placeholder="Is Display Name" data-role="displayName">
+									<input class="form-check-input isDisplayName" type="radio" name="isDisplayName" data-role="displayName" placeholder="Is Display Name">
 								</div>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" placeholder="Is birth Name" data-role="birthName">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" placeholder="Is birth Name">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="actorName[`+i+`]" data-role="actorName" value="`+newName[0]+`" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="newActorName[`+i+`]" data-role="newActorName[`+i+`]" value="`+newName[0]+`" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom" value="`+newName[1]+`" placeholder="[Enter name used from]" aria-describedby="Name used from">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="newNameUsedFrom[`+i+`]" data-role="newNameUsedFrom[`+i+`]" value="`+newName[1]+`" placeholder="[Enter name used from]" aria-describedby="Name used from">
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil" value="`+newName[2]+`" placeholder="[Enter name used until]" aria-describedby="Name used until">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="newNameUsedUntil[`+i+`]" data-role="newNameUsedUntil[`+i+`]" value="`+newName[2]+`" placeholder="[Enter name used until]" aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
@@ -520,18 +520,11 @@
 						</div>
 					</div>`
 					);
-					$('input[name="actorName['+i+']"').rules("add",
-					{
-						required: true,
-						minlength: 3,
-						maxlength: 200,
-					});
+					$('input[name="newActorName['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					if (listEntry.find('input').each(function(){
-						// console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 					if (listEntry.find('select').each(function(){
-						// console.log("TCL: $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 					$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
@@ -839,35 +832,35 @@
 											</div>
 											<div class="col-md-5">
 												<label class="col-form-label col-form-label-sm">Street name</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname" name="streetName[`+i+`]" data-role="streetName" value="`+newAddress[0]+`" placeholder="[Enter street name]" aria-describedby="Street name" minlength="3" maxlength="200" rows="1" readonly="true">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname" name="newStreetName[`+i+`]" data-role="newStreetName[`+i+`]" value="`+newAddress[0]+`" placeholder="[Enter street name]" aria-describedby="Street name" minlength="3" maxlength="200" rows="1" readonly="true">
 											</div>
 											<div class="col-md-2">
 												<label class="col-form-label col-form-label-sm">Street number</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber" name="streetNumber[`+i+`]" data-role="streetNumber" value="`+newAddress[1]+`" placeholder="[Enter street number]" aria-describedby="Street number" maxlength="10">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber" name="newStreetNumber[`+i+`]" data-role="newStreetNumber[`+i+`]" value="`+newAddress[1]+`" placeholder="[Enter street number]" aria-describedby="Street number" maxlength="10">
 											</div>
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Street addition</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition" name="streetAddition[`+i+`]" data-role="streetAddition" value="`+newAddress[2]+`" placeholder="[Enter street addition]" aria-describedby="Street addition" maxlength="50">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition" name="newStreetAddition[`+i+`]" data-role="newStreetAddition[`+i+`]" value="`+newAddress[2]+`" placeholder="[Enter street addition]" aria-describedby="Street addition" maxlength="50">
 											</div>
 										</div>
 										<div class="form-row">
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Postal code</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode" name="postalCode[`+i+`]" data-role="postalCode" value="`+newAddress[3]+`" placeholder="[Enter postal code]" aria-describedby="Postal code" maxlength="8">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode" name="newPostalCode[`+i+`]" data-role="newPostalCode[`+i+`]" value="`+newAddress[3]+`" placeholder="[Enter postal code]" aria-describedby="Postal code" maxlength="8">
 											</div>
 											<div class="col-md-6">
 												<label class="col-form-label col-form-label-sm">City</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city" name="cityName[`+i+`]" data-role="cityName" value="`+newAddress[4]+`" placeholder="[Enter city]" aria-describedby="City" readonly="true">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname" name="newCityName[`+i+`]" data-role="newCityName[`+i+`]" value="`+newAddress[4]+`" placeholder="[Enter city]" aria-describedby="City" readonly="true">
 											</div>
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Post office box</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox" name="postOfficeBox[`+i+`]" data-role="postOfficeBox" value="`+newAddress[5]+`" placeholder="[Enter post office box]" aria-describedby="Post office box" maxlength="10">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox" name="newPostOfficeBox[`+i+`]" data-role="newPostOfficeBox[`+i+`]" value="`+newAddress[5]+`" placeholder="[Enter post office box]" aria-describedby="Post office box" maxlength="10">
 											</div>
 										</div>
 										<div class="form-row">
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address type*</label>
-												<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id" name="addressTypeId[`+i+`]" data-role="addressTypeId[`+i+`]" required>
+												<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id" name="newAddressTypeId[`+i+`]" data-role="newAddressTypeId[`+i+`]" required>
 													<option value="" disabled selected hidden>[Choose address type...]</option>
 													<option value="1"> </option>
 													<option value="2">business</option>
@@ -877,11 +870,11 @@
 											</div>
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address used from</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom" name="addressUsedFrom[`+i+`]" name="addressUsedFrom" value="`+newAddress[6]+`" placeholder="[Enter used from]" aria-describedby="Address used from">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom" name="addressUsedFrom[`+i+`]" data-role="addressUsedFrom" value="`+newAddress[6]+`" placeholder="[Enter used from]" aria-describedby="Address used from">
 											</div>
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address used until</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil" name="addressUsedUntil[`+i+`]" name="addressUsedUntil" value="`+newAddress[7]+`" placeholder="[Enter used until]" aria-describedby="Address used until">
+												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil" name="addressUsedUntil[`+i+`]" data-role="addressUsedUntil" value="`+newAddress[7]+`" placeholder="[Enter used until]" aria-describedby="Address used until">
 											</div>
 										</div>
 									</fieldset>
@@ -894,10 +887,8 @@
 							</div>
 						</div>`
 					);
-					$('input[name="actorAddress['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
-					($('[data-role="addressTypeId['+i+']"]'))
-						.find('option[value='+addressTypeId+']')
-						.attr("selected",true);
+					$('input[name="newActorAddress['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
+					$('[data-role="newAddressTypeId['+i+']"]').find('option[value='+addressTypeId+']').attr("selected",true);
 					if (listEntry.find('input').each(function(){
 						// console.log("TCL: find(input) $(this).val()", $(this).val());
 						$(this).val('');
@@ -1217,7 +1208,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Email address type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="newEmailAddressTypeId[`+i+`]" data-role="newEmailAddressTypeId[`+i+`]" required>
 										<option value="" disabled selected hidden>[Choose email type...]</option>
 										<option value="1"> </option>
 										<option value="2">home</option>
@@ -1229,7 +1220,7 @@
 								</div>
 									<div class="col-md-6">
 										<label class="sr-only">Email address</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email[`+i+`]" data-role="email[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address">
+										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="newEmailAddress[`+i+`]" data-role="newEmailAddress[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
 									<button class="btn btn-danger" data-role="remove">
@@ -1239,17 +1230,14 @@
 							</div>
 						</div>`
 					);
-					$('input[name="actorEmailAddress['+i+']"').rules("add", { required: true, minlength: 6, maxlength: 255});
-					($('[data-role="emailAddressTypeId['+i+']"]'))
+					$('[data-role="newEmailAddressTypeId['+i+']"]')
 						.find('option[value='+emailAddressTypeId+']')
 						.attr("selected",true);
-					$('input[name="email['+i+']"').rules("add", { required: true, email: true});
+					$('input[name="newEmailAddress['+i+']"').rules("add", { required: true, email: true});
 					if (listEntry.find('input').each(function(){
-						// console.log("TCL: find(input) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 					if (listEntry.find('select').each(function(){
-						// console.log("TCL: find(select) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 				}
@@ -1540,7 +1528,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Phone number type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="newPhoneNumberTypeId[`+i+`]" data-role="newPhoneNumberTypeId[`+i+`]" required>
 										<option value="" disabled selected hidden>[Choose phone number type...]</option>
 										<option value="1"> </option>
 										<option value="2">mobile</option>
@@ -1553,7 +1541,7 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Phone number</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number">
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="newPhoneNumber[`+i+`]" data-role="newPhoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
 									<button class="btn btn-danger" data-role="remove">
@@ -1563,16 +1551,14 @@
 							</div>
 						</div>`
 					);
-					($('[data-role="phoneNumberTypeId['+i+']"]'))
+					($('[data-role="newPhoneNumberTypeId['+i+']"]'))
 						.find('option[value='+phoneNumberTypeId+']')
 						.attr("selected",true);
-					$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30 });
+					$('input[name="newPhoneNumber['+i+']"').rules("add", { required: true, maxlength: 30 });
 					if (listEntry.find('input').each(function(){
-						// console.log("TCL: find(input) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 					if (listEntry.find('select').each(function(){
-						// console.log("TCL: find(select) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
 				}
@@ -2287,31 +2273,24 @@
 							</div>
 						</div>
 					</div>`
-					);
-					if (actor.model.actorNames[i].id == actor.model.displayName.id) {
-						$('[data-role="displayName['+actor.model.actorNames[i].id+']"]')
-							.prop("checked", true);
-					}
-					if (actor.model.birthName && actor.model.actorNames[i].id == actor.model.birthName.id) {
-						$('[data-role="birthName['+actor.model.actorNames[i].id+']"]')
-							.prop("checked", true);
-					}
-					if (actor.model.actorNames[i].usedFrom) {
-						$('[data-role="nameUsedFrom['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
-					} else {
-						$('[data-role="nameUsedFrom['+i+']"]').val('');
-					}
-					if (actor.model.actorNames[i].usedUntil) {
-						$('[data-role="nameUsedUntil['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
-					} else {
-						$('[data-role="nameUsedUntil['+i+']"]').val('');
-					}
-					$('input[name="name['+i+']"').rules("add",
-						{
-							required: true,
-							minlength: 3,
-							maxlength: 200,
-						});
+				);
+				if (actor.model.actorNames[i].id == actor.model.displayName.id) {
+					$('[data-role="displayName['+actor.model.actorNames[i].id+']"]').prop("checked", true);
+				}
+				if (actor.model.birthName && actor.model.actorNames[i].id == actor.model.birthName.id) {
+					$('[data-role="birthName['+actor.model.actorNames[i].id+']"]').prop("checked", true);
+				}
+				$('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+				if (actor.model.actorNames[i].usedFrom) {
+					$('[data-role="nameUsedFrom['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
+				} else {
+					$('[data-role="nameUsedFrom['+i+']"]').val('');
+				}
+				if (actor.model.actorNames[i].usedUntil) {
+					$('[data-role="nameUsedUntil['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
+				} else {
+					$('[data-role="nameUsedUntil['+i+']"]').val('');
+				}
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-actornames-form :input').prop("disabled", true);
@@ -2385,35 +2364,35 @@
 										</div>
 										<div class="col-md-5">
 											<label class="col-form-label col-form-label-sm">Street name</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname" name="streetName[`+i+`]" data-role="streetName[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.streetName+`" placeholder="[Enter street name]" aria-describedby="Street name" minlength="3" maxlength="200" rows="1" readonly="true">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname" name="streetName[`+i+`]" data-role="streetName[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.streetName+`" placeholder="[Enter street name]" aria-describedby="Street name" minlength="3" maxlength="200" rows="1" readonly="true">
 										</div>
 										<div class="col-md-2">
 											<label class="col-form-label col-form-label-sm">Street number</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber" name="streetNumber[`+i+`]" data-role="streetNumber[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.streetNumber+`" placeholder="[Enter street number]" aria-describedby="Street number" maxlength="10">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber" name="streetNumber[`+i+`]" data-role="streetNumber[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.streetNumber+`" placeholder="[Enter street number]" aria-describedby="Street number" maxlength="10">
 										</div>
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Street addition</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition" name="streetAddition[`+i+`]" data-role="streetAddition[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.streetAddition+`" placeholder="[Enter street addition]" aria-describedby="Street addition" maxlength="50">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition" name="streetAddition[`+i+`]" data-role="streetAddition[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.streetAddition+`" placeholder="[Enter street addition]" aria-describedby="Street addition" maxlength="50">
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Postal code</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode" name="postalCode[`+i+`]" data-role="postalCode[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.postalCode+`" placeholder="[Enter postal code]" aria-describedby="Postal code" maxlength="8">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode" name="postalCode[`+i+`]" data-role="postalCode[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.postalCode+`" placeholder="[Enter postal code]" aria-describedby="Postal code" maxlength="8">
 										</div>
 										<div class="col-md-6">
 											<label class="col-form-label col-form-label-sm">City</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city" name="cityName[`+i+`]" data-role="cityName[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.cityName+`" placeholder="[Enter city]" aria-describedby="City" readonly="true">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname" name="cityName[`+i+`]" data-role="cityName[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.cityName+`" placeholder="[Enter city]" aria-describedby="City" readonly="true">
 										</div>
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Post office box</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox" name="postOfficeBox[`+i+`]" data-role="postOfficeBox[`+i+`]" value="`+actor.model.actorHasAddresses[i].address.postOfficeBox+`" placeholder="[Enter post office box]" aria-describedby="Post office box" maxlength="10">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox" name="postOfficeBox[`+i+`]" data-role="postOfficeBox[`+actor.model.actorHasAddresses[i].id.addressId+`]" value="`+actor.model.actorHasAddresses[i].address.postOfficeBox+`" placeholder="[Enter post office box]" aria-describedby="Post office box" maxlength="10">
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address type*</label>
-											<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id" name="addressTypeId[`+i+`]" data-role="addressTypeId[`+actor.model.actorHasAddresses[i].addressType.id+`]" required>
+											<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id" name="addressTypeId[`+i+`]" data-role="addressTypeId[`+actor.model.actorHasAddresses[i].id.addressId+`]" required>
 												<-- <option value="" disabled selected hidden>[Choose address type...]</option>
 												<option value="1"> </option>
 												<option value="2">business</option>
@@ -2423,11 +2402,11 @@
 										</div>
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address used from</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom" name="addressUsedFrom[`+i+`]" data-role="addressUsedFrom[`+i+`]" placeholder="[Enter used from]" aria-describedby="Address used from">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom" name="addressUsedFrom[`+i+`]" data-role="addressUsedFrom[`+actor.model.actorHasAddresses[i].id.addressId+`]" placeholder="[Enter used from]" aria-describedby="Address used from">
 										</div>
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address used until</label>
-											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil" name="addressUsedUntil[`+i+`]" data-role="addressUsedUntil[`+i+`]" placeholder="[Enter used until]" aria-describedby="Address used until">
+											<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil" name="addressUsedUntil[`+i+`]" data-role="addressUsedUntil[`+actor.model.actorHasAddresses[i].id.addressId+`]" placeholder="[Enter used until]" aria-describedby="Address used until">
 										</div>
 									</div>
 								</fieldset>
@@ -2444,20 +2423,20 @@
 					$('[data-role="primaryAddress['+actor.model.actorHasAddresses[i].id.addressId+']"]')
 						.prop("checked",true);
 				}
+				// $('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
+				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].id.addressId+']"')
+				.find('option[value='+actor.model.actorHasAddresses[i].addressType.id+']')
+				.attr("selected",true);
 				if (actor.model.actorHasAddresses[i].usedFrom) {
-					$('[data-role="addressUsedFrom['+i+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedFrom).format('YYYY-MM-DD'));
+					$('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedFrom).format('YYYY-MM-DD'));
 				} else {
-					$('[data-role="addressUsedFrom['+i+']"]').val('');
+					$('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val('');
 				}
 				if (actor.model.actorHasAddresses[i].usedUntil) {
-					$('[data-role="addressUsedUntil['+i+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedUntil).format('YYYY-MM-DD'));
+					$('[data-role="addressUsedUntil['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedUntil).format('YYYY-MM-DD'));
 				} else {
-					$('[data-role="addressUsedUntil['+i+']"]').val('');
+					$('[data-role="addressUsedUntil['+actor.model.actorHasAddresses[i].id.addressId+']"]').val('');
 				}
-				$('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
-				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].addressType.id+']"')
-					.find('option[value='+actor.model.actorHasAddresses[i].addressType.id+']')
-					.attr("selected",true);
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-addresses-form :input').prop("disabled", true);
@@ -2528,7 +2507,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Email address type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+actor.model.actorHasEmailAddresses[i].emailAddressType.id+`]" required>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" required>
 										<option value="" disabled selected hidden>[Choose email type...]</option>
 										<option value="1"> </option>
 										<option value="2">home</option>
@@ -2540,7 +2519,7 @@
 								</div>
 									<div class="col-md-6">
 										<label class="sr-only">Email address</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email[`+i+`]" data-role="email[`+i+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
+										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress[`+i+`]" data-role="emailAddress[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
 									<button class="btn btn-danger" data-role="remove">
@@ -2554,10 +2533,10 @@
 					$('[data-role="primaryEmailAddress['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"]')
 						.prop("checked",true);
 				}
-				$('input[name="email['+i+']"').rules("add", { required: true, email: true});
-				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']"')
+				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"')
 					.find('option[value='+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']')
 					.attr("selected",true);
+				$('input[name="emailAddress['+i+']"').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-emailaddresses-form :input').prop("disabled", true);
@@ -2624,7 +2603,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Phone number type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+`]" required>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" required>
 										<option value="" disabled selected hidden>[Choose phone number type...]</option>
 										<option value="1"> </option>
 										<option value="2">mobile</option>
@@ -2637,7 +2616,7 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Phone number</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+i+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
 									<button class="btn btn-danger" data-role="remove">
@@ -2651,10 +2630,10 @@
 					$('[data-role="primaryPhoneNumber['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"]')
 						.prop("checked",true);
 				}
-				$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30});
-				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']"')
+				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"')
 					.find('option[value='+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']')
 					.attr("selected",true);
+				$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30});
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-phonenumbers-form :input').prop("disabled", true);
@@ -3296,11 +3275,11 @@
 					</div>
 					<div class="col-md-2">
 						<label class="sr-only">Name used from</label>
-						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" id="timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
+						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" id="timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom" data-role="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
 					</div>
 					<div class="col-md-2">
 						<label class="sr-only">Name used until</label>
-						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
+						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil" data-role="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
 					</div>
 					<div class="col-md-1">
 						<button class="btn btn-primary" data-role="add">
@@ -3340,7 +3319,7 @@
 								</div>
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">City</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city" name="cityName" data-role="city" placeholder="[Enter city]" value="TEMP NAME" aria-describedby="City" readonly="true">
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname" name="cityName" data-role="cityName" placeholder="[Enter city]" value="TEMP NAME" aria-describedby="City" readonly="true">
 								</div>
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">Post office box</label>
@@ -3402,7 +3381,7 @@
 						</div>
 						<div class="col-md-6">
 							<label class="sr-only">Email address</label>
-							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-email" name="email" data-role="email" placeholder="[Enter email address]" aria-describedby="Email address">
+							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress" data-role="emailAddress" placeholder="[Enter email address]" aria-describedby="Email address" required>
 						</div>
 						<div class="col-md-1">
 							<button class="btn btn-primary" data-role="add">
@@ -3438,7 +3417,7 @@
 						</div>
 						<div class="col-md-6">
 							<label class="sr-only">Phone number</label>
-							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number">
+							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" rerquired>
 						</div>
 						<div class="col-md-1">
 							<button class="btn btn-primary" data-role="add">
