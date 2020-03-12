@@ -635,7 +635,7 @@
 				titleDisplay += `<p><i>(OT: `+video.originalTitle.name+`)</i></p>`;
 			}
 			video.titles.forEach(function(title) { // make additional titles searchable in medialibrary
-				if (title.id != video.displayTitle.id && title.id != video.originalTitle.id) {
+				if (title.id != video.displayTitle.id && (video.originalTitle != null && title.id != video.originalTitle.id)) {
 					titleDisplay += `<div style="display:none">`+title.name+`</div>`;
 				}
 			});
