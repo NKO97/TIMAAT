@@ -634,6 +634,11 @@
 			if (video.originalTitle != null && video.displayTitle.id != video.originalTitle.id) {
 				titleDisplay += `<p><i>(OT: `+video.originalTitle.name+`)</i></p>`;
 			}
+			video.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+				if (title.id != video.displayTitle.id && title.id != video.originalTitle.id) {
+					titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+				}
+			});
 			
 			if ( video.ui ) {
 				// remove event listeners
