@@ -478,7 +478,7 @@
       // console.log("TCL: addpersonIsMemberOfCollective -> actorId, personIsMemberOfCollective", actorId, personIsMemberOfCollective);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+personIsMemberOfCollective.id.collectiveId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+personIsMemberOfCollective.id.memberOfActorCollectiveActorId,
 					type:"POST",
 					data: JSON.stringify(personIsMemberOfCollective),
 					contentType:"application/json; charset=utf-8",

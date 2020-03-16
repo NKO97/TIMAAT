@@ -1843,7 +1843,7 @@
 					}
 					console.log("TIMAAT.ActorDatasets.collectivesInSelection", TIMAAT.ActorDatasets.collectivesInSelection);
 					// console.log("TCL: i", i);
-					$('#dynamic-personismemberofcollective-fields').append(
+					var collectiveFormData = 
 						`<div class="form-group" data-role="memberofcollective-entry">
 							<div class="form-row">
 								<div class="col-md-11">
@@ -1852,8 +1852,10 @@
 										<div class="form-row align-items-center">
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Member of collective</label>
-												<select class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-collective-id" name="newCollectiveId[`+i+`]" data-role="newCollectiveId[`+i+`]">
-												</select>
+												<select class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-collective-id" name="newCollectiveId[`+i+`]" data-role="newCollectiveId[`+i+`]">`
+						collectiveFormData += TIMAAT.ActorDatasets.appendCollectivesToSelectionOptions();
+						collectiveFormData +=	
+												`</select>
 											</div>
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Joined at</label>
@@ -1873,9 +1875,9 @@
 								</div>
 							</div>
 						</div>`
-					);
+					$('#dynamic-personismemberofcollective-fields').append(collectiveFormData);
 					// add collectives to dropdown list
-					TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
+					// TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
 					console.log("TCL: show selected collective name");
 					// TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
 					$('[data-role="newCollectiveId['+i+']"]').find('option[value='+collectiveId+']').attr("selected",true);
@@ -1924,7 +1926,7 @@
 				var i = 0;
 				while ( i < formData.length) { // fill formPersonIsMemberOfCollectivesList with data
 					var element = {
-						collectiveId: formData[i].value,
+						collectiveId: Number(formData[i].value),
 						joinedAt: formData[i+1].value,
 						leftAt: formData[i+2].value,
 					};
@@ -2942,39 +2944,40 @@
       // console.log("TCL: actor.model.actorPerson.actorPersonIsMemberOfActorCollectives", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives);
 			for (; i< numMemberOfCollectives; i++) {
 				var collectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId;
-        console.log("collectiveId", collectiveId);
-				$('[data-role="dynamic-personismemberofcollective-fields"]').append(
-					`<div class="form-group" data-role="memberofcollective-entry">
-						<div class="form-row">
-							<div class="col-md-11">
-								<fieldset>
-									<legend>Membership</legend>
-									<div class="form-row align-items-center">
-										<div class="col-md-4">
-											<label class="col-form-label col-form-label-sm">Member of collective</label>
-											<select class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-collective-id" name="collectiveId[`+i+`]" data-role="collectiveId[`+collectiveId+`]">
-											</select>
-										</div>
-										<div class="col-md-4">
-										<label class="col-form-label col-form-label-sm">Joined at</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat" name="joinedAt[`+i+`]" data-role="joinedAt[`+collectiveId+`]" placeholder="[Enter joined at]" aria-describedby="Collective joined at">
-									</div>
-									<div class="col-md-4">
-										<label class="col-form-label col-form-label-sm">Left at</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat" name="leftAt[`+i+`]" data-role="leftAt[`+collectiveId+`]" placeholder="[Enter used until]" aria-describedby="Collective left at">
-									</div>
-								</fieldset>
-							</div>
-							<div class="col-md-1 vertical-aligned">
-								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
-								</button>
-							</div>
+				console.log("collectiveId", collectiveId);
+				var collectiveFormData = `<div class="form-group" data-role="memberofcollective-entry">
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>Membership</legend>
+							<div class="form-row align-items-center">
+								<div class="col-md-4">
+									<label class="col-form-label col-form-label-sm">Member of collective</label>
+									<select class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-collective-id" name="collectiveId[`+i+`]" data-role="collectiveId[`+collectiveId+`]">`
+				collectiveFormData +=	TIMAAT.ActorDatasets.appendCollectivesToSelectionOptions();
+				collectiveFormData +=	
+									`</select>
+								</div>
+								<div class="col-md-4">
+									<label class="col-form-label col-form-label-sm">Joined at</label>
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat" name="joinedAt[`+i+`]" data-role="joinedAt[`+collectiveId+`]" placeholder="[Enter joined at]" aria-describedby="Collective joined at">
+								</div>
+								<div class="col-md-4">
+									<label class="col-form-label col-form-label-sm">Left at</label>
+									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat" name="leftAt[`+i+`]" data-role="leftAt[`+collectiveId+`]" placeholder="[Enter used until]" aria-describedby="Collective left at">
+								</div>
+							</fieldset>
 						</div>
-					</div>`
-				);
+						<div class="col-md-1 vertical-aligned">
+							<button class="btn btn-danger" data-role="remove">
+								<span class="fas fa-trash-alt"></span>
+							</button>
+						</div>
+					</div>
+				</div>`;
+				$('[data-role="dynamic-personismemberofcollective-fields"]').append(collectiveFormData);
 				// add collectives to dropdown list
-				TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
+				// TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
 				console.log("TCL: show selected collective name");
 				// TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
 				$('[data-role="collectiveId['+collectiveId+']"]')
@@ -3392,7 +3395,7 @@
 		},
 
 		updatePersonIsMemberOfCollective: async function(personIsMemberOfCollective, actor, collectiveId) {
-			console.log("TCL: updatePersonIsMemberOfCollective: async function -> personIsMemberOfCollective at beginning of update process: ", personIsMemberOfCollective, actor);
+			console.log("TCL: updatePersonIsMemberOfCollective: async function -> personIsMemberOfCollective at beginning of update process: ", personIsMemberOfCollective, actor, collectiveId);
 			try {
 				// update memberofcollective
 				var updatedPersonIsMemberOfCollective = await TIMAAT.ActorService.updatePersonIsMemberOfCollective(personIsMemberOfCollective, collectiveId);
@@ -3820,8 +3823,11 @@
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">Member of collective</label>
 									<select class="form-control form-control-sm" id="timaat-actordatasets-actor-memberofcollectives-collective-id" name="collectiveId" data-role="collectiveId">
-										<option value="" disabled selected hidden>[Select collective...]</option> 
-									</select>
+										<option value="" disabled selected hidden>[Select collective...]</option>
+										`;
+			memberOfCollectiveToAppend +=	TIMAAT.ActorDatasets.appendCollectivesToSelectionOptions();					
+			memberOfCollectiveToAppend +=	
+									`</select>
 								</div>
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">joined at</label>
@@ -3844,11 +3850,21 @@
 
 			// add collectives to dropdown list
 			// TIMAAT.ActorDatasets.appendCollectivesToSelectionList();
+			// TIMAAT.ActorDatasets.collectivesInSelection.forEach(function(entry) {
+			// 	console.log("entry", entry);
+			// 	$('#timaat-actordatasets-actor-memberofcollectives-collective-id-new').append($('<option value="'+entry.collectiveId+'">'+entry.name+'</option>'));
+			// });
+			return memberOfCollectiveToAppend;
+		},
+
+		appendCollectivesToSelectionOptions: function() {
+			var optionList;
 			TIMAAT.ActorDatasets.collectivesInSelection.forEach(function(entry) {
 				console.log("entry", entry);
-				$('#timaat-actordatasets-actor-memberofcollectives-collective-id-new').append($('<option value="'+entry.collectiveId+'">'+entry.name+'</option>'));
+				optionList += `<option value="`+entry.collectiveId+`">`+entry.name+`</option>
+											`;
 			});
-			return memberOfCollectiveToAppend;
+			return optionList;
 		},
 
 		appendCollectivesToSelectionList: function() {
