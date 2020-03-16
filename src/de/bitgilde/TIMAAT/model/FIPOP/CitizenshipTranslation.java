@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -25,7 +26,8 @@ public class CitizenshipTranslation implements Serializable {
 	//bi-directional many-to-one association to Citizenship
 	@ManyToOne
 	@JoinColumn(name="citizenship_id")
-	@JsonBackReference(value = "Citizenship-CitizenshipTranslation") // Jsonignore does NOT work here
+	@JsonIgnore
+	// @JsonBackReference(value = "Citizenship-CitizenshipTranslation") //? Jsonignore does NOT work here
 	private Citizenship citizenship;
 
 	//bi-directional many-to-one association to Language

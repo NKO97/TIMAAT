@@ -313,28 +313,28 @@
 			});
 		},
 
-		async addActorHasAddress(actorId, actorHasAddress) {
-      // console.log("TCL: addActorHasAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasaddress/"+actorHasAddress.address.id,
-					type:"POST",
-					data: JSON.stringify(actorHasAddress),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(actorHasAddressData) {
-					// console.log("TCL: addActorHasAddress -> actorHasAddressData", actorHasAddressData);
-					resolve(actorHasAddressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
-				});
-			}).catch((error) => {
-				console.log( "error: ", error );
-			});
-		},
+		// async addActorHasAddress(actorId, actorHasAddress) {
+    //   // console.log("TCL: addActorHasAddress -> actorId, actorHasAddress", actorId, actorHasAddress);
+		// 	return new Promise(resolve => {
+		// 		$.ajax({
+		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/actorhasaddress/"+actorHasAddress.address.id,
+		// 			type:"POST",
+		// 			data: JSON.stringify(actorHasAddress),
+		// 			contentType:"application/json; charset=utf-8",
+		// 			dataType:"json",
+		// 			beforeSend: function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		}).done(function(actorHasAddressData) {
+		// 			// console.log("TCL: addActorHasAddress -> actorHasAddressData", actorHasAddressData);
+		// 			resolve(actorHasAddressData);
+		// 		}).fail(function(e) {
+		// 			console.log( "error: ", e.responseText );
+		// 		});
+		// 	}).catch((error) => {
+		// 		console.log( "error: ", error );
+		// 	});
+		// },
 
 		async createEmailAddress(emailAddress) {
 			// console.log("TCL: async createEmailAddress -> emailAddress", emailAddress);
@@ -466,6 +466,29 @@
 				}).done(function(actorHasPhoneNumberData) {
 					// console.log("TCL: addActorHasPhoneNumber -> actorHasPhoneNumberData", actorHasPhoneNumberData);
 					resolve(actorHasPhoneNumberData);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async addPersonIsMemberOfCollective(actorId, personIsMemberOfCollective) {
+      // console.log("TCL: addpersonIsMemberOfCollective -> actorId, personIsMemberOfCollective", actorId, personIsMemberOfCollective);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+personIsMemberOfCollective.id.collectiveId,
+					type:"POST",
+					data: JSON.stringify(personIsMemberOfCollective),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(personIsMemberOfCollectiveData) {
+					// console.log("TCL: addpersonIsMemberOfCollective -> personIsMemberOfCollectiveData", personIsMemberOfCollectiveData);
+					resolve(personIsMemberOfCollectiveData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
 				});
@@ -798,6 +821,30 @@
 			});
 		},
 
+		async updatePersonIsMemberOfCollective(personIsMemberOfCollective, collectiveId) {
+			// console.log("TCL: async updatepersonIsMemberOfCollective -> personIsMemberOfCollective", personIsMemberOfCollective);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+personIsMemberOfCollective.id.actorPersonActorId+"/personismemberofcollective/"+collectiveId,
+					type:"PATCH",
+					data: JSON.stringify(personIsMemberOfCollective),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					// console.log("TCL: async updatepersonIsMemberOfCollective -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
+
 		async updateCitizenshipTranslation(citizenshipTranslation, languageId) {
 			// console.log("TCL: async updateCitizenship -> citizenshipTranslation, languageId", citizenshipTranslation, languageId);
 			return new Promise(resolve => {
@@ -911,6 +958,23 @@
 			// console.log("TCL: removePhoneNumber -> phoneNumber", phoneNumber);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/phonenumber/"+phoneNumber.id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
+
+		removeMemberOfCollective(memberOfCollective) {
+			// console.log("TCL: removeMemberOfCollective -> memberOfCollective", memberOfCollective);
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.personId+"collective/"+memberOfCollective.id.collectiveId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

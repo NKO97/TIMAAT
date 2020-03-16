@@ -1643,7 +1643,7 @@
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-phonenumbers-form" href="#actorPhoneNumbers">Phone Numbers</a>
                         </li>
                         <li class="nav-item actors-data-tabs memberofcollective-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-memberofcollectives-form" href="#actorMemberOfCollectives">Memberships</a>
+                          <a class="nav-link nav-link-actors" id="actors-tab-person-memberofcollectives-form" href="#personMemberOfCollectives">Memberships</a>
                         </li>
                         <li class="nav-item actors-data-tabs actoractorrelationship-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-actorrelationships-form" href="#actorActorRelatiohships">Actor Relationships</a>
@@ -1785,18 +1785,18 @@
                           <div class="form-row">
                             <div class="col-md-8">
                               <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-memberof">Member of collective</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-memberof" name="memberOfCollective" placeholder="[Enter collective]" aria-describedby="Member of collective">
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-memberof" name="memberOfCollective" placeholder="[Enter collective]" aria-describedby="Member of collective" required>
                             </div>
                             <div class="col-md-2">
-                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-joined">Joined Collective</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-joined" name="joined" placeholder="[Enter join date]" aria-describedby="Join date">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-joinedat">Joined collective at</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-joinedat" name="joined" placeholder="[Enter join date]" aria-describedby="Join date">
                             </div>
                             <div class="col-md-2">
-                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-left">Left Collective</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-left" name="left" placeholder="[Enter leave date]" aria-describedby="Leave date">
+                              <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-person-metadata-collective-leftat">Left collective at</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-person-metadata-collective-leftat" name="left" placeholder="[Enter leave date]" aria-describedby="Leave date">
                             </div>
                           </div>
-                        </div> -->
+                        </div>  -->
                         <!-- <div class="form-group datasheet-data actor-data actor-phone-data"> <!~~ actor phone number information ~~>
                           <fieldset>
                             <legend>Phone number</legend>
@@ -2154,6 +2154,42 @@
                         </div>
                         <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-phonenumbers-form-submit" name="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- membership form -->
+                      <form class="form" role="form" id="timaat-actordatasets-person-memberofcollective-form" name="timaat-actordatasets-person-memberofcollective-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="personMemberOfCollectivesLabel">Person member of collectives</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-person-memberofcollective-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-memberofcollectives-container">
+                          <div data-role="dynamic-personismemberofcollective-fields" id="dynamic-personismemberofcollective-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional name form content will be created dynamically --> 
+                          </div>
+                          <div class="memberofcollective-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-personismemberofcollective-fields" id="new-personismemberofcollective-fields">
+                            <!-- one row for new name information that shall be added to the memberofcollectives list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <div class="memberofcollective-form-divider">
+                          <hr>                            
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-person-memberofcollective-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-person-memberofcollective-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                     </div>
                   </div>

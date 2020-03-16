@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Date;
@@ -77,8 +78,8 @@ public class ActorPerson implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorPerson")
-	// @JsonIgnore
-	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
+	@JsonManagedReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollectives")
+	private List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="actorPerson")
@@ -181,11 +182,11 @@ public class ActorPerson implements Serializable {
 		this.citizenships = citizenships;
 	}
 
-	public Set<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
+	public List<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
 		return this.actorPersonIsMemberOfActorCollectives;
 	}
 
-	public void setActorPersonIsMemberOfActorCollectives(Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
+	public void setActorPersonIsMemberOfActorCollectives(List<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
 		this.actorPersonIsMemberOfActorCollectives = actorPersonIsMemberOfActorCollectives;
 	}
 

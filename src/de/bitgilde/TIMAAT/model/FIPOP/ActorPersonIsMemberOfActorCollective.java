@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 // import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
@@ -30,33 +32,25 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 
 	//bi-directional many-to-one association to ActorCollective
 	@ManyToOne
+	@JsonBackReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollectives")
 	@JoinColumn(name="member_of_actor_collective_actor_id")
-	// @JsonBackReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollective")
+
 	private ActorCollective actorCollective;
 
 	//bi-directional many-to-one association to ActorPerson
 	@ManyToOne
-	// @JsonBackReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollective")
-	// @JsonIgnore
+	@JsonBackReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollectives")
 	@JoinColumn(name="actor_person_actor_id")
 	private ActorPerson actorPerson;
-
-	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
-	// @ManyToOne
-	// private ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective;
-
-	// //bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
-	// @OneToMany(mappedBy="ActorPersonIsMemberOfActorCollective")
-	// private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	public ActorPersonIsMemberOfActorCollective() {
 	}
 
-	// public ActorPersonIsMemberOfActorCollective(ActorPerson actorPerson, ActorCollective actorCollective) {
-	// 	this.actorPerson = actorPerson;
-	// 	this.actorCollective = actorCollective;
-	// 	this.id = new ActorPersonIsMemberOfActorCollectivePK(actorPerson.getActorId(), actorCollective.getActorId());
-	// }
+	public ActorPersonIsMemberOfActorCollective(ActorPerson actorPerson, ActorCollective actorCollective) {
+		this.actorPerson = actorPerson;
+		this.actorCollective = actorCollective;
+		this.id = new ActorPersonIsMemberOfActorCollectivePK(actorPerson.getActorId(), actorCollective.getActorId());
+	}
 
 	public ActorPersonIsMemberOfActorCollectivePK getId() {
 		return this.id;
@@ -97,35 +91,5 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 	public void setActorPerson(ActorPerson actorPerson) {
 		this.actorPerson = actorPerson;
 	}
-
-	// public ActorPersonIsMemberOfActorCollective getActorPersonIsMemberOfActorCollective() {
-	// 	return this.actorPersonIsMemberOfActorCollective;
-	// }
-
-	// public void setActorPersonIsMemberOfActorCollective(ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective) {
-	// 	this.actorPersonIsMemberOfActorCollective = actorPersonIsMemberOfActorCollective;
-	// }
-
-	// public Set<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
-	// 	return this.actorPersonIsMemberOfActorCollectives;
-	// }
-
-	// public void setActorPersonIsMemberOfActorCollectives(Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives) {
-	// 	this.actorPersonIsMemberOfActorCollectives = actorPersonIsMemberOfActorCollectives;
-	// }
-
-	// public ActorPersonIsMemberOfActorCollective addActorPersonIsMemberOfActorCollective(ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective) {
-	// 	getActorPersonIsMemberOfActorCollectives().add(actorPersonIsMemberOfActorCollective);
-	// 	actorPersonIsMemberOfActorCollective.setActorPersonIsMemberOfActorCollective(this);
-
-	// 	return actorPersonIsMemberOfActorCollective;
-	// }
-
-	// public ActorPersonIsMemberOfActorCollective removeActorPersonIsMemberOfActorCollective(ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective) {
-	// 	getActorPersonIsMemberOfActorCollectives().remove(actorPersonIsMemberOfActorCollective);
-	// 	actorPersonIsMemberOfActorCollective.setActorPersonIsMemberOfActorCollective(null);
-
-	// 	return actorPersonIsMemberOfActorCollective;
-	// }
 
 }

@@ -263,6 +263,22 @@
           actorFormPhoneNumbers.submit();
         },
       });
+      var personFormMemberOfCollectives = $("#timaat-actordatasets-person-memberofcollective-form");
+      var personFormMemberOfCollectivesValidator = $("#timaat-actordatasets-person-memberofcollective-form").validate({
+        rules: {
+          collective: {
+            required: true,
+          }
+        },
+        messages: {
+          collective: {
+            required: "Select a collective",
+          }
+        },
+        submitHandler: function(actorFormNames) {
+          actorFormNames.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.Date;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class ActorCollective implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@OneToMany(mappedBy="actorCollective")
-	// @JsonIgnore
+	@JsonManagedReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollectives")
 	private Set<ActorPersonIsMemberOfActorCollective> actorPersonIsMemberOfActorCollectives;
 
 	public ActorCollective() {

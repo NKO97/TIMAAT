@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+// import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class Citizenship implements Serializable {
 
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="citizenship", cascade = CascadeType.PERSIST)
-	@JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
+	// @JsonManagedReference(value = "Citizenship-CitizenshipTranslation")
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
 	//bi-directional many-to-many association to Country
