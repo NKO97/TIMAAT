@@ -1427,7 +1427,9 @@ public class MediumServiceEndpoint{
   // @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumid}/languagetrack/{languagetypeid}/{languageid}")
 	@Secured
-	public Response addMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("languagetypeid") int mediumLanguageTypeId, @PathParam("languageid") int languageId) {
+	public Response addMediumHasLanguageItem(@PathParam("mediumid") int mediumId, 
+																					 @PathParam("languagetypeid") int mediumLanguageTypeId, 
+																					 @PathParam("languageid") int languageId) {
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: "+mediumId+" "+mediumLanguageTypeId+ " "+languageId);
 		// System.out.println("MediumServiceEndpoint: addLanguageTrack: jsonData: "+jsonData);
 
@@ -1486,7 +1488,11 @@ public class MediumServiceEndpoint{
 	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumid}/languagetrack/{languagetypeid}/{languageid}")
 	@Secured
-	public Response updateMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("languagetypeid") int mediumLanguageTypeId, @PathParam("languageid") int languageId, String jsonData) throws IOException {
+	public Response updateMediumHasLanguageItem(@PathParam("mediumid") int mediumId, 
+																							@PathParam("languagetypeid") int mediumLanguageTypeId, 
+																							@PathParam("languageid") int languageId, 
+																							String jsonData) throws IOException {
+		
 		System.out.println("MediumServiceEndpoint: updateLanguageTrack: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();

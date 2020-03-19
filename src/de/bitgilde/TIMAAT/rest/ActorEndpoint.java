@@ -1630,33 +1630,37 @@ public class ActorEndpoint {
   @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{actorid}/personismemberofcollective/{collectiveid}")
 	@Secured
-	public Response addPersonIsMemberOfCollective(@PathParam("actorid") int actorId, @PathParam("collectiveid") int collectiveId, String jsonData) {
+	public Response addPersonIsMemberOfCollective(@PathParam("actorid") int actorId, 
+																								@PathParam("collectiveid") int collectiveId, 
+																								String jsonData) throws IOException {
 
 		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		ActorPerson person = entityManager.find(ActorPerson.class, actorId);
+		if (person == null) return Response.status(Status.NOT_FOUND).build();
 		ActorCollective collective = entityManager.find(ActorCollective.class, collectiveId);
-		// ActorPersonIsMemberOfActorCollective apimosckey = new ActorPersonIsMemberOfActorCollective(person, collective);
-		// ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimosckey.getId());
-		
+		if (collective == null) return Response.status(Status.NOT_FOUND).build();
+		ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = new ActorPersonIsMemberOfActorCollective(person, collective);
+		ActorPersonIsMemberOfActorCollective apimoac = null;
+		try {
+			 apimoac = mapper.readValue(jsonData, ActorPersonIsMemberOfActorCollective.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
 		// parse JSON data
-		// try {
-		// 	actorPersonIsMemberOfActorCollective = mapper.readValue(jsonData, ActorPersonIsMemberOfActorCollective.class);
-		// } catch (IOException e) {
-		// 	System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: IOException e !");
-		// 	e.printStackTrace();
-		// 	return Response.status(Status.BAD_REQUEST).build();
-		// }
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: address: "+address.getAddress());
+		if (apimoac.getJoinedAt() != null) actorPersonIsMemberOfActorCollective.setJoinedAt(apimoac.getJoinedAt());
+		if (apimoac.getLeftAt() != null) actorPersonIsMemberOfActorCollective.setLeftAt(apimoac.getLeftAt());
+
 		// sanitize object data
 
 		// update log metadata
 		
 		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
 		// create actor_has_address-table entries
-		ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = new ActorPersonIsMemberOfActorCollective(person, collective);
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		person.getActorPersonIsMemberOfActorCollectives().add(actorPersonIsMemberOfActorCollective);
@@ -1685,7 +1689,9 @@ public class ActorEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{actor_id}/personismemberofcollective/{collective_id}")
 	@Secured
-	public Response updateActorPersonIsMemberOfActorCollective(@PathParam("actor_id") int actorId, @PathParam("collective_id") int collectiveId, String jsonData) {
+	public Response updatePersonIsMemberOfCollective(@PathParam("actor_id") int actorId, 
+																									 @PathParam("collective_id") int collectiveId, 
+																									 String jsonData) {
 
 		System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();

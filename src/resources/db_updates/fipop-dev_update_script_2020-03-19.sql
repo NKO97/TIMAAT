@@ -1,0 +1,4 @@
+ALTER TABLE `actor_person_is_member_of_actor_collective` DROP FOREIGN KEY `fk_actor_person_is_member_of_actor_collective_collective1`; 
+ALTER TABLE `actor_person_is_member_of_actor_collective` ADD CONSTRAINT `fk_actor_person_is_member_of_actor_collective_collective1` FOREIGN KEY (`member_of_actor_collective_actor_id`) REFERENCES `actor_collective`(`actor_id`) ON DELETE CASCADE ON UPDATE NO ACTION; 
+ALTER TABLE `actor_person_is_member_of_actor_collective` DROP FOREIGN KEY `fk_actor_person_is_member_of_actor_collective_person1`; 
+ALTER TABLE `actor_person_is_member_of_actor_collective` ADD CONSTRAINT `fk_actor_person_is_member_of_actor_collective_person1` FOREIGN KEY (`actor_person_actor_id`) REFERENCES `actor_person`(`actor_id`) ON DELETE CASCADE ON UPDATE NO ACTION; 

@@ -733,7 +733,7 @@ select:disabled {
 	align-items: center;
 }
 
-[data-role="add"], [data-role="remove"] {
+[data-role="add"], [data-role="remove"] , [data-role="save"] {
   line-height: 1;
 }
 

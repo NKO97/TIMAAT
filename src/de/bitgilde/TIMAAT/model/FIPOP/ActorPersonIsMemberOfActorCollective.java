@@ -34,7 +34,6 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 	@ManyToOne
 	@JsonBackReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollectives")
 	@JoinColumn(name="member_of_actor_collective_actor_id")
-
 	private ActorCollective actorCollective;
 
 	//bi-directional many-to-one association to ActorPerson
