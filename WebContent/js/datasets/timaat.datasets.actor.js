@@ -333,8 +333,8 @@
 					person.model.actorPerson.placeOfBirth = formDataObject.placeOfBirth;
 					person.model.actorPerson.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
 					person.model.actorPerson.placeOfDeath = formDataObject.placeOfDeath;
-					person.model.actorPerson.sex.id = (formDataObject.sexId === undefined) ? 4 : Number(formDataObject.sexId);
-					person.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName;
+					person.model.actorPerson.sex.id = Number(formDataObject.sexId); // (formDataObject.sexId === undefined) ? 4 : Number(formDataObject.sexId);
+					// person.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName; // TODO
 					person.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
 
           console.log("TCL: person", person);
@@ -347,9 +347,10 @@
 					var personModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, 'person');
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 1); // 1 = Person. TODO check clause to find proper id
 					var displayNameModel = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
-					var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
+					// var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
 					
-					await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, citizenshipModel);
+					// await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, citizenshipModel);
+					await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, null); // TODO
 					var person = TIMAAT.ActorDatasets.persons[TIMAAT.ActorDatasets.persons.length-1];
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 					$('#timaat-actordatasets-actor-metadata-form').data('actor', person);
@@ -2461,7 +2462,7 @@
 						else $('#timaat-actordatasets-person-metadata-dayofdeath').val(moment.utc(data.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
 					$('#timaat-actordatasets-person-metadata-placeofdeath').val(data.actorPerson.placeOfDeath);
 					$('#timaat-actordatasets-person-metadata-sex-type').val(data.actorPerson.sex.id);
-					$('#timaat-actordatasets-person-metadata-citizenship-name').val(data.actorPerson.citizenships[0].citizenshipTranslations[0].name);
+					// $('#timaat-actordatasets-person-metadata-citizenship-name').val(data.actorPerson.citizenships[0].citizenshipTranslations[0].name);
 					$('#timaat-actordatasets-person-metadata-specialfeatures').val(data.actorPerson.actorPersonTranslations[0].specialFeatures);
 					// TODO remove once location is properly connected
 					$('#timaat-actordatasets-person-metadata-placeofbirth').prop("disabled", true);
@@ -2518,15 +2519,15 @@
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="actorName[`+i+`]" data-role="actorName[`+i+`]" value="`+actor.model.actorNames[i].name+`" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="actorName[`+i+`]" data-role="actorName[`+actor.model.actorNames[i].id+`]" value="`+actor.model.actorNames[i].name+`" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom[`+i+`]" placeholder="[Enter name used from]" aria-describedby="Name used from">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used from]" aria-describedby="Name used from">
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil[`+i+`]" placeholder="[Enter name used until]" aria-describedby="Name used until">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used until]" aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
@@ -2544,14 +2545,14 @@
 				}
 				$('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
 				if (actor.model.actorNames[i].usedFrom) {
-					$('[data-role="nameUsedFrom['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
+					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
 				} else {
-					$('[data-role="nameUsedFrom['+i+']"]').val('');
+					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].idi+']"]').val('');
 				}
 				if (actor.model.actorNames[i].usedUntil) {
-					$('[data-role="nameUsedUntil['+i+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
+					$('[data-role="nameUsedUntil['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
 				} else {
-					$('[data-role="nameUsedUntil['+i+']"]').val('');
+					$('[data-role="nameUsedUntil['+actor.model.actorNames[i].id+']"]').val('');
 				}
 			}
 			if ( action == 'show') {
@@ -3293,7 +3294,9 @@
 							// update data that is part of person translation
 							// TODO: send request for each translation or for all translations
 							var tempActorPersonTranslation = await TIMAAT.ActorService.updateActorPersonTranslation(actor.model.id, actor.model.actorPerson.actorPersonTranslations[0]);
-							var tempActorPersonCitizenshipTranslation = await TIMAAT.ActorService.updateCitizenshipTranslation(actor.model.actorPerson.citizenships[0].citizenshipTranslations[0], actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].language.id);
+							if (actor.model.actorPerson.citizenships.length > 0) {
+								var tempActorPersonCitizenshipTranslation = await TIMAAT.ActorService.updateCitizenshipTranslation(actor.model.actorPerson.citizenships[0].citizenshipTranslations[0], actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].language.id);
+							}
 						break;
 					}
 				} catch(error) {
@@ -3550,6 +3553,7 @@
 		},
 
 		createActorSubtypeModel: async function(formDataObject, actorType) {
+    	console.log("formDataObject, actorType", formDataObject, actorType);
 			var model = {};
 			switch(actorType) {
 				case 'person':
@@ -3580,6 +3584,7 @@
 					};
 				break;
 			}
+      console.log("model", model);
 			return model;
 		},
 
