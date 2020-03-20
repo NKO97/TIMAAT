@@ -1679,7 +1679,7 @@ public class ActorEndpoint {
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																UserLogManager.LogEvents.MEMBERSHIPCREATED);
 
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: address added with id "+address.getId());
+		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: created");
 
 		return Response.ok().entity(actorPersonIsMemberOfActorCollective).build();
 	}
@@ -1759,6 +1759,8 @@ public class ActorEndpoint {
 		entityTransaction.begin();
 		entityManager.remove(actorPersonIsMemberOfActorCollective);
 		entityTransaction.commit();
+		entityManager.refresh(person);
+		entityManager.refresh(collective);
 		
 		// add log entry
 		UserLogManager.getLogger()

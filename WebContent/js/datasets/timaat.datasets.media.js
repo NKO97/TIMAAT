@@ -321,7 +321,7 @@
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
+									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
@@ -634,7 +634,7 @@
 								</div>
 								<div class="col-md-2 text-center">
 									<button class="btn btn-danger" data-role="remove">
-										<span class="fas fa-trash-alt"></span>
+										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
 							</div>
@@ -1758,7 +1758,7 @@
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
+									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
@@ -1856,7 +1856,7 @@
 							</div>
 							<div class="col-md-2 text-center">
 								<button class="btn btn-danger" data-role="remove">
-									<span class="fas fa-trash-alt"></span>
+									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
@@ -1931,7 +1931,7 @@
 							</div>
 							<div class="col-md-2 text-center">
 								<button class="btn btn-primary" data-role="add">
-									<span class="fas fa-plus"></span>
+									<i class="fas fa-plus"></i>
 								</button>
 							</div>
 						</div>
@@ -2453,7 +2453,7 @@
 								</div>
 								<div class="col-md-1 text-center">
 									<button class="btn btn-primary" data-role="add">
-										<span class="fas fa-plus"></span>
+										<i class="fas fa-plus"></i>
 									</button>
 								</div>
 							</div>
