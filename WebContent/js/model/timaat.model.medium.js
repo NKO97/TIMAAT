@@ -205,7 +205,7 @@
 			var name = this.model.displayTitle.name;
 			var type = this.model.mediaType.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').text(name);
+			this.listView.find('.timaat-mediadatasets-'+mediumType+'-list-name').html(name);
 			if (mediumType == 'medium') {
 				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
 			}

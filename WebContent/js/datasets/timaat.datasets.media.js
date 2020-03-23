@@ -306,7 +306,7 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="newTitle[`+i+`]" data-role="newTitle[`+i+`]" value="`+title+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="newTitle[`+i+`]" data-role="newTitle[`+i+`]" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
@@ -328,6 +328,7 @@
 					</div>`
 					);
 					$('input[name="newTitle['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('input[data-role="newTitle['+i+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
 					$('[data-role="newTitleLanguageId['+i+']"]').find('option[value='+languageId+']').attr("selected",true);
 					$('select[name="newTitleLanguageId['+i+']"').rules("add", { required: true, });
 					if (listEntry.find('input').each(function(){
@@ -394,12 +395,12 @@
 						if (formData[i+1].name == 'isOriginalTitle' && formData[i+1].value == 'on' ) {
 							// display title set, original title set
 							element.isOriginalTitle = true;
-							element.title = formData[i+2].value;
+							element.title = TIMAAT.MediaDatasets.replaceSpecialCharacters(formData[i+2].value);
 							element.titleLanguageId = formData[i+3].value;
 							i = i+4;
 						} else { // display title set, original title not set
 							element.isOriginalTitle = false;
-							element.title = formData[i+1].value;
+							element.title = TIMAAT.MediaDatasets.replaceSpecialCharacters(formData[i+1].value);
 							element.titleLanguageId = formData[i+2].value;
 							i = i+3;
 						}
@@ -407,13 +408,13 @@
 						element.isDisplayTitle = false;
 						if (formData[i].name == 'isOriginalTitle' && formData[i].value == 'on' ) {
 							element.isOriginalTitle = true;
-							element.title = formData[i+1].value;
+							element.title = TIMAAT.MediaDatasets.replaceSpecialCharacters(formData[i+1].value);
 							element.titleLanguageId = formData[i+2].value;
 							i = i+3;
 						} else {
 							// display title not set, original title not set
 							element.isOriginalTitle = false;
-							element.title = formData[i].value;
+							element.title = TIMAAT.MediaDatasets.replaceSpecialCharacters(formData[i].value);
 							element.titleLanguageId = formData[i+1].value;
 							i = i+2;
 						}
@@ -443,11 +444,19 @@
 							medium.model.displayTitle = medium.model.titles[i];
 							displayTitleChanged = true;
 						}
-						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
+						var originalTitleChanged = false
+						if (formTitleList[i].isOriginalTitle) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
+						// }
+						// // if form sets title and title was either not set or was set to different entry or title data has changed
+						// if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id || medium.model.originalTitle == medium.model.titles[i])) {
+						// 	console.log("medium.model.originalTitle", medium.model.originalTitle);
+						// 	medium.model.originalTitle = medium.model.titles[i];
+            //   console.log("medium.model.originalTitle", medium.model.originalTitle);
+						// 	originalTitleChanged = true;
+						// else if form does not set title and title was set before and title was set to this entry
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
 							medium.model.originalTitle = null;
 							originalTitleChanged = true;
@@ -496,11 +505,14 @@
 							medium.model.displayTitle = medium.model.titles[i];
 							displayTitleChanged = true;
 						}
-						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
+						var originalTitleChanged = false
+						if (formTitleList[i].isOriginalTitle) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
+						// if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id || medium.model.originalTitle == medium.model.titles[i])) {
+						// 	medium.model.originalTitle = medium.model.titles[i];
+						// 	originalTitleChanged = true;
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
 							medium.model.originalTitle = null;
 							originalTitleChanged = true;
@@ -531,11 +543,14 @@
 							medium.model.displayTitle = medium.model.titles[i];
 							displayTitleChanged = true;
 						}
-						var originalTitleChanged = false
 						// update original title
-						if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id)) {
+						var originalTitleChanged = false
+						if (formTitleList[i].isOriginalTitle) {
 							medium.model.originalTitle = medium.model.titles[i];
 							originalTitleChanged = true;
+						// if (formTitleList[i].isOriginalTitle && (medium.model.originalTitle == null || medium.model.originalTitle.id != medium.model.titles[i].id || medium.model.originalTitle == medium.model.titles[i])) {
+						// 	medium.model.originalTitle = medium.model.titles[i];
+						// 	originalTitleChanged = true;
 						} else if (!formTitleList[i].isOriginalTitle && medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
 							medium.model.originalTitle = null;
 							originalTitleChanged = true;
@@ -1527,7 +1542,7 @@
 			// setup model
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
-				if ( title.id > 0 )
+				if ( title.id > 0 ) 
 					mediumTitles.push(title); 
 			});
 			TIMAAT.MediaDatasets.titles = mediumTitles;
@@ -1642,6 +1657,8 @@
 			// console.log("TCL: mediumTypeData", mediumTypeData);
 			// setup UI
 			var data = mediumTypeData.model;
+      // console.log("data", data);
+
 			// medium data
 			$('#timaat-mediadatasets-media-metadata-mediatype-id').val(data.mediaType.id);
 			$('#timaat-mediadatasets-media-metadata-remark').val(data.remark);
@@ -1742,7 +1759,7 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]" value="`+medium.model.titles[i].name+`" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
@@ -1771,6 +1788,7 @@
 						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop("checked",true);							
 					}
 					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
 					$('[data-role="titleLanguageId['+medium.model.titles[i].id+']"')
 					.find('option[value='+medium.model.titles[i].language.id+']')
 					.attr("selected",true);
@@ -2053,6 +2071,7 @@
 		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
 			try { // update display title
 				var tempDisplayTitle = await TIMAAT.MediaService.updateTitle(medium.model.displayTitle);
+        // console.log("tempDisplayTitle", tempDisplayTitle);
 				medium.model.displayTitle = tempDisplayTitle;
 			} catch(error) {
 				console.log( "error: ", error);
@@ -2060,7 +2079,12 @@
 
 			try { // update original title
 				if (medium.model.originalTitle) { // medium initially has no original title set
+					// for changes in datasheet form that impact data in originaltitle
+					if (medium.model.displayTitle.id == medium.model.originalTitle.id) {
+						medium.model.originalTitle = medium.model.displayTitle;
+					}
 					var tempOriginalTitle = await TIMAAT.MediaService.updateTitle(medium.model.originalTitle);
+          // console.log("tempOriginalTitle", tempOriginalTitle);
 					medium.model.originalTitle = tempOriginalTitle;
 				}
 			} catch(error) {
@@ -2460,6 +2484,19 @@
 						</div>`;
 						return titleToAppend;
 		},
+
+		replaceSpecialCharacters: function(unsafe) {
+			return unsafe
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "\"")
+			.replace(/'/g, "\'");
+				// .replace(/&/g, "&amp;")
+				// .replace(/</g, "&lt;")
+				// .replace(/>/g, "&gt;")
+				// .replace(/"/g, "&quot;")
+				// .replace(/'/g, "&#039;");
+	 },
 
 	}
 	
