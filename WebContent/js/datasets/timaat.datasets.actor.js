@@ -3871,7 +3871,11 @@
 							<div class="form-row">
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">Member of collective</label>
-									<select class="form-control form-control-sm" id="timaat-actordatasets-actor-memberofcollectives-collective-id" name="collectiveId" data-role="collectiveId" required>
+									<select class="form-control form-control-sm" 
+													id="timaat-actordatasets-actor-memberofcollectives-collective-id" 
+													name="collectiveId" 
+													data-role="collectiveId" 
+													required>
 										<option value="" disabled selected hidden>[Select collective...]</option>
 										`;
 			memberOfCollectiveToAppend +=	TIMAAT.ActorDatasets.collectiveSelectObjectsSorted;				
@@ -3880,11 +3884,22 @@
 								</div>
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">joined at</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat" id="timaat-actordatasets-actor-memberofcollectives-joinedat" name="joinedAt" data-role="joinedAt" placeholder="[Enter joined at]" aria-describedby="Collective joined at">
+									<input type="text" 
+												 class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat" 
+												 id="timaat-actordatasets-actor-memberofcollectives-joinedat" 
+												 name="joinedAt" 
+												 data-role="joinedAt" 
+												 placeholder="[Enter joined at]" 
+												 aria-describedby="Collective joined at">
 								</div>
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">Left at</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat" id="timaat-actordatasets-actor-memberofcollectives-leftat" name="leftAt" data-role="leftAt" placeholder="[Enter left at]" aria-describedby="Collective left at">
+									<input type="text" 
+												 class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat" 
+												 id="timaat-actordatasets-actor-memberofcollectives-leftat" 
+												 name="leftAt" data-role="leftAt" 
+												 placeholder="[Enter left at]" 
+												 aria-describedby="Collective left at">
 								</div>
 							</div>
 						</fieldset>
