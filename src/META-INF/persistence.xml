@@ -105,6 +105,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImagePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
