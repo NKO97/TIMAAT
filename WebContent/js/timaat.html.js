@@ -200,7 +200,7 @@
           postOfficeBox: {
             maxlength: 10,
           },
-          addressType: {
+          addressTypeId: {
             required: true,
           }
         },
@@ -217,7 +217,7 @@
           postOfficeBox: {
             maxlength: "Post office box is too long: max length is 10"
           },
-          addressType: {
+          addressTypeId: {
             required: "Select an address type"
           }
         },
@@ -231,7 +231,7 @@
           email: {
             email: true
           },
-          emailAddressType: {
+          emailAddressTypeId: {
             required: true,
           }
         },
@@ -239,7 +239,7 @@
           email: {
             email: "Enter a valid email"
           },
-          emailAddressType: {
+          emailAddressTypeId: {
             required: "Select an email address type"
           }
         },
@@ -250,12 +250,12 @@
       var actorFormPhoneNumbers = $("#timaat-actordatasets-actor-phonenumbers-form");
       var actorFormPhoneNumbersValidator = $("#timaat-actordatasets-actor-phonenumbers-form").validate({
         rules: {
-          emailAddressType: {
-            required: true,
+          phoneNumberTypeId: {
+            required: true
           }
         },
         messages: {
-          emailAddressType: {
+          phoneNumberTypeId: {
             required: "Select an email address type"
           }
         },
@@ -266,17 +266,17 @@
       var personFormMemberOfCollectives = $("#timaat-actordatasets-person-memberofcollective-form");
       var personFormMemberOfCollectivesValidator = $("#timaat-actordatasets-person-memberofcollective-form").validate({
         rules: {
-          collective: {
-            required: true,
+          collectiveId: {
+            required: true
           }
         },
         messages: {
-          collective: {
-            required: "Select a collective",
+          collectiveId: {
+            required: "Select a collective"
           }
         },
-        submitHandler: function(actorFormNames) {
-          actorFormNames.submit();
+        submitHandler: function(personFormMemberOfCollectives) {
+          personFormMemberOfCollectives.submit();
         },
       });
 

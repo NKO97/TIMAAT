@@ -733,7 +733,11 @@ select:disabled {
 	align-items: center;
 }
 
-[data-role="add"], [data-role="remove"] , [data-role="save"] {
+[data-role="add"],
+[data-role="addMembershipDetails"],
+[data-role="remove"],
+[data-role="removeMembershipDetails"],
+[data-role="save"] {
   line-height: 1;
 }
 
