@@ -1904,49 +1904,7 @@
 					console.log("TCL: i", i);
 					console.log("TCL: collectiveId", collectiveId);
 
-					var memberOfCollectiveFormData =
-						`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`">
-							<div class="form-row">
-								<div class="col-md-11">
-									<fieldset>
-										<legend>Membership `+(i+1)+`</legend>
-										<div class="form-row">
-											<div class="col-md-6">
-												<label class="sr-only">Member of collective</label>
-												<select class="form-control form-control-sm timaat-actordatasets-person-memberofcollective-collective-id"
-																name="collectiveId"
-																data-role="collectiveId[`+collectiveId+`]"
-																readonly="true">`;
-													// append list of collectives for selection list
-													memberOfCollectiveFormData += TIMAAT.ActorDatasets.collectiveSelectObjectsSorted;
-													memberOfCollectiveFormData +=	
-												`</select>
-											</div>
-											<div class="col-md-6 person-memberofcollectives-details-container">
-												<div data-role="person-memberofcollectives-details-entries">`;
-					// append list of membership details
-					var j = 0;
-					for (; j < numMembershipDetails; j++) {
-						memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(i, j, collectiveId, newMembershipDetails[j], 'sr-only');
-					}
-					memberOfCollectiveFormData +=
-												`</div>
-												<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`
-					memberOfCollectiveFormData += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
-					memberOfCollectiveFormData +=
-													`<!-- add membership button: one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="col-md-1 vertical-aligned">
-									<button type="button" class="btn btn-danger" data-role="remove">
-										<i class="fas fa-trash-alt"></i>
-									</button>
-								</div>
-							</div>
-						</div>`;
+					var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(i, collectiveId, newMemberOfCollectiveData, 'sr-only', true);
 					$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
 					$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr("selected",true);
 					$('.timaat-actordatasets-person-memberofcollective-collective-id').prop("disabled", true);
@@ -1991,13 +1949,6 @@
 					console.log("no data endered");
 					return false; // don't add if all add fields were empty
 				}
-				// if (!$("#timaat-actordatasets-person-memberofcollective-form").valid()) 
-				// 	return false;
-				var actor = $('#timaat-actordatasets-actor-metadata-form').data('actor');
-				// $('.timaat-actordatasets-person-memberofcollective-collective-id').prop("disabled", false);
-				// var memberOfCollectivesInForm = $("#timaat-actordatasets-person-memberofcollective-form").serializeArray();
-				// $('.timaat-actordatasets-person-memberofcollective-collective-id').prop("disabled", true);
-				// console.log("TCL: memberOfCollectivesInForm", memberOfCollectivesInForm);
 				var newMembershipDetailsEntry = {
 					// id: {
 					// 	actorPersonActorId: actor.model.id,
@@ -2008,6 +1959,9 @@
 				};
 				var dataId = $(this).closest('[data-role="personismemberofcollective-entry"]').attr("data-id");
 				var dataDetailsId = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]').attr("data-details-id");
+        console.log("TCL: dataDetailsId", dataDetailsId);
+			  // dataDetailsId = (dataDetailsId === undefined) ? dataDetailsId = 0 : dataDetailsId += 1;
+        // console.log("TCL: dataDetailsId", dataDetailsId);
 				$(this).closest('[data-role="new-personismemberofcollective-details-fields"]').before(TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(dataId, dataDetailsId, collectiveId, newMembershipDetailsEntry, 'sr-only'));
 
 				// var numberOfMemberOfCollectiveDetailsElements = 2;
@@ -3113,50 +3067,10 @@
 				var collectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId;
 				var numMembershipDetails = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.length;
 				// console.log("collectiveId", collectiveId);
-				var memberOfCollectiveFormData = 
-				`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`">
-					<div class="form-row">
-						<div class="col-md-11">
-							<fieldset>
-								<legend>Membership `+(i+1)+`</legend>
-								<div class="form-row">
-									<div class="col-md-6">
-										<label class="sr-only">Member of collective</label>
-										<select class="form-control form-control-sm timaat-actordatasets-person-memberofcollective-collective-id"
-														name="collectiveId"
-														data-role="collectiveId[`+collectiveId+`]"
-														readonly="true">`;
-				// append list of collectives for selection list
-				memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.collectiveSelectObjectsSorted;
-				memberOfCollectiveFormData +=	
-										`</select>
-									</div>
-									<div class="col-md-6 person-memberofcollectives-details-container">
-										<div data-role="person-memberofcollectives-details-entries">`;
-				// append list of membership details
-				var j = 0;
-				for (; j < numMembershipDetails; j++) {
-					memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(i, j, collectiveId, null, 'sr-only');
-				}
-				memberOfCollectiveFormData +=	
-										`</div>
-										<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">
-											<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
-										</div>
-									</div>
-								</div>
-							</fieldset>
-						</div>
-						<div class="col-md-1 vertical-aligned">
-							<button type="button" class="btn btn-danger" data-role="remove">
-								<i class="fas fa-trash-alt"></i>
-							</button>
-						</div>
-					</div>
-				</div>`;
+				var editMode = (action == 'edit') ? true : false;
+				var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(i, collectiveId, newMemberOfCollectiveData, 'sr-only', editMode);
 				// TODO expand form by membershipDetail information
 				$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
-				// $('[data-role="save"]').prop("disabled", true);
 				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr("selected", true);
 				for (j = 0; j < numMembershipDetails; j++) {
 					if (actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt) {
@@ -3176,7 +3090,6 @@
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').show();
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').prop("disabled", false);
 				$('#timaat-actordatasets-person-memberofcollective-form-edit :input').prop("disabled", false);
-				// $('#timaat-actordatasets-person-memberofcollective-form-done').hide();
 				$('#timaat-actordatasets-person-memberofcollective-form-submit').hide();
 				$('#timaat-actordatasets-person-memberofcollective-form-dismiss').hide();
 				$('[data-role="new-personismemberofcollective-fields"').hide();
@@ -3189,7 +3102,6 @@
 				$('#personMemberOfCollectivesLabel').html("Person is member of collective list");
 			}
 			else if (action == 'edit') {
-				// $('#timaat-actordatasets-person-memberofcollective-form-done').show();
 				$('#timaat-actordatasets-person-memberofcollective-form-submit').show();
 				$('#timaat-actordatasets-person-memberofcollective-form-dismiss').show();
 				$('#timaat-actordatasets-person-memberofcollective-form :input').prop("disabled", false);
@@ -3197,7 +3109,6 @@
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').hide();
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').prop("disabled", true);
 				$('#timaat-actordatasets-person-memberofcollective-form-edit :input').prop("disabled", true);
-				// $('[data-role="save"]').prop("disabled", true);
 				$('[data-role="new-personismemberofcollective-fields"').show();
 				$('.memberofcollective-form-divider').show();
 				$('#personMemberOfCollectivesLabel').html("Edit person is member of collective list");
@@ -3206,8 +3117,6 @@
 
 				// fields for new memberofcollective entry
 				$('[data-role="new-personismemberofcollective-fields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveFields());
-				// fields for new memberofcollective details entries
-				$('[data-role="new-personismemberofcollective-details-fields"]').append(TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields());
 
 				$('.timaat-actordatasets-person-memberofcollectives-joinedat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('.timaat-actordatasets-person-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
@@ -4061,6 +3970,55 @@
 			return phoneNumberToAppend;
 		},
 
+		appendMemberOfCollectiveDataset(i, collectiveId, newMemberOfCollectiveData, labelClassString, editMode) {
+			var memberOfCollectiveFormData = 
+			`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`">
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>Membership `+(i+1)+`</legend>
+							<div class="form-row">
+								<div class="col-md-6">
+									<label class="sr-only">Member of collective</label>
+									<select class="form-control form-control-sm timaat-actordatasets-person-memberofcollective-collective-id"
+													name="collectiveId"
+													data-role="collectiveId[`+collectiveId+`]"
+													readonly="true">`;
+			// append list of collectives for selection list
+			memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.collectiveSelectObjectsSorted;
+			memberOfCollectiveFormData +=	
+									`</select>
+								</div>
+								<div class="col-md-6 person-memberofcollectives-details-container">
+									<div data-role="person-memberofcollectives-details-entries">`;
+			// append list of membership details
+			var j = 0;
+			for (; j < numMembershipDetails; j++) {
+				memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(i, j, collectiveId, newMemberOfCollectiveData, labelClassString);
+			}
+			memberOfCollectiveFormData +=	
+									`</div>
+									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`
+									if (editMode) {
+										memberOfCollectiveFormData += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
+									}
+									memberOfCollectiveFormData +=
+										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="col-md-1 vertical-aligned">
+						<button type="button" class="btn btn-danger" data-role="remove">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</div>
+				</div>
+			</div>`;
+			return memberOfCollectiveFormData;
+		},
+
 		/** adds empty fields for new memberOfCollective dataset */
 		appendNewMemberOfCollectiveFields: function() {
     	console.log("TCL: appendNewMemberOfCollectiveFields");
@@ -4086,23 +4044,11 @@
 										memberOfCollectiveToAppend +=
 									`</select>
 								</div>
-								<div class="col-md-6 person-memberofcollectives-details-container">`;
-			// append list of membership details
-			// var j = 0;
-			// for (; j < numMembershipDetails; j++) {
-			// 	memberOfCollectiveToAppend +=
-			// 						`<div class="form-group" data-role="memberofcollective-details-entry" data-details-id="`+j+`">
-			// 							<div class="form-row">`;
-			// 	memberOfCollectiveToAppend +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(-1, j, 0, null, 'col-form-label col-form-label-sm'); // TODO newDetails
-			// 	memberOfCollectiveToAppend +=
-			// 							`</div>
-			// 						</div>`
-			// }
-			// memberOfCollectiveToAppend += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
-			memberOfCollectiveToAppend +=	
-									`<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="0">
-									<!-- one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
-									</div>
+								<div class="col-md-6 person-memberofcollectives-details-container">
+									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="0">`;
+			memberOfCollectiveToAppend += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
+			memberOfCollectiveToAppend += 
+									`</div>
 								</div>
 							</div>
 						</fieldset>
@@ -4183,8 +4129,7 @@
 						<i class="fas fa-plus"></i>
 					</button>
 				</div>
-			</div>`
-				;
+			</div>`;
 			return newMembershipDetails;
 		},
 
