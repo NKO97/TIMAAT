@@ -528,7 +528,7 @@
 						</div>
 					</div>`
 					);
-					$('input[name="newActorName['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('input[name="newActorName['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -895,7 +895,7 @@
 							</div>
 						</div>`
 					);
-					$('input[name="newActorAddress['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
+					$('input[name="newActorAddress['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200});
 					$('[data-role="newAddressTypeId['+i+']"]').find('option[value='+addressTypeId+']').attr("selected",true);
 					if (listEntry.find('input').each(function(){
 						// console.log("TCL: find(input) $(this).val()", $(this).val());
@@ -1241,7 +1241,7 @@
 					$('[data-role="newEmailAddressTypeId['+i+']"]')
 						.find('option[value='+emailAddressTypeId+']')
 						.attr("selected",true);
-					$('input[name="newEmailAddress['+i+']"').rules("add", { required: true, email: true});
+					$('input[name="newEmailAddress['+i+']"]').rules("add", { required: true, email: true});
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -1562,7 +1562,7 @@
 					($('[data-role="newPhoneNumberTypeId['+i+']"]'))
 						.find('option[value='+phoneNumberTypeId+']')
 						.attr("selected",true);
-					$('input[name="newPhoneNumber['+i+']"').rules("add", { required: true, maxlength: 30 });
+					$('input[name="newPhoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30 });
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -2699,8 +2699,8 @@
 				if (actor.model.birthName && actor.model.actorNames[i].id == actor.model.birthName.id) {
 					$('[data-role="birthName['+actor.model.actorNames[i].id+']"]').prop("checked", true);
 				}
-				$('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
-				$('[data-role=name['+actor.model.actorNames[i].id+']"').attr('value', actor.model.actorNames[i].name);
+				$('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
+				$('[data-role="actorName['+actor.model.actorNames[i].id+']"]').attr('value', actor.model.actorNames[i].name);
 				if (actor.model.actorNames[i].usedFrom) {
 					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
 				} else {
@@ -2843,8 +2843,8 @@
 					$('[data-role="primaryAddress['+actor.model.actorHasAddresses[i].id.addressId+']"]')
 						.prop("checked",true);
 				}
-				// $('input[name="name['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200});
-				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].id.addressId+']"')
+				// $('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200});
+				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].id.addressId+']"]')
 				.find('option[value='+actor.model.actorHasAddresses[i].addressType.id+']')
 				.attr("selected",true);
 				if (actor.model.actorHasAddresses[i].usedFrom) {
@@ -2953,10 +2953,10 @@
 					$('[data-role="primaryEmailAddress['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"]')
 						.prop("checked",true);
 				}
-				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"')
+				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"]')
 					.find('option[value='+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']')
 					.attr("selected",true);
-				$('input[name="emailAddress['+i+']"').rules("add", { required: true, email: true});
+				$('input[name="emailAddress['+i+']"]').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-emailaddresses-form :input').prop("disabled", true);
@@ -3050,10 +3050,10 @@
 					$('[data-role="primaryPhoneNumber['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"]')
 						.prop("checked",true);
 				}
-				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"')
+				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"]')
 					.find('option[value='+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']')
 					.attr("selected",true);
-				$('input[name="phoneNumber['+i+']"').rules("add", { required: true, maxlength: 30});
+				$('input[name="phoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30});
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-phonenumbers-form :input').prop("disabled", true);
@@ -3772,6 +3772,40 @@
       console.log("TCL: name", model);
 			return model;
 		},
+
+		createActorHasAddressModel: function(data, actorId, addressId) {
+    	// console.log("TCL: data, actorId, addressId", data, actorId, addressId);
+			var actorHasAddressModel = {};
+			actorHasAddressModel.id = {
+				actorId: actorId,
+				addressId: addressId
+			};
+			actorHasAddressModel.usedFrom = data.addressUsedFrom;
+			actorHasAddressModel.usedUntil = data.addressUsedUntil;
+			actorHasAddressModel.address = {
+				id: addressId,
+				postOfficeBox: data.postOfficeBox,
+				postalCode: data.postalCode,
+				streetNumber: data.streetNumber,
+				streetAddition: data.streetAddition,
+				streetName: 'TEMP NAME',
+				cityName: 'TEMP NAME',
+			};
+			actorHasAddressModel.addressType = TIMAAT.ActorDatasets.addressTypes[Number(data.addressTypeId)-1];
+			return actorHasAddressModel;
+		},
+
+		updateActorHasAddressModel: function(originalModel, data) {
+			var updatedModel = originalModel;
+			updatedModel.usedFrom = data.addressUsedFrom;
+			updatedModel.usedUntil = data.addressUsedUntil;
+			updatedModel.addressType = TIMAAT.ActorDatasets.addressTypes[Number(data.addressTypeId)-1];
+			updatedModel.address.postOfficeBox = data.postOfficeBox;
+			updatedModel.address.postalCode = data.postalCode;
+			updatedModel.address.streetNumber = data.streetNumber;
+			updatedModel.address.streetAddition = data.streetAddition;
+			return updatedModel;
+		},		
 
 		createActorHasEmailAddressModel: async function(data, actorId, emailAddressId) {
     	// console.log("TCL: data, actorId, emailAddressId", data, actorId, emailAddressId);
