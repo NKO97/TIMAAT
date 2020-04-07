@@ -353,6 +353,7 @@
 				video.ui.find('.timaat-video-upload').show();
 				video.ui.find('.timaat-video-annotate').hide();
 
+				/*
 				if ( !video.ui.find('.timaat-video-upload').hasClass('dz-clickable') ) {
 					video.ui.find('.timaat-video-upload').dropzone({
 						url: "/TIMAAT/api/medium/video/"+video.id+"/upload",
@@ -387,7 +388,67 @@
 						}
 					});
 				}
-				video.ui.find('.timaat-video-upload i').on('click', function(ev) {$(this).parent().click();});
+				*/
+				let xhr = new XMLHttpRequest();
+				video.ui.find('form').on('submit', function(e) {
+			        //prevent regular form posting
+			        e.preventDefault();
+			        video.ui.find('.timaat-video-upload').hide();
+			        xhr.upload.addEventListener('loadstart', function(event) {
+			        	console.log('UPLOAD::Start')
+			        }, false);
+
+			        xhr.upload.addEventListener('progress', function(event) {
+			            var percent = (100 * event.loaded / event.total);
+			            console.log('UPLOAD:Progress: ' + percent.toFixed(2) + '%');
+			        }, false);
+
+			        xhr.upload.addEventListener('load', function(event) {
+			            console.log('UPLOAD:Completed, waiting for response...');
+			        }, false);
+
+			        xhr.addEventListener('readystatechange', function(event) {
+			            if (event.target.readyState == 4) {
+			            	if (event.target.status == 200) {
+			            		console.log('UPLOAD::SUCCESS');
+				            	var newvideo = JSON.parse(event.target.responseText);
+								video.mediumVideo.status = newvideo.status;
+								video.ui.find('.timaat-video-upload').hide();
+								video.ui.find('.timaat-video-annotate').show();
+								video.ui.find('.timaat-video-status').show();
+								video.mediumVideo.width = newvideo.width;
+								video.mediumVideo.height = newvideo.height;
+								video.mediumVideo.length = newvideo.length;
+								video.mediumVideo.frameRate = newvideo.frameRate;
+								video.ui.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
+
+								TIMAAT.VideoChooser.updateVideoStatus(video);
+			            	} else {
+				                console.log('UPLOAD FAILED: Error in the response.', event);
+				                video.ui.find('.timaat-video-upload').show();
+			            	}
+			            } else console.log('STATE CHANGE: ',event);
+			        }, false);
+
+			        //posting the form with the same method and action as specified by the HTML markup
+			        xhr.open(this.getAttribute('method'), this.getAttribute('action'), true);
+			        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+			        xhr.send(new FormData(this));
+
+			    });
+				
+				// upload button click triggers file selection
+				video.ui.find('.timaat-video-upload').on('click', function(ev) {
+					ev.preventDefault();
+					ev.stopPropagation();
+					video.ui.find('.timaat-video-upload-file').click();
+				});
+
+				// user selected file, trigger form submit / upload
+				video.ui.find('.timaat-video-upload-file').on('change', function(ev) {
+					let filelist = video.ui.find('.timaat-video-upload-file')[0].files;
+					if ( filelist.length  > 0 )  video.ui.find('form').trigger('submit');					
+				});
 			}
 		},
 		
@@ -663,7 +724,11 @@
 						<td class="date">xx.xx.xxxx xx:xx</td>
 						<td class="actions" style="padding:5px 5px">
 							<div>
-								<button type="button" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
+								<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
+									<input name="file" class="timaat-video-upload-file d-none" type="file" />
+									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
+								</form>
+
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
 								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
 								<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>
