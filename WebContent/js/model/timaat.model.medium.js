@@ -65,7 +65,11 @@
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
 									<i class="fas fa-user"></i>							
 								</div>
-								<button type="button" title="Video hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
+								<form action="/TIMAAT/api/medium/video/`+this.model.id+`/upload" method="post" enctype="multipart/form-data">
+									<input name="file" accept=".mp4" class="timaat-video-upload-file d-none" type="file" />
+									<button type="submit" title="Videodatei hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
+								</form>
+								
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
 						</div>
@@ -93,16 +97,17 @@
 			});
 
 			// attach video upload functionality
-			this.listView.find('.timaat-mediadatasets-medium-upload').on('click', this, function(ev) {
+			// upload button click triggers file selection
+			this.listView.find('.timaat-mediadatasets-medium-upload').on('click', function(ev) {
+				ev.preventDefault();
 				ev.stopPropagation();
-				// TIMAAT.UI.hidePopups();
-				console.log("TCL: updateUI");
-				medium.updateUI();
-				// }
+				medium.listView.find('.timaat-video-upload-file').click();
 			});
 
-			this.listView.find('.timaat-mediadatasets-medium-upload i').on('click', function(ev) {
-				$(this).parent().click();
+			// user selected file, trigger form submit / upload
+			this.listView.find('.timaat-video-upload-file').on('change', function(ev) {
+				let filelist = medium.listView.find('.timaat-video-upload-file')[0].files;
+				if ( filelist.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium.model, medium.listView.find('form'));
 			});
 
 			this.updateUI(); 
