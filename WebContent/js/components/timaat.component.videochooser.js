@@ -725,7 +725,7 @@
 						<td class="actions" style="padding:5px 5px">
 							<div>
 								<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" class="timaat-video-upload-file d-none" type="file" />
+									<input name="file" accept=".mp4" class="timaat-video-upload-file d-none" type="file" />
 									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
 								</form>
 
