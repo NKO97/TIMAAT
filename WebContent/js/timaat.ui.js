@@ -28,6 +28,7 @@
 				
 				// init components
 				TIMAAT.Datasets.init();
+				TIMAAT.UploadManager.init();
 				TIMAAT.VideoChooser.init();	 
 				TIMAAT.VideoPlayer.init();
 				TIMAAT.Settings.init();
@@ -51,7 +52,7 @@
 								}
 						});
 				});
-				
+								
 				// init user log popover functionality
 				$('#timaat-user-log-list').popover({
 				placement: 'bottom',

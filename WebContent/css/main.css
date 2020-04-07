@@ -613,7 +613,7 @@ a.dropdown-item {
 	font-weight: bold;
 	cursor: pointer;
 }
-.timaat-user-log {
+.timaat-user-log, .timaat-uploads {
 	cursor: pointer;
 }
 .timaat-user-log:disabled {
@@ -642,6 +642,15 @@ a.dropdown-item {
 
 #timaat-settings-categorylibrary {
 	cursor: pointer;
+}
+
+.timaat-upload-popover {
+	min-width: 350px;
+}
+
+ul.timaat-upload-list li {
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .tagsinput,.tagsinput *{box-sizing:border-box}

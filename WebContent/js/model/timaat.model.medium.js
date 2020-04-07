@@ -77,11 +77,25 @@
 			$('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
 			var medium = this; // save medium for system events
 			
+			$(document).on('added.upload.TIMAAT success.upload.TIMAAT removed.upload.TIMAAT', function(event, video) {
+				if ( !video ) return;
+				if ( medium.model.id != video.id ) return;
+				
+				if ( event.type == 'success' ) {
+					medium.model.mediumVideo.status = video.mediumVideo.status;
+					medium.model.mediumVideo.width = video.mediumVideo.width;
+					medium.model.mediumVideo.height = video.mediumVideo.height;
+					medium.model.mediumVideo.length = video.mediumVideo.length;
+					medium.model.mediumVideo.frameRate = video.mediumVideo.frameRate;
+				}
+				
+				medium.updateUI();
+			});
+
 			// attach video upload functionality
 			this.listView.find('.timaat-mediadatasets-medium-upload').on('click', this, function(ev) {
 				ev.stopPropagation();
 				// TIMAAT.UI.hidePopups();
-				medium.uploadVideo();
 				console.log("TCL: updateUI");
 				medium.updateUI();
 				// }
@@ -161,43 +175,6 @@
 
 		}
 
-		uploadVideo() {
-			if ( this.model.mediumVideo && this.model.mediumVideo.status == 'nofile' ) {
-				var medium = this;
-				var video = this.model.mediumVideo;
-				if (!this.listView.find('.timaat-mediadatasets-medium-upload').hasClass('dz-clickable') ) {
-					this.listView.find('.timaat-mediadatasets-medium-upload').dropzone({
-						url: "/TIMAAT/api/medium/video/"+this.model.id+"/upload",
-						createImageThumbnails: false,
-						acceptedFiles: 'video/mp4',
-						maxFilesize: 1024,
-						timeout: 60*60*1000, // 1 hour
-						maxFiles: 1,
-						headers: {'Authorization': 'Bearer '+TIMAAT.Service.token},
-						previewTemplate: `
-							<div class="dz-preview dz-file-preview"">
-								<div class="progress"">
-									<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress><span data-dz-name></span>
-									</div>
-								</div>
-							</div>`,
-						complete: function(file) {
-							if ( file.status == "success" && file.accepted ) {
-								var newVideo = JSON.parse(file.xhr.response);
-								video.status = newVideo.status;
-								video.width = newVideo.width;
-								video.height = newVideo.height;
-								video.length = newVideo.length;
-								video.frameRate = newVideo.frameRate;
-								medium.updateUI();
-							}
-							this.removeFile(file);
-						}
-					});
-				}
-			}
-		}
-
 		updateUI() {
 			// console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
@@ -210,7 +187,7 @@
 				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
 			}
 
-			if ( this.model.mediumVideo && this.model.mediumVideo.status == "nofile" ) {
+			if ( this.model.mediumVideo && this.model.mediumVideo.status == "nofile" && !TIMAAT.UploadManager.isUploading(this.model) ) {
 				this.listView.find('.timaat-mediadatasets-medium-upload').show();
 			} else {
 				this.listView.find('.timaat-mediadatasets-medium-upload').hide();

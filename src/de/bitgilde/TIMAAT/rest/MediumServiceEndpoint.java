@@ -1726,8 +1726,8 @@ public class MediumServiceEndpoint{
 
 	@POST
 	@Path("video/{id}/upload")
-  @Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadMediumVideo(
 			@PathParam("id") int id,

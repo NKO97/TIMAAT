@@ -23,6 +23,7 @@ requirejs.config({
 		"timaathtml":				'timaat.html',		
 		"TIMAAT":					'timaat.main',
 		"TIMAAT-ui":				'timaat.ui',
+		"TIMAAT-uploadmanager":		'components/timaat.uploadmanager',
 		"TIMAAT-videochooser":		'components/timaat.component.videochooser',
 		"TIMAAT-videoplayer":		'components/timaat.component.videoplayer',
 		"TIMAAT-settings":			'components/timaat.component.settings',
@@ -100,7 +101,7 @@ require(['domReady',
 	], function (domReady) { domReady(function () {
 	  console.log("TIMAAT::Init");
 	  requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
-		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
+		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-uploadmanager', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
 		  'TIMAAT-datasets', 'TIMAAT-actordatasets', 'TIMAAT-eventdatasets', 'TIMAAT-locationdatasets', 'TIMAAT-mediadatasets',
 		  'TIMAAT-service', 'TIMAAT-actorservice', 'TIMAAT-locationservice', 'TIMAAT-mediaservice', 'TIMAAT-eventservice',
 			'TIMAAT-marker', 'TIMAAT-annotation', 'TIMAAT-categoryset', 'TIMAAT-analysissegment',
