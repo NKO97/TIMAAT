@@ -474,17 +474,13 @@
 			});
 		},
 
-		async addPersonIsMemberOfCollective(actorId, personIsMemberOfCollective) {
-			var tempPersonIsMemberOfCollectiveData = {
-				joinedAt: personIsMemberOfCollective.joinedAt,
-				leftAt: personIsMemberOfCollective.leftAt
-			};
-      console.log("TCL: addpersonIsMemberOfCollective -> actorId, tempPersonIsMemberOfCollectiveData", actorId, tempPersonIsMemberOfCollectiveData);
+		async addPersonIsMemberOfCollective(actorId, collectiveId) {
+      console.log("TCL: addpersonIsMemberOfCollective -> actorId, collectiveId", actorId, collectiveId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+personIsMemberOfCollective.collectiveId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+collectiveId,
 					type:"POST",
-					data: JSON.stringify(tempPersonIsMemberOfCollectiveData),
+					// data: JSON.stringify(tempPersonIsMemberOfCollectiveData),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -501,8 +497,8 @@
 			});
 		},
 
-		async addMembershipDEtails(actorId, collectiveId, membershipDetails) {
-      // console.log("TCL: addMembershipDetails -> actorId, collectiveId, membershipDetails", actorId, collectiveId, membershipDetails);
+		async addMembershipDetails(actorId, collectiveId, membershipDetails) {
+      console.log("TCL: addMembershipDetails -> actorId, collectiveId, membershipDetails", actorId, collectiveId, membershipDetails);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/"+collectiveId+"/membershipdetails/"+membershipDetails.id,
@@ -514,7 +510,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: addMembershipDetails -> membershipDetails", data);
+					console.log("TCL: addMembershipDetails -> membershipDetails", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );

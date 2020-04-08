@@ -1914,12 +1914,12 @@
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]');
 				var newMemberOfCollectiveData = [];
-				var collectiveId = $('#timaat-actordatasets-person-memberofcollective-collective-id').val();
-				// if (listEntry.find('select').each(function(){           
+				var collectiveId = $(this).closest(('[data-role="personismemberofcollective-entry"]')).attr("data-collective-id");
+				// if (listEntry.find('select').each(function(){
 				// 	collectiveId = Number($(this).val());
 				// }));
 				console.log("TCL: collectiveId", collectiveId);
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newMemberOfCollectiveData.push($(this).val());
 				}));
 				console.log("TCL: newMemberOfCollectiveData", newMemberOfCollectiveData);
@@ -2000,6 +2000,7 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild)
 				}
+
 				// test if form is valid 
 				if (!$("#timaat-actordatasets-person-memberofcollective-form").valid()) {
 					$('[data-role="new-personismemberofcollective-fields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveField());				
@@ -2010,81 +2011,210 @@
 				var actor = $("#timaat-actordatasets-person-memberofcollective-form").data("actor");
 
 				// Create/Edit actor window submitted data
+				$('.timaat-actordatasets-person-memberofcollective-collective-id').prop("disabled", false);
+				$('[data-role="joinedAt"]').prop("disabled", true);
+				$('[data-role="leftAt"]').prop("disabled", true);
 				var formData = $("#timaat-actordatasets-person-memberofcollective-form").serializeArray();
+				$('[data-role="joinedAt"]').prop("disabled", false);
+				$('[data-role="leftAt"]').prop("disabled", false);
+        console.log("TCL: formData", formData);
 				var formPersonIsMemberOfCollectivesList = [];
+				var formCollectiveIdList = []; // List of all collectives containing membership data for this actor
+				var formCollectiveIdIndexes = []; // Index list of all collectiveIds and number of detail sets
 				var i = 0;
-				while ( i < formData.length -2) { // fill formPersonIsMemberOfCollectivesList with data
-					var element = {
-						actorPersonActorId: actor.model.id,
-						memberOfActorCollectiveActorId: Number(formData[i].value),
-						joinedAt: formData[i+1].value,
-						leftAt: formData[i+2].value,
-					};
-					i = i+3;
+				for (; i < formData.length; i++) {
+					if (formData[i].name == 'collectiveId') {
+						formCollectiveIdIndexes.push({collectiveIndex: i, numDetailSets: 0});
+					}
+				}
+				console.log("TCL: formCollectiveIdIndexes", formCollectiveIdIndexes);
+				i = 0;
+				for (; i < formCollectiveIdIndexes.length; i++) {
+					if (i < formCollectiveIdIndexes.length -1) {
+						formCollectiveIdIndexes[i].numDetailSets = (formCollectiveIdIndexes[i+1].collectiveIndex - formCollectiveIdIndexes[i].collectiveIndex - 1) / 2;
+					} else { // last entry has to be calculated differently
+						formCollectiveIdIndexes[i].numDetailSets = (formData.length - formCollectiveIdIndexes[i].collectiveIndex - 1) / 2;
+					}
+				}
+				console.log("TCL: formCollectiveIdIndexes", formCollectiveIdIndexes);
+				i = 0;
+				for (; i < formCollectiveIdIndexes.length; i++) {
+					console.log("TCL: formCollectiveIdIndexes.length", formCollectiveIdIndexes.length);
+						var element = {
+							actorId: actor.model.id,
+							collectiveId: Number(formData[formCollectiveIdIndexes[i].collectiveIndex].value),
+							membershipDetails: []
+						};
+						formCollectiveIdList.push(Number(formData[formCollectiveIdIndexes[i].collectiveIndex].value));
+					var j = 0;
+					for (; j < formCollectiveIdIndexes[i].numDetailSets; j++) {
+						var details = {
+							id: 0,
+							joinedAt: formData[formCollectiveIdIndexes[i].collectiveIndex+2*j+1].value,
+							leftAt:   formData[formCollectiveIdIndexes[i].collectiveIndex+2*j+2].value,
+							role: null
+						};
+						element.membershipDetails.push(details);
+					}
 					formPersonIsMemberOfCollectivesList[formPersonIsMemberOfCollectivesList.length] = element;
 				}
 				console.log("TCL: formPersonIsMemberOfCollectivesList", formPersonIsMemberOfCollectivesList);
-
-				// only updates to existing personIsMemberOfCollective entries
-				if (formPersonIsMemberOfCollectivesList.length == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
-					var i = 0;
-					for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++ ) { // update existing personIsMemberOfCollectives
-						var updatedPersonIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
-						// only update if anything changed
-						// if (updatedPersonIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
-							console.log("TCL: update existing memberOfCollective");
-							await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(updatedPersonIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
-						// }
-						console.log("TCL actorType, actor", 'person', actor);
-						await TIMAAT.ActorDatasets.updateActor('person', actor);
-					}
+				console.log("TCL: formCollectiveIdList", formCollectiveIdList);
+				// create collective id list for all already existing memberships
+				i = 0;
+				var existingCollectiveIdList = [];
+				for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++) {
+					existingCollectiveIdList.push(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
 				}
-				// update existing personIsMemberOfCollectives and add new ones
-				else if (formPersonIsMemberOfCollectivesList.length > actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
-					var i = 0;
-					for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++ ) { // update existing personIsMemberOfCollectives
-						console.log("TCL: actor", actor);
-						var personIsMemberOfCollective = {}; 
-						personIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
-						// only update if anything changed
-						// if (personIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
-							console.log("TCL: update existing personIsMemberOfCollectives (and add new ones)");
-							await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(personIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
-						// }
+				console.log("TCL: existingCollectiveIdList", existingCollectiveIdList);
+				// DELETE memberOfCollective data if id is in existingCollectiveIdList but not in FormCollectiveIdList
+				i = 0;
+				for (; i < existingCollectiveIdList.length; i++) {
+					var j = 0;
+					var deleteDataset = true;
+					for (; j < formCollectiveIdList.length; j ++) {
+						if (existingCollectiveIdList[i] == formCollectiveIdList[j]) {
+							deleteDataset = false;
+							break; // no need to check further if match was found
+						}
 					}
-					i = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length;
-					var newPersonIsMemberOfCollectives = [];
-					for (; i < formPersonIsMemberOfCollectivesList.length; i++) { // create new personIsMemberOfCollectives
-						var personIsMemberOfCollective = await TIMAAT.ActorDatasets.createPersonIsMemberOfCollectiveModel(formPersonIsMemberOfCollectivesList[i], actor.model.id);
-						newPersonIsMemberOfCollectives.push(personIsMemberOfCollective);
-					}
-					console.log("TCL: (update existing memberofcollectives and) add new ones");
-					await TIMAAT.ActorDatasets.addPersonIsMemberOfCollectives(actor, newPersonIsMemberOfCollectives);
-					// for the whole list check new primary personIsMemberOfCollective
-					i = 0;
-					for (; i < formPersonIsMemberOfCollectivesList.length; i++) {
-						await TIMAAT.ActorDatasets.updateActor('person', actor);
-					}
-				}
-				// update existing personIsMemberOfCollectives and delete obsolete ones
-				else if (formPersonIsMemberOfCollectivesList.length < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
-					var i = 0;
-					for (; i < formPersonIsMemberOfCollectivesList.length; i++ ) { // update existing personIsMemberOfCollectives
-						var personIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
-						// if (personIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
-							console.log("TCL: update existing personIsMemberOfCollectives (and delete obsolete ones)");
-							await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(personIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
-						// }
-						await TIMAAT.ActorDatasets.updateActor('person', actor);
-					}
-					var i = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length - 1;
-					for (; i >= formPersonIsMemberOfCollectivesList.length; i-- ) { // remove obsolete memberofcollective starting at end of list
-						// await TIMAAT.ActorDatasets.updateActor(actorType, actor);
-						console.log("TCL: (update existing personIsMemberOfCollectives and) delete obsolete ones");		
+					if (deleteDataset) {
+            console.log("TCL: remove memberOfCollective: ", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
 						TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
-						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.pop();
+						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.splice(i,1); // TODO verify // should be moved to ActorDatasets.removeMemberOfCollective(..)
+						existingCollectiveIdList.splice(i,1);
+						i--; // so the next list item is not jumped over due to the splicing
 					}
 				}
+				// ADD memberOfCollective data if id is not in existingCollectiveIdList but in FormCollectiveIdList
+				i = 0;
+				for (; i < formCollectiveIdList.length; i++) {
+					var j = 0;
+					var datasetExists = false;
+					for (; j < existingCollectiveIdList.length; j++) {
+						if (formCollectiveIdList[i] == existingCollectiveIdList[j]) {
+							datasetExists = true;
+							break; // no need to check further if match was found
+						}
+					}
+					if (!datasetExists) {
+						// TODO add subroutine
+						console.log("TCL: add memberOfCollective: ", formPersonIsMemberOfCollectivesList[i]);
+						await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor, formPersonIsMemberOfCollectivesList[i]);
+						formCollectiveIdList.splice(i,1);
+						i--; // so the next list item is not jumped over due to the splicing
+					}
+				}
+				console.log("TCL: formCollectiveIdList", formCollectiveIdList);
+				console.log("TCL: existingCollectiveIdList", existingCollectiveIdList);
+				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
+				// UPDATE memberOfCollective data if id is in existingCollectiveIdList and in FormCollectiveIdList
+				// TODO update (including delete, update, add details)
+				i = 0;
+				for (; i < existingCollectiveIdList.length; i++) {
+					// find corresponding actorPersonIsMemberOfActorCollectives id/index
+					var j = 0;
+					// var currentCollectiveId = existingCollectiveIdList[i];
+					var currentCollectiveIndex = -1;
+					for (; j < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; j++) {
+						if (existingCollectiveIdList[i] == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[j].id.memberOfActorCollectiveActorId) {
+							currentCollectiveIndex = j;
+							break; // no need to check further if index was found
+						}
+					}
+					var currentCollective = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentCollectiveIndex].id.memberOfActorCollectiveActorId;
+					// go through all membershipDetails and update/delete/add entries
+					console.log("TCL: currentCollective", currentCollective);
+					
+				}
+
+
+
+				// // traverse through all collectives the actor shall be a member of
+				// while (formCollectiveIdList.length > 0) {
+				// 	var formCollectiveId = formCollectiveIdList[formCollectiveIdList.length - 1];
+				// 	// delete all mem
+				// }
+				// // traverse through all existing actorPersonIsMemberOfActorCollectives datasets
+				// i = 0;
+				// for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++) {
+				// 	// traverse through all existing membershipDetails datasets of this actor-collective pairing
+				// 	var j = 0;
+				// 	var currentCollectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId;
+				// 	for (; j < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.length; j++) {
+				// 		// traverse through all form datasets to check for changes
+				// 		var k = 0;
+				// 		for (; k < formPersonIsMemberOfCollectivesList.length; k++) {
+				// 			if (currentCollectiveId == formPersonIsMemberOfCollectivesList[k].memberOfActorCollectiveActorId) {
+				// 				// check for changes if 
+				// 			}
+				// 		}
+						
+				// 	}
+				// }
+
+
+
+				// // only updates to existing personIsMemberOfCollective entries
+				// if (formPersonIsMemberOfCollectivesList.length == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
+				// 	var i = 0;
+				// 	for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++ ) { // update existing personIsMemberOfCollectives
+				// 		var updatedPersonIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
+				// 		// only update if anything changed
+				// 		// if (updatedPersonIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
+				// 			console.log("TCL: update existing memberOfCollective");
+				// 			await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(updatedPersonIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
+				// 		// }
+				// 		console.log("TCL actorType, actor", 'person', actor);
+				// 		await TIMAAT.ActorDatasets.updateActor('person', actor);
+				// 	}
+				// }
+				// // update existing personIsMemberOfCollectives and add new ones
+				// else if (formPersonIsMemberOfCollectivesList.length > actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
+				// 	var i = 0;
+				// 	for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++ ) { // update existing personIsMemberOfCollectives
+				// 		console.log("TCL: actor", actor);
+				// 		var personIsMemberOfCollective = {}; 
+				// 		personIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
+				// 		// only update if anything changed
+				// 		// if (personIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
+				// 			console.log("TCL: update existing personIsMemberOfCollectives (and add new ones)");
+				// 			await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(personIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
+				// 		// }
+				// 	}
+				// 	i = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length;
+				// 	var newPersonIsMemberOfCollectives = [];
+				// 	for (; i < formPersonIsMemberOfCollectivesList.length; i++) { // create new personIsMemberOfCollectives
+				// 		var personIsMemberOfCollective = await TIMAAT.ActorDatasets.createPersonIsMemberOfCollectiveModel(formPersonIsMemberOfCollectivesList[i], actor.model.id);
+				// 		newPersonIsMemberOfCollectives.push(personIsMemberOfCollective);
+				// 	}
+				// 	console.log("TCL: (update existing memberofcollectives and) add new ones");
+				// 	await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor, newPersonIsMemberOfCollectives);
+				// 	// for the whole list check new primary personIsMemberOfCollective
+				// 	i = 0;
+				// 	for (; i < formPersonIsMemberOfCollectivesList.length; i++) {
+				// 		await TIMAAT.ActorDatasets.updateActor('person', actor);
+				// 	}
+				// }
+				// // update existing personIsMemberOfCollectives and delete obsolete ones
+				// else if (formPersonIsMemberOfCollectivesList.length < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length) {
+				// 	var i = 0;
+				// 	for (; i < formPersonIsMemberOfCollectivesList.length; i++ ) { // update existing personIsMemberOfCollectives
+				// 		var personIsMemberOfCollective = await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollectiveModel(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i], formPersonIsMemberOfCollectivesList[i]);
+				// 		// if (personIsMemberOfCollective != actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]) { // TODO currently personIsMemberOfCollectives[i] values change too early causing this check to always fail
+				// 			console.log("TCL: update existing personIsMemberOfCollectives (and delete obsolete ones)");
+				// 			await TIMAAT.ActorDatasets.updatePersonIsMemberOfCollective(personIsMemberOfCollective, actor, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
+				// 		// }
+				// 		await TIMAAT.ActorDatasets.updateActor('person', actor);
+				// 	}
+				// 	var i = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length - 1;
+				// 	for (; i >= formPersonIsMemberOfCollectivesList.length; i-- ) { // remove obsolete memberofcollective starting at end of list
+				// 		// await TIMAAT.ActorDatasets.updateActor(actorType, actor);
+				// 		console.log("TCL: (update existing personIsMemberOfCollectives and) delete obsolete ones");		
+				// 		TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
+				// 		actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.pop();
+				// 	}
+				// }
 				console.log("TCL: show actor memberOfCollective form");
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', actor);
 			});
@@ -3041,7 +3171,7 @@
 			var i = 0;
 			var numMemberOfCollectives = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length;
       // console.log("TCL: actor.model.actorPerson.actorPersonIsMemberOfActorCollectives", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives);
-			for (; i< numMemberOfCollectives; i++) {
+			for (; i < numMemberOfCollectives; i++) {
 				var collectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId;
 				var numMembershipDetails = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.length;
 				// console.log("collectiveId", collectiveId);
@@ -3280,12 +3410,22 @@
 			}
 		},
 
-		addPersonIsMemberOfCollective: async function(actor, newPersonIsMemberOfCollective) {
-			console.log("TCL: addPersonIsMemberOfCollectives: async function -> actor, newPersonIsMemberOfCollective", actor, newPersonIsMemberOfCollective);
+		addPersonIsMemberOfCollective: async function(actor, personIsMemberOfCollectiveData) {
+			console.log("TCL: addPersonIsMemberOfCollective: async function -> personIsMemberOfCollectiveData", personIsMemberOfCollectiveData);
 			try {
 				// create memberofcollective
-					var addedPersonIsMemberOfCollectiveModel = await TIMAAT.ActorService.addPersonIsMemberOfCollective(actor.model.id, newPersonIsMemberOfCollective);
-					actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.push(addedPersonIsMemberOfCollectiveModel);
+				// TODO create and add membershipDetails
+				//? create model?
+				var newPersonIsMemberOfCollective = await TIMAAT.ActorService.addPersonIsMemberOfCollective(personIsMemberOfCollectiveData.actorId, personIsMemberOfCollectiveData.collectiveId);
+				console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
+				var i = 0;
+				for (; i < personIsMemberOfCollectiveData.membershipDetails.length; i++) {
+					var newDetails =  await TIMAAT.ActorService.addMembershipDetails(personIsMemberOfCollectiveData.actorId, personIsMemberOfCollectiveData.collectiveId, personIsMemberOfCollectiveData.membershipDetails[i]);
+          console.log("TCL: newDetails", newDetails);
+					newPersonIsMemberOfCollective.membershipDetails.push(newDetails);
+				}
+				console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
+				actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.push(newPersonIsMemberOfCollective);
 			} catch(error) {
 				console.log( "error: ", error);
 			}
@@ -3479,7 +3619,7 @@
 				console.log( "error: ", error);
 			}
 		},
-
+ 
 		_actorAdded: function(actorSubtype, actor) {
 			try {
 				console.log("TCL: _actorSubtypeAdded: function(actorSubtype, actor)");
@@ -3739,6 +3879,7 @@
 			return updatedModel;
 		},
 
+		// TODO should be obsolete
 		createPersonIsMemberOfCollectiveModel: async function(data, actorId) {
     	console.log("TCL: data, actorId", data, actorId);
 			var model = {};
@@ -3952,7 +4093,7 @@
 		appendMemberOfCollectiveDataset(i, collectiveId, memberOfCollectiveData, labelClassString, editMode) {
       console.log("TCL: appendMemberOfCollectiveDataset -> i, collectiveId, memberOfCollectiveData, labelClassString, editMode", i, collectiveId, memberOfCollectiveData, labelClassString, editMode);
 			var memberOfCollectiveFormData = 
-			`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`">
+			`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`" data-collective-id=`+collectiveId+`>
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>

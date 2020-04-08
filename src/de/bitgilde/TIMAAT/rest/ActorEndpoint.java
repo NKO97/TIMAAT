@@ -1632,10 +1632,9 @@ public class ActorEndpoint {
 	@Path("{actorid}/personismemberofcollective/{collectiveid}")
 	@Secured
 	public Response addPersonIsMemberOfCollective(@PathParam("actorid") int actorId, 
-																								@PathParam("collectiveid") int collectiveId, 
-																								String jsonData) throws IOException {
+																								@PathParam("collectiveid") int collectiveId) throws IOException {
 
-		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: jsonData: "+jsonData);
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective:");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1660,7 +1659,7 @@ public class ActorEndpoint {
 
 		// update log metadata
 		
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
 		// create actor_has_address-table entries
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1674,7 +1673,7 @@ public class ActorEndpoint {
 		entityManager.refresh(person);
 		entityManager.refresh(collective);
 
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: add log entry");	
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
