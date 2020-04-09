@@ -704,7 +704,7 @@
 					var title = (anno) ? anno.model.title : "";
 					var opacity = (anno) ? anno.opacity : 0.3;
 					var stroke = (anno) ? anno.stroke : 2;
-					var layerVisual = (anno) ? anno.layerVisual : 1;
+					var layerVisual = (anno) ? anno.layerVisual : (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 					var comment = (anno) ? anno.model.comment : "";
 					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
 					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
@@ -1067,6 +1067,7 @@
 			console.log("TCL: addQuickAnnotation: function()");
 			if ( !TIMAAT.VideoPlayer.curList ) return;
 			TIMAAT.VideoPlayer.pause();
+			let layerVisual = (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 			TIMAAT.Service.createAnnotation(
 					"Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime), 
 					"Lesezeichen, noch zu bearbeiten",
@@ -1074,7 +1075,7 @@
 					TIMAAT.VideoPlayer.video.currentTime*1000.0,
 					"5555554C", 
 					1,
-					1,
+					layerVisual,
 					TIMAAT.VideoPlayer.curList.id, 
 					TIMAAT.VideoPlayer._annotationAdded
 			);
