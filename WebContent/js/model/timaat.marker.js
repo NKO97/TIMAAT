@@ -216,7 +216,7 @@
 			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
-			  if ( this.annotation.model.layerVisual == 0 ) startoffset += 50;
+			  if ( this.annotation.model.layerVisual == 0 ) startoffset += 37;
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
 		  
 		  }
