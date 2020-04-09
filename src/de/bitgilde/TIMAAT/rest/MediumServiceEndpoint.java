@@ -1920,6 +1920,36 @@ public class MediumServiceEndpoint{
 	}
 
 	@GET
+	@Path("video/{id}/audio/combined")
+	@Produces("image/png")
+	public Response getVideoAudioWaveform(
+			@PathParam("id") int id,
+			@QueryParam("token") String fileToken) {
+
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}		
+		if ( tokenMediumID != id ) return Response.status(401).build();
+
+			// load audio waveform image from storage
+			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-audio-all.png");
+			if ( !thumbnail.exists() ) {
+				// try to create waveform
+				createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"-video-original.mp4");
+				thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-audio-all.png");
+			}
+			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
+		    	
+			return Response.ok().entity(thumbnail).build();
+	}
+	
+	
+	@GET
 	@Path("video/{id}/thumbnail")
 	@Produces("image/jpg")
 	public Response getVideoThumbnail(
@@ -2301,6 +2331,33 @@ public class MediumServiceEndpoint{
 			e1.printStackTrace();
 		}
 	}
+	
+	private void createAudioWaveform(int id, String filename) {
+		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
+		if ( !videoDir.exists() ) videoDir.mkdirs();
+
+		Runtime r = Runtime.getRuntime();
+	    Process p;     // Process tracks one external native process
+	    
+	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
+	    "-i", filename,
+	    "-filter_complex", "aformat=channel_layouts=mono,showwavespic=s=5000x300:colors=395C8D", // waveform settings
+	    "-frames:v", "1", "-y", 
+	    TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-audio-all.png" };
+
+	    try {
+			p = r.exec(commandLine);
+		    try {
+			      p.waitFor();  // wait for process to complete
+			    } catch (InterruptedException e) {
+			      System.err.println(e);  // "Can'tHappen"
+			    }		    
+		    } catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 
 	public static String issueFileToken(int mediumID) {
 		Key key = new TIMAATKeyGenerator().generateKey();

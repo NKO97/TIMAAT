@@ -497,7 +497,7 @@
 		</div>
 		<input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Titel" aria-label="Titel" />
 	</div>
-	<div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-3">
+	<div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
 		<div class="input-group-prepend"><span class="input-group-text">Deckkraft</span></div>
 		<div class="form-control form-control-sm">
 	 		<input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
@@ -505,6 +505,15 @@
  		<div class="input-group-append">
  			<button class="btn btn-primary" id="timaat-inspector-meta-outline" type="button"><i class="far fa-square"></i></button>
  		</div>
+	</div>
+
+	<div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend"><span class="input-group-text">Annotationsziel</span></div>
+			<div class="btn-group">
+				<button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
+				<button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-primary btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
+			</div>
+		</div>
 	</div>
 	
 	<div id="timaat-inspector-meta-timecode-group">
@@ -663,11 +672,23 @@
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <span>00:00</span><span style="float: right" class="timaat-videoduration">xx:xx</span>
+                	<div class="d-flex justify-content-between align-items-end mb-2">
+						<div>00:00</div>
+                		<div class="btn-group">
+                			<button type="button" class="btn btn-sm btn-primary timaat-button-videolayer"><i class="fas fa-video"></i> Video</button>
+                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audiolayer"><i class="fas fa-headphones"></i> Audio</button>
+                		</div>
+						<div class="timaat-videoduration">xx:xx</div>
+                	</div>
                   <div id="timaat-timeline-segment-pane"></div>
                   <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
                   <br>
-                  <div id="timaat-timeline-marker-pane"></div>
+                  <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
+					<div class="timaat-audiolayer mb-2">
+						<div class="timaat-audio-baseline"></div>
+						<img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
+					</div>
+				</div>
                 </div>
               </div>
             </div>

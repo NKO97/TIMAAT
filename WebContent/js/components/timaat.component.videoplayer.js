@@ -295,6 +295,8 @@
 					var anno = TIMAAT.VideoPlayer.inspector.state.item;
 					var title = $("#timaat-inspector-meta-title").val();
 					var opacity = $("#timaat-inspector-meta-opacity").val();
+					var layerVisual = 1;
+					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
 					var comment = $("#timaat-inspector-meta-comment").val();
 					var startTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-start").val());
 					var endTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-end").val());
@@ -306,10 +308,11 @@
 						anno.model.sequenceEndTime = endTime*1000.0;
 						anno.svg.color = color;
 						anno.opacity = opacity;
+						anno.layerVisual = layerVisual;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
-						TIMAAT.Service.createAnnotation(title, comment, startTime*1000.0, endTime*1000.0, color, 1, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
+						TIMAAT.Service.createAnnotation(title, comment, startTime*1000.0, endTime*1000.0, color, 1, layerVisual, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
 				}
 				// analysis lists
@@ -377,6 +380,17 @@
 				}
 			});
 			
+			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').on('click', function(ev) {
+				var anno = TIMAAT.VideoPlayer.inspector.state.item;
+				anno.layerVisual = 1;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+			});
+			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').on('click', function(ev) {
+				var anno = TIMAAT.VideoPlayer.inspector.state.item;
+				anno.layerVisual = 0;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+			});
+			
 			var metatimechange = function(ev) {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
@@ -410,6 +424,22 @@
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 
+			
+			// setup timeline view events
+			$('.timaat-button-videolayer').on('click', function(ev) {
+				$('.timaat-button-videolayer').removeClass('btn-outline-secondary').addClass('btn-primary');
+				$('.timaat-button-audiolayer').removeClass('btn-secondary').addClass('btn-outline-secondary');
+				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-audiolayer').addClass('timaat-timeline-videolayer');
+				TIMAAT.VideoPlayer.editAudioLayer = false;
+				TIMAAT.VideoPlayer.sortListUI();
+			});
+			$('.timaat-button-audiolayer').on('click', function(ev) {
+				$('.timaat-button-videolayer').removeClass('btn-secondary').addClass('btn-outline-secondary');
+				$('.timaat-button-audiolayer').removeClass('btn-outline-secondary').addClass('btn-primary');
+				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-videolayer').addClass('timaat-timeline-audiolayer');
+				TIMAAT.VideoPlayer.editAudioLayer = true;
+				TIMAAT.VideoPlayer.sortListUI();
+			});
 			
 			
 			// setup keyboard video controls
@@ -636,7 +666,19 @@
 				$('#timaat-inspector-meta-outline').find('i').attr('class', 'fas fa-border-style');
 			}					
 		},
-		
+
+		_setInspectorAnnotationType: function(layerVisual) {
+			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').removeClass('btn-secondary').removeClass('btn-outline-secondary');
+			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').removeClass('btn-secondary').removeClass('btn-outline-secondary');
+			if ( layerVisual > 0 ) {
+				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').addClass('btn-secondary');
+				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').addClass('btn-outline-secondary');
+			} else {
+				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').addClass('btn-outline-secondary');
+				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').addClass('btn-secondary');
+			}					
+		},
+
 		setInspectorMetadata: function(item, type) {
 			TIMAAT.VideoPlayer.inspector.state.item = item;
 			TIMAAT.VideoPlayer.inspector.state.type = type;
@@ -651,6 +693,7 @@
 				if ( type == 'annotation' ) {
 					$('#timaat-inspector-meta-color-group').show();
 					$('#timaat-inspector-meta-opacity-group').show();
+					$('#timaat-inspector-meta-type-group').show();
 					$('#timaat-inspector-meta-timecode-group').show();
 					$('#timaat-inspector-meta-comment-group').show();
 					var anno = item;
@@ -661,6 +704,7 @@
 					var title = (anno) ? anno.model.title : "";
 					var opacity = (anno) ? anno.opacity : 0.3;
 					var stroke = (anno) ? anno.stroke : 2;
+					var layerVisual = (anno) ? anno.layerVisual : 1;
 					var comment = (anno) ? anno.model.comment : "";
 					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
 					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
@@ -671,6 +715,7 @@
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
 					$("#timaat-inspector-meta-opacity").val(opacity);
 					TIMAAT.VideoPlayer._setInspectorStroke(stroke);
+					TIMAAT.VideoPlayer._setInspectorAnnotationType(layerVisual);
 					$("#timaat-inspector-meta-comment").val(comment);
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);	
@@ -680,6 +725,7 @@
 				if ( type == 'analysislist' ) {
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
 					$('#timaat-inspector-meta-timecode-group').hide();
 					$('#timaat-inspector-meta-comment-group').show();
 					var list = item;
@@ -698,6 +744,7 @@
 				if ( type == 'analysissegment' ) {
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
 					$('#timaat-inspector-meta-timecode-group').show();
 					$('#timaat-inspector-meta-comment-group').hide();
 					var segment = item;
@@ -819,6 +866,11 @@
 			$('#timaat-annotation-list-loader').show();
 			$('#timaat-videoplayer-annotation-add-button').prop("disabled", true);
 			$('#timaat-videoplayer-annotation-add-button').attr("disabled");
+
+			// setup timeline UI
+			let token = TIMAAT.VideoPlayer.model.video.mediumVideo.viewToken;
+			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "img/audio-placeholder.png");
+			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.id+"/audio/combined?token="+token);
 			
 			// setup analysis list UI
 			$('#timaat-analysislist-chooser').empty();
@@ -860,7 +912,9 @@
 				$('#timaat-video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
 				// update annotation list UI
 				TIMAAT.VideoPlayer.updateListUI();
-			});	
+			});
+			TIMAAT.VideoPlayer.editAudioLayer = false;
+			$('.timaat-button-videolayer').click();
 		},
 		
 		setupAnalysisLists: function (lists) {
@@ -1019,7 +1073,8 @@
 					TIMAAT.VideoPlayer.video.currentTime*1000.0,
 					TIMAAT.VideoPlayer.video.currentTime*1000.0,
 					"5555554C", 
-					1, 
+					1,
+					1,
 					TIMAAT.VideoPlayer.curList.id, 
 					TIMAAT.VideoPlayer._annotationAdded
 			);
@@ -1182,12 +1237,13 @@
 				return 0;
 			});
 			
+			let layerVisual = ( TIMAAT.VideoPlayer.editAudioLayer ) ? 0 : 1;
 			if ( sortedList.length > 0 ) {
 				sortedList[0].marker.UIOffset = 0;
 				var maxOffset = 0;
 				for (var i=1; i < sortedList.length; i++) {
 					var curOffset = 0;
-					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime )
+					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime && sortedList[a].layerVisual == layerVisual )
 						if ( curOffset == sortedList[a].marker.UIOffset ) curOffset++; // = sortedList[a].marker.UIOffset+1;
 					sortedList[i].marker.UIOffset = curOffset;
 					if ( curOffset > maxOffset ) maxOffset = curOffset;

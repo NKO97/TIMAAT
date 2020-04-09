@@ -102,8 +102,8 @@ public class AnnotationEndpoint {
 		newAnno.getAnnotationTranslations().get(0).setAnnotation(newAnno);
 		newAnno.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		newAnno.setLayerAudio((byte) 1);
-		newAnno.setLayerVisual((byte) 1);
-		
+//		newAnno.setLayerVisual((byte) 1);
+	
 		// create IRI
 		// String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
 		// 		"://"+
@@ -221,6 +221,7 @@ public class AnnotationEndpoint {
 		
 		annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
 		annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
+		annotation.setLayerVisual(updatedAnno.getLayerVisual());
 
 		if ( updatedAnno.getSelectorSvgs() != null 
 			 && (updatedAnno.getSelectorSvgs().size() > 0) 

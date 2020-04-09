@@ -37,6 +37,7 @@
 
 					this._startTime = this.model.sequenceStartTime/1000.0;
 					this._endTime = this.model.sequenceEndTime/1000.0;
+					this._layerVisual = this.model.layerVisual;
 					
 					
 					// create and style list view element
@@ -208,6 +209,17 @@
 			  this.updateUI();
 		  };
 
+		  get layerVisual() {
+			  return this._layerVisual;
+		  }
+			
+		  set layerVisual(layerVisual) {
+			  this._layerVisual = layerVisual;
+			  this.setChanged();
+			  TIMAAT.VideoPlayer.updateUI();
+			  this.updateUI();
+		  };
+		  
 		  get stroke() {
 			  return this.svg.strokeWidth;
 		  }
@@ -263,6 +275,8 @@
 					if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category timaat-no-categories');
 					else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category text-dark').attr('title', "ein Category");
 					else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-categories text-dark');
+					// type
+					this._updateAnnotationType();
 					
 					// update svg
 					var anno = this;
@@ -273,6 +287,19 @@
 					// update marker
 					if ( this.marker ) this.marker.updateView();
 				}
+
+				_updateAnnotationType() {
+					this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
+					this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
+					this.listView.find('.timaat-annotation-list-type').removeClass('fa-headphones');
+					if ( this.layerVisual == 0 ) {
+						this.listView.find('.timaat-annotation-list-type').addClass('fa-headphones');
+					} else {
+						if ( this.svg.items.length > 0 ) this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
+						else this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
+					}
+				};
+
 				
 				remove() {
 					console.log("TCL: Annotation -> remove -> remove()");
@@ -293,8 +320,7 @@
 					this.changed = true;
 
 					// update UI
-					this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
-					this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
+					this._updateAnnotationType();
 					if ( this.marker ) this.marker.updateView();
 					
 					// attach item event handlers
@@ -327,8 +353,7 @@
 
 					// update UI
 					if ( this.svg.items.length == 0 ) {
-						this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
-						this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
+						this._updateAnnotationType();
 						if ( this.marker ) this.marker.updateView();
 					}
 				}
@@ -356,6 +381,7 @@
 					if ( !this.changed ) return;
 					this.svg.layer.clearLayers();
 					this.svg.items = Array();
+					this._layerVisual = this.model.layerVisual;
 					this._startTime = this.model.sequenceStartTime/1000.0;
 					this._endTime = this.model.sequenceEndTime/1000.0;
 					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
@@ -370,14 +396,6 @@
 					});
 					
 					// update UI
-					if ( this.svg.items.length == 0 ) {
-						this.listView.find('.timaat-annotation-list-type').removeClass('fa-draw-polygon');
-						this.listView.find('.timaat-annotation-list-type').addClass('fa-image');
-					} else {
-						this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');
-						this.listView.find('.timaat-annotation-list-type').addClass('fa-draw-polygon');
-					}
-					
 					this.changed = false;
 					this.updateUI();
 
@@ -523,6 +541,8 @@
 					var jsonData = [];
 					this.model.sequenceStartTime = this._startTime*1000.0;
 					this.model.sequenceEndTime = this._endTime*1000.0;
+					this.model.layerVisual = this._layerVisual;
+
 					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
 					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;

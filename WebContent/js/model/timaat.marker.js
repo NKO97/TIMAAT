@@ -23,7 +23,7 @@
 		  constructor(annotation) {
 			  console.log("TCL: Marker -> constructor -> annotation", annotation);
 			  this.parent = annotation;
-			  this.annotation = annotation.model;
+			  this.annotation = annotation;
 			  this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
 			  this._to = Math.max(annotation.startTime, annotation.model.sequenceEndTime/1000.0);
@@ -216,6 +216,7 @@
 			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
+			  if ( this.annotation.model.layerVisual == 0 ) startoffset += 50;
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
 		  
 		  }
@@ -224,6 +225,10 @@
 //			  console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
 			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon');
 			  if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
+			  
+			  this.ui.element.removeClass('timaat-timeline-marker-video').removeClass('timaat-timeline-marker-audio');
+			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-video');
+			  else this.ui.element.addClass('timaat-timeline-marker-audio');
 		  }
 		  
 		  hexToRgbA(hex, opacity) {

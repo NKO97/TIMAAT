@@ -119,8 +119,8 @@
 		_handleAbort(event) {
 			let uploaditem = event.data;
 			console.log('UPLOAD::Canceled by user request', uploaditem);
-			uploaditem.xhr.abort(); // cancel transfer if active
 			uploaditem.state = 'abort';
+			uploaditem.xhr.abort(); // cancel transfer if active
 			TIMAAT.UploadManager.removeUpload(uploaditem);
 		}
 		

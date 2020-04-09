@@ -349,13 +349,14 @@
 			});
 		},
 		
-		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, list, callback) {
-			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, list, callback", title, comment, startTime, endTime, color, strokeWidth, list, callback);
+		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
+			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
 				id: 0, 
 				analysisListID: list,
 				sequenceStartTime: startTime,
 				sequenceEndTime: endTime,
+				layerVisual: layerVisual,
 //				actors: [],
 //				annotations1: [],
 //				annotations2: [],
