@@ -10,7 +10,7 @@
 	var yyyy = today.getFullYear();	
 	today = yyyy + '-' + mm + '-' + dd;
 
-	var version = 'v0.Sprint-6b1 (2020-04-07)';
+	var version = 'v0.Sprint-6b1 (2020-04-09)';
 
 	document.title = 'TIMAAT - Client '+version;
 	$('#timaat-version-info').text(version);
