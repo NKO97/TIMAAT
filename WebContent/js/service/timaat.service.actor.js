@@ -868,13 +868,13 @@
 			});
 		},
 
-		async updateMembershipDetails(membershipDetails) {
-			// console.log("TCL: async updateMembershipDetails -> membershipDetails", membershipDetails);
+		async updateMembershipDetails(membershipDetailsData) {
+			// console.log("TCL: async updateMembershipDetails -> actorId, collectiveId, membershipDetailsData", membershipDetailsData);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipdetails/"+membershipDetails.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipdetails/"+membershipDetailsData.id,
 					type:"PATCH",
-					data: JSON.stringify(membershipDetails),
+					data: JSON.stringify(membershipDetailsData),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -1021,7 +1021,7 @@
 		async removeMemberOfCollective(memberOfCollective) {
 			console.log("TCL: removeMemberOfCollective -> memberOfCollective", memberOfCollective);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.actorPersonActorId+"/collective/"+memberOfCollective.id.memberOfActorCollectiveActorId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.actorPersonActorId+"/personismemberofcollective/"+memberOfCollective.id.memberOfActorCollectiveActorId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
