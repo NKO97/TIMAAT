@@ -4,11 +4,12 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 // import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
-// import java.util.Set;
+// import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -24,12 +25,6 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 	@EmbeddedId
 	private ActorPersonIsMemberOfActorCollectivePK id;
 
-	@Column(name="joined_at", columnDefinition = "DATE")
-	private Date joinedAt;
-
-	@Column(name="left_at", columnDefinition = "DATE")
-	private Date leftAt;
-
 	//bi-directional many-to-one association to ActorCollective
 	@ManyToOne
 	@JsonBackReference(value = "ActorCollective-ActorPersonIsMemberOfActorCollectives")
@@ -41,6 +36,11 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 	@JsonBackReference(value = "ActorPerson-ActorPersonIsMemberOfActorCollectives")
 	@JoinColumn(name="actor_person_actor_id")
 	private ActorPerson actorPerson;
+
+	//bi-directional many-to-one association to MembershipDetail
+	@OneToMany(mappedBy="actorPersonIsMemberOfActorCollective")
+	@JsonManagedReference(value="ActorPersonIsMeMberOFActorCollectives-MemberShipDetails")
+	private List<MembershipDetail> membershipDetails;
 
 	public ActorPersonIsMemberOfActorCollective() {
 	}
@@ -59,20 +59,26 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 		this.id = id;
 	}
 
-	public Date getJoinedAt() {
-		return this.joinedAt;
+	public List<MembershipDetail> getMembershipDetails() {
+		return this.membershipDetails;
 	}
 
-	public void setJoinedAt(Date joinedAt) {
-		this.joinedAt = joinedAt;
+	public void setMembershipDetails(List<MembershipDetail> membershipDetails) {
+		this.membershipDetails = membershipDetails;
 	}
 
-	public Date getLeftAt() {
-		return this.leftAt;
+	public MembershipDetail addMembershipDetail(MembershipDetail membershipDetail) {
+		getMembershipDetails().add(membershipDetail);
+		membershipDetail.setActorPersonIsMemberOfActorCollective(this);
+
+		return membershipDetail;
 	}
 
-	public void setLeftAt(Date leftAt) {
-		this.leftAt = leftAt;
+	public MembershipDetail removeMembershipDetail(MembershipDetail membershipDetail) {
+		getMembershipDetails().remove(membershipDetail);
+		membershipDetail.setActorPersonIsMemberOfActorCollective(null);
+
+		return membershipDetail;
 	}
 
 	public ActorCollective getActorCollective() {

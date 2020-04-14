@@ -43,6 +43,10 @@ public class Role implements Serializable {
 	// @JsonManagedReference(value = "Role-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
+	//bi-directional many-to-one association to MembershipDetail
+	@OneToMany(mappedBy="role")
+	private List<MembershipDetail> membershipDetails;
+
 	//bi-directional many-to-one association to SiocContainerHasRoleInArea
 	// @OneToMany(mappedBy="role")
 	// private List<SiocContainerHasRoleInArea> siocContainerHasRoleInAreas;
@@ -102,6 +106,28 @@ public class Role implements Serializable {
 		roleTranslation.setRole(null);
 
 		return roleTranslation;
+	}
+
+	public List<MembershipDetail> getMembershipDetails() {
+		return this.membershipDetails;
+	}
+
+	public void setMembershipDetails(List<MembershipDetail> membershipDetails) {
+		this.membershipDetails = membershipDetails;
+	}
+
+	public MembershipDetail addMembershipDetail(MembershipDetail membershipDetail) {
+		getMembershipDetails().add(membershipDetail);
+		membershipDetail.setRole(this);
+
+		return membershipDetail;
+	}
+
+	public MembershipDetail removeMembershipDetail(MembershipDetail membershipDetail) {
+		getMembershipDetails().remove(membershipDetail);
+		membershipDetail.setRole(null);
+
+		return membershipDetail;
 	}
 
 	// public List<SiocContainerHasRoleInArea> getSiocContainerHasRoleInAreas() {

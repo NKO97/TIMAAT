@@ -49,6 +49,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
@@ -1631,10 +1632,9 @@ public class ActorEndpoint {
 	@Path("{actorid}/personismemberofcollective/{collectiveid}")
 	@Secured
 	public Response addPersonIsMemberOfCollective(@PathParam("actorid") int actorId, 
-																								@PathParam("collectiveid") int collectiveId, 
-																								String jsonData) throws IOException {
+																								@PathParam("collectiveid") int collectiveId) throws IOException {
 
-		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: jsonData: "+jsonData);
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective:");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1642,29 +1642,25 @@ public class ActorEndpoint {
 		if (person == null) return Response.status(Status.NOT_FOUND).build();
 		ActorCollective collective = entityManager.find(ActorCollective.class, collectiveId);
 		if (collective == null) return Response.status(Status.NOT_FOUND).build();
-		ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = new ActorPersonIsMemberOfActorCollective(person, collective);
-		ActorPersonIsMemberOfActorCollective apimoac = null;
-		try {
-			 apimoac = mapper.readValue(jsonData, ActorPersonIsMemberOfActorCollective.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-
-		// parse JSON data
-		if (apimoac.getJoinedAt() != null) actorPersonIsMemberOfActorCollective.setJoinedAt(apimoac.getJoinedAt());
-		if (apimoac.getLeftAt() != null) actorPersonIsMemberOfActorCollective.setLeftAt(apimoac.getLeftAt());
+		ActorPersonIsMemberOfActorCollective apimoac = new ActorPersonIsMemberOfActorCollective(person, collective);
+		// ActorPersonIsMemberOfActorCollective apimoac = null;
+		// try {
+		// 	 apimoac = mapper.readValue(jsonData, ActorPersonIsMemberOfActorCollective.class);
+		// } catch (IOException e) {
+		// 	e.printStackTrace();
+		// 	return Response.status(Status.BAD_REQUEST).build();
+		// }
 
 		// sanitize object data
 
 		// update log metadata
 		
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
 		// create actor_has_address-table entries
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		person.getActorPersonIsMemberOfActorCollectives().add(actorPersonIsMemberOfActorCollective);
-		collective.getActorPersonIsMemberOfActorCollectives().add(actorPersonIsMemberOfActorCollective);
+		person.getActorPersonIsMemberOfActorCollectives().add(apimoac);
+		collective.getActorPersonIsMemberOfActorCollectives().add(apimoac);
 		entityManager.merge(collective);
 		entityManager.merge(person);
 		entityManager.persist(person);
@@ -1673,7 +1669,7 @@ public class ActorEndpoint {
 		entityManager.refresh(person);
 		entityManager.refresh(collective);
 
-		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: add log entry");	
+		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: add log entry");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
@@ -1681,7 +1677,7 @@ public class ActorEndpoint {
 
 		// System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective: created");
 
-		return Response.ok().entity(actorPersonIsMemberOfActorCollective).build();
+		return Response.ok().entity(apimoac).build();
 	}
 
 	@PATCH
@@ -1704,9 +1700,8 @@ public class ActorEndpoint {
 		ActorCollective collective = entityManager.find(ActorCollective.class, collectiveId);
 		if ( person == null || collective == null) return Response.status(Status.NOT_FOUND).build();
 
-		ActorPersonIsMemberOfActorCollective apimosckey = new ActorPersonIsMemberOfActorCollective(person, collective);
-		ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimosckey.getId());
-		
+		ActorPersonIsMemberOfActorCollective apimoacKey = new ActorPersonIsMemberOfActorCollective(person, collective);
+		ActorPersonIsMemberOfActorCollective apimoac = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimoacKey.getId());
 		// System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - parse json data");
 		// parse JSON data
 		try {
@@ -1719,17 +1714,15 @@ public class ActorEndpoint {
 
 		// System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - update data");	
 		// update actorPersonIsMemberOfActorCollective
-		actorPersonIsMemberOfActorCollective.setActorCollective(collective);
-		actorPersonIsMemberOfActorCollective.setJoinedAt(updatedActorPersonIsMemberOfActorCollective.getJoinedAt());
-		actorPersonIsMemberOfActorCollective.setLeftAt(updatedActorPersonIsMemberOfActorCollective.getLeftAt());
+		apimoac.setActorCollective(collective);
 
 		// System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - persist");	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.merge(actorPersonIsMemberOfActorCollective);
-		entityManager.persist(actorPersonIsMemberOfActorCollective);
+		entityManager.merge(apimoac);
+		entityManager.persist(apimoac);
 		entityTransaction.commit();
-		entityManager.refresh(actorPersonIsMemberOfActorCollective);
+		entityManager.refresh(apimoac);
 
 		// System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - only logging remains");	
 		// add log entry
@@ -1737,27 +1730,28 @@ public class ActorEndpoint {
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																			UserLogManager.LogEvents.MEMBERSHIPEDITED);
 		System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - update complete");	
-		return Response.ok().entity(actorPersonIsMemberOfActorCollective).build();
+		return Response.ok().entity(apimoac).build();
 	}
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{person_id}/collective/{collective_id}")
+	@Path("{person_id}/personismemberofcollective/{collective_id}")
 	@Secured
-	public Response deletePersonIsMemberOfCollective(@PathParam("person_id") int personId, @PathParam("collective_id") int collectiveId) {    
+	public Response deletePersonIsMemberOfCollective(@PathParam("person_id") int personId, 
+																									 @PathParam("collective_id") int collectiveId) {    
 		System.out.println("ActorServiceEndpoint: deletePersonIsMemberOfCollective");	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		ActorPerson person = entityManager.find(ActorPerson.class, personId);
 		ActorCollective collective = entityManager.find(ActorCollective.class, collectiveId);
-		ActorPersonIsMemberOfActorCollective apimosckey = new ActorPersonIsMemberOfActorCollective(person, collective);
-		ActorPersonIsMemberOfActorCollective actorPersonIsMemberOfActorCollective = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimosckey.getId());
-		
+		ActorPersonIsMemberOfActorCollective apimoacKey = new ActorPersonIsMemberOfActorCollective(person, collective);
+		ActorPersonIsMemberOfActorCollective apimoac = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimoacKey.getId());
+
 		if ( person == null || collective == null) return Response.status(Status.NOT_FOUND).build();
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.remove(actorPersonIsMemberOfActorCollective);
+		entityManager.remove(apimoac);
 		entityTransaction.commit();
 		entityManager.refresh(person);
 		entityManager.refresh(collective);
@@ -1767,6 +1761,136 @@ public class ActorEndpoint {
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																UserLogManager.LogEvents.MEMBERSHIPDELETED);
 		System.out.println("ActorServiceEndpoint: deletePersonIsMemberOfCollective - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("{person_id}/{collective_id}/membershipdetails/{id}")
+	@Secured
+	public Response addMembership(@PathParam("person_id") int personId, 
+																@PathParam("collective_id") int collectiveId,
+																@PathParam("id") int id, 
+																String jsonData) {
+
+		System.out.println("ActorServiceEndpoint: addMembership: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		MembershipDetail newMembership = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			newMembership = mapper.readValue(jsonData, MembershipDetail.class);
+		} catch (IOException e) {
+			System.out.println("ActorServiceEndpoint: addMembership: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newMembership == null ) {
+			System.out.println("ActorServiceEndpoint: addMembership: newMembership == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// System.out.println("ActorServiceEndpoint: addMembership: membership: "+newMembership.getMembership());
+		// sanitize object data
+		newMembership.setId(0);
+		// Language language = entityManager.find(Language.class, newMembership.getLanguage().getId());
+		// newMembership.setLanguage(language);
+		ActorPerson person = entityManager.find(ActorPerson.class, personId);
+		ActorCollective collective = entityManager.find(ActorCollective.class, collectiveId);
+		ActorPersonIsMemberOfActorCollective apimoackey = new ActorPersonIsMemberOfActorCollective(person, collective);
+		ActorPersonIsMemberOfActorCollective apimoac = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimoackey.getId());
+		newMembership.setActorPersonIsMemberOfActorCollective(apimoac);
+
+		// update log metadata
+		// Not necessary, a membership will always be created in conjunction with a actor
+		System.out.println("ActorServiceEndpoint: addMembership: persist membership");
+
+		// persist membership
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(apimoac);
+		entityManager.persist(newMembership);
+		entityManager.flush();
+		newMembership.setActorPersonIsMemberOfActorCollective(apimoac);
+		entityTransaction.commit();
+		entityManager.refresh(newMembership);
+		entityManager.refresh(apimoac);
+
+		System.out.println("ActorServiceEndpoint: addMembership: add log entry");	
+		// add log entry
+		// always in conjunction with personIsMemberOfCollective
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 														UserLogManager.LogEvents.MEMBERSHIPCREATED);
+
+		System.out.println("ActorServiceEndpoint: addMembership: membership added with id "+newMembership.getId());
+
+		return Response.ok().entity(newMembership).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("membershipdetails/{id}")
+	@Secured
+	public Response updateMembership(@PathParam("id") int id, 
+																	 String jsonData) {
+		System.out.println("ActorServiceEndpoint: updateMembership - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		MembershipDetail updatedMembership = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MembershipDetail membership = entityManager.find(MembershipDetail.class, id);
+		if ( membership == null ) return Response.status(Status.NOT_FOUND).build();
+		// System.out.println("ActorServiceEndpoint: updateMembership - old membership :"+membership.getMembership());		
+		// parse JSON data
+		try {
+			updatedMembership = mapper.readValue(jsonData, MembershipDetail.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMembership == null ) return Response.notModified().build();
+		// update membership
+		// System.out.println("ActorServiceEndpoint: updateMembership - language id:"+updatedMembership.getLanguage().getId());	
+		// membership.setRole(updatedMembership.getRole()); // TODO connect role
+		membership.setJoinedAt(updatedMembership.getJoinedAt());
+		membership.setLeftAt(updatedMembership.getLeftAt());
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(membership);
+		entityManager.persist(membership);
+		entityTransaction.commit();
+		entityManager.refresh(membership);
+
+		// System.out.println("ActorServiceEndpoint: update NAME - only logging remains");	
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 														UserLogManager.LogEvents.MEMBERSHIPEDITED);
+		System.out.println("ActorServiceEndpoint: updateMembership - update complete");	
+		return Response.ok().entity(membership).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("membershipdetails/{id}")
+	@Secured
+	public Response deleteMembership(@PathParam("id") int id) {    
+		System.out.println("ActorServiceEndpoint: deleteMembership");	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		MembershipDetail membership = entityManager.find(MembershipDetail.class, id);
+		if ( membership == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(membership);
+		entityTransaction.commit();
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEMBERSHIPDELETED);
+		System.out.println("ActorServiceEndpoint: deleteMembership - delete complete");	
 		return Response.ok().build();
 	}
 
