@@ -1505,11 +1505,13 @@
 			TIMAAT.MediaDatasets.videos.model = videos;
 			// also set video chooser list
 			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumLists);
+/*
 			if (TIMAAT.VideoChooser.initialized == false) {
 				TIMAAT.VideoChooser.setMedia();
 				TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 				TIMAAT.VideoChooser.initialized = true;
 			}
+*/
 		},
 
 		setVideogameLists: function(videogames) {
@@ -2254,7 +2256,7 @@
 						TIMAAT.MediaDatasets.videos.model[index] = updatedMedium.model;
 
 						// update medialibrary data
-						TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
+//						TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 					}
 				break;
 				case 'videogame':

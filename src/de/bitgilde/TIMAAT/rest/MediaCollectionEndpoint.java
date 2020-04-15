@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -58,7 +59,9 @@ public class MediaCollectionEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@SuppressWarnings("unchecked")
-	public Response getAllCollections() {
+	public Response getAllCollections(
+			@QueryParam("nocontents") String nocontents
+			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		List<MediaCollection> cols = (List<MediaCollection>) em.createQuery("SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC")
@@ -67,6 +70,7 @@ public class MediaCollectionEndpoint {
 		
 		// strip analysislists
 		for ( MediaCollection col : cols ) {
+			if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
 			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 				m.getMedium().getMediumAnalysisLists().clear();
 				if (m.getMedium().getMediumVideo() != null) {
@@ -83,13 +87,17 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	public Response getCollection(@PathParam("id") int id) {
+	public Response getCollection(
+			@PathParam("id") int id,
+			@QueryParam("nocontents") String nocontents
+			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		MediaCollection col = em.find(MediaCollection.class, id);
 		
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 		
+		if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
 		// strip analysislists
 		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 			m.getMedium().getMediumAnalysisLists().clear();
@@ -102,6 +110,57 @@ public class MediaCollectionEndpoint {
 	
 		return Response.ok().entity(col).build();
 	}
+
+	
+	@GET
+	@Path("{id}/media")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	public Response getCollectionMedia(
+			@PathParam("id") int id,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("mediumsubtype") String mediumSubType
+			) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		
+		// TODO REFACTOR as query
+		
+		MediaCollection col = em.find(MediaCollection.class, id);		
+		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		List<Medium> media = new ArrayList<Medium>();
+		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) {
+			// strip non-video mediums
+			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
+				if ( m.getMedium().getMediumVideo() != null ) media.add(m.getMedium());
+			}
+		} else for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) media.add(m.getMedium());
+
+		// strip analysislists
+		for ( Medium m : media ) {
+			m.getMediumAnalysisLists().clear();
+			if (m.getMediumVideo() != null) {
+				m.getMediumVideo().getStatus();
+				m.getMediumVideo().getViewToken();
+			}
+		}
+		if ( start == null ) start = 0;
+		if ( length == null ) length = media.size();
+		if ( length < 1 ) length = 1;
+		
+		if ( media.size() > 0 ) {
+			if ( start > media.size() ) start = media.size();
+			int to = start+length;
+			if ( to > media.size() ) to = media.size();
+			List<Medium> filteredMedia = new ArrayList<Medium>();
+			for ( int i=0; i < to; i++ ) filteredMedia.add(media.get(i));
+			media = filteredMedia;
+		}
+	
+		return Response.ok().entity(media).build();
+	}
+	
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

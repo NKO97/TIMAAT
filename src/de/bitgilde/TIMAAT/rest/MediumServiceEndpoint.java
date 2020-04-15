@@ -18,6 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -91,9 +92,15 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getMediaList() {
-		System.out.println("MediumServiceEndpoint: getMediaList");
-		List<Medium> mlist = castList(Medium.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll").getResultList());
+	public Response getMediaList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length
+			) {
+		System.out.println("MediumServiceEndpoint: getMediaList: FROM:"+start+" LENGTH:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<Medium> mlist = castList(Medium.class, query.getResultList());
 
 		for (Medium m : mlist) {
 			MediumVideo video = m.getMediumVideo();
@@ -192,11 +199,21 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
-	public Response getVideoList() {
-		System.out.println("MediumServiceEndpoint: getVideoList");		
+	public Response getVideoList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length
+			) {
+		System.out.println("MediumServiceEndpoint: getVideoList: start:"+start+" length:"+length);
+/*
 		// @SuppressWarnings("unchecked")
 		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
+*/
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, query.getResultList());
 
+		
 		for (MediumVideo video : mediumVideoList ) {
 			video.setStatus(videoStatus(video.getMediumId()));
 			video.setViewToken(issueFileToken(video.getMediumId()));
