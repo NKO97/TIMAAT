@@ -110,7 +110,7 @@
 							TIMAAT.VideoPlayer.setCategoryset(null);
 							dropdown.find('button').text("Categoryset: keins");
 						});
-						$(TIMAAT.Settings.categorysets).each(function(index, categoryset) {
+						$(TIMAAT.CategoryLists.categorysets).each(function(index, categoryset) {
 							var item = $('<a class="dropdown-item">'+categoryset.model.name+'</a>');
 							tschooser.find('.dropdown-menu').append(item);
 							item.click(function() {
@@ -135,14 +135,14 @@
 					    	},
 
 					    	onAddCategory: function(categoryinput,category) {
-					    		TIMAAT.Service.addCategory(anno, category, function(newcategory) {
+					    		TIMAAT.CategoryService.addCategory(anno, category, function(newcategory) {
 										anno.model.categories.push(newcategory);
 										console.log("TCL: Annotation -> constructor -> anno.updateUI()");
 		                anno.updateUI();                
 					    		});
 					    	},
 					    	onRemoveCategory: function(categoryinput,category) {
-					    		TIMAAT.Service.removeCategory(anno, category, function(categoryname) {
+					    		TIMAAT.CategoryService.removeCategory(anno, category, function(categoryname) {
 					    			// find category in model
 					    			var found = -1;
 					    			anno.model.categories.forEach(function(item, index) {

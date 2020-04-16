@@ -172,7 +172,7 @@
                         <h3 class='popover-header'></h3>
                       </div>" 
                     title="Video-Bibliothek">
-                    <i class="fas fa-video"></i>
+                    <i class="fas fa-video fa-fw"></i>
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-videoplayer" >
@@ -191,9 +191,9 @@
                     <i class="fas fa-draw-polygon fa-fw"></i>
                   </a>
               </li>
-              <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
-                  <a href="#settings"
-                    onclick="TIMAAT.UI.showComponent('settings')"
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-lists">
+                  <a href="#lists"
+                    onclick="TIMAAT.UI.showComponent('lists')"
                     data-toggle="popover"
                     data-trigger="hover"
                     data-animation="false"
@@ -203,8 +203,8 @@
                         <div class='arrow'></div>
                         <h3 class='popover-header'></h3>
                       </div>"
-                    title="Einstellungen">
-                    <i class="fa fa-wrench fa-fw"></i>
+                    title="Lists">
+                    <i class="fas fa-list fa-fw"></i>
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-media">
@@ -220,7 +220,7 @@
                         <h3 class='popover-header'></h3>
                     </div>"
                   title="Media">
-                  <i class="fas fa-photo-video"></i>
+                  <i class="fas fa-photo-video fa-fw"></i>
                 </a>
               </li> 
               <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
@@ -236,7 +236,7 @@
                         <h3 class='popover-header'></h3>
                     </div>" 
                   title="Actors">
-                  <i class="fas fa-users"></i>
+                  <i class="fas fa-users fa-fw"></i>
                 </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
@@ -252,7 +252,7 @@
                         <h3 class='popover-header'></h3>
                     </div>"
                   title="Orte"> -->
-                  <i class="fas fa-map-marked-alt"></i>
+                  <i class="fas fa-map-marked-alt fa-fw"></i>
                 <!-- </a> -->
               </li>              
               <li class="timaat-sidebar-tab timaat-sidebar-tab-events isDisabled">
@@ -268,9 +268,25 @@
                         <h3 class='popover-header'></h3>
                     </div>"
                   title="Ereignisse"> -->
-                  <i class="fas fa-calendar-alt"></i>
+                  <i class="fas fa-calendar-alt fa-fw"></i>
                 <!-- </a> -->
               </li>
+              <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
+                <a href="#settings"
+                  onclick="TIMAAT.UI.showComponent('settings')"
+                  data-toggle="popover"
+                  data-trigger="hover"
+                  data-animation="false"
+                  data-placement="right"
+                  data-template="
+                    <div class='popover' role='tooltip'>
+                      <div class='arrow'></div>
+                      <h3 class='popover-header'></h3>
+                    </div>"
+                  title="Einstellungen">
+                  <i class="fa fa-wrench fa-fw"></i>
+                </a>
+            </li>
             </ul>
           </div>
           <!-- /.navbar-static-side -->
@@ -694,11 +710,10 @@
           </div>
         </div>
         <!-------------------------------------------------------------------->
-        <!-- Settings                                                       -->
+        <!-- Lists                                                          -->
         <!-------------------------------------------------------------------->
-        <div class="container-fluid timaat-component" id="timaat-component-settings">     
-
-          <div class="modal fade" id="timaat-settings-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
+        <div class="container-fluid timaat-component" id="timaat-component-lists">     
+          <div class="modal fade" id="timaat-lists-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -717,8 +732,7 @@
               </div>
             </div>
           </div>
-
-          <div class="modal fade" id="timaat-settings-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-lists-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -737,7 +751,7 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="timaat-settings-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorysettMetaLabel" aria-hidden="true">
+          <div class="modal fade" id="timaat-lists-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorysettMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -760,27 +774,36 @@
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
-              <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#timaat-settings-tags"><i class="fas fa-tag"></i> Kategorien</a>
+              <ul class="nav nav-pills" id="lists-tab" role="tablist">
+                <li class="nav-item active">
+                  <a class="nav-link" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-settings-tags"  role="tab" aria-controls="categorysets" aria-selected="true">
+                    <i class="fas fa-tag"></i> Kategorien
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link disabled" href="#timaat-settings-general" tabindex="-1" aria-disabled="true"><i class="fas fa-cogs"></i> Allgemein</a>
+                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-lists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="true">
+                    <i class="fas fa-users-cog"></i> RoleGroups
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="roles-tab" onclick="TIMAAT.RoleLists.loadRoles()" data-toggle="tab" href="#timaat-lists-roles" role="tab" aria-controls="roles" aria-selected="true">
+                    <i class="fas fa-user-cog"></i> Roles
+                  </a>
                 </li>
               </ul>
-              <div class="tab-content" id="timaat-settings-content">
-                <div class="tab-pane fade show active" id="timaat-settings-tags" role="tabpanel" aria-labelledby="home-tab">
-                  <div class="row timaat-settings-ui" style="padding-top: 1em;">
+              <div class="tab-content" id="timaat-lists-content">
+                <div class="tab-pane fade show active" id="timaat-lists-tags" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="row timaat-lists-ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
-                      <div class="card">
+                      <div class="card lists-cards categorysets-cards categorysets-card">
                         <div class="card-header">Kategoriesets
                           <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
-                          </div>
+                        </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <ul class="list-group list-group-flush">
-                                    <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-										<i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
-									</li>
+                            <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                            </li>
                           </ul>
                           <ul id="timaat-categoryset-list" class="list-group list-group-flush">
                           </ul>
@@ -788,33 +811,56 @@
                           </div>
                         </div>
                       </div>
-                    </div>		
-
+                      <div class="card lists-cards roles-cards rolegroups-card">
+                        <div class="card-header">RoleGroups
+                          <button type="button" id="timaat-lists-rolegroups-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-lists-list-wrapper">
+                          <div id="timaat-lists-rolegroup-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Loading data...
+                          </div>
+                          <ul id="timaat-lists-rolegroup-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                      <div class="card lists-cards roles-cards roles-card">
+                        <div class="card-header">Roles
+                          <button type="button" id="timaat-lists-roles-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-lists-list-wrapper">
+                          <div id="timaat-lists-role-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Loading data...
+                          </div>
+                          <ul id="timaat-lists-role-list" class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                    </div>
                     <div class="col-lg-6">
                       <div class="card">
                         <div class="card-header">Kategorien
                           <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
-                          </div>
+                        </div>
                         <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
-						<table id="timaat-category-table" class="table table-striped table-bordered table-hover">
-				  			<thead class="thead-dark">
-				    			<tr>
-								    <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
-				      				<th>Name</th>
-				      				<th style="max-width:150px;width:150px">Aktion</th>
-				    			</tr>
-				  			</thead>
-				  			<tbody id="timaat-category-list">
-							</tbody>
-						</table>
+                          <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th id="timaat-lists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <th>Name</th>
+                                  <th style="max-width:150px;width:150px">Aktion</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-category-list">
+                            </tbody>
+                          </table>
                         </div>
                       </div>
-                    </div>		
-
-
+                    </div>
                   </div> <!-- row -->	
                 </div>
-                <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="tab-pane fade" id="timaat-lists-general" role="tabpanel" aria-labelledby="profile-tab">
                   not yet implemented                
                 </div>
               </div>
@@ -1604,13 +1650,19 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="actors-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true"><i class="fas fa-id-badge"></i> Actors</a>
+                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true">
+                    <i class="fas fa-id-badge"></i> Actors
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false"><i class="fas fa-address-card"></i> Persons</a>
+                  <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false">
+                    <i class="fas fa-address-card"></i> Persons
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="collectives-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('collective')" data-toggle="tab" href="#collectives" role="tab" aria-controls="collectives" aria-selected="false"><i class="fas fa-users"></i> Collectives</a>
+                  <a class="nav-link" id="collectives-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('collective')" data-toggle="tab" href="#collectives" role="tab" aria-controls="collectives" aria-selected="false">
+                    <i class="fas fa-users"></i> Collectives
+                  </a>
                 </li>
               </ul>
               <div class="tab-content" id="actorsTabsContent">
@@ -2839,6 +2891,35 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-------------------------------------------------------------------->
+        <!-- Settings                                                       -->
+        <!-------------------------------------------------------------------->
+        <div class="container-fluid timaat-component" id="timaat-component-settings">     
+          <div class="row" style="padding-top: 1em;">
+            <div class="col-lg-12">
+              <ul class="nav nav-pills" id="settings-tab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="#timaat-settings-general" tabindex="-1" aria-disabled="true">
+                    <i class="fas fa-cogs"></i> Allgemein
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content" id="timaat-settings-content">
+                <div class="tab-pane fade show active" id="timaat-settings-tags" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="row timaat-settings-ui" style="padding-top: 1em;">
+                    <div class="col-lg-4">
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                  </div> <!-- row -->	
+                </div>
+                <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">
+                  not yet implemented                
                 </div>
               </div>
             </div>

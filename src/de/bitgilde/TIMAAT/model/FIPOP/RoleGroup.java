@@ -3,6 +3,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
 
 
@@ -13,14 +17,19 @@ import java.util.List;
 @Entity
 @Table(name="role_group")
 @NamedQuery(name="RoleGroup.findAll", query="SELECT rg FROM RoleGroup rg")
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany
+	@JsonBackReference(value="Roles-RoleGroups")
 	@JoinTable(
 		name="role_group_has_role"
 		, joinColumns={
@@ -34,7 +43,6 @@ public class RoleGroup implements Serializable {
 
 	//bi-directional many-to-one association to RoleGroupTranslation
 	@OneToMany(mappedBy="roleGroup")
-	// @JsonManagedReference(value = "RoleGroup-RoleGroupTranslation")
 	private List<RoleGroupTranslation> roleGroupTranslations;
 
 	public RoleGroup() {

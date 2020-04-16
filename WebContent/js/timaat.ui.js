@@ -158,10 +158,10 @@
 						    $('#timaat-login-modal').modal('hide');
 						    $('#timaat-user-info').html(e.accountName);							
 						    TIMAAT.VideoChooser.loadCollections();
-							TIMAAT.Settings.loadCategorySets();
-							TIMAAT.Datasets.load();
-							// load categories
-							TIMAAT.Settings.loadCategories(null,true);
+								TIMAAT.CategoryLists.loadCategorySets();
+								TIMAAT.Datasets.load();
+								// load categories
+								TIMAAT.CategoryLists.loadCategories(null,true);
 						  })
 						  .fail(function(e) {
 	       				console.log("TCL: processLogin fail: e", e);

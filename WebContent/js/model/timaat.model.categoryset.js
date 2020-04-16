@@ -83,7 +83,7 @@
 						ev.stopPropagation();
 						// show category editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.Settings.loadCategories(_set);
+						TIMAAT.CategoryLists.loadCategories(_set);
 					});
 					$(this.listView).dblclick(this, function(ev) {
 						ev.stopPropagation();
@@ -131,12 +131,12 @@
 					this.listView.remove();
 					
 					// remove from categoryset list
-					var index = TIMAAT.Settings.categorysets.indexOf(this);
-					if (index > -1) TIMAAT.Settings.categorysets.splice(index, 1);
+					var index = TIMAAT.CategoryLists.categorysets.indexOf(this);
+					if (index > -1) TIMAAT.CategoryLists.categorysets.splice(index, 1);
 
 					// remove from model list
-					index = TIMAAT.Settings.categorysets.model.indexOf(this);
-					if (index > -1) TIMAAT.Settings.categorysets.model.splice(index, 1);
+					index = TIMAAT.CategoryLists.categorysets.model.indexOf(this);
+					if (index > -1) TIMAAT.CategoryLists.categorysets.model.splice(index, 1);
 
 				}
 				

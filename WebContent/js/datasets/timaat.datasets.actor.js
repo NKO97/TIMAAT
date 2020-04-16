@@ -6,7 +6,6 @@
     if (typeof define === 'function' && define.amd) {
         define(['TIMAAT'], factory);
 
-
     // define a Common JS module that relies on 'TIMAAT'
     } else if (typeof exports === 'object') {
         module.exports = factory(require('TIMAAT'));
@@ -2295,8 +2294,6 @@
 			TIMAAT.ActorDatasets.actors = acts;
 			TIMAAT.ActorDatasets.actors.model = actors;
       // console.log("TCL: TIMAAT.ActorDatasets.actors", TIMAAT.ActorDatasets.actors);
-			// also set up video chooser list
-			// TIMAAT.VideoChooser.setActors(TIMAAT.ActorDatasets.actors.model);
 		},
 
 		setPersonLists: function(persons) {

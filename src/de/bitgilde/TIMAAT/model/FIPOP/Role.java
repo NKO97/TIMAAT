@@ -3,7 +3,10 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
@@ -14,10 +17,14 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "id")
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-many association to Actor
@@ -36,15 +43,16 @@ public class Role implements Serializable {
 
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
+	@JsonManagedReference(value="Roles-RoleGroups")
 	private List<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="role")
-	// @JsonManagedReference(value = "Role-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to MembershipDetail
 	@OneToMany(mappedBy="role")
+	@JsonIgnore
 	private List<MembershipDetail> membershipDetails;
 
 	//bi-directional many-to-one association to SiocContainerHasRoleInArea
