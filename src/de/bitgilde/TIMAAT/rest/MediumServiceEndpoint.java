@@ -110,13 +110,28 @@ public class MediumServiceEndpoint{
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-				// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
 		}
 
 		return Response.ok().entity(mlist).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("total")
+	public Response getMediaDatasetsTotal() {
+		System.out.println("MediumServiceEndpoint: getMediaDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+																.createQuery("SELECT COUNT(m.id) FROM Medium m");
+		long count = (long)query.getSingleResult();														
+		// int total = ((Integer)TIMAATApp.emf.createEntityManager()
+		// 												 .createQuery("SELECT m.id, COUNT(m) FROM Medium m")
+		// 												 .getSingleResult()).intValue();
+		return Response.ok().entity(count).build();
 	}
 
 	@GET
@@ -134,10 +149,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("audio/list")
-	public Response getAudioList() {
-		// System.out.println("MediumServiceEndpoint: getAudioList");	
-		@SuppressWarnings("unchecked")
-		List<MediumAudio> mediumAudioList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll").getResultList();
+	public Response getAudioList(	@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getAudioList: FROM:"+start+" LENGTH:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumAudio> mediumAudioList = castList(MediumAudio.class, query.getResultList());
+
+		// @SuppressWarnings("unchecked")
+		// List<MediumAudio> mediumAudioList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumAudio m : mediumAudioList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
@@ -147,10 +169,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("document/list")
-	public Response getDocumentList() {
-		// System.out.println("MediumServiceEndpoint: getDocumentList");	
-		@SuppressWarnings("unchecked")
-		List<MediumDocument> mediumDocumentList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll").getResultList();
+	public Response getDocumentList(@QueryParam("start") Integer start,
+																	@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getDocumentList: start:"+start+" length:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumDocument> mediumDocumentList = castList(MediumDocument.class, query.getResultList());
+
+		// @SuppressWarnings("unchecked")
+		// List<MediumDocument> mediumDocumentList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumDocument m : mediumDocumentList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
@@ -160,10 +189,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("image/list")
-	public Response getImageList() {
-		// System.out.println("MediumServiceEndpoint: getImageList");	
-		@SuppressWarnings("unchecked")
-		List<MediumImage> mediumImageList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll").getResultList();
+	public Response getImageList(	@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getImageList: start:"+start+" length:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumImage> mediumImageList = castList(MediumImage.class, query.getResultList());
+
+		// @SuppressWarnings("unchecked")
+		// List<MediumImage> mediumImageList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumImage m : mediumImageList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
@@ -173,10 +209,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("software/list")
-	public Response getSoftwareList() {
-		// System.out.println("MediumServiceEndpoint: getSoftwareList");	
-		@SuppressWarnings("unchecked")
-		List<MediumSoftware> mediumSoftwareList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll").getResultList();
+	public Response getSoftwareList(@QueryParam("start") Integer start,
+																	@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getSoftwareList: start:"+start+" length:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumSoftware> mediumSoftwareList = castList(MediumSoftware.class, query.getResultList());
+
+		// @SuppressWarnings("unchecked")
+		// List<MediumSoftware> mediumSoftwareList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumSoftware m : mediumSoftwareList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
@@ -186,10 +229,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("text/list")
-	public Response getTextList() {
-		// System.out.println("MediumServiceEndpoint: getTextList");	
-		@SuppressWarnings("unchecked")
-		List<MediumText> mediumTextList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll").getResultList();
+	public Response getTextList(@QueryParam("start") Integer start,
+															@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getTextList: start:"+start+" length:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumText> mediumTextList = castList(MediumText.class, query.getResultList());
+
+		// @SuppressWarnings("unchecked")
+		// List<MediumText> mediumTextList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumText m : mediumTextList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
@@ -199,20 +249,15 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
-	public Response getVideoList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length
-			) {
+	public Response getVideoList( @QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) 
+	{
 		System.out.println("MediumServiceEndpoint: getVideoList: start:"+start+" length:"+length);
-/*
-		// @SuppressWarnings("unchecked")
-		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
-*/
+		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, query.getResultList());
-
 		
 		for (MediumVideo video : mediumVideoList ) {
 			video.setStatus(videoStatus(video.getMediumId()));
@@ -224,7 +269,7 @@ public class MediumServiceEndpoint{
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumVideo video : mediumVideoList ) {
 			mediumList.add(video.getMedium());
-			// System.out.println("add medium of video: "+ video.getMediumId());
+			System.out.println("add medium of video: "+ video.getMediumId());
 		}
 
 		return Response.ok().entity(mediumList).build();
@@ -234,10 +279,17 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("videogame/list")
-	public Response getVideogameList() {
-		// System.out.println("MediumServiceEndpoint: getVideogameList");	
-		@SuppressWarnings("unchecked")
-		List<MediumVideogame> mediumVideogameList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll").getResultList();
+	public Response getVideogameList(	@QueryParam("start") Integer start,
+																		@QueryParam("length") Integer length) 
+	{
+		System.out.println("MediumServiceEndpoint: getVideogameList: start:"+start+" length:"+length);
+		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<MediumVideogame> mediumVideogameList = castList(MediumVideogame.class, query.getResultList());
+		// @SuppressWarnings("unchecked")
+		// List<MediumVideogame> mediumVideogameList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll").getResultList();
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumVideogame m : mediumVideogameList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();

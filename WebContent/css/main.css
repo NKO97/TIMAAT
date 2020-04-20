@@ -81,7 +81,7 @@ p + p {
 #timaat-videochooser-list td.actions {
 	padding: 5px 5px;
 }
-#timaat-component-videochooser .timaat-datasets-list-wrapper {
+#timaat-component-videochooser {
 	max-height: initial !important;
 }
 
@@ -254,6 +254,14 @@ p + p {
 	padding-right: 10px;
 }
 
+.card-body {
+	padding: 0px;
+}
+
+.thead {
+	box-sizing: none;
+}
+
 #timaat-mediadatasets-media-metadata-form,
 #timaat-mediadatasets-medium-titles-form,
 #timaat-mediadatasets-medium-languagetracks-form {
@@ -263,8 +271,9 @@ p + p {
 .timaat-datasets-list-wrapper {
 	height: 100%;
 	width: 100%;
-	max-height: 768px;
+	max-height: initial !important;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #timaat-annotation-list li, 

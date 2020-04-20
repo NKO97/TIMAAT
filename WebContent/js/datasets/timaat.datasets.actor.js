@@ -2210,7 +2210,7 @@
 
 		loadActorTypes: function() {
     	// console.log("TCL: loadActorTypes: function()");
-			TIMAAT.ActorService.listActorTypes(TIMAAT.ActorDatasets.setActorTypeLists);
+			TIMAAT.ActorService.listActorTypes(TIMAAT.ActorDatasets.setActorTypeList);
 		},
 
 		loadActors: function() {
@@ -2241,18 +2241,18 @@
 		},
 
 		loadAddressTypes: function() {
-			TIMAAT.ActorService.listAddressTypes(TIMAAT.ActorDatasets.setAddressTypeLists);
+			TIMAAT.ActorService.listAddressTypes(TIMAAT.ActorDatasets.setAddressTypeList);
 		},
 
 		loadEmailAddressTypes: function() {
-			TIMAAT.ActorService.listEmailAddressTypes(TIMAAT.ActorDatasets.setEmailAddressTypeLists);
+			TIMAAT.ActorService.listEmailAddressTypes(TIMAAT.ActorDatasets.setEmailAddressTypeList);
 		},
 
 		loadPhoneNumberTypes: function() {
-			TIMAAT.ActorService.listPhoneNumberTypes(TIMAAT.ActorDatasets.setPhoneNumberTypeLists);
+			TIMAAT.ActorService.listPhoneNumberTypes(TIMAAT.ActorDatasets.setPhoneNumberTypeList);
 		},
 
-		setActorTypeLists: function(actorTypes) {
+		setActorTypeList: function(actorTypes) {
 			// console.log("TCL: actorTypes", actorTypes);
 			if ( !actorTypes ) return;
 			$('#timaat-actortype-list-loader').remove();
@@ -2468,7 +2468,7 @@
 
 		},
 
-		setAddressTypeLists: function(addressTypes) {
+		setAddressTypeList: function(addressTypes) {
 			// console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
 			if ( !addressTypes ) return;
 			$('#timaat-actordatasets-addresstype-list-loader').remove();
@@ -2484,7 +2484,7 @@
       // console.log("TCL: TIMAAT.ActorDatasets.addressTypes", TIMAAT.ActorDatasets.addressTypes);
 		},
 
-		setEmailAddressTypeLists: function(emailAddressTypes) {
+		setEmailAddressTypeList: function(emailAddressTypes) {
 			// console.log("TCL: setAddressTypeList -> emailAddressTypes", emailAddressTypes);
 			if ( !emailAddressTypes ) return;
 			$('#timaat-actordatasets-emailaddresstype-list-loader').remove();
@@ -2500,7 +2500,7 @@
       // console.log("TCL: TIMAAT.ActorDatasets.emailAddressTypes", TIMAAT.ActorDatasets.emailAddressTypes);
 		},
 
-		setPhoneNumberTypeLists: function(phoneNumberTypes) {
+		setPhoneNumberTypeList: function(phoneNumberTypes) {
 			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
 			$('#timaat-actordatasets-phonenumbertype-list-loader').remove();

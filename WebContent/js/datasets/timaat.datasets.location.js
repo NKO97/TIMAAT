@@ -610,7 +610,7 @@
 		loadLocationTypes: function() {
 			// console.log("TCL: loadLocationTypes: function()");
 			// load locations
-			TIMAAT.LocationService.listLocationTypes(TIMAAT.LocationDatasets.setLocationTypeLists);
+			TIMAAT.LocationService.listLocationTypes(TIMAAT.LocationDatasets.setLocationTypeList);
 		},
 
 		loadLocations: function() {
@@ -647,7 +647,7 @@
 			TIMAAT.LocationService.listLocationSubtype("street", TIMAAT.LocationDatasets.setStreetLists);
 		},
 
-		setLocationTypeLists: function(locationTypes) {
+		setLocationTypeList: function(locationTypes) {
 			// console.log("TCL: locationTypes", locationTypes);
 			if ( !locationTypes ) return;
 			$('#timaat-locationtype-list-loader').remove();

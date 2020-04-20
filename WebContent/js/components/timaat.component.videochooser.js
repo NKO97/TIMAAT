@@ -347,10 +347,22 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 					"dataSrc": function(data) {
-						return data; // data.map(medium => new TIMAAT.Medium(medium));;
+						// setup model
+						var vids = Array();
+						var newVideo;
+						data.forEach(function(video) { 
+							if ( video.id > 0 ) {
+								newVideo = new TIMAAT.Medium(video, 'video');
+								vids.push(newVideo);
+							}
+						});
+						TIMAAT.MediaDatasets.videos = vids;
+						TIMAAT.MediaDatasets.videos.model = data;
+						return data; // data.map(medium => new TIMAAT.Medium(medium));            
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
 					let videoelement = $(row);
 					let video = data;
 					video.ui = videoelement;
@@ -444,6 +456,7 @@
 					}
 				},
 				{ data: 'id', className: 'title', render: function(data, type, video, meta) {
+        	// console.log("TCL: video", video);
 					let titleDisplay = `<p>`+video.displayTitle.name+`</p>`;
 						if (video.originalTitle != null && video.displayTitle.id != video.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+video.originalTitle.name+`)</i></p>`;
