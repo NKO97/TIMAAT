@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,6 +18,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -76,11 +78,27 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getActorList() {
-		System.out.println("ActorServiceEndpoint: getActorList");			
-		List<Actor> actorList = castList(Actor.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Actor.findAll").getResultList());
+	public Response getActorList( @QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) {
+		System.out.println("ActorServiceEndpoint: getActorList: FROM:"+start+" LENGTH:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Actor.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(actorList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("total")
+	public Response getActorDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getActorDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (a.id) FROM Actor a");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
 	}
 
 	@GET
@@ -97,9 +115,13 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("person/list")
-	public Response getPersonList() {
-		System.out.println("ActorServiceEndpoint: getPersonList");	
-		List<ActorPerson> actorPersonList = castList(ActorPerson.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorPerson.findAll").getResultList());
+	public Response getPersonList(@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) {
+		System.out.println("ActorServiceEndpoint: getPersonList: FROM:"+start+" LENGTH:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("ActorPerson.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<ActorPerson> actorPersonList = castList(ActorPerson.class, query.getResultList());
 		List<Actor> actorList = new ArrayList<Actor>();
 		for ( ActorPerson actorPerson : actorPersonList ) {
 			actorList.add(actorPerson.getActor());
@@ -110,10 +132,26 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("person/total")
+	public Response getPersonDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getPersonDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (ap.id) FROM ActorPerson ap");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("collective/list")
-	public Response getCollectiveList() {
-		System.out.println("ActorServiceEndpoint: getCollectiveList");	
-		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
+	public Response getCollectiveList(@QueryParam("start") Integer start,
+																		@QueryParam("length") Integer length) {
+		System.out.println("ActorServiceEndpoint: getCollectiveList: FROM:"+start+" LENGTH:"+length);
+		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll");
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, query.getResultList());
 		List<Actor> actorList = new ArrayList<Actor>();
 		for ( ActorCollective actorCollective : actorCollectiveList ) {
 			actorList.add(actorCollective.getActor());
@@ -121,6 +159,48 @@ public class ActorEndpoint {
 		return Response.ok().entity(actorList).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collective/total")
+	public Response getCollectiveDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getCollectiveDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (ac.id) FROM ActorCollective ac");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collective/selectlist")
+	public Response getCollectiveSelectList() {
+		// returns list of id and displayName combinations of all collectives
+		System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
+		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
+		class SelectElement{ 
+			public int collectiveId; 
+			public String name;
+			public SelectElement(int collectiveId, String name) {this.collectiveId = collectiveId; this.name = name;}
+		}
+		List<SelectElement> collectiveSelectList = new ArrayList<>();
+		for (ActorCollective actorCollective : actorCollectiveList) {
+			String name = "";
+			List<ActorName> actorNamesList = actorCollective.getActor().getActorNames();
+			for (ActorName actorName : actorNamesList) {
+				if (actorName.getIsDisplayName() == true) {
+					name = actorName.getName();
+					break;
+				}
+			}
+			collectiveSelectList.add(new SelectElement(actorCollective.getActorId(), name));
+			System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ actorCollective.getActorId() + " " + name);
+		}
+		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ collectiveSelectList.id + " " + collectiveSelectList.name);
+		return Response.ok().entity(collectiveSelectList).build();
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured

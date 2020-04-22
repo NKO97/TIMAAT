@@ -158,6 +158,7 @@
 					$('#timaat-user-info').html(e.accountName);							
 					TIMAAT.VideoChooser.loadCollections();
 					TIMAAT.MediaDatasets.loadMediaDatatables();
+					TIMAAT.ActorDatasets.loadActorDatatables();
 					TIMAAT.Settings.loadCategorySets();
 					TIMAAT.Datasets.load();
 					// load categories

@@ -34,7 +34,6 @@
 		personIsMemberOfCollectives: null,
 		collectiveSelectObjects: null,
 		collectiveSelectObjectsSorted: '',
-		// memberships: null, // TODO check if required
 
 		init: function() {   
 			TIMAAT.ActorDatasets.initActors();
@@ -120,14 +119,13 @@
 			// console.log("TCL: ActorDatasets: initActors: function()");
 			// nav-bar functionality
 			$('#actors-tab-actor-metadata-form').click(function(event) {
-				// $('.actor-data-tabs').show();
 				$('.nav-tabs a[href="#actorDatasheet"]').tab('show');
 				$('.form').hide();
 				$('#timaat-actordatasets-actor-metadata-form').show();
 				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'actor', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
 			});
 			
-			// delete medium button (in form) handler
+			// delete actor button (in form) handler
 			$('#timaat-actordatasets-actor-remove').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
@@ -136,10 +134,23 @@
 			});
 
 			// confirm delete actor modal functionality
-			$('#timaat-actordatasets-actor-delete-submit').click(function(ev) {
+			$('#timaat-actordatasets-actor-delete-submit').click(async function(ev) {
 				var modal = $('#timaat-actordatasets-actor-delete');
 				var actor = modal.data('actor');
-				if (actor) TIMAAT.ActorDatasets._actorRemoved(actor);
+				if (actor) {
+					var actorType = actor.model.actorType.actorTypeTranslations[0].type;
+					try {
+						await TIMAAT.ActorDatasets._actorRemoved(actor);
+					} catch (error) {
+						console.log("error: ", error);
+					}
+					try {
+						await TIMAAT.ActorDatasets.refreshDatatable(actorType);
+						await TIMAAT.ActorDatasets.refreshDatatable('actor');
+					} catch (error) {
+						console.log("error: ", error);
+					}
+				}
 				modal.modal('hide');
 				$('#timaat-actordatasets-actor-metadata-form').hide();
 				$('.actors-data-tabs').hide();
@@ -177,15 +188,15 @@
 				if (actor) { // update actor
 					// actor data
 					actor = await TIMAAT.ActorDatasets.updateActorModelData(actor, formDataObject);
-					// person data on actor dataseheet
-
+					
+					await TIMAAT.ActorDatasets.updateActor(actor.model.actorType.actorTypeTranslations[0].type, actor);
 					actor.updateUI();
-					TIMAAT.ActorDatasets.updateActor(actor.model.actorType.actorTypeTranslations[0].type, actor);
+					await TIMAAT.ActorDatasets.refreshDatatable('actor');
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
 				} else { // create new actor
 					// console.log("formDataObject", formDataObject);
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, formDataObject.typeId);
-					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
+					var displayNameModel = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 					var actorType;
 					var actorSubtypeTranslationModel = null;
 					var citizenshipModel = null;
@@ -201,8 +212,10 @@
 					}
 					var actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, actorType);
 
-					await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayName, actorSubtypeTranslationModel, citizenshipModel);
-					var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
+					var newActor = await TIMAAT.ActorDatasets.createActor(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
+					actor = new TIMAAT.Actor(newActor, actorType);
+					await TIMAAT.ActorDatasets.refreshDatatable('actor');
+					// var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
 					// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
 				}
@@ -287,15 +300,15 @@
 			});
 			
 			// delete person button functionality (in person list)
-			$('#timaat-actordatasets-person-delete-submit').click(function(ev) {
-				var modal = $('#timaat-actordatasets-person-delete');
-				var person = modal.data('person');
-				if (person) TIMAAT.ActorDatasets._actorSubtypeRemoved('person', person);
-				modal.modal('hide');
-				$('#timaat-actordatasets-actor-metadata-form').hide();
-				$('.actors-data-tabs').hide();
-				$('.form').hide();
-			});
+			// $('#timaat-actordatasets-person-delete-submit').click(function(ev) {
+			// 	var modal = $('#timaat-actordatasets-person-delete');
+			// 	var person = modal.data('person');
+			// 	if (person) TIMAAT.ActorDatasets._actorSubtypeRemoved('person', person);
+			// 	modal.modal('hide');
+			// 	$('#timaat-actordatasets-actor-metadata-form').hide();
+			// 	$('.actors-data-tabs').hide();
+			// 	$('.form').hide();
+			// });
 
 			// add person button functionality (opens form)
 			// $('#timaat-actordatasets-person-add').attr('onclick','TIMAAT.ActorDatasets.addActor("person")');
@@ -338,10 +351,9 @@
 					// person.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataObject.citizenshipName; // TODO
 					person.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataObject.specialFeatures;
 
-          console.log("TCL: person", person);
+					await TIMAAT.ActorDatasets.updateActor('person', person);
 					person.updateUI();
-					console.log("TCL actorType, actor", 'person', person);
-					TIMAAT.ActorDatasets.updateActor('person', person);
+					await TIMAAT.ActorDatasets.refreshDatatable('person');
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 				} else { // create new person
 					var personTranslationModel = await TIMAAT.ActorDatasets.createActorPersonTranslationModel(formDataObject);
@@ -351,8 +363,10 @@
 					// var citizenshipModel = await TIMAAT.ActorDatasets.createCitizenshipModel(formDataObject);
 					
 					// await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, citizenshipModel);
-					await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, null); // TODO
-					var person = TIMAAT.ActorDatasets.persons[TIMAAT.ActorDatasets.persons.length-1];
+					var newPerson = await TIMAAT.ActorDatasets.createActor('person', actorModel, personModel, displayNameModel, personTranslationModel, null); // TODO
+					person = new TIMAAT.Actor(newPerson, 'person');
+					await TIMAAT.ActorDatasets.refreshDatatable('person');
+					// var person = TIMAAT.ActorDatasets.persons[TIMAAT.ActorDatasets.persons.length-1];
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', person);
 					$('#timaat-actordatasets-actor-metadata-form').data('actor', person);
 				}
@@ -382,15 +396,15 @@
 			});
 			
 			// delete collective button functionality (in collective list)
-			$('#timaat-actordatasets-collective-delete-submit').click(function(ev) {
-				var modal = $('#timaat-actordatasets-collective-delete');
-				var collective = modal.data('collective');
-				if (collective) TIMAAT.ActorDatasets._actorSubtypeRemoved('collective', collective);
-				modal.modal('hide');
-				$('#timaat-actordatasets-actor-metadata-form').hide();
-				$('.actors-data-tabs').hide();
-				$('.form').hide();
-			});
+			// $('#timaat-actordatasets-collective-delete-submit').click(function(ev) {
+			// 	var modal = $('#timaat-actordatasets-collective-delete');
+			// 	var collective = modal.data('collective');
+			// 	if (collective) TIMAAT.ActorDatasets._actorSubtypeRemoved('collective', collective);
+			// 	modal.modal('hide');
+			// 	$('#timaat-actordatasets-actor-metadata-form').hide();
+			// 	$('.actors-data-tabs').hide();
+			// 	$('.form').hide();
+			// });
 
 			// add collective button functionality (opens form)
 			// $('#timaat-actordatasets-collective-add').attr('onclick','TIMAAT.ActorDatasets.addActor("collective")');
@@ -423,21 +437,24 @@
 					collective.model.actorCollective.founded = moment.utc(formDataObject.founded, "YYYY-MM-DD");
 					collective.model.actorCollective.disbanded = moment.utc(formDataObject.disbanded, "YYYY-MM-DD");
 
+					await TIMAAT.ActorDatasets.updateActor('collective', collective);
 					collective.updateUI();
-					console.log("TCL actorType, actor", 'collective', collective);
-					TIMAAT.ActorDatasets.updateActor('collective', collective);
+					await TIMAAT.ActorDatasets.refreshDatatable('collective');
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
 				} else { // create new collective
 					// var collectiveTranslationModel = await TIMAAT.ActorDatasets.createCollectiveTranslationModel(formDataObject);
 					var collectiveModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, 'collective');
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, 2); // 2 = Collective. TODO check clause to find proper id
-					var displayName = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
+					var displayNameModel = await TIMAAT.ActorDatasets.createNameModel(formDataObject);
 
-					await TIMAAT.ActorDatasets.createActor('collective', actorModel, collectiveModel, displayName, null, null); // last 2 parameters needed for personTranslation and citizenship
-					var collective = TIMAAT.ActorDatasets.collectives[TIMAAT.ActorDatasets.collectives.length-1];
+					var newCollective = await TIMAAT.ActorDatasets.createActor('collective', actorModel, collectiveModel, displayNameModel, null, null); // last 2 parameters needed for personTranslation and citizenship
+					collective = new TIMAAT.Actor(newCollective, 'collective');
+					await TIMAAT.ActorDatasets.refreshDatatable('collective');
+					// var collective = TIMAAT.ActorDatasets.collectives[TIMAAT.ActorDatasets.collectives.length-1];
 					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', collective);
 					$('#timaat-actordatasets-actor-metadata-form').data('actor', collective);
 				}
+				TIMAAT.ActorDatasets.setCollectiveSelectList();
 			});
 
 			// edit content form button handler
@@ -2206,6 +2223,7 @@
 			TIMAAT.ActorDatasets.loadAddressTypes();
 			TIMAAT.ActorDatasets.loadEmailAddressTypes();
 			TIMAAT.ActorDatasets.loadPhoneNumberTypes();
+			TIMAAT.ActorDatasets.loadSelectLists();
 		},
 
 		loadActorTypes: function() {
@@ -2218,26 +2236,35 @@
 			// load actors
 			$('.actors-cards').hide();
 			$('.actors-card').show();
-			TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorLists);
+			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
+			TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorList);
+		},
+
+		loadActorDatatables: async function() {
+			console.log("TCL: loadActorDatatables: async function()")
+			TIMAAT.ActorDatasets.setupActorDatatable();
+			TIMAAT.ActorDatasets.setupPersonDatatable();
+			TIMAAT.ActorDatasets.setupCollectiveDatatable();
 		},
 
 		loadActorSubtype: function(actorSubtype) {
 			$('.actors-cards').hide();
+			$('.form').hide();
 			$('.'+actorSubtype+'s-card').show();
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', actorSubtype);
 			switch (actorSubtype) {
 				case 'person':
-					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setPersonLists);
+					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setPersonList);
 					break;
 				case 'collective':
-					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setCollectiveLists);
+					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setCollectiveList);
 					break;
 			}
 		},
 
 		loadAllActorSubtypes: function() {
-			TIMAAT.ActorService.listActorSubtype('person', TIMAAT.ActorDatasets.setPersonLists);
-			TIMAAT.ActorService.listActorSubtype('collective', TIMAAT.ActorDatasets.setCollectiveLists);
+			TIMAAT.ActorService.listActorSubtype('person', TIMAAT.ActorDatasets.setPersonList);
+			TIMAAT.ActorService.listActorSubtype('collective', TIMAAT.ActorDatasets.setCollectiveList);
 		},
 
 		loadAddressTypes: function() {
@@ -2250,6 +2277,10 @@
 
 		loadPhoneNumberTypes: function() {
 			TIMAAT.ActorService.listPhoneNumberTypes(TIMAAT.ActorDatasets.setPhoneNumberTypeList);
+		},
+
+		loadSelectLists: function() {
+			TIMAAT.ActorDatasets.setCollectiveSelectList();
 		},
 
 		setActorTypeList: function(actorTypes) {
@@ -2268,39 +2299,44 @@
 			TIMAAT.ActorDatasets.actorTypes.model = actorTypes;
 		},
 		
-		setActorLists: function(actors) {
+		setActorList: function(actors) {
+			console.log("TCL: setActorList -> actors", actors);
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
-    	console.log("TCL: setActorLists -> actors", actors);
 			if ( !actors ) return;
 
-			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
 			$('#timaat-actordatasets-actor-list-loader').remove();
 			// clear old UI list
 			$('#timaat-actordatasets-actor-list').empty();
+
+			// set ajax data source
+			if ( TIMAAT.ActorDatasets.dataTableActor ) {
+				// TIMAAT.ActorDatasets.dataTableActor.ajax.url('/TIMAAT/api/actor/list');
+				TIMAAT.ActorDatasets.dataTableActor.ajax.reload();
+			}
 			// setup model
-			var acts = Array();
-			actors.forEach(function(actor) { 
-				if ( actor.id > 0 ) {
-					// console.log("TCL: actor", actor);
-					actor.actorNames.forEach(function(name) {
-						if (name.isDisplayName) {
-							actor.displayName = name;
-							return; // only one displayName exists/needs to be found
-						}
-					})
-					acts.push(new TIMAAT.Actor(actor, 'actor'));
-				}
-			});
-			TIMAAT.ActorDatasets.actors = acts;
-			TIMAAT.ActorDatasets.actors.model = actors;
+			// var acts = Array();
+			// actors.forEach(function(actor) { 
+			// 	if ( actor.id > 0 ) {
+			// 		// console.log("TCL: actor", actor);
+			// 		actor.actorNames.forEach(function(name) {
+			// 			if (name.isDisplayName) {
+			// 				actor.displayName = name;
+			// 				return; // only one displayName exists/needs to be found
+			// 			}
+			// 		})
+			// 		acts.push(new TIMAAT.Actor(actor, 'actor'));
+			// 	}
+			// });
+			// TIMAAT.ActorDatasets.actors = acts;
+			// TIMAAT.ActorDatasets.actors.model = actors;
       // console.log("TCL: TIMAAT.ActorDatasets.actors", TIMAAT.ActorDatasets.actors);
 			// also set up video chooser list
 			// TIMAAT.VideoChooser.setActors(TIMAAT.ActorDatasets.actors.model);
 		},
 
-		setPersonLists: function(persons) {
-			console.log("TCL: setPersonLists -> persons", persons);
+		setPersonList: function(persons) {
+			console.log("TCL: setPersonList -> persons", persons);
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
 			if ( !persons ) return;
@@ -2308,29 +2344,35 @@
 			$('#timaat-actordatasets-person-list-loader').remove();
 			// clear old UI list
 			$('#timaat-actordatasets-person-list').empty();
+
+			// set ajax data source
+			if ( TIMAAT.ActorDatasets.dataTablePerson ) {
+				// TIMAAT.ActorDatasets.dataTablePerson.ajax.url('/TIMAAT/api/actor/person/list');
+				TIMAAT.ActorDatasets.dataTablePerson.ajax.reload();
+			}
 			// setup model
-			var pers = Array();
-			var newPerson;
-			persons.forEach(function(person) { 
-				if (person.id > 0) {
-					// console.log("TCL: person", person);
-					person.actorNames.forEach(function(name) {
-						if (name.isDisplayName) {
-							person.displayName = name;
-							return; // only one displayName exists/needs to be found
-						}
-					})
-					newPerson = new TIMAAT.Actor(person, 'person');
-					pers.push(newPerson);
-				}
-			});
-			TIMAAT.ActorDatasets.persons = pers;
-			TIMAAT.ActorDatasets.persons.model = persons;
+			// var pers = Array();
+			// var newPerson;
+			// persons.forEach(function(person) { 
+			// 	if (person.id > 0) {
+			// 		// console.log("TCL: person", person);
+			// 		person.actorNames.forEach(function(name) {
+			// 			if (name.isDisplayName) {
+			// 				person.displayName = name;
+			// 				return; // only one displayName exists/needs to be found
+			// 			}
+			// 		})
+			// 		newPerson = new TIMAAT.Actor(person, 'person');
+			// 		pers.push(newPerson);
+			// 	}
+			// });
+			// TIMAAT.ActorDatasets.persons = pers;
+			// TIMAAT.ActorDatasets.persons.model = persons;
       // console.log("TCL: TIMAAT.ActorDatasets.persons", TIMAAT.ActorDatasets.persons);
 		},
 
-		setCollectiveLists: function(collectives) {
-			console.log("TCL: setCollectiveLists -> collectives", collectives);
+		setCollectiveList: function(collectives) {
+			console.log("TCL: setCollectiveList -> collectives", collectives);
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
 			if ( !collectives ) return;
@@ -2339,29 +2381,16 @@
 			// clear old UI list
 			$('#timaat-actordatasets-collective-list').empty();
 
-			// setup model
-			var colls = Array();
-			var newCollective;
-			var collsInSelection = [];
+			// set ajax data source
+			if ( TIMAAT.ActorDatasets.dataTableCollective ) {
+				// TIMAAT.ActorDatasets.dataTableCollective.ajax.url('/TIMAAT/api/actor/collective/list');
+				TIMAAT.ActorDatasets.dataTableCollective.ajax.reload();
+			}
 
-			collectives.forEach(function(collective) { 
-				if (collective.id > 0) {
-					// console.log("TCL: collective", collective);
-					collective.actorNames.forEach(function(name) {
-						if (name.isDisplayName) {
-							collective.displayName = name;
-							return; // only one displayName exists/needs to be found
-						}
-					})
-					newCollective = new TIMAAT.Actor(collective, 'collective');
-					colls.push(newCollective);
-					collsInSelection.push({collectiveId: collective.id, name: collective.displayName.name});
-				}
-			});
-			TIMAAT.ActorDatasets.collectives = colls;
-			TIMAAT.ActorDatasets.collectives.model = collectives;
+		},
 
-			TIMAAT.ActorDatasets.collectiveSelectObjects = collsInSelection;
+		setCollectiveSelectList: async function() {
+			TIMAAT.ActorDatasets.collectiveSelectObjects = await TIMAAT.ActorService.getCollectiveSelectList();
 			TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
 			TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
 		},
@@ -2575,7 +2604,6 @@
 			$('.address-data-tab').show();
 			$('.emailaddress-data-tab').show();
 			$('.phonenumber-data-tab').show();
-
 			if (actorType == "person") {
 				$('.memberofcollective-data-tab').show();
 			}
@@ -2594,7 +2622,8 @@
 				$('#timaat-actordatasets-actor-remove :input').prop("disabled", false);
 				$('.datasheet-form-buttons').hide()
 				$('#actorFormHeader').html(actorType+" Datasheet (#"+ actorTypeData.model.id+')');
-			}	else if (action == 'edit') {
+			}
+			else if (action == 'edit') {
 				$('.datasheet-form-buttons').hide();
 				$('.'+actorType+'-datasheet-form-submit').show();
 				$('#timaat-actordatasets-actor-metadata-form :input').prop("disabled", false);
@@ -3264,22 +3293,20 @@
 
 			try {
 				// push new actor to dataset model
-				console.log("TCL: newActorModel", newActorModel);
 				switch (actorType) {
 					case 'person':
 						newActorModel.actorPerson = actorSubtypeModel;
-            console.log("TCL: newActorModel", newActorModel);
 					break;
 					case 'collective':
 						newActorModel.actorCollective = actorSubtypeModel;
-            console.log("TCL: newActorModel", newActorModel);
 					break;
 				}
-				console.log("TCL: newActorModel", newActorModel);
-				await TIMAAT.ActorDatasets._actorAdded(actorType, newActorModel);
+				// console.log("TCL: newActorModel", newActorModel);
+				// await TIMAAT.ActorDatasets._actorAdded(actorType, newActorModel); //* commented out with datatables
 			} catch(error) {
 				console.log( "error: ", error);
 			}
+			return (newActorModel);
 		},
 
 		createName: async function(nameModel) {
@@ -3472,9 +3499,7 @@
 					// update display name
 					// var tempDisplayName = await TIMAAT.ActorService.updateName(actor.model.displayName);
 					var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
-
 					// actor.model.displayName = tempDisplayName;
-
 					console.log("TCL: tempActorModel", tempActorModel);
 				} catch(error) {
 					console.log( "error: ", error);
@@ -3610,8 +3635,8 @@
 						TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
 					break;
 				}
-				TIMAAT.ActorDatasets.actors.model.push(actor);
-				TIMAAT.ActorDatasets.actors.push(newActor);
+				// TIMAAT.ActorDatasets.actors.model.push(actor);
+				// TIMAAT.ActorDatasets.actors.push(newActor);
 			} catch(error) {
 				console.log( "error: ", error);
 			}
@@ -3620,8 +3645,13 @@
 		_actorRemoved: async function(actor) {
     	console.log("TCL: actor", actor);
 			// sync to server
-			TIMAAT.ActorService.removeActor(actor);
+			try {
+				await TIMAAT.ActorService.removeActor(actor);
+			} catch (error) {
+				console.log("error: ", error);
+			}
 			// remove all citizenships from actorPerson
+			// TODO check if this can be solved via CASCADE
 			if (actor.model.actorType.actorTypeTranslations[0].type == "person") {
 				var i = 0;
 				for (; i < actor.model.actorPerson.citizenships.length; i++ ) { // remove obsolete citizenships
@@ -3644,31 +3674,31 @@
 			actor.remove();
 		},
 
-		_actorSubtypeRemoved: function(actorSubtype, actorSubtypeData) {
-			console.log("TCL: _actorSubtypeRemoved: function(actorSubtype, actorSubtypeData)", actorSubtype, actorSubtypeData);
-			// sync to server
-			TIMAAT.ActorService.removeActorSubtype(actorSubtype, actorSubtypeData);
-			// remove all citizenships from actorPerson
-			if (actorSubtype == "person") {
-				var i = 0;
-				for (; i < actorSubtypeData.citizenships.length; i++ ) { // remove obsolete citizenships
-					TIMAAT.ActorService.removeCitizenship(actorSubtypeData.citizenships[i]);
-					actorSubtypeData.citizenships.splice(i,1);
-				}
-			}
-			if (actorSubtype == "collective") {
-				var index = TIMAAT.ActorDatasets.collectiveSelectObjects.findIndex( ({collectiveId}) => collectiveId === actor.model.id );
-        // console.log("index", index);
-				TIMAAT.ActorDatasets.collectiveSelectObjects.splice(index,1);
-				TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
-				// remove deleted collective from all person is member of collective lists
-				index = TIMAAT.ActorDatasets.personIsMemberOfCollectives.findIndex( ({memberOfActorCollectiveActorId}) => memberOfActorCollectiveActorId === actor.model.id );
-				// console.log("index", index);
-				// console.log("IMAAT.ActorDatasets.personIsMemberOfCollectives[index]", IMAAT.ActorDatasets.personIsMemberOfCollectives[index]);
-				TIMAAT.ActorDatasets.personIsMemberOfCollectives.splice(index,1);
-			}
-			actorSubtypeData.remove();
-		},
+		// _actorSubtypeRemoved: function(actorSubtype, actorSubtypeData) {
+		// 	console.log("TCL: _actorSubtypeRemoved: function(actorSubtype, actorSubtypeData)", actorSubtype, actorSubtypeData);
+		// 	// sync to server
+		// 	TIMAAT.ActorService.removeActorSubtype(actorSubtype, actorSubtypeData);
+		// 	// remove all citizenships from actorPerson
+		// 	if (actorSubtype == "person") {
+		// 		var i = 0;
+		// 		for (; i < actorSubtypeData.citizenships.length; i++ ) { // remove obsolete citizenships
+		// 			TIMAAT.ActorService.removeCitizenship(actorSubtypeData.citizenships[i]);
+		// 			actorSubtypeData.citizenships.splice(i,1);
+		// 		}
+		// 	}
+		// 	if (actorSubtype == "collective") {
+		// 		var index = TIMAAT.ActorDatasets.collectiveSelectObjects.findIndex( ({collectiveId}) => collectiveId === actor.model.id );
+    //     // console.log("index", index);
+		// 		TIMAAT.ActorDatasets.collectiveSelectObjects.splice(index,1);
+		// 		TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
+		// 		// remove deleted collective from all person is member of collective lists
+		// 		index = TIMAAT.ActorDatasets.personIsMemberOfCollectives.findIndex( ({memberOfActorCollectiveActorId}) => memberOfActorCollectiveActorId === actor.model.id );
+		// 		// console.log("index", index);
+		// 		// console.log("IMAAT.ActorDatasets.personIsMemberOfCollectives[index]", IMAAT.ActorDatasets.personIsMemberOfCollectives[index]);
+		// 		TIMAAT.ActorDatasets.personIsMemberOfCollectives.splice(index,1);
+		// 	}
+		// 	actorSubtypeData.remove();
+		// },
 
 		updateActorModelData: function(actor, formDataObject) {
     console.log("TCL: updateActorModelData: actor, formDataObject", actor, formDataObject);
@@ -3849,32 +3879,32 @@
 			return updatedModel;
 		},
 
-		// TODO should be obsolete
-		createPersonIsMemberOfCollectiveModel: async function(data, actorId) {
-    	console.log("TCL: data, actorId", data, actorId);
-			var model = {};
-			model = {
-				id: {
-					actorPersonActorId: actorId,
-					memberOfActorCollectiveActorId: data.collectiveId
-				},
-				membershipDetails: []
-			};
-      console.log("model", model);
-			return model;
-		},
+		// should be obsolete
+		// createPersonIsMemberOfCollectiveModel: async function(data, actorId) {
+    // 	console.log("TCL: data, actorId", data, actorId);
+		// 	var model = {};
+		// 	model = {
+		// 		id: {
+		// 			actorPersonActorId: actorId,
+		// 			memberOfActorCollectiveActorId: data.collectiveId
+		// 		},
+		// 		membershipDetails: []
+		// 	};
+    //   console.log("model", model);
+		// 	return model;
+		// },
 
-		// TODO obsolete?
-		updatePersonIsMemberOfCollectiveModel: async function(originalModel, data) {
-			var updatedModel = originalModel;
-			// TODO changing collective
-			var i = 0;
-			for(; i < data.length; i++) {
-				updatedModel.membershipDetails[i].joinedAt = data[i].joinedAt;
-				updatedModel.membershipDetails[i].leftAt = data[i].leftAt;
-			};
-			return updatedModel;
-		},
+		// should be obsolete
+		// updatePersonIsMemberOfCollectiveModel: async function(originalModel, data) {
+		// 	var updatedModel = originalModel;
+		// 	// TODO changing collective
+		// 	var i = 0;
+		// 	for(; i < data.length; i++) {
+		// 		updatedModel.membershipDetails[i].joinedAt = data[i].joinedAt;
+		// 		updatedModel.membershipDetails[i].leftAt = data[i].leftAt;
+		// 	};
+		// 	return updatedModel;
+		// },
 
 		createCitizenshipModel: async function(formDataObject) {
     // console.log("TCL: createCitizenshipModel: formDataObject", formDataObject);
@@ -4258,6 +4288,380 @@
 				TIMAAT.ActorDatasets.collectiveSelectObjectsSorted += `<option value="`+entry.collectiveId+`">`+entry.name+`</option>
 				`;
 			});
+		},
+
+		setupActorDatatable: function() {			
+			console.log("TCL: setupDatatable");
+			// setup datatable
+			TIMAAT.ActorDatasets.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
+				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"order"         : [[ 0, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollY"       : "100%",
+				"scrollCollapse": true,
+				"scrollX"       : false,
+				"serverSide"    : true,
+				"ajax"          : {
+					"url"        : "api/actor/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+								start        : data.start,
+								length       : data.length,
+								// actorsubtype: ''
+						}
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: TIMAAT.ActorDatasets.actor (last)", TIMAAT.ActorDatasets.actor);
+						// setup model
+						var acts = Array();
+						data.forEach(function(actor) { 
+							if ( actor.id > 0 ) {
+								actor.actorNames.forEach(function(name) {
+									if (name.isDisplayName) {
+										actor.displayName = name;
+										return; // only one displayName exists/needs to be found
+									}
+								})
+								acts.push(new TIMAAT.Actor(actor, 'actor'));
+							}
+						});
+						TIMAAT.ActorDatasets.actors = acts;
+						TIMAAT.ActorDatasets.actors.model = data;
+						// console.log("TCL: TIMAAT.ActorDatasets.actor (current)", TIMAAT.ActorDatasets.actor);
+						return data; // data.map(actor => new TIMAAT.Actor(actor));;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let actorElement = $(row);
+					let actor = data;
+					actor.ui = actorElement;
+					actorElement.data('actor', actor);
+
+					actorElement.on('click', '.title', function(event) {
+						event.stopPropagation();
+						// show tag editor - trigger popup
+						TIMAAT.UI.hidePopups();
+						TIMAAT.UI.showComponent('actors');
+						$('.form').hide();
+						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
+						$('.nav-tabs a[href="#actorDatasheet"]').tab('show');
+						var id = actor.id;
+						var selectedActor;
+						var i = 0;
+						for (; i < TIMAAT.ActorDatasets.actors.length; i++) {
+							if (TIMAAT.ActorDatasets.actors[i].model.id == id) {
+								selectedActor = TIMAAT.ActorDatasets.actors[i];
+								break;
+							}
+						}
+						$('#timaat-actordatasets-actor-metadata-form').data('actor', selectedActor);
+						TIMAAT.ActorDatasets.actorFormDatasheet('show', 'actor', selectedActor);
+					});
+				},
+				"columns": [{
+					data: 'id', className: 'title', render: function(data, type, actor, meta) {
+						// console.log("TCL: actor", actor);
+						let displayActorTypeIcon = '';
+						switch (actor.actorType.actorTypeTranslations[0].type) {
+							case 'person': 
+								displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
+							break;
+							case 'collective': 
+								displayActorTypeIcon = '  <i class="fas fa-users"></i>';
+							break;
+						}
+						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`</p>`;
+						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
+							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+						}
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
+								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+							}
+						});
+						return nameDisplay;
+					}
+				}],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No actor found.",
+					"info"        : "Page _PAGE_ of _PAGES_",
+					"infoEmpty"   : "No actor available.",
+					"infoFiltered": "(filtered, _MAX_ Actor total)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},				
+			});				
+		},
+
+		setupPersonDatatable: function() {			
+			// console.log("TCL: setupDatatable");
+			// setup datatable
+			TIMAAT.ActorDatasets.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
+				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"order"         : [[ 0, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollY"       : "100%",
+				"scrollCollapse": true,
+				"scrollX"       : false,
+				"serverSide"    : true,
+				"ajax"          : {
+					"url"        : "api/actor/person/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+								start        : data.start,
+								length       : data.length,
+								// actorsubtype: 'person'
+						}
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+          	// console.log("TCL: data", data);
+						// console.log("TCL: TIMAAT.ActorDatasets.persons (last)", TIMAAT.ActorDatasets.persons);
+						// setup model
+						var acts = Array();
+						data.forEach(function(actor) { 
+							if ( actor.id > 0 ) {
+								actor.actorNames.forEach(function(name) {
+									if (name.isDisplayName) {
+										actor.displayName = name;
+										return; // only one displayName exists/needs to be found
+									}
+								})
+								acts.push(new TIMAAT.Actor(actor, 'person'));
+							}
+						});
+						TIMAAT.ActorDatasets.persons = acts;
+						TIMAAT.ActorDatasets.persons.model = data;
+						// console.log("TCL: TIMAAT.ActorDatasets.persons (current)", TIMAAT.ActorDatasets.persons);
+						return data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let actorElement = $(row);
+					let actor = data;
+					actor.ui = actorElement;
+					actorElement.data('actor', actor);
+
+					actorElement.on('click', '.title', function(event) {
+						event.stopPropagation();
+						// show tag editor - trigger popup
+						TIMAAT.UI.hidePopups();
+						TIMAAT.UI.showComponent('actors');
+						$('.form').hide();
+						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
+						$('.nav-tabs a[href="#personDatasheet"]').tab("show");
+						// $(this).addClass('.selectedEntry');
+						var id = actor.id;
+						var selectedActor;
+						var i = 0;
+						for (; i < TIMAAT.ActorDatasets.persons.length; i++) {
+							if (TIMAAT.ActorDatasets.persons[i].model.id == id) {
+								selectedActor = TIMAAT.ActorDatasets.persons[i];
+								break;
+							}
+						}
+						$('#timaat-actordatasets-actor-metadata-form').data('actor', selectedActor);
+						TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', selectedActor);
+					});
+				},
+				"columns": [{ 
+					data: 'id', className: 'title', render: function(data, type, actor, meta) {
+						// console.log("TCL: actor", actor);
+						let nameDisplay = `<p>` + actor.displayName.name +`</p>`;
+						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
+							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+						}
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
+								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+							}
+						});
+						return nameDisplay;
+					}
+				}],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No persons found.",
+					"info"        : "Page _PAGE_ of _PAGES_",
+					"infoEmpty"   : "No person available.",
+					"infoFiltered": "(filtered, _MAX_ person(s) total)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},				
+			});				
+		},
+
+		setupCollectiveDatatable: function() {			
+			// console.log("TCL: setupDatatable");
+			// setup datatable
+			TIMAAT.ActorDatasets.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
+				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"order"         : [[ 0, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollY"       : "100%",
+				"scrollCollapse": true,
+				"scrollX"       : false,
+				"serverSide"    : true,
+				"ajax"          : {
+					"url"        : "api/actor/collective/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+								start        : data.start,
+								length       : data.length,
+								// actorsubtype: 'collective'
+						}
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+          	// console.log("TCL: data", data);
+						// console.log("TCL: TIMAAT.ActorDatasets.collectives (last)", TIMAAT.ActorDatasets.collectives);
+						// setup model
+						var acts = Array();
+						data.forEach(function(actor) { 
+							if ( actor.id > 0 ) {
+								actor.actorNames.forEach(function(name) {
+									if (name.isDisplayName) {
+										actor.displayName = name;
+										return; // only one displayName exists/needs to be found
+									}
+								})
+								acts.push(new TIMAAT.Actor(actor, 'collective'));
+							}
+						});
+						TIMAAT.ActorDatasets.collectives = acts;
+						TIMAAT.ActorDatasets.collectives.model = data;
+						// console.log("TCL: TIMAAT.ActorDatasets.collectives (current)", TIMAAT.ActorDatasets.collectives);
+						return data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let actorElement = $(row);
+					let actor = data;
+					actor.ui = actorElement;
+					actorElement.data('actor', actor);
+
+					actorElement.on('click', '.title', function(event) {
+						event.stopPropagation();
+						// show tag editor - trigger popup
+						TIMAAT.UI.hidePopups();
+						TIMAAT.UI.showComponent('actors');
+						$('.form').hide();
+						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
+						$('.nav-tabs a[href="#collectiveDatasheet"]').tab("show");
+						// $(this).addClass('.selectedEntry');
+						var id = actor.id;
+						var selectedActor;
+						var i = 0;
+						for (; i < TIMAAT.ActorDatasets.collectives.length; i++) {
+							if (TIMAAT.ActorDatasets.collectives[i].model.id == id) {
+								selectedActor = TIMAAT.ActorDatasets.collectives[i];
+								break;
+							}
+						}
+						$('#timaat-actordatasets-actor-metadata-form').data('actor', selectedActor);
+						TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', selectedActor);
+					});
+				},
+				"columns": [{ 
+					data: 'id', className: 'title', render: function(data, type, actor, meta) {
+						// console.log("TCL: actor", actor);
+						let nameDisplay = `<p>` + actor.displayName.name +`</p>`;
+						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
+							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+						}
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
+								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+							}
+						});
+						return nameDisplay;
+					}
+				}],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No collective found.",
+					"info"        : "Page _PAGE_ of _PAGES_",
+					"infoEmpty"   : "No collective available.",
+					"infoFiltered": "(filtered, _MAX_ collective(s) total)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					}
+				}			
+			});				
+		},
+
+		refreshDatatable: async function(actorType) {
+			console.log("TCL: refreshDatatable - actorType: ", actorType);
+			// set ajax data source
+			switch(actorType) {
+				case 'actor':
+					if (TIMAAT.ActorDatasets.dataTableActor) {
+						// TIMAAT.ActorDatasets.dataTableActor.ajax.url('/TIMAAT/api/actor/list');
+						TIMAAT.ActorDatasets.dataTableActor.ajax.reload();
+					}
+				break;
+				case 'person':
+					if (TIMAAT.ActorDatasets.dataTablePerson) {
+						// TIMAAT.ActorDatasets.dataTablePerson.ajax.url('/TIMAAT/api/actor/'+actorType+'/list');
+						TIMAAT.ActorDatasets.dataTablePerson.ajax.reload();
+					}
+				break;
+				case 'collective':
+					if (TIMAAT.ActorDatasets.dataTableCollective) {
+						// TIMAAT.ActorDatasets.dataTableCollective.ajax.url('/TIMAAT/api/actor/'+actorType+'/list');
+						TIMAAT.ActorDatasets.dataTableCollective.ajax.reload();
+					}
+				break;
+			}			
 		},
 
 	}

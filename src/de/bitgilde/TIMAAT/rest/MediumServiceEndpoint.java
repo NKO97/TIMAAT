@@ -92,10 +92,8 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getMediaList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length
-			) {
+	public Response getMediaList(	@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length) {
 		System.out.println("MediumServiceEndpoint: getMediaList: FROM:"+start+" LENGTH:"+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
@@ -126,7 +124,7 @@ public class MediumServiceEndpoint{
 	public Response getMediaDatasetsTotal() {
 		System.out.println("MediumServiceEndpoint: getMediaDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
-																.createQuery("SELECT COUNT(m.id) FROM Medium m");
+																.createQuery("SELECT COUNT (m.id) FROM Medium m");
 		long count = (long)query.getSingleResult();														
 		// int total = ((Integer)TIMAATApp.emf.createEntityManager()
 		// 												 .createQuery("SELECT m.id, COUNT(m) FROM Medium m")

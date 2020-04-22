@@ -1712,13 +1712,24 @@
                         <div class="card-header">Actors
                           <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> -->
+                          </button> <!~~ TODO When re-added: open dialogue to ask which actor type to add, then open corresponding form ~~> --> 
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-actor-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-actor-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-actor-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card actors-cards persons-card">
@@ -1728,10 +1739,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-person-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-person-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-person-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-person-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card actors-cards collectives-card">
@@ -1741,10 +1763,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-collective-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-collective-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-collective-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-collective-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-collective-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                     </div>

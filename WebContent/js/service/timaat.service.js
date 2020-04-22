@@ -32,7 +32,7 @@
 			TIMAAT.Service.session = null;
 			location.reload(true);
 		},
-		
+
 		getAllCategorySets: function(callback) {
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);
@@ -51,7 +51,7 @@
 				console.log( "error", e );
 			});
 		},
-		
+
 		getUserName: function(id, callback) {
       // console.log("TCL: getUserName: function(id, callback)");
 			// console.log("TCL: id, callback", id, callback);
@@ -70,7 +70,7 @@
 				console.log( "error", e );
 			});
 		},
-		
+
 		getUserLog: function(id, limit, callback) {
     // console.log("TCL: getUserLog: function(id, limit, callback)");
     // console.log("TCL: id, limit, callback", id, limit, callback);
@@ -87,7 +87,8 @@
 			})
 			.fail(function(e) {
 				console.log( "error", e );
-			});		},
+			});		
+		},
 
 		listVideos(callback) {
       // console.log("TCL: listVideos -> listVideos(callback)");
@@ -108,7 +109,7 @@
 			});
 			
 		},
-		
+
 		getMediaCollections(callback) {
 			// console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
 			jQuery.ajax({
@@ -155,7 +156,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateMediacollection(collection) {
 			console.log("TCL: updatMediacollection -> collection", collection);
 			var col = {
@@ -184,7 +185,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		removeMediacollection(collection) {
 			console.log("TCL: removeMediacollection -> collection", collection);
 			var col = collection;
@@ -202,7 +203,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		addCollectionItem(collection, medium) {
 			console.log("TCL: addCollectionItem -> collection", collection);
 			console.log("TCL: addCollectionItem -> medium", medium);
@@ -221,7 +222,6 @@
 				console.log( e.responseText );
 			});
 		},
-
 
 		async removeCollectionItem(collection, medium) {
 			console.log("TCL: removeCollectionItem -> collection", collection);
@@ -348,7 +348,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
 			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
@@ -396,7 +396,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateAnnotation(annotation) {
 			console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
@@ -435,7 +435,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		createSegment(name, startTime, endTime, list, callback) {
 			console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);
 			var model = { 	
@@ -464,7 +464,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateSegment(segment) {
       console.log("TCL: updateSegment -> segment", segment);
 			jQuery.ajax({
@@ -484,7 +484,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		removeSegment(segment) {
 			console.log("TCL: removeSegment -> segment", segment);
 			jQuery.ajax({
@@ -608,7 +608,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		addMediumTag(medium, tagname, callback) {
 			console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
@@ -628,7 +628,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		removeMediumTag(medium, tagname, callback) {
 			console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
@@ -646,12 +646,12 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateCategorySets(categoryname) {
 			console.log("TCL: updateCategorySets -> categoryname", categoryname);
 			// TODO implement for updating unassigned categories
 		},
-			
+
 		createCategorySet(name, callback) {
 			console.log("TCL: createCategorySet -> createCategorySet(name, callback)");
 			console.log("TCL:   -> createCategorySet -> name", name);
@@ -679,7 +679,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateCategorySet(categoryset) {
 			console.log("TCL: updateCategorySet -> categoryset", categoryset);
 			var set = {
@@ -743,9 +743,7 @@
 				console.log( e.responseText );
 			});
 		},	
-		
-		
-		
+
 	}
-	
+
 }, window));
