@@ -2237,7 +2237,8 @@
 			$('.actors-cards').hide();
 			$('.actors-card').show();
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
-			TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorList);
+			// TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorList);
+			TIMAAT.ActorDatasets.setActorList();
 		},
 
 		loadActorDatatables: async function() {
@@ -2254,17 +2255,21 @@
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', actorSubtype);
 			switch (actorSubtype) {
 				case 'person':
-					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setPersonList);
+					// TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setPersonList);
+					TIMAAT.ActorDatasets.setPersonList();
 					break;
 				case 'collective':
-					TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setCollectiveList);
+					// TIMAAT.ActorService.listActorSubtype(actorSubtype, TIMAAT.ActorDatasets.setCollectiveList);
+					TIMAAT.ActorDatasets.setCollectiveList();
 					break;
 			}
 		},
 
 		loadAllActorSubtypes: function() {
-			TIMAAT.ActorService.listActorSubtype('person', TIMAAT.ActorDatasets.setPersonList);
-			TIMAAT.ActorService.listActorSubtype('collective', TIMAAT.ActorDatasets.setCollectiveList);
+			// TIMAAT.ActorService.listActorSubtype('person', TIMAAT.ActorDatasets.setPersonList);
+			// TIMAAT.ActorService.listActorSubtype('collective', TIMAAT.ActorDatasets.setCollectiveList);
+			TIMAAT.ActorDatasets.setPersonList();
+			TIMAAT.ActorDatasets.setCollectiveList();
 		},
 
 		loadAddressTypes: function() {
@@ -2299,11 +2304,11 @@
 			TIMAAT.ActorDatasets.actorTypes.model = actorTypes;
 		},
 		
-		setActorList: function(actors) {
-			console.log("TCL: setActorList -> actors", actors);
+		setActorList: function() {
+			console.log("TCL: setActorList");
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
-			if ( !actors ) return;
+			if ( TIMAAT.ActorDatasets.actors == null ) return;
 
 			$('#timaat-actordatasets-actor-list-loader').remove();
 			// clear old UI list
@@ -2335,11 +2340,11 @@
 			// TIMAAT.VideoChooser.setActors(TIMAAT.ActorDatasets.actors.model);
 		},
 
-		setPersonList: function(persons) {
-			console.log("TCL: setPersonList -> persons", persons);
+		setPersonList: function() {
+			console.log("TCL: setPersonList");
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
-			if ( !persons ) return;
+			if ( TIMAAT.ActorDatasets.persons == null) return;
 			
 			$('#timaat-actordatasets-person-list-loader').remove();
 			// clear old UI list
@@ -2371,11 +2376,11 @@
       // console.log("TCL: TIMAAT.ActorDatasets.persons", TIMAAT.ActorDatasets.persons);
 		},
 
-		setCollectiveList: function(collectives) {
-			console.log("TCL: setCollectiveList -> collectives", collectives);
+		setCollectiveList: function() {
+			console.log("TCL: setCollectiveList");
 			$('.form').hide();
 			$('.actors-data-tabs').hide();
-			if ( !collectives ) return;
+			if ( TIMAAT.ActorDatasets.collectives == null ) return;
 			
 			$('#timaat-actordatasets-collective-list-loader').remove();
 			// clear old UI list

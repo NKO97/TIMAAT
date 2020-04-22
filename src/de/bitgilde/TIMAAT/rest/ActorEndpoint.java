@@ -80,7 +80,7 @@ public class ActorEndpoint {
 	@Path("list")
 	public Response getActorList( @QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) {
-		System.out.println("ActorServiceEndpoint: getActorList: FROM:"+start+" LENGTH:"+length);
+		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Actor.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -117,7 +117,7 @@ public class ActorEndpoint {
 	@Path("person/list")
 	public Response getPersonList(@QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) {
-		System.out.println("ActorServiceEndpoint: getPersonList: FROM:"+start+" LENGTH:"+length);
+		System.out.println("ActorServiceEndpoint: getPersonList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("ActorPerson.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -147,7 +147,7 @@ public class ActorEndpoint {
 	@Path("collective/list")
 	public Response getCollectiveList(@QueryParam("start") Integer start,
 																		@QueryParam("length") Integer length) {
-		System.out.println("ActorServiceEndpoint: getCollectiveList: FROM:"+start+" LENGTH:"+length);
+		System.out.println("ActorServiceEndpoint: getCollectiveList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -195,7 +195,7 @@ public class ActorEndpoint {
 				}
 			}
 			collectiveSelectList.add(new SelectElement(actorCollective.getActorId(), name));
-			System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ actorCollective.getActorId() + " " + name);
+			// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ actorCollective.getActorId() + " " + name);
 		}
 		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ collectiveSelectList.id + " " + collectiveSelectList.name);
 		return Response.ok().entity(collectiveSelectList).build();

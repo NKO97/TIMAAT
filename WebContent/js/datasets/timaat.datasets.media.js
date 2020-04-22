@@ -1340,7 +1340,8 @@
 			$('.media-cards').hide();
 			$('.media-card').show();
 			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
-			TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
+			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
+			TIMAAT.MediaDatasets.setMediumList();
 		},
 
 		loadMediaDatatables: async function() {
@@ -1363,38 +1364,52 @@
 			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', mediumSubtype);
 			switch (mediumSubtype) {
 				case 'audio':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioList);
+					TIMAAT.MediaDatasets.setAudioList();
+				break;
 				case 'document':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentList);
+					TIMAAT.MediaDatasets.setDocumentList();
+				break;
 				case 'image':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageList);
+					TIMAAT.MediaDatasets.setImageList();
+				break;
 				case 'software':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareList);
+					TIMAAT.MediaDatasets.setSoftwareList();
+				break;
 				case 'text':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextList);
+					TIMAAT.MediaDatasets.setTextList();
+				break;
 				case 'video':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoList);
+					TIMAAT.MediaDatasets.setVideoList();
+				break;
 				case 'videogame':
-					TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameList);
-					break;
+					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameList);
+					TIMAAT.MediaDatasets.setVideogameList();
+				break;
 			};
 		},
 
 		loadAllMediumSubtypes: function() {
     	console.log("TCL: loadAllMediumSubtypes()");
-			TIMAAT.MediaService.listMediumSubtype('audio', TIMAAT.MediaDatasets.setAudioList);
-			TIMAAT.MediaService.listMediumSubtype('document', TIMAAT.MediaDatasets.setDocumentList);
-			TIMAAT.MediaService.listMediumSubtype('image', TIMAAT.MediaDatasets.setImageList);
-			TIMAAT.MediaService.listMediumSubtype('software', TIMAAT.MediaDatasets.setSoftwareList);
-			TIMAAT.MediaService.listMediumSubtype('text', TIMAAT.MediaDatasets.setTextList);
-			TIMAAT.MediaService.listMediumSubtype('video', TIMAAT.MediaDatasets.setVideoList);
-			TIMAAT.MediaService.listMediumSubtype('videogame', TIMAAT.MediaDatasets.setVideogameList);
+			// TIMAAT.MediaService.listMediumSubtype('audio', TIMAAT.MediaDatasets.setAudioList);
+			// TIMAAT.MediaService.listMediumSubtype('document', TIMAAT.MediaDatasets.setDocumentList);
+			// TIMAAT.MediaService.listMediumSubtype('image', TIMAAT.MediaDatasets.setImageList);
+			// TIMAAT.MediaService.listMediumSubtype('software', TIMAAT.MediaDatasets.setSoftwareList);
+			// TIMAAT.MediaService.listMediumSubtype('text', TIMAAT.MediaDatasets.setTextList);
+			// TIMAAT.MediaService.listMediumSubtype('video', TIMAAT.MediaDatasets.setVideoList);
+			// TIMAAT.MediaService.listMediumSubtype('videogame', TIMAAT.MediaDatasets.setVideogameList);
+			TIMAAT.MediaDatasets.setAudioList();
+			TIMAAT.MediaDatasets.setDocumentList();
+			TIMAAT.MediaDatasets.setImageList();
+			TIMAAT.MediaDatasets.setSoftwareList();
+			TIMAAT.MediaDatasets.setTextList();
+			TIMAAT.MediaDatasets.setVideoList();
+			TIMAAT.MediaDatasets.setVideogameList();
 		},
 
 		setMediaTypeList: function(mediaTypes) {
@@ -1410,11 +1425,11 @@
 			TIMAAT.MediaDatasets.mediaTypes.model = mediaTypes;
 		},
 
-		setMediumList: function(media) {
-    	console.log("TCL: setMediumList - media", media);
+		setMediumList: function() {
+    	console.log("TCL: setMediumList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !media ) return;
+			if ( TIMAAT.MediaDatasets.media == null ) return;
 			
 			$('#timaat-mediadatasets-medium-list-loader').remove();
 			// clear old UI list
@@ -1427,11 +1442,11 @@
 			}
 		},
 
-		setAudioList: function(audios) {
-			// console.log("TCL: setAudioList -> audios", audios);
+		setAudioList: function() {
+			// console.log("TCL: setAudioList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !audios ) return;
+			if ( TIMAAT.MediaDatasets.audios == null ) return;
 			
 			$('#timaat-mediadatasets-audio-list-loader').remove();
 			// clear old UI list
@@ -1444,11 +1459,11 @@
 			}
 		},
 
-		setDocumentList: function(documents) {
-			// console.log("TCL: setDocumentList -> documents", documents);
+		setDocumentList: function() {
+			// console.log("TCL: setDocumentList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !documents ) return;
+			if ( TIMAAT.MediaDatasets.documents == null ) return;
 
 			$('#timaat-mediadatasets-document-list-loader').remove();
 			// clear old UI list
@@ -1461,11 +1476,11 @@
 			}
 		},
 
-		setImageList: function(images) {
-			// console.log("TCL: setImageList -> images", images);
+		setImageList: function() {
+			// console.log("TCL: setImageList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !images ) return;
+			if ( TIMAAT.MediaDatasets.images == null ) return;
 
 			$('#timaat-mediadatasets-image-list-loader').remove();
 			// clear old UI list
@@ -1478,11 +1493,11 @@
 			$('#timaat-mediadatasets-image-list').empty();
 		},
 
-		setSoftwareList: function(softwares) {
-			// console.log("TCL: setSoftwareList -> softwares", softwares);
+		setSoftwareList: function() {
+			// console.log("TCL: setSoftwareList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !softwares ) return;
+			if ( TIMAAT.MediaDatasets.softwares == null ) return;
 
 			$('#timaat-mediadatasets-software-list-loader').remove();
 			// clear old UI list
@@ -1495,11 +1510,11 @@
 			}
 		},
 
-		setTextList: function(texts) {
-			// console.log("TCL: setTextList -> texts", texts);
+		setTextList: function() {
+			// console.log("TCL: setTextList");
 			$('.form');
 			$('.media-data-tabs').hide();
-			if ( !texts ) return;
+			if ( TIMAAT.MediaDatasets.texts == null ) return;
 			$('#timaat-mediadatasets-text-list-loader').remove();
 			// clear old UI list
 
@@ -1511,11 +1526,11 @@
 			$('#timaat-mediadatasets-text-list').empty();
 		},
 		
-		setVideoList: function(videos) {
-			console.log("TCL: setVideoList -> videos", videos);
+		setVideoList: function() {
+			console.log("TCL: setVideoList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !videos ) return;
+			if ( TIMAAT.MediaDatasets.videos == null ) return;
 
 			$('#timaat-mediadatasets-video-list-loader').remove();
 			// clear old UI list
@@ -1535,11 +1550,11 @@
 */
 		},
 
-		setVideogameList: function(videogames) {
-			// console.log("TCL: setVideogameList -> videogames", videogames);
+		setVideogameList: function() {
+			// console.log("TCL: setVideogameList");
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			if ( !videogames ) return;
+			if ( TIMAAT.MediaDatasets.videogames == null ) return;
 			$('#timaat-mediadatasets-videogame-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-videogame-list').empty();

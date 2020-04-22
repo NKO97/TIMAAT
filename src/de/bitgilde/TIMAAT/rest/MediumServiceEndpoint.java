@@ -94,7 +94,7 @@ public class MediumServiceEndpoint{
 	@Path("list")
 	public Response getMediaList(	@QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) {
-		System.out.println("MediumServiceEndpoint: getMediaList: FROM:"+start+" LENGTH:"+length);
+		System.out.println("MediumServiceEndpoint: getMediaList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -108,7 +108,7 @@ public class MediumServiceEndpoint{
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-				System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
+				// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
@@ -150,7 +150,7 @@ public class MediumServiceEndpoint{
 	public Response getAudioList(	@QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getAudioList: FROM:"+start+" LENGTH:"+length);
+		System.out.println("MediumServiceEndpoint: getAudioList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -170,7 +170,7 @@ public class MediumServiceEndpoint{
 	public Response getDocumentList(@QueryParam("start") Integer start,
 																	@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getDocumentList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getDocumentList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -190,7 +190,7 @@ public class MediumServiceEndpoint{
 	public Response getImageList(	@QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getImageList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getImageList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -210,7 +210,7 @@ public class MediumServiceEndpoint{
 	public Response getSoftwareList(@QueryParam("start") Integer start,
 																	@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getSoftwareList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getSoftwareList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -230,7 +230,7 @@ public class MediumServiceEndpoint{
 	public Response getTextList(@QueryParam("start") Integer start,
 															@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getTextList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getTextList: start: "+start+" length: "+length);
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -250,7 +250,7 @@ public class MediumServiceEndpoint{
 	public Response getVideoList( @QueryParam("start") Integer start,
 																@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getVideoList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length);
 		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
@@ -267,7 +267,7 @@ public class MediumServiceEndpoint{
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumVideo video : mediumVideoList ) {
 			mediumList.add(video.getMedium());
-			System.out.println("add medium of video: "+ video.getMediumId());
+			// System.out.println("add medium of video: "+ video.getMediumId());
 		}
 
 		return Response.ok().entity(mediumList).build();
@@ -280,7 +280,7 @@ public class MediumServiceEndpoint{
 	public Response getVideogameList(	@QueryParam("start") Integer start,
 																		@QueryParam("length") Integer length) 
 	{
-		System.out.println("MediumServiceEndpoint: getVideogameList: start:"+start+" length:"+length);
+		System.out.println("MediumServiceEndpoint: getVideogameList: start: "+start+" length: "+length);
 		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
 		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
