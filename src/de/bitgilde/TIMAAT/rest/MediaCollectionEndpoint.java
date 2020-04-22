@@ -2,10 +2,12 @@ package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -120,22 +122,51 @@ public class MediaCollectionEndpoint {
 			@PathParam("id") int id,
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
-			@QueryParam("mediumsubtype") String mediumSubType
+			@QueryParam("mediumsubtype") String mediumSubType,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search
 			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		// TODO REFACTOR as query
 		
-		MediaCollection col = em.find(MediaCollection.class, id);		
+		MediaCollection col = em.find(MediaCollection.class, id);
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		List<Medium> media = new ArrayList<Medium>();
-		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) {
-			// strip non-video mediums
-			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
-				if ( m.getMedium().getMediumVideo() != null ) media.add(m.getMedium());
-			}
-		} else for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) media.add(m.getMedium());
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc" ) ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mchm.medium.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.title1.name";
+			if (orderby.equalsIgnoreCase("duration")) column = "mchm.medium.mediumVideo.length";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
+			// TODO producer, seems way to complex to put in DB query
+			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
+			// + --> role == 112 --> producer 
+		}
+
+		String subType = "";
+		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+//			query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
+		}
+		query.setParameter("id", id);
+
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> media = castList(Medium.class, query.getResultList());
 
 		// strip analysislists
 		for ( Medium m : media ) {
@@ -144,18 +175,6 @@ public class MediaCollectionEndpoint {
 				m.getMediumVideo().getStatus();
 				m.getMediumVideo().getViewToken();
 			}
-		}
-		if ( start == null ) start = 0;
-		if ( length == null ) length = media.size();
-		if ( length < 1 ) length = 1;
-		
-		if ( media.size() > 0 ) {
-			if ( start > media.size() ) start = media.size();
-			int to = start+length;
-			if ( to > media.size() ) to = media.size();
-			List<Medium> filteredMedia = new ArrayList<Medium>();
-			for ( int i=0; i < to; i++ ) filteredMedia.add(media.get(i));
-			media = filteredMedia;
 		}
 	
 		return Response.ok().entity(media).build();
@@ -357,5 +376,11 @@ public class MediaCollectionEndpoint {
 
 
 
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
+    }
 	
 }

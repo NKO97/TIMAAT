@@ -327,8 +327,8 @@
 		setupDatatable: function() {
 			// setup datatable
 			TIMAAT.VideoChooser.dt = $('#timaat-videochooser-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
-				"order"         : [[ 4, 'desc' ]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"order"         : [[ 2, 'asc' ]],
 				"pagingType"    : "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
@@ -344,8 +344,13 @@
 						let serverData = {
 								start: data.start,
 								length: data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								mediumsubtype: 'video'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -460,7 +465,7 @@
 						return ui;
 						}
 					},
-					{ data: 'id', className: 'title', render: function(data, type, video, meta) {
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, video, meta) {
 						// console.log("TCL: video", video);
 						let titleDisplay = `<p>`+video.displayTitle.name+`</p>`;
 							if (video.originalTitle != null && video.displayTitle.id != video.originalTitle.id) {
@@ -474,15 +479,15 @@
 							return titleDisplay;
 						}
 					},
-					{ data: 'mediumVideo.length', className: 'duration' , render: function(data, type, row, meta) {
+					{ data: 'mediumVideo.length', name: 'duration', className: 'duration' , render: function(data, type, row, meta) {
 							return TIMAAT.Util.formatTime(data);
 						}
 					},
-					{ data: 'mediumHasActorWithRoles', className: 'producer', render: function(data, type, video, meta) {
+					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, video, meta) {
 							return TIMAAT.VideoChooser._getProducer(video);
 						}
 					},
-					{ data: 'releaseDate', className: 'date', render: function(data, type, video, meta) {
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', render: function(data, type, video, meta) {
 							return moment(data).format('YYYY-MM-DD');
 						}
 					},

@@ -79,7 +79,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 @Path("/medium")
-public class MediumServiceEndpoint{
+public class MediumServiceEndpoint {
 
 	@Context
 	private UriInfo uriInfo;
@@ -92,10 +92,13 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getMediaList(	@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length) {
+	public Response getMediaList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length
+			) {
+		
 		System.out.println("MediumServiceEndpoint: getMediaList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("Medium.findAll");
+		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT m FROM Medium m");
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 		List<Medium> mlist = castList(Medium.class, query.getResultList());
@@ -247,29 +250,63 @@ public class MediumServiceEndpoint{
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
-	public Response getVideoList( @QueryParam("start") Integer start,
-																@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length);
-		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll");
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumVideo> mediumVideoList = castList(MediumVideo.class, query.getResultList());
+	public Response getVideoList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search
+			) {
+		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc" ) ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mv.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
+			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
+			// TODO producer, seems way to complex to put in DB query
+			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
+			// + --> role == 112 --> producer 
+			
+		}
 		
-		for (MediumVideo video : mediumVideoList ) {
-			video.setStatus(videoStatus(video.getMediumId()));
-			video.setViewToken(issueFileToken(video.getMediumId()));
-			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
-			video.getMedium().getMediumAnalysisLists().clear();
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mv.medium FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+//			query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction);
 		}
 
+
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		
+		for (Medium m : mediumList ) {
+			if ( m.getMediumVideo() != null ) {
+				m.getMediumVideo().setStatus(videoStatus(m.getMediumVideo().getMediumId()));
+				m.getMediumVideo().setViewToken(issueFileToken(m.getMediumVideo().getMediumId()));
+				// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
+				m.getMediumVideo().getMedium().getMediumAnalysisLists().clear();
+			}
+		}
+		
+/*
 		List<Medium> mediumList = new ArrayList<Medium>();
 		for ( MediumVideo video : mediumVideoList ) {
 			mediumList.add(video.getMedium());
 			// System.out.println("add medium of video: "+ video.getMediumId());
 		}
-
+*/
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -2447,10 +2484,10 @@ public class MediumServiceEndpoint{
 	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
-    List<T> r = new ArrayList<T>(c.size());
-    for(Object o: c)
-      r.add(clazz.cast(o));
-    return r;
-}
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
+    }
 	
 }
