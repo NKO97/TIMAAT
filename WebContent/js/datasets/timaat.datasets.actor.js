@@ -34,6 +34,7 @@
 		personIsMemberOfCollectives: null,
 		collectiveSelectObjects: null,
 		collectiveSelectObjectsSorted: '',
+		actorsLoaded: false,
 
 		init: function() {   
 			TIMAAT.ActorDatasets.initActors();
@@ -48,6 +49,15 @@
 			$('.actors-cards').hide();
 			$('.actors-card').show();
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
+		},
+
+		initActorComponent: function() {
+    console.log("TCL: initActorComponent");
+			if (!TIMAAT.ActorDatasets.actorsLoaded) {
+				TIMAAT.ActorDatasets.setActorList();
+				TIMAAT.ActorDatasets.actorsLoaded = true;
+			}
+			TIMAAT.UI.showComponent('actors');
 		},
 
 		initActorTypes: function() {
@@ -2238,7 +2248,7 @@
 			$('.actors-card').show();
 			$('#timaat-actordatasets-actor-metadata-form').data('actorType', 'actor');
 			// TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorList);
-			TIMAAT.ActorDatasets.setActorList();
+			// TIMAAT.ActorDatasets.setActorList();
 		},
 
 		loadActorDatatables: async function() {

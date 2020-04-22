@@ -30,6 +30,7 @@
 		videos: null,
 		videogames: null,	
 		titles: null,
+		mediaLoaded: false,
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
@@ -47,6 +48,15 @@
 			$('.media-cards').hide();
 			$('.media-card').show();
 			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
+		},
+
+		initMediaComponent: function() {
+			console.log("TCL: initMediaComponent");
+			if (!TIMAAT.MediaDatasets.mediaLoaded) {
+				TIMAAT.MediaDatasets.setMediumList();
+				TIMAAT.MediaDatasets.mediaLoaded = true;
+			}
+			TIMAAT.UI.showComponent('media');
 		},
 
 		initMediaTypes: function() {
@@ -1341,7 +1351,7 @@
 			$('.media-card').show();
 			$('#timaat-mediadatasets-media-metadata-form').data('mediumType', 'medium');
 			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
-			TIMAAT.MediaDatasets.setMediumList();
+			// TIMAAT.MediaDatasets.setMediumList();
 		},
 
 		loadMediaDatatables: async function() {
@@ -2550,7 +2560,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -2614,44 +2624,44 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let displayMediumTypeIcon = '';
-					switch (medium.mediaType.mediaTypeTranslations[0].type) {
-						case 'audio':
-							displayMediumTypeIcon = '  <i class="far fa-file-audio"></i>';
-						break;
-						case 'document':
-							displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i>';
-						break;
-						case 'image':
-							displayMediumTypeIcon = '  <i class="far fa-file-image"></i>';
-						break;
-						case 'software':
-							displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i>';
-						break;
-						case 'text':
-							displayMediumTypeIcon = '  <i class="far fa-file-alt"></i>';
-						break;
-						case 'video':
-							displayMediumTypeIcon = '  <i class="far fa-file-video"></i>';
-						break;
-						case 'videogame':
-							displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i>';
-						break;
-					}
-					let titleDisplay = `<p>` + displayMediumTypeIcon + `  ` + medium.displayTitle.name +`</p>`;
-						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
-							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
+					{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+						// console.log("TCL: medium", medium);
+						let displayMediumTypeIcon = '';
+						switch (medium.mediaType.mediaTypeTranslations[0].type) {
+							case 'audio':
+								displayMediumTypeIcon = '  <i class="far fa-file-audio"></i>';
+							break;
+							case 'document':
+								displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i>';
+							break;
+							case 'image':
+								displayMediumTypeIcon = '  <i class="far fa-file-image"></i>';
+							break;
+							case 'software':
+								displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i>';
+							break;
+							case 'text':
+								displayMediumTypeIcon = '  <i class="far fa-file-alt"></i>';
+							break;
+							case 'video':
+								displayMediumTypeIcon = '  <i class="far fa-file-video"></i>';
+							break;
+							case 'videogame':
+								displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i>';
+							break;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
-							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+						let titleDisplay = `<p>` + displayMediumTypeIcon + `  ` + medium.displayTitle.name +`</p>`;
+							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
-						});
-						return titleDisplay;
-					}
-				},			
+							medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+								if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},			
 				],
 				"language": {
 					"decimal"     : ",",
@@ -2681,7 +2691,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -2790,7 +2800,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -2899,7 +2909,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -3008,7 +3018,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -3117,7 +3127,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -3226,7 +3236,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,
@@ -3335,7 +3345,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollY"       : "100%",
+				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
 				"serverSide"    : true,

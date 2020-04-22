@@ -209,7 +209,7 @@
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-media">
                 <a href="#mediadatasets"
-                  onclick="TIMAAT.UI.showComponent('media')"
+                  onclick="TIMAAT.MediaDatasets.initMediaComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -224,8 +224,8 @@
                 </a>
               </li> 
               <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
-                <a href="#actors"
-                  onclick="TIMAAT.UI.showComponent('actors')"
+                <a href="#actordatasets"
+                  onclick="TIMAAT.ActorDatasets.initActorComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -372,21 +372,21 @@
                     </div>
                   </div>
                 </div>
-                <div class="timaat-datasets-list-wrapper">
-                  <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
+                <div class="timaat-library-list-wrapper">
+                  <!-- <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
                     <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
-                  </div>
-                  <div class="card-body" style="padding-left:0; padding-right:0;">
+                  </div> -->
+                  <div class="card-body">
                     <table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
                       <thead class="thead-dark">
                         <tr>
                           <th id="timaat-videochooser-list-selectall"><input type="checkbox" aria-label="Auswahl"></th>
                           <th>Vorschau</th>
                           <th>Titel</th>
-                          <th>L&auml;nge</th>
-                          <th>Produzent&nbsp;</th>
+                          <th>Länge</th>
+                          <th>Produzent</th>
                           <th>VÖ-Datum</th>
-                          <th style="width:100px">Aktionen</th>
+                          <th>Aktionen</th>
                         </tr>
                       </thead>
                       <tbody id="timaat-videochooser-list">
@@ -776,44 +776,43 @@
                     <div class="col-lg-4">
                       <div class="card">
                         <div class="card-header">Kategoriesets
-                          <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
+                          <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <ul class="list-group list-group-flush">
-                                    <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-										<i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
-									</li>
+                            <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                            </li>
                           </ul>
                           <ul id="timaat-categoryset-list" class="list-group list-group-flush">
                           </ul>
-                          <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
                         </div>
                       </div>
-                    </div>		
-
+                    </div>
                     <div class="col-lg-6">
                       <div class="card">
                         <div class="card-header">Kategorien
                           <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
-						<table id="timaat-category-table" class="table table-striped table-bordered table-hover">
-				  			<thead class="thead-dark">
-				    			<tr>
-								    <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
-				      				<th>Name</th>
-				      				<th style="max-width:150px;width:150px">Aktion</th>
-				    			</tr>
-				  			</thead>
-				  			<tbody id="timaat-category-list">
-							</tbody>
-						</table>
+                          <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                    <th>Name</th>
+                                    <th style="max-width:150px;width:150px">Aktion</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-category-list">
+                            </tbody>
+                          </table>
                         </div>
                       </div>
-                    </div>		
-
-
+                    </div>
                   </div> <!-- row -->	
                 </div>
                 <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">
@@ -1014,7 +1013,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
+                  <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="audios-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
@@ -1694,7 +1693,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="actors-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true"><i class="fas fa-id-badge"></i> Actors</a>
+                  <a class="nav-link active" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true"><i class="fas fa-id-badge"></i> Actors</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false"><i class="fas fa-address-card"></i> Persons</a>
