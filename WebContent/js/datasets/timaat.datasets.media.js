@@ -3246,6 +3246,7 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
+								draw        : data.draw,
 								start        : data.start,
 								length       : data.length,
 								// mediumsubtype: 'video'
@@ -3260,13 +3261,13 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.videos (last)", TIMAAT.MediaDatasets.videos);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'video'));
 							}
 						});
 						TIMAAT.MediaDatasets.videos = meds;
-						TIMAAT.MediaDatasets.videos.model = data;
+						TIMAAT.MediaDatasets.videos.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.videos (current)", TIMAAT.MediaDatasets.videos);
 						return data;
 					}

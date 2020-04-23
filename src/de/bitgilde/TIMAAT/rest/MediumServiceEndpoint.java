@@ -48,6 +48,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.VideoInformation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -251,13 +252,15 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("video/list")
 	public Response getVideoList(
+			@QueryParam("draw") Integer draw,
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
 			@QueryParam("search") String search
 			) {
-		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc" ) ) direction = "DESC"; else direction = "ASC";
@@ -273,9 +276,20 @@ public class MediumServiceEndpoint {
 			
 		}
 		
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+		
 		// search
 		Query query;
 		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT COUNT(mv.medium) FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 					"SELECT mv.medium FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
 			query.setParameter("title1", search);
@@ -285,12 +299,11 @@ public class MediumServiceEndpoint {
 					"SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction);
 		}
 
-
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 		
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-		
+				
 		for (Medium m : mediumList ) {
 			if ( m.getMediumVideo() != null ) {
 				m.getMediumVideo().setStatus(videoStatus(m.getMediumVideo().getMediumId()));
@@ -299,15 +312,7 @@ public class MediumServiceEndpoint {
 				m.getMediumVideo().getMedium().getMediumAnalysisLists().clear();
 			}
 		}
-		
-/*
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumVideo video : mediumVideoList ) {
-			mediumList.add(video.getMedium());
-			// System.out.println("add medium of video: "+ video.getMediumId());
-		}
-*/
-		return Response.ok().entity(mediumList).build();
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET

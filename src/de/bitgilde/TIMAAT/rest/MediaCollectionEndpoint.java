@@ -30,6 +30,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
@@ -120,6 +121,7 @@ public class MediaCollectionEndpoint {
 	@Secured
 	public Response getCollectionMedia(
 			@PathParam("id") int id,
+			@QueryParam("draw") Integer draw,
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
 			@QueryParam("mediumsubtype") String mediumSubType,
@@ -129,7 +131,7 @@ public class MediaCollectionEndpoint {
 			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
-		// TODO REFACTOR as query
+		if ( draw == null ) draw = 0;
 		
 		MediaCollection col = em.find(MediaCollection.class, id);
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
@@ -150,9 +152,21 @@ public class MediaCollectionEndpoint {
 		String subType = "";
 		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
 
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
 		// search
 		Query query;
 		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType);
+			countQuery.setParameter("id", id);
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
 			query.setParameter("title1", search);
@@ -177,7 +191,7 @@ public class MediaCollectionEndpoint {
 			}
 		}
 	
-		return Response.ok().entity(media).build();
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
 	}
 	
 	
