@@ -2555,7 +2555,7 @@
 			console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -2572,8 +2572,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: ''
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -2624,7 +2628,7 @@
 					});
 				},
 				"columns": [
-					{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 						// console.log("TCL: medium", medium);
 						let displayMediumTypeIcon = '';
 						switch (medium.mediaType.mediaTypeTranslations[0].type) {
@@ -2686,7 +2690,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableAudio = $('#timaat-mediadatasets-audio-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -2703,8 +2707,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'audio'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -2757,7 +2765,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -2795,7 +2803,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableDocument = $('#timaat-mediadatasets-document-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -2812,8 +2820,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'document'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -2866,7 +2878,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -2904,7 +2916,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableImage = $('#timaat-mediadatasets-image-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -2921,8 +2933,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'image'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -2975,7 +2991,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -3013,7 +3029,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableSoftware = $('#timaat-mediadatasets-software-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -3030,8 +3046,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'software'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -3084,7 +3104,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -3122,7 +3142,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableText = $('#timaat-mediadatasets-text-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -3139,8 +3159,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'text'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -3193,7 +3217,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -3231,7 +3255,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableVideo = $('#timaat-mediadatasets-video-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -3248,6 +3272,8 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								// mediumsubtype: 'video'
 						}
 						return serverData;
@@ -3302,7 +3328,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -3340,7 +3366,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableVideogame = $('#timaat-mediadatasets-videogame-table').DataTable({
-				"lengthMenu"    : [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
@@ -3357,8 +3383,12 @@
 						let serverData = {
 								start        : data.start,
 								length       : data.length,
+								orderby: data.columns[data.order[0].column].name,
+								dir: data.order[0].dir,
 								mediumsubtype: 'videogame'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -3411,7 +3441,7 @@
 					});
 				},
 				"columns": [
-				{ data: 'id', className: 'title', render: function(data, type, medium, meta) {
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {

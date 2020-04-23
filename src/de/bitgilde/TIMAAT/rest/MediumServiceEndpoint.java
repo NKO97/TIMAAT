@@ -92,15 +92,35 @@ public class MediumServiceEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getMediaList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length
-			) {
+	public Response getMediaList(	@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search ) {
+		System.out.println("MediumServiceEndpoint: getMediaList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		
-		System.out.println("MediumServiceEndpoint: getMediaList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT m FROM Medium m");
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "m.id";
+		if ( orderby != null) {
+			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
+		}
+
+		// search
+		Query query;
+		if (search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+		//			query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT m FROM Medium m ORDER BY "+column+" "+direction);
+		}
+
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
+
 		List<Medium> mlist = castList(Medium.class, query.getResultList());
 
 		for (Medium m : mlist) {
@@ -151,18 +171,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("audio/list")
 	public Response getAudioList(	@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getAudioList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll");
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search) {
+		System.out.println("MediumServiceEndpoint: getAudioList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "ma.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "ma.medium.title1.name";
+		}
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ma.medium FROM MediumAudio ma WHERE lower(ma.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction);
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumAudio> mediumAudioList = castList(MediumAudio.class, query.getResultList());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
-		// @SuppressWarnings("unchecked")
-		// List<MediumAudio> mediumAudioList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumAudio.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumAudio m : mediumAudioList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -171,18 +208,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("document/list")
 	public Response getDocumentList(@QueryParam("start") Integer start,
-																	@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getDocumentList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll");
+																	@QueryParam("length") Integer length,
+																	@QueryParam("orderby") String orderby,
+																	@QueryParam("dir") String direction,
+																	@QueryParam("search") String search ) {
+		System.out.println("MediumServiceEndpoint: getDocumentList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "md.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "md.medium.title1.name";
+		}
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT md.medium FROM MediumDocument md WHERE lower(md.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction);
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumDocument> mediumDocumentList = castList(MediumDocument.class, query.getResultList());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
-		// @SuppressWarnings("unchecked")
-		// List<MediumDocument> mediumDocumentList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumDocument.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumDocument m : mediumDocumentList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -191,18 +245,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("image/list")
 	public Response getImageList(	@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getImageList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll");
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search) {
+		System.out.println("MediumServiceEndpoint: getImageList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mi.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mi.medium.title1.name";
+		}
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mi.medium FROM MediumImage mi WHERE lower(mi.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction);
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumImage> mediumImageList = castList(MediumImage.class, query.getResultList());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
-		// @SuppressWarnings("unchecked")
-		// List<MediumImage> mediumImageList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumImage.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumImage m : mediumImageList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -211,18 +282,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("software/list")
 	public Response getSoftwareList(@QueryParam("start") Integer start,
-																	@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getSoftwareList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll");
+																	@QueryParam("length") Integer length,
+																	@QueryParam("orderby") String orderby,
+																	@QueryParam("dir") String direction,
+																	@QueryParam("search") String search) {
+		System.out.println("MediumServiceEndpoint: getSoftwareList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "ms.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "ms.medium.title1.name";
+		}
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ms.medium FROM MediumSoftware ms WHERE lower(ms.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction);
+		}	
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumSoftware> mediumSoftwareList = castList(MediumSoftware.class, query.getResultList());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
-		// @SuppressWarnings("unchecked")
-		// List<MediumSoftware> mediumSoftwareList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumSoftware.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumSoftware m : mediumSoftwareList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -231,18 +319,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("text/list")
 	public Response getTextList(@QueryParam("start") Integer start,
-															@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getTextList: start: "+start+" length: "+length);
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll");
+															@QueryParam("length") Integer length,
+															@QueryParam("orderby") String orderby,
+															@QueryParam("dir") String direction,
+															@QueryParam("search") String search) {
+		System.out.println("MediumServiceEndpoint: getTextList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mt.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mt.medium.title1.name";
+		}
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mt.medium FROM MediumText mt WHERE lower(mt.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction);
+		}		
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumText> mediumTextList = castList(MediumText.class, query.getResultList());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
-		// @SuppressWarnings("unchecked")
-		// List<MediumText> mediumTextList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumText.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumText m : mediumTextList ) mediumList.add(m.getMedium());
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -250,27 +355,24 @@ public class MediumServiceEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
-	public Response getVideoList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length,
-			@QueryParam("orderby") String orderby,
-			@QueryParam("dir") String direction,
-			@QueryParam("search") String search
-			) {
+	public Response getVideoList(	@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search ) {
 		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 
 		// sanitize user input
-		if ( direction != null && direction.equalsIgnoreCase("desc" ) ) direction = "DESC"; else direction = "ASC";
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
 		String column = "mv.mediumId";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
 			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
-			// TODO producer, seems way to complex to put in DB query
+			// TODO producer, seems way to complex to put in DB query // should be easier with MediumHasActorWithRole-table
 			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
-			// + --> role == 112 --> producer 
-			
+			// + --> role == 112 --> producer
 		}
 		
 		// search
@@ -279,18 +381,15 @@ public class MediumServiceEndpoint {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 					"SELECT mv.medium FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
 			query.setParameter("title1", search);
-//			query.setParameter("title2", search);
+			// query.setParameter("title2", search);
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 					"SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction);
 		}
-
-
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		
+
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-		
 		for (Medium m : mediumList ) {
 			if ( m.getMediumVideo() != null ) {
 				m.getMediumVideo().setStatus(videoStatus(m.getMediumVideo().getMediumId()));
@@ -299,14 +398,7 @@ public class MediumServiceEndpoint {
 				m.getMediumVideo().getMedium().getMediumAnalysisLists().clear();
 			}
 		}
-		
-/*
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumVideo video : mediumVideoList ) {
-			mediumList.add(video.getMedium());
-			// System.out.println("add medium of video: "+ video.getMediumId());
-		}
-*/
+
 		return Response.ok().entity(mediumList).build();
 	}
 
@@ -315,18 +407,35 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("videogame/list")
 	public Response getVideogameList(	@QueryParam("start") Integer start,
-																		@QueryParam("length") Integer length) 
-	{
-		System.out.println("MediumServiceEndpoint: getVideogameList: start: "+start+" length: "+length);
-		// List<MediumVideo> mediumVideoList = castList(MediumVideo.class, TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideo.findAll").getResultList());
-		Query query = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll");
+																		@QueryParam("length") Integer length,
+																		@QueryParam("orderby") String orderby,
+																		@QueryParam("dir") String direction,
+																		@QueryParam("search") String search )	{
+		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mv.mediumId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
+		}
+		
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mv.medium FROM MediumVideogame mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+			// query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction);
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<MediumVideogame> mediumVideogameList = castList(MediumVideogame.class, query.getResultList());
-		// @SuppressWarnings("unchecked")
-		// List<MediumVideogame> mediumVideogameList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediumVideogame.findAll").getResultList();
-		List<Medium> mediumList = new ArrayList<Medium>();
-		for ( MediumVideogame m : mediumVideogameList ) mediumList.add(m.getMedium());
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+
 		return Response.ok().entity(mediumList).build();
 	}
 	
