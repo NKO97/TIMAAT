@@ -356,7 +356,6 @@ public class MediumServiceEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
-<<<<<<< .merge_file_UZyoyp
 	public Response getVideoList(
 			@QueryParam("draw") Integer draw,
 			@QueryParam("start") Integer start,
@@ -367,14 +366,6 @@ public class MediumServiceEndpoint {
 			) {
 		System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-=======
-	public Response getVideoList(	@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length,
-																@QueryParam("orderby") String orderby,
-																@QueryParam("dir") String direction,
-																@QueryParam("search") String search ) {
-		System.out.println("MediumServiceEndpoint: getVideoList: start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
->>>>>>> .merge_file_QlS6Uq
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -411,18 +402,11 @@ public class MediumServiceEndpoint {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 					"SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction);
 		}
-<<<<<<< .merge_file_UZyoyp
-
-=======
->>>>>>> .merge_file_QlS6Uq
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-<<<<<<< .merge_file_UZyoyp
 				
-=======
->>>>>>> .merge_file_QlS6Uq
 		for (Medium m : mediumList ) {
 			if ( m.getMediumVideo() != null ) {
 				m.getMediumVideo().setStatus(videoStatus(m.getMediumVideo().getMediumId()));
@@ -431,12 +415,7 @@ public class MediumServiceEndpoint {
 				m.getMediumVideo().getMedium().getMediumAnalysisLists().clear();
 			}
 		}
-<<<<<<< .merge_file_UZyoyp
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
-=======
-
-		return Response.ok().entity(mediumList).build();
->>>>>>> .merge_file_QlS6Uq
 	}
 
 	@GET
