@@ -358,7 +358,6 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 					"dataSrc": function(data) {
-						console.log("--> ", data);
 						// setup model
 						var vids = Array();
 						var newVideo;
