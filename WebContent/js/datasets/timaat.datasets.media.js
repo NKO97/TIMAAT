@@ -2570,11 +2570,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: ''
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: ''
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -2587,15 +2588,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.media (last)", TIMAAT.MediaDatasets.media);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'medium'));
 							}
 						});
 						TIMAAT.MediaDatasets.media = meds;
-						TIMAAT.MediaDatasets.media.model = data;
+						TIMAAT.MediaDatasets.media.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.media (current)", TIMAAT.MediaDatasets.media);
-						return data; // data.map(medium => new TIMAAT.Medium(medium));;
+						return data.data; // data.map(medium => new TIMAAT.Medium(medium));;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -2673,9 +2674,9 @@
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
 					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ media total)",
 					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ media)",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -2705,11 +2706,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'audio'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'audio'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -2723,15 +2725,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.audios (last)", TIMAAT.MediaDatasets.audios);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'audio'));
 							}
 						});
 						TIMAAT.MediaDatasets.audios = meds;
-						TIMAAT.MediaDatasets.audios.model = data;
+						TIMAAT.MediaDatasets.audios.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.audios (current)", TIMAAT.MediaDatasets.audios);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -2785,10 +2787,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No audios found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ audios total)",
+					"infoEmpty"   : "No audios available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ audio(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -2818,11 +2820,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'document'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'document'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -2836,15 +2839,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.documents (last)", TIMAAT.MediaDatasets.documents);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'document'));
 							}
 						});
 						TIMAAT.MediaDatasets.documents = meds;
-						TIMAAT.MediaDatasets.documents.model = data;
+						TIMAAT.MediaDatasets.documents.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.documents (current)", TIMAAT.MediaDatasets.documents);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -2898,10 +2901,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No documents found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ documents total)",
+					"infoEmpty"   : "No documents available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ documents(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -2931,11 +2934,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'image'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'image'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -2949,15 +2953,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.images (last)", TIMAAT.MediaDatasets.images);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'image'));
 							}
 						});
 						TIMAAT.MediaDatasets.images = meds;
-						TIMAAT.MediaDatasets.images.model = data;
+						TIMAAT.MediaDatasets.images.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.images (current)", TIMAAT.MediaDatasets.images);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -3011,10 +3015,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No images found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ images total)",
+					"infoEmpty"   : "No images available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ image(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -3044,11 +3048,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'software'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'software'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -3062,15 +3067,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.softwares (last)", TIMAAT.MediaDatasets.softwares);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'software'));
 							}
 						});
 						TIMAAT.MediaDatasets.softwares = meds;
-						TIMAAT.MediaDatasets.softwares.model = data;
+						TIMAAT.MediaDatasets.softwares.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.softwares (current)", TIMAAT.MediaDatasets.softwares);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -3124,10 +3129,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No software found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ software total)",
+					"infoEmpty"   : "No software available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ software(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -3157,11 +3162,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'text'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'text'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -3175,15 +3181,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.texts (last)", TIMAAT.MediaDatasets.texts);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'text'));
 							}
 						});
 						TIMAAT.MediaDatasets.texts = meds;
-						TIMAAT.MediaDatasets.texts.model = data;
+						TIMAAT.MediaDatasets.texts.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.texts (current)", TIMAAT.MediaDatasets.texts);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -3237,10 +3243,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No texts found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ texts total)",
+					"infoEmpty"   : "No texts available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ text(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -3270,12 +3276,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								draw        : data.draw,
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'video'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'video'
 						}
 						return serverData;
 					},
@@ -3295,7 +3301,7 @@
 						TIMAAT.MediaDatasets.videos = meds;
 						TIMAAT.MediaDatasets.videos.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.videos (current)", TIMAAT.MediaDatasets.videos);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -3349,10 +3355,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No videos found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ video total)",
+					"infoEmpty"   : "No videos available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ video(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -3382,11 +3388,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								mediumsubtype: 'videogame'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// mediumsubtype: 'videogame'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -3400,15 +3407,15 @@
 						// console.log("TCL: TIMAAT.MediaDatasets.videogames (last)", TIMAAT.MediaDatasets.videogames);
 						// setup model
 						var meds = Array();
-						data.forEach(function(medium) { 
+						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
 								meds.push(new TIMAAT.Medium(medium, 'videogame'));
 							}
 						});
 						TIMAAT.MediaDatasets.videogames = meds;
-						TIMAAT.MediaDatasets.videogames.model = data;
+						TIMAAT.MediaDatasets.videogames.model = data.data;
 						// console.log("TCL: TIMAAT.MediaDatasets.videogames (current)", TIMAAT.MediaDatasets.videogames);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -3462,10 +3469,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No media found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No media available.",
-					"infoFiltered": "(filtered, _MAX_ Media total)",
+					"zeroRecords" : "No videogames found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ videogames total)",
+					"infoEmpty"   : "No videogames available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ videogame(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",

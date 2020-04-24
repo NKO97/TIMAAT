@@ -4264,11 +4264,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// actorsubtype: ''
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// actorsubtype: ''
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4281,15 +4282,15 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (last)", TIMAAT.ActorDatasets.actor);
 						// setup model
 						var acts = Array();
-						data.forEach(function(actor) { 
+						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
 								acts.push(new TIMAAT.Actor(actor, 'actor'));
 							}
 						});
 						TIMAAT.ActorDatasets.actors = acts;
-						TIMAAT.ActorDatasets.actors.model = data;
+						TIMAAT.ActorDatasets.actors.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (current)", TIMAAT.ActorDatasets.actor);
-						return data; // data.map(actor => new TIMAAT.Actor(actor));;
+						return data.data; // data.map(actor => new TIMAAT.Actor(actor));;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4350,10 +4351,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No actor found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No actor available.",
-					"infoFiltered": "(filtered, _MAX_ Actor total)",
+					"zeroRecords" : "No actors found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ actors total)",
+					"infoEmpty"   : "No actors available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ actors(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -4383,11 +4384,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// actorsubtype: 'person'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// actorsubtype: 'person'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4401,15 +4403,15 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.persons (last)", TIMAAT.ActorDatasets.persons);
 						// setup model
 						var acts = Array();
-						data.forEach(function(actor) { 
+						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
 								acts.push(new TIMAAT.Actor(actor, 'person'));
 							}
 						});
 						TIMAAT.ActorDatasets.persons = acts;
-						TIMAAT.ActorDatasets.persons.model = data;
+						TIMAAT.ActorDatasets.persons.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.persons (current)", TIMAAT.ActorDatasets.persons);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4462,10 +4464,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No persons found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No person available.",
-					"infoFiltered": "(filtered, _MAX_ person(s) total)",
+					"zeroRecords" : "No person found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ persons total)",
+					"infoEmpty"   : "No persons available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ person(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
@@ -4495,11 +4497,12 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-								start        : data.start,
-								length       : data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// actorsubtype: 'collective'
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							// actorsubtype: 'collective'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4513,15 +4516,15 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.collectives (last)", TIMAAT.ActorDatasets.collectives);
 						// setup model
 						var acts = Array();
-						data.forEach(function(actor) { 
+						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
 								acts.push(new TIMAAT.Actor(actor, 'collective'));
 							}
 						});
 						TIMAAT.ActorDatasets.collectives = acts;
-						TIMAAT.ActorDatasets.collectives.model = data;
+						TIMAAT.ActorDatasets.collectives.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.collectives (current)", TIMAAT.ActorDatasets.collectives);
-						return data;
+						return data.data;
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4574,10 +4577,10 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "No collective found.",
-					"info"        : "Page _PAGE_ of _PAGES_",
-					"infoEmpty"   : "No collective available.",
-					"infoFiltered": "(filtered, _MAX_ collective(s) total)",
+					"zeroRecords" : "No collectives found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ collectives total)",
+					"infoEmpty"   : "No collectives available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ collective(s))",
 					"paginate"    : {
 						"first"   : "<<",
 						"previous": "<",
