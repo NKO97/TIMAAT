@@ -382,13 +382,13 @@
 			
 			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').on('click', function(ev) {
 				var anno = TIMAAT.VideoPlayer.inspector.state.item;
-				anno.layerVisual = 1;
-				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+				if ( anno ) anno.layerVisual = 1;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType( (anno) ? anno.layerVisual : 1 );
 			});
 			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').on('click', function(ev) {
 				var anno = TIMAAT.VideoPlayer.inspector.state.item;
-				anno.layerVisual = 0;
-				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+				if ( anno ) anno.layerVisual = 0;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType( (anno) ? anno.layerVisual : 0 );
 			});
 			
 			var metatimechange = function(ev) {
