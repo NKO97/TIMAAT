@@ -342,6 +342,7 @@
 					"dataType": "json",
 					"data": function(data) {
 						let serverData = {
+								draw: data.draw,
 								start: data.start,
 								length: data.length,
 								orderby: data.columns[data.order[0].column].name,
@@ -360,15 +361,15 @@
 						// setup model
 						var vids = Array();
 						var newVideo;
-						data.forEach(function(video) { 
+						data.data.forEach(function(video) { 
 							if ( video.id > 0 ) {
 								newVideo = new TIMAAT.Medium(video, 'video');
 								vids.push(newVideo);
 							}
 						});
 						TIMAAT.VideoChooser.videos = vids;
-						TIMAAT.VideoChooser.videos.model = data;
-						return data; // data.map(medium => new TIMAAT.Medium(medium));            
+						TIMAAT.VideoChooser.videos.model = data.data;
+						return data.data; // data.map(medium => new TIMAAT.Medium(medium));            
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -512,10 +513,10 @@
 					"search": "Suche",
 					"lengthMenu": "Zeige _MENU_ Videos pro Seite",
 					"zeroRecords": "Keine Videos gefunden.",
-					"info": "Seite _PAGE_ von _PAGES_",
+					"info": "Seite _PAGE_ von _PAGES_ &middot; (_MAX_ Videos gesamt)",
 					"infoEmpty": "Keine Videos verf&uuml;gbar.",
-					"infoFiltered": "(gefilterte Liste vom Server)",
-					"paginate": {
+                    "infoFiltered": " &mdash; _TOTAL_ von _MAX_ Videos angezeigt",
+                    "paginate": {
 						"first":      "Erste",
 						"previous":   "Vorherige",
 						"next":       "N&auml;chste",
