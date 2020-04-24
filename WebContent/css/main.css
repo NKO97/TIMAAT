@@ -109,6 +109,10 @@ p + p {
 	width: 100%;
 }
 
+#timaat-inspector-meta-comment-group textarea {
+	min-height: 6rem;
+}
+
 .timmat-video-thumbnail {
 	cursor: ew-resize;
 }
