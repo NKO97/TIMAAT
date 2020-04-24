@@ -220,7 +220,7 @@
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', "medium", medium);
 				} else { // create new medium
 					var mediumModel = await TIMAAT.MediaDatasets.createMediumModel(formDataObject, formDataObject.typeId)
-					var displayTitle = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
+					var displayTitleModel = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
 					var source = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					var mediumType;
 					switch(formDataObject.typeId) {
@@ -248,7 +248,7 @@
 					}
 					var mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataObject, mediumType);
 
-					var newMedium = await TIMAAT.MediaDatasets.createMedium(mediumType, mediumModel, mediumSubtypeModel, displayTitle, source);
+					var newMedium = await TIMAAT.MediaDatasets.createMedium(mediumType, mediumModel, mediumSubtypeModel, displayTitleModel, source);
 					medium = new TIMAAT.Medium(newMedium, mediumType);
 					await TIMAAT.MediaDatasets.refreshDatatable('medium');
 					// var medium = TIMAAT.MediaDatasets.media[TIMAAT.MediaDatasets.media.length-1];
@@ -2008,7 +2008,7 @@
 
 		createMedium: async function(mediumSubtype, mediumModel, mediumSubtypeModel, title, source) {
     	console.log("TCL: createMedium: mediumSubtype, mediumModel, mediumSubtypeModel, title, source", mediumSubtype, mediumModel, mediumSubtypeModel, title, source);
-			try { // TODO needs to be called after createMedium once m-n-table is refactored to 1-n table
+			try { // TODO needs to be called after createMedium once m-n-table is refactored to 1-n table (sure?)
 				// create display title
 				var newDisplayTitle = await TIMAAT.MediaService.createTitle(title);
 			} catch(error) {

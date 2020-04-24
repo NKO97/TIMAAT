@@ -27,9 +27,6 @@ public class ActorName implements Serializable {
 	@Column(name="name")
 	private String name;
 
-	@Column(name="is_display_name", columnDefinition = "BOOLEAN")
-	private Boolean isDisplayName;
-
 	@Column(name="used_from", columnDefinition = "DATE")
 	private Date usedFrom;
 
@@ -42,9 +39,14 @@ public class ActorName implements Serializable {
 	private Actor actor;
 
 	//bi-directional many-to-one association to Actor
-	@OneToMany(mappedBy="actorName")
+	@OneToMany(mappedBy="birthName")
 	@JsonIgnore
-	private List<Actor> actors;
+	private List<Actor> actors1;
+	
+	//bi-directional many-to-one association to Actor
+	@OneToMany(mappedBy="displayName")
+	@JsonIgnore
+	private List<Actor> actors2;
 
 	public ActorName() {
 	}
@@ -65,14 +67,6 @@ public class ActorName implements Serializable {
 		this.name = name;
 	}
 
-	public Boolean getIsDisplayName() {
-		return isDisplayName;
-	}
-
-	public void setIsDisplayName(Boolean isDisplayName) {
-		this.isDisplayName = isDisplayName;
-	}
-
 	public Date getUsedFrom() {
 		return this.usedFrom;
 	}
@@ -89,24 +83,46 @@ public class ActorName implements Serializable {
 		this.usedUntil = usedUntil;
 	}
 
-	public List<Actor> getActors() {
-		return this.actors;
+	public List<Actor> getActors1() {
+		return this.actors1;
 	}
 
-	public void setActors(List<Actor> actors) {
-		this.actors = actors;
+	public void setActors1(List<Actor> actors) {
+		this.actors1 = actors;
 	}
 
-	public Actor addActors(Actor actors) {
-		getActors().add(actors);
+	public Actor addActors1(Actor actors) {
+		getActors1().add(actors);
 		actors.setBirthName(this);
 
 		return actors;
 	}
 
-	public Actor removeActors(Actor actors) {
-		getActors().remove(actors);
+	public Actor removeActors1(Actor actors) {
+		getActors1().remove(actors);
 		actors.setBirthName(null);
+
+		return actors;
+	}
+
+	public List<Actor> getActors2() {
+		return this.actors2;
+	}
+
+	public void setActors2(List<Actor> actors) {
+		this.actors2 = actors;
+	}
+
+	public Actor addActors2(Actor actors) {
+		getActors2().add(actors);
+		actors.setDisplayName(this);
+
+		return actors;
+	}
+
+	public Actor removeActors2(Actor actors) {
+		getActors2().remove(actors);
+		actors.setDisplayName(null);
 
 		return actors;
 	}
