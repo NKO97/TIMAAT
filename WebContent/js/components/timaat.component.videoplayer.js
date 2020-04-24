@@ -1163,6 +1163,11 @@
 			// TODO refactor
 			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 			var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+			if ( time == 0 ) {
+				// 0 means current frame in video player
+				time = TIMAAT.VideoPlayer.video.currentTime - startTime;
+				time = Math.max(0.0, time);
+			}
 			endTime = startTime+time;
 			startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 			endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
