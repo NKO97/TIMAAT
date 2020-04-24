@@ -225,7 +225,9 @@ p + p {
 .timaat-annotation-list-type {
 	text-shadow: 1px 1px rgba(127,127,177,0.4);
 }
-
+.timaat-annotation-list-comment {
+	color: #6c757d;
+}
 .timaat-annotation-list-title,
 .timaat-annotation-segment-title {
 	overflow: hidden;
