@@ -361,6 +361,7 @@
 			var sliderupdate = function(ev) {
 				if ( TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
 					var anno = TIMAAT.VideoPlayer.inspector.state.item;
+					if ( !anno ) return;
 					var opacity = $("#timaat-inspector-meta-opacity").val();
 					anno.opacity = opacity;
 					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
