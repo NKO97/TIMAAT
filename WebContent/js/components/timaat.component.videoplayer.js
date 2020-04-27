@@ -361,6 +361,7 @@
 			var sliderupdate = function(ev) {
 				if ( TIMAAT.VideoPlayer.inspector.state.type == 'annotation' ) {
 					var anno = TIMAAT.VideoPlayer.inspector.state.item;
+					if ( !anno ) return;
 					var opacity = $("#timaat-inspector-meta-opacity").val();
 					anno.opacity = opacity;
 					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
@@ -382,13 +383,13 @@
 			
 			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').on('click', function(ev) {
 				var anno = TIMAAT.VideoPlayer.inspector.state.item;
-				anno.layerVisual = 1;
-				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+				if ( anno ) anno.layerVisual = 1;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType( (anno) ? anno.layerVisual : 1 );
 			});
 			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').on('click', function(ev) {
 				var anno = TIMAAT.VideoPlayer.inspector.state.item;
-				anno.layerVisual = 0;
-				TIMAAT.VideoPlayer._setInspectorAnnotationType(anno.layerVisual);
+				if ( anno ) anno.layerVisual = 0;
+				TIMAAT.VideoPlayer._setInspectorAnnotationType( (anno) ? anno.layerVisual : 0 );
 			});
 			
 			var metatimechange = function(ev) {
@@ -1163,6 +1164,11 @@
 			// TODO refactor
 			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 			var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+			if ( time == 0 ) {
+				// 0 means current frame in video player
+				time = TIMAAT.VideoPlayer.video.currentTime - startTime;
+				time = Math.max(0.0, time);
+			}
 			endTime = startTime+time;
 			startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 			endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);

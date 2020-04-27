@@ -2,7 +2,7 @@
 -- Table `FIPOP`.`membership_details`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`membership_details` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `actor_person_actor_id` INT NOT NULL,
   `member_of_actor_collective_actor_id` INT NOT NULL,
   `role_id` INT NULL,

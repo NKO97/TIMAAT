@@ -66,6 +66,10 @@ p + p {
 	opacity: 0.2;
 }
 
+#timaat-videochooser-table td.videochooser-item-preview {
+	padding:0;
+	width: 150px;
+}
 #timaat-videochooser-table th:nth-of-type(2) {
 	width: 150px;
 	min-width: 150px !important;
@@ -75,9 +79,11 @@ p + p {
 	width: 40% !important;
 }
 #timaat-videochooser-list td.actions {
-	padding-top: 0;
-	padding-bottom: 0;
+	padding: 5px 5px;
 }
+#timaat-component-videochooser {
+	max-height: initial !important;
+} 
 
 #timaat-videochooser-table_length, #timaat-videochooser-table_info {
 	padding-left: 1em;
@@ -101,6 +107,10 @@ p + p {
 #timaat-inspector-meta-opacity {
 	margin-top: 4px;
 	width: 100%;
+}
+
+#timaat-inspector-meta-comment-group textarea {
+	min-height: 6rem;
 }
 
 .timmat-video-thumbnail {
@@ -219,7 +229,9 @@ p + p {
 .timaat-annotation-list-type {
 	text-shadow: 1px 1px rgba(127,127,177,0.4);
 }
-
+.timaat-annotation-list-comment {
+	color: #6c757d;
+}
 .timaat-annotation-list-title,
 .timaat-annotation-segment-title {
 	overflow: hidden;
@@ -248,17 +260,30 @@ p + p {
 	padding-right: 10px;
 }
 
+.card-body {
+	padding: 0px;
+}
+
 #timaat-mediadatasets-media-metadata-form,
 #timaat-mediadatasets-medium-titles-form,
 #timaat-mediadatasets-medium-languagetracks-form {
 	display: none;
 }
 
+.timaat-library-list-wrapper {
+	height: 100%;
+	width: 100%;
+	/* max-height: 80vh; */
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
 .timaat-datasets-list-wrapper {
 	height: 100%;
 	width: 100%;
-	max-height: 768px;
+	/* max-height: 80vh; */
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 #timaat-annotation-list li, 

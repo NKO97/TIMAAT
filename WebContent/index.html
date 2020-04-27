@@ -208,8 +208,8 @@
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-media">
-                <a href="#media"
-                  onclick="TIMAAT.UI.showComponent('media')"
+                <a href="#mediadatasets"
+                  onclick="TIMAAT.MediaDatasets.initMediaComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -224,8 +224,8 @@
                 </a>
               </li> 
               <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
-                <a href="#actors"
-                  onclick="TIMAAT.UI.showComponent('actors')"
+                <a href="#actordatasets"
+                  onclick="TIMAAT.ActorDatasets.initActorComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -388,25 +388,27 @@
                     </div>
                   </div>
                 </div>
-                <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
-                  <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
-                </div>
-                <div class="card-body" style="padding-left:0; padding-right:0;">
-                  <table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th id="timaat-videochooser-list-selectall"><input type="checkbox" aria-label="Auswahl"></th>
-                        <th>Vorschau</th>
-                        <th>Titel</th>
-                        <th>L&auml;nge</th>
-                        <th>Produzent&nbsp;</th>
-                        <th>VÖ-Datum</th>
-                        <th style="width:100px">Aktionen</th>
-                      </tr>
-                    </thead>
-                    <tbody id="timaat-videochooser-list">
-                    </tbody>
-                  </table>
+                <div class="timaat-library-list-wrapper">
+                  <!-- <div id="timaat-videochooser-list-loading" class="d-flex alert alert-secondary justify-content-center" role="alert">
+                    <h2><i class="fas fa-spinner fa-spin"></i> Videos werden geladen...</h2>
+                  </div> -->
+                  <div class="card-body">
+                    <table id="timaat-videochooser-table" class="table table-striped table-bordered table-hover">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th id="timaat-videochooser-list-selectall"><input type="checkbox" aria-label="Auswahl"></th>
+                          <th>Vorschau</th>
+                          <th>Titel</th>
+                          <th>Länge</th>
+                          <th>Produzent</th>
+                          <th>VÖ-Datum</th>
+                          <th>Aktionen</th>
+                        </tr>
+                      </thead>
+                      <tbody id="timaat-videochooser-list">
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>				
@@ -797,17 +799,19 @@
                     <div class="col-lg-4">
                       <div class="card lists-cards categorysets-cards categorysets-card">
                         <div class="card-header">Kategoriesets
-                          <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
-                        </div>
+                          <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i></button>
+                          </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <ul class="list-group list-group-flush">
-                            <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                            <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
                               <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
                             </li>
                           </ul>
                           <ul id="timaat-categoryset-list" class="list-group list-group-flush">
                           </ul>
-                          <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
                         </div>
                       </div>
@@ -845,14 +849,14 @@
                         </div>
                         <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
                           <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
-                            <thead class="thead-dark">
-                              <tr>
-                                <th id="timaat-lists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
-                                  <th>Name</th>
-                                  <th style="max-width:150px;width:150px">Aktion</th>
-                              </tr>
-                            </thead>
-                            <tbody id="timaat-category-list">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                    <th>Name</th>
+                                    <th style="max-width:150px;width:150px">Aktion</th>
+                                  </tr>
+                                </thead>
+                              <tbody id="timaat-category-list">
                             </tbody>
                           </table>
                         </div>
@@ -1058,28 +1062,28 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="media-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
+                  <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="audios-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
+                  <a class="nav-link" id="audios-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="documents-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('document')" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
+                  <a class="nav-link" id="documents-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('document')" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="images-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('image')" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
+                  <a class="nav-link" id="images-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('image')" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="softwares-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('software')" data-toggle="tab" href="#softwares" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
+                  <a class="nav-link" id="softwares-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('software')" data-toggle="tab" href="#softwares" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="texts-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('text')" data-toggle="tab" href="#texts" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
+                  <a class="nav-link" id="texts-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('text')" data-toggle="tab" href="#texts" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videos-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('video')" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
+                  <a class="nav-link" id="videos-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('video')" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videogames-tab"  onclick="TIMAAT.MediaDatasets.loadMediumSubtype('videogame')" data-toggle="tab" href="#videogames" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
+                  <a class="nav-link" id="videogames-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('videogame')" data-toggle="tab" href="#videogames" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
                 </li>
               </ul>
               <div class="tab-content" id="mediaTabsContent">
@@ -1089,15 +1093,26 @@
                     <div class="col-md-4">
                       <div class="card media-cards media-card">
                         <div class="card-header">Media
-                          <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
+                           <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> -->
+                          </button> <!~~ TODO When re-added: open dialogue to ask which medium type to add, then open corresponding form ~~> --> 
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-medium-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-medium-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-medium-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-media-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-medium-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-medium-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards audios-card">
@@ -1107,10 +1122,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-audio-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-audio-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-audio-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-audio-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-audio-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-audio-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards documents-card">
@@ -1120,10 +1146,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-document-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-document-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-document-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-document-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-document-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-document-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards images-card">
@@ -1133,10 +1170,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-image-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-image-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-image-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-image-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-image-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-image-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards softwares-card">
@@ -1146,10 +1194,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-software-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-software-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-software-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-software-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-software-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-software-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards texts-card">
@@ -1159,10 +1218,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-text-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-text-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-text-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-text-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-text-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-text-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards videos-card">
@@ -1172,10 +1242,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-video-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-video-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-video-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-video-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-video-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-video-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card media-cards videogames-card">
@@ -1185,10 +1266,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-videogame-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-mediadatasets-videogame-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-mediadatasets-videogame-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-mediadatasets-videogame-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-media-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediadatasets-videogame-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-videogame-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1650,7 +1742,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="actors-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true">
+                  <a class="nav-link active" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true">
                     <i class="fas fa-id-badge"></i> Actors
                   </a>
                 </li>
@@ -1674,13 +1766,24 @@
                         <div class="card-header">Actors
                           <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> -->
+                          </button> <!~~ TODO When re-added: open dialogue to ask which actor type to add, then open corresponding form ~~> --> 
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-actor-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-actor-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-actor-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card actors-cards persons-card">
@@ -1690,10 +1793,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-person-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-person-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-person-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-person-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card actors-cards collectives-card">
@@ -1703,10 +1817,21 @@
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-collective-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-actordatasets-collective-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
-                          <ul id="timaat-actordatasets-collective-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-actordatasets-collective-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-actordatasets-collective-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                     </div>

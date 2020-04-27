@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,6 +18,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -32,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress;
@@ -76,11 +79,65 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getActorList() {
-		System.out.println("ActorServiceEndpoint: getActorList");			
-		List<Actor> actorList = castList(Actor.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Actor.findAll").getResultList());
+	public Response getActorList( @QueryParam("draw") Integer draw,
+																@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search )
+	{
+		System.out.println("ActorServiceEndpoint: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
 
-		return Response.ok().entity(actorList).build();
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		}
+
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(a) FROM Actor a");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+		
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))");
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT a FROM Actor a ORDER BY "+column+" "+direction);
+		}
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("total")
+	public Response getActorDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getActorDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (a.id) FROM Actor a");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
 	}
 
 	@GET
@@ -97,30 +154,151 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("person/list")
-	public Response getPersonList() {
-		System.out.println("ActorServiceEndpoint: getPersonList");	
-		List<ActorPerson> actorPersonList = castList(ActorPerson.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorPerson.findAll").getResultList());
-		List<Actor> actorList = new ArrayList<Actor>();
-		for ( ActorPerson actorPerson : actorPersonList ) {
-			actorList.add(actorPerson.getActor());
+	public Response getPersonList(@QueryParam("draw") Integer draw,
+																@QueryParam("start") Integer start,
+																@QueryParam("length") Integer length,
+																@QueryParam("orderby") String orderby,
+																@QueryParam("dir") String direction,
+																@QueryParam("search") String search )
+	{
+		System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "ap.actorId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "ap.actor.displayName.name"; // TODO change displayName access in DB-Schema 
 		}
-		return Response.ok().entity(actorList).build();
+
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ap.actor) FROM ActorPerson ap");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+		
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT COUNT(ap.actor) FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ap.actor FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction);
+		}
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("person/total")
+	public Response getPersonDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getPersonDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (ap.id) FROM ActorPerson ap");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("collective/list")
-	public Response getCollectiveList() {
-		System.out.println("ActorServiceEndpoint: getCollectiveList");	
-		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
-		List<Actor> actorList = new ArrayList<Actor>();
-		for ( ActorCollective actorCollective : actorCollectiveList ) {
-			actorList.add(actorCollective.getActor());
+	public Response getCollectiveList(@QueryParam("draw") Integer draw,
+																		@QueryParam("start") Integer start,
+																		@QueryParam("length") Integer length,
+																		@QueryParam("orderby") String orderby,
+																		@QueryParam("dir") String direction,
+																		@QueryParam("search") String search )
+	{
+		System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
+		String column = "ac.actorId";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "ac.actor.displayName.name"; // TODO change displayName access in DB-Schema 
 		}
-		return Response.ok().entity(actorList).build();
+
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ac.actor) FROM ActorCollective ac");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+		
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT COUNT(ac.actor) FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ac.actor FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction);
+		}		
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collective/total")
+	public Response getCollectiveDatasetsTotal() {
+		System.out.println("ActorServiceEndpoint: getCollectiveDatasetsTotal");
+		Query query = TIMAATApp.emf.createEntityManager()
+															 .createQuery("SELECT COUNT (ac.id) FROM ActorCollective ac");
+		long count = (long)query.getSingleResult();														
+		return Response.ok().entity(count).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collective/selectlist")
+	public Response getCollectiveSelectList() {
+		// returns list of id and displayName combinations of all collectives
+		System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
+		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
+		class SelectElement{ 
+			public int collectiveId; 
+			public String name;
+			public SelectElement(int collectiveId, String name) {this.collectiveId = collectiveId; this.name = name;}
+		}
+		List<SelectElement> collectiveSelectList = new ArrayList<>();
+		for (ActorCollective actorCollective : actorCollectiveList) {
+			collectiveSelectList.add(new SelectElement(actorCollective.getActorId(), actorCollective.getActor().getDisplayName().getName()));
+			// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ actorCollective.getActorId() + " " + name);
+		}
+		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ collectiveSelectList.id + " " + collectiveSelectList.name);
+		return Response.ok().entity(collectiveSelectList).build();
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -247,6 +425,7 @@ public class ActorEndpoint {
 
     // update actor
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
+		if (updatedActor.getDisplayName() != null ) actor.setDisplayName(updatedActor.getDisplayName());
 		actor.setBirthName(updatedActor.getBirthName());
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
@@ -291,7 +470,6 @@ public class ActorEndpoint {
 		// entityManager.remove(actor.getDisplayName());
 		entityManager.remove(actor);
 		entityTransaction.commit();
-
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
@@ -684,6 +862,7 @@ public class ActorEndpoint {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(collective);
+		// entityManager.remove(collective.getActor().getDisplayName());
 		entityManager.remove(collective.getActor()); // remove collective, then corresponding actor
 		entityTransaction.commit();
 
@@ -701,7 +880,7 @@ public class ActorEndpoint {
   @Consumes(MediaType.APPLICATION_JSON)
 	@Path("name/{id}")
 	@Secured
-	public Response createName(@PathParam("id") int id, String jsonData) {
+		public Response createName(@PathParam("id") int id, String jsonData) {
 
 		System.out.println("ActorServiceEndpoint: createName: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -760,7 +939,9 @@ public class ActorEndpoint {
   @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{actorid}/name/{id}")
 	@Secured
-	public Response addName(@PathParam("actorid") int actorId, @PathParam("id") int id, String jsonData) {
+	public Response addName(@PathParam("actorid") int actorId, 
+													@PathParam("id") int id,
+													String jsonData) {
 
 		System.out.println("ActorServiceEndpoint: addName: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -851,7 +1032,6 @@ public class ActorEndpoint {
 		// update name
 		// System.out.println("ActorServiceEndpoint: updateName - language id:"+updatedName.getLanguage().getId());	
 		if ( updatedName.getName() != null ) name.setName(updatedName.getName());
-		if ( updatedName.getIsDisplayName() != null) name.setIsDisplayName(updatedName.getIsDisplayName());
 		name.setUsedFrom(updatedName.getUsedFrom());
 		name.setUsedUntil(updatedName.getUsedUntil());
 

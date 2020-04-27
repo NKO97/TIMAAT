@@ -37,7 +37,7 @@
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();
 			TIMAAT.LocationDatasets.load();   
-			await TIMAAT.MediaDatasets.load();
+			TIMAAT.MediaDatasets.load();
 			// Lists
 			TIMAAT.RoleLists.load();
 			// TIMAAT.CategoryLists.load();

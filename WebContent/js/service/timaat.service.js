@@ -32,26 +32,26 @@
 			TIMAAT.Service.session = null;
 			location.reload(true);
 		},
-		
-		// getAllCategorySets: function(callback) {
-    // // console.log("TCL: getAllCategorySets: function(callback)");
-    // // console.log("TCL: callback", callback);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/all",
-		// 		type:"GET",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		callback(data);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 	});
-		// },
-		
+
+		getAllCategorySets: function(callback) {
+    // console.log("TCL: getAllCategorySets: function(callback)");
+    // console.log("TCL: callback", callback);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/all",
+				type:"GET",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+			});
+		},
+
 		getUserName: function(id, callback) {
       // console.log("TCL: getUserName: function(id, callback)");
 			// console.log("TCL: id, callback", id, callback);
@@ -70,7 +70,7 @@
 				console.log( "error", e );
 			});
 		},
-		
+
 		getUserLog: function(id, limit, callback) {
     // console.log("TCL: getUserLog: function(id, limit, callback)");
     // console.log("TCL: id, limit, callback", id, limit, callback);
@@ -87,7 +87,8 @@
 			})
 			.fail(function(e) {
 				console.log( "error", e );
-			});		},
+			});		
+		},
 
 		listVideos(callback) {
       // console.log("TCL: listVideos -> listVideos(callback)");
@@ -108,11 +109,11 @@
 			});
 			
 		},
-		
+
 		getMediaCollections(callback) {
 			// console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediacollection/list?nocontents=1",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -155,7 +156,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateMediacollection(collection) {
 			console.log("TCL: updatMediacollection -> collection", collection);
 			var col = {
@@ -184,7 +185,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		removeMediacollection(collection) {
 			console.log("TCL: removeMediacollection -> collection", collection);
 			var col = collection;
@@ -202,7 +203,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		addCollectionItem(collection, medium) {
 			console.log("TCL: addCollectionItem -> collection", collection);
 			console.log("TCL: addCollectionItem -> medium", medium);
@@ -347,7 +348,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
 			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
@@ -395,7 +396,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateAnnotation(annotation) {
 			console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
@@ -434,7 +435,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		createSegment(name, startTime, endTime, list, callback) {
 			console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);
 			var model = { 	
@@ -463,7 +464,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		updateSegment(segment) {
       console.log("TCL: updateSegment -> segment", segment);
 			jQuery.ajax({
@@ -483,7 +484,7 @@
 				console.log( e.responseText );
 			});
 		},
-		
+
 		removeSegment(segment) {
 			console.log("TCL: removeSegment -> segment", segment);
 			jQuery.ajax({
@@ -590,24 +591,24 @@
 		// 	});			
 		// },
 
-		// removeCategory(set, catname, callback) {
-		// 	var serviceEndpoint = "category"; // set/{id}/category/{name}
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
-		// 		type:"DELETE",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		TIMAAT.Service.updateCategorySets(catname);
-		// 		callback(catname);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
-		
+		removeCategory(set, catname, callback) {
+			var serviceEndpoint = "category"; // set/{id}/category/{name}
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+				type:"DELETE",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				TIMAAT.Service.updateCategorySets(catname);
+				callback(catname);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+
 		addMediumTag(medium, tagname, callback) {
 			console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
@@ -627,7 +628,7 @@
 				console.log( e.responseText );
 			});			
 		},
-		
+
 		removeMediumTag(medium, tagname, callback) {
 			console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
@@ -645,69 +646,69 @@
 				console.log( e.responseText );
 			});			
 		},
-		
-		// updateCategorySets(categoryname) {
-		// 	console.log("TCL: updateCategorySets -> categoryname", categoryname);
-		// 	// TODO implement for updating unassigned categories
-		// },
-			
-		// createCategorySet(name, callback) {
-		// 	console.log("TCL: createCategorySet -> createCategorySet(name, callback)");
-		// 	console.log("TCL:   -> createCategorySet -> name", name);
-		// 	// console.log("TCL: createCategorySet -> callback", callback);
-		// 	// console.log("TCL: createCategorySet -> name, callback", name, callback);
-		// 	var model = {
-		// 			"id": 0,
-		// 			"name": name,
-		// 			"categorySetHasCategories": [],
-		// 	};
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/",
-		// 		type:"POST",
-		// 		data: JSON.stringify(model),
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		callback(data);
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});			
-		// },
-		
-		// updateCategorySet(categoryset) {
-		// 	console.log("TCL: updateCategorySet -> categoryset", categoryset);
-		// 	var set = {
-		// 			id: categoryset.model.id,
-		// 			name: categoryset.model.name,
-		// 			categorySetHasCategories: []
-		// 	};
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+set.id,
-		// 		type:"PATCH",
-		// 		data: JSON.stringify(set),
-		// 		contentType:"application/json; charset=utf-8",
-		// 		dataType:"json",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 		// TODO refactor
-		// 		categoryset.model.id = data.id;
-		// 		categoryset.model.name = data.name;
-		// 		categoryset.model.categories = data.categories;
-		// 		console.log("TCL: updateCategorySet -> categoryset.updateUI()");
-		// 		categoryset.updateUI();        
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});
-		// },
+
+		updateCategorySets(categoryname) {
+			console.log("TCL: updateCategorySets -> categoryname", categoryname);
+			// TODO implement for updating unassigned categories
+		},
+
+		createCategorySet(name, callback) {
+			console.log("TCL: createCategorySet -> createCategorySet(name, callback)");
+			console.log("TCL:   -> createCategorySet -> name", name);
+			// console.log("TCL: createCategorySet -> callback", callback);
+			// console.log("TCL: createCategorySet -> name, callback", name, callback);
+			var model = {
+					"id": 0,
+					"name": name,
+					"categorySetHasCategories": [],
+			};
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/",
+				type:"POST",
+				data: JSON.stringify(model),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				callback(data);
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});			
+		},
+
+		updateCategorySet(categoryset) {
+			console.log("TCL: updateCategorySet -> categoryset", categoryset);
+			var set = {
+					id: categoryset.model.id,
+					name: categoryset.model.name,
+					categorySetHasCategories: []
+			};
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+set.id,
+				type:"PATCH",
+				data: JSON.stringify(set),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				// TODO refactor
+				categoryset.model.id = data.id;
+				categoryset.model.name = data.name;
+				categoryset.model.categories = data.categories;
+				console.log("TCL: updateCategorySet -> categoryset.updateUI()");
+				categoryset.updateUI();        
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},
 
 		// deleteCategorySet(categoryset) {
 		// 	console.log("TCL: deleteCategorySet -> categoryset", categoryset);
@@ -726,25 +727,23 @@
 		// 	});
 		// },	
 
-		// deleteCategory(id) {
-		// 	console.log("TCL: removeCategory -> id", id);
-		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
-		// 		type:"DELETE",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});
-		// },	
-		
-		
-		
+		deleteCategory(id) {
+			console.log("TCL: removeCategory -> id", id);
+			jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+			});
+		},	
+
 	}
-	
+
 }, window));

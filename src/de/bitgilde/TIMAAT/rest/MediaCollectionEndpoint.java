@@ -2,10 +2,12 @@ package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -27,6 +30,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
@@ -58,7 +62,9 @@ public class MediaCollectionEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@SuppressWarnings("unchecked")
-	public Response getAllCollections() {
+	public Response getAllCollections(
+			@QueryParam("nocontents") String nocontents
+			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		List<MediaCollection> cols = (List<MediaCollection>) em.createQuery("SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC")
@@ -67,6 +73,7 @@ public class MediaCollectionEndpoint {
 		
 		// strip analysislists
 		for ( MediaCollection col : cols ) {
+			if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
 			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 				m.getMedium().getMediumAnalysisLists().clear();
 				if (m.getMedium().getMediumVideo() != null) {
@@ -83,13 +90,17 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	public Response getCollection(@PathParam("id") int id) {
+	public Response getCollection(
+			@PathParam("id") int id,
+			@QueryParam("nocontents") String nocontents
+			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		MediaCollection col = em.find(MediaCollection.class, id);
 		
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 		
+		if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
 		// strip analysislists
 		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 			m.getMedium().getMediumAnalysisLists().clear();
@@ -102,6 +113,87 @@ public class MediaCollectionEndpoint {
 	
 		return Response.ok().entity(col).build();
 	}
+
+	
+	@GET
+	@Path("{id}/media")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	public Response getCollectionMedia(
+			@PathParam("id") int id,
+			@QueryParam("draw") Integer draw,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("mediumsubtype") String mediumSubType,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search
+			) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		
+		if ( draw == null ) draw = 0;
+		
+		MediaCollection col = em.find(MediaCollection.class, id);
+		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc" ) ) direction = "DESC"; else direction = "ASC";
+
+		String column = "mchm.medium.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.title1.name";
+			if (orderby.equalsIgnoreCase("duration")) column = "mchm.medium.mediumVideo.length";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
+			// TODO producer, seems way to complex to put in DB query
+			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
+			// + --> role == 112 --> producer 
+		}
+
+		String subType = "";
+		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
+
+		// calculate total # of records
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// calculate search result # of records
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType);
+			countQuery.setParameter("id", id);
+			countQuery.setParameter("title1", search);
+			recordsFiltered = (long) countQuery.getSingleResult();
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
+			query.setParameter("title1", search);
+//			query.setParameter("title2", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
+		}
+		query.setParameter("id", id);
+
+		if ( start != null && start > 0 ) query.setFirstResult(start);
+		if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> media = castList(Medium.class, query.getResultList());
+
+		// strip analysislists
+		for ( Medium m : media ) {
+			m.getMediumAnalysisLists().clear();
+			if (m.getMediumVideo() != null) {
+				m.getMediumVideo().getStatus();
+				m.getMediumVideo().getViewToken();
+			}
+		}
+	
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
+	}
+	
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -298,5 +390,11 @@ public class MediaCollectionEndpoint {
 
 
 
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
+    }
 	
 }

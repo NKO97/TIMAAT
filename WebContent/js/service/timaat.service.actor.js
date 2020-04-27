@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.ActorService = {
 
 		listActorTypes(callback) {
@@ -57,6 +57,28 @@
 			});			
 		},
 
+		async getActorDatasetsTotal() {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/total",
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorDatasetsTotal -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
 		listActorSubtype(actorSubtype, callback) {
 			// console.log("TCL: listActorSubtype", actorSubtype);
 			jQuery.ajax({
@@ -76,6 +98,52 @@
 				console.log(e.responseText);
 				console.log( "error", e );
 			});			
+		},
+
+		async getActorSubtypeDatasetsTotal(actorSubtype) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/total",
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getMediaDatasetsTotal -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async getCollectiveSelectList() {
+			return new Promise(resolve => {
+				// console.log("TCL: getCollectiveSelectList", getCollectiveSelectList);
+				jQuery.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/collective/selectlist",
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getCollectiveSelectList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
 		},
 
 		listAddressTypes(callback) {
@@ -143,15 +211,6 @@
 					id: actorModel.actorType.id,
 				},
 				isFictional: actorModel.isFictional,
-				// primaryAddress: {
-				// 	id: actorModel.primaryAddress.id,
-				// },
-				// primaryEmail: {
-				// 	id: actorModel.primaryEmail.id,
-				// },
-				// primaryPhoneNumber: {
-				// 	id: actorModel.primaryPhoneNumber.id,
-				// }
 			};
       console.log("TCL: createActor -> newActorModel", newActorModel);
 			return new Promise(resolve => {
@@ -244,11 +303,11 @@
 			});
 		},
 
-		async addName(actorId, name) {
-      // console.log("TCL: addName -> actorId, name", actorId, name);
+		async addName(name) {
+      // console.log("TCL: addName -> name", name);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+name.actor.id+"/name/"+name.id,
 					type:"POST",
 					data: JSON.stringify(name),
 					contentType:"application/json; charset=utf-8",
@@ -569,7 +628,7 @@
 		async updateActor(actorModel) {
 			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
 			var tempActorModel = {};
-			// tempActorModel.displayName = actorModel.displayName;
+			tempActorModel.displayName = actorModel.displayName;
 			tempActorModel.isFictional = actorModel.isFictional;
 			tempActorModel.birthName = actorModel.birthName;
 			tempActorModel.primaryAddress = actorModel.primaryAddress;
@@ -916,20 +975,25 @@
 			});
 		},
 
-		removeActor(actor) {
+		async removeActor(actor) {
 			// console.log("TCL: removeActor -> actor", actor);
-			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actor.model.id,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actor.model.id,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error);
 			});
 		},
 

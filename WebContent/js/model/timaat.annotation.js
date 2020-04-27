@@ -43,7 +43,9 @@
 					// create and style list view element
 					this.listView = $('<li class="list-group-item" style="padding:0"> \
 							    <div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div> \
-						 		<i class="timaat-annotation-list-type fas fa-image fa-fw" aria-hidden="true"></i><span class="timaat-annotation-list-time"></span> \
+						 		<i class="timaat-annotation-list-type fas fa-image fa-fw" aria-hidden="true"></i>\
+								<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>\
+								<span class="timaat-annotation-list-time"></span> \
 								<span class="text-nowrap timaat-annotation-list-categories float-right text-muted"><i class=""></i></span><br> \
 								<div class="timaat-annotation-list-title text-muted float-left"></div> \
 								<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div> \
@@ -262,31 +264,39 @@
 			  return this.svg.items.length > 0;
 		  }
 				
-				updateUI() {
-					console.log("TCL: Annotation -> updateUI -> updateUI()");
-					this.listView.attr('data-starttime', this.model.sequenceStartTime);
-					this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-					var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
-					if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
-					this.listView.find('.timaat-annotation-list-time').html(timeString);
-					this.listView.find('.timaat-annotation-list-title').html(this.model.title);
-					// categories
-					this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");			
-					if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category timaat-no-categories');
-					else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category text-dark').attr('title', "ein Category");
-					else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-categories text-dark');
-					// type
-					this._updateAnnotationType();
-					
-					// update svg
-					var anno = this;
-					this.svg.items.forEach(function(item) {
-					        item.setStyle({color:'#'+anno.svg.color, weight: anno.svg.strokeWidth, fillOpacity: anno.opacity});
-					});
-					
-					// update marker
-					if ( this.marker ) this.marker.updateView();
-				}
+
+		  
+		  updateUI() {
+			  console.log("TCL: Annotation -> updateUI -> updateUI()");
+			  this.listView.attr('data-starttime', this.model.sequenceStartTime);
+			  this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
+			  var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
+			  if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
+			  this.listView.find('.timaat-annotation-list-time').html(timeString);
+			  this.listView.find('.timaat-annotation-list-title').html(this.model.title);
+			  // categories
+			  this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");			
+			  if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category timaat-no-categories');
+			  else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-category text-dark').attr('title', "ein Category");
+			  else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-categories text-dark');
+			  // type
+			  this._updateAnnotationType();
+			  
+			  // comment
+			  if ( this.model.comment && this.model.comment.length > 0 )
+				  this.listView.find('.timaat-annotation-list-comment').show();
+			  else
+				  this.listView.find('.timaat-annotation-list-comment').hide();
+				  
+			  // update svg
+			  var anno = this;
+			  this.svg.items.forEach(function(item) {
+				  item.setStyle({color:'#'+anno.svg.color, weight: anno.svg.strokeWidth, fillOpacity: anno.opacity});
+			  });
+				
+			  // update marker
+			  if ( this.marker ) this.marker.updateView();
+		  }		  
 
 				_updateAnnotationType() {
 					this.listView.find('.timaat-annotation-list-type').removeClass('fa-image');

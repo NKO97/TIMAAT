@@ -46,7 +46,12 @@ public class Actor implements Serializable {
 	//bi-directional many-to-one association to Name
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="birth_name_actor_name_id")
-	private ActorName actorName;
+	private ActorName birthName;
+
+	//bi-directional many-to-one association to Name
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="display_name_actor_name_id")
+	private ActorName displayName;
 
 	//bi-directional many-to-one association to Address
 	@ManyToOne(cascade=CascadeType.PERSIST)
@@ -130,9 +135,6 @@ public class Actor implements Serializable {
 	//bi-directional many-to-one association to SpatialSemanticsTypeActorPerson
 	// @OneToMany(mappedBy="actor")
 	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
-
-	@Transient
-	private ActorName displayName;
 
 	public Actor() {
 	}
@@ -342,11 +344,11 @@ public class Actor implements Serializable {
 
 	// birth name
 	public ActorName getBirthName() {
-		return this.actorName;
+		return this.birthName;
 	}
 
 	public void setBirthName(ActorName birthName) {
-		this.actorName = birthName;
+		this.birthName = birthName;
 	}
 
 	// display name
