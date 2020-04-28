@@ -778,17 +778,22 @@
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="lists-tab" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-settings-tags"  role="tab" aria-controls="categorysets" aria-selected="true">
-                    <i class="fas fa-tag"></i> Kategorien
+                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-lists-categorysets" role="tab" aria-controls="categorysets" aria-selected="true">
+                    <i class="fas fa-tags"></i> Category Sets
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-lists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="true">
+                  <a class="nav-link" id="categories-tab" onclick="TIMAAT.CategoryLists.loadCategories()" data-toggle="tab" href="#timaat-lists-categories" role="tab" aria-controls="categories" aria-selected="false">
+                    <i class="fas fa-tag"></i> Categories
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-rolelists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="fale">
                     <i class="fas fa-users-cog"></i> RoleGroups
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="roles-tab" onclick="TIMAAT.RoleLists.loadRoles()" data-toggle="tab" href="#timaat-lists-roles" role="tab" aria-controls="roles" aria-selected="true">
+                  <a class="nav-link" id="roles-tab" onclick="TIMAAT.RoleLists.loadRoles()" data-toggle="tab" href="#timaat-rolelists-roles" role="tab" aria-controls="roles" aria-selected="false">
                     <i class="fas fa-user-cog"></i> Roles
                   </a>
                 </li>
@@ -797,53 +802,119 @@
                 <div class="tab-pane fade show active" id="timaat-lists-tags" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row timaat-lists-ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
-                      <div class="card lists-cards categorysets-cards categorysets-card">
-                        <div class="card-header">Kategoriesets
+                      <div class="card lists-cards categories-cards categorysets-card">
+                        <div class="card-header">Category sets
                           <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
-                          <ul class="list-group list-group-flush">
-                            <li id="timaat-settings-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                              <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
-                            </li>
-                          </ul>
-                          <ul id="timaat-categoryset-list" class="list-group list-group-flush">
-                          </ul>
                           <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                            <i class="fas fa-spinner fa-spin"></i> Load data...
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-lists-categoryset-table" class="table table-striped table-bordered table-hover timaat-lists-categoryset-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th id="timaat-lists-categoryset-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <th>Name</th>
+                                  <th style="max-width:150px;width:150px">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-lists-categoryset-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul class="list-group list-group-flush">
+                              <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                                <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                              </li>
+                            </ul>
+                            <ul id="timaat-categoryset-list" class="list-group list-group-flush">
+                            </ul> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card lists-cards categories-cards category-card">
+                        <div class="card-header">Categories
+                          <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i></button>
+                          </div>
+                        <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
+                          <div id="timaat-category-list-loader" class="text-center card-body bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Load data...
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-lists-category-table" class="table table-striped table-bordered table-hover timaat-lists-category-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th id="timaat-lists-category-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <th>Name</th>
+                                  <th style="max-width:150px;width:150px">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-lists-category-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul class="list-group list-group-flush">
+                              <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                                <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                              </li>
+                            </ul>
+                            <ul id="timaat-category-list" class="list-group list-group-flush">
+                            </ul> -->
                           </div>
                         </div>
                       </div>
                       <div class="card lists-cards roles-cards rolegroups-card">
                         <div class="card-header">RoleGroups
-                          <button type="button" id="timaat-lists-rolegroups-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
+                          <button type="button" id="timaat-rolelists-rolegroups-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
                         <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-lists-rolegroup-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-rolelists-rolegroup-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Loading data...
                           </div>
-                          <ul id="timaat-lists-rolegroup-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-rolelists-rolegroup-table" class="table table-striped table-bordered table-hover timaat-rolelists-rolegroup-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Name</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-rolelists-rolegroup-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-rolelists-rolegroup-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                       <div class="card lists-cards roles-cards roles-card">
                         <div class="card-header">Roles
-                          <button type="button" id="timaat-lists-roles-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
+                          <button type="button" id="timaat-rolelists-roles-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
                         <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-lists-role-list-loader" class="text-center card-body bg-info text-white">
+                          <div id="timaat-rolelists-role-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Loading data...
                           </div>
-                          <ul id="timaat-lists-role-list" class="list-group list-group-flush"></ul>
+                          <div class="card-body">
+                            <table id="timaat-rolelists-role-table" class="table table-striped table-bordered table-hover timaat-rolelists-role-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Name</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-rolelists-role-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-rolelists-role-list" class="list-group list-group-flush"></ul> -->
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-6">
-                      <div class="card">
+                    <div class="col-lg-8" id="timaat-lists-tabs">
+                      <!-- <div class="card">
                         <div class="card-header">Kategorien
                           <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
                         </div>
@@ -851,7 +922,7 @@
                           <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th id="timaat-settings-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <th id="timaat-lists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
                                     <th>Name</th>
                                     <th style="max-width:150px;width:150px">Aktion</th>
                                   </tr>
@@ -860,12 +931,51 @@
                             </tbody>
                           </table>
                         </div>
-                      </div>
+                      </div> -->
+                      <!-- Data tab content -->
+                      <!-- datasheet form -->
+                      <form class="form" role="form" id="timaat-rolelists-metadata-form" name="timaat-rolelists-metadata-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="roleFormHeader">Role</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-rolegroup-metadata-form-edit" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-rolelists-role-remove" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Role data -->
+                        <div class="form-group datasheet-data name-data">
+                          <div class="form-row">
+                            <div class="col-md-12">
+                              <label class="col-form-label col-form-label-sm" for="timaat-rolelists-role-metadata-name">Name*</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-role-metadata-name" name="name" placeholder="[Enter display title]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                            </div>                            
+                          </div>
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <!-- <div class="form-buttons"> -->
+                          <div class="role-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                        <!-- </div> -->
+                      </form>
                     </div>
                   </div> <!-- row -->	
-                </div>
-                <div class="tab-pane fade" id="timaat-lists-general" role="tabpanel" aria-labelledby="profile-tab">
-                  not yet implemented                
                 </div>
               </div>
             </div>

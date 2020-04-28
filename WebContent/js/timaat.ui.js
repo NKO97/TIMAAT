@@ -159,10 +159,11 @@
 					TIMAAT.VideoChooser.loadCollections();
 					TIMAAT.MediaDatasets.loadMediaDatatables();
 					TIMAAT.ActorDatasets.loadActorDatatables();
-					TIMAAT.Settings.loadCategorySets();
+					TIMAAT.RoleLists.loadRoleDatatables();
+					TIMAAT.CategoryLists.loadCategorySets();
 					TIMAAT.Datasets.load();
 					// load categories
-					TIMAAT.Settings.loadCategories(null,true);
+					TIMAAT.CategoryLists.loadCategories(null,true);
 				}).fail(function(e) {
 					console.log("TCL: processLogin fail: e", e);
 					console.log( "error",e );

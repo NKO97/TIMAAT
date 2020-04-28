@@ -30,7 +30,7 @@
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`  <span class="timaat-roledatasets-role-list-name">
+							`<span class="timaat-rolelists-role-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			$('#timaat-roledatasets-role-list').append(this.listView);
+			$('#timaat-rolelists-role-list').append(this.listView);
 			// console.log("TCL: Role -> constructor -> this.updateUI()");    
 			var role = this; // save role for system events
 
@@ -59,16 +59,16 @@
 				$('.form').hide();
 				$('.roles-nav-tabs').show();
 				$('.roles-data-tabs').hide();
-				$('.nav-tabs a[href="#roleDatasheet"]').tab("show");
-				$('#timaat-roledatasets-role-metadata-form').data('role', role);
-				TIMAAT.RoleLists.roleFormDatasheet("show", role);
+				$('.nav-tabs a[href="#roleDatasheet"]').tab('show');
+				$('#timaat-rolelists-metadata-form').data('role', role);
+				TIMAAT.RoleLists.rolesFormDatasheet('show', 'role', role);
 			});
     }
 
 		updateUI() {
-			var name = this.model.roleTranslations[0].name;
+			var name = this.model.roleTranslations[0].name;		
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-roledatasets-role-list-name').text(name);
+			this.listView.find('.timaat-rolelists-role-list-name').text(name);
 	
 		}
 
@@ -76,7 +76,7 @@
 			// remove role from UI
 			this.listView.remove();
       console.log("TCL: Role -> remove -> this", this);
-			$('#timaat-roledatasets-role-metadata-form').data('role', null);
+			$('#timaat-rolelists-metadata-form').data('role', null);
 			// remove from roles list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.roles.length; i++) {

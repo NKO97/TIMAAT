@@ -279,6 +279,32 @@
           personFormMemberOfCollectives.submit();
         },
       });
+      var rolesFormMetadata = $("#timaat-rolelists-metadata-form");
+      var rolesFormMetadataValidator = $("#timaat-rolelists-metadata-form").validate({
+        rules: {
+          name: {
+            required: true,
+            minlength: 3,
+            maxlength: 200
+          },
+          languageId: {
+            required: true,
+          },     
+        },
+        messages: {
+          name: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          },
+          languageId: {
+            required: "Please provide the name's language"
+          },
+        },
+        submitHandler: function(rolesFormMetadata) {
+          rolesFormMetadata.submit();
+        },
+      });
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

@@ -30,7 +30,7 @@
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`  <span class="timaat-roledatasets-rolegroup-list-name">
+							`<span class="timaat-rolelists-rolegroup-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			$('#timaat-roledatasets-rolegroup-list').append(this.listView);
+			$('#timaat-rolelists-rolegroup-list').append(this.listView);
 			// console.log("TCL: RoleGroup -> constructor -> this.updateUI()");    
 			var roleGroup = this; // save rolegroup for system events
 
@@ -59,16 +59,16 @@
 				$('.form').hide();
 				$('.rolegroups-nav-tabs').show();
 				$('.rolegroups-data-tabs').hide();
-				$('.nav-tabs a[href="#rolegroupDatasheet"]').tab("show");
-				$('#timaat-roledatasets-rolegroup-metadata-form').data('roleGroup', roleGroup);
-				TIMAAT.RoleLists.rolegroupFormDatasheet("show", roleGroup);
+				$('.nav-tabs a[href="#rolegroupDatasheet"]').tab('show');
+				$('#timaat-rolelists-rolegroup-metadata-form').data('rolegroup', roleGroup);
+				TIMAAT.RoleLists.rolegroupFormDatasheet('show', 'rolegroup', roleGroup);
 			});
     }
 
 		updateUI() {
 			var name = this.model.roleGroupTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-roledatasets-rolegroup-list-name').text(name);
+			this.listView.find('.timaat-rolelists-rolegroup-list-name').text(name);
 	
 		}
 
@@ -76,7 +76,7 @@
 			// remove rolegroup from UI
 			this.listView.remove();
       console.log("TCL: RoleGroup -> remove -> this", this);
-			$('#timaat-roledatasets-rolegroup-metadata-form').data('rolegroup', null);
+			$('#timaat-rolelists-rolegroup-metadata-form').data('rolegroup', null);
 			// remove from rolegroups list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.rolegroups.length; i++) {
