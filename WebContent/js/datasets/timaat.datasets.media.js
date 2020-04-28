@@ -3283,6 +3283,8 @@
 							dir    : data.order[0].dir,
 							// mediumsubtype: 'video'
 						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
