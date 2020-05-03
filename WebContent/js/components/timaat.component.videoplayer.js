@@ -167,41 +167,65 @@
 			    			<button id="timaat-videoplayer-annotation-remove-button" title="Annotation löschen" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="btn btn-light">
 			    				<i class="fa fa-trash-alt"></i>
 			    			</button>`,
-			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
+			    classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
 			    style   :
-			    {
-			        margin: '10px',
-			        padding: '0px 0 0 0',
-			        cursor: 'pointer',
-			    },
+			    { margin: '10px', padding: '0px 0 0 0', },
 			})
 			.addTo(TIMAAT.VideoPlayer.viewer);
 						
-			// shape tools
-			L.EditControl = L.Control.extend({
-
-		        options: {
-		            position: 'topleft',
-		            callback: null,
-		            kind: '',
-		            html: ''
-		        },
-
-		        onAdd: function (map) {
-		            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
-		                link = L.DomUtil.create('a', '', container);
-
-		            link.href = '#';
-		            link.title = 'Erzeuge ' + this.options.kind;
-		            link.innerHTML = this.options.html;
-		            L.DomEvent.on(link, 'click', L.DomEvent.stop)
-		                      .on(link, 'click', function () {
-					      if ( !$(this._container).find('a').hasClass('leaflet-disabled') )
-						      window.LAYER = this.options.callback.call(TIMAAT.VideoPlayer.viewer.editTools);
-		                      }, this);
-		            return container;
-		        }
-		    });
+			// save polygon changes control
+			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
+				enabled: false,
+			    position: 'topleft',
+			    content : '<button disabled title="Änderungen der Annotation speichern" id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-light">'+
+			              '    <i class="fa fa-save"></i>' +
+			              '</button>',
+			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
+			    style   : { margin: '10px', padding: '0px 0 0 0', },
+			});
+			TIMAAT.VideoPlayer.savePolygonCtrl.setEnabled = function(enabled) {
+				if ( this.options.enabled == enabled ) return;
+				this.options.enabled = enabled;
+				let button = $('#timaat-videoplayer-save-polygons-button');
+				button.prop('disabled', !enabled);
+				if ( enabled ) button.removeClass('btn-light').addClass('btn-success');
+				else button.removeClass('btn-success').addClass('btn-light');
+			};
+			TIMAAT.VideoPlayer.savePolygonCtrl.addTo(TIMAAT.VideoPlayer.viewer);
+			TIMAAT.VideoPlayer.savePolygonCtrl.setEnabled(false);
+			
+			// shape editing control
+			TIMAAT.VideoPlayer.editShapesCtrl = L.control.custom({
+			    position: 'topleft',
+			    enabled: true,
+			    content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation" onclick="TIMAAT.VideoPlayer.createRectangle()" class="rectangle btn btn-sm btn-light">
+			    				<i class="fas fa-vector-square"></i>
+			    			</button>
+			    			<button data-type="polygon" type="button" title="Polygon-Annotation" onclick="TIMAAT.VideoPlayer.createPolygon()" class="polygon btn btn-sm btn-light">
+			    				<i class="fas fa-draw-polygon"></i>
+			    			</button>
+			   				<button data-type="line" type="button" title="Linien-Annotation" onclick="TIMAAT.VideoPlayer.createLine()" class="line btn btn-sm btn-light">
+			   					<i class="fas fa-slash"></i>
+			   				</button>
+			   				<button data-type="circle" type="button" title="Kreis-Annotation" onclick="TIMAAT.VideoPlayer.createCircle()" class="circle btn btn-sm btn-light">
+		    					<i class="far fa-circle"></i>
+		    				</button>`,
+			    classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
+			    style   : { margin: '10px', padding: '0px 0 0 0', },
+			});
+			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled = function(enabled) {
+				if ( this.options.enabled == enabled ) return;
+				this.options.enabled = enabled;
+				$(this.getContainer()).find('button').prop('disabled', !enabled);
+				if (!enabled) {
+					$(this.getContainer()).find('button').removeClass('btn-success').addClass('btn-light');
+					try { TIMAAT.VideoPlayer.viewer.editTools.stopDrawing(); } catch(err) {};
+				}
+			}
+			TIMAAT.VideoPlayer.editShapesCtrl.addTo(this.viewer);
+			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled(false);
+			
+			// ------------------------------------------------------------------------------------
 			
 			// polygon layer
 			var annoLayer = new L.LayerGroup();
@@ -227,78 +251,6 @@
 						}
 					});
 			});
-			
-			// save polygon changes control
-			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
-			    position: 'topleft',
-			    content : '<button title="Änderungen der Annotation speichern" id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-light">'+
-			              '    <i class="fa fa-save"></i>' +
-			              '</button>',
-			    classes : 'btn-group-vertical btn-group-sm leaflet-bar',
-			    style   :
-			    {
-			        margin: '10px',
-			        padding: '0px 0 0 0',
-			        cursor: 'pointer',
-			    },
-			});
-			TIMAAT.VideoPlayer.savePolygonCtrl.setEnabled = function(enabled) {
-				let button = $('#timaat-videoplayer-save-polygons-button');
-				button.prop('disabled', !enabled);
-				if ( enabled ) button.removeClass('btn-light').addClass('btn-success');
-				else button.removeClass('btn-success').addClass('btn-light');
-			};
-			TIMAAT.VideoPlayer.savePolygonCtrl.addTo(TIMAAT.VideoPlayer.viewer);
-			TIMAAT.VideoPlayer.savePolygonCtrl.setEnabled(false);
-			
-			// shape controls
-			L.NewRectangleControl = L.EditControl.extend({
-				type: 'rectangle',
-					options: {
-							position: 'topleft',
-							callback: TIMAAT.VideoPlayer.createRectangle,
-							kind: 'Rechteck-Annotation',
-							html: '<i class="fas fa-vector-square"></i>'
-					}
-			});
-			L.NewPolygonControl = L.EditControl.extend({
-				type: 'polygon',
-					options: {
-							position: 'topleft',
-							callback: TIMAAT.VideoPlayer.createPolygon,
-							kind: 'Polygon-Annotation',
-							html: '<i class="fas fa-draw-polygon"></i>'
-					}
-			});
-			L.NewLineControl = L.EditControl.extend({
-				type: 'line',
-					options: {
-							position: 'topleft',
-							callback: TIMAAT.VideoPlayer.createLine,
-							kind: 'Linien-Annotation',
-							html: '<i class="fas fa-slash"></i>'
-					}
-			});
-			L.NewCircleControl = L.EditControl.extend({
-				type: 'circle',
-					options: {
-							position: 'topleft',
-							callback: TIMAAT.VideoPlayer.createCircle,
-							kind: 'Kreis-Annotation',
-							html: '<i class="far fa-circle"></i>'
-					}
-			});
-
-			var ctrl = new L.NewRectangleControl();
-			TIMAAT.VideoPlayer.viewer.editCtrl = new Array();
-			TIMAAT.VideoPlayer.viewer.editCtrl.push(ctrl);
-			TIMAAT.VideoPlayer.viewer.editCtrl.push(new L.NewPolygonControl());
-			TIMAAT.VideoPlayer.viewer.editCtrl.push(new L.NewCircleControl());
-			TIMAAT.VideoPlayer.viewer.editCtrl.push(new L.NewLineControl());
-			
-			$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {TIMAAT.VideoPlayer.viewer.addControl(item)});
-
-			$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {$(item._container).find('a').addClass('leaflet-disabled');});
 			
 			TIMAAT.VideoPlayer.viewer.on('editable:editing', function (e) {
 					e.layer.setStyle({weight: 1, fillOpacity: 0.2});
@@ -392,7 +344,7 @@
 				
 			});
 			TIMAAT.VideoPlayer.viewer.on('editable:drawing:end', function(ev) {
-				$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index, item) {$(item._container).find('a').removeClass('bg-success');});
+				$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).find('button').removeClass('btn-success').addClass('btn-light');
 				TIMAAT.VideoPlayer.curTool = null;
 				ev.layer.dragging.enable();
 				TIMAAT.VideoPlayer.viewer.removeLayer(ev.layer);
@@ -667,12 +619,9 @@
 				TIMAAT.VideoPlayer.curTool = type;
 				TIMAAT.VideoPlayer.viewer.editTools.startPolyline();
 				break;
-			}
-			
+			}			
 			// update UI
-			$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {
-				if ( item.type == type ) $(item._container).find('a').addClass('bg-success');
-			});
+			$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).find('button.'+type).removeClass('btn-light').addClass('btn-success');
 		},
 
 		confineBounds: function(bounds, xOff, yOff) {
@@ -767,6 +716,7 @@
 				// update annotation list UI
 				TIMAAT.VideoPlayer.updateListUI();
 				if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.animCtrl.updateUI();
+				TIMAAT.VideoPlayer.updateUI();
 			});
 			TIMAAT.VideoPlayer.editAudioLayer = false;
 			$('.timaat-button-videolayer').click();
@@ -993,15 +943,10 @@
 			if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 			this.curAnnotation = annotation;
 			if ( this.curAnnotation ) {
-			  $(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {$(item._container).find('a').removeClass('leaflet-disabled');});
 				this.curAnnotation.setSelected(true);
 				$('#timaat-videoplayer-annotation-remove-button').prop("disabled", false);
 				$('#timaat-videoplayer-annotation-remove-button').removeAttr("disabled");
-				
 			} else {
-				// disable editing widget
-				$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {$(item._container).find('a').removeClass('bg-success');});
-				$(TIMAAT.VideoPlayer.viewer.editCtrl).each(function(index,item) {$(item._container).find('a').addClass('leaflet-disabled');});
 				$('#timaat-videoplayer-annotation-remove-button').prop("disabled", true);
 				$('#timaat-videoplayer-annotation-remove-button').attr("disabled");
 				// stop editing in progress
@@ -1110,6 +1055,8 @@
 			if ( this.curAnnotation && this.curAnnotation.isAnimation() )
 				$('#timaat-timeline-keyframe-pane').show();
 			else $('#timaat-timeline-keyframe-pane').hide();
+			let enabled = this.curAnnotation && this.curAnnotation.isActive() && this.curAnnotation.isOnKeyframe();
+			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled(enabled);
 		},
 		
 		pause: function() {
