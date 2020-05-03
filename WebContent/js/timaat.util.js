@@ -152,6 +152,44 @@
 			}
 		},
 		
+		getInterpolatedShape: function (shapeFrom, shapeTo, percent) {
+			if ( !shapeFrom || !shapeTo || percent == null ) return null;
+			percent = percent < 0 ? 0 : percent;
+			percent = percent > 1 ? 1 : percent;
+			if ( shapeFrom.id != shapeTo.id ) return null;
+			if ( shapeFrom == shapeTo ) return shapeFrom;
+			if ( percent == 0 ) return shapeFrom;
+			if ( percent == 1 ) return shapeTo;
+			let interShape = { id: shapeFrom.id, type: shapeFrom.type };
+			switch (shapeFrom.type) {
+				case 'rectangle': 
+					interShape.bounds = [ this._lerpValue(shapeFrom.bounds[0], shapeTo.bounds[0], percent), this._lerpValue(shapeFrom.bounds[1], shapeTo.bounds[1], percent) ];
+//					interShape.bounds = L.latLngBounds( this._lerpValue(shapeFrom.bounds.getSouthWest(), shapeTo.bounds.getSouthWest(), percent), this._lerpValue(shapeFrom.bounds.getNorthEast(), shapeTo.bounds.getNorthEast(), percent) );
+					break;
+					
+				case "polygon":
+				case "line":
+					interShape.points = new Array();
+					for (let index=0; index < shapeFrom.points.length; index++)
+						interShape.points.push(this._lerpValue(shapeFrom.points[index], shapeTo.points[index], percent));
+					break;
+				
+				case "circle":
+					interShape.point = this._lerpValue(shapeFrom.point, shapeTo.point, percent);
+					interShape.radius = this._lerpValue(shapeFrom.radius, shapeTo.radius, percent);
+					break;
+			}
+			return interShape;
+		},
+		
+		_lerpValue: function (from, to, percent) {
+			if ( !from || !to || percent == null ) return null;
+			if ( Array.isArray(from) )
+				return [from[0] + (to[0] - from[0]) * percent, from[1] + (to[1] - from[1]) * percent];
+			else
+				return from + (to - from) * percent;
+		},
+		
 		getDefTranslation: function(item, list, prop) {
 			var value = null;
 			item[list].forEach(function(translation) {
@@ -167,6 +205,17 @@
 					translation[prop] = value;
 			});
 		},
+		
+		createUUIDv4() {
+		    let dt = new Date().getTime();
+		    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		        var r = (dt + Math.random()*16)%16 | 0;
+		        dt = Math.floor(dt/16);
+		        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+		    });
+		    return uuid;
+		},
+
 		
 		getArgonHash: function(password, salt) {
     // console.log("TCL: getArgonHash: function(password, salt)");

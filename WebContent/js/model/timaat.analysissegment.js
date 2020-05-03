@@ -73,26 +73,26 @@
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
-						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 					});
 					this.timelineView.click(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
-						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 					});
 					this.listView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
-						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					this.timelineView.dblclick(this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
-						TIMAAT.VideoPlayer.setInspectorMetadata(segment, 'analysissegment');			
+						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
 					console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");
@@ -108,7 +108,7 @@
 				}
 					
 				updateStatus(time) {
-		      console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
+//					console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 					var status = false;
 					if ( time >= this.model.startTime && time <= this.model.endTime) status = true;
 

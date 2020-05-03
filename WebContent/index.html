@@ -467,14 +467,15 @@
     <!-- Nav tabs -->
     <div class="leaflet-sidebar-tabs">
         <ul role="tablist"> <!-- top aligned tabs -->
-            <li><a href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+            <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+            <li><a title="Animationseinstellungen (nur bei Annotation)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
             <li><a href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
             <li><a href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
             <li><a href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
             <li><a href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
         </ul>
         <ul role="tablist"> <!-- bottom aligned tabs -->
-            <li><a href="javascript:TIMAAT.VideoPlayer.switchInspector()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
+            <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
         </ul>
     </div>
 
@@ -515,7 +516,6 @@
 				<button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
 				<button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-primary btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
 			</div>
-		</div>
 	</div>
 	
 	<div id="timaat-inspector-meta-timecode-group">
@@ -530,14 +530,14 @@
 		</div>
 			<div class="input-group input-group-sm mb-3">
 		<div class="input-group-prepend">				
-			<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+			<button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
 			<div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(0)">dieses Frame</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(1)">1 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(5)">5 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(15)">15 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(30)">30 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(60)">1 min</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
 				<div role="separator" class="dropdown-divider"></div>
 				<a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
 			</div>
@@ -552,7 +552,22 @@
 		<textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Kommentar eingeben"></textarea>
 	</div>
 	<button type="button" class="btn btn-primary" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
+  </div>
 </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
+            <h1 class="leaflet-sidebar-header">Animationseinstellungen<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
+	            <p>
+					<strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden.
+				</p>
+				<br>
+				<button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block"><i class="fas fa-running fa-fw"></i> Animation erstellen</button>
+				<button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block"><i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen</button>
+				<br>
+				<h6>Keyframes</h6>
+        	    <div id="timaat-inspector-animation-keyframes">Diese Funktion steht in Kürze zur Verfügung.</div>
+            </div>
         </div>
 
         <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
@@ -582,6 +597,8 @@
 			Locations werden von FIPOP noch nicht unterstützt.
             </div>
         </div>
+	</div>
+        
 
     </div>
           
@@ -640,9 +657,9 @@
               <div class="col-lg-9">
                 <div class="card">
                   <div class="list-group list-group-flush">
-                    <div id="map" style="height: 450px; width: 100%;">
+                    <div id="timaat-videoplayer-viewer" style="height: 450px; width: 100%;">
                     </div>
-                    <div id="timaat-map-overlay">
+                    <div id="timaat-videoplayer-viewer-overlay">
                       x                    
                     </div>
                   </div>
@@ -682,6 +699,7 @@
 						<div class="timaat-videoduration">xx:xx</div>
                 	</div>
                   <div id="timaat-timeline-segment-pane"></div>
+                  <div id="timaat-timeline-keyframe-pane"></div>
                   <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
                   <br>
                   <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
