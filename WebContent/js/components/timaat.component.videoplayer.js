@@ -68,24 +68,20 @@
 			    position: 'topleft',
 			    content : `<div class="text-center bg-light border-bottom" onclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">Keyframes</div>
 			    			<div class="btn-group btn-group-sm">
-			    				<button id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
+			    				<button title="vorheriges Keyframe auswählen" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
 			    					<i class="fas fa-arrow-left"></i>
 			    				</button>
-								<div class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
+								<div title="aktuelles Keyframe" class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
 									<i class="fas fa-fw keyframeinfo">2</i>
 								</div>
-								<button id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
+								<button title="nächstes Keyframe auswählen" id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
 									<i class="fas fa-arrow-right"></i>
 			    				</button>
 			    			</div>
-			    			<button id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
-			    			<button id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
+			    			<button title="neues Keyframe an diesem Timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
+			    			<button title="aktuelles Keyframe entfernen" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
 			    classes : 'leaflet-bar',
-			    style   : {
-			        margin: '10px',
-			        padding: '0px 0 0 0',
-			        cursor: 'pointer',
-			    },
+			    style   : { margin: '10px', padding: '0px 0 0 0', },
 			});
 			TIMAAT.VideoPlayer.animCtrl.updateUI = function() {
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
@@ -198,16 +194,16 @@
 			TIMAAT.VideoPlayer.editShapesCtrl = L.control.custom({
 			    position: 'topleft',
 			    enabled: true,
-			    content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation" onclick="TIMAAT.VideoPlayer.createRectangle()" class="rectangle btn btn-sm btn-light">
+			    content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createRectangle()" class="rectangle btn btn-sm btn-light">
 			    				<i class="fas fa-vector-square"></i>
 			    			</button>
-			    			<button data-type="polygon" type="button" title="Polygon-Annotation" onclick="TIMAAT.VideoPlayer.createPolygon()" class="polygon btn btn-sm btn-light">
+			    			<button data-type="polygon" type="button" title="Polygon-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createPolygon()" class="polygon btn btn-sm btn-light">
 			    				<i class="fas fa-draw-polygon"></i>
 			    			</button>
-			   				<button data-type="line" type="button" title="Linien-Annotation" onclick="TIMAAT.VideoPlayer.createLine()" class="line btn btn-sm btn-light">
+			   				<button data-type="line" type="button" title="Linien-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createLine()" class="line btn btn-sm btn-light">
 			   					<i class="fas fa-slash"></i>
 			   				</button>
-			   				<button data-type="circle" type="button" title="Kreis-Annotation" onclick="TIMAAT.VideoPlayer.createCircle()" class="circle btn btn-sm btn-light">
+			   				<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createCircle()" class="circle btn btn-sm btn-light">
 		    					<i class="far fa-circle"></i>
 		    				</button>`,
 			    classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
