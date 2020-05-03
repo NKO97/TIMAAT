@@ -598,6 +598,14 @@
 		createShape: function(type) {
 			console.log("TCL: createShape: function(type)");
 			console.log("TCL: type", type);
+			
+			if ( TIMAAT.VideoPlayer.viewer.editTools.drawing() ) {
+				let oldTool = TIMAAT.VideoPlayer.curTool;
+				try { TIMAAT.VideoPlayer.viewer.editTools.stopDrawing(); } catch(err) {};
+				$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).find('button').removeClass('btn-success').addClass('btn-light');
+				if ( type == oldTool ) return;
+			}
+			
 			switch (type) {
 			case 'rectangle':
 				TIMAAT.VideoPlayer.curTool = type;

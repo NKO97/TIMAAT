@@ -34,6 +34,7 @@
 			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
 			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
 			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
+			if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
 /*
@@ -454,6 +455,7 @@
 						else if ( item instanceof L.Polyline ) shape.type = 'line';
 						else if ( item instanceof L.Circle ) shape.type = 'circle';
 						shape = this.syncShape(item, shape);
+						// TODO check if stringify needed to decouple references
 						for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
 					}
 					// add to list of shapes
