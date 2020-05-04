@@ -43,6 +43,94 @@
 			this.ui.addAnimButton = $('#timaat-inspector-animation-add-button');
 			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
 			
+			// actors panel
+			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
+				lengthChange	: false,
+				dom				: 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+//				dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				pageLength		: 3,
+				deferLoading	: 0,
+				order			: [[ 0, 'asc' ]],
+				processing		: true,
+				serverSide		: true,
+				ajax			: {
+					"url"        : "api/actor/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) { return data.data; }
+				},
+				"createdRow": function(row, data, dataIndex) {
+					let actorElement = $(row);
+					let actor = data;
+					actor.ui = actorElement;
+					actorElement.data('actor', actor);
+
+					actorElement.on('click', '.name', function(event) {
+						event.stopPropagation();
+					});
+				},
+				"columns": [{
+					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
+						// console.log("TCL: actor", actor);
+						let displayActorTypeIcon = '';
+						switch (actor.actorType.actorTypeTranslations[0].type) {
+							case 'person': 
+								displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
+							break;
+							case 'collective': 
+								displayActorTypeIcon = '  <i class="fas fa-users"></i>';
+							break;
+						}
+						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`</p>`;
+						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
+							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+						}
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
+								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+							}
+						});
+						return nameDisplay;
+					}
+				}],
+				language: {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "",
+					"searchPlaceholder": "Suche Actors",
+					"processing"  : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
+					"lengthMenu"  : "Zeige _MENU_ Einträge",
+					"zeroRecords" : "Keine Actors gefunden.",
+					"info"        : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
+					"infoEmpty"   : "Keine Actors gefunden.",
+					"infoFiltered": "(&mdash; _TOTAL_ von _MAX_ Actors)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},				
+			});
+			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Verfügbare Actors');
+			
+			
+			
 			// attach listeners
 			let inspector = this;
 			$('#timaat-inspector-meta-submit').click(function(ev) {
@@ -215,6 +303,15 @@
 
 		}
 		
+		get isOpen() {
+			return !$('#timaat-inspector').hasClass('collapsed');
+		}
+		
+		reset() {
+			this.setItem(null);
+			this.ui.dataTableActors.ajax.reload();
+		}
+		
 		switchPosition() {
 			if ( this.getPosition() == 'left' ) {
 				this.setPosition('right');
@@ -240,20 +337,24 @@
 			
 			// animation panel default UI setting
 			this.disablePanel('timaat-inspector-animation');
-			$('#timaat-inspector-animation-pane').hide();
+			this.disablePanel('timaat-inspector-tags');
+			this.disablePanel('timaat-inspector-actors');
+			this.disablePanel('timaat-inspector-events');
+			this.disablePanel('timaat-inspector-locations');
 
 			if ( !type ) {
 				this.disablePanel('timaat-inspector-metadata');
-				$('#timaat-inspector-metadata-pane').hide();
 				$('#timaat-inspector-metadata-title').html('Kein Element ausgewählt');
 			} else {
 				this.enablePanel('timaat-inspector-metadata');
-				$('#timaat-inspector-metadata-pane').show();
 				// annotations
 				if ( type == 'annotation' ) {
 					// animation panel
 					this.enablePanel('timaat-inspector-animation');
-					$('#timaat-inspector-animation-pane').show();
+					this.enablePanel('timaat-inspector-tags');
+					this.enablePanel('timaat-inspector-actors');
+					this.enablePanel('timaat-inspector-events');
+					this.enablePanel('timaat-inspector-locations');
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
 					$('#timaat-inspector-meta-opacity-group').show();
@@ -311,6 +412,7 @@
 					$('#timaat-inspector-meta-submit').html(submit);
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
 					$("#timaat-inspector-meta-comment").val(comment);				
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
 				// analysis segments
 				if ( type == 'analysissegment' ) {
@@ -340,6 +442,7 @@
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);
 					(segment) ? $('#timaat-segment-delete-submit').show() : $('#timaat-segment-delete-submit').hide();
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
 			}
 		}
@@ -395,9 +498,11 @@
 		}
 		
 		enablePanel(panel) {
+			$('#'+panel+'-pane').show();
 			return this._inspector.enablePanel(panel);
 		}
 		disablePanel(panel) {
+			$('#'+panel+'-pane').hide();
 			return this._inspector.disablePanel(panel);
 		}
 		

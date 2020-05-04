@@ -580,7 +580,24 @@
         <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
             <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
             <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
-			Actors werden von FIPOP noch nicht unterstützt.
+	            <button class="btn-block text-left btn btn-light collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
+	            <div class="actors-available-wrapper p-2 border border-secondary collapse">
+					<table class="actors-available table table-striped table-bordered table-hover">
+						<thead class="thead-dark">
+							<tr><th>Titel</th></tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+	            </div>
+	            <button class="btn-block text-left btn btn-light font-weight-bold mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
+	            <div class="actors-annotation-wrapper p-2 border border-secondary collapse show" aria-expanded="true">
+					<table class="actors-annotation table table-striped table-bordered table-hover">
+						<thead class="thead-light">
+							<tr><th>Diese Funktion steht in Kürze zur Verfügung.</th></tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
             </div>
         </div>
 
@@ -710,7 +727,7 @@
                 		</div>
 						<div class="timaat-videoduration">xx:xx</div>
                 	</div>
-                	<div id="timaat-timeline-zoomable-wrapper"><div id="timaat-timeline-zoomable">
+                	<div id="timaat-timeline-zoomable-wrapper" class="pb-2"><div id="timaat-timeline-zoomable">
                   <div id="timaat-timeline-segment-pane"></div>
                   <div id="timaat-timeline-keyframe-pane"></div>
                   <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">

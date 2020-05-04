@@ -711,6 +711,9 @@
 			$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", true);
 			$('#timaat-videoplayer-annotation-quickadd-button').attr("disabled");
 
+			// setup inspector
+			TIMAAT.VideoPlayer.inspector.reset();
+			
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
 			$('.timaat-videoplayer-ui').show();

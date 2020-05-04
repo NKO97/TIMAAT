@@ -39,6 +39,21 @@ p + p {
 	display: none;
 }
 
+button i.collapse-icon:before {
+	content: "\f0d7";
+}
+button.collapsed i.collapse-icon:before {
+	content: "\f0da";
+}
+
+th.timaat-padding, td.timaat-padding {
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.timaat-padding.sorting_asc:after, th.timaat-padding.sorting_desc:after {
+	bottom: 0.25rem !important;
+}
+
 .timaat-video-card {
 	cursor: pointer;
 	width: 16rem;
