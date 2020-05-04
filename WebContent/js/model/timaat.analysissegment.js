@@ -47,16 +47,17 @@
 				updateUI() {
 					console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
 					this.listView.attr('data-starttime', this.model.startTime);
-					var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+					let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 					this.listView.find('.timaat-annotation-segment-title').html(this.model.analysisSegmentTranslations[0].name);
 					this.timelineView.find('.timaat-timeline-segment-title ').html(this.model.analysisSegmentTranslations[0].name);
 
 					// update timeline position
-					var magicoffset = 1; // TODO replace input slider
-					var width =  $('#timaat-video-seek-bar').width();
-					var length = (this.model.endTime - this.model.startTime) / TIMAAT.VideoPlayer.duration * width;
-					var offset = this.model.startTime / TIMAAT.VideoPlayer.duration * width;
+					let magicoffset = 0; // TODO replace input slider
+					let width =  $('#timaat-video-seek-bar').width();
+					let length = (this.model.endTime - this.model.startTime) / TIMAAT.VideoPlayer.duration * width;
+					length -= 2; // TODO magic number - replace input slider
+					let offset = this.model.startTime / TIMAAT.VideoPlayer.duration * width;
 					this.timelineView.css('width', length+'px');
 					this.timelineView.css('margin-left', (offset+magicoffset)+'px');
 

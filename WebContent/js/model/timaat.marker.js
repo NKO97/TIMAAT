@@ -183,7 +183,10 @@
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  this._updateElementStyle();
-				  
+			  
+			  if ( this.parent.isSelected() && this.parent.isAnimation() ) this.ui.element.addClass('timaat-timeline-marker-anim');
+			  else this.ui.element.removeClass('timaat-timeline-marker-anim');
+			  
 			  if ( this.parent.isSelected() && !this.parent.isAnimation() ) {
 				  this.regionstart.attr('style','position:relative;');
 				  this.regionstart.show();

@@ -523,6 +523,9 @@ a.dropdown-item {
 	width: 100%;
 	height: 15px;
 }
+#timaat-timeline-marker-pane .timaat-timeline-marker-anim {
+	background-color: rgba(0, 0, 0, 0.3);
+}
 #timaat-timeline-marker-pane.timaat-timeline-videolayer .timaat-timeline-marker-video {
 	display: block;
 }
