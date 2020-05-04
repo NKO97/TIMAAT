@@ -30,20 +30,22 @@
 		UI: Object(),
 		model: Object(),
 		volume: 1,
+		repeatSection: false,
 		
 		init: function() {
 			// init UI
 			$('.timaat-videoplayer-novideo').show();
 			$('.timaat-videoplayer-ui').hide();
 			
-			TIMAAT.VideoPlayer.viewer = L.map('timaat-videoplayer-viewer', {
+			this.viewer = L.map('timaat-videoplayer-viewer', {
 				zoomControl: false,
 				attributionControl: false,
 				zoom: 0.0,
 				maxZoom: 0.0,
 				center: [0,0],
 				crs: L.CRS.Simple,
-				editable: true,		
+				editable: true,
+				keyboard: false,
 			});
 
 			let bounds = [[450,0], [0,800]];
@@ -403,6 +405,10 @@
 					ev.preventDefault();
 					$('.stepfwdbutton').click();
 					break;
+				case "r":
+					ev.preventDefault();
+					$('.repeatbutton').click();
+					break;
 				case "m":
 					ev.preventDefault();
 					$('#timaat-volumeicon').click();
@@ -420,12 +426,13 @@
 			preview.hide();
 		    
 			// setup video controls UI events
+			// TODO refactor
 			$('.playbutton').click(function(ev) {
 				ev.preventDefault();
-				$(this).toggleClass('playing');
-				if ( $(this).hasClass('playing') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
+				$(this).toggleClass('active');
+				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
 			});			
-			$('.stepbckbutton').click(function(ev) {
+			$('.stepbckbutton').on('click dblclick', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
@@ -434,7 +441,7 @@
 					Math.max(0, TIMAAT.VideoPlayer.video.currentTime - frameTime)
 				);
 			});
-			$('.stepfwdbutton').click(function(ev) {
+			$('.stepfwdbutton').on('click dblclick', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
@@ -443,7 +450,13 @@
 					Math.min(TIMAAT.VideoPlayer.video.duration, TIMAAT.VideoPlayer.video.currentTime + frameTime)
 				);
 			});
-			$('.stepbckbutton,.stepfwdbutton').dblclick(function(ev) {ev.preventDefault(); ev.stopPropagation(); });
+			$('.repeatbutton').on('click', function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+				TIMAAT.VideoPlayer.repeatSection = !TIMAAT.VideoPlayer.repeatSection;
+				$(this).removeClass('btn-outline-secondary').removeClass('btn-primary');
+				if ( TIMAAT.VideoPlayer.repeatSection ) $(this).addClass('btn-primary'); else $(this).addClass('btn-outline-secondary');
+			});
 			
 			$('#timaat-volume-slider').on('input change', function() {
 				if ( !TIMAAT.VideoPlayer.video ) return;
@@ -479,9 +492,13 @@
 					if ( speed > playbackSpeeds.length-1 ) speed = 0;
 					TIMAAT.VideoPlayer.video.playbackRate = playbackSpeeds[speed];
 				}
-				
+				let rateInfo = TIMAAT.VideoPlayer.video.playbackRate;
+				if ( rateInfo == 0.5 ) rateInfo = "&frac12;";
+				if ( rateInfo == 0.25 ) rateInfo = "&frac14;";
 				// update UI
-				$('#timaat-videoplayer-video-speed').text(TIMAAT.VideoPlayer.video.playbackRate+"x");
+				$(this).find('.video-speed-info').html(rateInfo+"&times;");
+				if ( TIMAAT.VideoPlayer.video.playbackRate != 1 ) $(this).addClass('active'); else $(this).removeClass('active');
+				
 			});
 			
 			$('#timaat-video-seek-bar').change(function(ev) {
@@ -1061,20 +1078,21 @@
 			else $('#timaat-timeline-keyframe-pane').hide();
 			let enabled = this.curAnnotation && this.curAnnotation.isActive() && this.curAnnotation.isOnKeyframe();
 			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled(enabled);
+//			$('.repeatbutton').prop('disabled', TIMAAT.VideoPlayer.curAnnotation == null );
 		},
 		
 		pause: function() {
 			// console.log("TCL: pause: function()");
 			if ( !this.video ) return;
 			this.video.pause();
-			if ( $('.playbutton').hasClass('playing') ) $('.playbutton').removeClass('playing');			
+			$('.playbutton').removeClass('active');			
 		},
 
 		play: function() {
 			// console.log("TCL: play: function()");
 			if ( !this.video ) return;
 			this.video.play();
-			if ( !$('.playbutton').hasClass('playing') ) $('.playbutton').addClass('playing');			
+			$('.playbutton').addClass('active');			
 		},
 		
 		jumpTo: function(time) {
@@ -1097,6 +1115,11 @@
 		
 		_updateAnimations: function() {
 			if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.video.paused || !TIMAAT.VideoPlayer.annotationList ) return;
+			
+			if ( TIMAAT.VideoPlayer.repeatSection && TIMAAT.VideoPlayer.curAnnotation )
+				if ( TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime
+					|| TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curAnnotation.endTime )
+					TIMAAT.VideoPlayer.jumpTo(TIMAAT.VideoPlayer.curAnnotation.startTime);
 			
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
 				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);

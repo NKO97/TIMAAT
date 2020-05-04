@@ -55,9 +55,21 @@
 		}
 		
 		addShape(shape) {
-			// TODO check if shape id exists
+			// check if shape id exists
+			if ( this.shapeMap.has(shape.id) ) return;
 			this.shapes.push(shape);
 			this.shapeMap.set(shape.id, shape);
+		}
+		
+		removeShape(shape) {
+			if ( !shape ) return;
+			let id = (shape.id) ? shape.id : shape;
+			let kfShape = this.shapeMap.get(id);
+			if ( !kfShape ) return;
+			let index = this.shapes.indexOf(kfShape);
+			if ( index < 0 ) return;
+			this.shapes.splice(index, 1);
+			this.shapeMap.delete(id);
 		}
 		
 		get time() {

@@ -663,17 +663,29 @@
                       x                    
                     </div>
                   </div>
-                  <div class="card-footer">
-                    <a class="stepbckbutton"><i class="fas fa-step-backward fa-fw"></i></a>
-                    <a class="playbutton"><i class="play fa fa-play fa-fw"></i><i class="pause fa fa-pause fa-fw"></i></a>
-                    <a class="stepfwdbutton"><i class="fas fa-step-forward fa-fw"></i></a>
-                    &nbsp;
-                    <a class="timaat-volumecontrol">
+                  <div class="card-footer timaat-videoplayer-video-footer">
+                  	<!-- Playback Controls -->
+					<div class="btn-group btn-group-sm mr-1">
+						<button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary"><i class="fas fa-step-backward"></i></button>
+						<button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary"><i class="play fas fa-play fa-fw"></i><i class="pause fa fa-pause fa-fw"></i></button>
+						<button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary"><i class="fas fa-step-forward"></i></button>
+					</div>
+					<!-- Playback Repeat Control -->
+					<div class="btn-group btn-group-sm mr-3">
+						<button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary"><i class="fas fa-sync"></i> A&rarr;B</button>
+					</div>
+					<!-- Volume Control -->
+                    <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
                       <span id="timaat-volumeicon"><i class="volume fas fa-volume-up"></i><i class="mute fas fa-volume-mute"></i></span>
                       <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-control form-control-sm-range">
-                    </a>				 
-                    <span class="videotime" style="padding-left:20px">00:00</span>
-                    <span id="timaat-videoplayer-video-speed" class="float-right">1x</span>
+                    </a>
+                    <span class="videotime" style="padding-left:20px">00:00.000</span>
+					<!-- Playback Speed Control -->
+					<div class="btn-group btn-group-sm float-right">
+						<button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
+							<span class="video-speed-info">1&times;</span>
+						</button>
+					</div>
                     <hr style="margin: 2px; padding: 0"/>
 <!--
                    <div id="timaat-mediadatasets-medium-tags" class="float-left"><i class="fas fa-tag"></i>&nbsp;&nbsp;

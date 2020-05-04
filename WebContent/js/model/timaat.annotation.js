@@ -455,6 +455,7 @@
 						else if ( item instanceof L.Polyline ) shape.type = 'line';
 						else if ( item instanceof L.Circle ) shape.type = 'circle';
 						shape = this.syncShape(item, shape);
+						// propagate changes to keyframes
 						// TODO check if stringify needed to decouple references
 						for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
 					}
@@ -473,12 +474,11 @@
 					item.on('click', function(ev) {
 						TIMAAT.VideoPlayer.selectAnnotation(anno);
 						// delete annotation if user presses alt
-						if ( ev.originalEvent.altKey ) {
+						if ( ev.originalEvent.altKey && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isOnKeyframe()  ) {
 							anno.removeSVGItem(ev.target);
-						  TIMAAT.VideoPlayer.updateUI();
-						  console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+							TIMAAT.VideoPlayer.updateUI();
+							console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 						}
-						
 					});
 					item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
 					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
@@ -493,6 +493,8 @@
 					this.svg.layer.removeLayer(item);
 					var index = this.svg.items.indexOf(item);
 					if (index > -1) this.svg.items.splice(index, 1);
+					// propagate changes to keyframes
+					for (let keyframe of this.svg.keyframes) keyframe.removeShape(item.options.id);
 					
 					this.changed = true;
 
