@@ -468,11 +468,11 @@
     <div class="leaflet-sidebar-tabs">
         <ul role="tablist"> <!-- top aligned tabs -->
             <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
-            <li><a title="Animationseinstellungen (nur bei Annotation)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
-            <li><a href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
-            <li><a href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-            <li><a href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
-            <li><a href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
+            <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
+            <li><a title="Kategorien und Tags verknüpfen (nur bei Annotationen)" href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
+            <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+            <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
+            <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
         </ul>
         <ul role="tablist"> <!-- bottom aligned tabs -->
             <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
@@ -698,6 +698,7 @@
                 		</div>
 						<div class="timaat-videoduration">xx:xx</div>
                 	</div>
+                	<div id="timaat-timeline-zoomable-wrapper"><div id="timaat-timeline-zoomable">
                   <div id="timaat-timeline-segment-pane"></div>
                   <div id="timaat-timeline-keyframe-pane"></div>
                   <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
@@ -708,6 +709,8 @@
 						<img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
 					</div>
 				</div>
+                	</div>
+                	</div>
                 </div>
               </div>
             </div>
