@@ -60,8 +60,8 @@
 				$('.rolegroups-nav-tabs').show();
 				$('.rolegroups-data-tabs').hide();
 				$('.nav-tabs a[href="#rolegroupDatasheet"]').tab('show');
-				$('#timaat-rolelists-rolegroup-metadata-form').data('rolegroup', roleGroup);
-				TIMAAT.RoleLists.rolegroupFormDatasheet('show', 'rolegroup', roleGroup);
+				$('#timaat-rolelists-metadata-form').data('rolegroup', roleGroup);
+				TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'rolegroup', roleGroup);
 			});
     }
 
@@ -76,20 +76,20 @@
 			// remove rolegroup from UI
 			this.listView.remove();
       console.log("TCL: RoleGroup -> remove -> this", this);
-			$('#timaat-rolelists-rolegroup-metadata-form').data('rolegroup', null);
-			// remove from rolegroups list
+			$('#timaat-rolelists-metadata-form').data('rolegroup', null);
+			// remove from role groups list
 			var index;
-			for (var i = 0; i < TIMAAT.RoleLists.rolegroups.length; i++) {
-				if (TIMAAT.RoleLists.rolegroups[i].model.id == this.model.id) {
+			for (var i = 0; i < TIMAAT.RoleLists.roleGroups.length; i++) {
+				if (TIMAAT.RoleLists.roleGroups[i].model.id == this.model.id) {
 					index = i;
 					break;
 				}
 			}
 			if (index > -1) {
-				TIMAAT.RoleLists.rolegroups.splice(index, 1);
-				TIMAAT.RoleLists.rolegroups.model.splice(index, 1);
+				TIMAAT.RoleLists.roleGroups.splice(index, 1);
+				TIMAAT.RoleLists.roleGroups.model.splice(index, 1);
 			}
-			// remove from rolegroupgroup list
+			// remove from roles list
       var roleIndex;
       for (var i = 0; i < TIMAAT.RoleLists.roles.length; i++) {
         if (TIMAAT.RoleLists.roles[i].model.id == this.model.id) {

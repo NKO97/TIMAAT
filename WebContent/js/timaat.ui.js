@@ -159,7 +159,7 @@
 					TIMAAT.VideoChooser.loadCollections();
 					TIMAAT.MediaDatasets.loadMediaDatatables();
 					TIMAAT.ActorDatasets.loadActorDatatables();
-					TIMAAT.RoleLists.loadRoleDatatables();
+					TIMAAT.RoleLists.loadRolesDatatables();
 					TIMAAT.CategoryLists.loadCategorySets();
 					TIMAAT.Datasets.load();
 					// load categories

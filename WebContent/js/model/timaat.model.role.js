@@ -61,11 +61,12 @@
 				$('.roles-data-tabs').hide();
 				$('.nav-tabs a[href="#roleDatasheet"]').tab('show');
 				$('#timaat-rolelists-metadata-form').data('role', role);
-				TIMAAT.RoleLists.rolesFormDatasheet('show', 'role', role);
+				TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'role', role);
 			});
     }
 
 		updateUI() {
+			// console.log("TCL: Role -> updateUI -> this.model", this.model);
 			var name = this.model.roleTranslations[0].name;		
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-rolelists-role-list-name').text(name);
@@ -89,7 +90,7 @@
 				TIMAAT.RoleLists.roles.splice(index, 1);
 				TIMAAT.RoleLists.roles.model.splice(index, 1);
 			}
-			// remove from rolegroup list
+			// remove from role groups list
       var roleGroupIndex;
       for (var i = 0; i < TIMAAT.RoleLists.roleGroups.length; i++) {
         if (TIMAAT.RoleLists.roleGroups[i].model.id == this.model.id) {

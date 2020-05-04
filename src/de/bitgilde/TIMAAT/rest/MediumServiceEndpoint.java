@@ -2683,7 +2683,6 @@ public class MediumServiceEndpoint {
 		}
 	}
 
-
 	public static String issueFileToken(int mediumID) {
 		Key key = new TIMAATKeyGenerator().generateKey();
 		String token = Jwts.builder().claim("file", mediumID).setIssuer(

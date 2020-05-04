@@ -3,11 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -17,9 +14,6 @@ import java.util.List;
 @Entity
 @Table(name="role_group")
 @NamedQuery(name="RoleGroup.findAll", query="SELECT rg FROM RoleGroup rg")
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class, 
-  property = "id")
 public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +23,6 @@ public class RoleGroup implements Serializable {
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany
-	@JsonBackReference(value="Roles-RoleGroups")
 	@JoinTable(
 		name="role_group_has_role"
 		, joinColumns={
@@ -39,11 +32,15 @@ public class RoleGroup implements Serializable {
 			@JoinColumn(name="role_id")
 			}
 		)
-	private List<Role> roles;
+	private Set<Role> roles;
 
 	//bi-directional many-to-one association to RoleGroupTranslation
-	@OneToMany(mappedBy="roleGroup")
+	@OneToMany(mappedBy="roleGroup", cascade=CascadeType.PERSIST)
 	private List<RoleGroupTranslation> roleGroupTranslations;
+
+	// tables cannot contain identifier id alone, or a query exception is thrown
+	@Column(columnDefinition = "BOOLEAN")
+	private Boolean dummy;
 
 	public RoleGroup() {
 	}
@@ -56,11 +53,11 @@ public class RoleGroup implements Serializable {
 		this.id = id;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return this.roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 

@@ -3,12 +3,11 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -17,9 +16,6 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
-@JsonIdentityInfo(
-  generator = ObjectIdGenerators.PropertyGenerator.class, 
-  property = "id")
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,6 +25,7 @@ public class Role implements Serializable {
 
 	//bi-directional many-to-many association to Actor
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="actor_has_role"
 		, joinColumns={
@@ -38,16 +35,16 @@ public class Role implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
-	@JsonIgnore
-	private List<Actor> actors;
+	private Set<Actor> actors;
 
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
-	@JsonManagedReference(value="Roles-RoleGroups")
-	private List<RoleGroup> roleGroups;
+	@JsonIgnore
+	private Set<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
-	@OneToMany(mappedBy="role")
+	@OneToMany(mappedBy="role", cascade=CascadeType.PERSIST)
+	@JsonManagedReference(value="Role-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to MembershipDetail
@@ -67,6 +64,10 @@ public class Role implements Serializable {
 	// @OneToMany(mappedBy="role")
 	// private List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts;
 
+	// tables cannot contain identifier id alone, or a query exception is thrown
+	@Column(columnDefinition = "BOOLEAN")
+	private Boolean dummy;
+
 	public Role() {
 	}
 
@@ -78,19 +79,19 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public List<Actor> getActors() {
+	public Set<Actor> getActors() {
 		return this.actors;
 	}
 
-	public void setActors(List<Actor> actors) {
+	public void setActors(Set<Actor> actors) {
 		this.actors = actors;
 	}
 
-	public List<RoleGroup> getRoleGroups() {
+	public Set<RoleGroup> getRoleGroups() {
 		return this.roleGroups;
 	}
 
-	public void setRoleGroups(List<RoleGroup> roleGroups) {
+	public void setRoleGroups(Set<RoleGroup> roleGroups) {
 		this.roleGroups = roleGroups;
 	}
 

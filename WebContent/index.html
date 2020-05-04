@@ -714,41 +714,85 @@
         <!-------------------------------------------------------------------->
         <!-- Lists                                                          -->
         <!-------------------------------------------------------------------->
-        <div class="container-fluid timaat-component" id="timaat-component-lists">     
-          <div class="modal fade" id="timaat-lists-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="categoryDeleteLabel">Kategorie löschen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Möchten Sie die ausgewählte Kategorie löschen?
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-danger" id="timaat-category-delete-submit">Kategorie löschen</button>
+        <div class="container-fluid timaat-component" id="timaat-component-lists">  
+          <div> <!-- delete modals-->
+            <!-- delete role -->
+            <div class="modal fade" id="timaat-rolelists-role-delete" tabindex="-1" role="dialog" aria-labelledby="roleDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="roleDeleteLabel">Delete role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Do you want to delete the selected role?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="timaat-rolelists-role-delete-submit">Delete role</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="modal fade" id="timaat-lists-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="categorysetDeleteLabel">CategorySet löschen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+            <!-- delete role group -->
+            <div class="modal fade" id="timaat-rolelists-rolegroup-delete" tabindex="-1" role="dialog" aria-labelledby="rolegroupDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="rolegroupDeleteLabel">Delete role group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Do you want to delete the selected role group?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="timaat-rolelists-rolegroup-delete-submit">Delete role group</button>
+                  </div>
                 </div>
-                <div class="modal-body">
-                  Möchten Sie das ausgewählte CategorySet löschen?
+              </div>
+            </div>
+            <!-- delete category -->
+            <div class="modal fade" id="timaat-lists-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="categoryDeleteLabel">Kategorie löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Möchten Sie die ausgewählte Kategorie löschen?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-category-delete-submit">Kategorie löschen</button>
+                  </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-danger" id="timaat-categoryset-delete-submit">CategorySet löschen</button>
+              </div>
+            </div>
+            <!-- delete category set -->
+            <div class="modal fade" id="timaat-lists-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="categorysetDeleteLabel">CategorySet löschen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Möchten Sie das ausgewählte CategorySet löschen?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-categoryset-delete-submit">CategorySet löschen</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -866,7 +910,7 @@
                       </div>
                       <div class="card lists-cards roles-cards rolegroups-card">
                         <div class="card-header">RoleGroups
-                          <button type="button" id="timaat-rolelists-rolegroups-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
+                          <button type="button" id="timaat-rolelists-rolegroup-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -890,7 +934,7 @@
                       </div>
                       <div class="card lists-cards roles-cards roles-card">
                         <div class="card-header">Roles
-                          <button type="button" id="timaat-rolelists-roles-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
+                          <button type="button" id="timaat-rolelists-role-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -934,22 +978,22 @@
                       </div> -->
                       <!-- Data tab content -->
                       <!-- datasheet form -->
-                      <form class="form" role="form" id="timaat-rolelists-metadata-form" name="timaat-rolelists-metadata-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-rolelists-metadata-form" name="timaat-rolelists-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="roleFormHeader">Role</h5>
+                              <h5 class="form-title caps-title" id="roleOrRoleGroupFormHeader">Role</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-role-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
                                   <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-rolegroup-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-rolelists-role-remove" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -961,16 +1005,20 @@
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
                             <div class="col-md-12">
-                              <label class="col-form-label col-form-label-sm" for="timaat-rolelists-role-metadata-name">Name*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-role-metadata-name" name="name" placeholder="[Enter display title]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                              <label class="col-form-label col-form-label-sm" for="timaat-rolelists-metadata-name">Name*</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter display title]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                             </div>                            
                           </div>
                         </div>
                         <!-- Save/Cancel buttons -->
                         <!-- <div class="form-buttons"> -->
                           <div class="role-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-role-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-role-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          </div>
+                          <div class="rolegroup-datasheet-form-submit datasheet-form-buttons">
+                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-rolegroup-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-rolegroup-metadata-form-dismiss" name="dismiss">Abbruch</button>
                           </div>
                         <!-- </div> -->
                       </form>

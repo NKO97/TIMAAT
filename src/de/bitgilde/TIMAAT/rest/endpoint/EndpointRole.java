@@ -28,14 +28,15 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.RoleGroup;
+import de.bitgilde.TIMAAT.model.FIPOP.RoleGroupTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.RoleTranslation;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
@@ -163,7 +164,353 @@ public class EndpointRole {
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
   }
-  
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	@Secured
+	public Response createRole(@PathParam("id") int id) {
+		System.out.println("RoleServiceEndpoint: createRole:");
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+
+		Role role = new Role();
+		role.setId(0);
+
+		System.out.println("RoleServiceEndpioint: createRole - persist role");
+		// persist role
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(role);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(role);
+
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLECREATED);
+		System.out.println("RoleServiceEndpioint: createRole - done");
+		return Response.ok().entity(role).build();
+	}
+
+	//* No data in role to update. All information is stored in role_translation
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	@Secured
+	public Response deleteRole(@PathParam("id") int id) {
+		System.out.println("RoleServiceEndpoint: deleteRole");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, id);
+
+		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(role);
+		//* ON DELETE CASCADE deletes connected role_translation entries
+		entityTransaction.commit();
+		
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
+		System.out.println("RoleServiceEndpoint: deleteRole - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("{role_id}/translation/{id}")
+	@Secured
+	public Response createRoleTranslation(@PathParam("id") int id,
+																				@PathParam("role_id") int roleId,
+																				String jsonData) {
+
+		System.out.println("RoleServiceEndpoint: createRoleTranslation: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		RoleTranslation newRoleTranslation = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		
+		// parse JSON data
+		try {
+			newRoleTranslation = mapper.readValue(jsonData, RoleTranslation.class);
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: createRoleTranslation: IOException");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newRoleTranslation == null ) {
+			System.out.println("RoleServiceEndpoint: createRoleTranslation: newRoleTranslation == null");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// System.out.println("RoleServiceEndpoint: createRoleTranslation: language id: "+newRoleTranslation.getLanguage().getId());
+		// sanitize object data
+		newRoleTranslation.setId(0);
+		Language language = entityManager.find(Language.class, newRoleTranslation.getLanguage().getId());
+		newRoleTranslation.setLanguage(language);
+		Role role = entityManager.find(Role.class, roleId);
+		newRoleTranslation.setRole(role);
+
+		// update log metadata
+		// Not necessary, a translation will always be created in conjunction with a medium
+		System.out.println("RoleServiceEndpoint: createRoleTranslation: persist translation");
+
+		// persist translation
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(language);
+		entityManager.persist(newRoleTranslation);
+		entityManager.flush();
+		newRoleTranslation.setLanguage(language);
+		newRoleTranslation.setRole(role);
+		entityTransaction.commit();
+		entityManager.refresh(newRoleTranslation);
+		entityManager.refresh(language);
+		entityManager.refresh(role);
+
+		// System.out.println("RoleServiceEndpoint: createRoleTranslation: add log entry");	
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext
+		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLECREATED);
+		
+		System.out.println("RoleServiceEndpoint: create translation: translation created with id "+newRoleTranslation.getId());
+		System.out.println("RoleServiceEndpoint: create translation: translation created with language id "+newRoleTranslation.getLanguage().getId());
+
+		return Response.ok().entity(newRoleTranslation).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("translation/{id}")
+	@Secured
+	public Response updateRoleTranslation(@PathParam("id") int id,
+																				String jsonData) {																					
+		System.out.println("RoleServiceEndpoint: update translation - jsonData: " + jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		RoleTranslation updatedRoleTranslation = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleTranslation roleTranslation = entityManager.find(RoleTranslation.class, id);
+
+		if ( roleTranslation == null ) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		// System.out.println("RoleServiceEndpoint: update translation - old translation :"+translation.getName());
+		// parse JSON data
+		try {
+			updatedRoleTranslation = mapper.readValue(jsonData, RoleTranslation.class);
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: update translation: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedRoleTranslation == null ) {
+			return Response.notModified().build();
+		}
+
+		// update translation
+		System.out.println("RoleServiceEndpoint: update translation - language id:"+updatedRoleTranslation.getLanguage().getId());	
+		if ( updatedRoleTranslation.getName() != null ) roleTranslation.setName(updatedRoleTranslation.getName());
+		if ( updatedRoleTranslation.getLanguage() != null ) roleTranslation.setLanguage(updatedRoleTranslation.getLanguage());
+
+		System.out.println("RoleServiceEndpoint: update translation - start transaction");	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(roleTranslation);
+		entityManager.persist(roleTranslation);
+		entityTransaction.commit();
+		entityManager.refresh(roleTranslation);
+
+		System.out.println("RoleServiceEndpoint: update translation - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEEDITED);
+		System.out.println("RoleServiceEndpoint: update translation - update complete");	
+		return Response.ok().entity(roleTranslation).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("group/{id}")
+	@Secured
+	public Response createRoleGroup(@PathParam("id") int id) {
+		System.out.println("RoleServiceEndpoint: createRoleGroup");
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = new RoleGroup();
+		roleGroup.setId(0);
+
+		// System.out.println("RoleServiceEndpioint: createRoleGroup - persist roleGroup");
+
+		// persist Medium
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(roleGroup);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(roleGroup);
+
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPCREATED);
+		System.out.println("RoleServiceEndpioint: createRoleGroup - done");
+		return Response.ok().entity(roleGroup).build();
+	}
+
+	//* No data in roleGroup to update. All information is stored in role_group_translation
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("group/{id}")
+	@Secured
+	public Response deleteRoleGroup(@PathParam("id") int id) {
+		System.out.println("RoleServiceEndpoint: deleteRoleGroup");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, id);
+
+		if ( roleGroup == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(roleGroup);
+		//* ON DELETE CASCADE deletes connected role_group_translation entries
+		entityTransaction.commit();
+
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPDELETED);
+		System.out.println("RoleServiceEndpoint: deleteRoleGroup - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("group/{rolegroup_id}/translation/{id}")
+	@Secured
+	public Response createRoleGroupTranslation(@PathParam("id") int id,
+																						 @PathParam("rolegroup_id") int roleGroupId,
+																						 String jsonData) {
+
+		System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		RoleGroupTranslation newRoleGroupTranslation = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		
+		// parse JSON data
+		try {
+			newRoleGroupTranslation = mapper.readValue(jsonData, RoleGroupTranslation.class);
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newRoleGroupTranslation == null ) {
+			System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: newRoleGroupTranslation == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: language id: "+newRoleGroupTranslation.getLanguage().getId());
+		// sanitize object data
+		newRoleGroupTranslation.setId(0);
+		Language language = entityManager.find(Language.class, newRoleGroupTranslation.getLanguage().getId());
+		newRoleGroupTranslation.setLanguage(language);
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		newRoleGroupTranslation.setRoleGroup(roleGroup);
+
+		// update log metadata
+		// Not necessary, a translation will always be created in conjunction with a medium
+		System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: persist translation");
+
+		// persist translation
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(language);
+		entityManager.persist(newRoleGroupTranslation);
+		entityManager.flush();
+		newRoleGroupTranslation.setLanguage(language);
+		newRoleGroupTranslation.setRoleGroup(roleGroup);
+		entityTransaction.commit();
+		entityManager.refresh(newRoleGroupTranslation);
+		entityManager.refresh(language);
+		entityManager.refresh(roleGroup);
+
+		// System.out.println("RoleServiceEndpoint: createRoleGroupTranslation: add log entry");	
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext
+		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPCREATED);
+		
+		System.out.println("RoleServiceEndpoint: create translation: translation created with id "+newRoleGroupTranslation.getId());
+		System.out.println("RoleServiceEndpoint: create translation: translation created with language id "+newRoleGroupTranslation.getLanguage().getId());
+
+		return Response.ok().entity(newRoleGroupTranslation).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("group/translation/{id}")
+	@Secured
+	public Response updateRoleGroupTranslation(@PathParam("id") int id,
+																						 String jsonData) {																					
+		System.out.println("RoleServiceEndpoint: update translation - jsonData: " + jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		RoleGroupTranslation updatedRoleGroupTranslation = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroupTranslation rolegroupTranslation = entityManager.find(RoleGroupTranslation.class, id);
+
+		if ( rolegroupTranslation == null ) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		// System.out.println("RoleServiceEndpoint: update translation - old translation :"+translation.getName());
+		// parse JSON data
+		try {
+			updatedRoleGroupTranslation = mapper.readValue(jsonData, RoleGroupTranslation.class);
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: update translation: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedRoleGroupTranslation == null ) {
+			return Response.notModified().build();
+		}
+
+		// update translation
+		System.out.println("RoleServiceEndpoint: update translation - language id:"+updatedRoleGroupTranslation.getLanguage().getId());	
+		if ( updatedRoleGroupTranslation.getName() != null ) rolegroupTranslation.setName(updatedRoleGroupTranslation.getName());
+		if ( updatedRoleGroupTranslation.getLanguage() != null ) rolegroupTranslation.setLanguage(updatedRoleGroupTranslation.getLanguage());
+
+		System.out.println("RoleServiceEndpoint: update translation - start transaction");	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(rolegroupTranslation);
+		entityManager.persist(rolegroupTranslation);
+		entityTransaction.commit();
+		entityManager.refresh(rolegroupTranslation);
+
+		System.out.println("RoleServiceEndpoint: update translation - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPEDITED);
+		System.out.println("RoleServiceEndpoint: update translation - update complete");	
+		return Response.ok().entity(rolegroupTranslation).build();
+	}
+
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
     for(Object o: c)
