@@ -343,6 +343,7 @@
 			this.disablePanel('timaat-inspector-locations');
 
 			if ( !type ) {
+				if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				this.disablePanel('timaat-inspector-metadata');
 				$('#timaat-inspector-metadata-title').html('Kein Element ausgewählt');
 			} else {
