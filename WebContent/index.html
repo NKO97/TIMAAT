@@ -91,10 +91,10 @@
             <div id="timaat-version-info" class="text-muted d-flex justify-content-end mr-1">v.unknown
             </div>
             <div class="modal-header">
-              <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
+              <h3 class="modal-title col-12 text-center"><i class="fas fa-photo-video"></i> TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
             </div>
             <div class="modal-body text-center">
-              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
+              <div id="timaat-login-message" class="alert alert-danger small" style="display:none;" role="alert">
                 Nutzername oder Passwort falsch.
               </div>
               <div class="input-group mb-3">
@@ -106,42 +106,23 @@
             </div>
             <div class="modal-footer">
               <div class="input-group mb-12">
-                <button id="timaat-login-submit" type="submit" name="login" class="btn btn-primary col-12">Einloggen</button>
+                <button id="timaat-login-submit" type="submit" name="login" class="btn btn-success col-12"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Einloggen</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!--
-      <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"  aria-hidden="true" style="display: none;">
-        <div id="timaat-login-box" class="modal-dialog modal-sm modal-dialog-centered">
-          <div class="timaat-loginmodal-container modal-content">
-            <div class="modal-body text-center">
-              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
-                Nutzername oder Passwort falsch.
-              </div>
-              <h1>
-                TIMAAT - Bitte anmelden
-              </h1><br>
-              <input id="timaat-login-user" type="text" name="user" placeholder="Benutzername"> 
-              <input id="timaat-login-pass" type="password" name="pass" placeholder="Passwort"> 
-              <input id="timaat-login-submit" type="submit" name="login" class="login loginmodal-submit" value="Einloggen">
-              <div class="timaat-login-help">            
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
     </div>
     <div id="wrapper" class="toggled">
       <div class="navigation">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-static-top pt-1 pb-1 pl-1" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-          <a class="navbar-brand">
+          <a href="https://bitgilde.de" target="_blank" class="navbar-brand float-left">
             <img src="img/bitgilde-small.png" style="height: 32px;float: left;margin-top:-6px;padding-right: 15px;" title="bitGilde IT Solutions UG" alt="bitGilde Logo" />
-             TIMAAT - Time-based Image Area Annotation Tool
+          </a>
+          <a class="navbar-brand float-left">
+             <i class="fas fa-photo-video"></i> TIMAAT - Time-based Image Area Annotation Tool
           </a>
         </div>
         <!-- /.navbar-header -->	    
@@ -580,8 +561,8 @@
         <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
             <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
             <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
-	            <button class="btn-block text-left btn btn-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
-	            <div class="actors-available-wrapper p-2 border border-secondary collapse">
+	            <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
+	            <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
 					<table class="actors-available table table-striped table-bordered table-hover">
 						<thead class="thead-dark">
 							<tr><th>Titel</th></tr>
@@ -589,11 +570,11 @@
 						<tbody></tbody>
 					</table>
 	            </div>
-	            <button class="btn-block text-left btn btn-secondary font-weight-bold mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
-	            <div class="actors-annotation-wrapper p-2 border border-secondary collapse show" aria-expanded="true">
+	            <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
+	            <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
 					<table class="actors-annotation table table-striped table-bordered table-hover">
 						<thead class="thead-light">
-							<tr><th>Diese Funktion steht in Kürze zur Verfügung.</th></tr>
+							<tr><th>Titel</th></tr>
 						</thead>
 						<tbody></tbody>
 					</table>

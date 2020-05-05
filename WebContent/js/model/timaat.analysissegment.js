@@ -27,20 +27,21 @@
 					this.active = false;
 					
 					// create and style list view element
-					this.listView = $('<li class="list-group-item timaat-annotation-list-segment" style="padding:0"> \
-								<div class="timaat-annotation-segment-title float-left text-white font-weight-bold"></div> \
-			                  <button type="button" class="btn btn-danger btn-sm float-right mr-auto" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button> \
-							</li>'
+					this.listView = $(
+							`<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+								<div class="d-flex justify-content-between">
+									<span class="timaat-annotation-segment-title font-weight-bold align-middle pt-1 text-light pl-1"></span>
+									<button type="button" class="btn btn-sm btn-danger" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button>
+								</div>
+							</li>`
 					);
-					this.timelineView = $('<div class="timaat-timeline-segment"> \
-							<div class="timaat-timeline-segment-title text-white font-weight-bold"></div> \
-							</div>'
+					this.timelineView = $(
+							`<div class="timaat-timeline-segment">
+								<div class="timaat-timeline-segment-title text-white font-weight-bold"></div>
+							</div>`
 					);
-					
 					
 					var segment = this; // save annotation for events
-
-					
 
 				}
 				

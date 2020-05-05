@@ -42,14 +42,35 @@
 			this.ui = {};
 			this.ui.addAnimButton = $('#timaat-inspector-animation-add-button');
 			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
+			let inspector = this;
 			
 			// actors panel
+			this.ui.actorlang = {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "",
+					"searchPlaceholder": "Suche Actors",
+					"processing"  : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
+					"lengthMenu"  : "Zeige _MENU_ Einträge",
+					"zeroRecords" : "Keine Actors gefunden.",
+					"info"        : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
+					"infoEmpty"   : "Keine Actors gefunden.",
+					"infoFiltered": '&mdash; <i class="fas fa-search"></i> _TOTAL_',
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					}
+			};
+
 			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
 				lengthChange	: false,
 				dom				: 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 //				dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength		: 3,
 				deferLoading	: 0,
+				pagingType		: 'full',
 				order			: [[ 0, 'asc' ]],
 				processing		: true,
 				serverSide		: true,
@@ -67,6 +88,8 @@
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
+						if ( inspector.state.item && inspector.state.type == 'annotation' )
+							serverData.exclude_annotation = inspector.state.item.model.id;
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
@@ -77,11 +100,19 @@
 				"createdRow": function(row, data, dataIndex) {
 					let actorElement = $(row);
 					let actor = data;
-					actor.ui = actorElement;
 					actorElement.data('actor', actor);
 
-					actorElement.on('click', '.name', function(event) {
-						event.stopPropagation();
+					actorElement.find('.add-actor').on('click', actor, function(ev) {
+						ev.stopPropagation();
+						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
+						$(this).remove();
+						TIMAAT.Service.addAnnotationActor(TIMAAT.VideoPlayer.curAnnotation.model.id, actor.id)
+						.then((result)=>{
+							inspector.ui.dataTableActors.ajax.reload();
+							inspector.ui.dataTableAnnoActors.ajax.reload();
+						}).catch((error)=>{
+							console.log("ERROR:", error);
+						});
 					});
 				},
 				"columns": [{
@@ -90,13 +121,15 @@
 						let displayActorTypeIcon = '';
 						switch (actor.actorType.actorTypeTranslations[0].type) {
 							case 'person': 
-								displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
+								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
 							break;
 							case 'collective': 
-								displayActorTypeIcon = '  <i class="fas fa-users"></i>';
+								displayActorTypeIcon = '<i class="fas fa-users"></i>';
 							break;
 						}
-						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`</p>`;
+						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`
+						<span class="add-actor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
+						</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
 						}
@@ -108,31 +141,89 @@
 						return nameDisplay;
 					}
 				}],
-				language: {
-					"decimal"     : ",",
-					"thousands"   : ".",
-					"search"      : "",
-					"searchPlaceholder": "Suche Actors",
-					"processing"  : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
-					"lengthMenu"  : "Zeige _MENU_ Einträge",
-					"zeroRecords" : "Keine Actors gefunden.",
-					"info"        : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
-					"infoEmpty"   : "Keine Actors gefunden.",
-					"infoFiltered": "(&mdash; _TOTAL_ von _MAX_ Actors)",
-					"paginate"    : {
-						"first"   : "<<",
-						"previous": "<",
-						"next"    : ">",
-						"last"    : ">>"
-					},
-				},				
+				language: this.ui.actorlang,
 			});
-			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Verfügbare Actors');
+//			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Verfügbare Actors');
 			
+			this.ui.dataTableAnnoActors = $('#timaat-inspector-actors-pane .actors-annotation').DataTable({
+				lengthChange	: false,
+				pageLength		: 10,
+				dom				: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+//				dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				searching		: false,
+				deferLoading	: 0,
+				order			: [[ 0, 'asc' ]],
+				processing		: true,
+				serverSide		: true,
+				ajax			: {
+					"url"        : "api/annotation/0/actors",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							as_datatable: true,
+						}
+//						if ( data.search && data.search.value && data.search.value.length > 0 ) serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token); },
+					"dataSrc": function(data) { return data.data; }
+				},
+				"createdRow": function(row, data, dataIndex) {
+					let actorElement = $(row);
+					let actor = data;
+					actorElement.data('actor', actor);
+
+					actorElement.find('.remove-actor').on('click', actor, function(ev) {
+						ev.stopPropagation();
+						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
+						$(this).remove();
+						TIMAAT.Service.removeAnnotationActor(TIMAAT.VideoPlayer.curAnnotation.model.id, actor.id)
+						.then((result)=>{
+							inspector.ui.dataTableActors.ajax.reload();
+							inspector.ui.dataTableAnnoActors.ajax.reload();
+						}).catch((error)=>{
+							console.log("ERROR:", error);
+						});
+					});
+				},
+				"columns": [{
+					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
+						// console.log("TCL: actor", actor);
+						let displayActorTypeIcon = '';
+						switch (actor.actorType.actorTypeTranslations[0].type) {
+							case 'person': 
+								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
+							break;
+							case 'collective': 
+								displayActorTypeIcon = '<i class="fas fa-users"></i>';
+							break;
+						}
+						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`
+						<span class="remove-actor badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>
+						</p>`;
+						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
+							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+						}
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
+								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+							}
+						});
+						return nameDisplay;
+					}
+				}],
+				language: this.ui.actorlang,
+			});
+
 			
 			
 			// attach listeners
-			let inspector = this;
 			$('#timaat-inspector-meta-submit').click(function(ev) {
 				if ( !inspector.state.type ) return;
 				// annotations
@@ -309,6 +400,7 @@
 		
 		reset() {
 			this.setItem(null);
+			this.ui.dataTableActors.clear();
 			this.ui.dataTableActors.ajax.reload();
 		}
 		
@@ -322,7 +414,7 @@
 				$('#timaat-inspector').removeClass('leaflet-sidebar-right');
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
 			}
-		}
+		}		
 
 		setItem(item, type=null) {
 			this.state.item = item;
@@ -341,6 +433,9 @@
 			this.disablePanel('timaat-inspector-actors');
 			this.disablePanel('timaat-inspector-events');
 			this.disablePanel('timaat-inspector-locations');
+			
+			// actors panel default UI setting
+			this.ui.dataTableAnnoActors.ajax.url('api/annotation/0/actors');
 
 			if ( !type ) {
 				if ( this.isOpen ) this.open('timaat-inspector-metadata');
@@ -352,10 +447,12 @@
 				if ( type == 'annotation' ) {
 					// animation panel
 					this.enablePanel('timaat-inspector-animation');
-					this.enablePanel('timaat-inspector-tags');
-					this.enablePanel('timaat-inspector-actors');
-					this.enablePanel('timaat-inspector-events');
-					this.enablePanel('timaat-inspector-locations');
+					if ( item != null ) {
+						this.enablePanel('timaat-inspector-tags');
+						this.enablePanel('timaat-inspector-actors');
+						this.enablePanel('timaat-inspector-events');
+						this.enablePanel('timaat-inspector-locations');
+					}
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
 					$('#timaat-inspector-meta-opacity-group').show();
@@ -394,6 +491,11 @@
 					$("#timaat-inspector-meta-end").val(end);	
 					if ( !anno ) this.open('timaat-inspector-metadata');
 					else this.updateItem();
+					
+					// actors panel
+					this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
+					this.ui.dataTableAnnoActors.ajax.reload();
+					this.ui.dataTableActors.ajax.reload();
 				}
 				// analysis lists
 				if ( type == 'analysislist' ) {

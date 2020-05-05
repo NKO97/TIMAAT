@@ -132,42 +132,56 @@
 			else $('#timaat-ui-waiting').modal('hide');
 		},
 		
+		setLoginEnabled: function(enabled) {
+			$('#timaat-login-user').prop('disabled', !enabled);
+			$('#timaat-login-pass').prop('disabled', !enabled);
+			$('#timaat-login-submit').prop('disabled', !enabled);
+			if ( enabled ) $('#timaat-login-submit i.login-spinner').addClass('d-none');
+			else $('#timaat-login-submit i.login-spinner').removeClass('d-none');
+		},
+		
 		processLogin: function() {
 			// console.log("TCL: processLogin: function()");
 			var user = jQuery('#timaat-login-user').val();
 			var pass = jQuery('#timaat-login-pass').val();
 			if ( user.length > 0 && pass.length > 0 ) {
-				var hash = TIMAAT.Util.getArgonHash(pass,user+"timaat.kunden.bitgilde.de"); // TODO refactor
-				var credentials = {
-					username : user,
-					password: hash
-				}
-		
-				$.ajax({
-					// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate",
-					url:"api/authenticate",
-					type:"POST",
-					data:JSON.stringify(credentials),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-				}).done(function(e) {
-					TIMAAT.Service.session = e;
-					TIMAAT.Service.token = e.token;
-					$('body').removeClass('timaat-login-modal-open');
-					$('#timaat-login-modal').modal('hide');
-					$('#timaat-user-info').html(e.accountName);							
-					TIMAAT.VideoChooser.loadCollections();
-					TIMAAT.MediaDatasets.loadMediaDatatables();
-					TIMAAT.ActorDatasets.loadActorDatatables();
-					TIMAAT.Settings.loadCategorySets();
-					TIMAAT.Datasets.load();
-					// load categories
-					TIMAAT.Settings.loadCategories(null,true);
-				}).fail(function(e) {
-					console.log("TCL: processLogin fail: e", e);
-					console.log( "error",e );
-					jQuery('#timaat-login-message').fadeIn();
-				});
+				TIMAAT.UI.setLoginEnabled(false);
+				
+				setTimeout(function() {
+					var hash = TIMAAT.Util.getArgonHash(pass,user+"timaat.kunden.bitgilde.de"); // TODO refactor
+					var credentials = {
+						username : user,
+						password: hash
+					}
+			
+					$.ajax({
+						// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate",
+						url:"api/authenticate",
+						type:"POST",
+						data:JSON.stringify(credentials),
+						contentType:"application/json; charset=utf-8",
+						dataType:"json",
+					}).done(function(e) {
+						TIMAAT.UI.setLoginEnabled(true);
+						TIMAAT.Service.session = e;
+						TIMAAT.Service.token = e.token;
+						$('body').removeClass('timaat-login-modal-open');
+						$('#timaat-login-modal').modal('hide');
+						$('#timaat-user-info').html(e.accountName);							
+						TIMAAT.VideoChooser.loadCollections();
+						TIMAAT.MediaDatasets.loadMediaDatatables();
+						TIMAAT.ActorDatasets.loadActorDatatables();
+						TIMAAT.Settings.loadCategorySets();
+						TIMAAT.Datasets.load();
+						// load categories
+						TIMAAT.Settings.loadCategories(null,true);
+					}).fail(function(e) {
+						TIMAAT.UI.setLoginEnabled(true);
+						console.log("TCL: processLogin fail: e", e);
+						console.log( "error",e );
+						jQuery('#timaat-login-message').fadeIn();
+					});
+				}, 50);
 			}
 		}			
 	}

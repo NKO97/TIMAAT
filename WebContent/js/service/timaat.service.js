@@ -419,7 +419,7 @@
 		},
 
 		removeAnnotation(annotation) {
-      console.log("TCL: removeAnnotation -> annotation", annotation);
+			console.log("TCL: removeAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+anno.model.id,
@@ -435,6 +435,47 @@
 				console.log( e.responseText );
 			});
 		},
+		
+		addAnnotationActor(annotationId, actorId) {
+			console.log("TCL: addAnnotationActor -> annotationId", annotationId);
+			console.log("TCL: addAnnotationActor -> actorId", actorId);
+			return jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
+				type:"POST",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				return data;
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+				return false;
+			});
+		},
+
+		removeAnnotationActor(annotationId, actorId) {
+			console.log("TCL: removeAnnotationActor -> annotationId", annotationId);
+			console.log("TCL: removeAnnotationActor -> actorId", actorId);
+			return jQuery.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+				return data;
+			})
+			.fail(function(e) {
+				console.log( "error", e );
+				console.log( e.responseText );
+				return false;
+			});
+		},
+		
 
 		createSegment(name, startTime, endTime, list, callback) {
 			console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);

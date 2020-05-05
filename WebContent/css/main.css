@@ -18,6 +18,16 @@ body {
 	padding: 0;
 }
 
+#timaat-login-modal {
+	background: url('../img/timaat-login-backdrop.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+#timaat-login-modal .modal-content {
+	box-shadow: 0px 0px 32px black;
+}
+
 body.timaat-login-modal-open #wrapper {
     -webkit-filter: blur(50px);
     -moz-filter: blur(50px);
@@ -234,12 +244,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-no-tags {
 	color: #bbbbbb !important;
 }
-.timaat-annotation-list-segment {
-	 padding: 0.1rem 0.5rem;
-	 color: white !important;
-	 background-color: #6c757d !important;
-/*	 cursor: default !important; */
-}
 .timaat-annotation-list-type {
 	text-shadow: 1px 1px rgba(127,127,177,0.4);
 }
@@ -251,10 +255,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-
-.timaat-annotation-segment-title {
-	padding-left: 4px;
 }
 
 .timaat-annotation-list-tags {

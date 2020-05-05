@@ -2,11 +2,15 @@ package de.bitgilde.TIMAAT.rest;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +31,8 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -61,6 +68,114 @@ public class AnnotationEndpoint {
     	    	
 		return Response.ok().entity(annotation).build();
 	}
+	
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/actors/{actorID}")
+	public Response addActor(@PathParam("id") int id, @PathParam("actorID") int actorID) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Annotation anno = em.find(Annotation.class, id);
+		Actor actor = em.find(Actor.class, actorID);
+		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
+		if ( anno.getActors().contains(actor) ) return Response.ok().entity(false).build();
+		anno.getActors().add(actor);
+		actor.getAnnotations().add(anno);
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.merge(anno);
+		em.persist(anno);
+		em.merge(actor);
+		em.persist(actor);
+		entityTransaction.commit();
+		em.refresh(anno);
+		em.refresh(actor);
+		
+		return Response.ok().entity(true).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/actors/{actorID}")
+	public Response removeActor(@PathParam("id") int id, @PathParam("actorID") int actorID) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Annotation anno = em.find(Annotation.class, id);
+		Actor actor = em.find(Actor.class, actorID);
+		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
+		if ( anno.getActors().contains(actor) == false ) return Response.ok().entity(false).build();
+		anno.getActors().remove(actor);
+		actor.getAnnotations().remove(anno);
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.merge(anno);
+		em.persist(anno);
+		em.merge(actor);
+		em.persist(actor);
+		entityTransaction.commit();
+		em.refresh(anno);
+		em.refresh(actor);
+		
+		return Response.ok().entity(true).build();
+	}
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/actors")
+	public Response getAnnotationActors(
+			@PathParam("id") int id,
+			@QueryParam("draw") Integer draw,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search, // not supported
+			@QueryParam("as_datatable") String asDatatable
+	)	{
+		System.out.println("AnnotationEndpoint: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// sanitize user input
+		if ( draw == null ) draw = 0;
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		}
+
+		// retrieve annotation
+		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
+		if ( asDatatable == null ) {
+			if ( anno != null ) return Response.ok().entity(anno.getActors()).build();
+			else return Response.status(Status.NOT_FOUND).build();
+		} else {
+			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Actor>())).build();
+			else {
+				List<Actor> actors = anno.getActors();
+				if ( actors.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, actors)).build();
+				if ( direction.compareTo("ASC") == 0 ) 
+					Collections.sort(actors, (Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().compareTo( a2.getDisplayName().getName() ));
+				else
+					Collections.sort(actors, ((Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().compareTo( a2.getDisplayName().getName() )).reversed());
+				
+				if ( start != null ) {
+					if ( start < 0 ) start = 0;
+					if ( start > actors.size()-1 ) start = actors.size()-1;
+					if ( length == null ) length = 1;
+					if ( length < 1 ) length = 1;
+					if ( (start+length) > actors.size() ) length = actors.size()-start;
+					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors.subList(start, start+length))).build();
+				} else 
+					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors)).build();
+				
+			}
+		}
+
+	}
+
+	
+	
 	
 
 	@POST

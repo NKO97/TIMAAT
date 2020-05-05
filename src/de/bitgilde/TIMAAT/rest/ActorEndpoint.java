@@ -47,6 +47,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
 import de.bitgilde.TIMAAT.model.FIPOP.Address;
 import de.bitgilde.TIMAAT.model.FIPOP.AddressType;
+import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Citizenship;
 import de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
@@ -79,14 +80,16 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getActorList( @QueryParam("draw") Integer draw,
-																@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length,
-																@QueryParam("orderby") String orderby,
-																@QueryParam("dir") String direction,
-																@QueryParam("search") String search )
+	public Response getActorList(
+			@QueryParam("draw") Integer draw,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search,
+			@QueryParam("exclude_annotation") Integer annotationID)
 	{
-		System.out.println("ActorServiceEndpoint: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("ActorServiceEndpoint: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -96,9 +99,26 @@ public class ActorEndpoint {
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
 		}
+		
+		// define default query strings
+		String actorQuery = "SELECT a FROM Actor a ORDER BY ";
+		String actorCountQuery = "SELECT COUNT(a) FROM Actor a";
+		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+		String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+
+		// exclude actory from annotation if specified
+		if ( annotationID != null ) {
+			Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, annotationID);
+			if ( anno != null && anno.getActors().size() > 0 ) {
+				actorQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors ORDER BY ";
+				actorCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors";
+				actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+				actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+			}
+		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(a) FROM Actor a");
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorCountQuery);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
@@ -106,18 +126,17 @@ public class ActorEndpoint {
 		Query query;
 		if ( search != null && search.length() > 0 ) {
 			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))");
+			countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorSearchCountQuery);
 			countQuery.setParameter("title1", search);
 			recordsFiltered = (long) countQuery.getSingleResult();
 			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+				actorSearchQuery+column+" "+direction);
 			query.setParameter("name", search);
 			// query.setParameter("actorName", search); // birthName
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT a FROM Actor a ORDER BY "+column+" "+direction);
+				actorQuery+column+" "+direction);
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);

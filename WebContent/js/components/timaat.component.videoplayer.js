@@ -1119,10 +1119,27 @@
 		_updateAnimations: function() {
 			if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.video.paused || !TIMAAT.VideoPlayer.annotationList ) return;
 			
-			if ( TIMAAT.VideoPlayer.repeatSection && TIMAAT.VideoPlayer.curAnnotation )
-				if ( TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime
-					|| TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curAnnotation.endTime )
-					TIMAAT.VideoPlayer.jumpTo(TIMAAT.VideoPlayer.curAnnotation.startTime);
+			// repeat video section if control activated
+			if ( TIMAAT.VideoPlayer.repeatSection ) {
+				if ( TIMAAT.VideoPlayer.curAnnotation ) {
+					// repeat annotation
+					if ( TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime
+							|| TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curAnnotation.endTime )
+							TIMAAT.VideoPlayer.jumpTo(TIMAAT.VideoPlayer.curAnnotation.startTime);
+				} else {
+					// repeat segment
+					let curSegment = null;
+					for (let segment of TIMAAT.VideoPlayer.curList.segments) 
+						if (segment.active) { curSegment = segment; break; }
+
+					if ( curSegment ) {
+						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime
+								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.endTime )
+								TIMAAT.VideoPlayer.jumpTo(curSegment.model.startTime);
+					}
+				}
+			} 
+				
 			
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
 				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);

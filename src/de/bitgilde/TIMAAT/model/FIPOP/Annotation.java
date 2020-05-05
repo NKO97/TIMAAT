@@ -303,6 +303,14 @@ public class Annotation implements Serializable {
 	public void setMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
 		this.mediumAnalysisList = mediumAnalysisList;
 	}
+	
+	@Transient
+	public int getCreatedByUserAccountId() {
+		return this.createdByUserAccount.getId();
+	}
+	public void setCreatedByUserAccountId(int id) {
+		// do nothing
+	}
 
 	public UserAccount getCreatedByUserAccount() {
 		return this.createdByUserAccount;
@@ -310,6 +318,14 @@ public class Annotation implements Serializable {
 
 	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
 		this.createdByUserAccount = createdByUserAccount;
+	}
+
+	@Transient
+	public int getLastEditedByUserAccountId() {
+		return this.lastEditedByUserAccount.getId();
+	}
+	public void setLastEditedByUserAccountId(int id) {
+		// do nothing
 	}
 
 	public UserAccount getLastEditedByUserAccount() {
