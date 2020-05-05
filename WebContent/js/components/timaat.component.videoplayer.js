@@ -586,10 +586,22 @@
 				var modal = $('#timaat-videoplayer-segment-delete');
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissegment' ) return;
 				var segment = TIMAAT.VideoPlayer.inspector.state.item;
-				if (segment) TIMAAT.Service.removeSegment(segment);
+				if (segment) {
+					TIMAAT.Service.removeSegment(segment);
+					TIMAAT.VideoPlayer.sortSegments();
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
 				modal.modal('hide');
 			});			
+		},
+		
+		sortSegments: function() {
+			if ( !TIMAAT.VideoPlayer.curList || !TIMAAT.VideoPlayer.curList.segments ) return;
+			TIMAAT.VideoPlayer.curList.segments.sort(function (a, b) {
+				if ( b.model.startTime < a.model.startTime ) return 1;
+				if ( b.model.startTime > a.model.startTime ) return -1;
+				return 0;
+			})
 		},
 		
 		createPolygon: function() {
@@ -764,7 +776,8 @@
 				list.analysisSegments.forEach(function(segment) {
 					list.segments.push(new TIMAAT.AnalysisSegment(segment));
 				});
-			});			
+			});
+			TIMAAT.VideoPlayer.sortSegments();
 			
 			// update UI
 			$('#timaat-analysislist-options').prop("disabled", false);
@@ -1009,6 +1022,7 @@
 			console.log("TCL: segment", segment);
 			// sync to server
 			TIMAAT.Service.updateSegment(segment);
+			TIMAAT.VideoPlayer.sortSegments();
 
 			// update UI list view
 			console.log("TCL: segment.updateUI()");
@@ -1117,7 +1131,7 @@
 		},
 		
 		_updateAnimations: function() {
-			if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.video.paused || !TIMAAT.VideoPlayer.annotationList ) return;
+			if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.video.paused || !TIMAAT.VideoPlayer.annotationList || !TIMAAT.VideoPlayer.curList ) return;
 			
 			// repeat video section if control activated
 			if ( TIMAAT.VideoPlayer.repeatSection ) {
@@ -1129,8 +1143,10 @@
 				} else {
 					// repeat segment
 					let curSegment = null;
-					for (let segment of TIMAAT.VideoPlayer.curList.segments) 
+					for (let index = TIMAAT.VideoPlayer.curList.segments.length-1; index >= 0; index-- ) {
+						let segment = TIMAAT.VideoPlayer.curList.segments[index]
 						if (segment.active) { curSegment = segment; break; }
+					}
 
 					if ( curSegment ) {
 						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime
@@ -1241,6 +1257,7 @@
 			console.log("TCL: _segmentAdded: function(segment)");
 			console.log("TCL: segment", segment);
 			TIMAAT.VideoPlayer.curList.segments.push(segment);
+			TIMAAT.VideoPlayer.sortSegments();
 			segment.addUI();
 
 			TIMAAT.VideoPlayer.selectAnnotation(null);

@@ -47,7 +47,7 @@
 				
 				updateUI() {
 					console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
-					this.listView.attr('data-starttime', this.model.startTime);
+					this.listView.attr('data-starttime', this.model.startTime * 1000);
 					let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 					this.listView.find('.timaat-annotation-segment-title').html(this.model.analysisSegmentTranslations[0].name);
