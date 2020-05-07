@@ -770,7 +770,7 @@
 						case "rectangle":
 							// [[ height, x], [ y, width]]
 							var bounds = [[ Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
-							return L.rectangle(bounds, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+							return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
 						case "polygon":
 							var points = new Array();
 							$(svgitem.points).each(function(index,point) {
@@ -778,7 +778,7 @@
 								var lng = point[0]*factor*width;
 								points.push([lat,lng]);
 							});
-							return L.polygon(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+							return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
 						case "line":
 							var points = new Array();
 							$(svgitem.points).each(function(index,point) {

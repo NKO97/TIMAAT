@@ -62,8 +62,8 @@
 			});
 			
 			// animation player shape updater
-			let frameRate = 20;
-			TIMAAT.VideoPlayer.animInterval = setInterval(this._updateAnimations, 1000 / frameRate);
+			let animFrameRate = 20;
+			TIMAAT.VideoPlayer.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
 			
 			// animation keyframe control
 			TIMAAT.VideoPlayer.animCtrl = L.control.custom({
@@ -436,18 +436,18 @@
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
-				var frameTime = 1 / 25;
+				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo(
-					Math.max(0, TIMAAT.VideoPlayer.video.currentTime - frameTime)
+					Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime)*frameTime) - frameTime)
 				);
 			});
 			$('.stepfwdbutton').on('click dblclick', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
-				var frameTime = 1 / 25;
+				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo(
-					Math.min(TIMAAT.VideoPlayer.video.duration, TIMAAT.VideoPlayer.video.currentTime + frameTime)
+					Math.min(TIMAAT.VideoPlayer.video.duration, (Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime)*frameTime) + frameTime)
 				);
 			});
 			$('.repeatbutton').on('click', function(ev) {
@@ -683,6 +683,7 @@
 			console.log("TCL: video", video);
 			// setup model
 			if ( video.mediumVideo.length < 0 ) video.mediumVideo.length += 3600; // temp fix for DB problems
+			this.curFrameRate = 25; // TODO
 			this.model.video = video;
 			this.duration = video.mediumVideo.length;			
 			// remove all annotations and markers
@@ -1058,14 +1059,18 @@
 				return 0;
 			});
 			
+			// position annotation markers in timeline
 			let layerVisual = ( TIMAAT.VideoPlayer.editAudioLayer ) ? 0 : 1;
+			let maxOffset = 0;
 			if ( sortedList.length > 0 ) {
 				sortedList[0].marker.UIOffset = 0;
-				var maxOffset = 0;
-				for (var i=1; i < sortedList.length; i++) {
-					var curOffset = 0;
-					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime && sortedList[a].layerVisual == layerVisual )
-						if ( curOffset == sortedList[a].marker.UIOffset ) curOffset++; // = sortedList[a].marker.UIOffset+1;
+				for (let i=1; i < sortedList.length; i++) {
+					let curOffset = 0;
+					let occupiedOffets = [];
+					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime && sortedList[a].layerVisual == layerVisual ) {
+						occupiedOffets.push(sortedList[a].marker.UIOffset);
+						while ( occupiedOffets.indexOf(curOffset) >= 0 ) curOffset++;
+					}
 					sortedList[i].marker.UIOffset = curOffset;
 					if ( curOffset > maxOffset ) maxOffset = curOffset;
 				}
@@ -1102,7 +1107,11 @@
 			// console.log("TCL: pause: function()");
 			if ( !this.video ) return;
 			this.video.pause();
-			$('.playbutton').removeClass('active');			
+			let frameTime = 1.0 / TIMAAT.VideoPlayer.curFrameRate;
+			let videoTime = TIMAAT.VideoPlayer.video.currentTime;
+			let time = Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime) * frameTime;
+//			if ( videoTime != time ) TIMAAT.VideoPlayer.jumpTo(time);
+			$('.playbutton').removeClass('active');
 		},
 
 		play: function() {
