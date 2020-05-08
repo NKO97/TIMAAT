@@ -120,7 +120,6 @@
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
 				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 				anno.addKeyframeAt(TIMAAT.VideoPlayer.video.currentTime);				
-				TIMAAT.VideoPlayer.updateUI();
 			});
 			$('#timaat-videoplayer-keyframe-remove-button').on('click', function(ev) {
 				ev.stopPropagation();
@@ -129,7 +128,6 @@
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
 				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 				anno.removeCurrentKeyframe();
-				TIMAAT.VideoPlayer.updateUI();
 			});
 			$('#timaat-videoplayer-keyframe-prev-button').on('click', function(ev) {
 				ev.stopPropagation();
@@ -305,6 +303,25 @@
 			});
 
 			// Animation Events
+			$(document).on('keyframeadded.annotation.TIMAAT', function(event, anno) {
+				if ( !anno ) return;
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				TIMAAT.VideoPlayer.updateUI();
+				TIMAAT.VideoPlayer.inspector.updateItem();
+			});
+			$(document).on('keyframeremoved.annotation.TIMAAT', function(event, anno) {
+				if ( !anno ) return;
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				TIMAAT.VideoPlayer.updateUI();
+				TIMAAT.VideoPlayer.inspector.updateItem();
+			});
+			$(document).on('keyframechanged.annotation.TIMAAT', function(event, anno) {
+				if ( !anno ) return;
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				TIMAAT.VideoPlayer.updateUI();
+				TIMAAT.VideoPlayer.inspector.updateItem();
+			});
+			
 			TIMAAT.VideoPlayer.viewer.on('editable:vertex:click', function(ev) {
 				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation()  && !ev.layer.editor.drawing() ) ev.cancel();
 			});

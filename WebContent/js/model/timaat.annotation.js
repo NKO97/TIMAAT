@@ -37,19 +37,15 @@
 			if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
-/*
-			// DEBUG remove
-			this.svg.model.keyframes.push(Object.assign({}, this.svg.model.keyframes[0]));
-			this.svg.model.keyframes[1].time = 2.0;
-*/
-			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
-			this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
 
 			this._startTime = this.model.sequenceStartTime/1000.0;
 			this._endTime = this.model.sequenceEndTime/1000.0;
 			this._layerVisual = this.model.layerVisual;
-					
-					
+			// create keyframes
+			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
+
+			this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
+			
 			// create and style list view element
 			this.listView = $(`<li class="list-group-item" style="padding:0">
 							    <div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
@@ -307,26 +303,39 @@
 				if ( a.time < b.time ) return -1;
 				if ( a.time > b.time ) return 1;
 				return 0;
-			});			
+			});
 			this.changed = true;
-			keyframe.updateUI();
+			for (let frame of this.svg.keyframes) frame.updateUI();
 			this.updateEditableUI();
 			this.updateUI();
+			// send event
+			$(document).trigger('keyframeadded.annotation.TIMAAT', this);
 		}
 		
 		removeCurrentKeyframe() {
 			if ( this._destroyed ) return;
 			if ( this.svg.keyframes.length <= 2 || this.currentKeyframe.time == 0 ) return;
 			let cur = this.currentKeyframe;
-			cur.remove();
-			let index = this.svg.keyframes.indexOf(cur);
+			this.removeKeyframe(cur);
+		}
+		
+		removeKeyframe(keyframe) {
+			if ( this._destroyed || !keyframe ) return;
+			if ( this.svg.keyframes.length < 2 || keyframe.time == 0 ) return;
+			if ( this.svg.keyframes.indexOf(keyframe) < 1 ) return;
+			keyframe.remove();
+			let index = this.svg.keyframes.indexOf(keyframe);
 			if ( index < 0 ) return;
 			this.svg.keyframes.splice(index, 1);
 			this.changed = true;
+			for (let frame of this.svg.keyframes) frame.updateUI();
 			this._updateShapeUI();
 			this.updateEditableUI();
 			this.updateUI();
+			// send event
+			$(document).trigger('keyframeremoved.annotation.TIMAAT', this);
 		}
+
 		
 		removeAnimationKeyframes() {
 			if ( this._destroyed ) return;
@@ -337,6 +346,8 @@
 			for (let item of this.svg.items) this._updateSVGItem(item, first.getShape(item.options.id));
 			this.updateEditableUI();
 			this.updateUI();
+			// send event
+			$(document).trigger('keyframeremoved.annotation.TIMAAT', this);
 		}
 		
 		get opacity() {
@@ -385,25 +396,29 @@
 			this._endTime = Math.max(startTime, this._endTime);
 			if ( this._startTime != this.model.startTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
 			if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+			this.svg.keyframes[0].updateTimeUI();
 		};
 		  
-		  get endTime() {
-			  return this._endTime;
-		  }
-			
-		  set endTime(endTime) {
-			  this._endTime = Math.min(endTime, TIMAAT.VideoPlayer.duration);
-			  this._endTime = Math.max(this._startTime, this._endTime);
-			  if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
-		  };	
+		get endTime() {
+			return this._endTime;
+		}
 
-		  hasPolygons() {
-			  return this.svg.items.length > 0;
-		  }
-				
+		set endTime(endTime) {
+			this._endTime = Math.min(endTime, TIMAAT.VideoPlayer.duration);
+			this._endTime = Math.max(this._startTime, this._endTime);
+			if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+		};
+		
+		get length() {
+			return this._endTime - this._startTime;
+		}
 
-		  
-		  updateUI() {
+		hasPolygons() {
+			return this.svg.items.length > 0;
+		}
+
+		
+		updateUI() {
 //			  console.log("TCL: Annotation -> updateUI -> updateUI()");
 			  this.listView.attr('data-starttime', this.model.sequenceStartTime);
 			  this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);

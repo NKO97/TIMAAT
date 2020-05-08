@@ -128,6 +128,10 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	margin-top: 1em;
 }
 
+#timaat-inspector-animation-keyframes {
+	max-width: 18em;
+}
+
 #timaat-inspector-meta-opacity {
 	margin-top: 4px;
 	width: 100%;

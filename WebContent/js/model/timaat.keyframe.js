@@ -38,20 +38,68 @@
 			}
 			// init keyframe UI
 			this.ui = {
-					timelineTemplate : `<div class="timaat-timeline-keyframe"><div class="timaat-timeline-keyframehead"></div></div>`
-			}
+					timelineTemplate : `<div class="timaat-timeline-keyframe"><div class="timaat-timeline-keyframehead"></div></div>`,
+					inspectorTemplate : `<div class="list-group-item p-0">
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text keyframe-number">01</span>
+						</div>
+						<input type="text" class="form-control keyframe-time">
+						<div class="input-group-append">
+							<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
+							<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
+						</div>
+					</div></div>`
+			};
 			this.ui.timelineView = $(this.ui.timelineTemplate);
+			this.ui.inspectorView = $(this.ui.inspectorTemplate);
+			if ( this._time == 0 ) {
+				this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
+				this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
+			}
 			this.ui.head = this.ui.timelineView.find('.timaat-timeline-keyframehead');
 			$('#timaat-timeline-keyframe-pane').append(this.ui.timelineView);
 			if ( this.time == 0 ) this.ui.head.addClass('first');
+
 			// add events
 			this.ui.head.click(this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime+ev.data.time);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime + ev.data.time);
+			});
+			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
+				if ( !ev.data ) return;
+				let keyframe = ev.data;
+				let anno = keyframe.parent;
+				let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
+				let minTime = 0;
+				if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 0.001;
+				minTime = parseFloat(minTime.toFixed(3));
+				newTime = Math.max(minTime, newTime);
+				let maxTime = anno.length;
+				if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 0.001;
+				maxTime = parseFloat(maxTime.toFixed(3));
+				newTime = Math.min(newTime, maxTime);
+				if ( newTime != keyframe.time ) {
+					keyframe.time = newTime;
+					keyframe.updateUI();
+					anno._updateShapeUI();
+					anno.updateEditableUI();
+				}
+			});
+			this.ui.inspectorView.find('.keyframe-undo').on('click', this, function(ev) {
+				if ( !ev.data ) return;
+				ev.data.discardChanges();
+				ev.data.parent._updateShapeUI();
+				ev.data.parent.updateEditableUI();
+			});
+			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
+				if ( !ev.data ) return;
+				ev.data.parent.removeKeyframe(ev.data);
 			});
 
 			this.updateUI();
 			this._updateOffsetUI();
+			this.updateTimeUI();
 		}
 		
 		addShape(shape) {
@@ -77,8 +125,13 @@
 		}
 
 		set time(time) {
-			this._time = time;
+			if ( this._time == 0 ) return;
+			this._time = parseFloat(time.toFixed(3));;
+			this.parent.setChanged();
 			this._updateOffsetUI();
+			this.updateTimeUI();
+			// send event
+			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
 		}
 		
 		getShape(id) {
@@ -96,6 +149,8 @@
 			}
 			this.updateUI();
 			this._updateOffsetUI();
+			// send event
+			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
 		}
 		
 		saveChanges() {
@@ -212,6 +267,8 @@
 		remove() {
 			// remove UI
 			this.ui.timelineView.remove();
+			this.ui.inspectorView.find('.keyframe-time').off();
+			this.ui.inspectorView.remove();
 		}
 
 		_updateOffsetUI() {
@@ -220,7 +277,14 @@
 			  this.ui.timelineView.css('margin-left', offset+'px');
 
 		}
-				
+		
+		updateStatus() {
+			
+		}
+		
+		updateTimeUI() {
+			this.ui.inspectorView.find('.keyframe-time').val(TIMAAT.Util.formatTime(this.parent.startTime+this._time, true));
+		}
 		
 		updateUI() {
 			let visible = this.parent.isSelected() && this.parent.isAnimation();
@@ -237,6 +301,17 @@
 					this._selected = selected;
 					if ( selected ) this.ui.head.addClass('selected'); else this.ui.head.removeClass('selected');
 				}
+				
+				let maxPadding = (this.parent.svg.keyframes.length+1).toString().length;
+				if (maxPadding < 2) maxPadding = 2;
+				let frameNumber = this.parent.svg.keyframes.indexOf(this)+1;
+				let padNumber = frameNumber;
+				if ( typeof(String.prototype.padStart) === 'function' ) padNumber = frameNumber.toString().padStart(maxPadding, '0');
+				else {
+					// TODO only for Internet Explorer
+					padNumber = ('000'+frameNumber).substr(-3);
+				}
+				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
 			}
 			
 		}

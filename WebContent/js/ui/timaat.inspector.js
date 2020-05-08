@@ -42,6 +42,7 @@
 			this.ui = {};
 			this.ui.addAnimButton = $('#timaat-inspector-animation-add-button');
 			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
+			this.ui.keyframeList = $('#timaat-inspector-animation-keyframes');
 			let inspector = this;
 			
 			// actors panel
@@ -375,9 +376,6 @@
 					TIMAAT.VideoPlayer.pause();
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
 					anno.addKeyframeAt(anno.endTime);
-					anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-					TIMAAT.VideoPlayer.updateUI();
-					inspector.updateItem();
 				}
 			});
 			this.ui.removeAnimButton.on('click', function(ev) {
@@ -433,6 +431,7 @@
 			this.disablePanel('timaat-inspector-actors');
 			this.disablePanel('timaat-inspector-events');
 			this.disablePanel('timaat-inspector-locations');
+			this.ui.keyframeList.children().detach();
 			
 			// actors panel default UI setting
 			this.ui.dataTableAnnoActors.ajax.url('api/annotation/0/actors');
@@ -559,14 +558,21 @@
 				// metadata panel
 				$("#timaat-inspector-meta-start").val(start);
 				$("#timaat-inspector-meta-end").val(end);
+				
 				// animation panel
 				if ( this.state.item.isAnimation() ) {
 					this.ui.addAnimButton.hide();
 					this.ui.removeAnimButton.show();
 				} else {
 					this.ui.addAnimButton.show();
+					this.ui.addAnimButton.prop('disabled', this.state.item.length == 0);
 					this.ui.removeAnimButton.hide();
 				}
+				// set keyframes
+				this.ui.keyframeList.children().detach();
+				for (let keyframe of this.state.item.svg.keyframes)
+					this.ui.keyframeList.append(keyframe.ui.inspectorView);
+
 			}
 		};
 		
