@@ -564,6 +564,7 @@
 					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
 
 					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
+					this._upgradeModel();
 					for (let svgitem of this.svg.model.keyframes[0].shapes) {
 						let item = this._parseSVG(svgitem);
 						this.addSVGItem(item);
@@ -576,6 +577,10 @@
 					// update UI
 					this.changed = false;
 					this.updateUI();
+					this._updateShapeUI();
+					this.updateEditableUI();
+					// update keyframe UI
+					if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
 
 				}
 				

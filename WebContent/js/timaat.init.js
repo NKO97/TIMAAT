@@ -23,7 +23,7 @@ requirejs.config({
 		"sbadmin2":					'sb-admin-2',
 		"timaathtml":				'timaat.html',		
 		"TIMAAT":					'timaat.main',
-		"TIMAAT-ui":				'timaat.ui',
+		"TIMAAT-ui":				'ui/timaat.ui',
 		"TIMAAT-ui-inspector":		'ui/timaat.inspector',
 		"TIMAAT-uploadmanager":		'components/timaat.uploadmanager',
 		"TIMAAT-videochooser":		'components/timaat.component.videochooser',

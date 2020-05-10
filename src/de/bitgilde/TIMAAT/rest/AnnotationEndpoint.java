@@ -42,6 +42,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
+import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -53,7 +54,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 @Path("/annotation")
 public class AnnotationEndpoint {
 	
-	@Context ContainerRequestContext containerRequestContext;
+	@Context ContainerRequestContext crc;
 	
 
 	@GET
@@ -91,6 +92,9 @@ public class AnnotationEndpoint {
 		entityTransaction.commit();
 		em.refresh(anno);
 		em.refresh(actor);
+		
+		// TODO log entry annotation modified
+		// TODO ? should this send notification event as well ?
 		
 		return Response.ok().entity(true).build();
 	}
@@ -262,9 +266,9 @@ public class AnnotationEndpoint {
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newAnno.setCreatedAt(creationDate);
 		newAnno.setLastEditedAt(creationDate);
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		if ( crc.getProperty("TIMAAT.userID") != null ) {
+			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
+			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -299,6 +303,9 @@ public class AnnotationEndpoint {
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
+
+		// send notification action
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "add-annotation", malList.get(0).getId(), newAnno);
 
 		return Response.ok().entity(newAnno).build();
 	}
@@ -350,8 +357,8 @@ public class AnnotationEndpoint {
 		System.out.println("AnnotationServiceEndpoint: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		if ( crc.getProperty("TIMAAT.userID") != null ) {
+			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -366,6 +373,9 @@ public class AnnotationEndpoint {
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(annotation.getLastEditedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONEDITED);
+
+		// send notification action
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-annotation", annotation.getMediumAnalysisList().getId(), annotation);
 
 		return Response.ok().entity(annotation).build();
 	}
@@ -392,7 +402,10 @@ public class AnnotationEndpoint {
 		entityManager.refresh(mal);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
+
+		// send notification action
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-annotation", mal.getId(), annotation);
 
 		return Response.ok().build();
 	}

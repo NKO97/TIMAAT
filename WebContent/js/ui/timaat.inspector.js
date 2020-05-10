@@ -572,8 +572,19 @@
 				this.ui.keyframeList.children().detach();
 				for (let keyframe of this.state.item.svg.keyframes)
 					this.ui.keyframeList.append(keyframe.ui.inspectorView);
-
+			} else
+			if (  this.state.type == 'analysissegment' ) {
+				let title = this.state.item.model.analysisSegmentTranslations[0].name;
+				let startTime = this.state.item.model.startTime;
+				let endTime = this.state.item.model.endTime;
+				let start = TIMAAT.Util.formatTime(startTime, true);
+				let end = TIMAAT.Util.formatTime(endTime, true);
+				// setup UI from Video Player state
+				$("#timaat-inspector-meta-title").val(title);
+				$("#timaat-inspector-meta-start").val(start);
+				$("#timaat-inspector-meta-end").val(end);
 			}
+
 		};
 		
 		setMetaEnd(time) {

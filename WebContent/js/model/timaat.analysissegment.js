@@ -102,7 +102,7 @@
 				}
 				
 				removeUI() {
-		      console.log("TCL: AnalysisSegment -> removeUI -> removeUI()");
+					console.log("TCL: AnalysisSegment -> removeUI -> removeUI()");
 					this.listView.remove();
 					this.timelineView.remove();
 					console.log("TCL: AnalysisSegment -> removeUI -> this.updateUI()");

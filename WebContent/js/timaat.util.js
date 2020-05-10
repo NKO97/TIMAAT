@@ -218,7 +218,7 @@
 
 		
 		getArgonHash: function(password, salt) {
-    // console.log("TCL: getArgonHash: function(password, salt)");
+			// console.log("TCL: getArgonHash: function(password, salt)");
 			var hash = Module.allocate(new Array(32), 'i8', Module.ALLOC_NORMAL);
 			var encoded = Module.allocate(new Array(512), 'i8', Module.ALLOC_NORMAL);
 			var passwordArr = allocateArray(password);

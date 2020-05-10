@@ -8,8 +8,6 @@ import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.security.auth.login.CredentialException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,7 +24,6 @@ import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
-import de.bitgilde.TIMAAT.model.FIPOP.UserLog;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.mkammerer.argon2.Argon2Advanced;
@@ -60,7 +57,7 @@ public class AuthenticationEndpoint {
             UserAccount user = authenticate(username, password);
 
             // Issue a token for the user
-            String token = issueToken(username);
+            String token = issueToken(username, user.getId());
 
             // write log entry
             UserLogManager.getLogger().addLogEntry(user.getId(),UserLogManager.LogEvents.LOGIN);
@@ -136,10 +133,12 @@ public class AuthenticationEndpoint {
 		
     }
 
-    private String issueToken(String username) {
-    	Key key = new TIMAATKeyGenerator().generateKey();
+    private String issueToken(String username, int userID) {
+    	Key key = TIMAATKeyGenerator.generateKey();
         String token = Jwts.builder()
+//        		.setHeaderParam("typ", "JWT")
                 .setSubject(username)
+                .claim("id", userID)
                 .setIssuer(uriInfo.getAbsolutePath().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(toDate(LocalDateTime.now().plusHours(8L)))

@@ -26,11 +26,13 @@
 		idCache: new Map(),
 		
 		logout: function() {
-    	console.log("TCL: logout: function()");
+			console.log("TCL: logout: function()");
 			TIMAAT.Service.state = 2;
 			TIMAAT.Service.token = null;
 			TIMAAT.Service.session = null;
 			location.reload(true);
+			// TODO refactor
+			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
 		},
 
 		getAllCategorySets: function(callback) {
@@ -507,7 +509,7 @@
 		},
 
 		updateSegment(segment) {
-      console.log("TCL: updateSegment -> segment", segment);
+			console.log("TCL: updateSegment -> segment", segment);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/segment/"+segment.model.id,
 				type:"PATCH",

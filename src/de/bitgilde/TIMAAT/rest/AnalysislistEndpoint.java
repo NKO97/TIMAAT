@@ -33,6 +33,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -217,8 +218,13 @@ public class AnalysislistEndpoint {
 		tx.commit();
 		em.refresh(newSegment);
 		em.refresh(mal);		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTCREATED);
+
+		// send notification action
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "add-segment", newSegment.getMediumAnalysisList().getId(), newSegment);
+
 		return Response.ok().entity(newSegment).build();
 	}
 	
@@ -258,7 +264,9 @@ public class AnalysislistEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTEDITED);
-
+		// send notification action
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-segment", seg.getMediumAnalysisList().getId(), seg);
+		
 		return Response.ok().entity(seg).build();
 	}
 
@@ -281,6 +289,10 @@ public class AnalysislistEndpoint {
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEGMENTDELETED);
+
+		// send notification action
+		;
+		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-segment", mal.getId(), seg);
 
 		return Response.ok().build();
 	}

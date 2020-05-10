@@ -18,6 +18,20 @@ body {
 	padding: 0;
 }
 
+#timaat-notification-pane {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+}
+
+#timaat-notification-pane .toast {
+	min-width: 250px;
+}
+
+#timaat-notification-pane .toast .notification-action-color {
+	font-size: 100%;
+}
+
 #timaat-login-modal {
 	background: url('../img/timaat-login-backdrop.jpg');
 	background-position: center center;

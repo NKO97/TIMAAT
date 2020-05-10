@@ -26,6 +26,18 @@
 			// console.log("TCL: UI: init: function()");
 			$('[data-toggle="popover"]').popover();
 			
+			this.templates = {
+					notification: `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+						<div class="toast-header">
+							<span class="notification-action-color badge"><i class="notification-action fas fa-fw"></i></span>
+							&nbsp;<strong class="notification-user mr-auto">(unbekannt)</strong>
+							<small class="notification-time text-muted">jetzt</small>
+							<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="notification-message toast-body"></div>
+					</div>`,
+			}
+			
 			// init components
 			TIMAAT.Datasets.init();
 			TIMAAT.UploadManager.init();
@@ -124,6 +136,108 @@
 			$('.timaat-sidebar-tab-'+component).addClass('bg-info');
 			$('.timaat-sidebar-tab-'+component+' a').addClass('selected');
 		},
+		
+		receiveNotification(notificationEvent) {
+			try {
+				console.log("notification event", notificationEvent);
+				let notification = JSON.parse(notificationEvent.data);
+				console.log("notification data", notification);
+				// TODO refactor
+				// only show if notification is for current list
+				if ( TIMAAT.VideoPlayer.curList && TIMAAT.VideoPlayer.curList.id == notification.dataID ) {
+					TIMAAT.UI.showNotification( notification );
+					// trigger local event and action
+					console.log("trigger ",notification.message+'.notification.TIMAAT');
+					$(document).trigger(notification.message+'.notification.TIMAAT', notification);
+				}
+			} catch(e) {
+				console.log("notification error", e);
+			}
+		},
+		
+		sendNotification(type, dataID=0, data=null) {
+			if ( !this.notificationSocket || this.notificationSocket.readyState == WebSocket.CLOSED ) {
+				// init websocket
+				let protocol = ( location.protocol == 'http:') ? 'ws://' : 'wss://';
+				this.notificationSocket = new WebSocket(protocol+location.host+location.pathname+'api/notification');
+				let request = type;
+				let storedID = dataID;
+				this.notificationSocket.onopen = function() {
+					// send notification request to server
+					TIMAAT.UI.notificationSocket.send( JSON.stringify({token:TIMAAT.Service.token,request:request,dataID:storedID}) );
+				}
+				this.notificationSocket.onmessage = TIMAAT.UI.receiveNotification;
+				// send notification request to server
+			} else this.notificationSocket.send( JSON.stringify({token:TIMAAT.Service.token,request:type,dataID:dataID}) );
+
+		},
+		
+		showNotification(notification) {
+			if (!notification) return;
+			let ui = $(this.templates.notification);
+			let color = 'badge-info';
+			let action = 'fa-question';
+			let user = notification.username;
+			let message = 'hat eine unbekannte Aktion durchgeführt';
+			
+			// parse and style notification
+			switch (notification.message) {
+				case 'subscribe-list':
+					color = 'badge-primary';
+					action = 'fa-eye';
+					message = 'aktuelle Liste geöffnet'
+					break;
+				case 'unsubscribe-list':
+					color = 'badge-secondary';
+					action = 'fa-eye';
+					message = 'aktuelle Liste geschlossen'
+					break;
+				case 'add-segment':
+					color = 'badge-success';
+					action = 'fa-plus';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> hinzugefügt';
+					break;
+				case 'edit-segment':
+					color = 'badge-warning';
+					action = 'fa-edit';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> bearbeitet';
+					break;
+				case 'remove-segment':
+					color = 'badge-danger';
+					action = 'fa-trash-alt';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> gelöscht';
+					break;
+				case 'add-annotation':
+					color = 'badge-success';
+					action = 'fa-plus';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> hinzugefügt';
+					break;
+				case 'edit-annotation':
+					color = 'badge-warning';
+					action = 'fa-edit';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> bearbeitet';
+					break;
+				case 'remove-annotation':
+					color = 'badge-danger';
+					action = 'fa-trash-alt';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> gelöscht';
+					break;
+				default:
+					message = 'unbekannte Aktion: '+notification.message;
+					break;
+			}
+			ui.find('.notification-action-color').addClass(color);
+			ui.find('.notification-action').addClass(action);
+			ui.find('.notification-user').text(user);
+			ui.find('.notification-message').html(message);
+			
+			$('#timaat-notification-pane').append(ui);
+			// display notification
+			ui.toast({delay:3000})
+			.on('hidden.bs.toast',function(){$(this).toast('dispose').remove();})
+			.toast('show');
+		},
+		
 		
 		setWaiting: function(waiting) {
 			console.log("TCL: setWaiting: function(waiting)");
