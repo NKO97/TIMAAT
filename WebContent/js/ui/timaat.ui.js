@@ -27,7 +27,7 @@
 			$('[data-toggle="popover"]').popover();
 			
 			this.templates = {
-					notification: `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+					notification: `<div class="toast mb-1" role="alert" aria-live="assertive" aria-atomic="true">
 						<div class="toast-header">
 							<span class="notification-action-color badge"><i class="notification-action fas fa-fw"></i></span>
 							&nbsp;<strong class="notification-user mr-auto">(unbekannt)</strong>
