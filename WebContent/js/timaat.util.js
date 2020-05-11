@@ -220,7 +220,6 @@
 			let fuzzyDate = '';
 
 			let now = Date.now();
-			console.log(now-timestamp);
 			let seconds = Math.floor((now-timestamp)/1000);
 			let minutes = Math.floor(seconds/60);
 			let hours = Math.floor(minutes/60);
