@@ -230,10 +230,11 @@
 			ui.find('.notification-action').addClass(action);
 			ui.find('.notification-user').text(user);
 			ui.find('.notification-message').html(message);
+			ui.find('.notification-time').text(TIMAAT.Util.getFuzzyDate(notification.timestamp));
 			
 			$('#timaat-notification-pane').append(ui);
 			// display notification
-			ui.toast({delay:3000})
+			ui.toast({delay:4000})
 			.on('hidden.bs.toast',function(){$(this).toast('dispose').remove();})
 			.toast('show');
 		},

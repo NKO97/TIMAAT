@@ -216,6 +216,30 @@
 		    return uuid;
 		},
 
+		getFuzzyDate(timestamp) {
+			let fuzzyDate = '';
+
+			let now = Date.now();
+			console.log(now-timestamp);
+			let seconds = Math.floor((now-timestamp)/1000);
+			let minutes = Math.floor(seconds/60);
+			let hours = Math.floor(minutes/60);
+			let days = Math.floor(hours/24);
+			let weeks = Math.floor(days / 7);
+			let months = Math.floor(days / 30);
+			let years = Math.floor(days / 365);
+			
+			if ( years > 0 ) fuzzyDate = (years == 1) ? 'vor einem Jahr' : 'vor '+years+' Jahren';
+			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'vor einem Monat' : 'vor '+months+' Monaten';
+			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'letzte Woche' : 'vor '+weeks+' Wochen';
+			else if ( days > 0 ) fuzzyDate = (days == 1) ? 'Gestern' : 'vor '+days+' Tagen';
+			else if ( hours > 0 ) fuzzyDate = (hours == 1) ? 'vor einer Stunde' : 'vor '+hours+' Stunden';
+			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'vor einer Minute' : 'vor '+minutes+' Minuten';
+			else if ( seconds > 4 ) fuzzyDate = 'vor '+seconds+' Sekunden';
+			else fuzzyDate = 'jetzt';
+			
+			return fuzzyDate;
+		},
 		
 		getArgonHash: function(password, salt) {
 			// console.log("TCL: getArgonHash: function(password, salt)");
