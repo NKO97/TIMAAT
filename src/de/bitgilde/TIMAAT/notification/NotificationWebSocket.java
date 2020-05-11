@@ -1,7 +1,9 @@
 package de.bitgilde.TIMAAT.notification;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.websocket.OnClose;
@@ -47,10 +49,20 @@ public class NotificationWebSocket {
         		// TODO check if user account status has expired or is blocked
         		if ( !userSessions.containsKey(session.getId()) ) createUserSession(username, session);
         		notifyUserSubscription(username, req.dataID, session);
+        		// answer user subscription request
+        		if ( req.getDataID() > 0 ) acknowledgeSubscriptionInfo(username, session, req.dataID);
         	}
         } catch (Exception e) {
         	System.out.println("TIMAAT::Notification:client message failed to decode");
         }
+    }
+    
+    private void acknowledgeSubscriptionInfo(String subscriber, Session session, int listID) {
+    	List <String> subscribers = new ArrayList<String>();
+    	for (UserSubscriptions userSub : userSessions.values()) {
+    		if ( !userSub.username.equalsIgnoreCase(subscriber) && userSub.getAnalysisList() == listID ) subscribers.add(userSub.getUsername());
+    	}
+    	if ( subscribers.size() > 0 ) sendNotificationTo(session, subscriber, "list-subscribers", listID, subscribers);
     }
     
     private void notifyUserSubscription(String username, int listID, Session session) {

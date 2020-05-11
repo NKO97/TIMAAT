@@ -222,6 +222,16 @@
 					action = 'fa-trash-alt';
 					message = 'Annotation <strong>"'+notification.data.title+'"</strong> gelöscht';
 					break;
+				case 'list-subscribers':
+					color = 'badge-primary';
+					action = 'fa-user-friends';
+					user = 'Bearbeiter/-innen';
+					message = '';
+					for (let subscriber of notification.data) message += ', '+subscriber;
+					message = '<strong>'+message.substring(2)+'</strong> ';
+					message += (notification.data.length == 1) ? 'bearbeitet ' : 'bearbeiten ';
+					message += 'die Liste ebenfalls';
+					break;
 				default:
 					message = 'unbekannte Aktion: '+notification.message;
 					break;
