@@ -201,7 +201,7 @@
 					await TIMAAT.ActorDatasets.updateActor(actor.model.actorType.actorTypeTranslations[0].type, actor);
 					actor.updateUI();
 					await TIMAAT.ActorDatasets.refreshDatatable('actor');
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
+					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'actor', actor);
 				} else { // create new actor
 					// console.log("formDataObject", formDataObject);
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, formDataObject.typeId);
@@ -225,7 +225,7 @@
 					actor = new TIMAAT.Actor(newActor, actorType);
 					await TIMAAT.ActorDatasets.refreshDatatable('actor');
 					// var actor = TIMAAT.ActorDatasets.actors[TIMAAT.ActorDatasets.actors.length-1];
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', "actor", actor);
+					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'actor', actor);
 					// $('#timaat-actordatasets-actor-metadata-form').data('actor', actor); //? needed or not?
 				}
 			});
@@ -3292,6 +3292,9 @@
 					break;
 					case 'collective':
 						newActorModel.actorCollective = actorSubtypeModel;
+						TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: actor.id, name: actor.displayName.name});
+						TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
+						TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
 					break;
 				}
 				// console.log("TCL: newActorModel", newActorModel);
@@ -3608,32 +3611,32 @@
 			}
 		},
  
-		_actorAdded: function(actorSubtype, actor) {
-			try {
-				console.log("TCL: _actorSubtypeAdded: function(actorSubtype, actor)");
-				// console.log("TCL: actorSubtype", actorSubtype);
-				// console.log("TCL: actor", actor);
-				switch (actorSubtype) {
-					case 'person':
-						TIMAAT.ActorDatasets.persons.model.push(actor);
-						var newActor = new TIMAAT.Actor(actor, 'person');
-						TIMAAT.ActorDatasets.persons.push(newActor);
-					break;
-					case 'collective':
-						TIMAAT.ActorDatasets.collectives.model.push(actor);
-						var newActor = new TIMAAT.Actor(actor, 'collective');
-						TIMAAT.ActorDatasets.collectives.push(newActor);
-						TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: actor.id, name: actor.displayName.name});
-						TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
-						TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
-					break;
-				}
-				// TIMAAT.ActorDatasets.actors.model.push(actor);
-				// TIMAAT.ActorDatasets.actors.push(newActor);
-			} catch(error) {
-				console.log( "error: ", error);
-			}
-		},
+		// _actorAdded: function(actorSubtype, actor) {
+		// 	try {
+		// 		console.log("TCL: _actorSubtypeAdded: function(actorSubtype, actor)");
+		// 		// console.log("TCL: actorSubtype", actorSubtype);
+		// 		// console.log("TCL: actor", actor);
+		// 		switch (actorSubtype) {
+		// 			case 'person':
+		// 				TIMAAT.ActorDatasets.persons.model.push(actor);
+		// 				var newActor = new TIMAAT.Actor(actor, 'person');
+		// 				TIMAAT.ActorDatasets.persons.push(newActor);
+		// 			break;
+		// 			case 'collective':
+		// 				TIMAAT.ActorDatasets.collectives.model.push(actor);
+		// 				var newActor = new TIMAAT.Actor(actor, 'collective');
+		// 				TIMAAT.ActorDatasets.collectives.push(newActor);
+		// 				TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: actor.id, name: actor.displayName.name});
+		// 				TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
+		// 				TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
+		// 			break;
+		// 		}
+		// 		// TIMAAT.ActorDatasets.actors.model.push(actor);
+		// 		// TIMAAT.ActorDatasets.actors.push(newActor);
+		// 	} catch(error) {
+		// 		console.log( "error: ", error);
+		// 	}
+		// },
 
 		_actorRemoved: async function(actor) {
 			console.log("TCL: actor", actor);
@@ -4045,7 +4048,7 @@
 			return phoneNumberToAppend;
 		},
 
-		appendMemberOfCollectiveDataset(i, collectiveId, memberOfCollectiveData, labelClassString, editMode) {
+		appendMemberOfCollectiveDataset: function(i, collectiveId, memberOfCollectiveData, labelClassString, editMode) {
       // console.log("TCL: appendMemberOfCollectiveDataset -> i, collectiveId, memberOfCollectiveData, labelClassString, editMode", i, collectiveId, memberOfCollectiveData, labelClassString, editMode);
 			var memberOfCollectiveFormData = 
 			`<div class="form-group" data-role="personismemberofcollective-entry" data-id="`+i+`" data-collective-id=`+collectiveId+`>
@@ -4074,11 +4077,11 @@
 			}
 			memberOfCollectiveFormData +=	
 									`</div>
-									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`
-									if (editMode) {
-										memberOfCollectiveFormData += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
-									}
-									memberOfCollectiveFormData +=
+									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`;
+			if (editMode) {
+				memberOfCollectiveFormData += TIMAAT.ActorDatasets.appendMemberOfCollectiveNewDetailFields();
+			}
+			memberOfCollectiveFormData +=
 										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
 									</div>
 								</div>

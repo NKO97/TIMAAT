@@ -19,6 +19,7 @@ requirejs.config({
 		"leaflet-customcontrol"  : '../vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom',
 		"leaflet-sidebar"        : '../vendor/leaflet/plugins/leaflet-sidebar-v2/js/leaflet-sidebar.min',
 		"popper"                 : '../vendor/popper/popper.min',
+		"select2"		             : '../vendor/select2/js/select2.min',
 		"sbadmin2"               : 'sb-admin-2',
 		"timaathtml"             : 'timaat.html',
 		"TIMAAT"                 : 'timaat.main',
@@ -96,6 +97,7 @@ require(['domReady',
 
 	'popper',
 	'bootstrap',
+	'select2',
 	
 	'argon2',
 	
@@ -106,7 +108,7 @@ require(['domReady',
 	'leaflet-sidebar',
 	], function (domReady) { domReady(function () {
 	  console.log("TIMAAT::Init");
-	  requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
+		requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
 		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-uploadmanager', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
 		  'TIMAAT-datasets', 'TIMAAT-actordatasets', 'TIMAAT-eventdatasets', 'TIMAAT-locationdatasets', 'TIMAAT-mediadatasets', 'TIMAAT-rolelists',
 		  'TIMAAT-service', 'TIMAAT-categoryservice', 'TIMAAT-actorservice', 'TIMAAT-locationservice', 'TIMAAT-mediaservice', 'TIMAAT-eventservice', 'TIMAAT-roleservice',

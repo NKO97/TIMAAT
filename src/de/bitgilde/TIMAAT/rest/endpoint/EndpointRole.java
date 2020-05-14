@@ -1,7 +1,6 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +27,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -67,7 +68,7 @@ public class EndpointRole {
 		if ( draw == null ) draw = 0;
 		
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-		String languageQuery = "SELECT rt.name FROM RoleTranslation rt WHERE rt.role.id = r.id AND rt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
+		String languageQuery = "SELECT rt.name FROM RoleTranslation rt WHERE rt.role.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery2 = "SELECT rt.name WHERE rt.role.id = r.id AND rt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
 		
 		// sanitize user input
@@ -114,7 +115,7 @@ public class EndpointRole {
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("/group/list")
+	@Path("group/list")
 	public Response getRoleGroupList(	@QueryParam("draw") Integer draw,
 																		@QueryParam("start") Integer start,
 																		@QueryParam("length") Integer length,
@@ -165,6 +166,207 @@ public class EndpointRole {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
   }
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("selectlist")
+	public Response getRoleSelectList(@QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all roles
+		System.out.println("RoleServiceEndpoint: getRoleSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+
+		class SelectElement{ 
+			public int roleId; 
+			public String text;
+			public boolean selected;
+			public SelectElement(int roleId, String text, boolean selected) {
+				this.roleId = roleId; this.text = text; this.selected = selected;
+			};
+		}
+		List<SelectElement> roleSelectList = new ArrayList<>();
+		Query roleTranslationsQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
+		// Query rolesInRoleGroupQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rg From RoleGroup rg WHERE rg.id = rghr.role.id (SELECT rghr.role.id FROM RoleGroupHasRole rghr WHERE rghr.rolegroup.id = "+roleGroupId+")");
+		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, roleTranslationsQuery.getResultList());
+		// List<Role> rolesInRoleGroup = castList(Role.class, rolesInRoleGroupQuery.getResultList());
+		// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		// List<Role> rolesInRoleGroup = roleGroup.getRoles();
+		boolean selected = false;
+		for (RoleTranslation roleTranslation : roleTranslationList) {
+			// selected = false;
+			// if (roleContainsRoleGroupId(rolesInRoleGroup, roleGroupId)) {
+			// 	selected = true;
+			// }
+			roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
+																					 roleTranslation.getName(),
+																					 selected));
+			// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ role.getId() + " " + name);
+		}
+		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+		return Response.ok().entity(roleSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("selectlist/{role_group_id}")
+	public Response getRoleSelectListForId(@PathParam("role_group_id") int roleGroupId,
+																				 @QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all roles
+		System.out.println("RoleServiceEndpoint: getRoleSelectListForId "+ roleGroupId);
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public boolean selected;
+			public SelectElement(int id, String text, boolean selected) {
+				this.id = id; this.text = text; this.selected = selected;
+			};
+		}
+		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - create query");
+		List<SelectElement> roleSelectList = new ArrayList<>();
+		Query roleTranslationsQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
+		// Query rolesInRoleGroupQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rg From RoleGroup rg WHERE rg.id = rghr.role.id (SELECT rghr.role.id FROM RoleGroupHasRole rghr WHERE rghr.rolegroup.id = "+roleGroupId+")");
+		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, roleTranslationsQuery.getResultList());
+		// List<Role> rolesInRoleGroup = castList(Role.class, rolesInRoleGroupQuery.getResultList());
+
+		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - prepare to create return data");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		List<Role> rolesInRoleGroup = roleGroup.getRoles();
+		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ rolesInRoleGroup.size());
+		boolean selected;
+
+		for (RoleTranslation roleTranslation : roleTranslationList) {
+			selected = false;
+			if (roleContainsRoleGroupId(rolesInRoleGroup, roleTranslation.getRole().getId())) {
+				selected = true;
+			}
+			roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
+																					 roleTranslation.getName(),
+																					 selected));
+			// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - add item: "+ roleTranslation.getId() + ";" + roleTranslation.getName() + ";" + selected + "; ");
+		}
+		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+		return Response.ok().entity(roleSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("group/selectlist/")
+	public Response getRoleGroupSelectList(@QueryParam("language") String languageCode,
+																				 @QueryParam("roleGroupId") int roleGroupId) {
+		// returns list of id and name combinations of all roles
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( roleGroupId < 0 ) roleGroupId = 0; // fallback so that no option will be selected
+		class SelectElement{ 
+			public int roleGroupId; 
+			public String text;
+			public boolean selected;
+			public SelectElement(int roleGroupId, String text, boolean selected) {
+				this.roleGroupId = roleGroupId; this.text = text; this.selected = selected;
+			};
+		}
+		List<SelectElement> roleGroupSelectList = new ArrayList<>();
+		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
+		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
+		boolean selected = false;
+		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
+			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
+																								roleGroupTranslation.getName(),
+																								selected));
+			// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ role.getId() + " " + name);
+		}
+		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+		return Response.ok().entity(roleGroupSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("group/selectlist/{role_id}")
+	public Response getRoleGroupSelectListForId(@PathParam("role_id") int roleId,
+																							@QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all roles
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId "+ roleId);
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public boolean selected;
+			public SelectElement(int id, String text, boolean selected) {
+				this.id = id; this.text = text; this.selected = selected;
+			};
+		}
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - create query");
+		List<SelectElement> roleGroupSelectList = new ArrayList<>();
+		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
+		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
+
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - prepare to create return data");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		List<RoleGroup> roleGroupsInRole = role.getRoleGroups();
+		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ roleGroupsInRole.size());
+		boolean selected;
+
+		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
+			selected = false;
+			if (roleGroupContainsRoleId(roleGroupsInRole, roleGroupTranslation.getRoleGroup().getId())) {
+				selected = true;
+			}
+			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
+																								roleGroupTranslation.getName(),
+																								selected));
+			// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - add item: "+ roleGroupTranslation.getId() + ";" + roleGroupTranslation.getName() + ";" + selected + "; ");
+		}
+		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+		return Response.ok().entity(roleGroupSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("group/{role_group_id}/haslist")
+	public Response getRoleGroupHasRoleList(@PathParam("role_group_id") Integer roleGroupId)
+	{
+		// TODO should be unnecessary, as roleGroup knows about Role (although not the other way around)
+		// Query query = TIMAATApp.emf.createEntityManager().createQuery(
+			// "SELECT r FROM Role r WHERE r.id = (SELECT rg.role_group_has_role.role_id FROM RoleGroup rg WHERE rg.role_group_has_role.role_group_id = "+roleGroupId+") ORDER BY r.id");
+			// "SELECT r FROM Role r WHERE r.roleGroup MEMBER OF RoleGroupHasRole");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		List<Role> roleList = roleGroup.getRoles();
+
+		return Response.ok().entity(roleList).build();
+  }
+
+  @GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{role_id}/haslist")
+	public Response getRoleHasRoleGroupList(@PathParam("role_id") Integer roleId)
+	{
+		// Query query = TIMAATApp.emf.createEntityManager().createQuery(
+		// 	// "SELECT rg FROM RoleGroup rg WHERE rg.id = (SELECT rghr.role_group_id FROM RoleGroupHasRole rghr WHERE rghr.role_id = "+roleId+") ORDER BY rg.id");
+		// 	"SELECT rg FROM RoleGroup rg WHERE rg.role MEMBER OF RoleGroupHasRole");
+		// List<RoleGroup> roleGroupList = castList(RoleGroup.class, query.getResultList());
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		List<RoleGroup> roleGroupList = role.getRoleGroups();
+
+		return Response.ok().entity(roleGroupList).build();
+  }
+
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -324,6 +526,7 @@ public class EndpointRole {
 
 		System.out.println("RoleServiceEndpoint: update translation - start transaction");	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
+		// update Role translation
 		entityTransaction.begin();
 		entityManager.merge(roleTranslation);
 		entityManager.persist(roleTranslation);
@@ -369,7 +572,56 @@ public class EndpointRole {
 		return Response.ok().entity(roleGroup).build();
 	}
 
-	//* No data in roleGroup to update. All information is stored in role_group_translation
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("group/{id}")
+	@Secured
+	public Response updateRoleGroup(@PathParam("id") int id,
+																	String jsonData) {
+		System.out.println("RoleServiceEndpoint: updateRoleGroup - jsonData: "+ jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		RoleGroup updatedRoleGroup = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, id);
+		if ( roleGroup == null ) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		// parse JSON data
+		try {
+			updatedRoleGroup = mapper.readValue(jsonData, RoleGroup.class);
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: updateRoleGroup: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedRoleGroup == null ) {
+			return Response.notModified().build();
+		}
+
+		// update role group
+		roleGroup.setRoles(updatedRoleGroup.getRoles());
+
+		// persist role group
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(roleGroup);
+		entityManager.persist(roleGroup);
+		entityTransaction.commit();
+		entityManager.refresh(roleGroup);
+
+		System.out.println("RoleServiceEndpoint: updateRoleGroup - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPEDITED);
+		System.out.println("RoleServiceEndpoint: updateRoleGroup - update complete");
+	
+		return Response.ok().entity(roleGroup).build();
+	}
+
+	
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -471,9 +723,9 @@ public class EndpointRole {
 		ObjectMapper mapper = new ObjectMapper();
 		RoleGroupTranslation updatedRoleGroupTranslation = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		RoleGroupTranslation rolegroupTranslation = entityManager.find(RoleGroupTranslation.class, id);
+		RoleGroupTranslation roleGroupTranslation = entityManager.find(RoleGroupTranslation.class, id);
 
-		if ( rolegroupTranslation == null ) {
+		if ( roleGroupTranslation == null ) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		// System.out.println("RoleServiceEndpoint: update translation - old translation :"+translation.getName());
@@ -491,16 +743,16 @@ public class EndpointRole {
 
 		// update translation
 		System.out.println("RoleServiceEndpoint: update translation - language id:"+updatedRoleGroupTranslation.getLanguage().getId());	
-		if ( updatedRoleGroupTranslation.getName() != null ) rolegroupTranslation.setName(updatedRoleGroupTranslation.getName());
-		if ( updatedRoleGroupTranslation.getLanguage() != null ) rolegroupTranslation.setLanguage(updatedRoleGroupTranslation.getLanguage());
+		if ( updatedRoleGroupTranslation.getName() != null ) roleGroupTranslation.setName(updatedRoleGroupTranslation.getName());
+		if ( updatedRoleGroupTranslation.getLanguage() != null ) roleGroupTranslation.setLanguage(updatedRoleGroupTranslation.getLanguage());
 
 		System.out.println("RoleServiceEndpoint: update translation - start transaction");	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.merge(rolegroupTranslation);
-		entityManager.persist(rolegroupTranslation);
+		entityManager.merge(roleGroupTranslation);
+		entityManager.persist(roleGroupTranslation);
 		entityTransaction.commit();
-		entityManager.refresh(rolegroupTranslation);
+		entityManager.refresh(roleGroupTranslation);
 
 		System.out.println("RoleServiceEndpoint: update translation - only logging remains");	
 		// add log entry
@@ -508,7 +760,206 @@ public class EndpointRole {
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPEDITED);
 		System.out.println("RoleServiceEndpoint: update translation - update complete");	
-		return Response.ok().entity(rolegroupTranslation).build();
+		return Response.ok().entity(roleGroupTranslation).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("rolehasgroup/{role_id}")
+	@Secured
+	public Response createRoleHasRoleGroup(@PathParam("role_id") int roleId,
+																				 String jsonData) {
+		ObjectMapper mapper = new ObjectMapper();
+		List<RoleGroup> roleGroups = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		// Role role = entityManager.find(Role.class, roleId);
+		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
+		try {
+			roleGroups = mapper.readValue(jsonData, new TypeReference<List<RoleGroup>>(){});
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: update role group has roles: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		for (RoleGroup roleGroup : roleGroups) {
+			entityManager.merge(roleGroup);
+			role.getRoleGroups().add(roleGroup);
+		}
+		entityManager.merge(role);
+		entityManager.persist(role);
+		entityTransaction.commit();
+		entityManager.refresh(role);
+
+		return Response.ok().entity(role).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("grouphasrole/{role_group_id}")
+	@Secured
+	public Response createRoleGroupHasRole(@PathParam("role_group_id") int roleGroupId,
+																				 String jsonData) {
+		System.out.println("RoleServiceEndpoint: createRoleGroupHasRole: roleGroupId, jsonData: "+roleGroupId+" "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		List<Role> roles = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		if ( roleGroup == null ) return Response.status(Status.NOT_FOUND).build();
+		try {
+			roles = mapper.readValue(jsonData, new TypeReference<List<Role>>(){});
+			for (Role role : roles) {
+				System.out.println("RoleServiceEndpoint: createRoleGroupHasRole - role has id "+ role.getId());
+			}
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: createRoleGroupHasRole: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		System.out.println("RoleServiceEndpoint: createRoleGroupHasRole - start entityTransaction");
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		for (Role role : roles) {
+			entityManager.merge(role);
+			roleGroup.getRoles().add(role);
+		}
+		entityManager.merge(roleGroup);
+		entityManager.persist(roleGroup);
+		entityTransaction.commit();
+		entityManager.refresh(roleGroup);
+		System.out.println("RoleServiceEndpoint: createRoleGroupHasRole - entity transaction complete");
+
+		return Response.ok().entity(roleGroup).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("rolehasgroup/{role_id}")
+	@Secured
+	public Response deleteRoleHasRoleGroup(@PathParam("role_id") int roleId,
+																				 String jsonData) {  
+		System.out.println("ActorServiceEndpoint: deleteRoleHasRoleGroup - jsonData: "+ jsonData);	
+		ObjectMapper mapper = new ObjectMapper();
+		List<RoleGroup> roleGroups = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
+		try {
+			roleGroups = mapper.readValue(jsonData, new TypeReference<List<RoleGroup>>(){});
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: update role group has roles: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// EntityTransaction entityTransaction = entityManager.getTransaction();
+		// entityTransaction.begin();
+		// for (RoleGroup roleGroup : roleGroups) {
+		// 	role.getRoleGroups().remove(roleGroup);
+		// 	entityManager.merge(roleGroup);
+		// 	// entityManager.persist(roleGroup);
+		// }
+		// entityManager.merge(role);
+		// entityManager.persist(role);
+		// entityTransaction.commit();
+		// // for (RoleGroup roleGroup : roleGroups) {
+		// // 	entityManager.refresh(roleGroup);
+		// // }
+		// entityManager.refresh(role);
+
+		for (RoleGroup roleGroup : roleGroups) {
+			roleGroup.getRoles().remove(role);
+			role.getRoleGroups().remove(roleGroup);
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(roleGroup);
+			entityManager.persist(roleGroup);
+			entityManager.merge(role);
+			entityManager.persist(role);
+			entityTransaction.commit();
+			entityManager.refresh(roleGroup);
+			entityManager.refresh(role);
+		}
+
+		System.out.println("ActorServiceEndpoint: deleteRoleHasRoleGroup - delete complete");	
+		return Response.ok().build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("grouphasrole/{role_group_id}")
+	@Secured
+	public Response deleteRoleGroupHasRole(@PathParam("role_group_id") int roleGroupId,
+																				 String jsonData) {  
+		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - jsonData: "+ jsonData);	
+		ObjectMapper mapper = new ObjectMapper();
+		List<Role> roles = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
+		if ( roleGroup == null ) return Response.status(Status.NOT_FOUND).build();
+		try {
+			roles = mapper.readValue(jsonData, new TypeReference<List<Role>>(){});
+		} catch (IOException e) {
+			System.out.println("RoleServiceEndpoint: update role group has roles: IOException e!");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - start entity transaction");	
+		// try {
+		// 	EntityTransaction entityTransaction = entityManager.getTransaction();
+		// 	entityTransaction.begin();
+		// 	for (Role role : roles) {
+		// 		// entityManager.createQuery("DELETE FROM RoleGroup.role_group_has_role rg WHERE rg.role=:role AND rg.role_group_id=:roleGroupId") 
+		// 		// 						.setParameter("roleId", role.getId())
+		// 		// 						.setParameter("roleGroupId", roleGroup.getId())
+		// 		// 						.executeUpdate();
+		// 		roleGroup.removeRole(role);
+		// 		// roleGroup.getRoles().remove(role);
+		// 		// entityManager.merge(role);
+		// 	}
+		// 	// for (Role role : roleGroup.getRoles()) {
+		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after remove: roleGroup left with Id: " +role.getId());	
+		// 	// }
+		// 	// entityManager.merge(roleGroup);
+		// 	// for (Role role : roleGroup.getRoles()) {
+		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after merge: roleGroup left with Id: " +role.getId());	
+		// 	// }
+		// 	// entityManager.persist(roleGroup);
+		// 	// for (Role role : roleGroup.getRoles()) {
+		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after persist: roleGroup left with Id: " +role.getId());	
+		// 	// }
+		// 	entityTransaction.commit();
+		// 	entityManager.refresh(roleGroup);
+		// 	// for (Role role : roleGroup.getRoles()) {
+		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after refresh: roleGroup left with Id: " +role.getId());	
+		// 	// }
+		// } catch (Exception e) {
+		// 	e.printStackTrace();
+		// 	return Response.notModified().build();
+		// }
+		for (Role role : roles) {
+			roleGroup.getRoles().remove(role);
+			role.getRoleGroups().remove(roleGroup);
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(roleGroup);
+			entityManager.persist(roleGroup);
+			entityManager.merge(role);
+			entityManager.persist(role);
+			entityTransaction.commit();
+			entityManager.refresh(roleGroup);
+			entityManager.refresh(role);
+		}
+		
+		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - delete complete");	
+		return Response.ok().build();
 	}
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
@@ -516,6 +967,14 @@ public class EndpointRole {
     for(Object o: c)
       r.add(clazz.cast(o));
     return r;
-}
+	}
+
+	public boolean roleContainsRoleGroupId(final List<Role> list, final int id){
+		return list.stream().anyMatch(o -> o.getId() == id);
+	}
+
+	public boolean roleGroupContainsRoleId(final List<RoleGroup> list, final int id){
+		return list.stream().anyMatch(o -> o.getId() == id);
+	}
 
 }

@@ -134,7 +134,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCollectiveSelectList -> data", data);
+					// console.log("TCL: getCollectiveSelectList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {

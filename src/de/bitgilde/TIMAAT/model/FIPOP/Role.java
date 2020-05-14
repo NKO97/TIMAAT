@@ -3,7 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -39,8 +41,10 @@ public class Role implements Serializable {
 
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
-	@JsonIgnore
-	private Set<RoleGroup> roleGroups;
+	// @JsonIgnore
+	@JsonBackReference(value="RoleGroup-Role")
+	// @JsonIgnoreProperties(value="roles", allowGetters = true, allowSetters = true)
+	private List<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
 	@OneToMany(mappedBy="role", cascade=CascadeType.PERSIST)
@@ -87,12 +91,26 @@ public class Role implements Serializable {
 		this.actors = actors;
 	}
 
-	public Set<RoleGroup> getRoleGroups() {
+	public List<RoleGroup> getRoleGroups() {
 		return this.roleGroups;
 	}
 
-	public void setRoleGroups(Set<RoleGroup> roleGroups) {
+	public void setRoleGroups(List<RoleGroup> roleGroups) {
 		this.roleGroups = roleGroups;
+	}
+
+		public RoleGroup addRoleGroup(RoleGroup roleGroup) {
+		getRoleGroups().add(roleGroup);
+		// roleGroup.addRole(this);
+
+		return roleGroup;
+	}
+
+	public RoleGroup removeRoleGroup(RoleGroup roleGroup) {
+		getRoleGroups().remove(roleGroup);
+		// roleGroup.removeRole(this);
+
+		return roleGroup;
 	}
 
 	public List<RoleTranslation> getRoleTranslations() {

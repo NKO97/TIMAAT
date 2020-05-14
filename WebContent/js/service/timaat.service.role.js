@@ -23,11 +23,11 @@
 
     listRoles(callback) {
       jQuery.ajax({
-        url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/list",
-        type:"GET",
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        beforeSend: function (xhr) {
+        url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/list",
+        type       : "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType   : "json",
+        beforeSend : function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
         },
       }).done(function(data) {
@@ -41,11 +41,11 @@
 
     listRoleGroups(callback) {
       jQuery.ajax({
-        url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/list",
-        type:"GET",
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        beforeSend: function (xhr) {
+        url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/list",
+        type       : "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType   : "json",
+        beforeSend : function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
         },
       }).done(function(data) {
@@ -65,12 +65,11 @@
 			}
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/0",
-					type:"POST",
-					// data: JSON.stringify(model),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/0",
+					type       : "POST",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -82,10 +81,92 @@
 			}).catch((error) => {
 				console.log( "error: ", error );
 			});
-    },
+		},
+		
+		async getRoleOrRoleGroupSelectList(type) {
+      console.log("TCL: getRoleOrRoleGroupSelectList -> type", type);
+			var path = '';
+			if (type == 'rolegroup') { 
+				path = '/group';
+			}
+			return new Promise(resolve => {
+				// console.log("TCL: getRoleOrRoleGroupSelectList", type);
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/selectlist/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getRoleOrRoleGroupSelectList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async getRoleOrRoleGroupSelectListForId(type, id) {
+      console.log("TCL: getRoleOrRoleGroupSelectListForId -> type, id", type, id);
+			var path = '';
+			if (type == 'rolegroup') { 
+				path = '/group';
+			}
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/selectlist/"+id,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getRoleOrRoleGroupSelectList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async getRoleGroupHasRoleList(type, id) {
+			console.log("TCL: getRoleGroupHasRoleIdList -> type, id", type, id);
+			var path = ( type == 'role') ? '' : '/group';
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+id+"/haslist/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getRoleGroupHasRoleIdList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
 
     async addTranslation(type, model) {
-      // console.log("TCL: async createTranslation -> type, model", type, model);
+      console.log("TCL: async createTranslation -> type, model", type, model);
       var path = '';
       var translation = {};
 			switch (type) {
@@ -99,12 +180,12 @@
 			}
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+model.id+"/translation/"+translation.id,
-					type:"POST",
-					data: JSON.stringify(translation),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+model.id+"/translation/"+translation.id,
+					type       : "POST",
+					data       : JSON.stringify(translation),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -116,7 +197,30 @@
 			}).catch((error) => {
 				console.log( "error: ", error );
 			});
-    },
+		},
+		
+		/** Adds roles to role group or role groups to role */
+		async updateRoleGroup(roleGroup) {
+      console.log("TCL: updateRoleGroup -> roleGroup", roleGroup);
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/"+id,
+					type       : "PATCH",
+					data       : JSON.stringify(roleGroup),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
 
     async updateTranslation(type, translation, roleOrRoleGroupId) {
       console.log("TCL: async updateTranslation -> type, translation, roleOrRoleGroupId", type, translation, roleOrRoleGroupId);
@@ -125,22 +229,18 @@
 			var tempTranslation = {
 				id: translation.id,
 				name: translation.name,
-				// role: {
-				// 	id: roleOrRoleGroupId
-				// },
 				language: {
 					id: translation.language.id
 				}
 			};
-
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/translation/"+translation.id,
-					type:"PATCH",
-					data: JSON.stringify(tempTranslation),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/translation/"+translation.id,
+					type       : "PATCH",
+					data       : JSON.stringify(tempTranslation),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -153,28 +253,97 @@
 			}).catch((error) => {
 				console.log( "error: ", error);
 			});
-    },
+		},
+		
+		/** Adds roles to role group or role groups to role */
+		async createRoleGroupHasRoles(type, id, idList) {
+      console.log("TCL: createRoleGroupHasRoles -> type, id, idList", type, id, idList);
+			var path = ( type == 'role') ? 'rolehasgroup' : 'grouphasrole';
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+path+"/"+id,
+					type       : "POST",
+					data       : JSON.stringify(idList),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		// /** updates role has role groups or role group has roles */
+		// async updateRoleGroupHasRoles(type, id, idList) {
+		// 	var path = ( type == 'role') ? 'rolehasgroup' : 'grouphasrole';
+		// 	return new Promise(resolve => {
+		// 		$.ajax({
+		// 			url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+path+"/"+id,
+		// 			type       : "PATCH",
+		// 			data       : JSON.stringify(idList),
+		// 			contentType: "application/json; charset=utf-8",
+		// 			dataType   : "json",
+		// 			beforeSend : function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		}).done(function(data) {
+		// 			resolve(data);
+		// 		}).fail(function(e) {
+		// 			console.log( "error: ", e.responseText);
+		// 		});
+		// 	}).catch((error) => {
+		// 		console.log( "error: ", error );
+		// 	});
+		// },
+
+		/** deletes role has role groups or role group has roles */
+		async deleteRoleGroupHasRoles(type, id, idList) {
+      console.log("TCL: deleteRoleGroupHasRoles -> type, id, idList", type, id, idList);
+			var path = ( type == 'role') ? 'rolehasgroup' : 'grouphasrole';
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+path+"/"+id,
+					type       : "DELETE",
+					data			 : JSON.stringify(idList),
+					contentType: "application/json; charset=utf-8",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e );
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
 
     async deleteRoleOrRoleGroup(type, roleOrRoleGroup) {
-			// console.log("TCL: deleteRoleOrRoleGroup -> type, roleOrRoleGroup", type, roleOrRoleGroup);
+			console.log("TCL: deleteRoleOrRoleGroup -> type, roleOrRoleGroup", type, roleOrRoleGroup);
 			var path = '';
 			if (type == 'rolegroup') { 
 				path = '/group';
 			}
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+roleOrRoleGroup.model.id,
-					type:"DELETE",
-					contentType:"application/json; charset=utf-8",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+roleOrRoleGroup.model.id,
+					type       : "DELETE",
+					contentType: "application/json; charset=utf-8",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
 					resolve(data);
-				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(e) {
+					console.log( "error", e.responseText );
 				});
 			}).catch((error) => {
 				console.log( "error: ", error);

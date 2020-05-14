@@ -49,6 +49,9 @@
     <!-- Leaflet Sidebar CSS -->
     <link href="vendor/leaflet/plugins/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" rel="stylesheet" type="text/css">
 
+    <!--Select2 CSS -->
+    <link href="vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
     
@@ -1001,13 +1004,59 @@
                             </div>
                           </div>
                         </div>
-                        <!-- Role data -->
+                        <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
                             <div class="col-md-12">
                               <label class="col-form-label col-form-label-sm" for="timaat-rolelists-metadata-name">Name*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter display title]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                             </div>                            
+                          </div>
+                        </div>
+                        <!-- role data -->
+                        <div class="form-group datasheet-data role-data">
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-11">
+                                <div class="form-row">
+                                  <div class="col-md-10">
+                                    <h6 class="form-header">Is part of role group(s)</h6>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <h6 class="form-header"></h6>
+                                  </div>
+                                </div>  
+                              </div>                          
+                            </div>
+                          </div>
+                          <div class="role-ispartof-rolegroup-container">
+                            <div data-role="dynamic-role-ispartof-rolegroup-fields" id="dynamic-role-ispartof-rolegroup-fields">
+                              <div class="form-group">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- role group data -->
+                        <div class="form-group datasheet-data rolegroup-data">
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-11">
+                                <div class="form-row">
+                                  <div class="col-md-10">
+                                    <h6 class="form-header">Contains role(s)</h6>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <h6 class="form-header"></h6>
+                                  </div>
+                                </div>  
+                              </div>                          
+                            </div>
+                          </div>
+                          <div class="role-ispartof-rolegroup-container">
+                            <div data-role="dynamic-rolegroup-contains-role-fields" id="dynamic-rolegroup-contains-role-fields">
+                              <div class="form-group">
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <!-- Save/Cancel buttons -->
