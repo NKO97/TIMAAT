@@ -301,7 +301,7 @@
 						// TIMAAT.Settings.loadCategorySets();
 						TIMAAT.Datasets.load();
 						// load categories
-						TIMAAT.Settings.loadCategories(null,true);
+						TIMAAT.CategoryLists.loadCategories(null,true);
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
 						console.log("TCL: processLogin fail: e", e);
