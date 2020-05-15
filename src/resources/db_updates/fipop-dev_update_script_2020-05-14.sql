@@ -1,5 +1,5 @@
-INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (12, '1', 'salzigessalt', '8', '074cbcdaedb5bf1792c10213b04090f404d817357d596c7921d31afee5e60f5d')
-INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (13, '1', 'salzigessalt', '8', 'f534d6c6445e9b5fcad6dea856de3c705c0448c63d6e01ec06ce1317502ed3ee')
+INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (12, '1', 'salzigessalt', '8', '074cbcdaedb5bf1792c10213b04090f404d817357d596c7921d31afee5e60f5d');
+INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (13, '1', 'salzigessalt', '8', 'f534d6c6445e9b5fcad6dea856de3c705c0448c63d6e01ec06ce1317502ed3ee');
 
 UPDATE `FIPOP`.`user_account` SET `user_account_status` = 'suspended' WHERE `user_account`.`id` = 4;
 UPDATE `FIPOP`.`user_account` SET `user_account_status` = 'suspended' WHERE `user_account`.`id` = 10;
