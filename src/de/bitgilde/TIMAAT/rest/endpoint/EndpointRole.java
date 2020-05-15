@@ -116,13 +116,13 @@ public class EndpointRole {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("group/list")
-	public Response getRoleGroupList(	@QueryParam("draw") Integer draw,
-																		@QueryParam("start") Integer start,
-																		@QueryParam("length") Integer length,
-																		@QueryParam("orderby") String orderby,
-																		@QueryParam("dir") String direction,
-																		@QueryParam("search") String search,
-																		@QueryParam("language") String languageCode)
+	public Response getRoleGroupList(@QueryParam("draw") Integer draw,
+																	 @QueryParam("start") Integer start,
+																	 @QueryParam("length") Integer length,
+																	 @QueryParam("orderby") String orderby,
+																	 @QueryParam("dir") String direction,
+																	 @QueryParam("search") String search,
+																	 @QueryParam("language") String languageCode)
 	{
 		System.out.println("RoleServiceEndpoint: getRoleGroupList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
@@ -164,6 +164,19 @@ public class EndpointRole {
 		List<RoleGroup> roleGroupList = castList(RoleGroup.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
+  }
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("group/{id}")
+	public Response getRoleGroup(@PathParam("id") Integer id) {
+		System.out.println("RoleServiceEndpoint: getRoleGroup with id "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		RoleGroup roleGroup = entityManager.find(RoleGroup.class, id);
+
+		return Response.ok().entity(roleGroup).build();
   }
 	
 	@GET
@@ -226,18 +239,18 @@ public class EndpointRole {
 				this.id = id; this.text = text; this.selected = selected;
 			};
 		}
-		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - create query");
+		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - create query");
 		List<SelectElement> roleSelectList = new ArrayList<>();
 		Query roleTranslationsQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
 		// Query rolesInRoleGroupQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rg From RoleGroup rg WHERE rg.id = rghr.role.id (SELECT rghr.role.id FROM RoleGroupHasRole rghr WHERE rghr.rolegroup.id = "+roleGroupId+")");
 		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, roleTranslationsQuery.getResultList());
 		// List<Role> rolesInRoleGroup = castList(Role.class, rolesInRoleGroupQuery.getResultList());
 
-		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - prepare to create return data");
+		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - prepare to create return data");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
 		List<Role> rolesInRoleGroup = roleGroup.getRoles();
-		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ rolesInRoleGroup.size());
+		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ rolesInRoleGroup.size());
 		boolean selected;
 
 		for (RoleTranslation roleTranslation : roleTranslationList) {
@@ -306,16 +319,16 @@ public class EndpointRole {
 				this.id = id; this.text = text; this.selected = selected;
 			};
 		}
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - create query");
+		// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - create query");
 		List<SelectElement> roleGroupSelectList = new ArrayList<>();
 		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
 		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
 
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - prepare to create return data");
+		// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - prepare to create return data");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = entityManager.find(Role.class, roleId);
 		List<RoleGroup> roleGroupsInRole = role.getRoleGroups();
-		System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ roleGroupsInRole.size());
+		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ roleGroupsInRole.size());
 		boolean selected;
 
 		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
@@ -326,7 +339,7 @@ public class EndpointRole {
 			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
 																								roleGroupTranslation.getName(),
 																								selected));
-			// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - add item: "+ roleGroupTranslation.getId() + ";" + roleGroupTranslation.getName() + ";" + selected + "; ");
+			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - add item: "+ roleGroupTranslation.getId() + ";" + roleGroupTranslation.getName() + ";" + selected + "; ");
 		}
 		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
 		return Response.ok().entity(roleGroupSelectList).build();
@@ -366,7 +379,6 @@ public class EndpointRole {
 		return Response.ok().entity(roleGroupList).build();
   }
 
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -399,7 +411,37 @@ public class EndpointRole {
 		return Response.ok().entity(role).build();
 	}
 
-	//* No data in role to update. All information is stored in role_translation
+	//* Update role is only required to refresh role after altering role_group_has_role table entries*/
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	@Secured
+	public Response updateRole(@PathParam("id") int id) {
+		System.out.println("RoleServiceEndpoint: updateRole: ");	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, id);
+		if ( role == null ) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+
+		// persist role group
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(role);
+		entityManager.persist(role);
+		entityTransaction.commit();
+		entityManager.refresh(role);
+
+		System.out.println("RoleServiceEndpoint: updateRole - only logging remains");	
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext
+									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEEDITED);
+		System.out.println("RoleServiceEndpoint: updateRole - update complete");
+	
+		return Response.ok().entity(role).build();
+	}	
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -600,6 +642,7 @@ public class EndpointRole {
 			return Response.notModified().build();
 		}
 
+		List<Role> oldRoles = roleGroup.getRoles();
 		// update role group
 		roleGroup.setRoles(updatedRoleGroup.getRoles());
 
@@ -610,6 +653,12 @@ public class EndpointRole {
 		entityManager.persist(roleGroup);
 		entityTransaction.commit();
 		entityManager.refresh(roleGroup);
+	  for (Role role : roleGroup.getRoles()) {
+			entityManager.refresh(role);
+		}
+		for (Role role : oldRoles) {
+			entityManager.refresh(role);
+		}
 
 		System.out.println("RoleServiceEndpoint: updateRoleGroup - only logging remains");	
 		// add log entry
@@ -619,9 +668,7 @@ public class EndpointRole {
 		System.out.println("RoleServiceEndpoint: updateRoleGroup - update complete");
 	
 		return Response.ok().entity(roleGroup).build();
-	}
-
-	
+	}	
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
@@ -911,52 +958,19 @@ public class EndpointRole {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
-		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - start entity transaction");	
-		// try {
-		// 	EntityTransaction entityTransaction = entityManager.getTransaction();
-		// 	entityTransaction.begin();
-		// 	for (Role role : roles) {
-		// 		// entityManager.createQuery("DELETE FROM RoleGroup.role_group_has_role rg WHERE rg.role=:role AND rg.role_group_id=:roleGroupId") 
-		// 		// 						.setParameter("roleId", role.getId())
-		// 		// 						.setParameter("roleGroupId", roleGroup.getId())
-		// 		// 						.executeUpdate();
-		// 		roleGroup.removeRole(role);
-		// 		// roleGroup.getRoles().remove(role);
-		// 		// entityManager.merge(role);
-		// 	}
-		// 	// for (Role role : roleGroup.getRoles()) {
-		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after remove: roleGroup left with Id: " +role.getId());	
-		// 	// }
-		// 	// entityManager.merge(roleGroup);
-		// 	// for (Role role : roleGroup.getRoles()) {
-		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after merge: roleGroup left with Id: " +role.getId());	
-		// 	// }
-		// 	// entityManager.persist(roleGroup);
-		// 	// for (Role role : roleGroup.getRoles()) {
-		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after persist: roleGroup left with Id: " +role.getId());	
-		// 	// }
-		// 	entityTransaction.commit();
-		// 	entityManager.refresh(roleGroup);
-		// 	// for (Role role : roleGroup.getRoles()) {
-		// 	// 	System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - after refresh: roleGroup left with Id: " +role.getId());	
-		// 	// }
-		// } catch (Exception e) {
-		// 	e.printStackTrace();
-		// 	return Response.notModified().build();
-		// }
+		// update role group data
 		for (Role role : roles) {
 			roleGroup.getRoles().remove(role);
-			role.getRoleGroups().remove(roleGroup);
-			EntityTransaction entityTransaction = entityManager.getTransaction();
-			entityTransaction.begin();
-			entityManager.merge(roleGroup);
-			entityManager.persist(roleGroup);
-			entityManager.merge(role);
-			entityManager.persist(role);
-			entityTransaction.commit();
-			entityManager.refresh(roleGroup);
-			entityManager.refresh(role);
 		}
+
+		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - start entity transaction");	
+	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(roleGroup);
+		entityManager.persist(roleGroup);
+		entityTransaction.commit();
+		entityManager.refresh(roleGroup);
 		
 		System.out.println("ActorServiceEndpoint: deleteRoleGroupHasRole - delete complete");	
 		return Response.ok().build();

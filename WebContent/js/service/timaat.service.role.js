@@ -165,6 +165,30 @@
 			});	
 		},
 
+		async getRoleGroup(id) {
+			console.log("TCL: getRoleGroup -> id", id);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/"+id,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getRoleGroup -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
     async addTranslation(type, model) {
       console.log("TCL: async createTranslation -> type, model", type, model);
       var path = '';
@@ -198,13 +222,37 @@
 				console.log( "error: ", error );
 			});
 		},
-		
-		/** Adds roles to role group or role groups to role */
-		async updateRoleGroup(roleGroup) {
-      console.log("TCL: updateRoleGroup -> roleGroup", roleGroup);
+
+		/** updates role groups belonging to role  */
+		async updateRole(id) {
+			console.log("TCL: updateRoleGroup -> role id", id);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/"+id,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+id,
+					type       : "PATCH",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText);
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		/** updates roles belonging to role groups*/
+		async updateRoleGroup(roleGroup) {
+			console.log("TCL: updateRoleGroup -> roleGroup", roleGroup);
+			// var tempRoleGroup = roleGroup.model;
+			// if (tempRoleGroup.ui != undefined) {	tempRoleGroup.ui = {};}
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/group/"+roleGroup.id,
 					type       : "PATCH",
 					data       : JSON.stringify(roleGroup),
 					contentType: "application/json; charset=utf-8",

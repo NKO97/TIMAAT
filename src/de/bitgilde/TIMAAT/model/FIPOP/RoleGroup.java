@@ -33,7 +33,6 @@ public class RoleGroup implements Serializable {
 	//bi-directional many-to-many association to Role
 	@ManyToMany
 	// @JsonIgnoreProperties(value="roleGroups", allowGetters = true, allowSetters = true)
-	@JsonManagedReference(value="RoleGroup-Role")
 	// @JsonIgnore	
 	@JoinTable(
 		name="role_group_has_role"
