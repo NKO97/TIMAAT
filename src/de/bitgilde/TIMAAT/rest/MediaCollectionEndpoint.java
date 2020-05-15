@@ -153,7 +153,8 @@ public class MediaCollectionEndpoint {
 		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType);
+		countQuery.setParameter("id", id);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 

@@ -183,8 +183,11 @@
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  this._updateElementStyle();
-				  
-			  if ( this.parent.isSelected() ) {
+			  
+			  if ( this.parent.isSelected() && this.parent.isAnimation() ) this.ui.element.addClass('timaat-timeline-marker-anim');
+			  else this.ui.element.removeClass('timaat-timeline-marker-anim');
+			  
+			  if ( this.parent.isSelected() && !this.parent.isAnimation() ) {
 				  this.regionstart.attr('style','position:relative;');
 				  this.regionstart.show();
 				  this.regionend.attr('style','position:relative;');
@@ -223,8 +226,9 @@
 		  
 		  _updateElementStyle() {
 //			  console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
-			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon');
-			  if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
+			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon').removeClass('timaat-markerhead-anim');
+			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
+			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 			  
 			  this.ui.element.removeClass('timaat-timeline-marker-video').removeClass('timaat-timeline-marker-audio');
 			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-video');

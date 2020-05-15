@@ -22,11 +22,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.servlet.ServletContext;
-import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 

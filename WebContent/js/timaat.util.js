@@ -152,6 +152,44 @@
 			}
 		},
 		
+		getInterpolatedShape: function (shapeFrom, shapeTo, percent) {
+			if ( !shapeFrom || !shapeTo || percent == null ) return null;
+			percent = percent < 0 ? 0 : percent;
+			percent = percent > 1 ? 1 : percent;
+			if ( shapeFrom.id != shapeTo.id ) return null;
+			if ( shapeFrom == shapeTo ) return shapeFrom;
+			if ( percent == 0 ) return shapeFrom;
+			if ( percent == 1 ) return shapeTo;
+			let interShape = { id: shapeFrom.id, type: shapeFrom.type };
+			switch (shapeFrom.type) {
+				case 'rectangle': 
+					interShape.bounds = [ this._lerpValue(shapeFrom.bounds[0], shapeTo.bounds[0], percent), this._lerpValue(shapeFrom.bounds[1], shapeTo.bounds[1], percent) ];
+//					interShape.bounds = L.latLngBounds( this._lerpValue(shapeFrom.bounds.getSouthWest(), shapeTo.bounds.getSouthWest(), percent), this._lerpValue(shapeFrom.bounds.getNorthEast(), shapeTo.bounds.getNorthEast(), percent) );
+					break;
+					
+				case "polygon":
+				case "line":
+					interShape.points = new Array();
+					for (let index=0; index < shapeFrom.points.length; index++)
+						interShape.points.push(this._lerpValue(shapeFrom.points[index], shapeTo.points[index], percent));
+					break;
+				
+				case "circle":
+					interShape.point = this._lerpValue(shapeFrom.point, shapeTo.point, percent);
+					interShape.radius = this._lerpValue(shapeFrom.radius, shapeTo.radius, percent);
+					break;
+			}
+			return interShape;
+		},
+		
+		_lerpValue: function (from, to, percent) {
+			if ( !from || !to || percent == null ) return null;
+			if ( Array.isArray(from) )
+				return [from[0] + (to[0] - from[0]) * percent, from[1] + (to[1] - from[1]) * percent];
+			else
+				return from + (to - from) * percent;
+		},
+		
 		getDefTranslation: function(item, list, prop) {
 			var value = null;
 			item[list].forEach(function(translation) {
@@ -168,8 +206,42 @@
 			});
 		},
 		
+		createUUIDv4() {
+		    let dt = new Date().getTime();
+		    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		        var r = (dt + Math.random()*16)%16 | 0;
+		        dt = Math.floor(dt/16);
+		        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+		    });
+		    return uuid;
+		},
+
+		getFuzzyDate(timestamp) {
+			let fuzzyDate = '';
+
+			let now = Date.now();
+			let seconds = Math.floor((now-timestamp)/1000);
+			let minutes = Math.floor(seconds/60);
+			let hours = Math.floor(minutes/60);
+			let days = Math.floor(hours/24);
+			let weeks = Math.floor(days / 7);
+			let months = Math.floor(days / 30);
+			let years = Math.floor(days / 365);
+			
+			if ( years > 0 ) fuzzyDate = (years == 1) ? 'vor einem Jahr' : 'vor '+years+' Jahren';
+			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'vor einem Monat' : 'vor '+months+' Monaten';
+			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'letzte Woche' : 'vor '+weeks+' Wochen';
+			else if ( days > 0 ) fuzzyDate = (days == 1) ? 'Gestern' : 'vor '+days+' Tagen';
+			else if ( hours > 0 ) fuzzyDate = (hours == 1) ? 'vor einer Stunde' : 'vor '+hours+' Stunden';
+			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'vor einer Minute' : 'vor '+minutes+' Minuten';
+			else if ( seconds > 4 ) fuzzyDate = 'vor '+seconds+' Sekunden';
+			else fuzzyDate = 'jetzt';
+			
+			return fuzzyDate;
+		},
+		
 		getArgonHash: function(password, salt) {
-    // console.log("TCL: getArgonHash: function(password, salt)");
+			// console.log("TCL: getArgonHash: function(password, salt)");
 			var hash = Module.allocate(new Array(32), 'i8', Module.ALLOC_NORMAL);
 			var encoded = Module.allocate(new Array(512), 'i8', Module.ALLOC_NORMAL);
 			var passwordArr = allocateArray(password);

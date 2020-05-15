@@ -4,17 +4,11 @@
 .playbutton i.pause {
 	display: none;
 }
-.playing i.play {
+.playbutton.active i.play {
 	display: none !important;
 }
-.playing i.pause {
+.playbutton.active i.pause {
 	display: inline-block !important;
-}
-
-.playbutton, 
-.stepbckbutton, 
-.stepfwdbutton {
-	cursor: pointer;
 }
 
 body {
@@ -22,6 +16,30 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+#timaat-notification-pane {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+}
+
+#timaat-notification-pane .toast {
+	min-width: 250px;
+}
+
+#timaat-notification-pane .toast .notification-action-color {
+	font-size: 100%;
+}
+
+#timaat-login-modal {
+	background: url('../img/timaat-login-backdrop.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+#timaat-login-modal .modal-content {
+	box-shadow: 0px 0px 32px black;
 }
 
 body.timaat-login-modal-open #wrapper {
@@ -43,6 +61,21 @@ p + p {
 
 .timaat-component {
 	display: none;
+}
+
+button i.collapse-icon:before {
+	content: "\f0d7";
+}
+button.collapsed i.collapse-icon:before {
+	content: "\f0da";
+}
+
+th.timaat-padding, td.timaat-padding {
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.timaat-padding.sorting_asc:after, th.timaat-padding.sorting_desc:after {
+	bottom: 0.25rem !important;
 }
 
 .timaat-video-card {
@@ -97,11 +130,20 @@ p + p {
 	cursor: pointer;
 }
 
+#timaat-component-videoplayer .timaat-videoplayer-video-footer {
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+
 #timaat-inspector {
 	z-index: 1000; /* behind modal dialogs */
 }
 .timaat-inspector-pane {
 	margin-top: 1em;
+}
+
+#timaat-inspector-animation-keyframes {
+	max-width: 18em;
 }
 
 #timaat-inspector-meta-opacity {
@@ -220,12 +262,6 @@ p + p {
 .timaat-no-tags {
 	color: #bbbbbb !important;
 }
-.timaat-annotation-list-segment {
-	 padding: 0.1rem 0.5rem;
-	 color: white !important;
-	 background-color: #6c757d !important;
-/*	 cursor: default !important; */
-}
 .timaat-annotation-list-type {
 	text-shadow: 1px 1px rgba(127,127,177,0.4);
 }
@@ -237,10 +273,6 @@ p + p {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-
-.timaat-annotation-segment-title {
-	padding-left: 4px;
 }
 
 .timaat-annotation-list-tags {
@@ -434,7 +466,7 @@ a.dropdown-item {
 	cursor: pointer;
 }
 
-#timaat-map-overlay {
+#timaat-videoplayer-viewer-overlay {
 	display: none;
 	z-index: 1000;
 	background-color: white;
@@ -453,6 +485,39 @@ a.dropdown-item {
 #timaat-timeline-segment-pane {
 	width: 100%;
 	height: 15px;
+}
+
+#timaat-timeline-keyframe-pane {
+	width: 100%;
+	height: 20px;
+}
+.timaat-timeline-keyframe {
+	pointer-events: none;
+	font-size: 8px;
+	height: 20px;
+	z-index: 200;
+	margin-top: 12px;
+	position: absolute;
+	float: left;
+	border-left: 2px solid black;
+}
+.timaat-timeline-keyframe .timaat-timeline-keyframehead {
+	pointer-events: all;
+	cursor: pointer;
+	transform: rotate(45deg);
+	border: 1px solid #333;
+	box-shadow: 0px 0px 1px #333;
+	width: 10px;
+	height: 10px;
+	margin-left: -6px;
+	margin-top: -7px;
+	background: white;
+}
+.timaat-timeline-keyframe .timaat-timeline-keyframehead.first {
+	background: #e00;
+}
+.timaat-timeline-keyframe .timaat-timeline-keyframehead.selected {
+	background: #6c757d !important;
 }
 .timaat-timeline-segment {
 	position: absolute;
@@ -475,6 +540,9 @@ a.dropdown-item {
 #timaat-timeline-marker-pane {
 	width: 100%;
 	height: 15px;
+}
+#timaat-timeline-marker-pane .timaat-timeline-marker-anim {
+	background-color: rgba(0, 0, 0, 0.3);
 }
 #timaat-timeline-marker-pane.timaat-timeline-videolayer .timaat-timeline-marker-video {
 	display: block;
@@ -541,6 +609,9 @@ a.dropdown-item {
 .timaat-timeline-marker-white .timaat-markerhead-polygon {
 	background-image: url('../img/markerhead-polygons-black.png');
 }
+.timaat-timeline-marker-white .timaat-markerhead-anim {
+	background-image: url('../img/markerhead-anim-black.png');
+}
 
 .timaat-timeline-markerbar {
 	pointer-events: all;
@@ -562,6 +633,9 @@ a.dropdown-item {
 
 .timaat-markerhead-polygon {
 	background-image: url('../img/markerhead-polygons-white.png');
+}
+.timaat-markerhead-anim {
+	background-image: url('../img/markerhead-anim-white.png');
 }
 .timaat-timeline-markerhead.picture {
 	border-radius: 25px;
@@ -677,10 +751,6 @@ a.dropdown-item {
 #timaat-videoplayer-video-title {
 	color: grey;
 }
-#timaat-videoplayer-video-speed {
-	font-weight: bold;
-	cursor: pointer;
-}
 .timaat-user-log, .timaat-uploads {
 	cursor: pointer;
 }
@@ -697,11 +767,7 @@ a.dropdown-item {
 	margin-top: 0.5em;
 }
 
-#timaat-videoplayer-video-speed:hover,
 #timaat-volumeicon:hover,
-.stepbckbutton i:hover,
-.playbutton i:hover,
-.stepfwdbutton i:hover,
 .timaat-user-log i:hover,
 .timaat-annotation-list-tags i:hover,
 #timaat-mediadatasets-medium-tags i:hover {

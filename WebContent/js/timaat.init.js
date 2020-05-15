@@ -16,6 +16,7 @@ requirejs.config({
 		"leaflet"                : '../vendor/leaflet/leaflet',
 		"leaflet-editable"       : '../vendor/leaflet/plugins/Leaflet.Editable/src/Leaflet.Editable',
 		"leaflet-pathdrag"       : '../vendor/leaflet/plugins/Path.Drag.js/src/Path.Drag',
+		"leaflet-pathtransform"  : '../vendor/leaflet/plugins/Path.Transform.js/L.Path.Transform',
 		"leaflet-customcontrol"  : '../vendor/leaflet/plugins/Leaflet.Control.Custom/Leaflet.Control.Custom',
 		"leaflet-sidebar"        : '../vendor/leaflet/plugins/leaflet-sidebar-v2/js/leaflet-sidebar.min',
 		"popper"                 : '../vendor/popper/popper.min',
@@ -23,7 +24,8 @@ requirejs.config({
 		"sbadmin2"               : 'sb-admin-2',
 		"timaathtml"             : 'timaat.html',
 		"TIMAAT"                 : 'timaat.main',
-		"TIMAAT-ui"              : 'timaat.ui',
+		"TIMAAT-ui"              : 'ui/timaat.ui',
+		"TIMAAT-ui-inspector"    : 'ui/timaat.inspector',
 		"TIMAAT-uploadmanager"   : 'components/timaat.uploadmanager',
 		"TIMAAT-videochooser"    : 'components/timaat.component.videochooser',
 		"TIMAAT-videoplayer"     : 'components/timaat.component.videoplayer',
@@ -44,6 +46,7 @@ requirejs.config({
 		"TIMAAT-eventservice"    : 'service/timaat.service.event',
 		"TIMAAT-util"            : 'timaat.util',
 		"TIMAAT-marker"          : 'model/timaat.marker',
+		"TIMAAT-keyframe"        : 'model/timaat.keyframe',
 		"TIMAAT-annotation"      : 'model/timaat.annotation',
 		"TIMAAT-categoryset"     : 'model/timaat.model.categoryset',
 		"TIMAAT-analysissegment" : 'model/timaat.analysissegment',
@@ -77,6 +80,7 @@ requirejs.config({
 		'datatables'            : { deps: [ 'bootstrap', 'jquery' ] },
 		'leaflet-editable'      : { deps: [ 'leaflet' ], },
 		'leaflet-pathdrag'      : { deps: [ 'leaflet' ], exports: 'L.PathDraggable' },
+		'leaflet-pathtransform' : { deps: ['leaflet', 'leaflet-pathdrag' ], },
 		'leaflet-customcontrol' : { deps: [ 'leaflet' ], },
 		'leaflet-sidebar'       : { deps: [ 'leaflet' ], },
 	},
@@ -104,15 +108,16 @@ require(['domReady',
 	'leaflet',
 	'leaflet-editable',
 	'leaflet-pathdrag',
+//	'leaflet-pathtransform',
 	'leaflet-customcontrol',
 	'leaflet-sidebar',
 	], function (domReady) { domReady(function () {
 	  console.log("TIMAAT::Init");
 		requirejs(['moment', 'datatables', 'sbadmin2', 'timaathtml', 
-		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-uploadmanager', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
+		  'TIMAAT', 'TIMAAT-ui', 'TIMAAT-ui-inspector', 'TIMAAT-uploadmanager', 'TIMAAT-videochooser', 'TIMAAT-videoplayer', 'TIMAAT-settings', 'TIMAAT-util', 
 		  'TIMAAT-datasets', 'TIMAAT-actordatasets', 'TIMAAT-eventdatasets', 'TIMAAT-locationdatasets', 'TIMAAT-mediadatasets', 'TIMAAT-rolelists',
 		  'TIMAAT-service', 'TIMAAT-categoryservice', 'TIMAAT-actorservice', 'TIMAAT-locationservice', 'TIMAAT-mediaservice', 'TIMAAT-eventservice', 'TIMAAT-roleservice',
-			'TIMAAT-marker', 'TIMAAT-annotation', 'TIMAAT-categoryset', 'TIMAAT-categorylists','TIMAAT-analysissegment',
+			'TIMAAT-marker', 'TIMAAT-keyframe', 'TIMAAT-annotation', 'TIMAAT-categoryset', 'TIMAAT-categorylists','TIMAAT-analysissegment',
 			'TIMAAT-medium', 'TIMAAT-mediatype',
 			'TIMAAT-actor', 'TIMAAT-actortype', 'TIMAAT-addresstype', 'TIMAAT-emailaddresstype', 'TIMAAT-role', 'TIMAAT-rolegroup',
 			'TIMAAT-location', 'TIMAAT-locationtype', 'TIMAAT-country', 'TIMAAT-province', 'TIMAAT-county', 'TIMAAT-city', 'TIMAAT-street',
@@ -121,36 +126,10 @@ require(['domReady',
 		  ], function (moment) {
 		  console.log("TIMAAT::Setup");
 		  window.moment = moment;		  
-		  
-			var map = L.map('map', {
-				zoomControl       : false,
-				attributionControl: false,
-				zoom              : 1,
-				maxZoom           : 0,
-				center            : [0,0],
-				crs               : L.CRS.Simple,
-				editable          : true,
-			});
-			
-			window.map = map; // TODO refactor
+		  // init UI
+		  TIMAAT.UI.init();
+		  console.log("TIMAAT::Ready");
 
-			var bounds = [[450,0], [0,800]];
-			map.setMaxBounds(bounds);
-			map.fitBounds(bounds);	
-			map.dragging.disable();
-			map.touchZoom.disable();
-			map.doubleClickZoom.disable();
-			map.scrollWheelZoom.disable();
-
-			$(window).resize(function() {
-				TIMAAT.VideoPlayer.markerList.forEach(function(marker) {
-					marker._updateElementOffset();
-				});
-			});
-			
-			TIMAAT.UI.init();
-
-			console.log("TIMAAT::Ready");
 	  });
 		  
   });

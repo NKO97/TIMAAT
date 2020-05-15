@@ -94,10 +94,10 @@
             <div id="timaat-version-info" class="text-muted d-flex justify-content-end mr-1">v.unknown
             </div>
             <div class="modal-header">
-              <h3 class="modal-title col-12 text-center">TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
+              <h3 class="modal-title col-12 text-center"><i class="fas fa-photo-video"></i> TIMAAT<br><span style="font-size:75%">Bitte anmelden</span></h3>
             </div>
             <div class="modal-body text-center">
-              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
+              <div id="timaat-login-message" class="alert alert-danger small" style="display:none;" role="alert">
                 Nutzername oder Passwort falsch.
               </div>
               <div class="input-group mb-3">
@@ -109,42 +109,37 @@
             </div>
             <div class="modal-footer">
               <div class="input-group mb-12">
-                <button id="timaat-login-submit" type="submit" name="login" class="btn btn-primary col-12">Einloggen</button>
+                <button id="timaat-login-submit" type="submit" name="login" class="btn btn-success col-12"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Einloggen</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!--
-      <div class="modal fade" id="timaat-login-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"  aria-hidden="true" style="display: none;">
-        <div id="timaat-login-box" class="modal-dialog modal-sm modal-dialog-centered">
-          <div class="timaat-loginmodal-container modal-content">
-            <div class="modal-body text-center">
-              <div id="timaat-login-message" class="alert alert-danger" style="display:none;" role="alert">
-                Nutzername oder Passwort falsch.
-              </div>
-              <h1>
-                TIMAAT - Bitte anmelden
-              </h1><br>
-              <input id="timaat-login-user" type="text" name="user" placeholder="Benutzername"> 
-              <input id="timaat-login-pass" type="password" name="pass" placeholder="Passwort"> 
-              <input id="timaat-login-submit" type="submit" name="login" class="login loginmodal-submit" value="Einloggen">
-              <div class="timaat-login-help">            
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
     </div>
     <div id="wrapper" class="toggled">
+    
+        <!-------------------------------------------------------------------->
+        <!-- Notifications                                                  -->
+        <!-------------------------------------------------------------------->
+
+<div aria-live="polite" aria-atomic="true" style="position: relative; z-index:1500">
+  <div id="timaat-notification-pane">
+  </div>
+</div>
+
+      
+        <!-------------------------------------------------------------------->
+        <!-- Navigation                                                     -->
+        <!-------------------------------------------------------------------->
       <div class="navigation">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-static-top pt-1 pb-1 pl-1" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-          <a class="navbar-brand">
+          <a href="https://bitgilde.de" target="_blank" class="navbar-brand float-left">
             <img src="img/bitgilde-small.png" style="height: 32px;float: left;margin-top:-6px;padding-right: 15px;" title="bitGilde IT Solutions UG" alt="bitGilde Logo" />
-             TIMAAT - Time-based Image Area Annotation Tool
+          </a>
+          <a class="navbar-brand float-left">
+             <i class="fas fa-photo-video"></i> TIMAAT - Time-based Image Area Annotation Tool
           </a>
         </div>
         <!-- /.navbar-header -->	    
@@ -486,14 +481,15 @@
     <!-- Nav tabs -->
     <div class="leaflet-sidebar-tabs">
         <ul role="tablist"> <!-- top aligned tabs -->
-            <li><a href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
-            <li><a href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
-            <li><a href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-            <li><a href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
-            <li><a href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
+            <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+            <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
+            <li><a title="Kategorien und Tags verknüpfen (nur bei Annotationen)" href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
+            <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+            <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
+            <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
         </ul>
         <ul role="tablist"> <!-- bottom aligned tabs -->
-            <li><a href="javascript:TIMAAT.VideoPlayer.switchInspector()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
+            <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
         </ul>
     </div>
 
@@ -504,7 +500,7 @@
                 <span id="timaat-inspector-metadata-title">Metadaten</span>
                 <div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div>
             </h1>
-          <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" tabindex="-1" aria-hidden="true">
+          <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
 	<div class="input-group input-group-sm mb-1">
 		<div id="timaat-inspector-meta-color-group" class="input-group-prepend">
 			<span class="input-group-text">
@@ -532,9 +528,8 @@
 			<div class="input-group-prepend"><span class="input-group-text">Annotationsziel</span></div>
 			<div class="btn-group">
 				<button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
-				<button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-primary btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
+				<button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
 			</div>
-		</div>
 	</div>
 	
 	<div id="timaat-inspector-meta-timecode-group">
@@ -549,14 +544,14 @@
 		</div>
 			<div class="input-group input-group-sm mb-3">
 		<div class="input-group-prepend">				
-			<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+			<button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
 			<div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(0)">dieses Frame</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(1)">1 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(5)">5 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(15)">15 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(30)">30 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspectorMetaEnd(60)">1 min</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
+				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
 				<div role="separator" class="dropdown-divider"></div>
 				<a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
 			</div>
@@ -570,8 +565,23 @@
 	<div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
 		<textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Kommentar eingeben"></textarea>
 	</div>
-	<button type="button" class="btn btn-primary" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
+	<button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
+  </div>
 </div>
+
+        <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
+            <h1 class="leaflet-sidebar-header">Animationseinstellungen<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+            <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
+	            <p>
+					<strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
+				</p>
+				<br>
+				<button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block"><i class="fas fa-running fa-fw"></i> Animation erstellen</button>
+				<button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block"><i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen</button>
+				<br>
+				<h6>Keyframes</h6>
+        	    <div id="timaat-inspector-animation-keyframes"></div>
+            </div>
         </div>
 
         <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
@@ -584,7 +594,24 @@
         <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
             <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
             <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
-			Actors werden von FIPOP noch nicht unterstützt.
+	            <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
+	            <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
+					<table class="actors-available table table-striped table-bordered table-hover">
+						<thead class="thead-dark">
+							<tr><th>Titel</th></tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+	            </div>
+	            <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
+	            <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+					<table class="actors-annotation table table-striped table-bordered table-hover">
+						<thead class="thead-light">
+							<tr><th>Titel</th></tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
             </div>
         </div>
 
@@ -601,6 +628,8 @@
 			Locations werden von FIPOP noch nicht unterstützt.
             </div>
         </div>
+	</div>
+        
 
     </div>
           
@@ -659,23 +688,35 @@
               <div class="col-lg-9">
                 <div class="card">
                   <div class="list-group list-group-flush">
-                    <div id="map" style="height: 450px; width: 100%;">
+                    <div id="timaat-videoplayer-viewer" style="height: 450px; width: 100%;">
                     </div>
-                    <div id="timaat-map-overlay">
+                    <div id="timaat-videoplayer-viewer-overlay">
                       x                    
                     </div>
                   </div>
-                  <div class="card-footer">
-                    <a class="stepbckbutton"><i class="fas fa-step-backward fa-fw"></i></a>
-                    <a class="playbutton"><i class="play fa fa-play fa-fw"></i><i class="pause fa fa-pause fa-fw"></i></a>
-                    <a class="stepfwdbutton"><i class="fas fa-step-forward fa-fw"></i></a>
-                    &nbsp;
-                    <a class="timaat-volumecontrol">
+                  <div class="card-footer timaat-videoplayer-video-footer">
+                  	<!-- Playback Controls -->
+					<div class="btn-group btn-group-sm mr-1">
+						<button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary"><i class="fas fa-step-backward"></i></button>
+						<button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary"><i class="play fas fa-play fa-fw"></i><i class="pause fa fa-pause fa-fw"></i></button>
+						<button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary"><i class="fas fa-step-forward"></i></button>
+					</div>
+					<!-- Playback Repeat Control -->
+					<div class="btn-group btn-group-sm mr-3">
+						<button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary"><i class="fas fa-sync"></i> A&rarr;B</button>
+					</div>
+					<!-- Volume Control -->
+                    <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
                       <span id="timaat-volumeicon"><i class="volume fas fa-volume-up"></i><i class="mute fas fa-volume-mute"></i></span>
                       <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-control form-control-sm-range">
-                    </a>				 
-                    <span class="videotime" style="padding-left:20px">00:00</span>
-                    <span id="timaat-videoplayer-video-speed" class="float-right">1x</span>
+                    </a>
+                    <span class="videotime" style="padding-left:20px">00:00.000</span>
+					<!-- Playback Speed Control -->
+					<div class="btn-group btn-group-sm float-right">
+						<button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
+							<span class="video-speed-info">1&times;</span>
+						</button>
+					</div>
                     <hr style="margin: 2px; padding: 0"/>
 <!--
                    <div id="timaat-mediadatasets-medium-tags" class="float-left"><i class="fas fa-tag"></i>&nbsp;&nbsp;
@@ -700,7 +741,9 @@
                 		</div>
 						<div class="timaat-videoduration">xx:xx</div>
                 	</div>
+                	<div id="timaat-timeline-zoomable-wrapper" class="pb-2"><div id="timaat-timeline-zoomable">
                   <div id="timaat-timeline-segment-pane"></div>
+                  <div id="timaat-timeline-keyframe-pane"></div>
                   <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
                   <br>
                   <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
@@ -709,6 +752,8 @@
 						<img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
 					</div>
 				</div>
+                	</div>
+                	</div>
                 </div>
               </div>
             </div>

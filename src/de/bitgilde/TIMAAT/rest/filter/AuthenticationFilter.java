@@ -59,6 +59,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             	
                 // Authentication succeeded, set request context
                 requestContext.setProperty("TIMAAT.userID", user.getId());
+                requestContext.setProperty("TIMAAT.userName", user.getAccountName());
                 requestContext.setProperty("TIMAAT.user", user);
 
             } catch (AccountSuspendedException e) {
@@ -121,7 +122,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
 
-    	Key key = new TIMAATKeyGenerator().generateKey();
+    	Key key = TIMAATKeyGenerator.generateKey();
     	String username = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
 		
 		return username;

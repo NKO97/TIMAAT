@@ -32,10 +32,10 @@
 			TIMAAT.Service.getMediaCollections(TIMAAT.VideoChooser.setupMediaCollections);
 			// init datatable
 			TIMAAT.VideoChooser.setupDatatable();
-			if ( !TIMAAT.VideoChooser.collection ) {
+//			if ( !TIMAAT.VideoChooser.collection ) {
 				TIMAAT.VideoChooser.collection = 'init';
 				TIMAAT.VideoChooser.setCollection(null);
-			}
+//			}
 		},
 		
 		init: function() {		
