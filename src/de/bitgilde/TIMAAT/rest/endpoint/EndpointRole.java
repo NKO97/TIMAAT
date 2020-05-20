@@ -179,10 +179,13 @@ public class EndpointRole {
 	@Secured
 	@Path("selectlist/{role_group_id}")
 	public Response getRoleSelectList(@PathParam("role_group_id") int roleGroupId,
-																		@QueryParam("search") String search,
+																		@QueryParam("q") String search,
+																		@QueryParam("page") Integer page,
+																		@QueryParam("per_page") Integer per_page,
 																		@QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles
-		System.out.println("RoleServiceEndpoint: getRoleSelectListForId "+ roleGroupId);
+		System.out.println("RoleServiceEndpoint: getRoleSelectList "+ roleGroupId);
+		System.out.println("RoleServiceEndpoint: getRoleSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 
@@ -196,12 +199,12 @@ public class EndpointRole {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("RoleServiceEndpoint: getRoleSelectListForId - with search string");
+			System.out.println("RoleServiceEndpoint: getRoleSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rt.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("RoleServiceEndpoint: getRoleSelectListForId - no search string");
+			System.out.println("RoleServiceEndpoint: getRoleSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
 		}
@@ -224,8 +227,8 @@ public class EndpointRole {
 																				 @QueryParam("per_page") Integer per_page,
 																				 @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - ID: "+ roleId);
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - search string: "+ search);
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - ID: "+ roleId);
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - search string: "+ search);
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 		
 		class SelectElement{ 
@@ -239,12 +242,12 @@ public class EndpointRole {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - with search string");
+			System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rgt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rgt.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - no search string");
+			System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
 		}
