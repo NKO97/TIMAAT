@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -104,11 +103,7 @@ public class EndpointRole {
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		List<Role> roleList = castList(Role.class, query.getResultList());
-		// System.out.println("draw: "+ draw);
-		// System.out.println("recordsTotal: "+ recordsTotal);
-		// System.out.println("recordsFiltered: "+ recordsFiltered);
-		// System.out.println("roleList.size(): "+ roleList.size());
-
+		
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleList)).build();
   }
 
@@ -178,54 +173,14 @@ public class EndpointRole {
 
 		return Response.ok().entity(roleGroup).build();
   }
-	
-	// @GET
-	// @Produces(MediaType.APPLICATION_JSON)
-	// @Secured
-	// @Path("selectlist")
-	// public Response getRoleSelectList(@QueryParam("language") String languageCode) {
-	// 	// returns list of id and name combinations of all roles
-	// 	System.out.println("RoleServiceEndpoint: getRoleSelectList");
-
-	// 	if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-
-	// 	class SelectElement{ 
-	// 		public int roleId; 
-	// 		public String text;
-	// 		public boolean selected;
-	// 		public SelectElement(int roleId, String text, boolean selected) {
-	// 			this.roleId = roleId; this.text = text; this.selected = selected;
-	// 		};
-	// 	}
-	// 	List<SelectElement> roleSelectList = new ArrayList<>();
-	// 	Query roleTranslationsQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
-	// 	// Query rolesInRoleGroupQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rg From RoleGroup rg WHERE rg.id = rghr.role.id (SELECT rghr.role.id FROM RoleGroupHasRole rghr WHERE rghr.rolegroup.id = "+roleGroupId+")");
-	// 	List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, roleTranslationsQuery.getResultList());
-	// 	// List<Role> rolesInRoleGroup = castList(Role.class, rolesInRoleGroupQuery.getResultList());
-	// 	// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-	// 	// RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
-	// 	// List<Role> rolesInRoleGroup = roleGroup.getRoles();
-	// 	boolean selected = false;
-	// 	for (RoleTranslation roleTranslation : roleTranslationList) {
-	// 		// selected = false;
-	// 		// if (roleContainsRoleGroupId(rolesInRoleGroup, roleGroupId)) {
-	// 		// 	selected = true;
-	// 		// }
-	// 		roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
-	// 																				 roleTranslation.getName(),
-	// 																				 selected));
-	// 		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ role.getId() + " " + name);
-	// 	}
-	// 	// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
-	// 	return Response.ok().entity(roleSelectList).build();
-	// }
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("selectlist/{role_group_id}")
-	public Response getRoleSelectListForId(@PathParam("role_group_id") int roleGroupId,
-																				 @QueryParam("language") String languageCode) {
+	public Response getRoleSelectList(@PathParam("role_group_id") int roleGroupId,
+																		@QueryParam("search") String search,
+																		@QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles
 		System.out.println("RoleServiceEndpoint: getRoleSelectListForId "+ roleGroupId);
 
@@ -234,114 +189,76 @@ public class EndpointRole {
 		class SelectElement{ 
 			public int id; 
 			public String text;
-			public boolean selected;
-			public SelectElement(int id, String text, boolean selected) {
-				this.id = id; this.text = text; this.selected = selected;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
 			};
 		}
-		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - create query");
-		List<SelectElement> roleSelectList = new ArrayList<>();
-		Query roleTranslationsQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
-		// Query rolesInRoleGroupQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT rg From RoleGroup rg WHERE rg.id = rghr.role.id (SELECT rghr.role.id FROM RoleGroupHasRole rghr WHERE rghr.rolegroup.id = "+roleGroupId+")");
-		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, roleTranslationsQuery.getResultList());
-		// List<Role> rolesInRoleGroup = castList(Role.class, rolesInRoleGroupQuery.getResultList());
-
-		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - prepare to create return data");
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
-		List<Role> rolesInRoleGroup = roleGroup.getRoles();
-		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ rolesInRoleGroup.size());
-		boolean selected;
-
-		for (RoleTranslation roleTranslation : roleTranslationList) {
-			selected = false;
-			if (roleContainsRoleGroupId(rolesInRoleGroup, roleTranslation.getRole().getId())) {
-				selected = true;
-			}
-			roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
-																					 roleTranslation.getName(),
-																					 selected));
-			// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - add item: "+ roleTranslation.getId() + ";" + roleTranslation.getName() + ";" + selected + "; ");
+		// search
+		Query query;
+		if (search != null && search.length() > 0) {
+			System.out.println("RoleServiceEndpoint: getRoleSelectListForId - with search string");
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rt.name ASC");
+				query.setParameter("name", search);
+		} else {
+			System.out.println("RoleServiceEndpoint: getRoleSelectListForId - no search string");
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT rt FROM RoleTranslation rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
 		}
-		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+		List<SelectElement> roleSelectList = new ArrayList<>();
+		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, query.getResultList());
+		for (RoleTranslation roleTranslation : roleTranslationList) {
+			roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
+																					 roleTranslation.getName()));
+		}
 		return Response.ok().entity(roleSelectList).build();
 	}
-
-	// @GET
-	// @Produces(MediaType.APPLICATION_JSON)
-	// @Secured
-	// @Path("group/selectlist/")
-	// public Response getRoleGroupSelectList(@QueryParam("language") String languageCode,
-	// 																			 @QueryParam("roleGroupId") int roleGroupId) {
-	// 	// returns list of id and name combinations of all roles
-	// 	System.out.println("RoleServiceEndpoint: getRoleGroupSelectList");
-
-	// 	if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-	// 	if ( roleGroupId < 0 ) roleGroupId = 0; // fallback so that no option will be selected
-	// 	class SelectElement{ 
-	// 		public int roleGroupId; 
-	// 		public String text;
-	// 		public boolean selected;
-	// 		public SelectElement(int roleGroupId, String text, boolean selected) {
-	// 			this.roleGroupId = roleGroupId; this.text = text; this.selected = selected;
-	// 		};
-	// 	}
-	// 	List<SelectElement> roleGroupSelectList = new ArrayList<>();
-	// 	Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
-	// 	List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
-	// 	boolean selected = false;
-	// 	for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
-	// 		roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
-	// 																							roleGroupTranslation.getName(),
-	// 																							selected));
-	// 		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ role.getId() + " " + name);
-	// 	}
-	// 	// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
-	// 	return Response.ok().entity(roleGroupSelectList).build();
-	// }
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("group/selectlist/{role_id}")
-	public Response getRoleGroupSelectListForId(@PathParam("role_id") int roleId,
-																							@QueryParam("language") String languageCode) {
+	public Response getRoleGroupSelectList(@PathParam("role_id") int roleId,
+																				 @QueryParam("q") String search,
+																				 @QueryParam("page") Integer page,
+																				 @QueryParam("per_page") Integer per_page,
+																				 @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId "+ roleId);
-
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - ID: "+ roleId);
+		System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - search string: "+ search);
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 		
 		class SelectElement{ 
 			public int id; 
 			public String text;
-			public boolean selected;
-			public SelectElement(int id, String text, boolean selected) {
-				this.id = id; this.text = text; this.selected = selected;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
 			};
 		}
 		// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - create query");
-		List<SelectElement> roleGroupSelectList = new ArrayList<>();
-		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
-		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
-
-		// System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - prepare to create return data");
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Role role = entityManager.find(Role.class, roleId);
-		List<RoleGroup> roleGroupsInRole = role.getRoleGroups();
-		// System.out.println("RoleServiceEndpoint: getRoleSelectListForId - rolesInRoleGroup # entries: "+ roleGroupsInRole.size());
-		boolean selected;
-
-		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
-			selected = false;
-			if (roleGroupContainsRoleId(roleGroupsInRole, roleGroupTranslation.getRoleGroup().getId())) {
-				selected = true;
-			}
-			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
-																								roleGroupTranslation.getName(),
-																								selected));
-			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - add item: "+ roleGroupTranslation.getId() + ";" + roleGroupTranslation.getName() + ";" + selected + "; ");
+		// search
+		Query query;
+		if (search != null && search.length() > 0) {
+			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - with search string");
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rgt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rgt.name ASC");
+				query.setParameter("name", search);
+		} else {
+			System.out.println("RoleServiceEndpoint: getRoleGroupSelectListForId - no search string");
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
 		}
-		// System.out.println("RoleServiceEndpoint: getRoleSelectList - roleSelectList: "+ roleSelectList.id + " " + roleSelectList.name);
+
+		if (page != null && page > 0 && per_page != null && per_page > 0) {
+			query.setFirstResult(page*per_page);
+			query.setMaxResults(per_page);
+		}
+		List<SelectElement> roleGroupSelectList = new ArrayList<>();
+		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
+		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
+			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
+																								roleGroupTranslation.getName()));
+		}
 		return Response.ok().entity(roleGroupSelectList).build();
 	}
 
@@ -351,10 +268,7 @@ public class EndpointRole {
 	@Path("group/{role_group_id}/haslist")
 	public Response getRoleGroupHasRoleList(@PathParam("role_group_id") Integer roleGroupId)
 	{
-		// TODO should be unnecessary, as roleGroup knows about Role (although not the other way around)
-		// Query query = TIMAATApp.emf.createEntityManager().createQuery(
-			// "SELECT r FROM Role r WHERE r.id = (SELECT rg.role_group_has_role.role_id FROM RoleGroup rg WHERE rg.role_group_has_role.role_group_id = "+roleGroupId+") ORDER BY r.id");
-			// "SELECT r FROM Role r WHERE r.roleGroup MEMBER OF RoleGroupHasRole");
+		System.out.println("RoleServiceEndpoint: getRoleGroupHasRoleList - ID: "+ roleGroupId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
 		List<Role> roleList = roleGroup.getRoles();
@@ -368,16 +282,13 @@ public class EndpointRole {
 	@Path("{role_id}/haslist")
 	public Response getRoleHasRoleGroupList(@PathParam("role_id") Integer roleId)
 	{
-		// Query query = TIMAATApp.emf.createEntityManager().createQuery(
-		// 	// "SELECT rg FROM RoleGroup rg WHERE rg.id = (SELECT rghr.role_group_id FROM RoleGroupHasRole rghr WHERE rghr.role_id = "+roleId+") ORDER BY rg.id");
-		// 	"SELECT rg FROM RoleGroup rg WHERE rg.role MEMBER OF RoleGroupHasRole");
-		// List<RoleGroup> roleGroupList = castList(RoleGroup.class, query.getResultList());
+		System.out.println("RoleServiceEndpoint: getRoleHasRoleGroupList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = entityManager.find(Role.class, roleId);
 		List<RoleGroup> roleGroupList = role.getRoleGroups();
 
 		return Response.ok().entity(roleGroupList).build();
-  }
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

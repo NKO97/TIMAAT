@@ -83,65 +83,8 @@
 			});
 		},
 		
-		// async getRoleOrRoleGroupSelectList(type) {
-    //   console.log("TCL: getRoleOrRoleGroupSelectList -> type", type);
-		// 	var path = '';
-		// 	if (type == 'rolegroup') { 
-		// 		path = '/group';
-		// 	}
-		// 	return new Promise(resolve => {
-		// 		// console.log("TCL: getRoleOrRoleGroupSelectList", type);
-		// 		jQuery.ajax({
-		// 			url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/selectlist/",
-		// 			type       : "GET",
-		// 			contentType: "application/json; charset=utf-8",
-		// 			dataType   : "json",
-		// 			beforeSend : function (xhr) {
-		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 			},
-		// 		}).done(function(data) {
-		// 			// console.log("TCL: getRoleOrRoleGroupSelectList -> data", data);
-		// 			resolve(data);
-		// 		})
-		// 		.fail(function(e) {
-		// 			console.log(e.responseText);
-		// 			console.log( "error", e );
-		// 		});	
-		// 	}).catch((error) => {
-		// 		console.log( "error: ", error );
-		// 	});		
-		// },
-
-		async getRoleOrRoleGroupSelectListForId(type, id) {
-      console.log("TCL: getRoleOrRoleGroupSelectListForId -> type, id", type, id);
-			var path = '';
-			if (type == 'rolegroup') { 
-				path = '/group';
-			}
-			return new Promise(resolve => {
-				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/selectlist/"+id,
-					type       : "GET",
-					contentType: "application/json; charset=utf-8",
-					dataType   : "json",
-					beforeSend : function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-					// console.log("TCL: getRoleOrRoleGroupSelectList -> data", data);
-					resolve(data);
-				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
-				});	
-			}).catch((error) => {
-				console.log( "error: ", error );
-			});		
-		},
-
 		async getRoleGroupHasRoleList(type, id) {
-			console.log("TCL: getRoleGroupHasRoleIdList -> type, id", type, id);
+			console.log("TCL: getRoleGroupHasRoleList -> type, id: ", type, id);
 			var path = ( type == 'role') ? '' : '/group';
 			return new Promise(resolve => {
 				jQuery.ajax({
@@ -153,7 +96,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRoleGroupHasRoleIdList -> data", data);
+					console.log("TCL: getRoleGroupHasRoleList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
