@@ -13,10 +13,6 @@ import java.util.List;
 @Entity
 @Table(name="role_group")
 @NamedQuery(name="RoleGroup.findAll", query="SELECT rg FROM RoleGroup rg")
-// @JsonIgnoreProperties(ignoreUnknown = true)
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-// property  = "id", 
-// scope     = Integer.class)
 public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,8 +22,6 @@ public class RoleGroup implements Serializable {
 
 	//bi-directional many-to-many association to Role
 	@ManyToMany
-	// @JsonIgnoreProperties(value="roleGroups", allowGetters = true, allowSetters = true)
-	// @JsonIgnore	
 	@JoinTable(
 		name="role_group_has_role"
 		, joinColumns={

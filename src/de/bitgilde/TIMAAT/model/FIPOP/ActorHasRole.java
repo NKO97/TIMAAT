@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -20,10 +23,12 @@ public class ActorHasRole implements Serializable {
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="actorHasRoles")
+	@JsonIgnore
 	private List<Event> events;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="actorHasRoles")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	public ActorHasRole() {

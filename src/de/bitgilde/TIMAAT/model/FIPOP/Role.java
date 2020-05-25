@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -24,23 +23,28 @@ public class Role implements Serializable {
 	private int id;
 
 	//bi-directional many-to-many association to Actor
-	@ManyToMany
-	@JsonIgnore
-	@JoinTable(
-		name="actor_has_role"
-		, joinColumns={
-			@JoinColumn(name="role_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="actor_id")
-			}
-		)
-	private Set<Actor> actors;
+	// @ManyToMany
+	// @JsonIgnore
+	// @JoinTable(
+	// 	name="actor_has_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="role_id")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="actor_id")
+	// 		}
+	// 	)
+	// private List<Actor> actors;
 
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
 	@JsonIgnore
-	// @JsonIgnoreProperties(value="roles", allowGetters = true, allowSetters = true)
+	private List<Actor> actors;
+
+
+	//bi-directional many-to-many association to RoleGroup
+	@ManyToMany(mappedBy="roles")
+	@JsonIgnore
 	private List<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
@@ -80,12 +84,26 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public Set<Actor> getActors() {
+	public List<Actor> getActors() {
 		return this.actors;
 	}
 
-	public void setActors(Set<Actor> actors) {
+	public void setActors(List<Actor> actors) {
 		this.actors = actors;
+	}
+
+	public Actor addActor(Actor actor) {
+		getActors().add(actor);
+		// actor.addRole(this);
+
+		return actor;
+	}
+
+	public Actor removeActor(Actor actor) {
+		getActors().remove(actor);
+		// actor.removeRole(this);
+
+		return actor;
 	}
 
 	public List<RoleGroup> getRoleGroups() {

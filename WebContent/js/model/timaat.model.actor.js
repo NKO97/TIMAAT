@@ -197,49 +197,6 @@
 			this.listView.remove(); // TODO remove tags from actor_has_tags
       // console.log("TCL: Actor -> remove -> this", this);
 			$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
-			// remove from actors list
-			// var index;
-			// for (var i = 0; i < TIMAAT.ActorDatasets.actors.length; i++) {
-			// 	if (TIMAAT.ActorDatasets.actors[i].model.id == this.model.id) {
-			// 		index = i;	
-			// 		break;				
-			// 	}
-			// }
-			// if (index > -1) {
-			// 	TIMAAT.ActorDatasets.actors.splice(index, 1);
-			// 	TIMAAT.ActorDatasets.actors.model.splice(index, 1);
-			// }
-			// // remove from subactor list
-			// switch (this.model.actorType.id) {
-			// 	case 1: 
-			// 		// remove from person list
-			// 		var personIndex;
-			// 		for (var i = 0; i < TIMAAT.ActorDatasets.persons.length; i++) {
-			// 			if (TIMAAT.ActorDatasets.persons[i].model.id == this.model.id) {
-			// 				personIndex = i;
-			// 				break;
-			// 			}
-			// 		}
-			// 		if (personIndex > -1) {
-			// 			 TIMAAT.ActorDatasets.persons.splice(personIndex, 1);
-			// 			 TIMAAT.ActorDatasets.persons.model.splice(personIndex, 1);
-			// 		}
-			// 	break;
-			// 	case 2: 
-			// 		// remove from collective list
-			// 		var collectiveIndex;
-			// 		for (var i = 0; i < TIMAAT.ActorDatasets.collectives.length; i++) {
-			// 			if (TIMAAT.ActorDatasets.collectives[i].model.id == this.model.id) {
-			// 				collectiveIndex = i;
-			// 				break;
-			// 			}
-			// 		}
-			// 		if (collectiveIndex > -1) {
-			// 			 TIMAAT.ActorDatasets.collectives.splice(collectiveIndex, 1);
-			// 			 TIMAAT.ActorDatasets.collectives.model.splice(collectiveIndex, 1);
-			// 		}
-			// 	break;
-			// }
 		}
 	}
 	

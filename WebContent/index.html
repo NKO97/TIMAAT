@@ -1052,26 +1052,15 @@
                         <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
-                            <div class="col-md-12">
-                              <label class="col-form-label col-form-label-sm" for="timaat-rolelists-metadata-name">Name*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
-                            </div>                            
+                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- role data -->
                         <div class="form-group datasheet-data role-data">
                           <div class="form-header">
                             <div class="form-row">
-                              <div class="col-md-11">
-                                <div class="form-row">
-                                  <div class="col-md-10">
-                                    <h6 class="form-header">Is part of role group(s)</h6>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <h6 class="form-header"></h6>
-                                  </div>
-                                </div>  
-                              </div>                          
+                              <h6 class="form-header">Is part of role group(s)</h6>
                             </div>
                           </div>
                           <div class="role-ispartof-rolegroup-container">
@@ -1085,16 +1074,7 @@
                         <div class="form-group datasheet-data rolegroup-data">
                           <div class="form-header">
                             <div class="form-row">
-                              <div class="col-md-11">
-                                <div class="form-row">
-                                  <div class="col-md-10">
-                                    <h6 class="form-header">Contains role(s)</h6>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <h6 class="form-header"></h6>
-                                  </div>
-                                </div>  
-                              </div>                          
+                              <h6 class="form-header">Contains role(s)</h6>
                             </div>
                           </div>
                           <div class="role-ispartof-rolegroup-container">
@@ -1106,14 +1086,14 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <!-- <div class="form-buttons"> -->
-                          <div class="role-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-role-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-role-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="rolegroup-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-rolelists-rolegroup-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-rolegroup-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
+                        <div class="role-datasheet-form-submit datasheet-form-buttons">
+                          <button type="submit" class="btn btn-primary" id="timaat-rolelists-role-metadata-form-submit" name="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-role-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                        </div>
+                        <div class="rolegroup-datasheet-form-submit datasheet-form-buttons">
+                          <button type="submit" class="btn btn-primary" id="timaat-rolelists-rolegroup-metadata-form-submit" name="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-rolelists-rolegroup-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                        </div>
                         <!-- </div> -->
                       </form>
                     </div>
@@ -2120,6 +2100,9 @@
                         <li class="nav-item actors-data-tabs locatedincountry-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-locatedincountry-form" href="#actorLocatedInCountries">Whereabouts</a>
                         </li>
+                        <li class="nav-item actors-data-tabs actorroles-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-roles-form" href="#actorRoles">Roles</a>
+                        </li>
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
@@ -2700,6 +2683,34 @@
                         </div>
                         <button type="submit" class="btn btn-primary" id="timaat-actordatasets-person-memberofcollective-form-submit" name="submit">Speichern</button>
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-person-memberofcollective-form-dismiss" name="dismiss">Abbruch</button>
+                      </form>
+                      <!-- actor role form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-role-form" name="timaat-actordatasets-actor-role-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorRolesLabel">Person has roles</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-role-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actor-roles-container">
+                          <div data-role="dynamic-actorhasrole-fields" id="dynamic-actorhasrole-fields">
+                            <div class="form-group">
+                            </div>
+                          <!-- additional actorrole form content will be created dynamically --> 
+                          </div>
+                        </div>
+                        <div class="actorrole-form-divider">
+                          <hr>                            
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                     </div>
                   </div>

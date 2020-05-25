@@ -17,7 +17,7 @@
   }
 
 } (function (TIMAAT) {
- 
+
   TIMAAT.RoleLists = {
     roles: null,
     roleGroups: null,
@@ -593,7 +593,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/group/selectlist/' + data.model.id,
+              url: 'api/role/group/selectlist/',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -605,7 +605,7 @@
               data: function(params) {
                 // console.log("TCL: data: params", params);
                 return {
-                  q: params.term,
+                  search: params.term,
                   page: params.page
                 };          
               },
@@ -619,7 +619,7 @@
               cache: true
             },
             minimumInputLength: 0,
-          });          
+          });
           var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
           await TIMAAT.RoleService.getRoleGroupHasRoleList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
@@ -647,7 +647,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/selectlist/' + data.model.id,
+              url: 'api/role/selectlist/',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -659,7 +659,7 @@
               data: function(params) {
                 // console.log("TCL: data: params", params);
                 return {
-                  q: params.term,
+                  search: params.term,
                   page: params.page
                 };          
               },

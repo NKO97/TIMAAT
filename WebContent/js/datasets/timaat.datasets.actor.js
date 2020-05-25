@@ -44,6 +44,7 @@
 			TIMAAT.ActorDatasets.initEmailAddresses();
 			TIMAAT.ActorDatasets.initPhoneNumbers();
 			TIMAAT.ActorDatasets.initMemberOfCollectives();
+			TIMAAT.ActorDatasets.initRoles();
 			$('.actors-data-tabs').hide();
 			$('.actors-cards').hide();
 			$('.actors-card').show();
@@ -2229,6 +2230,76 @@
 
 		},
 
+		initRoles: function() {
+			// nav-bar functionality
+			$('#actors-tab-actor-roles-form').on('click', function(event) {
+				$('.nav-tabs a[href="#actorRoles"]').tab('show');
+				$('.form').hide();
+				$('#timaat-actordatasets-actor-role-form').show();
+				TIMAAT.ActorDatasets.actorFormRoles('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+
+			// add role button functionality (in actor role tab - opens datasheet form)
+			$('#timaat-actordatasets-role-add').on('click', function(event) {
+				console.log("TCL: add role to actor");
+				$('#timaat-actordatasets-actor-metadata-form').data('role', null);
+				TIMAAT.ActorDatasets.addRole();
+			});
+			
+			// actor role form handlers
+			// submit actor role button functionality
+			$('#timaat-actordatasets-actor-role-form-submit').on('click', async function(event) {
+				// continue only if client side validation has passed
+				event.preventDefault();
+				// if (!$('#timaat-actordatasets-actor-role-form').valid()) return false;
+
+				// the original actor model (in case of editing an existing actor)
+				var actor = $('#timaat-actordatasets-actor-metadata-form').data('actor');				
+        console.log("TCL: actor", actor);
+
+				// create/edit role window submitted data
+				var formSelectData = $('#timaat-actordatasets-actor-role-form').serializeArray();
+        console.log("TCL: formSelectData", formSelectData);
+        // console.log("TCL: formDataRaw", formDataRaw);
+        // var formDataObject = {};
+        // $(formDataRaw).each(function(i, field){
+				// 	formDataObject[field.name] = field.value;
+        // });
+        // // delete formDataObject.roleId;
+        // console.log("TCL: formDataObject", formDataObject);
+        // var formSelectData = formDataRaw;				
+        // formSelectData.splice(0,1); // remove entries not part of multi select data
+        // console.log("TCL: formSelectData", formSelectData);
+        // create proper id list
+        var i = 0;
+        var roleIdList = [];
+        for (; i < formSelectData.length; i++) {
+          roleIdList.push( {id: formSelectData[i].value})
+        }
+        // console.log("TCL: roleIdList", roleIdList);
+
+				// update actor
+				let actorModel = actor.model;
+				await TIMAAT.ActorDatasets.updateActorHasRole(actorModel, roleIdList);
+				actor.updateUI();
+				// await TIMAAT.Actordatasets.refreshDatatable(actor.model.actorType.actorTypeTranslations[0].type);
+				TIMAAT.ActorDatasets.actorFormRoles('show', actor);
+			});
+
+			// edit role form button handler
+			$('#timaat-actordatasets-actor-role-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.ActorDatasets.actorFormRoles('edit', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+
+			// cancel add/edit button in actor roles form functionality
+			$('#timaat-actordatasets-actor-role-form-dismiss').on('click', function(event) {
+				TIMAAT.ActorDatasets.actorFormRoles('show', $('#timaat-actordatasets-actor-metadata-form').data('actor'));
+			});
+
+		},
+
 		// TODO initMemberships?
 
 		load: function() {
@@ -2459,22 +2530,6 @@
       // console.log("TCL: TIMAAT.ActorDatasets.personIsMemberOfCollectives", TIMAAT.ActorDatasets.personIsMemberOfCollectives);
 		},
 
-		// TODO check if required
-		// setMembershipList: function(actor) {
-		// 	// console.log("TCL: setMembershipList -> actor", actor);
-		// 	if ( !actor ) return;
-		// 	$('#timaat-actordatasets-actor-membership-list-loader').remove();
-		// 	// clear old UI list
-		// 	$('#timaat-actordatasets-actor-membership-list').empty();
-		// 	// setup model
-		// 	var memberships = Array();
-		// 	actor.model.membershipDetails.forEach(function(membership) { 
-		// 		if ( membership.id > 0 )
-		// 			memberships.push(membership); 
-		// 	});
-		// 	TIMAAT.ActorDatasets.memberships = memberships;
-		// },
-
 		setCitizenshipsList: function(actor) {
 
 		},
@@ -2586,6 +2641,7 @@
 			$('.address-data-tab').show();
 			$('.emailaddress-data-tab').show();
 			$('.phonenumber-data-tab').show();
+			$('.actorroles-data-tab').show();
 			if (actorType == "person") {
 				$('.memberofcollective-data-tab').show();
 			}
@@ -3219,6 +3275,98 @@
 			}
 		},
 
+		actorFormRoles: async function(action, actor) {
+			console.log("TCL: actorFormRoles: action, actor", action, actor);
+			var node = document.getElementById("dynamic-actorhasrole-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+			$('#timaat-actordatasets-actpr-roles-form').trigger('reset');
+			// actorFormRolesValidator.resetForm();
+			$('.nav-tabs a[href="#actorRoles"]').focus();
+			$('#timaat-actordatasets-actor-role-form').show();
+
+			$('#dynamic-actorhasrole-fields').append(TIMAAT.ActorDatasets.appendActorHasRolesDataset());
+			$('#actorroles-multi-select-dropdown').select2({
+				closeOnSelect: false,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/role/selectlist/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};          
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: true
+				},
+				minimumInputLength: 0,
+			});
+			var roleSelect = $('#actorroles-multi-select-dropdown');
+			await TIMAAT.ActorService.getActorHasRoleList(actor.model.id).then(function(data) {
+				console.log("TCL: then: data", data);
+				if (data.length > 0) {
+					// create the options and append to Select2
+					var i = 0;
+					for (; i < data.length; i++) {
+						var option = new Option(data[i].roleTranslations[0].name, data[i].id, true, true);
+						roleSelect.append(option).trigger('change');
+					}
+					// manually trigger the 'select2:select' event
+					roleSelect.trigger({
+						type: 'select2:select',
+						params: {
+							data: data
+						}
+					});
+				}
+			});
+
+			if ( action == 'show') {
+				$('#timaat-actordatasets-actor-role-form :input').prop("disabled", true);
+				$('#timaat-actordatasets-actor-role-form-edit').show();
+				$('#timaat-actordatasets-actor-role-form-edit').prop("disabled", false);
+				$('#timaat-actordatasets-actor-role-form-edit :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-role-form-submit').hide();
+				$('#timaat-actordatasets-actor-role-form-dismiss').hide();
+				$('.actorroles-form-divider').hide();
+				$('[data-role="save"]').hide();
+				$('#actorRolesLabel').html("Person has role(s) list");
+			}
+			else if (action == 'edit') {
+				$('#timaat-actordatasets-actor-role-form :input').prop("disabled", false);
+				$('#timaat-actordatasets-actor-role-form-edit').hide();
+				$('#timaat-actordatasets-actor-role-form-edit').prop("disabled", true);
+				$('#timaat-actordatasets-actor-role-form-edit :input').prop("disabled", true);
+				$('#timaat-actordatasets-actor-role-form-submit').show();
+				$('#timaat-actordatasets-actor-role-form-dismiss').show();
+				$('#timaat-actordatasets-actor-role-form-submit').html("Speichern");
+				$('.actorroles-form-divider').show();
+				$('#actorRolesLabel').html("Edit actor roles list");
+				$('#actorroles-multi-select-dropdown').focus();
+
+				// console.log("TCL: actor", actor);
+				$('#timaat-actordatasets-actor-role-form').data('actor', actor);
+			}
+		},
+
 		createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel) {
 			console.log("TCL: createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel)", 
 									actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
@@ -3610,33 +3758,90 @@
 				console.log( "error: ", error);
 			}
 		},
- 
-		// _actorAdded: function(actorSubtype, actor) {
-		// 	try {
-		// 		console.log("TCL: _actorSubtypeAdded: function(actorSubtype, actor)");
-		// 		// console.log("TCL: actorSubtype", actorSubtype);
-		// 		// console.log("TCL: actor", actor);
-		// 		switch (actorSubtype) {
-		// 			case 'person':
-		// 				TIMAAT.ActorDatasets.persons.model.push(actor);
-		// 				var newActor = new TIMAAT.Actor(actor, 'person');
-		// 				TIMAAT.ActorDatasets.persons.push(newActor);
-		// 			break;
-		// 			case 'collective':
-		// 				TIMAAT.ActorDatasets.collectives.model.push(actor);
-		// 				var newActor = new TIMAAT.Actor(actor, 'collective');
-		// 				TIMAAT.ActorDatasets.collectives.push(newActor);
-		// 				TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: actor.id, name: actor.displayName.name});
-		// 				TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
-		// 				TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
-		// 			break;
-		// 		}
-		// 		// TIMAAT.ActorDatasets.actors.model.push(actor);
-		// 		// TIMAAT.ActorDatasets.actors.push(newActor);
-		// 	} catch(error) {
-		// 		console.log( "error: ", error);
-		// 	}
-		// },
+
+		updateActorHasRole: async function(actorModel, roleIdList) {
+    console.log("TCL: actorModel, roleIdList", actorModel, roleIdList);
+			try { // update actor_has_role table entries
+        var existingActorHasRoleEntries = await TIMAAT.ActorService.getActorHasRoleList(actorModel.id);
+        // console.log("TCL: existingActorHasRoleEntries", existingActorHasRoleEntries);
+        // console.log("TCL: roleIdList", roleIdList);
+        if (roleIdList == null) { //* all entries will be deleted
+          // console.log("TCL: delete all existingActorHasRoleEntries: ", existingActorHasRoleEntries);
+					actorModel.roles = [];
+					await TIMAAT.ActorService.updateActor(actorModel);        
+        } else if (existingActorHasRoleEntries.length == 0) { //* all entries will be added
+          // console.log("TCL: add all roleIdList: ", roleIdList);
+					actorModel.roles = roleIdList;
+					await TIMAAT.ActorService.updateActor(actorModel);          
+        } else { //* add/remove entries
+          // delete removed entries
+          var actorHasRoleEntriesToDelete = [];
+          var i = 0;
+          for (; i < existingActorHasRoleEntries.length; i++) {
+            var deleteId = true;
+            var item = {};
+            var j = 0;
+            for (; j < roleIdList.length; j++) {
+              if( existingActorHasRoleEntries[i].id == roleIdList[j].id) {
+                deleteId = false;
+                break; // no need to check further if match was found
+              }
+            }
+            if (deleteId) { // id is in existingActorHasRoleEntries but not in roleIdList
+              // console.log("TCL: delete entry: ", existingActorHasRoleEntries[i]);
+              item = existingActorHasRoleEntries[i];
+              actorHasRoleEntriesToDelete.push(item);
+              existingActorHasRoleEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+              i--; // so the next list item is not jumped over due to the splicing
+            }
+					}
+					
+          // console.log("TCL: actorHasRoleEntriesToDelete", actorHasRoleEntriesToDelete);
+          if (actorHasRoleEntriesToDelete.length > 0) { // anything to delete?
+						var i = 0;
+						for (; i < actorHasRoleEntriesToDelete.length; i++) {
+							var index = actorModel.roles.findIndex(({id}) => id === actorHasRoleEntriesToDelete[i].id);
+							actorModel.roles.splice(index,1);
+						}
+						await TIMAAT.ActorService.updateActor(actorModel);
+          }
+
+          // create new entries
+          var idsToCreate = [];
+          i = 0;
+          for (; i < roleIdList.length; i++) {
+            // console.log("TCL: roleIdList", roleIdList);
+            var idExists = false;
+            var item = { id: 0 };
+            var j = 0;
+            for (; j < existingActorHasRoleEntries.length; j++) {
+              // console.log("TCL: existingActorHasRoleEntries", existingActorHasRoleEntries);
+              if (roleIdList[i].id == existingActorHasRoleEntries[j].id) {
+                idExists = true;
+                break; // no need to check further if match was found
+              }
+            }
+            if (!idExists) {
+              item.id = roleIdList[i].id;
+              idsToCreate.push(item);
+            }
+          }
+          // console.log("TCL: idsToCreate", idsToCreate);
+          if (idsToCreate.length > 0) { // anything to add?
+            // console.log("TCL: idsToCreate", idsToCreate);
+						var i = 0;
+						for (; i < idsToCreate.length; i++) {
+							actorModel.roles.push(idsToCreate[i]);
+							await TIMAAT.ActorService.updateActor(actorModel);
+						}
+          }
+        }
+      } catch(error) {
+        console.log( "error: ", error);
+      };
+      
+      TIMAAT.ActorDatasets.refreshDatatable(actorModel.actorType.actorTypeTranslations[0].type);
+		},
 
 		_actorRemoved: async function(actor) {
 			console.log("TCL: actor", actor);
@@ -4245,6 +4450,25 @@
 				TIMAAT.ActorDatasets.collectiveSelectObjectsSorted += `<option value="`+entry.collectiveId+`">`+entry.name+`</option>
 				`;
 			});
+		},
+
+		appendActorHasRolesDataset: function() {
+			var actorRoleMultiSelectDropDown =
+			`<div class="form-group" data-role="actorhasrole-entry">
+				<div class="form-row">
+					<div class="col-md-12">
+            <label class="sr-only">Has Role(s)</label>
+            <select class="form-control form-control-sm"
+                    id="actorroles-multi-select-dropdown"
+                    name="roleId"
+                    data-placeholder="Select role(s)"
+                    multiple="multiple"
+                    readonly="true">
+            </select>
+					</div>
+				</div>
+			</div>`;
+			return actorRoleMultiSelectDropDown;
 		},
 
 		setupActorDatatable: function() {			

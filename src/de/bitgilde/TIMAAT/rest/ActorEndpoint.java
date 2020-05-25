@@ -56,6 +56,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
+import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -366,6 +367,20 @@ public class ActorEndpoint {
 		return Response.ok(actor.getActorNames()).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/role/list")
+	public Response getActorHasRoleList(@PathParam("id") Integer actorId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		List<Role> roleList = actor.getRoles();
+
+		return Response.ok().entity(roleList).build();
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -442,6 +457,7 @@ public class ActorEndpoint {
 		}
 		if ( updatedActor == null ) return Response.notModified().build();
 
+		List<Role> oldRoles = actor.getRoles();
     // update actor
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
 		if (updatedActor.getDisplayName() != null ) actor.setDisplayName(updatedActor.getDisplayName());
@@ -449,6 +465,7 @@ public class ActorEndpoint {
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
 		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
+		actor.setRoles(updatedActor.getRoles());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -458,12 +475,20 @@ public class ActorEndpoint {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actor);
 		entityManager.persist(actor);
 		entityTransaction.commit();
 		entityManager.refresh(actor);
+		for (Role role : actor.getRoles()) {
+			entityManager.refresh(role);
+		}
+		for (Role role : oldRoles) {
+			entityManager.refresh(role);
+		}
+
 
 		// add log entry
 		UserLogManager.getLogger()

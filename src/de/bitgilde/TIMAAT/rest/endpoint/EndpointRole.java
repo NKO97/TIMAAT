@@ -177,14 +177,13 @@ public class EndpointRole {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("selectlist/{role_group_id}")
-	public Response getRoleSelectList(@PathParam("role_group_id") int roleGroupId,
-																		@QueryParam("q") String search,
+	@Path("selectlist")
+	public Response getRoleSelectList(@QueryParam("search") String search,
 																		@QueryParam("page") Integer page,
 																		@QueryParam("per_page") Integer per_page,
 																		@QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles
-		System.out.println("RoleServiceEndpoint: getRoleSelectList "+ roleGroupId);
+		System.out.println("RoleServiceEndpoint: getRoleSelectList");
 		System.out.println("RoleServiceEndpoint: getRoleSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
@@ -220,14 +219,12 @@ public class EndpointRole {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("group/selectlist/{role_id}")
-	public Response getRoleGroupSelectList(@PathParam("role_id") int roleId,
-																				 @QueryParam("q") String search,
+	@Path("group/selectlist")
+	public Response getRoleGroupSelectList(@QueryParam("search") String search,
 																				 @QueryParam("page") Integer page,
 																				 @QueryParam("per_page") Integer per_page,
 																				 @QueryParam("language") String languageCode) {
-		// returns list of id and name combinations of all roles
-		System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - ID: "+ roleId);
+		// returns list of id and name combinations of all role groups
 		System.out.println("RoleServiceEndpoint: getRoleGroupSelectList - search string: "+ search);
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 		

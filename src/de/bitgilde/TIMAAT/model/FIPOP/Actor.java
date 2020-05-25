@@ -8,7 +8,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -82,7 +81,7 @@ public class Actor implements Serializable {
 	private List<ActorHasPhoneNumber> actorHasPhoneNumbers;
 
 	//bi-directional many-to-many association to Role
-	@ManyToMany(mappedBy="actors")
+	@ManyToMany
 	@JoinTable(
 		name="actor_has_role"
 		, joinColumns={
@@ -92,7 +91,7 @@ public class Actor implements Serializable {
 			@JoinColumn(name="role_id")
 			}
 		)
-	private Set<Role> roles;
+	private List<Role> roles;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
 	// @OneToMany(mappedBy="actor")
@@ -291,12 +290,26 @@ public class Actor implements Serializable {
 		this.actorHasPhoneNumber = actorHasPhoneNumber;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return this.roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Role addRole(Role role) {
+		getRoles().add(role);
+		role.addActor(this);
+
+		return role;
+	}
+
+	public Role removeRole(Role role) {
+		getRoles().remove(role);
+		role.removeActor(this);
+
+		return role;
 	}
 
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {

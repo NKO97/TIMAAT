@@ -146,6 +146,30 @@
 			});		
 		},
 
+		async getActorHasRoleList(id) {
+			console.log("TCL: getActorRolesList -> id: ", id);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/role/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorRolesList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		listAddressTypes(callback) {
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/addresstype/list",
@@ -634,6 +658,7 @@
 			tempActorModel.primaryAddress = actorModel.primaryAddress;
 			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
 			tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
+			tempActorModel.roles = actorModel.roles;
 			// tempActorModel.actorNames = actorModel.actorNames;
       // console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;
