@@ -296,7 +296,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	padding: 0px;
 }
 
-#timaat-mediadatasets-media-metadata-form,
+#timaat-mediadatasets-metadata-form,
 #timaat-mediadatasets-medium-titles-form,
 #timaat-mediadatasets-medium-languagetracks-form {
 	display: none;
@@ -440,14 +440,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-county-remove,
 .timaat-city-remove,
 .timaat-street-remove,
-.timaat-mediadatasets-medium-remove,
-.timaat-mediadatasets-audio-remove,
-.timaat-mediadatasets-document-remove,
-.timaat-mediadatasets-image-remove,
-.timaat-mediadatasets-software-remove,
-.timaat-mediadatasets-text-remove,
-.timaat-mediadatasets-video-remove,
-.timaat-mediadatasets-videogame-remove,
 .timaat-actordatasets-actor-remove,
 .timaat-actordatasets-person-remove,
 .timaat-actordatasets-collective-remove {

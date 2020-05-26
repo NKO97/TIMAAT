@@ -51,6 +51,8 @@
         TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('edit', type, $('#timaat-rolelists-metadata-form').data(type));
       });
 
+      // TODO combine delete submits
+
       // submit content form button functionality
 			$('#timaat-rolelists-metadata-form-submit').on('click', async function(event) {
 				// continue only if client side validation has passed
@@ -492,15 +494,17 @@
 			$('#timaat-rolelists-metadata-form').trigger('reset');
 			$('#timaat-rolelists-metadata-form').show();
 			$('.datasheet-data').hide();
-			$('.name-data').show();
+      $('.name-data').show();
+      
       $('#timaat-rolelists-metadata-form-edit').hide();
       $('#timaat-rolelists-metadata-form-delete').hide();
       $('#timaat-rolelists-metadata-form-submit').html("Add");
       $('#timaat-rolelists-metadata-form-submit').show();
       $('#timaat-rolelists-metadata-form-dismiss').show();
 			$('#timaat-rolelists-metadata-form :input').prop('disabled', false);
-			$('#timaat-rolelists-metadata-name').focus();
-			$('#roleOrRoleGroupFormHeader').html("Add "+type);
+      $('#roleOrRoleGroupFormHeader').html("Add "+type);
+      
+      $('#timaat-rolelists-metadata-name').focus();
     },
     
     roleOrRoleGroupFormDatasheet: async function(action, type, data) {

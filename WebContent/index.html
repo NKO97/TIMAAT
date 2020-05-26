@@ -1035,10 +1035,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm" id="timaat-rolelists-metadata-form-delete" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1098,8 +1098,7 @@
         <!-- Media                                                          -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-media">
-          <div> <!-- delete modals-->
-            <!-- delete medium -->
+          <div> <!-- delete modal-->
             <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -1114,151 +1113,11 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-medium-delete-submit">Medium löschen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-modal-delete-submit">Medium löschen</button>
                   </div>
                 </div>
               </div>
             </div> 
-            <!-- delete audio -->
-            <div class="modal fade" id="timaat-mediadatasets-audio-delete" tabindex="-1" role="dialog" aria-labelledby="audioDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="audioDeleteLabel">Audio löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Audio löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-audio-delete-submit">Audio löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete document -->
-            <div class="modal fade" id="timaat-mediadatasets-document-delete" tabindex="-1" role="dialog" aria-labelledby="documentDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="documentDeleteLabel">Document löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Document löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-document-delete-submit">Document löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete image -->
-            <div class="modal fade" id="timaat-mediadatasets-image-delete" tabindex="-1" role="dialog" aria-labelledby="imageDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="imageDeleteLabel">Image löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Image löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-image-delete-submit">Image löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete software -->
-            <div class="modal fade" id="timaat-mediadatasets-software-delete" tabindex="-1" role="dialog" aria-labelledby="softwareDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="softwareDeleteLabel">Software löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Software löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-software-delete-submit">Software löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete text -->
-            <div class="modal fade" id="timaat-mediadatasets-text-delete" tabindex="-1" role="dialog" aria-labelledby="textDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="textDeleteLabel">Text löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Text löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-text-delete-submit">Text löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete video -->
-            <div class="modal fade" id="timaat-mediadatasets-video-delete" tabindex="-1" role="dialog" aria-labelledby="videoDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="videoDeleteLabel">Video löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Video löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-video-delete-submit">Video löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- delete videogame -->
-            <div class="modal fade" id="timaat-mediadatasets-videogame-delete" tabindex="-1" role="dialog" aria-labelledby="videogameDeleteLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="videogameDeleteLabel">Videogame löschen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Möchten Sie das ausgewählte Videogame löschen?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediadatasets-videogame-delete-submit">Videogame löschen</button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           <div> <!-- duplicate language track modal -->
             <div class="modal fade" id="timaat-mediadatasets-languagetrack-duplicate" tabindex="-1" role="dialog" aria-labelledby="languageTrackDuplicateLabel" aria-hidden="true">
@@ -1543,7 +1402,7 @@
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-media-metadata-form" name="timaat-mediadatasets-media-metadata-form" data-type="" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -1552,31 +1411,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-medium-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-audio-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-document-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-image-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-software-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-text-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-video-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-videogame-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-mediadatasets-medium-remove" title="Delete medium">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-mediadatasets-metadata-form-delete" title="Delete medium">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1584,192 +1422,163 @@
                             </div>
                           </div>
                         </div>
-                        <!-- Medium data -->
-                        <div class="form-group datasheet-data title-data">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-title">Display Title*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
-                            </div>                            
-                            <div class="col-md-3">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-title-language-id">Title's Language*</label>
-                              <select class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-title-language-id" name="displayTitleLanguageId" required>
-                                <option value="" disabled selected hidden>[Choose title language...]</option>
-                                <!-- <option value="1">default-untranslated</option> -->
-                                <option value="2">English</option>
-                                <option value="3">German</option>
-                                <option value="4">French</option>
-                                <option value="5">Spanish</option>
-                                <option value="6">Russian</option>
-                                <option value="7">Arabic</option>
-                              </select>
+                        <div> <!-- Medium data -->
+                          <div class="form-group datasheet-data title-data">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title">Display Title*</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
+                              </div>                            
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title-language-id">Title's Language*</label>
+                                <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title-language-id" name="displayTitleLanguageId" required>
+                                  <option value="" disabled selected hidden>[Choose title language...]</option>
+                                  <!-- <option value="1">default-untranslated</option> -->
+                                  <option value="2">English</option>
+                                  <option value="3">German</option>
+                                  <option value="4">French</option>
+                                  <option value="5">Spanish</option>
+                                  <option value="6">Russian</option>
+                                  <option value="7">Arabic</option>
+                                </select>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data mediumtype-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-mediatype-id">Medium Type*</label>
-                          <select class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-mediatype-id" name="typeId" required>
-                            <option value="" disabled selected hidden>[Choose medium type...]</option>
-                            <option value="1">Audio</option>
-                            <option value="2">Document</option>
-                            <option value="3">Image</option>                      
-                            <option value="4">Software</option>
-                            <option value="5">Text</option>                      
-                            <option value="6">Video</option>
-                            <option value="7">Videogame</option>
-                          </select>
-                        </div>
-                        <div class="form-group datasheet-data medium-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-releasedate">Release Date</label>
-                          <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
-                        </div>
-                        <div class="form-group datasheet-data source-data">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-source-url">Quelle (URL)</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
-                            </div> 
-                            <div class="col-md-3">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-source-isprimarysource">Primärquelle?</label>
-                              <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
+                          <!-- <div class="form-group datasheet-data mediumtype-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-mediatype-id">Medium Type*</label>
+                            <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-mediatype-id" name="typeId" required>
+                              <option value="" disabled selected hidden>[Choose medium type...]</option>
+                              <option value="1">Audio</option>
+                              <option value="2">Document</option>
+                              <option value="3">Image</option>
+                              <option value="4">Software</option>
+                              <option value="5">Text</option>
+                              <option value="6">Video</option>
+                              <option value="7">Videogame</option>
+                            </select>
+                          </div> -->
+                          <div class="form-group datasheet-data medium-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-releasedate">Release Date</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
+                          </div>
+                          <div class="form-group datasheet-data source-data">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Quelle (URL)</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
+                              </div> 
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primärquelle?</label>
+                                <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data source-data">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-source-lastaccessed">Quelle (letzter Zugriff)</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
-                            </div> 
-                            <div class="col-md-3">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-source-isstillavailable">Quelle verfügbar?</label>
-                              <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
+                          <div class="form-group datasheet-data source-data">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Quelle (letzter Zugriff)</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
+                              </div> 
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Quelle verfügbar?</label>
+                                <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data audio-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-audio-metadata-length">Länge</label>
-                          <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-audio-metadata-length" name="length" placeholder="[Length]" aria-describedby="Length">
-                        </div>
-                        <div class="form-group datasheet-data audio-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-audio-metadata-audiocodec">Audio Codec</label>
-                          <input class="form-control form-control-sm" id="timaat-mediadatasets-audio-metadata-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
-                        </div>
-                        <div class="form-group datasheet-data image-data">
-                          <div class="form-row">
+                          <div class="form-group datasheet-data audio-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-length">Länge</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-length" name="length" placeholder="[Length]" aria-describedby="Length">
+                          </div>
+                          <div class="form-group datasheet-data audio-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-audiocodec">Audio Codec</label>
+                            <input class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
+                          </div>
+                          <div class="form-group datasheet-data image-data">
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Bildbreite</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Bildhöhe</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[Enter image height]" aria-describedby="Image Height">
+                              </div>
+                              <div class="col-md-4">                                
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bittiefe</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[Enter image bit depth]" aria-describedby="Bit Depth">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group datasheet-data software-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-software-version">Version</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-software-version" name="version" placeholder="[Enter version]" aria-describedby="Version">
+                          </div>
+                          <div class="form-group datasheet-data text-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-text-content">Content</label>
+                            <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-text-content" name="content" placeholder="[Enter text content]" aria-describedby="Content"></textarea>
+                          </div>
+                          <div class="form-group datasheet-data video-data">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Länge</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
+                              </div>
+                              <div class="col-md-3">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
+                                <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group datasheet-data video-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-videocodec">Video codec</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
+                          </div>
+                          <div class="form-group datasheet-data video-data">
+                            <div class="form-row">
+                              <div class="col-md-6">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Videobreite</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
+                              </div>
+                              <div class="col-md-6">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Videohöhe</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
+                              </div>  
+                            </div>
+                          </div>
+                          <div class="form-group datasheet-data video-data">
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-framerate">Frame rate</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-datarate">Data rate</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
+                            </div>
                             <div class="col-md-4">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-image-metadata-width">Bildbreite</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-image-metadata-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
-                            </div>
-                            <div class="col-md-4">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-image-metadata-height">Bildhöhe</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-image-metadata-height" name="height" placeholder="[Enter image height]" aria-describedby="Image Height">
-                            </div>
-                            <div class="col-md-4">                                
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-image-metadata-bitdepth">Bittiefe</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-image-metadata-bitdepth" name="bitDepth" placeholder="[Enter image bit depth]" aria-describedby="Bit Depth">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-totalbitrate">Total bitrate</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data software-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-software-metadata-version">Version</label>
-                          <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-software-metadata-version" name="version" placeholder="[Enter version]" aria-describedby="Version">
-                        </div>
-                        <div class="form-group datasheet-data text-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-text-metadata-content">Content</label>
-                          <textarea class="form-control form-control-sm" id="timaat-mediadatasets-text-metadata-content" name="content" placeholder="[Enter text content]" aria-describedby="Content"></textarea>
-                        </div>
-                        <div class="form-group datasheet-data video-data">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-length">Länge</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
-                            </div>
-                            <div class="col-md-3">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-isepisode">Episode?</label>
-                              <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
-                            </div>
+                          <div class="form-group col-md-2 datasheet-data videogame-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
+                            <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-videogame-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data video-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-videocodec">Video codec</label>
-                          <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
-                        </div>
-                        <div class="form-group datasheet-data video-data">
-                          <div class="form-row">
-                            <div class="col-md-6">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-width">Videobreite</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
-                            </div>
-                            <div class="col-md-6">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-height">Videohöhe</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
-                            </div>  
+                          <div class="form-group datasheet-data medium-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-copyright">Copyright</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
                           </div>
-                        </div>
-                        <div class="form-group datasheet-data video-data">
-                          <div class="form-row">
-                            <div class="col-md-4">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-framerate">Frame rate</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
-                            </div>
-                            <div class="col-md-4">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-datarate">Data rate</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
+                          <div class="form-group datasheet-data medium-data">
+                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-remark">Remark</label>
+                            <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                           </div>
-                          <div class="col-md-4">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-totalbitrate">Total bitrate</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-video-metadata-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group col-md-2 datasheet-data videogame-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-video-metadata-isepisode">Episode?</label>
-                          <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-videogame-metadata-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
-                        </div>
-                        <div class="form-group datasheet-data medium-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-copyright">Copyright</label>
-                          <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
-                        </div>
-                        <div class="form-group datasheet-data medium-data">
-                          <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-media-metadata-remark">Remark</label>
-                          <textarea class="form-control form-control-sm" id="timaat-mediadatasets-media-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <!-- <div class="form-buttons"> -->
-                          <div class="medium-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-medium-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          <div class="medium-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-metadata-form-submit" name="submit">Speichern</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Abbruch</button>
                           </div>
-                          <div class="audio-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-audio-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-audio-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="document-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-document-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-document-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="image-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-image-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-image-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="software-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-software-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-software-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="text-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-text-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-text-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="video-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-video-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-video-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                          <div class="videogame-datasheet-form-submit datasheet-form-buttons">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-videogame-metadata-form-submit" name="submit">Speichern</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-videogame-metadata-form-dismiss" name="dismiss">Abbruch</button>
-                          </div>
-                        <!-- </div> -->
                       </form>
                       <!-- titles form -->
                       <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>

@@ -424,7 +424,7 @@
 								break;
 							}
 						}
-						$('#timaat-mediadatasets-media-metadata-form').data('medium', selectedVideo);
+						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 						TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
 					});
 
@@ -975,7 +975,7 @@
 						break;
 					}
 				}
-				$('#timaat-mediadatasets-media-metadata-form').data('medium', selectedVideo);
+				$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
 			});
 

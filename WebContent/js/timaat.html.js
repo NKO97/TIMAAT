@@ -4,8 +4,8 @@
       });
 
     // <!-- client side form validation -->
-      var mediumFormMetadata = $('#timaat-mediadatasets-media-metadata-form');
-      var mediumFormMetadataValidator = $('#timaat-mediadatasets-media-metadata-form').validate({
+      var mediumFormMetadata = $('#timaat-mediadatasets-metadata-form');
+      var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').validate({
         rules: {
           displayTitle: {
             required: true,
