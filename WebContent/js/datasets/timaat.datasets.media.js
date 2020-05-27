@@ -130,11 +130,11 @@
 			// TODO validate all required fields				
 			$('#timaat-mediadatasets-mediumtype-meta-name').on('input', function(ev) {
 				if ( $("#timaat-mediadatasets-mediumtype-meta-name").val().length > 0 ) {
-					$('#timaat-mediadatasets-mediumtype-meta-submit').prop("disabled", false);
-					$('#timaat-mediadatasets-mediumtype-meta-submit').removeAttr("disabled");
+					$('#timaat-mediadatasets-mediumtype-meta-submit').prop('disabled', false);
+					$('#timaat-mediadatasets-mediumtype-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-mediadatasets-mediumtype-meta-submit').prop("disabled", true);
-					$('#timaat-mediadatasets-mediumtype-meta-submit').attr("disabled");
+					$('#timaat-mediadatasets-mediumtype-meta-submit').prop('disabled', true);
+					$('#timaat-mediadatasets-mediumtype-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -170,10 +170,9 @@
 
 			// confirm delete medium modal functionality
 			$('#timaat-mediadatasets-modal-delete-submit').on('click', async function(ev) {
-				console.log("TCL: delete medium");
 				var modal = $('#timaat-mediadatasets-medium-delete');
 				var medium = modal.data('medium');
-				console.log("TCL: medium", medium);
+				// console.log("TCL: medium", medium);
 				if (medium) {
 					var mediaType = medium.model.mediaType.mediaTypeTranslations[0].type;
 					try {	
@@ -225,8 +224,7 @@
 				if (medium) { // update medium
 					// medium data
 					medium = await TIMAAT.MediaDatasets.updateMediumModelData(medium, formDataObject);
-					let typeId = 0;
-					// submedium data
+					// medium subtype data
 					switch (type) {
 						case "audio":
 							medium.model.mediumAudio.length = TIMAAT.Util.parseTime(formDataObject.length);
@@ -263,13 +261,13 @@
 				} else { // create new medium
 					var mediumModel = await TIMAAT.MediaDatasets.createMediumModel(formDataObject, type);
 					var displayTitleModel = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
-					var source = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
+					var sourceModel = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
 					var mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataObject, type);
 
-					var newMedium = await TIMAAT.MediaDatasets.createMedium(type, mediumModel, mediumSubtypeModel, displayTitleModel, source);
+					var newMedium = await TIMAAT.MediaDatasets.createMedium(type, mediumModel, mediumSubtypeModel, displayTitleModel, sourceModel);
 					medium = new TIMAAT.Medium(newMedium, type);
 					// $('#timaat-mediadatasets-metadata-form').data(type, medium);
-				};
+				}
 				await TIMAAT.MediaDatasets.refreshDatatable('medium');
 				await TIMAAT.MediaDatasets.refreshDatatable(type);
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, medium);
@@ -1168,7 +1166,7 @@
       $('#timaat-mediadatasets-metadata-form-submit').show();
       $('#timaat-mediadatasets-metadata-form-dismiss').show();
 			$('#timaat-mediadatasets-metadata-form :input').prop('disabled', false);
-			$('#mediumFormHeader').html(mediumType+" hinzufügen");
+			$('#mediumFormHeader').html("Add "+mediumType);
 
 			$('#timaat-mediadatasets-metadata-title').focus();
 
@@ -1223,7 +1221,6 @@
 				// }
 				$('#timaat-mediadatasets-metadata-medium-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('.datasheet-form-buttons').hide();
 				$('#timaat-mediadatasets-metadata-form :input').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-edit').hide();
 				$('#timaat-mediadatasets-metadata-form-edit').prop('disabled', true);
@@ -1367,10 +1364,10 @@
 					</div>`
 					);
 					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
-						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop("checked",true);							
+						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop('checked',true);							
 					}
 					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
-						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop("checked",true);							
+						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop('checked',true);							
 					}
 					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
@@ -1381,10 +1378,10 @@
 			};
 
 			if ( action == 'show') {
-				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-titles-form :input').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-titles-form-edit').show();
-				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-titles-form-edit').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
 				$('[data-role="new-title-fields"').hide();
@@ -1396,10 +1393,10 @@
 			else if (action == 'edit') {
 				$('#timaat-mediadatasets-medium-titles-form-submit').show();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
-				$('#timaat-mediadatasets-medium-titles-form :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-titles-form :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-titles-form-edit').hide();
-				$('#timaat-mediadatasets-medium-titles-form-edit').prop("disabled", true);
-				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-titles-form-edit').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop('disabled', true);
 				$('[data-role="new-title-fields"').show();
 				$('.title-form-divider').show();
 				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
@@ -1476,10 +1473,10 @@
 			};
 
 			if ( action == 'show') {
-				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
-				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", false);
-				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-languagetracks-form-done').hide();
 				$('[data-role="new-languagetrack-fields"').hide();
 				$('.languagetrack-form-divider').hide();
@@ -1489,12 +1486,12 @@
 			}
 			else if (action == 'edit') {
 				$('#timaat-mediadatasets-medium-languagetracks-form-done').show();
-				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop("disabled", false);
-				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop("disabled", true);
-				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-language-id').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', false);
+				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop('disabled', true);
+				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-language-id').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').hide();
-				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop("disabled", true);
-				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop("disabled", true);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop('disabled', true);
 				$('[data-role="new-languagetrack-fields"').show();
 				$('.languagetrack-form-divider').show();
 				$('#mediumLanguageTracksLabel').html("Medium Spurliste bearbeiten");

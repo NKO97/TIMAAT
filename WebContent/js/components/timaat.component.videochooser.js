@@ -86,11 +86,11 @@
 
 			$('#timaat-mediacollection-meta-title').on('input', function(ev) {
 				if ( $("#timaat-mediacollection-meta-title").val().length > 0 ) {
-					$('#timaat-mediacollection-meta-submit').prop("disabled", false);
-					$('#timaat-mediacollection-meta-submit').removeAttr("disabled");
+					$('#timaat-mediacollection-meta-submit').prop('disabled', false);
+					$('#timaat-mediacollection-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-mediacollection-meta-submit').prop("disabled", true);
-					$('#timaat-mediacollection-meta-submit').attr("disabled");
+					$('#timaat-mediacollection-meta-submit').prop('disabled', true);
+					$('#timaat-mediacollection-meta-submit').attr('disabled');
 				}
 			});
 			

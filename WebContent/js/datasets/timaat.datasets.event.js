@@ -166,29 +166,29 @@
 			$('#timaat-event-meta-name').on('input', function(ev) {
 				// console.log("TCL: allow saving only if data is valid");
 				if ( $("#timaat-event-meta-name").val().length > 0 ) {
-					$('#timaat-event-meta-submit').prop("disabled", false);
-					$('#timaat-event-meta-submit').removeAttr("disabled");
+					$('#timaat-event-meta-submit').prop('disabled', false);
+					$('#timaat-event-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-event-meta-submit').prop("disabled", true);
-					$('#timaat-event-meta-submit').attr("disabled");
+					$('#timaat-event-meta-submit').prop('disabled', true);
+					$('#timaat-event-meta-submit').attr('disabled');
 				}
 			});
 			// $('#timaat-event-meta-start').on('inputStart', function(ev) {
 			// 	if ( $("#timaat-event-meta-start").val() != "" ) {
-			// 		$('#timaat-event-meta-submit').prop("disabled", false);
-			// 		$('#timaat-event-meta-submit').removeAttr("disabled");
+			// 		$('#timaat-event-meta-submit').prop('disabled', false);
+			// 		$('#timaat-event-meta-submit').removeAttr('disabled');
 			// 	} else {
-			// 		$('#timaat-event-meta-submit').prop("disabled", true);
-			// 		$('#timaat-event-meta-submit').attr("disabled");
+			// 		$('#timaat-event-meta-submit').prop('disabled', true);
+			// 		$('#timaat-event-meta-submit').attr('disabled');
 			// 		}
 			// });
 			// $('#timaat-event-meta-end').on('input', function(ev) {
 			// 	if ( $("#timaat-event-meta-end").val() >= $("#timaat-event-meta-start").val()) {
-			// 		$('#timaat-event-meta-submit').prop("disabled", false);
-			// 		$('#timaat-event-meta-submit').removeAttr("disabled");
+			// 		$('#timaat-event-meta-submit').prop('disabled', false);
+			// 		$('#timaat-event-meta-submit').removeAttr('disabled');
 			// 	} else {
-			// 		$('#timaat-event-meta-submit').prop("disabled", true);
-			// 		$('#timaat-event-meta-submit').attr("disabled");
+			// 		$('#timaat-event-meta-submit').prop('disabled', true);
+			// 		$('#timaat-event-meta-submit').attr('disabled');
 			// 	}
 			// });
 		},

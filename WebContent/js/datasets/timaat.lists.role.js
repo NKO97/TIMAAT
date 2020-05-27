@@ -650,7 +650,6 @@
         $('#roleOrRoleGroupFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
-        $('.datasheet-form-buttons').hide();
         $('#timaat-rolelists-metadata-form :input').prop('disabled', false);
         $('#timaat-rolelists-metadata-form-edit').hide();
         $('#timaat-rolelists-metadata-form-edit').prop('disabled', true);

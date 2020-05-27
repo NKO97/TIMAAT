@@ -293,11 +293,11 @@
 
 			$('#timaat-inspector-meta-title').on('input', function(ev) {
 				if ( $("#timaat-inspector-meta-title").val().length > 0 ) {
-					$('#timaat-inspector-meta-submit').prop("disabled", false);
-					$('#timaat-inspector-meta-submit').removeAttr("disabled");
+					$('#timaat-inspector-meta-submit').prop('disabled', false);
+					$('#timaat-inspector-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop("disabled", true);
-					$('#timaat-inspector-meta-submit').attr("disabled");
+					$('#timaat-inspector-meta-submit').prop('disabled', true);
+					$('#timaat-inspector-meta-submit').attr('disabled');
 				}
 			});
 

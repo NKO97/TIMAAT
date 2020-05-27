@@ -135,11 +135,11 @@
 				console.log("TCL: validate categoryset input");
 				console.log("TCL: $(\"#timaat-categoryset-meta-title\").val():", $("#timaat-categoryset-meta-title").val());
 				if ( $("#timaat-categoryset-meta-title").val().length > 0 ) {
-					$('#timaat-categoryset-meta-submit').prop("disabled", false);
-					$('#timaat-categoryset-meta-submit').removeAttr("disabled");
+					$('#timaat-categoryset-meta-submit').prop('disabled', false);
+					$('#timaat-categoryset-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-categoryset-meta-submit').prop("disabled", true);
-					$('#timaat-categoryset-meta-submit').attr("disabled");
+					$('#timaat-categoryset-meta-submit').prop('disabled', true);
+					$('#timaat-categoryset-meta-submit').attr('disabled');
 				}
 			});			
 		},

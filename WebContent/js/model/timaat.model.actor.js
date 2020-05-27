@@ -158,7 +158,7 @@
 				$('.actors-nav-tabs').show();
 				$('.actors-data-tabs').hide();
 				$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
-				$('#timaat-actordatasets-actor-metadata-form').data('actor', actor);
+				$('#timaat-actordatasets-metadata-form').data('actor', actor);
 				TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
 				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			});
@@ -169,7 +169,7 @@
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
 			// console.log("TCL: Actor -> updateUI -> this", this);
-			var actorType = $('#timaat-actordatasets-actor-metadata-form').data('actorType');
+			var actorType = $('#timaat-actordatasets-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
 			var name = this.model.displayName.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;
@@ -196,7 +196,7 @@
 			// remove actor from UI
 			this.listView.remove(); // TODO remove tags from actor_has_tags
       // console.log("TCL: Actor -> remove -> this", this);
-			$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
+			$('#timaat-actordatasets-metadata-form').data('actor', null);
 		}
 	}
 	

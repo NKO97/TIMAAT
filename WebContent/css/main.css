@@ -439,10 +439,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-province-remove,
 .timaat-county-remove,
 .timaat-city-remove,
-.timaat-street-remove,
-.timaat-actordatasets-actor-remove,
-.timaat-actordatasets-person-remove,
-.timaat-actordatasets-collective-remove {
+.timaat-street-remove {
 	margin-right: 1em;
 }
 
