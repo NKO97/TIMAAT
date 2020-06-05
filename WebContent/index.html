@@ -159,7 +159,7 @@
             <ul id="side-menu">
               <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser">
                   <a href="#mediaLibrary" 
-                    onclick="TIMAAT.UI.showComponent('videochooser')" 
+                    onclick="TIMAAT.VideoChooser.initVideoChooserComponent()" 
                     data-toggle="popover" 
                     data-trigger="hover" 
                     data-animation="false" 
@@ -1124,13 +1124,33 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="languageTrackDuplicateLabel">Sprachspur schon vorhanden</h5>
+                    <h5 class="modal-title" id="languageTrackDuplicateLabel">Language track already exists</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true"></span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    Diese Sprachspur existiert schon.
+                    This language track already exists.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+          <div> <!-- duplicate actor with role(s) modal -->
+            <div class="modal fade" id="timaat-mediadatasets-actorwithrole-duplicate" tabindex="-1" role="dialog" aria-labelledby="actorWithRoleDuplicateLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="actorWithRoleDuplicateLabel">Actor already exists</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    This actor already exists.
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
@@ -1396,8 +1416,8 @@
                         <li class="nav-item media-data-tabs languagetrack-data-tab">
                           <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Languages</a>
                         </li>
-                        <li class="nav-item media-data-tabs mediumactorrole-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-actor-role-form" href="#mediumActorRoles">Cast &amp; Crew</a>
+                        <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
+                          <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form" href="#mediumActorRoles">Actors</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -1561,7 +1581,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="form-group col-md-2 datasheet-data videogame-data">
+                          <div class="form-group datasheet-data videogame-data col-md-2 ">
                             <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
                             <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-videogame-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
                           </div>
@@ -1678,6 +1698,53 @@
                           <hr>                            
                         </div>
                         <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Done</button>
+                      </form>
+                      <!-- actor-roles form -->
+                      <form class="form" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="mediumActorRolesLabel">Medium actor roles</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-actorwithroles-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="col-md-4">
+                              <h6 class="form-header">Actor</h6>
+                            </div>
+                            <div class="col-md-7">
+                              <h6 class="form-header">Has role(s)</h6>
+                            </div>
+                            <div class="col-md-1">
+                              <h6 class="form-header"></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="medium-actorwithrole-container">
+                          <div data-role="dynamic-actorwithrole-fields" id="dynamic-actorwithrole-fields">
+                            <div class="form-group">                              
+                            </div>
+                          <!-- additional actor role form content will be created dynamically --> 
+                          </div>
+                          <div class="actorwithrole-form-divider">
+                            <br>
+                            <hr>                            
+                          </div>
+                          <div data-role="new-actorwithrole-fields" id="new-actorwithrole-fields">
+                            <!-- one row for new actor role information that shall be added to the actor role list --> 
+                            <div class="form-group">                              
+                            </div>
+                          </div>
+                        </div>
+                        <div class="actorwithrole-form-divider">
+                          <hr>                            
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-actorwithroles-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                     </div>
                   </div>
@@ -2457,8 +2524,8 @@
                           <hr>                            
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                     </div>
                   </div>

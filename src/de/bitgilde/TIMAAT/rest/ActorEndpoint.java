@@ -151,6 +151,89 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("selectlist")
+	public Response getActorSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// define default query strings
+		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
+		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+		List<SelectElement> actorSelectList = new ArrayList<>();
+		for (Actor actor : actorList) {
+			actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+		}
+
+		return Response.ok().entity(actorSelectList).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/select")
+	public Response getActorSelect(@PathParam("id") int id,
+																 @QueryParam("start") Integer start,
+																 @QueryParam("length") Integer length,
+																 @QueryParam("orderby") String orderby,
+																 @QueryParam("search") String search)
+	{
+		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, id);
+		List<SelectElement> actorSelectList = new ArrayList<>();
+			actorSelectList.add(new SelectElement(id, actor.getDisplayName().getName()));
+
+		return Response.ok().entity(actorSelectList).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("total")
 	public Response getActorDatasetsTotal() {
 		System.out.println("ActorServiceEndpoint: getActorDatasetsTotal");
@@ -354,7 +437,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("{id}/names/list")
 	public Response getNamesList(@PathParam("id") int id) {
-		// // System.out.println("ActorServiceEndpoint: getNamesList");
+		// System.out.println("ActorServiceEndpoint: getNamesList");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -432,6 +515,17 @@ public class ActorEndpoint {
 		UserLogManager.getLogger().addLogEntry(newActor.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORCREATED);
 		System.out.println("ActorServiceEndpoint: createActor - done");
 		return Response.ok().entity(newActor).build();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getActor(@PathParam("id") int id) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor e = entityManager.find(Actor.class, id);
+		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		return Response.ok().entity(e).build();
 	}
 
 	@PATCH
@@ -2447,17 +2541,6 @@ public class ActorEndpoint {
   //   	} 	
 	// 	return Response.ok().build();
 	// }
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("{id}")
-	public Response getActorInfo(@PathParam("id") int id) {    	
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Actor e = entityManager.find(Actor.class, id);
-		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
-	return Response.ok().entity(e).build();
-	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());

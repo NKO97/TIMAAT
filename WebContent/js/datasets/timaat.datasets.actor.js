@@ -83,7 +83,7 @@
 				// setup UI
 				$('#actorTypeMetaLabel').html(heading);
 				$('#timaat-actordatasets-actortype-meta-submit').html(submit);
-				$("#timaat-actordatasets-actortype-meta-name").val(type).trigger('input');
+				$('#timaat-actordatasets-actortype-meta-name').val(type).trigger('input');
 			});
 
 			// Submit actorType data
@@ -91,7 +91,7 @@
 				// Create/Edit actorType window submitted data validation
 				var modal = $('#timaat-actordatasets-actortype-meta');
 				var actorType = modal.data('actorType');
-				var type = $("#timaat-actordatasets-actortype-meta-name").val();
+				var type = $('#timaat-actordatasets-actortype-meta-name').val();
 
 				if (actorType) {
 					actorType.model.actor.actorTypeTranslations[0].type = type;
@@ -115,7 +115,7 @@
 			// validate actorType data	
 			// TODO validate all required fields				
 			$('#timaat-actordatasets-actortype-meta-name').on('input', function(ev) {
-				if ( $("#timaat-actordatasets-actortype-meta-name").val().length > 0 ) {
+				if ( $('#timaat-actordatasets-actortype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-actortype-meta-submit').prop('disabled', false);
 					$('#timaat-actordatasets-actortype-meta-submit').removeAttr('disabled');
 				} else {
@@ -376,10 +376,10 @@
           // console.log("TCL: $(this).val()", $(this).val());
           // console.log("TCL: newName", newName);
 				}));
-				if (!$("#timaat-actordatasets-actor-actornames-form").valid()) 
+				if (!$('#timaat-actordatasets-actor-actornames-form').valid()) 
 					return false;
 				if (newName != '') { // TODO is '' proper check?
-					var namesInForm = $("#timaat-actordatasets-actor-actornames-form").serializeArray();
+					var namesInForm = $('#timaat-actordatasets-actor-actornames-form').serializeArray();
 					console.log("TCL: namesInForm", namesInForm);
 					var numberOfNameElements = 3;
 					var indexName = namesInForm[namesInForm.length-numberOfNameElements-1].name; // find last used indexed name (first prior to new address fields)
@@ -453,7 +453,7 @@
 			});
 
 			// Submit actor names button functionality
-			$("#timaat-actordatasets-actor-actornames-form-submit").on('click', async function(event) {
+			$('#timaat-actordatasets-actor-actornames-form-submit').on('click', async function(event) {
 				// console.log("TCL: Names form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -462,17 +462,17 @@
 					node.removeChild(node.lastChild)
 				}
 				// test if form is valid 
-				if (!$("#timaat-actordatasets-actor-actornames-form").valid()) {
+				if (!$('#timaat-actordatasets-actor-actornames-form').valid()) {
 					$('[data-role="new-name-fields"]').append(TIMAAT.ActorDatasets.appendNewNameField());				
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $("#timaat-actordatasets-actor-actornames-form").data("actor");
+				var actor = $('#timaat-actordatasets-actor-actornames-form').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $("#timaat-actordatasets-actor-actornames-form").serializeArray();
+				var formData = $('#timaat-actordatasets-actor-actornames-form').serializeArray();
 				var formNameList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formNameList with data
@@ -707,11 +707,11 @@
 				if (listEntry.find('input').each(function(){           
 					newAddress.push($(this).val());
 				}));
-				if (!$("#timaat-actordatasets-actor-addresses-form").valid()) 
+				if (!$('#timaat-actordatasets-actor-addresses-form').valid()) 
 					return false;
 				console.log("TCL: newAddress", newAddress);
 				if (newAddress != '') { // TODO is '' proper check?
-					var addressesInForm = $("#timaat-actordatasets-actor-addresses-form").serializeArray();
+					var addressesInForm = $('#timaat-actordatasets-actor-addresses-form').serializeArray();
 					console.log("TCL: addressesInForm", addressesInForm);
 					var i;
 					var numberOfAddressElements = 9;
@@ -795,7 +795,7 @@
 						</div>`
 					);
 					$('input[name="newActorAddress['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200});
-					$('[data-role="newAddressTypeId['+i+']"]').find('option[value='+addressTypeId+']').attr("selected",true);
+					$('[data-role="newAddressTypeId['+i+']"]').find('option[value='+addressTypeId+']').attr('selected',true);
 					if (listEntry.find('input').each(function(){
 						// console.log("TCL: find(input) $(this).val()", $(this).val());
 						$(this).val('');
@@ -819,7 +819,7 @@
 			});
 
 			// Submit actor addresses button functionality
-			$("#timaat-actordatasets-actor-addresses-form-submit").on('click', async function(event) {
+			$('#timaat-actordatasets-actor-addresses-form-submit').on('click', async function(event) {
 				// console.log("TCL: Addresses form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -828,17 +828,17 @@
 					node.removeChild(node.lastChild)
 				}
 				// test if form is valid 
-				if (!$("#timaat-actordatasets-actor-addresses-form").valid()) {
+				if (!$('#timaat-actordatasets-actor-addresses-form').valid()) {
 					$('[data-role="new-actorhasaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());				
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $("#timaat-actordatasets-actor-addresses-form").data("actor");
+				var actor = $('#timaat-actordatasets-actor-addresses-form').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $("#timaat-actordatasets-actor-addresses-form").serializeArray();
+				var formData = $('#timaat-actordatasets-actor-addresses-form').serializeArray();
 				var formActorHasAddressesList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasAddressesList with data
@@ -1015,7 +1015,7 @@
 				// setup UI
 				$('#addressTypeMetaLabel').html(heading);
 				$('#timaat-actordatasets-addresstype-meta-submit').html(submit);
-				$("#timaat-actordatasets-addresstype-meta-name").val(type).trigger('input');
+				$('#timaat-actordatasets-addresstype-meta-name').val(type).trigger('input');
 			});
 
 			// Submit addressType data
@@ -1023,7 +1023,7 @@
 				// Create/Edit addressType window submitted data validation
 				var modal = $('#timaat-actordatasets-addresstype-meta');
 				var addressType = modal.data('addressType');
-				var type = $("#timaat-actordatasets-addresstype-meta-name").val();
+				var type = $('#timaat-actordatasets-addresstype-meta-name').val();
 
 				if (addressType) {
 					addressType.model.actor.addressTypeTranslations[0].type = type;
@@ -1047,7 +1047,7 @@
 			// validate addressType data	
 			// TODO validate all required fields				
 			$('#timaat-actordatasets-addresstype-meta-name').on('input', function(ev) {
-				if ( $("#timaat-actordatasets-addresstype-meta-name").val().length > 0 ) {
+				if ( $('#timaat-actordatasets-addresstype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-addresstype-meta-submit').prop('disabled', false);
 					$('#timaat-actordatasets-addresstype-meta-submit').removeAttr('disabled');
 				} else {
@@ -1087,11 +1087,11 @@
 				if (listEntry.find('input').each(function(){           
 					newEmailAddress.push($(this).val());
 				}));
-				if (!$("#timaat-actordatasets-actor-emailaddresses-form").valid()) 
+				if (!$('#timaat-actordatasets-actor-emailaddresses-form').valid()) 
 					return false;
 				console.log("TCL: newEmailAddress", newEmailAddress);
 				if (newEmailAddress != '') { // TODO is '' proper check?
-					var emailAddressesinForm = $("#timaat-actordatasets-actor-emailaddresses-form").serializeArray();
+					var emailAddressesinForm = $('#timaat-actordatasets-actor-emailaddresses-form').serializeArray();
 					console.log("TCL: emailAddressesinForm", emailAddressesinForm);
 					var i;
 					var numberOfEmailAddressElements = 2;
@@ -1139,7 +1139,7 @@
 					);
 					$('[data-role="newEmailAddressTypeId['+i+']"]')
 						.find('option[value='+emailAddressTypeId+']')
-						.attr("selected",true);
+						.attr('selected',true);
 					$('input[name="newEmailAddress['+i+']"]').rules("add", { required: true, email: true});
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
@@ -1160,7 +1160,7 @@
 			});
 
 			// Submit actor email addresses button functionality
-			$("#timaat-actordatasets-actor-emailaddresses-form-submit").on('click', async function(event) {
+			$('#timaat-actordatasets-actor-emailaddresses-form-submit').on('click', async function(event) {
 				// console.log("TCL: Email addresses form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -1169,17 +1169,17 @@
 					node.removeChild(node.lastChild)
 				}
 				// test if form is valid 
-				if (!$("#timaat-actordatasets-actor-emailaddresses-form").valid()) {
+				if (!$('#timaat-actordatasets-actor-emailaddresses-form').valid()) {
 					$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());				
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $("#timaat-actordatasets-actor-emailaddresses-form").data("actor");
+				var actor = $('#timaat-actordatasets-actor-emailaddresses-form').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $("#timaat-actordatasets-actor-emailaddresses-form").serializeArray();
+				var formData = $('#timaat-actordatasets-actor-emailaddresses-form').serializeArray();
 				var formActorHasEmailAddressesList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasEmailAddressesList with data
@@ -1335,7 +1335,7 @@
 				// setup UI
 				$('#emailAddressTypeMetaLabel').html(heading);
 				$('#timaat-actordatasets-emailaddresstype-meta-submit').html(submit);
-				$("#timaat-actordatasets-emailaddresstype-meta-name").val(type).trigger('input');
+				$('#timaat-actordatasets-emailaddresstype-meta-name').val(type).trigger('input');
 			});
 
 			// Submit emailAddressType data
@@ -1343,7 +1343,7 @@
 				// Create/Edit emailAddressType window submitted data validation
 				var modal = $('#timaat-actordatasets-emailaddresstype-meta');
 				var emailAddressType = modal.data('emailAddressType');
-				var type = $("#timaat-actordatasets-emailaddresstype-meta-name").val();
+				var type = $('#timaat-actordatasets-emailaddresstype-meta-name').val();
 
 				if (emailAddressType) {
 					emailAddressType.model.actor.emailAddressTypeTranslations[0].type = type;
@@ -1367,7 +1367,7 @@
 			// validate emailAddressType data	
 			// TODO validate all required fields				
 			$('#timaat-actordatasets-emailaddresstype-meta-name').on('input', function(ev) {
-				if ( $("#timaat-actordatasets-emailaddresstype-meta-name").val().length > 0 ) {
+				if ( $('#timaat-actordatasets-emailaddresstype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop('disabled', false);
 					$('#timaat-actordatasets-emailaddresstype-meta-submit').removeAttr('disabled');
 				} else {
@@ -1407,11 +1407,11 @@
 				if (listEntry.find('input').each(function(){           
 					newPhoneNumber.push($(this).val());
 				}));
-				if (!$("#timaat-actordatasets-actor-phonenumbers-form").valid()) 
+				if (!$('#timaat-actordatasets-actor-phonenumbers-form').valid()) 
 					return false;
 				console.log("TCL: newPhoneNumber", newPhoneNumber);
 				if (newPhoneNumber != '') { // TODO is '' proper check?
-					var phoneNumbersinForm = $("#timaat-actordatasets-actor-phonenumbers-form").serializeArray();
+					var phoneNumbersinForm = $('#timaat-actordatasets-actor-phonenumbers-form').serializeArray();
 					console.log("TCL: phoneNumbersinForm", phoneNumbersinForm);
 					var i;
 					var numberOfPhoneNumberElements = 2;
@@ -1460,7 +1460,7 @@
 					);
 					($('[data-role="newPhoneNumberTypeId['+i+']"]'))
 						.find('option[value='+phoneNumberTypeId+']')
-						.attr("selected",true);
+						.attr('selected',true);
 					$('input[name="newPhoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30 });
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
@@ -1481,7 +1481,7 @@
 			});
 
 			// Submit actor phonenumbers button functionality
-			$("#timaat-actordatasets-actor-phonenumbers-form-submit").on('click', async function(event) {
+			$('#timaat-actordatasets-actor-phonenumbers-form-submit').on('click', async function(event) {
 				// console.log("TCL: Phone numberes form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -1490,17 +1490,17 @@
 					node.removeChild(node.lastChild)
 				}
 				// test if form is valid 
-				if (!$("#timaat-actordatasets-actor-phonenumbers-form").valid()) {
+				if (!$('#timaat-actordatasets-actor-phonenumbers-form').valid()) {
 					$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());				
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $("#timaat-actordatasets-actor-phonenumbers-form").data("actor");
+				var actor = $('#timaat-actordatasets-actor-phonenumbers-form').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $("#timaat-actordatasets-actor-phonenumbers-form").serializeArray();
+				var formData = $('#timaat-actordatasets-actor-phonenumbers-form').serializeArray();
 				var formActorHasPhoneNumbersList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasPhoneNumbersList with data
@@ -1656,7 +1656,7 @@
 				// setup UI
 				$('#phoneNumberTypeMetaLabel').html(heading);
 				$('#timaat-actordatasets-phonenumbertype-meta-submit').html(submit);
-				$("#timaat-actordatasets-phonenumbertype-meta-name").val(type).trigger('input');
+				$('#timaat-actordatasets-phonenumbertype-meta-name').val(type).trigger('input');
 			});
 
 			// Submit phoneNumberType data
@@ -1664,7 +1664,7 @@
 				// Create/Edit phoneNumberType window submitted data validation
 				var modal = $('#timaat-actordatasets-phonenumbertype-meta');
 				var phoneNumberType = modal.data('phoneNumberType');
-				var type = $("#timaat-actordatasets-phonenumbertype-meta-name").val();
+				var type = $('#timaat-actordatasets-phonenumbertype-meta-name').val();
 
 				if (phoneNumberType) {
 					phoneNumberType.model.actor.phoneNumberTypeTranslations[0].type = type;
@@ -1688,7 +1688,7 @@
 			// validate phoneNumberType data	
 			// TODO validate all required fields				
 			$('#timaat-actordatasets-phonenumbertype-meta-name').on('input', function(ev) {
-				if ( $("#timaat-actordatasets-phonenumbertype-meta-name").val().length > 0 ) {
+				if ( $('#timaat-actordatasets-phonenumbertype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop('disabled', false);
 					$('#timaat-actordatasets-phonenumbertype-meta-submit').removeAttr('disabled');
 				} else {
@@ -1699,11 +1699,11 @@
 		},
 
 		initMemberOfCollectives: function() {
-			$('#actors-tab-person-memberofcollectives-form').click(function(event) {
+			$('#actors-tab-person-memberofcollectives-form').on('click', function(event) {
 				$('.nav-tabs a[href="#personMemberOfCollectives"]').tab('show');
 				$('.form').hide();
 				TIMAAT.ActorDatasets.setPersonIsMemberOfCollectiveList($('#timaat-actordatasets-metadata-form').data('actor'))
-				$('#timaat-actordatasets-person-memberofcollective-form').show();
+				// $('#timaat-actordatasets-person-memberofcollective-form').show();
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 			
@@ -1715,75 +1715,75 @@
 				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			});
 
-			// Add membership button click
+			// add membership button click
 			$(document).on('click','[data-role="new-personismemberofcollective-fields"] > .form-group [data-role="add"]', async function(event) {
 				console.log("TCL: MemberOfCollective form: add new membership");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-fields"]');
-				var newMemberOfCollectiveData = [];
-				var collectiveId = null;
+				var newFormEntry = [];
+				var newEntryId = null;
 				if (listEntry.find('select').each(function(){           
-					collectiveId = Number($(this).val());
+					newEntryId = Number($(this).val());
 				}));
 				if (listEntry.find('input').each(function(){           
-					newMemberOfCollectiveData.push($(this).val());
+					newFormEntry.push($(this).val());
 				}));
-				console.log("TCL: newMemberOfCollectiveData", newMemberOfCollectiveData);
+				console.log("TCL: newFormEntry", newFormEntry);
 
-				if (!$("#timaat-actordatasets-person-memberofcollective-form").valid()) 
+				if (!$('#timaat-actordatasets-person-memberofcollective-form').valid()) 
 					return false;
 
 				var actor = $('#timaat-actordatasets-metadata-form').data('actor');
 				$('.timaat-actordatasets-person-memberofcollective-collective-id').prop('disabled', false);
 				$('.disable-on-submit').prop('disabled', true);
-				var memberOfCollectivesInForm = $("#timaat-actordatasets-person-memberofcollective-form").serializeArray();
+				var existingEntriesInForm = $('#timaat-actordatasets-person-memberofcollective-form').serializeArray();
 				$('.disable-on-submit').prop('disabled', false);
-				console.log("TCL: memberOfCollectivesInForm", memberOfCollectivesInForm);
+				console.log("TCL: existingEntriesInForm", existingEntriesInForm);
 
 				// create list of collectiveIds that the person is is already a member of
-				var collectiveIdList = [];
+				var existingEntriesIdList = [];
 				var i = 0;
-				for (; i < memberOfCollectivesInForm.length; i++) {
-					if (memberOfCollectivesInForm[i].name == "collectiveId") {
-						collectiveIdList.push(Number(memberOfCollectivesInForm[i].value));
+				for (; i < existingEntriesInForm.length; i++) {
+					if (existingEntriesInForm[i].name == "collectiveId") {
+						existingEntriesIdList.push(Number(existingEntriesInForm[i].value));
 					}
 				}
-				collectiveIdList.pop(); // remove new membership collective id
-				// console.log("TCL: collectiveIdList", collectiveIdList);
+				existingEntriesIdList.pop(); // remove new membership collective id
+				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				// check for duplicate actor-collection relation. only one allowed
 				var duplicate = false;
 				i = 0;
-				while (i < collectiveIdList.length) {
-					if (collectiveId == collectiveIdList[i]) {
+				while (i < existingEntriesIdList.length) {
+					if (newEntryId == existingEntriesIdList[i]) {
 						duplicate = true;
-						console.log("TCL: duplicate memberOfCollective found");
+						console.log("TCL: duplicate entry found");
 						break;
 					}
-					// console.log("TCL: collectiveId", collectiveId);
-					console.log("TCL: collectiveIdList[i]", collectiveIdList[i]);
+					// console.log("TCL: newEntryId", newEntryId);
+					console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
 					i++;
 				}
 
 				if (!duplicate) {
-					var newMembershipDetails = [];
+					var newEntryDetails = [];
 					i = 0;
 					var j = 0;
-					for (; j < newMemberOfCollectiveData.length -3; i++) { // -3 for empty fields of new entry that is not added yet
-						newMembershipDetails[i] = {
+					for (; j < newFormEntry.length -3; i++) { // -3 for empty fields of new entry that is not added yet
+						newEntryDetails[i] = {
 							actorPersonActorId: actor.model.id,
-							memberOfActorCollectiveActorId: collectiveId,
-							id: newMemberOfCollectiveData[j], // == 0
-							joinedAt: newMemberOfCollectiveData[j+1],
-							leftAt: newMemberOfCollectiveData[j+2]
+							memberOfActorCollectiveActorId: newEntryId,
+							id: newFormEntry[j], // == 0
+							joinedAt: newFormEntry[j+1],
+							leftAt: newFormEntry[j+2]
 						};
 						j += 3;
 					}
 
-					console.log("TCL: collectiveId", collectiveId);
-          // console.log("TCL: newMembershipDetails", newMembershipDetails);
-					var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(collectiveIdList.length, collectiveId, newMembershipDetails, 'sr-only', true);
-					$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
-					$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr("selected",true);
+					console.log("TCL: newEntryId", newEntryId);
+          // console.log("TCL: newEntryDetails", newEntryDetails);
+					var appendNewFormDataEntry = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(existingEntriesIdList.length, newEntryId, newEntryDetails, 'sr-only', true);
+					$('#dynamic-personismemberofcollective-fields').append(appendNewFormDataEntry);
+					$('[data-role="collectiveId['+newEntryId+']"]').find('option[value='+newEntryId+']').attr('selected',true);
 					$('.timaat-actordatasets-person-memberofcollective-collective-id').prop('disabled', true);
 
 					$('[data-role="new-personismemberofcollective-fields"]').find('[data-role="memberofcollective-details-entry"]').remove();
@@ -1806,7 +1806,7 @@
 				}
 			});
 
-			// Add membership detail button click
+			// add membership detail button click
 			// $(document).on('click','[data-role="new-personismemberofcollective-details-fields"] > .form-group [data-role="personismemberofcollective-entry"] > .form-group [data-role="memberofcollective-details-entry"] > .form-group [data-role="addMembershipDetails"]', async function(event) {
 			$(document).on('click', '.form-group [data-role="addMembershipDetails"]', async function(event) {
 				console.log("TCL: MemberOfCollective form: add details to membership");
@@ -1835,7 +1835,7 @@
 				var dataDetailsId = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]').attr("data-details-id");
 				$(this).closest('[data-role="new-personismemberofcollective-details-fields"]').before(TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(dataId, dataDetailsId, collectiveId, newMembershipDetailsEntry, 'sr-only'));
 
-				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr("selected",true);
+				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr('selected',true);
 				if (listEntry.find('input').each(function(){
 					$(this).val('');
 				}));
@@ -1846,22 +1846,22 @@
 				$('.timaat-actordatasets-person-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			});
 
-			// Remove member of collective button click
+			// remove member of collective button click
 			$(document).on('click','[data-role="dynamic-personismemberofcollective-fields"] > .form-group [data-role="remove"]', async function(event) {
 				console.log("TCL: MemberOfCollective form: remove membership");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
-			// Remove membership detail button click
+			// remove membership detail button click
 			$(document).on('click','.form-group [data-role="removeMembershipDetails"]', async function(event) {
 				console.log("TCL: MemberOfCollective form: remove details");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
-			// Submit actor memberofcollectives button functionality
-			$("#timaat-actordatasets-person-memberofcollective-form-submit").on('click', async function(event) {
+			// submit actor memberofcollectives button functionality
+			$('#timaat-actordatasets-person-memberofcollective-form-submit').on('click', async function(event) {
 				// console.log("TCL: MemberOfCollective form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -1871,79 +1871,79 @@
 				}
 
 				// test if form is valid 
-				if (!$("#timaat-actordatasets-person-memberofcollective-form").valid()) {
+				if (!$('#timaat-actordatasets-person-memberofcollective-form').valid()) {
 					$('[data-role="new-personismemberofcollective-fields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveField());				
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $("#timaat-actordatasets-person-memberofcollective-form").data("actor");
+				var actor = $('#timaat-actordatasets-person-memberofcollective-form').data('actor');
 
-				// Create/Edit actor window submitted data
+				// create/edit actor window submitted data
 				$('.timaat-actordatasets-person-memberofcollective-collective-id').prop('disabled', false);
 				$('.disable-on-submit').prop('disabled', true);
-				var formData = $("#timaat-actordatasets-person-memberofcollective-form").serializeArray();
+				var formDataRaw = $('#timaat-actordatasets-person-memberofcollective-form').serializeArray();
 				$('.disable-on-submit').prop('disabled', false);
-        console.log("TCL: formData", formData);
-				var formPersonIsMemberOfCollectivesList = [];
-				var formCollectiveIdList = []; // List of all collectives containing membership data for this actor
-				var formCollectiveIdIndexes = []; // Index list of all collectiveIds and number of detail sets
+        console.log("TCL: formDataRaw", formDataRaw);
+				var formEntries = [];
+				var formEntryIds = []; // List of all collectives containing membership data for this actor
+				var formEntriesIdIndexes = []; // Index list of all collectiveIds and number of detail sets
 				var i = 0;
-				for (; i < formData.length; i++) {
-					if (formData[i].name == 'collectiveId') {
-						formCollectiveIdIndexes.push({collectiveIndex: i, numDetailSets: 0});
+				for (; i < formDataRaw.length; i++) {
+					if (formDataRaw[i].name == 'collectiveId') {
+						formEntriesIdIndexes.push({entryIndex: i, numDetailSets: 0});
 					}
 				}
-				console.log("TCL: formCollectiveIdIndexes", formCollectiveIdIndexes);
+				console.log("TCL: formEntriesIdIndexes", formEntriesIdIndexes);
 				var numDetailElements = 3; // hidden membershipDetailId, joinedAt, leftAt
 				i = 0;
-				for (; i < formCollectiveIdIndexes.length; i++) {
-					if (i < formCollectiveIdIndexes.length -1) {
-						formCollectiveIdIndexes[i].numDetailSets = (formCollectiveIdIndexes[i+1].collectiveIndex - formCollectiveIdIndexes[i].collectiveIndex - 1) / numDetailElements;
+				for (; i < formEntriesIdIndexes.length; i++) {
+					if (i < formEntriesIdIndexes.length -1) {
+						formEntriesIdIndexes[i].numDetailSets = (formEntriesIdIndexes[i+1].entryIndex - formEntriesIdIndexes[i].entryIndex - 1) / numDetailElements;
 					} else { // last entry has to be calculated differently
-						formCollectiveIdIndexes[i].numDetailSets = (formData.length - formCollectiveIdIndexes[i].collectiveIndex - 1) / numDetailElements;
+						formEntriesIdIndexes[i].numDetailSets = (formDataRaw.length - formEntriesIdIndexes[i].entryIndex - 1) / numDetailElements;
 					}
 				}
-				console.log("TCL: formCollectiveIdIndexes", formCollectiveIdIndexes);
+				console.log("TCL: formEntriesIdIndexes", formEntriesIdIndexes);
 				i = 0;
-				for (; i < formCollectiveIdIndexes.length; i++) {
-					console.log("TCL: formCollectiveIdIndexes[i]", formCollectiveIdIndexes[i]);
+				for (; i < formEntriesIdIndexes.length; i++) {
+					console.log("TCL: formEntriesIdIndexes[i]", formEntriesIdIndexes[i]);
 						var element = {
 							actorId: actor.model.id,
-							collectiveId: Number(formData[formCollectiveIdIndexes[i].collectiveIndex].value),
+							collectiveId: Number(formDataRaw[formEntriesIdIndexes[i].entryIndex].value),
 							membershipDetails: []
 						};
-						formCollectiveIdList.push(Number(formData[formCollectiveIdIndexes[i].collectiveIndex].value));
+						formEntryIds.push(Number(formDataRaw[formEntriesIdIndexes[i].entryIndex].value));
 					var j = 0;
-					for (; j < formCollectiveIdIndexes[i].numDetailSets; j++) {
+					for (; j < formEntriesIdIndexes[i].numDetailSets; j++) {
 						var details = {
-							id: Number(formData[formCollectiveIdIndexes[i].collectiveIndex+numDetailElements*j+1].value),
-							joinedAt: formData[formCollectiveIdIndexes[i].collectiveIndex+numDetailElements*j+2].value,
-							leftAt:   formData[formCollectiveIdIndexes[i].collectiveIndex+numDetailElements*j+3].value,
+							id: Number(formDataRaw[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+1].value),
+							joinedAt: formDataRaw[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+2].value,
+							leftAt:   formDataRaw[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+3].value,
 							role: null
 						};
 						element.membershipDetails.push(details);
 					}
-					formPersonIsMemberOfCollectivesList[formPersonIsMemberOfCollectivesList.length] = element;
+					formEntries.push(element);
 				}
-				console.log("TCL: formPersonIsMemberOfCollectivesList", formPersonIsMemberOfCollectivesList);
+				console.log("TCL: formEntries", formEntries);
 				// create collective id list for all already existing memberships
 				i = 0;
-				var existingCollectiveIdList = [];
+				var existingEntriesIdList = [];
 				for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++) {
-					existingCollectiveIdList.push(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
+					existingEntriesIdList.push(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
 				}
-				// DELETE memberOfCollective data if id is in existingCollectiveIdList but not in FormCollectiveIdList
+				// DELETE memberOfCollective data if id is in existingEntriesIdList but not in formEntryIds
 				// console.log("TCL: DELETE memberOfCollectives (start)");
-				// console.log("TCL: formCollectiveIdList", formCollectiveIdList);
-				// console.log("TCL: existingCollectiveIdList", existingCollectiveIdList);
+				// console.log("TCL: formEntryIds", formEntryIds);
+				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
-				for (; i < existingCollectiveIdList.length; i++) {
-					// console.log("TCL: check for DELETE COLLECTIVE: ", existingCollectiveIdList[i]);
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for DELETE COLLECTIVE: ", existingEntriesIdList[i]);
 					var j = 0;
 					var deleteDataset = true;
-					for (; j < formCollectiveIdList.length; j ++) {
-						if (existingCollectiveIdList[i] == formCollectiveIdList[j]) {
+					for (; j < formEntryIds.length; j ++) {
+						if (existingEntriesIdList[i] == formEntryIds[j]) {
 							deleteDataset = false;
 							break; // no need to check further if match was found
 						}
@@ -1952,50 +1952,50 @@
             console.log("TCL: REMOVE memberOfCollective: ", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
 						await TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
 						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.splice(i,1); // TODO should be moved to ActorDatasets.removeMemberOfCollective(..)
-						existingCollectiveIdList.splice(i,1);
+						existingEntriesIdList.splice(i,1);
 						i--; // so the next list item is not jumped over due to the splicing
 					}
 				}
 				// console.log("TCL: DELETE memberOfCollectives (end)");
-				// ADD memberOfCollective data if id is not in existingCollectiveIdList but in FormCollectiveIdList
+				// ADD memberOfCollective data if id is not in existingEntriesIdList but in formEntryIds
 				// console.log("TCL: ADD new memberOfCollectives (start)");
-				// console.log("TCL: formCollectiveIdList", formCollectiveIdList);
-				// console.log("TCL: existingCollectiveIdList", existingCollectiveIdList);
+				// console.log("TCL: formEntryIds", formEntryIds);
+				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
-				for (; i < formCollectiveIdList.length; i++) {
-					// console.log("TCL: check for ADD COLLECTIVE: ", formCollectiveIdList[i]);
+				for (; i < formEntryIds.length; i++) {
+					// console.log("TCL: check for ADD COLLECTIVE: ", formEntryIds[i]);
 					var j = 0;
 					var datasetExists = false;
-					for (; j < existingCollectiveIdList.length; j++) {
-						if (formCollectiveIdList[i] == existingCollectiveIdList[j]) {
+					for (; j < existingEntriesIdList.length; j++) {
+						if (formEntryIds[i] == existingEntriesIdList[j]) {
 							datasetExists = true;
 							break; // no need to check further if match was found
 						}
 					}
 					if (!datasetExists) {
-						console.log("TCL: add memberOfCollective: ", formPersonIsMemberOfCollectivesList[i]);
-						await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor, formPersonIsMemberOfCollectivesList[i]);
-						formCollectiveIdList.splice(i,1);
-						formPersonIsMemberOfCollectivesList.splice(i,1);
-            // console.log("TCL: formCollectiveIdList", formCollectiveIdList);
+						console.log("TCL: add memberOfCollective: ", formEntries[i]);
+						await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor, formEntries[i]);
+						formEntryIds.splice(i,1);
+						formEntries.splice(i,1);
+            // console.log("TCL: formEntryIds", formEntryIds);
 						i--; // so the next list item is not jumped over due to the splicing
 					}
 				}
 				// console.log("TCL: ADD new memberOfCollectives (end)");
 				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
-				// UPDATE memberOfCollective data if id is in existingCollectiveIdList and in FormCollectiveIdList
+				// UPDATE memberOfCollective data if id is in existingEntriesIdList and in formEntryIds
 				// console.log("TCL: UPDATE memberOfCollectives (start)");
-				// console.log("TCL: formCollectiveIdList", formCollectiveIdList);
-				// console.log("TCL: existingCollectiveIdList", existingCollectiveIdList);
+				// console.log("TCL: formEntryIds", formEntryIds);
+				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
-				for (; i < existingCollectiveIdList.length; i++) {
-					// console.log("TCL: check for UPDATE COLLECTIVE: ", existingCollectiveIdList[i]);
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for UPDATE COLLECTIVE: ", existingEntriesIdList[i]);
 					// find corresponding actorPersonIsMemberOfActorCollectives id/index
-					// var currentCollectiveId = existingCollectiveIdList[i];
+					// var currentCollectiveId = existingEntriesIdList[i];
 					var currentMemberOfCollectiveIndex = -1;
 					var j = 0;
 					for (; j < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; j++) {
-						if (existingCollectiveIdList[i] == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[j].id.memberOfActorCollectiveActorId) {
+						if (existingEntriesIdList[i] == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[j].id.memberOfActorCollectiveActorId) {
 							currentMemberOfCollectiveIndex = j;
               console.log("TCL: currentMemberOfCollectiveIndex", currentMemberOfCollectiveIndex);
 							break; // no need to check further if index was found
@@ -2015,10 +2015,10 @@
 					// create membershipDetail id list for all form memberships for this collective
 					var formMembershipDetailIdList = [];
 					j = 0;
-					for (; j < formPersonIsMemberOfCollectivesList[i].membershipDetails.length; j++ ) {
-						formMembershipDetailIdList.push(formPersonIsMemberOfCollectivesList[i].membershipDetails[j].id);
+					for (; j < formEntries[i].membershipDetails.length; j++ ) {
+						formMembershipDetailIdList.push(formEntries[i].membershipDetails[j].id);
 					}
-					// DELETE membershipDetail data if id is in existingMembershipDetailIdList but not in membershipDetails of formPersonIsMemberOfCollectivesList
+					// DELETE membershipDetail data if id is in existingMembershipDetailIdList but not in membershipDetails of formEntries
 					console.log("TCL: DELETE membershipDetail (start)");
 					console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
 					console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
@@ -2047,7 +2047,7 @@
 						}
 					}
 					console.log("TCL: DELETE membershipDetail (end)");
-					// ADD membershipDetail data if id is not in existingMembershipDetailIdList but in membershipDetails of formPersonIsMemberOfCollectivesList
+					// ADD membershipDetail data if id is not in existingMembershipDetailIdList but in membershipDetails of formEntries
 					// console.log("TCL: ADD membershipDetail (start)");
 					// console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
 					// console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
@@ -2055,8 +2055,8 @@
 					for (; j < formMembershipDetailIdList.length; j++) {
 						// console.log("TCL: check for ADD COLLECTIVEDETAIL: ", formMembershipDetailIdList[j]);
 						if (formMembershipDetailIdList[j] == 0) {
-							console.log("TCL: add membershipDetail: ", formPersonIsMemberOfCollectivesList[i].membershipDetails[j]);
-							var newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(actor.model.id, formPersonIsMemberOfCollectivesList[i].collectiveId, formPersonIsMemberOfCollectivesList[i].membershipDetails[j]);
+							console.log("TCL: add membershipDetail: ", formEntries[i].membershipDetails[j]);
+							var newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(actor.model.id, formEntries[i].collectiveId, formEntries[i].membershipDetails[j]);
               console.log("TCL: newMembershipDetails", newMembershipDetails);
 							actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.push(newMembershipDetails);
 							// existingMembershipDetailIdList.push(newMembershipDetails.id);
@@ -2069,18 +2069,18 @@
 					}
 					// console.log("TCL: ADD membershipDetail (end)");
 					//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
-					// UPDATE membershipDetail data if id is in existingMembershipDetailIdList and in membershipDetails of formPersonIsMemberOfCollectivesList
+					// UPDATE membershipDetail data if id is in existingMembershipDetailIdList and in membershipDetails of formEntries
 					// console.log("TCL: UPDATE membershipDetail (start)");
 					// console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
 					// console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
 					j = 0;
 					for (; j < existingMembershipDetailIdList.length; j++) {
 						// console.log("TCL: check for UPDATE COLLECTIVEDETAIL: ", existingMembershipDetailIdList[j]);
-						// formPersonIsMemberOfCollectivesList[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorPerson = actor.model.id;
-						// formPersonIsMemberOfCollectivesList[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorCollective = formPersonIsMemberOfCollectivesList[i].collectiveId;
-						console.log("TCL: update membershipDetail: ", formPersonIsMemberOfCollectivesList[i].membershipDetails[j]);
-						await TIMAAT.ActorService.updateMembershipDetails(formPersonIsMemberOfCollectivesList[i].membershipDetails[j]);
-						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j] = formPersonIsMemberOfCollectivesList[i].membershipDetails[j];
+						// formEntries[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorPerson = actor.model.id;
+						// formEntries[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorCollective = formEntries[i].collectiveId;
+						console.log("TCL: update membershipDetail: ", formEntries[i].membershipDetails[j]);
+						await TIMAAT.ActorService.updateMembershipDetails(formEntries[i].membershipDetails[j]);
+						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j] = formEntries[i].membershipDetails[j];
 					}
 					// console.log("TCL: UPDATE membershipDetail (end)");
 				}
@@ -2089,8 +2089,8 @@
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', actor);
 			});
 
-			// Cancel add/edit button in membershipofcollective form functionality
-			$('#timaat-actordatasets-person-memberofcollective-form-dismiss').click( function(event) {
+			// cancel add/edit button in membershipofcollective form functionality
+			$('#timaat-actordatasets-person-memberofcollective-form-dismiss').on('click', function(event) {
 				console.log("TCL: MemberOfCollective form: dismiss");
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
@@ -2814,7 +2814,7 @@
 				// $('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200});
 				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].id.addressId+']"]')
 				.find('option[value='+actor.model.actorHasAddresses[i].addressType.id+']')
-				.attr("selected",true);
+				.attr('selected',true);
 				if (actor.model.actorHasAddresses[i].usedFrom) {
 					$('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedFrom).format('YYYY-MM-DD'));
 				} else {
@@ -2923,7 +2923,7 @@
 				}
 				$('[data-role="emailAddressTypeId['+actor.model.actorHasEmailAddresses[i].id.emailAddressId+']"]')
 					.find('option[value='+actor.model.actorHasEmailAddresses[i].emailAddressType.id+']')
-					.attr("selected",true);
+					.attr('selected',true);
 				$('input[name="emailAddress['+i+']"]').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
@@ -3020,7 +3020,7 @@
 				}
 				$('[data-role="phoneNumberTypeId['+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+']"]')
 					.find('option[value='+actor.model.actorHasPhoneNumbers[i].phoneNumberType.id+']')
-					.attr("selected",true);
+					.attr('selected',true);
 				$('input[name="phoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30});
 			}
 			if ( action == 'show') {
@@ -3088,7 +3088,7 @@
 				var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(i, collectiveId, actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails, 'sr-only', editMode);
 				// TODO expand form by membershipDetail information
 				$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
-				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr("selected", true);
+				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr('selected', true);
 				var j = 0;
 				for (; j < numMembershipDetails; j++) {
 					if (actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt) {
@@ -3110,7 +3110,7 @@
 				$('#timaat-actordatasets-person-memberofcollective-form-edit :input').prop('disabled', false);
 				$('#timaat-actordatasets-person-memberofcollective-form-submit').hide();
 				$('#timaat-actordatasets-person-memberofcollective-form-dismiss').hide();
-				$('[data-role="new-personismemberofcollective-fields"').hide();
+				$('[data-role="new-personismemberofcollective-fields"]').hide();
 				$('.memberofcollective-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="removeMembershipDetails"]').hide();
@@ -3127,7 +3127,7 @@
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').hide();
 				$('#timaat-actordatasets-person-memberofcollective-form-edit').prop('disabled', true);
 				$('#timaat-actordatasets-person-memberofcollective-form-edit :input').prop('disabled', true);
-				$('[data-role="new-personismemberofcollective-fields"').show();
+				$('[data-role="new-personismemberofcollective-fields"]').show();
 				$('.memberofcollective-form-divider').show();
 				$('#personMemberOfCollectivesLabel').html("Edit person is member of collective list");
 				// $('#timaat-actordatasets-person-memberofcollective-form-submit').html("Speichern");

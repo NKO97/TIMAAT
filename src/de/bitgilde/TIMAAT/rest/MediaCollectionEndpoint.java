@@ -146,7 +146,7 @@ public class MediaCollectionEndpoint {
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query
 			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
-			// + --> role == 112 --> producer 
+			// + --> role == 5 --> producer 
 		}
 
 		String subType = "";

@@ -26,6 +26,7 @@
 		initialized: false,
 		curVideos: [],
 		videos: null,
+		videoChooserLoaded: false,
 	
 		loadCollections: function() {
 			// load media collections
@@ -36,6 +37,16 @@
 				TIMAAT.VideoChooser.collection = 'init';
 				TIMAAT.VideoChooser.setCollection(null);
 //			}
+		},
+
+		initVideoChooserComponent: function() {
+			console.log("TCL: initVideochooserComponent");
+			if (!TIMAAT.VideoChooser.videoChooserLoaded) {
+				TIMAAT.VideoChooser.setMedia();
+				TIMAAT.VideoChooser.videoChooserLoaded = true;
+			}
+			TIMAAT.VideoChooser.dt.ajax.reload();
+			TIMAAT.UI.showComponent('videochooser');
 		},
 		
 		init: function() {		
@@ -415,15 +426,8 @@
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
 						$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-						var id = video.id;
-						var selectedVideo;
-						var i = 0;
-						for (; i < TIMAAT.MediaDatasets.media.length; i++) {
-							if (TIMAAT.MediaDatasets.media[i].model.id == id) {
-								selectedVideo = TIMAAT.MediaDatasets.media[i];
-								break;
-							}
-						}
+						var selectedVideo = {}
+						selectedVideo.model = video;
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 						TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
 					});
@@ -836,15 +840,19 @@
 		_getProducer: function(video) {
 			var producer = "";
 			if ( !video || !video.mediumHasActorWithRoles ) return producer;
-			var actor = null;
+			var actors = [];
 			video.mediumHasActorWithRoles.forEach(function(role) {
-				if ( role.role.id == 112 ) actor = role.actor; // 112 == Producer, according to TIMAAT DB definition
+				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
 			});
-			if ( !actor || !actor.displayName ) return producer;
-			// actor.actorNames.forEach(function(name) {
-				// if ( actor.displayName.name.isPrimary && name.name ) producer = name.name; 
-			producer = actor.displayName.name; 
-			// });
+			if ( actors.length == 0 ) return producer;
+			var i = 0;
+			for (; i < actors.length; i++) {
+				if (producer.length == 0) {
+					producer += actors[i].displayName.name;
+				} else {
+					producer += ", "+actors[i].displayName.name;
+				}
+			}
 			return producer;
 		},
 

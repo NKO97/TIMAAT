@@ -139,7 +139,7 @@ public class Medium implements Serializable {
 			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
 			}
 		)
-	@JsonIgnore
+	// @JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-many association to Category

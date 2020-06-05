@@ -521,7 +521,7 @@
       $('#timaat-rolelists-metadata-form').attr('data-type', type);
       $('.datasheet-data').hide();
       $('.name-data').show();
-      // $('.'+type+'-data').show();
+      $('.'+type+'-data').show();
       roleOrRoleGroupFormMetadataValidator.resetForm();
 
       $('#timaat-rolelists-metadata-form').show();
@@ -534,7 +534,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/group/selectlist/',
+              url: 'api/role/group/selectlist',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -562,6 +562,7 @@
             minimumInputLength: 0,
           });
           var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
+          console.log("TCL: roleGroupSelect", roleGroupSelect);
           await TIMAAT.RoleService.getRoleGroupHasRoleList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
             if (data.length > 0) {
@@ -588,7 +589,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/selectlist/',
+              url: 'api/role/selectlist',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -616,6 +617,7 @@
             minimumInputLength: 0,
           });          
           var roleSelect = $('#roles-multi-select-dropdown');
+          console.log("TCL: roleSelect", roleSelect);
           await TIMAAT.RoleService.getRoleGroupHasRoleList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
             if (data.length > 0) {

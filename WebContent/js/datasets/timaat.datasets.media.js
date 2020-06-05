@@ -44,6 +44,7 @@
 			TIMAAT.MediaDatasets.initVideogames();
 			TIMAAT.MediaDatasets.initTitles();
 			TIMAAT.MediaDatasets.initLanguageTracks();
+			TIMAAT.MediaDatasets.initActorRoles();
 			$('.media-data-tabs').hide();
 			$('.media-cards').hide();
 			$('.media-card').show();
@@ -85,10 +86,10 @@
 				// setup UI
 				$('#mediaTypeMetaLabel').html(heading);
 				$('#timaat-mediadatasets-mediumtype-meta-submit').html(submit);
-				$("#timaat-mediadatasets-mediumtype-meta-name").val(type).trigger('input');
-				$("#timaat-mediadatasets-mediumtype-meta-hasvisual").val(hasVisual);
-				$("#timaat-mediadatasets-mediumtype-meta-hasaudio").val(hasAudio);
-				$("#timaat-mediadatasets-mediumtype-meta-hascontent").val(hasContent);
+				$('#timaat-mediadatasets-mediumtype-meta-name').val(type).trigger('input');
+				$('#timaat-mediadatasets-mediumtype-meta-hasvisual').val(hasVisual);
+				$('#timaat-mediadatasets-mediumtype-meta-hasaudio').val(hasAudio);
+				$('#timaat-mediadatasets-mediumtype-meta-hascontent').val(hasContent);
 			});
 
 			// Submit mediaType data
@@ -96,10 +97,10 @@
 				// Create/Edit mediaType window submitted data validation
 				var modal = $('#timaat-mediadatasets-mediumtype-meta');
 				var mediaType = modal.data('mediaType');
-				var type = $("#timaat-mediadatasets-mediumtype-meta-name").val();
-				var hasVisual = $("#timaat-mediadatasets-mediumtype-meta-hasvisual").val();
-				var hasAudio = $("#timaat-mediadatasets-mediumtype-meta-hasaudio").val();
-				var hasContent = $("#timaat-mediadatasets-mediumtype-meta-hascontent").val();
+				var type = $('#timaat-mediadatasets-mediumtype-meta-name').val();
+				var hasVisual = $('#timaat-mediadatasets-mediumtype-meta-hasvisual').val();
+				var hasAudio = $('#timaat-mediadatasets-mediumtype-meta-hasaudio').val();
+				var hasContent = $('#timaat-mediadatasets-mediumtype-meta-hascontent').val();
 
 				if (mediaType) {
 					mediaType.model.medium.mediaTypeTranslations[0].type = type;
@@ -129,7 +130,7 @@
 			// validate mediaType data	
 			// TODO validate all required fields				
 			$('#timaat-mediadatasets-mediumtype-meta-name').on('input', function(ev) {
-				if ( $("#timaat-mediadatasets-mediumtype-meta-name").val().length > 0 ) {
+				if ( $('#timaat-mediadatasets-mediumtype-meta-name').val().length > 0 ) {
 					$('#timaat-mediadatasets-mediumtype-meta-submit').prop('disabled', false);
 					$('#timaat-mediadatasets-mediumtype-meta-submit').removeAttr('disabled');
 				} else {
@@ -417,7 +418,7 @@
 				$('.nav-tabs a[href="#mediumTitles"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.setMediumTitleList($('#timaat-mediadatasets-metadata-form').data('medium'))
-				$('#timaat-mediadatasets-medium-titles-form').show();
+				// $('#timaat-mediadatasets-medium-titles-form').show();
 				TIMAAT.MediaDatasets.mediumFormTitles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 			
@@ -442,10 +443,10 @@
 				if (listEntry.find('select').each(function(){
 					languageId = $(this).val();
 				}));
-				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) 
+				if (!$('#timaat-mediadatasets-medium-titles-form').valid()) 
 					return false;
 				if (title != '' && languageId != null) {
-					var titlesInForm = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
+					var titlesInForm = $('#timaat-mediadatasets-medium-titles-form').serializeArray();
 					// console.log("TCL: titlesInForm", titlesInForm);
 					var numberOfTitleElements = 2;
 					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used indexed name
@@ -490,10 +491,10 @@
 						</div>
 					</div>`
 					);
-					$('input[name="newTitle['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
-					$('input[data-role="newTitle['+i+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
-					$('[data-role="newTitleLanguageId['+i+']"]').find('option[value='+languageId+']').attr("selected",true);
-					$('select[name="newTitleLanguageId['+i+']"').rules("add", { required: true, });
+					$('input[name="newTitle['+i+']"').rules('add', { required: true, minlength: 3, maxlength: 200, });
+					$('input[data-role="newTitle['+i+']"').attr('value', TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
+					$('[data-role="newTitleLanguageId['+i+']"]').find('option[value='+languageId+']').attr('selected',true);
+					$('select[name="newTitleLanguageId['+i+']"').rules('add', { required: true, });
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -522,7 +523,7 @@
 			});
 
 			// Submit medium titles button functionality
-			$("#timaat-mediadatasets-medium-titles-form-submit").on('click', async function(event) {
+			$('#timaat-mediadatasets-medium-titles-form-submit').on('click', async function(event) {
 				// console.log("TCL: Titles form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
@@ -531,19 +532,19 @@
 					node.removeChild(node.lastChild)
 				};
 				// test if form is valid 
-				if (!$("#timaat-mediadatasets-medium-titles-form").valid()) {
+				if (!$('#timaat-mediadatasets-medium-titles-form').valid()) {
 					$('[data-role="new-title-fields"]').append(TIMAAT.MediaDatasets.titleFormTitleToAppend());
 					return false;
 				}
 				// console.log("TCL: Titles form: valid");
 
 				// the original medium model (in case of editing an existing medium)
-				var medium = $("#timaat-mediadatasets-medium-titles-form").data("medium");	
+				var medium = $('#timaat-mediadatasets-medium-titles-form').data("medium");	
 				var mediumType = medium.model.mediaType.mediaTypeTranslations[0].type;		
         // console.log("TCL: mediumType", mediumType);
 
 				// Create/Edit medium window submitted data
-				var formData = $("#timaat-mediadatasets-medium-titles-form").serializeArray();
+				var formData = $('#timaat-mediadatasets-medium-titles-form').serializeArray();
 				var formTitleList = [];
 				var i = 0;
 				while ( i < formData.length) {
@@ -750,7 +751,7 @@
 				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.setMediumLanguageTrackList($('#timaat-mediadatasets-metadata-form').data('medium'))
-				$('#timaat-mediadatasets-medium-languagetracks-form').show();
+				// $('#timaat-mediadatasets-medium-languagetracks-form').show();
 				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 			
@@ -768,10 +769,10 @@
 				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
-				// if (!$("#timaat-mediadatasets-medium-languagetracks-form").valid()) return false;
+				// if (!$('#timaat-mediadatasets-medium-languagetracks-form').valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
 					var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
-					var languageTracksInForm = $("#timaat-mediadatasets-medium-languagetracks-form").serializeArray();
+					var languageTracksInForm = $('#timaat-mediadatasets-medium-languagetracks-form').serializeArray();
 					var newTrackEntry = {
 						mediumId: medium.model.id,
 						languageId: Number(languageTracksInForm[languageTracksInForm.length-1].value),
@@ -818,10 +819,10 @@
 							</div>
 						</div>`
 						);
-						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr("selected",true);
-						$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
-						$('[data-role="languageTrackLanguageId['+i+']"]').find('option[value='+languageId+']').attr("selected",true);
-						$('select[name="languageTrackLanguageId['+i+']"').rules("add", { required: true, });
+						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected',true);
+						$('select[name="languageTrackTypeId['+i+']"').rules('add', { required: true, });
+						$('[data-role="languageTrackLanguageId['+i+']"]').find('option[value='+languageId+']').attr('selected',true);
+						$('select[name="languageTrackLanguageId['+i+']"').rules('add', { required: true, });
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
 						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
@@ -861,6 +862,371 @@
 			// Done button in languageTracks form functionality
 			$('#timaat-mediadatasets-medium-languagetracks-form-done').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
+			});
+		},
+
+		initActorRoles: function() {
+			$('#media-tab-medium-actorwithroles-form').on('click', function(event) {
+				console.log("TCL: open Actors tab");
+				$('.nav-tabs a[href="#mediumActorRoles"]').tab('show');
+				$('.form').hide();
+				// TIMAAT.MediaDatasets.setMediumActorRoleList($('#timaat-mediadatasets-metadata-form').data('medium'))
+				// $('#timaat-mediadatasets-medium-titles-form').show();
+				TIMAAT.MediaDatasets.mediumFormActorRoles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
+			});
+			
+			// edit actorwithroles form button handler
+			$('#timaat-mediadatasets-medium-actorwithroles-form-edit').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				TIMAAT.MediaDatasets.mediumFormActorRoles('edit', $('#timaat-mediadatasets-metadata-form').data('medium'));
+				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
+			});
+
+			// add actorwithroles button click
+			$(document).on('click','[data-role="new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
+				console.log("TCL: add new actor with role(s)");
+				event.preventDefault();
+				var listEntry = $(this).closest('[data-role="new-actorwithrole-fields"]');
+				var newFormEntry = [];
+				if (listEntry.find('select').each(function(){           
+					newFormEntry.push($(this).val());
+				}));
+				// var newEntryId = newFormEntry[0];
+				console.log("TCL: newFormEntry", newFormEntry);
+
+				if (!$('#timaat-mediadatasets-medium-actorwithroles-form').valid() || newFormEntry[1].length == 0) //! temp solution to prevent adding actors without roles
+				// if (!$('#timaat-mediadatasets-medium-actorwithroles-form').valid())	
+				return false;
+
+				// var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
+				$('.disable-on-submit').prop('disabled', true);
+				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', false);
+				var existingEntriesInForm = $('#timaat-mediadatasets-medium-actorwithroles-form').serializeArray();
+				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
+				$('.disable-on-submit').prop('disabled', false);
+				console.log("TCL: existingEntriesInForm", existingEntriesInForm);
+
+				// create list of actorIds that the medium is already connected with
+				var existingEntriesIdList = [];
+				var i = 0;
+				for (; i < existingEntriesInForm.length; i++) {
+					if (existingEntriesInForm[i].name == "actorId") {
+						existingEntriesIdList.push(Number(existingEntriesInForm[i].value));
+					}
+				}
+				existingEntriesIdList.pop(); // remove new actor id
+				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
+				// check for duplicate medium-actor relation. only one allowed
+				var duplicate = false;
+				i = 0;
+				while (i < existingEntriesIdList.length) {
+					if (newFormEntry[0] == existingEntriesIdList[i]) {
+						duplicate = true;
+						console.log("TCL: duplicate entry found");
+						break;
+					}
+					// console.log("TCL: newEntryId", newEntryId);
+					console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
+					i++;
+				}
+
+				if (!duplicate) {
+					// var newActorId = newFormEntry[0];
+					var newActorSelectData = $('#mediumhasactorwithrole-actorid').select2('data');
+					var newActorId = newActorSelectData[0].id;
+					var newRoleSelectData = $('#actorwithroles-multi-select-dropdown').select2('data');
+					// var actorHasRoleIds = newFormEntry[1];
+					$('#dynamic-actorwithrole-fields').append(TIMAAT.MediaDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
+					$('#mediumhasactorwithrole-actorid-'+newActorId).select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: false,
+						ajax: {
+							url: 'api/actor/'+newActorId+'/select',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
+					// select actor for new entry
+
+					await TIMAAT.ActorService.getActor(newActorId).then(function (data) {
+						var actorSelect = $('#mediumhasactorwithrole-actorid-'+newActorId);
+						// console.log("TCL: actorSelect", actorSelect);
+						console.log("TCL: then: data", data);
+						var option = new Option(data.displayName.name, data.id, true, true);
+						actorSelect.append(option).trigger('change');
+						// manually trigger the 'select2:select' event
+						actorSelect.trigger({
+							type: 'select2:select',
+							params: {
+								data: data
+							}
+						});
+					});
+					$('#mediumhasactorwithrole-actorid-'+newActorId).prop('disabled', true);
+					
+					// provide roles list for new actor entry
+					$('#actorwithroles-multi-select-dropdown-'+newActorId).select2({
+						closeOnSelect: false,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/medium/hasactor/'+newActorId+'/withroles/selectlist',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
+
+					var roleSelect = $('#actorwithroles-multi-select-dropdown-'+newActorId);
+					var j = 0;
+					for (; j < newRoleSelectData.length; j++) {
+						var option = new Option(newRoleSelectData[j].text, newRoleSelectData[j].id, true, true);
+						roleSelect.append(option).trigger('change');
+					}
+					roleSelect.trigger({
+						type: 'select2:select',
+						params: {
+							data: newRoleSelectData
+						}
+					});
+
+					// clear new entry values
+					$('#mediumhasactorwithrole-actorid').val(null).trigger('change');
+					// $('#mediumhasactorwithrole-actorid').prop('required', true);
+					$('#actorwithroles-multi-select-dropdown').val(null).trigger('change');
+					// $('#actorwithroles-multi-select-dropdown').prop('required', true);
+				}
+				else { // duplicate actor
+					$('#timaat-mediadatasets-actorwithrole-duplicate').modal('show');
+				}
+			});
+
+			// remove actorwithroles button click
+			$(document).on('click','[data-role="dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
+				console.log("TCL: remove actor with role(s)");
+				event.preventDefault();
+				$(this).closest('.form-group').remove();
+			});
+
+			// submit actorwithroles button functionality
+			$('#timaat-mediadatasets-medium-actorwithroles-form-submit').on('click', async function(event) {
+				console.log("TCL: ActorWithRole form: submit");
+				// add rules to dynamically added form fields
+				event.preventDefault();
+				var node = document.getElementById("new-actorwithrole-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild)
+				}
+
+				//! temp solution to prevent adding actors without roles
+				//TODO 
+
+				// test if form is valid 
+				if (!$('#timaat-mediadatasets-medium-actorwithroles-form').valid()) {
+					$('[data-role="new-actorwithrole-fields"]').append(TIMAAT.MediaDatasets.appendNewActorHasRolesField());				
+					return false;
+				}
+
+				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
+
+				// Create/Edit actor window submitted data
+				$('.disable-on-submit').prop('disabled', true);
+				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', false);
+				var formDataRaw = $('#timaat-mediadatasets-medium-actorwithroles-form').serializeArray();
+				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
+				$('.disable-on-submit').prop('disabled', false);
+				console.log("TCL: formDataRaw", formDataRaw);
+				
+				var formDataObject = {};
+        $(formDataRaw).each(function(i, field){
+					formDataObject[field.name] = field.value;
+        });
+
+				var formEntryIds = []; // List of all actors containing role data for this medium
+				var i = 0;
+				for (; i < formDataRaw.length; i++) {
+					if (formDataRaw[i].name == 'actorId') {
+						formEntryIds.push(Number(formDataRaw[i].value));
+					}
+				}
+				console.log("TCL: Actor Ids in form", formEntryIds);
+				// create actor id list for all already existing roles
+				i = 0;
+				var actorList = await TIMAAT.MediaService.getActorList(medium.model.id);
+        console.log("TCL: Actors of current Medium", actorList);
+				var existingEntriesIdList = [];
+				for (; i < actorList.length; i++) {
+					existingEntriesIdList.push(actorList[i].id);
+				}
+				// DELETE actorwithroles data if id is in existingEntriesIdList but not in formEntryIds
+				i = 0;
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for DELETE ACTOR: ", existingEntriesIdList[i]);
+					var j = 0;
+					var deleteDataset = true;
+					for (; j < formEntryIds.length; j ++) {
+						if (existingEntriesIdList[i] == formEntryIds[j]) {
+							deleteDataset = false;
+							break; // no need to check further if match was found
+						}
+					}
+					if (deleteDataset) {
+						// console.log("TCL: REMOVE actor entries with Id: ", formEntryIds[j]);
+						console.log("TCL: Actor removed: REMOVE medium has actor (with all roles) datasets:", medium.model.id, existingEntriesIdList[i]);
+						await TIMAAT.MediaService.removeActorFromMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i]);
+						existingEntriesIdList.splice(i,1);
+						i--; // so the next list item is not jumped over due to the splicing
+					}
+				}
+				// console.log("TCL: DELETE actorWithRole (end)");
+				// ADD actorwithroles data if id is not in existingEntriesIdList but in formEntryIds
+				i = 0;
+				for (; i < formEntryIds.length; i++) {
+					// console.log("TCL: check for ADD ACTOR: ", formEntryIds[i]);
+					var j = 0;
+					var datasetExists = false;
+					for (; j < existingEntriesIdList.length; j++) {
+						if (formEntryIds[i] == existingEntriesIdList[j]) {
+							datasetExists = true;
+							break; // no need to check further if match was found
+						}
+					}
+					if (!datasetExists) {
+						// console.log("TCL: ADD actor entries with id: ", formEntryIds[i]);
+						var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+formEntryIds[i]).select2('data');
+						console.log("TCL: roleSelectData", roleSelectData);
+						var k = 0;
+						for (; k < roleSelectData.length; k++) {
+							console.log("TCL: New Actor: ADD medium has actor with role dataset: ", medium.model.id, formEntryIds[i], Number(roleSelectData[k].id));
+							await TIMAAT.MediaService.addMediumHasActorWithRoles(medium.model.id, formEntryIds[i], Number(roleSelectData[k].id));
+						}
+						formEntryIds.splice(i,1);
+            // console.log("TCL: formEntryIds", formEntryIds);
+						i--; // so the next list item is not jumped over due to the splicing
+					}
+				}
+				// console.log("TCL: ADD new actorWithRole (end)");
+				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
+				// UPDATE actorwithroles data if id is in existingEntriesIdList and in formEntryIds
+				i = 0;
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for UPDATE ACTOR: ", existingEntriesIdList[i]);
+					var existingRoles = await TIMAAT.MediaService.getActorHasRoleList(medium.model.id, existingEntriesIdList[i]);
+          console.log("TCL: existingRoles", existingRoles);
+					var existingRoleIds = [];
+					var j = 0;
+					for (; j < existingRoles.length; j++) {
+						existingRoleIds.push(existingRoles[j].id);
+					}
+					console.log("TCL: existing role ids for the current actor", existingRoleIds);
+					var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+existingEntriesIdList[i]).select2('data');
+					console.log("TCL: roleSelectData", roleSelectData);
+					if (roleSelectData == undefined) {
+						roleSelectData = [];
+					}
+					var roleSelectIds = [];
+					j = 0;
+					for (; j < roleSelectData.length; j++) {
+						roleSelectIds.push(Number(roleSelectData[j].id));
+					}
+					console.log("TCL: form role ids for the current actor: ", roleSelectIds);
+					// DELETE role entry if id is in existingRoleIds but not in roleSelectIds
+					j = 0;
+					for (; j < existingRoleIds.length; j++) {
+						// console.log("TCL: check for DELETE ROLE: ", existingRoleIds[j]);
+						var k = 0;
+						var deleteDataset = true;
+						for (; k < roleSelectIds.length; k++) {
+							if (existingRoleIds[j] == roleSelectIds[k]) {
+								deleteDataset = false;
+								break; // no need to check further if match was found
+							}
+						}
+						if (deleteDataset) {
+							// console.log("TCL: REMOVE role entry with Id: ", existingRoleIds[j]);
+							console.log("TCL: role removed: REMOVE medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], existingRoleIds[j]);
+							await TIMAAT.MediaService.removeRoleFromMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i], existingRoleIds[j]);
+							existingRoleIds.splice(j,1);
+							j--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					// ADD role entry if id is not in existingRoleIds but in roleSelectIds
+					j = 0;
+					for (; j < roleSelectIds.length; j++) {
+						// console.log("TCL: check for ADD ROLE: ", roleSelectIds[j]);
+						var k = 0;
+						var datasetExists = false;
+						for (; k < existingRoleIds.length; k++) {
+							if (roleSelectIds[j] == existingRoleIds[k]) {
+								datasetExists = true;
+								break; // no need to check further if match was found
+							}
+						}
+						if (!datasetExists) {
+							// console.log("TCL: ADD actor entries with id: ", roleSelectIds[j]);
+							console.log("TCL: role added: ADD medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], roleSelectIds[j]);
+							await TIMAAT.MediaService.addMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i], roleSelectIds[j]);
+							roleSelectIds.splice(j,1);
+							// console.log("TCL: roleSelectIds", roleSelectIds);
+							j--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					// no UPDATE as medium-actor-role table only has ids and no information stored 
+				}
+				medium.model = await TIMAAT.MediaService.getMedium(medium.model.id);
+				medium.updateUI();
+				console.log("TCL: show medium actorwithroles form");
+				TIMAAT.MediaDatasets.mediumFormActorRoles('show', medium);
+			});
+
+			// cancel add/edit button in titles form functionality
+			$('#timaat-mediadatasets-medium-actorwithroles-form-dismiss').on('click', function(event) {
+				TIMAAT.MediaDatasets.mediumFormActorRoles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 		},
 
@@ -1107,12 +1473,13 @@
 			}
 		},
 
+		// TODO check if obsolete
 		setMediumTitleList: function(medium) {
 			// console.log("TCL: setMediumTitleList -> medium", medium);
 			if ( !medium ) return;
-			$('#timaat-mediadatasets-media-title-list-loader').remove();
+			$('#timaat-mediadatasets-title-list-loader').remove();
 			// clear old UI list
-			$('#timaat-mediadatasets-media-title-list').empty();
+			$('#timaat-mediadatasets-title-list').empty();
 			// setup model
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
@@ -1197,6 +1564,7 @@
 			$('.'+mediumType+'-data-tab').show();
 			$('.title-data-tab').show();
 			$('.languagetrack-data-tab').show();
+			$('.mediumactorwithrole-data-tab').show();
 
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
 			$('#timaat-mediadatasets-metadata-form').show();
@@ -1246,39 +1614,39 @@
 			$('#timaat-mediadatasets-metadata-medium-copyright').val(data.copyright);
 			if (isNaN(moment(data.releaseDate)))
 				$('#timaat-mediadatasets-metadata-medium-releasedate').val('');
-				else $('#timaat-mediadatasets-metadata-medium-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
+			else $('#timaat-mediadatasets-metadata-medium-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
 			// display-title data
 			$('#timaat-mediadatasets-metadata-medium-title').val(data.displayTitle.name);
 			$('#timaat-mediadatasets-metadata-medium-title-language-id').val(data.displayTitle.language.id);
 			// source data
 			if (data.sources[0].isPrimarySource)
 				$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
-				else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
+			else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
 			$('#timaat-mediadatasets-metadata-medium-source-url').val(data.sources[0].url);
 			if (isNaN(moment.utc(data.sources[0].lastAccessed))) 
 				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val('');
-				else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+			else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
 			if (data.sources[0].isStillAvailable)
 				$('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', true);
-				else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
+			else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
 				
 			// medium subtype specific data
 			switch (mediumType) {
 				case 'audio':
-					$("#timaat-mediadatasets-metadata-audio-length").val(data.mediumAudio.length);
+					$('#timaat-mediadatasets-metadata-audio-length').val(data.mediumAudio.length);
 				break;
 				case "mediumDocument":
 				break;
 				case 'image':
-					$("#timaat-mediadatasets-metadata-image-width").val(data.mediumImage.width);
-					$("#timaat-mediadatasets-metadata-image-height").val(data.mediumImage.height);
-					$("#timaat-mediadatasets-metadata-image-bitdepth").val(data.mediumImage.bitDepth);
+					$('#timaat-mediadatasets-metadata-image-width').val(data.mediumImage.width);
+					$('#timaat-mediadatasets-metadata-image-height').val(data.mediumImage.height);
+					$('#timaat-mediadatasets-metadata-image-bitdepth').val(data.mediumImage.bitDepth);
 				break;
 				case 'software':
-					$("#timaat-mediadatasets-metadata-software-version").val(data.mediumSoftware.version);
+					$('#timaat-mediadatasets-metadata-software-version').val(data.mediumSoftware.version);
 				break;
 				case 'text':
-					$("#timaat-mediadatasets-metadata-text-content").val(data.mediumText.content);
+					$('#timaat-mediadatasets-metadata-text-content').val(data.mediumText.content);
 				break;
 				case 'video':
 					$('#timaat-mediadatasets-metadata-video-length').val(data.mediumVideo.length);
@@ -1290,12 +1658,12 @@
 					$('#timaat-mediadatasets-metadata-video-totalbitrate').val(data.mediumVideo.totalBitrate);
 					if (data.mediumVideo.isEpisode)
 						$('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', true);
-						else $('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', false);
+					else $('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', false);
 				break;
 				case 'videogame':
 					if (data.mediumVideogame.isEpisode)
-					$("#timaat-mediadatasets-metadata-videogame-isepisode").prop('checked', true);
-					else $("#timaat-mediadatasets-metadata-videogame-isepisode").prop('checked', false);
+						$('#timaat-mediadatasets-metadata-videogame-isepisode').prop('checked', true);
+					else $('#timaat-mediadatasets-metadata-videogame-isepisode').prop('checked', false);
 				break;
 			}
 			$('#timaat-mediadatasets-metadata-form').data(mediumType, mediumTypeData);
@@ -1373,34 +1741,34 @@
 					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
 					$('[data-role="titleLanguageId['+medium.model.titles[i].id+']"')
 					.find('option[value='+medium.model.titles[i].language.id+']')
-					.attr("selected",true);
+					.attr('selected',true);
 					$('select[name="titleLanguageId['+medium.model.titles[i].id+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
 				$('#timaat-mediadatasets-medium-titles-form :input').prop('disabled', true);
-				$('#timaat-mediadatasets-medium-titles-form-edit').show();
 				$('#timaat-mediadatasets-medium-titles-form-edit').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-titles-form-edit').show();
 				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
 				$('[data-role="new-title-fields"').hide();
 				$('.title-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
-				$('#mediumTitlesLabel').html("Medium Titelliste");
+				$('#mediumTitlesLabel').html("Medium titles");
 			}
 			else if (action == 'edit') {
-				$('#timaat-mediadatasets-medium-titles-form-submit').show();
-				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
 				$('#timaat-mediadatasets-medium-titles-form :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-titles-form-edit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-edit').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-titles-form-edit :input').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-titles-form-submit').html("Save");
+				$('#timaat-mediadatasets-medium-titles-form-submit').show();
+				$('#timaat-mediadatasets-medium-titles-form-dismiss').show();
+				$('#mediumTitlesLabel').html("Edit medium titles");
 				$('[data-role="new-title-fields"').show();
-				$('.title-form-divider').show();
-				$('#mediumTitlesLabel').html("Medium Titelliste bearbeiten");
-				$('#timaat-mediadatasets-medium-titles-form-submit').html("Speichern");
+				$('.title-form-divider').show();				
 				$('#timaat-mediadatasets-metadata-medium-title').focus();
 
 				// fields for new title entry
@@ -1464,38 +1832,38 @@
 					);
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
-						.attr("selected",true);
+						.attr('selected',true);
 					$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
 					$('[data-role="languageTrackLanguageId['+medium.model.mediumHasLanguages[i].language.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].language.id+']')
-						.attr("selected",true);
+						.attr('selected',true);
 					$('select[name="languageTrackLanguageId['+i+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
 				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', true);
-				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-languagetracks-form-edit').show();
 				$('#timaat-mediadatasets-medium-languagetracks-form-done').hide();
 				$('[data-role="new-languagetrack-fields"').hide();
 				$('.languagetrack-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
-				$('#mediumLanguageTracksLabel').html("Medium Spurliste");
+				$('#mediumLanguageTracksLabel').html("Medium track list");
 			}
 			else if (action == 'edit') {
-				$('#timaat-mediadatasets-medium-languagetracks-form-done').show();
-				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', false);
 				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop('disabled', true);
 				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-language-id').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').hide();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit :input').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-languagetracks-form-done').html("Done");
+				$('#timaat-mediadatasets-medium-languagetracks-form-done').show();
 				$('[data-role="new-languagetrack-fields"').show();
 				$('.languagetrack-form-divider').show();
-				$('#mediumLanguageTracksLabel').html("Medium Spurliste bearbeiten");
-				$('#timaat-mediadatasets-medium-languagetracks-form-done').html("Fertig");
+				$('#mediumLanguageTracksLabel').html("Edit medium track list");
 
 				// fields for new languageTrack entry
 				// add empty 'add new track' row to form when edit mode is enabled
@@ -1538,6 +1906,293 @@
 					</div>`
 				);
 				$('#timaat-mediadatasets-medium-languagetracks-form').data('medium', medium);
+			}
+		},
+
+		mediumFormActorRoles: async function(action, medium) {
+			// console.log("TCL: mediumFormTitles: action, medium", action, medium);
+			var node = document.getElementById("dynamic-actorwithrole-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
+			var node = document.getElementById("new-actorwithrole-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			};
+			$('#timaat-mediadatasets-medium-actorwithroles-form').trigger('reset');
+			// mediumFormActorRolesValidator.resetForm();
+			// $('.medium-data-tab').show();
+			$('.nav-tabs a[href="#mediumActorRoles"]').focus();
+			$('#timaat-mediadatasets-medium-actorwithroles-form').show();
+
+			// setup UI
+			// actor roles data
+			var actorIdList = [];
+			var i = 0;
+			for (; i < medium.model.mediumHasActorWithRoles.length; i++) {
+				if (actorIdList[actorIdList.length-1] != medium.model.mediumHasActorWithRoles[i].actor.id) {
+					actorIdList.push(medium.model.mediumHasActorWithRoles[i].actor.id);
+				}
+			}
+			console.log("TCL: actorIdList", actorIdList);
+
+			// set up form content structure
+			i = 0;
+			for (; i < actorIdList.length; i++) {
+				$('[data-role="dynamic-actorwithrole-fields"]').append(TIMAAT.MediaDatasets.appendActorWithRolesDataset(i, actorIdList[i]));
+
+				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
+				$('#mediumhasactorwithrole-actorid-'+actorIdList[i]).select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: false,
+					ajax: {
+						url: 'api/actor/'+actorIdList[i]+'/select',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								// search: params.term,
+								// page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+				// select actor for each entry
+				// await TIMAAT.MediaService.getActorList(medium.model.id).then(function (data) {
+				await TIMAAT.ActorService.getActor(actorIdList[i]).then(function (data) {
+					var actorSelect = $('#mediumhasactorwithrole-actorid-'+actorIdList[i]);
+					// console.log("TCL: actorSelect", actorSelect);
+					console.log("TCL: then: data", data);
+					var option = new Option(data.displayName.name, data.id, true, true);
+					actorSelect.append(option).trigger('change');
+					// manually trigger the 'select2:select' event
+					actorSelect.trigger({
+						type: 'select2:select',
+						params: {
+							data: data
+						}
+					});
+				});
+
+				// url for role fetch needs to chance on actor change
+				// provide roles list for new selected actor
+				$('#actorwithroles-multi-select-dropdown-'+actorIdList[i]).select2({
+					closeOnSelect: false,
+					scrollAfterSelect: true,
+					allowClear: true,
+					ajax: {
+						url: 'api/medium/hasactor/'+actorIdList[i]+'/withroles/selectlist',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+
+				var roleSelect = $('#actorwithroles-multi-select-dropdown-'+actorIdList[i]);
+				// console.log("TCL: roleSelect", roleSelect);
+				await TIMAAT.MediaService.getActorHasRoleList(medium.model.id, actorIdList[i]).then(function (data) {
+					console.log("TCL: then: data", data);
+					if (data.length > 0) {
+						// create the options and append to Select2
+						var j = 0;
+						for (; j < data.length; j++) {
+							var option = new Option(data[j].roleTranslations[0].name, data[j].id, true, true);
+							roleSelect.append(option).trigger('change');
+						}
+						// manually trigger the 'select2:select' event
+						roleSelect.trigger({
+							type: 'select2:select',
+							params: {
+								data: data
+							}
+						});
+					}
+				});
+			}
+
+			if ( action == 'show') {
+				$('#timaat-mediadatasets-medium-actorwithroles-form :input').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit :input').prop('disabled', false);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit').show();
+				$('#timaat-mediadatasets-medium-actorwithroles-form-submit').hide();
+				$('#timaat-mediadatasets-medium-actorwithroles-form-dismiss').hide();
+				$('[data-role="new-actorwithrole-fields"]').hide();
+				$('.actorwithrole-form-divider').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="add"]').hide();
+				$('#mediumActorRolesLabel').html("Medium actor roles");
+			}
+			else if (action == 'edit') {
+				$('#timaat-mediadatasets-medium-actorwithroles-form :input').prop('disabled', false);
+				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit').hide();
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-edit :input').prop('disabled', true);
+				$('#timaat-mediadatasets-medium-actorwithroles-form-submit').html("Save");
+				$('#timaat-mediadatasets-medium-actorwithroles-form-submit').show();
+				$('#timaat-mediadatasets-medium-actorwithroles-form-dismiss').show();
+				$('#mediumActorRolesLabel').html("Edit medium actor roles");
+				$('[data-role="new-actorwithrole-fields"]').show();
+				$('.actorwithrole-form-divider').show();				
+				// $('#timaat-mediadatasets-metadata-medium-actorwithrole').focus();
+
+				// fields for new title entry
+				$('[data-role="new-actorwithrole-fields"]').append(
+					`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="-1">
+						<div class="form-row">
+							<div class="col-md-11">
+								<fieldset>
+									<legend>Add new Actor with role(s):</legend>
+									<div class="form-row">
+										<div class="col-md-4">
+											<label class="sr-only">Actor</label>
+											<select class="form-control form-control-sm mediumhasactorwithrole-actorid"
+															id="mediumhasactorwithrole-actorid"
+															name="actorId" 
+															data-placeholder="Select actor"
+															data-role="actorId"
+															required>
+											</select>
+										</div>
+										<div class="col-md-8">
+											<label class="sr-only">Has Role(s)</label>
+											<select class="form-control form-control-sm"
+															id="actorwithroles-multi-select-dropdown"
+															name="roleId"
+															data-placeholder="Select role(s)"
+															multiple="multiple"
+															readonly="true"
+															required>
+											</select>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="col-md-1 vertical-aligned">
+								<button type="button" class="btn btn-primary" data-role="add">
+									<i class="fas fa-plus"></i>
+								</button>
+							</div>
+						</div>
+					</div>`
+				);
+
+				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
+				$('#mediumhasactorwithrole-actorid').select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: true,
+					ajax: {
+						url: 'api/actor/selectlist/', // TODO limit list to actors that already have roles associations
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+
+				// url for role fetch needs to chance on actor change
+				$('#mediumhasactorwithrole-actorid').on('change', function (event) {
+					console.log("TCL: actor selection changed");
+					console.log("TCL: selected Actor Id", $(this).val());
+					if (!($(this).val() == null)) {
+						$('#actorwithroles-multi-select-dropdown').val(null).trigger('change');
+						// provide roles list for new selected actor
+						$('#actorwithroles-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							ajax: {
+								url: 'api/medium/hasactor/'+$(this).val()+'/withroles/selectlist',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									// console.log("TCL: data: params", params);
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									// console.log("TCL: processResults: data", data);
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+					}
+				});
+				
+				$('#timaat-mediadatasets-medium-actorwithroles-form').data('medium', medium);
 			}
 		},
 
@@ -2019,6 +2674,46 @@
 						return titleToAppend;
 		},
 
+		appendActorWithRolesDataset: function(i, actorId) {
+    	console.log("TCL: i, actorId", i, actorId);
+			var entryToAppend = 
+				`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="`+i+`" data-actor-id=`+actorId+`>
+					<div class="form-row">
+						<div class="col-md-11">
+							<div class="form-row">
+								<div class="col-md-4">
+									<label class="sr-only">Actor</label>
+									<select class="form-control form-control-sm mediumhasactorwithrole-actorid"
+													id="mediumhasactorwithrole-actorid-`+actorId+`"
+													name="actorId" 
+													data-placeholder="Select actor"
+													data-role="actorId-`+actorId+`" 
+													required>
+									</select>
+								</div>
+								<div class="col-md-8">
+									<label class="sr-only">Has Role(s)</label>
+									<select class="form-control form-control-sm"
+													id="actorwithroles-multi-select-dropdown-`+actorId+`"
+													name="roleId"
+													data-placeholder="Select role(s)"
+													data-role="actorRoles-`+actorId+`"
+													multiple="multiple"
+													required>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1 text-center">
+							<button class="btn btn-danger" data-role="remove">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</div>
+					</div>
+				</div>`;
+			return entryToAppend;
+		},
+
 		replaceSpecialCharacters: function(unsafe) {
 			return unsafe
 			.replace(/</g, "&lt;")
@@ -2030,7 +2725,7 @@
 				// .replace(/>/g, "&gt;")
 				// .replace(/"/g, "&quot;")
 				// .replace(/'/g, "&#039;");
-	 	},
+		},
 
 		setupMediaDatatable: function() {			
 			console.log("TCL: setupDatatable");

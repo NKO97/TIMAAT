@@ -139,6 +139,29 @@
           mediumFormLanguageTracks.submit();
         },
       });
+      var mediumFormActorRoles = $('#timaat-mediadatasets-medium-actorwithroles-form');
+      var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithroles-form').validate({
+        ignore: [],
+        rules: {
+          actorId: {
+            required: true,
+          },
+          roleId: {
+            required: true,
+          },
+        },
+        messages: {
+          actorId: {
+            required: 'Please select an actor.'
+          },
+          roleId: {
+            required: 'Please select at least one role.'
+          }
+        },
+        submitHandler: function(mediumFormLanguageTracks) {
+          mediumFormLanguageTracks.submit();
+        },
+      })
       var actorFormMetadata = $('#timaat-actordatasets-metadata-form');
       var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').validate({
         rules: {
@@ -299,6 +322,7 @@
           roleOrRoleGroupFormMetadata.submit();
         },
       });
+
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);
