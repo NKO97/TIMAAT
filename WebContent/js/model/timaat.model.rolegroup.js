@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			$('#timaat-rolelists-rolegroup-list').append(this.listView);
+			// $('#timaat-rolelists-rolegroup-list').append(this.listView);
 			// console.log("TCL: RoleGroup -> constructor -> this.updateUI()");    
 			var roleGroup = this; // save rolegroup for system events
 

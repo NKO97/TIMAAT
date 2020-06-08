@@ -57,7 +57,7 @@
 				</li>`
 			);
 
-			$('#timaat-actordatasets-'+actorType+'-list').append(this.listView);
+			// $('#timaat-actordatasets-'+actorType+'-list').append(this.listView);
 			// console.log("TCL: Actor -> constructor -> this.updateUI()");    
 			var actor = this; // save actor for system events
 

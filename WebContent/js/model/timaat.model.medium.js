@@ -79,7 +79,7 @@
 			);
 
 			// console.log("TCL: append me to list:", mediumType);
-			$('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
+			// $('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
 			var medium = this; // save medium for system events
 			
 			$(document).on('added.upload.TIMAAT success.upload.TIMAAT removed.upload.TIMAAT', function(event, video) {
@@ -93,7 +93,7 @@
 					medium.model.mediumVideo.length = video.mediumVideo.length;
 					medium.model.mediumVideo.frameRate = video.mediumVideo.frameRate;
 				}
-				
+				TIMAAT.MediaDatasets.refreshDatatable('video');
 				medium.updateUI();
 			});
 
