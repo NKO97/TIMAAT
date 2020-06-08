@@ -865,6 +865,10 @@ select:disabled {
 	align-items: center;
 }
 
+.datasheet-form-upload-button {
+	display: none;
+}
+
 [data-role="add"],
 [data-role="addMembershipDetails"],
 [data-role="remove"],

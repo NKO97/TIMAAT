@@ -291,6 +291,17 @@
 				}
 			});
 
+			// edit content form button handler
+			$('#timaat-mediadatasets-metadata-form-upload').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				var type = $('#timaat-mediadatasets-metadata-form').attr('data-type');
+				if (type == 'video') {
+					var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
+					medium.listView.find('.timaat-video-upload-file').click();
+				}
+			});			
+
 		},
 
 		initAudios: function() {
@@ -1598,6 +1609,13 @@
 				$('#timaat-mediadatasets-metadata-form-edit').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-edit :input').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-edit').show();
+				if (mediumType == 'video') {
+					$('.datasheet-form-upload-button').prop('disabled', false);
+					$('.datasheet-form-upload-button').show();
+				} else {
+					$('.datasheet-form-upload-button').hide();
+					$('.datasheet-form-upload-button').prop('disabled', true);
+				}
 				$('#timaat-mediadatasets-metadata-form-delete').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-delete :input').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-delete').show();
@@ -1617,6 +1635,8 @@
 				$('#timaat-mediadatasets-metadata-form-edit').hide();
 				$('#timaat-mediadatasets-metadata-form-edit').prop('disabled', true);
 				$('#timaat-mediadatasets-metadata-form-edit :input').prop('disabled', true);
+				$('.datasheet-form-upload-button').hide();
+				$('.datasheet-form-upload-button').prop('disabled', true);
 				$('#timaat-mediadatasets-metadata-form-delete').hide();
 				$('#timaat-mediadatasets-metadata-form-delete').prop('disabled', true);
 				$('#timaat-mediadatasets-metadata-form-delete :input').prop('disabled', true);
@@ -3546,7 +3566,11 @@
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
-					let titleDisplay = `<p>` + medium.displayTitle.name +`</p>`;
+					let noFileIcon = '';
+					if (medium.mediumVideo.status == 'nofile') {
+						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -3557,7 +3581,7 @@
 						});
 						return titleDisplay;
 					}
-				},			
+				},
 				],
 				"language": {
 					"decimal"     : ",",
