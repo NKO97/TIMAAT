@@ -349,11 +349,11 @@
 			});
 		},
 
-		async addName(name) {
-      // console.log("TCL: addName -> name", name);
+		async addName(actorId, name) {
+      console.log("TCL: addName -> name", name);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+name.actor.id+"/name/"+name.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
 					type:"POST",
 					data: JSON.stringify(name),
 					contentType:"application/json; charset=utf-8",

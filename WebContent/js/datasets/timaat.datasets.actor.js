@@ -260,6 +260,12 @@
 					$('.form').hide();
 				}
 			});
+
+			$('#timaat-actordatasets-metadata-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-metadata-form-submit').trigger('click');
+				}
+			});
 			
 			// // attach tag editor
 			// $('#timaat-actordatasets-actor-tags').popover({
@@ -586,11 +592,14 @@
 						};
 						newNames.push(name);
 					}
+					console.log("TCL: newNames", newNames);
 					console.log("TCL: (update existing names and) add new ones");
 					await TIMAAT.ActorDatasets.addNames(actor, newNames);
 					// for the whole list check new birth name
 					i = 0;
 					for (; i < formNameList.length; i++) {
+						console.log("TCL: formNameList", formNameList);
+						console.log("TCL: actor.model", actor.model);
 						// update display name
 						var displayNameChanged = false;
 						if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
@@ -674,6 +683,12 @@
 			// Cancel add/edit button in names form functionality
 			$('#timaat-actordatasets-actor-actornames-form-dismiss').click( function(event) {
 				TIMAAT.ActorDatasets.actorFormNames('show', $('#timaat-actordatasets-metadata-form').data('actor'));
+			});
+
+			$('#timaat-actordatasets-actor-actornames-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-actor-actornames-form-submit').trigger('click');
+				}
 			});
 		},
 
@@ -989,6 +1004,12 @@
 			// Cancel add/edit button in addresses form functionality
 			$('#timaat-actordatasets-actor-addresses-form-dismiss').click( function(event) {
 				TIMAAT.ActorDatasets.actorFormAddresses('show', $('#timaat-actordatasets-metadata-form').data('actor'));
+			});
+
+			$('#timaat-actordatasets-actor-addresses-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-actor-addresses-form-submit').trigger('click');
+				}
 			});
 		},
 
@@ -1310,6 +1331,12 @@
 			$('#timaat-actordatasets-actor-emailaddresses-form-dismiss').click( function(event) {
 				TIMAAT.ActorDatasets.actorFormEmailAddresses('show', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
+
+			$('#timaat-actordatasets-actor-emailaddresses-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-actor-emailaddresses-form-submit').trigger('click');
+				}
+			});
 		},
 
 		initEmailAddressTypes: function() {
@@ -1630,6 +1657,12 @@
 			// Cancel add/edit button in phone numbers form functionality
 			$('#timaat-actordatasets-actor-phonenumbers-form-dismiss').click( function(event) {
 				TIMAAT.ActorDatasets.actorFormPhoneNumbers('show', $('#timaat-actordatasets-metadata-form').data('actor'));
+			});
+
+			$('#timaat-actordatasets-actor-phonenumbers-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-actor-phonenumbers-form-submit').trigger('click');
+				}
 			});
 		},
 
@@ -2095,6 +2128,12 @@
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 
+			$('#timaat-actordatasets-person-memberofcollective-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-person-memberofcollective-form-submit').trigger('click');
+				}
+			});
+
 		},
 
 		initRoles: function() {
@@ -2163,6 +2202,12 @@
 			// cancel add/edit button in actor roles form functionality
 			$('#timaat-actordatasets-actor-role-form-dismiss').on('click', function(event) {
 				TIMAAT.ActorDatasets.actorFormRoles('show', $('#timaat-actordatasets-metadata-form').data('actor'));
+			});
+
+			$('#timaat-actordatasets-actor-role-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-actordatasets-actor-role-form-submit').trigger('click');
+				}
 			});
 
 		},
@@ -2314,7 +2359,7 @@
 		},
 
 		setActorNameList: function(actor) {
-			// console.log("TCL: setActorNameList -> actor", actor);
+			console.log("TCL: setActorNameList -> actor", actor);
 			if ( !actor ) return;
 			$('#timaat-actordatasets-actor-name-list-loader').remove();
 			// clear old UI list
@@ -3251,7 +3296,7 @@
 			try {
 				// create display name
 				displayNameModel.actor.id = newActorModel.id;
-				var newDisplayName = await TIMAAT.ActorService.addName(displayNameModel);
+				var newDisplayName = await TIMAAT.ActorService.addName(newActorModel.id, displayNameModel);
 				newActorModel.displayName = newDisplayName;
 				newActorModel.actorNames[0] = newDisplayName;
         console.log("TCL: newActorModel", newActorModel);
@@ -3334,13 +3379,13 @@
 		},
 
 		addNames: async function(actor, newNames) {
-			// console.log("TCL: addNames: async function -> actor, newNames", actor, newNames);
+			console.log("TCL: addNames: async function -> actor, newNames", actor, newNames);
 			try {
 				// create name
 				var i = 0;
-				for (; i <newNames.length; i++) {
+				for (; i < newNames.length; i++) {
 					// var newName = await TIMAAT.ActorService.createName(newNames[i]);
-					var addedNameModel = await TIMAAT.ActorService.addName(newNames[i]);
+					var addedNameModel = await TIMAAT.ActorService.addName(actor.model.id, newNames[i]);
 					actor.model.actorNames.push(addedNameModel);
 				}
 			} catch(error) {

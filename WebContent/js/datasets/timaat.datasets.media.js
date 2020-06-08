@@ -285,6 +285,12 @@
 				}
 			});
 
+			$('#timaat-mediadatasets-metadata-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-metadata-form-submit').trigger('click');
+				}
+			});
+
 		},
 
 		initAudios: function() {
@@ -743,6 +749,12 @@
 			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormTitles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
+
+			$('#timaat-mediadatasets-medium-titles-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-medium-titles-form-submit').trigger('click');
+				}
+			});
 		},
 
 		initLanguageTracks: function() {
@@ -862,6 +874,12 @@
 			// Done button in languageTracks form functionality
 			$('#timaat-mediadatasets-medium-languagetracks-form-done').click( function(event) {
 				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
+			});
+
+			$('#timaat-mediadatasets-medium-languagetracks-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-medium-languagetracks-form-done').trigger('click');
+				}
 			});
 		},
 
@@ -1227,6 +1245,12 @@
 			// cancel add/edit button in titles form functionality
 			$('#timaat-mediadatasets-medium-actorwithroles-form-dismiss').on('click', function(event) {
 				TIMAAT.MediaDatasets.mediumFormActorRoles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
+			});
+
+			$('#timaat-mediadatasets-medium-actorwithroles-form').keypress( function(event) {
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-medium-actorwithroles-form-submit').trigger('click');
+				}
 			});
 		},
 
