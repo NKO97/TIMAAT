@@ -818,6 +818,8 @@
 					}
 				}
 				console.log("TCL: show medium title form");
+				await TIMAAT.MediaDatasets.refreshDatatable(mediumType);
+				await TIMAAT.MediaDatasets.refreshDatatable('medium');
 				TIMAAT.MediaDatasets.mediumFormTitles('show', medium);
 			});
 

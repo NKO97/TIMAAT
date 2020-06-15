@@ -712,6 +712,8 @@
 					}
 				}
 				console.log("TCL: show actor name form");
+				await TIMAAT.ActorDatasets.refreshDatatable(actorType);
+				await TIMAAT.ActorDatasets.refreshDatatable('actor');
 				TIMAAT.ActorDatasets.actorFormNames('show', actor);
 			});
 
