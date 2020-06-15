@@ -243,7 +243,7 @@
 					}
 					var newActor = await TIMAAT.ActorDatasets.createActor(type, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
 					actor = new TIMAAT.Actor(newActor, type);
-					// $('#timaat-actordatasets-metadata-form').data('actor', actor); //? needed or not?
+					$('#timaat-actordatasets-metadata-form').data('actor', actor);
 				}
 				await TIMAAT.ActorDatasets.refreshDatatable('actor');
 				await TIMAAT.ActorDatasets.refreshDatatable(type);
@@ -3354,7 +3354,7 @@
 					break;
 					case 'collective':
 						newActorModel.actorCollective = actorSubtypeModel;
-						TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: actor.id, name: actor.displayName.name});
+						TIMAAT.ActorDatasets.collectiveSelectObjects.push({collectiveId: newActorModel.id, name: newActorModel.displayName.name});
 						TIMAAT.ActorDatasets.sortCollectiveSelectOptions();
 						TIMAAT.ActorDatasets.createCollectiveSortedOptionsString();
 					break;
