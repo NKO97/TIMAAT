@@ -326,18 +326,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 #timaat-province-list li,
 #timaat-county-list li,
 #timaat-city-list li,
-#timaat-street-list li,
-#timaat-mediadatasets-medium-list li,
-#timaat-mediadatasets-audio-list li,
-#timaat-mediadatasets-document-list li,
-#timaat-mediadatasets-image-list li,
-#timaat-mediadatasets-software-list li,
-#timaat-mediadatasets-text-list li,
-#timaat-mediadatasets-video-list li,
-#timaat-mediadatasets-videogame-list li,
-#timaat-actordatasets-actor-list li,
-#timaat-actordatasets-person-list li,
-#timaat-actordatasets-collective-list li {
+#timaat-street-list li {
 	cursor: pointer;
 	font-size: 90%;
 }
@@ -349,18 +338,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 #timaat-province-list li:hover,
 #timaat-county-list li:hover,
 #timaat-city-list li:hover,
-#timaat-street-list li:hover,
-#timaat-mediadatasets-medium-list li:hover,
-#timaat-mediadatasets-audio-list li:hover,
-#timaat-mediadatasets-document-list li:hover,
-#timaat-mediadatasets-image-list li:hover,
-#timaat-mediadatasets-software-list li:hover,
-#timaat-mediadatasets-text-list li:hover,
-#timaat-mediadatasets-video-list li:hover,
-#timaat-mediadatasets-videogame-list li:hover,
-#timaat-actordatasets-actor-list li:hover,
-#timaat-actordatasets-person-list li:hover,
-#timaat-actordatasets-colective-list li:hover {
+#timaat-street-list li:hover {
 	background-color: #e5e5e5;
 }
 
@@ -372,18 +350,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-province-list-selected,
 .timaat-county-list-selected,
 .timaat-city-list-selected,
-.timaat-street-list-selected,
-.timaat-mediadatasets-medium-list-selected,
-.timaat-mediadatasets-audio-list-selected,
-.timaat-mediadatasets-document-list-selected,
-.timaat-mediadatasets-image-list-selected,
-.timaat-mediadatasets-software-list-selected,
-.timaat-mediadatasets-text-list-selected,
-.timaat-mediadatasets-video-list-selected,
-.timaat-mediadatasets-videogame-list-selected,
-.timaat-actordatasets-actor-list-selected,
-.timaat-actordatasets-person-list-selected,
-.timaat-actordatasets-collective-list-selected {
+.timaat-street-list-selected {
 	background-color: #c9e2ff;
 }
 
@@ -395,18 +362,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-province-list-selected:hover,
 .timaat-county-list-selected:hover,
 .timaat-city-list-selected:hover,
-.timaat-street-list-selected:hover,
-.timaat-mediadatasets-medium-list-selected:hover,
-.timaat-mediadatasets-audio-list-selected:hover,
-.timaat-mediadatasets-document-list-selected:hover,
-.timaat-mediadatasets-image-list-selected:hover,
-.timaat-mediadatasets-software-list-selected:hover,
-.timaat-mediadatasets-text-list-selected:hover,
-.timaat-mediadatasets-video-list-selected:hover,
-.timaat-mediadatasets-videogame-list-selected:hover,
-.timaat-actordatasets-actor-list-selected:hover,
-.timaat-actordatasets-person-list-selected:hover,
-.timaat-actordatasets-collective-list-selected:hover {
+.timaat-street-list-selected:hover {
 	background-color: #c9e2ff !important;
 }
 
@@ -417,18 +373,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-province-chooser,
 .timaat-county-chooser,
 .timaat-city-chooser,
-.timaat-street-chooser,
-.timaat-mediadatasets-medium-chooser,
-.timaat-mediadatasets-audio-chooser,
-.timaat-mediadatasets-document-chooser,
-.timaat-mediadatasets-image-chooser,
-.timaat-mediadatasets-software-chooser,
-.timaat-mediadatasets-text-chooser,
-.timaat-mediadatasets-video-chooser,
-.timaat-mediadatasets-videogame-chooser,
-.timaat-actordatasets-actor-chooser,
-.timaat-actordatasets-person-chooser,
-.timaat-actordatasets-collective-chooser {
+.timaat-street-chooser {
 	margin-top: 0.5em;
 }
 

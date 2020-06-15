@@ -149,19 +149,19 @@
 			// this.listView.find('.timaat-actordatasets-actor-list-tags').dblclick(function(ev) {ev.stopPropagation();});
 
 			// attach actor handlers
-			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: Actor -> constructor -> open actor datasheet");
-				ev.stopPropagation();
-				// show tag editor - trigger popup
-				TIMAAT.UI.hidePopups();
-				$('.form').hide();
-				$('.actors-nav-tabs').show();
-				$('.actors-data-tabs').hide();
-				$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
-				$('#timaat-actordatasets-metadata-form').data('actor', actor);
-				TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
-				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
-			});
+			// $(this.listView).on('click', this, function(ev) {
+			// 	// console.log("TCL: Actor -> constructor -> open actor datasheet");
+			// 	ev.stopPropagation();
+			// 	// show tag editor - trigger popup
+			// 	TIMAAT.UI.hidePopups();
+			// 	$('.form').hide();
+			// 	$('.actors-nav-tabs').show();
+			// 	$('.actors-data-tabs').hide();
+			// 	$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
+			// 	$('#timaat-actordatasets-metadata-form').data('actor', actor);
+			// 	TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
+			// 	// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
+			// });
 
 		}
 

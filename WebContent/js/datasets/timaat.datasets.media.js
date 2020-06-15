@@ -2751,6 +2751,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/list",
@@ -2795,6 +2796,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableMedia.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableMedia.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -2809,6 +2813,7 @@
 						for (; i < TIMAAT.MediaDatasets.media.length; i++) {
 							if (TIMAAT.MediaDatasets.media[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.media[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
@@ -2892,6 +2897,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/audio/list",
@@ -2937,6 +2943,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableAudio.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableAudio.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -2952,6 +2961,7 @@
 						for (; i < TIMAAT.MediaDatasets.audios.length; i++) {
 							if (TIMAAT.MediaDatasets.audios[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.audios[i];
+								$(this).addClass('selected');
 								break;
 							}
 						}
@@ -3007,6 +3017,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/document/list",
@@ -3052,6 +3063,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableDocument.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableDocument.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -3067,6 +3081,7 @@
 						for (; i < TIMAAT.MediaDatasets.documents.length; i++) {
 							if (TIMAAT.MediaDatasets.documents[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.documents[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
@@ -3122,6 +3137,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/image/list",
@@ -3167,6 +3183,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableImage.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableImage.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -3182,6 +3201,7 @@
 						for (; i < TIMAAT.MediaDatasets.images.length; i++) {
 							if (TIMAAT.MediaDatasets.images[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.images[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
@@ -3237,6 +3257,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/software/list",
@@ -3282,6 +3303,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableSoftware.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableSoftware.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -3297,6 +3321,7 @@
 						for (; i < TIMAAT.MediaDatasets.softwares.length; i++) {
 							if (TIMAAT.MediaDatasets.softwares[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.softwares[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
@@ -3352,6 +3377,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/text/list",
@@ -3397,6 +3423,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableText.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableText.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -3412,6 +3441,7 @@
 						for (; i < TIMAAT.MediaDatasets.texts.length; i++) {
 							if (TIMAAT.MediaDatasets.texts[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.texts[i];
+								$(this).addClass('selected');
 								break;
 							}
 						}
@@ -3467,6 +3497,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/video/list",
@@ -3514,6 +3545,9 @@
 					mediumElement.data('medium', medium);
 
 					mediumElement.on('click', '.title', function(event) {
+						TIMAAT.MediaDatasets.dataTableVideo.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableVideo.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -3529,6 +3563,7 @@
 						for (; i < TIMAAT.MediaDatasets.videos.length; i++) {
 							if (TIMAAT.MediaDatasets.videos[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.videos[i];
+								$(this).addClass('selected');
 								break;
 							}
 						}
@@ -3588,6 +3623,7 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/medium/videogame/list",
@@ -3634,6 +3670,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						TIMAAT.MediaDatasets.dataTableVideogame.rows().eq(0).each( function() {
+							TIMAAT.MediaDatasets.dataTableVideogame.$('td.selected').removeClass('selected');
+						})
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
@@ -3648,6 +3687,7 @@
 						for (; i < TIMAAT.MediaDatasets.videogames.length; i++) {
 							if (TIMAAT.MediaDatasets.videogames[i].model.id == id) {
 								selectedMedium = TIMAAT.MediaDatasets.videogames[i];
+								$(this).addClass('selected');
 								break;
 							}
 						}

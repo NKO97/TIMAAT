@@ -168,16 +168,16 @@
 			});
 
 			// annotate handler
-			this.listView.find('.timaat-mediadatasets-medium-annotate').on('click', this, function(ev) {
-				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();
-				TIMAAT.UI.showComponent('videoplayer');
-				console.log("TCL: Medium -> constructor -> medium", medium);
-				// setup video in player
-				TIMAAT.VideoPlayer.setupVideo(medium.model);
-				// load video annotations from server
-				TIMAAT.Service.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
-			});
+			// this.listView.find('.timaat-mediadatasets-medium-annotate').on('click', this, function(ev) {
+			// 	ev.stopPropagation();
+			// 	TIMAAT.UI.hidePopups();
+			// 	TIMAAT.UI.showComponent('videoplayer');
+			// 	console.log("TCL: Medium -> constructor -> medium", medium);
+			// 	// setup video in player
+			// 	TIMAAT.VideoPlayer.setupVideo(medium.model);
+			// 	// load video annotations from server
+			// 	TIMAAT.Service.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+			// });
 
 		}
 

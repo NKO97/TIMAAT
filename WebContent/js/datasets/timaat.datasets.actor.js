@@ -2548,7 +2548,7 @@
 		},
 
 		actorFormDatasheet: function(action, actorType, actorTypeData) {
-    	console.log("TCL: action, actorType, actorTypeData", action, actorType, actorTypeData);
+    	// console.log("TCL: action, actorType, actorTypeData", action, actorType, actorTypeData);
 			$('#timaat-actordatasets-metadata-form').trigger('reset');
 			$('#timaat-actordatasets-metadata-form').attr('data-type', actorType);
 			$('.datasheet-data').hide();
@@ -4429,6 +4429,7 @@
 				"scrollY"       : "100%",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/actor/list",
@@ -4473,6 +4474,9 @@
 					actorElement.data('actor', actor);
 
 					actorElement.on('click', '.name', function(event) {
+						TIMAAT.ActorDatasets.dataTableActor.rows().eq(0).each( function() {
+							TIMAAT.ActorDatasets.dataTableActor.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -4487,6 +4491,7 @@
 						for (; i < TIMAAT.ActorDatasets.actors.length; i++) {
 							if (TIMAAT.ActorDatasets.actors[i].model.id == id) {
 								selectedActor = TIMAAT.ActorDatasets.actors[i];
+								$(this).addClass('selected');
 								break;
 							}
 						}
@@ -4550,6 +4555,7 @@
 				"scrollY"       : "100%",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/actor/person/list",
@@ -4595,6 +4601,9 @@
 					actorElement.data('actor', actor);
 
 					actorElement.on('click', '.name', function(event) {
+						TIMAAT.ActorDatasets.dataTablePerson.rows().eq(0).each( function() {
+							TIMAAT.ActorDatasets.dataTablePerson.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -4610,6 +4619,7 @@
 						for (; i < TIMAAT.ActorDatasets.persons.length; i++) {
 							if (TIMAAT.ActorDatasets.persons[i].model.id == id) {
 								selectedActor = TIMAAT.ActorDatasets.persons[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
@@ -4664,6 +4674,7 @@
 				"scrollY"       : "100%",
 				"scrollCollapse": true,
 				"scrollX"       : false,
+				"select"				: 'single',
 				"serverSide"    : true,
 				"ajax"          : {
 					"url"        : "api/actor/collective/list",
@@ -4709,6 +4720,9 @@
 					actorElement.data('actor', actor);
 
 					actorElement.on('click', '.name', function(event) {
+						TIMAAT.ActorDatasets.dataTableCollective.rows().eq(0).each( function() {
+							TIMAAT.ActorDatasets.dataTableCollective.$('td.selected').removeClass('selected');
+						})
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -4724,6 +4738,7 @@
 						for (; i < TIMAAT.ActorDatasets.collectives.length; i++) {
 							if (TIMAAT.ActorDatasets.collectives[i].model.id == id) {
 								selectedActor = TIMAAT.ActorDatasets.collectives[i];
+								$(this).addClass('selected'); 
 								break;
 							}
 						}
