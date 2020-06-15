@@ -371,6 +371,20 @@
 				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			});
 
+			$(document).on('click', '.isBirthName', function(event) {
+        if ($(this).data('waschecked') == true)
+        {
+          $(this).prop('checked', false);
+					// $(this).data('waschecked', false);
+					$('input[name="isBirthName"]').data('waschecked', false);
+        }
+        else {
+					$('input[name="isBirthName"]').data('waschecked', false);
+					$(this).data('waschecked', true);
+				}
+			});
+
+
 			// Add name button click
 			$(document).on('click','[data-role="new-name-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
@@ -405,7 +419,7 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" placeholder="Is birth Name">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" data-waschecked="false" placeholder="Is birth Name">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
@@ -2683,7 +2697,7 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" placeholder="Is birth Name"">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" data-waschecked="true" placeholder="Is birth Name"">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">

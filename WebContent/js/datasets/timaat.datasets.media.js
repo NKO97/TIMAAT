@@ -449,6 +449,19 @@
 				// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			});
 
+			$(document).on('click', '.isOriginalTitle', function(event) {
+        if ($(this).data('waschecked') == true)
+        {
+          $(this).prop('checked', false);
+					// $(this).data('waschecked', false);
+					$('input[name="isOriginalTitle"]').data('waschecked', false);
+        }
+        else {
+					$('input[name="isOriginalTitle"]').data('waschecked', false);
+					$(this).data('waschecked', true);
+				}
+			});
+
 			// Add title button click
 			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
@@ -484,7 +497,7 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" placeholder="Is Original Title">
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" data-waschecked="false" placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
@@ -1750,7 +1763,7 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle[`+medium.model.titles[i].id+`]" placeholder="Is Original Title">
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle[`+medium.model.titles[i].id+`]" data-waschecked="true" placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
