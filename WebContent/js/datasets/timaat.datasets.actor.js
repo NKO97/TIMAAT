@@ -2750,7 +2750,15 @@
 				$('.name-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
-				$('#actorNamesLabel').html("Actor Namensliste");
+				$('#actorNamesLabel').html("Actor name list");
+				if (actor.model.actorType.actorTypeTranslations[0].type == "person") {
+					$('#actor-display-name-header').html("Display Name");
+					$('#actor-birth-name-header').html("Birth Name");
+				}
+				if (actor.model.actorType.actorTypeTranslations[0].type == "collective") {
+					$('#actor-display-name-header').html("Display Designation");
+					$('#actor-birth-name-header').html("Original Designation");
+				}
 			}
 			else if (action == 'edit') {
 				$('#timaat-actordatasets-actor-actornames-form-submit').show();
@@ -2761,8 +2769,8 @@
 				$('#timaat-actordatasets-actor-actornames-form-edit :input').prop('disabled', true);
 				$('[data-role="new-name-fields"').show();
 				$('.name-form-divider').show();
-				$('#actorNamesLabel').html("Actor Namensliste bearbeiten");
-				$('#timaat-actordatasets-actor-actornames-form-submit').html("Speichern");
+				$('#actorNamesLabel').html("Edit actor name list");
+				$('#timaat-actordatasets-actor-actornames-form-submit').html("Save");
 				$('#timaat-actordatasets-metadata-actor-name').focus();
 
 				// fields for new name entry
