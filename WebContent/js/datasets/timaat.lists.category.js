@@ -276,7 +276,7 @@
 
 			// set ajax data source
 			if ( TIMAAT.CategoryLists.dataTableCategories ) {
-				TIMAAT.CategoryLists.dataTableCategories.ajax.reload();
+				TIMAAT.CategoryLists.dataTableCategories.ajax.reload(null, false);
 			}
 		},
 		
@@ -296,7 +296,7 @@
 
 			// set ajax data source
 			if ( TIMAAT.CategoryLists.dataTableCategorySets ) {
-				TIMAAT.CategoryLists.dataTableCategorySets.ajax.reload();
+				TIMAAT.CategoryLists.dataTableCategorySets.ajax.reload(null, false);
 			}
 		},
 		

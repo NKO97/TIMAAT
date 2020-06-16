@@ -245,7 +245,7 @@
 
       // set ajax data source
       if ( TIMAAT.RoleLists.dataTableRoles ) {
-        TIMAAT.RoleLists.dataTableRoles.ajax.reload();
+        TIMAAT.RoleLists.dataTableRoles.ajax.reload(null, false);
       }
     },
 
@@ -259,7 +259,7 @@
       $('#timaat-rolelists-rolegroup-list').empty();
       // set ajax data source
       if ( TIMAAT.RoleLists.dataTableRoleGroups ) {
-        TIMAAT.RoleLists.dataTableRoleGroups.ajax.reload();
+        TIMAAT.RoleLists.dataTableRoleGroups.ajax.reload(null, false);
       }
     },
 
@@ -472,12 +472,12 @@
       switch(type) {
         case 'role':
           if (TIMAAT.RoleLists.dataTableRoles) {
-            TIMAAT.RoleLists.dataTableRoles.ajax.reload();
+            TIMAAT.RoleLists.dataTableRoles.ajax.reload(null, false);
           }
         break;
         case 'rolegroup':
           if (TIMAAT.RoleLists.dataTableRoleGroups) {
-            TIMAAT.RoleLists.dataTableRoleGroups.ajax.reload();
+            TIMAAT.RoleLists.dataTableRoleGroups.ajax.reload(null, false);
           }
         break;
       }			

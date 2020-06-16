@@ -1399,7 +1399,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableMedia ) {
 				// TIMAAT.MediaDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
-				TIMAAT.MediaDatasets.dataTableMedia.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableMedia.ajax.reload(null, false);
 			}
 		},
 
@@ -1416,7 +1416,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableAudio ) {
 				// TIMAAT.MediaDatasets.dataTableAudio.ajax.url('/TIMAAT/api/medium/audio/list');
-				TIMAAT.MediaDatasets.dataTableAudio.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableAudio.ajax.reload(null, false);
 			}
 		},
 
@@ -1433,7 +1433,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableDocument ) {
 				// TIMAAT.MediaDatasets.dataTableDocument.ajax.url('/TIMAAT/api/medium/document/list');
-				TIMAAT.MediaDatasets.dataTableDocument.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableDocument.ajax.reload(null, false);
 			}
 		},
 
@@ -1449,7 +1449,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableImage ) {
 				// TIMAAT.MediaDatasets.dataTableImage.ajax.url('/TIMAAT/api/medium/image/list');
-				TIMAAT.MediaDatasets.dataTableImage.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableImage.ajax.reload(null, false);
 			}
 			$('#timaat-mediadatasets-image-list').empty();
 		},
@@ -1467,7 +1467,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableSoftware ) {
 				// TIMAAT.MediaDatasets.dataTableSoftware.ajax.url('/TIMAAT/api/medium/software/list');
-				TIMAAT.MediaDatasets.dataTableSoftware.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableSoftware.ajax.reload(null, false);
 			}
 		},
 
@@ -1482,7 +1482,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableText ) {
 				// TIMAAT.MediaDatasets.dataTableText.ajax.url('/TIMAAT/api/medium/text/list');
-				TIMAAT.MediaDatasets.dataTableText.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableText.ajax.reload(null, false);
 			}
 			$('#timaat-mediadatasets-text-list').empty();
 		},
@@ -1500,7 +1500,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableVideo ) {
 				// TIMAAT.MediaDatasets.dataTableVideo.ajax.url('/TIMAAT/api/medium/video/list');
-				TIMAAT.MediaDatasets.dataTableVideo.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableVideo.ajax.reload(null, false);
 			}
 /*
 			if (TIMAAT.VideoChooser.initialized == false) {
@@ -1523,7 +1523,7 @@
 			// set ajax data source
 			if ( TIMAAT.MediaDatasets.dataTableVideogame ) {
 				// TIMAAT.MediaDatasets.dataTableVideogame.ajax.url('/TIMAAT/api/medium/videogame/list');
-				TIMAAT.MediaDatasets.dataTableVideogame.ajax.reload();
+				TIMAAT.MediaDatasets.dataTableVideogame.ajax.reload(null, false);
 			}
 		},
 
@@ -3848,50 +3848,50 @@
 				case 'medium':
 					if (TIMAAT.MediaDatasets.dataTableMedia) {
 						// TIMAAT.MediaDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
-						TIMAAT.MediaDatasets.dataTableMedia.ajax.reload();
-						TIMAAT.VideoChooser.dt.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableMedia.ajax.reload(null, false);
+						TIMAAT.VideoChooser.dt.ajax.reload(null, false);
 					}
 				break;
 				case 'audio':
 					if (TIMAAT.MediaDatasets.dataTableAudio) {
 						// TIMAAT.MediaDatasets.dataTableAudio.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableAudio.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableAudio.ajax.reload(null, false);
 					}
 				break;
 				case 'document':
 					if (TIMAAT.MediaDatasets.dataTableDocument) {
 						// TIMAAT.MediaDatasets.dataTableDocument.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableDocument.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableDocument.ajax.reload(null, false);
 					}
 				break;
 				case 'image':
 					if (TIMAAT.MediaDatasets.dataTableImage) {
 						// TIMAAT.MediaDatasets.dataTableImage.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableImage.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableImage.ajax.reload(null, false);
 					}
 				break;
 				case 'software':
 					if (TIMAAT.MediaDatasets.dataTableSoftware) {
 						// TIMAAT.MediaDatasets.dataTableSoftware.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableSoftware.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableSoftware.ajax.reload(null, false);
 					}
 				break;
 				case 'text':
 					if (TIMAAT.MediaDatasets.dataTableText) {
 						// TIMAAT.MediaDatasets.dataTableText.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableText.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableText.ajax.reload(null, false);
 					}
 				break;
 				case 'video':
 					if (TIMAAT.MediaDatasets.dataTableVideo) {
 						// TIMAAT.MediaDatasets.dataTableVideo.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableVideo.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableVideo.ajax.reload(null, false);
 					}
 				break;
 				case 'videogame':
 					if (TIMAAT.MediaDatasets.dataTableVideogame) {
 						// TIMAAT.MediaDatasets.dataTableVideogame.ajax.url('/TIMAAT/api/medium/'+mediaType+'/list');
-						TIMAAT.MediaDatasets.dataTableVideogame.ajax.reload();
+						TIMAAT.MediaDatasets.dataTableVideogame.ajax.reload(null, false);
 					}
 				break;
 			}			

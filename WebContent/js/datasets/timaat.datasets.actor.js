@@ -2337,7 +2337,7 @@
 			// set ajax data source
 			if ( TIMAAT.ActorDatasets.dataTableActor ) {
 				// TIMAAT.ActorDatasets.dataTableActor.ajax.url('/TIMAAT/api/actor/list');
-				TIMAAT.ActorDatasets.dataTableActor.ajax.reload();
+				TIMAAT.ActorDatasets.dataTableActor.ajax.reload(null, false);
 			}
 		},
 
@@ -2354,7 +2354,7 @@
 			// set ajax data source
 			if ( TIMAAT.ActorDatasets.dataTablePerson ) {
 				// TIMAAT.ActorDatasets.dataTablePerson.ajax.url('/TIMAAT/api/actor/person/list');
-				TIMAAT.ActorDatasets.dataTablePerson.ajax.reload();
+				TIMAAT.ActorDatasets.dataTablePerson.ajax.reload(null, false);
 			}
 		},
 
@@ -2371,7 +2371,7 @@
 			// set ajax data source
 			if ( TIMAAT.ActorDatasets.dataTableCollective ) {
 				// TIMAAT.ActorDatasets.dataTableCollective.ajax.url('/TIMAAT/api/actor/collective/list');
-				TIMAAT.ActorDatasets.dataTableCollective.ajax.reload();
+				TIMAAT.ActorDatasets.dataTableCollective.ajax.reload(null, false);
 			}
 
 		},
@@ -4861,19 +4861,19 @@
 				case 'actor':
 					if (TIMAAT.ActorDatasets.dataTableActor) {
 						// TIMAAT.ActorDatasets.dataTableActor.ajax.url('/TIMAAT/api/actor/list');
-						TIMAAT.ActorDatasets.dataTableActor.ajax.reload();
+						TIMAAT.ActorDatasets.dataTableActor.ajax.reload(null, false);
 					}
 				break;
 				case 'person':
 					if (TIMAAT.ActorDatasets.dataTablePerson) {
 						// TIMAAT.ActorDatasets.dataTablePerson.ajax.url('/TIMAAT/api/actor/'+actorType+'/list');
-						TIMAAT.ActorDatasets.dataTablePerson.ajax.reload();
+						TIMAAT.ActorDatasets.dataTablePerson.ajax.reload(null, false);
 					}
 				break;
 				case 'collective':
 					if (TIMAAT.ActorDatasets.dataTableCollective) {
 						// TIMAAT.ActorDatasets.dataTableCollective.ajax.url('/TIMAAT/api/actor/'+actorType+'/list');
-						TIMAAT.ActorDatasets.dataTableCollective.ajax.reload();
+						TIMAAT.ActorDatasets.dataTableCollective.ajax.reload(null, false);
 					}
 				break;
 			}			
