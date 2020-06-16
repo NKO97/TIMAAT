@@ -48,8 +48,8 @@
 			TIMAAT.MediaDatasets.initLanguageTracks();
 			TIMAAT.MediaDatasets.initActorRoles();
 			$('.media-data-tabs').hide();
-			$('.media-cards').hide();
-			$('.media-card').show();
+			$('.media-datatables').hide();
+			$('.media-datatable').show();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', 'medium');
 		},
 
@@ -150,15 +150,9 @@
 				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
 				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#mediumDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#mediumDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
@@ -317,15 +311,9 @@
 			// nav-bar functionality
 			$('#media-tab-audio-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add audio button functionality (opens form)
@@ -341,15 +329,9 @@
 			// nav-bar functionality
 			$('#media-tab-document-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#documentDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#documentDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add document button functionality (opens form)
@@ -365,15 +347,9 @@
 			// nav-bar functionality
 			$('#media-tab-image-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#imageDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#imageDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add image button functionality (opens form)
@@ -389,15 +365,9 @@
 			// nav-bar functionality
 			$('#media-tab-software-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add software button functionality (opens form)
@@ -413,15 +383,9 @@
 			// nav-bar functionality
 			$('#media-tab-text-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#textDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#textDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add text button functionality (opens form)
@@ -437,15 +401,9 @@
 			// nav-bar functionality
 			$('#media-tab-video-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
@@ -461,15 +419,9 @@
 			// nav-bar functionality
 			$('#media-tab-videogame-metadata-form').on('click', function(event) {
 				$('.form').hide();
-				if (TIMAAT.MediaDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.MediaDatasets.showLastForm();
-				} else {
-					TIMAAT.MediaDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
-					TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', $('#timaat-mediadatasets-metadata-form').data('medium'));
-				}
+				TIMAAT.MediaDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
 			// add videogame button functionality (opens form)
@@ -1346,8 +1298,8 @@
 		
 		loadMedia: function() {
 			console.log("TCL: loadMedia: async function()");
-			$('.media-cards').hide();
-			$('.media-card').show();
+			$('.media-datatables').hide();
+			$('.media-datatable').show();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', 'medium');
 			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
 			// TIMAAT.MediaDatasets.setMediumList();
@@ -1367,9 +1319,9 @@
 
 		loadMediumSubtype: function(mediumSubtype) {
     	console.log("TCL: loadMediumSubtype - mediumSubtype", mediumSubtype);
-			$('.media-cards').hide();
+			$('.media-datatables').hide();
 			$('.form').hide();
-			$('.'+mediumSubtype+'s-card').show();
+			$('.'+mediumSubtype+'s-datatable').show();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', mediumSubtype);
 			switch (mediumSubtype) {
 				case 'audio':
@@ -1653,11 +1605,7 @@
 			$('.datasheet-data').hide();
 			$('.title-data').show();
 			$('.medium-data').show();
-			// if (mediumType == "medium") {
-			// 	$('.mediumtype-data').show();
-			// }	else {
-			// 	$('.mediumtype-data').hide();
-			// }
+			// if (mediumType == "medium") { $('.mediumtype-data').show(); }	else { $('.mediumtype-data').hide(); }
 			$('.source-data').show();
 			$('.'+mediumType+'-data').show();
 			mediumFormMetadataValidator.resetForm();
@@ -1792,7 +1740,6 @@
 			};
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
 			mediumFormTitlesValidator.resetForm();
-			// $('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumTitles"]').focus();
 			$('#timaat-mediadatasets-medium-titles-form').show();
 			
@@ -1900,7 +1847,6 @@
 			};
 			$('#timaat-mediadatasets-medium-languagetracks-form').trigger('reset');
 			mediumFormLanguageTracksValidator.resetForm();
-			// $('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumLanguageTracks"]').focus();
 			$('#timaat-mediadatasets-medium-languagetracks-form').show();
 			
@@ -2032,7 +1978,6 @@
 			};
 			$('#timaat-mediadatasets-medium-actorwithroles-form').trigger('reset');
 			// mediumFormActorRolesValidator.resetForm();
-			// $('.medium-data-tab').show();
 			$('.nav-tabs a[href="#mediumActorRoles"]').focus();
 			$('#timaat-mediadatasets-medium-actorwithroles-form').show();
 
@@ -2871,6 +2816,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -2882,14 +2828,22 @@
 							}
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
+						var type = selectedMedium.model.mediaType.mediaTypeTranslations[0].type;
+            console.log("TCL: type", type);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.'+type+'-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
 							TIMAAT.MediaDatasets.subNavTab = null;
-							$('.nav-tabs a[href="#mediumDatasheet"]').tab('show');
-							TIMAAT.MediaDatasets.mediumFormDatasheet('show', selectedMedium.model.mediaType.mediaTypeTranslations[0].type, selectedMedium);
+							$('.nav-tabs a[href="#'+type+'Datasheet"]').tab('show');
+							TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, selectedMedium);
 						}
 					});
 				},
@@ -3024,6 +2978,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3036,11 +2991,18 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.audio-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
               console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
 							TIMAAT.MediaDatasets.subNavTab = null;
+              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
 							$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', selectedMedium);
 						}
@@ -3149,6 +3111,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3161,7 +3124,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.document-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
@@ -3274,6 +3243,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3286,7 +3256,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.image-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
@@ -3399,6 +3375,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3411,7 +3388,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.software-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
@@ -3524,6 +3507,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3536,7 +3520,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.text-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
@@ -3651,6 +3641,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3663,7 +3654,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.video-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
@@ -3780,6 +3777,7 @@
 						TIMAAT.UI.showComponent('media');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
+						$('.media-data-tabs').hide();
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3792,7 +3790,13 @@
 						}
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
+							// show tabs
+							console.log("TCL: show data tabs");
+							$('.videogame-data-tab').show();
+							$('.title-data-tab').show();
+							$('.languagetrack-data-tab').show();
+							$('.mediumactorwithrole-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {

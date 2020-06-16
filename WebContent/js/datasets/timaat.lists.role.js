@@ -27,8 +27,8 @@
       TIMAAT.RoleLists.initRoles();
       TIMAAT.RoleLists.initRoleGroups();
       // $('.roles-data-tabs').hide();
-      $('.lists-cards').hide();
-      // $('.roles-card').show();
+      $('.lists-datatables').hide();
+      // $('.roles-datatable').show();
     },
 
     initRolesAndRoleGroups: function() {
@@ -216,14 +216,14 @@
     },
 
     loadRoles: function() {
-      $('.lists-cards').hide();
-      $('.roles-card').show();
+      $('.lists-datatables').hide();
+      $('.roles-datatable').show();
       TIMAAT.RoleLists.setRolesList();
     },
 
     loadRoleGroups: function() {
-      $('.lists-cards').hide();
-      $('.rolegroups-card').show();
+      $('.lists-datatables').hide();
+      $('.rolegroups-datatable').show();
       TIMAAT.RoleLists.setRoleGroupsList();
     },
 

@@ -48,8 +48,8 @@
 			TIMAAT.ActorDatasets.initMemberOfCollectives();
 			TIMAAT.ActorDatasets.initRoles();
 			$('.actors-data-tabs').hide();
-			$('.actors-cards').hide();
-			$('.actors-card').show();
+			$('.actors-datatables').hide();
+			$('.actors-datatable').show();
 			$('#timaat-actordatasets-metadata-form').data('actorType', 'actor');
 		},
 
@@ -135,15 +135,9 @@
 				var actor = $('#timaat-actordatasets-metadata-form').data('actor');
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 				$('.form').hide();
-				if (TIMAAT.ActorDatasets.subNavTab && !(type == 'collective' && TIMAAT.ActorDatasets.subNavTab == 'memberofcollectives')) {
-          console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.ActorDatasets.showLastForm();
-				} else {
-					TIMAAT.ActorDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#actorDatasheet"]').tab('show');
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', type, $('#timaat-actordatasets-metadata-form').data('actor'));
-				}
+				TIMAAT.ActorDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#actorDatasheet"]').tab('show');
+				TIMAAT.ActorDatasets.actorFormDatasheet('show', type, $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 
 			// add actor button functionality (in actor list - opens datasheet form)
@@ -330,15 +324,9 @@
 			// nav-bar functionality
 			$('#actors-tab-person-metadata-form').click(function(event) {
 				$('.form').hide();
-				if (TIMAAT.ActorDatasets.subNavTab) {
-          console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.ActorDatasets.showLastForm();
-				} else {
-					TIMAAT.ActorDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#personDatasheet"]').tab('show');
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', $('#timaat-actordatasets-metadata-form').data('actor'));
-				}
+				TIMAAT.ActorDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#personDatasheet"]').tab('show');
+				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'person', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 
 			// add person button functionality (opens form)
@@ -354,15 +342,9 @@
 			// nav-bar functionality
 			$('#actors-tab-collective-metadata-form').click(function(event) {
 				$('.form').hide();
-				if (TIMAAT.ActorDatasets.subNavTab && TIMAAT.ActorDatasets.subNavTab != 'personMemberOfCollectives') {
-          console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
-					$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
-					TIMAAT.ActorDatasets.showLastForm();
-				} else {
-					TIMAAT.ActorDatasets.subNavTab = null;
-					$('.nav-tabs a[href="#collectiveDatasheet"]').tab('show');
-					TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', $('#timaat-actordatasets-metadata-form').data('actor'));
-				}				
+				TIMAAT.ActorDatasets.subNavTab = null;
+				$('.nav-tabs a[href="#collectiveDatasheet"]').tab('show');
+				TIMAAT.ActorDatasets.actorFormDatasheet('show', 'collective', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 
 			// add collective button functionality (opens form)
@@ -2272,8 +2254,8 @@
 		loadActors: function() {
     	// console.log("TCL: loadActors: function()");
 			// load actors
-			$('.actors-cards').hide();
-			$('.actors-card').show();
+			$('.actors-datatables').hide();
+			$('.actors-datatable').show();
 			$('#timaat-actordatasets-metadata-form').data('actorType', 'actor');
 			// TIMAAT.ActorService.listActors(TIMAAT.ActorDatasets.setActorList);
 			// TIMAAT.ActorDatasets.setActorList();
@@ -2287,9 +2269,9 @@
 		},
 
 		loadActorSubtype: function(actorSubtype) {
-			$('.actors-cards').hide();
+			$('.actors-datatables').hide();
 			$('.form').hide();
-			$('.'+actorSubtype+'s-card').show();
+			$('.'+actorSubtype+'s-datatable').show();
 			$('#timaat-actordatasets-metadata-form').data('actorType', actorSubtype);
 			switch (actorSubtype) {
 				case 'person':
@@ -2582,11 +2564,7 @@
 			$('.datasheet-data').hide();
 			$('.name-data').show();
 			$('.actor-data').show();
-			// if (actorType == "actor") {
-			// 	$('.actortype-data').show();
-			// }	else {
-			// 	$('.actortype-data').hide();
-			// }		
+			// if (actorType == "actor") { $('.actortype-data').show(); }	else {	$('.actortype-data').hide(); }		
 			$('.'+actorType+'-data').show();
 			actorFormMetadataValidator.resetForm();
 
@@ -4534,6 +4512,7 @@
 						TIMAAT.UI.showComponent('actors');
 						$('.form').hide();
 						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
 						var id = actor.id;
 						var selectedActor;
 						var i = 0;
@@ -4547,12 +4526,22 @@
 						var type = selectedActor.model.actorType.actorTypeTranslations[0].type;
 						$('#timaat-actordatasets-metadata-form').data('actor', selectedActor);
 						if (TIMAAT.ActorDatasets.subNavTab && !(type == 'collective' && TIMAAT.ActorDatasets.subNavTab == 'personMemberOfCollectives')) {
-              console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							// show tabs
+							$('.'+type+'-data-tab').show();
+							$('.name-data-tab').show();
+							$('.address-data-tab').show();
+							$('.emailaddress-data-tab').show();
+							$('.phonenumber-data-tab').show();
+							$('.actorroles-data-tab').show();
+							if (type == "person") {
+								$('.memberofcollective-data-tab').show();
+							}
 							$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.ActorDatasets.showLastForm();
 						} else {
 							TIMAAT.ActorDatasets.subNavTab = null;
-							$('.nav-tabs a[href="#actorDatasheet"]').tab('show');
+							$('.nav-tabs a[href="#'+type+'Datasheet"]').tab('show');
 							TIMAAT.ActorDatasets.actorFormDatasheet('show', type, selectedActor);
 						}
 					});
@@ -4668,6 +4657,7 @@
 						TIMAAT.UI.showComponent('actors');
 						$('.form').hide();
 						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
 						var id = actor.id;
 						var selectedActor;
 						var i = 0;
@@ -4680,7 +4670,15 @@
 						}
 						$('#timaat-actordatasets-metadata-form').data('actor', selectedActor);
 						if (TIMAAT.ActorDatasets.subNavTab) {
-              console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							// show tabs
+							$('.person-data-tab').show();
+							$('.name-data-tab').show();
+							$('.address-data-tab').show();
+							$('.emailaddress-data-tab').show();
+							$('.phonenumber-data-tab').show();
+							$('.actorroles-data-tab').show();
+							$('.memberofcollective-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.ActorDatasets.showLastForm();
 						} else {
@@ -4792,6 +4790,7 @@
 						TIMAAT.UI.showComponent('actors');
 						$('.form').hide();
 						$('.actors-nav-tabs').show();
+						$('.actors-data-tabs').hide();
 						var id = actor.id;
 						var selectedActor;
 						var i = 0;
@@ -4804,7 +4803,14 @@
 						}						
 						$('#timaat-actordatasets-metadata-form').data('actor', selectedActor);
 						if (TIMAAT.ActorDatasets.subNavTab && TIMAAT.ActorDatasets.subNavTa != 'personMemberOfCollectives') {
-              console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							console.log("TCL: TIMAAT.ActorDatasets.subNavTab", TIMAAT.ActorDatasets.subNavTab);
+							// show tabs
+							$('.collective-data-tab').show();
+							$('.name-data-tab').show();
+							$('.address-data-tab').show();
+							$('.emailaddress-data-tab').show();
+							$('.phonenumber-data-tab').show();
+							$('.actorroles-data-tab').show();
 							$('.nav-tabs a[href="#'+TIMAAT.ActorDatasets.subNavTab+'"]').tab('show');
 							TIMAAT.ActorDatasets.showLastForm();
 						} else {

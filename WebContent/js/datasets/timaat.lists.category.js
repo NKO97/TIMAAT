@@ -26,8 +26,8 @@
 		init: function() {
 			TIMAAT.CategoryLists.initCategories();
 			TIMAAT.CategoryLists.initCategorySets();
-			$('.lists-cards').hide();
-			$('.categorysets-card').show();
+			$('.lists-datatables').hide();
+			$('.categorysets-datatable').show();
 		},
 
 		initCategories: function() {
@@ -150,8 +150,8 @@
 		},
 		
 		loadCategories: function(set, force) {
-			$('.lists-cards').hide();
-			$('.categories-card').show();
+			$('.lists-datatables').hide();
+			$('.categories-datatable').show();
 
 			var setId = 0;
 			if ( set && set.model && set.model.id ) setId = set.model.id;
@@ -259,8 +259,8 @@
 		
 		loadCategorySets: function() {
 			// console.log("TCL: loadCategorySets: function()");
-			$('.lists-cards').hide();
-			$('.categoriesets-card').show();
+			$('.lists-datatables').hide();
+			$('.categoriesets-datatable').show();
 
 			// load categorysets
 			TIMAAT.CategoryService.getAllCategorySets(TIMAAT.CategoryLists.setCategorySetLists); // TODO uncomment once working
