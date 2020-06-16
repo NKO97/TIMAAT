@@ -97,7 +97,7 @@
 
 				if (actorType) {
 					actorType.model.actor.actorTypeTranslations[0].type = type;
-					actorType.updateUI();
+					// actorType.updateUI();
 					TIMAAT.ActorService.updateActorType(actorType);
 					TIMAAT.ActorService.updateActorTypeTranslation(actorType);
 				} else { // create new actorType
@@ -238,7 +238,7 @@
 						break;
 					}					
 					await TIMAAT.ActorDatasets.updateActor(type, actor);
-					actor.updateUI();
+					// actor.updateUI();
 				} else { // create new actor
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(formDataObject, type);
 					var actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(formDataObject, type);
@@ -1086,7 +1086,7 @@
 
 				if (addressType) {
 					addressType.model.actor.addressTypeTranslations[0].type = type;
-					addressType.updateUI();
+					// addressType.updateUI();
 					TIMAAT.ActorService.updateAddressType(addressType);
 					TIMAAT.ActorService.updateAddressTypeTranslation(addressType);
 				} else { // create new addressType
@@ -1413,7 +1413,7 @@
 
 				if (emailAddressType) {
 					emailAddressType.model.actor.emailAddressTypeTranslations[0].type = type;
-					emailAddressType.updateUI();
+					// emailAddressType.updateUI();
 					TIMAAT.ActorService.updateEmailAddressType(emailAddressType);
 					TIMAAT.ActorService.updateEmailAddressTypeTranslation(emailAddressType);
 				} else { // create new emailAddressType
@@ -1741,7 +1741,7 @@
 
 				if (phoneNumberType) {
 					phoneNumberType.model.actor.phoneNumberTypeTranslations[0].type = type;
-					phoneNumberType.updateUI();
+					// phoneNumberType.updateUI();
 					TIMAAT.ActorService.updatePhoneNumberType(phoneNumberType);
 					TIMAAT.ActorService.updatePhoneNumberTypeTranslation(phoneNumberType);
 				} else { // create new phoneNumberType
@@ -2158,7 +2158,7 @@
 					}
 					// console.log("TCL: UPDATE membershipDetail (end)");
 				}
-				actor.updateUI();
+				// actor.updateUI();
 				console.log("TCL: show actor memberOfCollective form");
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', actor);
 			});
@@ -2229,7 +2229,7 @@
 				// update actor
 				let actorModel = actor.model;
 				await TIMAAT.ActorDatasets.updateActorHasRole(actorModel, roleIdList);
-				actor.updateUI();
+				// actor.updateUI();
 				// await TIMAAT.Actordatasets.refreshDatatable(actor.model.actorType.actorTypeTranslations[0].type);
 				TIMAAT.ActorDatasets.actorFormRoles('show', actor);
 			});
@@ -3635,7 +3635,7 @@
 				} catch(error) {
 					console.log( "error: ", error);
 				}
-				actor.updateUI();
+				// actor.updateUI();
 		},
 
 		updateName: async function(name, actor) {

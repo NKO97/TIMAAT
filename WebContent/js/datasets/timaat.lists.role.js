@@ -94,7 +94,7 @@
           let roleOrRoleGroupData = roleOrRoleGroup.model;
           delete roleOrRoleGroupData.ui;
           await TIMAAT.RoleLists.updateRoleOrRoleGroup(type, roleOrRoleGroupData, roleOrRoleGroupIdList);
-					roleOrRoleGroup.updateUI();
+					// roleOrRoleGroup.updateUI();
 					await TIMAAT.RoleLists.refreshDatatable(type);
 					TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', type, roleOrRoleGroup);
         } 

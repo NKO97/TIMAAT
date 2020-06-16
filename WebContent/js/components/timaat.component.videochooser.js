@@ -421,7 +421,7 @@
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.UI.showComponent('media');
+						TIMAAT.MediaDatasets.initMediaComponent();
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();

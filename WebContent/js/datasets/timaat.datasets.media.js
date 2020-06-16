@@ -109,7 +109,7 @@
 					mediaType.model.hasVisual = hasVisual;
 					mediaType.model.hasAudio = hasAudio;
 					mediaType.model.hasContent = hasContent;
-					mediaType.updateUI();
+					// mediaType.updateUI();
 					TIMAAT.MediaService.updateMediaType(mediaType);
 					TIMAAT.MediaService.updateMediaTypeTranslation(mediaType);
 				} else { // create new mediaType
@@ -265,7 +265,7 @@
 						break;
 					}
 					await TIMAAT.MediaDatasets.updateMedium(type, medium);
-					medium.updateUI();
+					// medium.updateUI();
 				} else { // create new medium
 					var mediumModel = await TIMAAT.MediaDatasets.createMediumModel(formDataObject, type);
 					var displayTitleModel = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
@@ -917,7 +917,7 @@
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
 						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
-						medium.updateUI();
+						// medium.updateUI();
 						TIMAAT.MediaDatasets.mediumFormLanguageTracks('edit', medium);
 					}
 					else { // duplicate entry
@@ -946,7 +946,7 @@
 							break;
 						}
 					}
-					medium.updateUI();
+					// medium.updateUI();
 					TIMAAT.MediaDatasets.mediumFormLanguageTracks('edit', medium);
 			});
 
@@ -1315,7 +1315,7 @@
 					// no UPDATE as medium-actor-role table only has ids and no information stored 
 				}
 				medium.model = await TIMAAT.MediaService.getMedium(medium.model.id);
-				medium.updateUI();
+				// medium.updateUI();
 				console.log("TCL: show medium actorwithroles form");
 				TIMAAT.MediaDatasets.mediumFormActorRoles('show', medium);
 			});
@@ -2502,7 +2502,7 @@
 			// 	console.log( "error: ", error);
 			// };
 			
-			medium.updateUI();
+			// medium.updateUI();
 		},
 
 		updateTitle: async function(title, medium) {
