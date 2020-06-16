@@ -362,7 +362,7 @@
 				TIMAAT.ActorDatasets.subNavTab = 'actorNames';
 				TIMAAT.ActorDatasets.lastForm = 'names';
 				$('.form').hide();
-				TIMAAT.ActorDatasets.setActorNameList($('#timaat-actordatasets-metadata-form').data('actor'))
+				// TIMAAT.ActorDatasets.setActorNameList($('#timaat-actordatasets-metadata-form').data('actor'))
 				TIMAAT.ActorDatasets.actorFormNames('show', $('#timaat-actordatasets-metadata-form').data('actor'));
 			});
 			
@@ -560,18 +560,29 @@
 						}
 						// update display name
 						var displayNameChanged = false;
-						if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						if (formNameList[i].isDisplayName) {
 							actor.model.displayName = actor.model.actorNames[i];
 							displayNameChanged = true;
-						} else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
-							actor.model.displayName = null;
-							displayNameChanged = true;
 						}
-						var birthNameChanged = false;
 						// update birth name
-						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						var birthNameChanged = false
+						if (formNameList[i].isBirthName) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
+						// // update display name
+						// var displayNameChanged = false;
+						// if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.displayName = actor.model.actorNames[i];
+						// 	displayNameChanged = true;
+						// } else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
+						// 	actor.model.displayName = null;
+						// 	displayNameChanged = true;
+						// }
+						// var birthNameChanged = false;
+						// // update birth name
+						// if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.birthName = actor.model.actorNames[i];
+						// 	birthNameChanged = true;
 						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
@@ -619,18 +630,29 @@
 						console.log("TCL: actor.model", actor.model);
 						// update display name
 						var displayNameChanged = false;
-						if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						if (formNameList[i].isDisplayName) {
 							actor.model.displayName = actor.model.actorNames[i];
-							displayNameChanged = true;
-						} else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
-							actor.model.displayName = null;
 							displayNameChanged = true;
 						}
 						// update birth name
-						var birthNameChanged = false;
-						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						var birthNameChanged = false
+						if (formNameList[i].isBirthName) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
+						// // update display name
+						// var displayNameChanged = false;
+						// if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.displayName = actor.model.actorNames[i];
+						// 	displayNameChanged = true;
+						// } else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
+						// 	actor.model.displayName = null;
+						// 	displayNameChanged = true;
+						// }
+						// // update birth name
+						// var birthNameChanged = false;
+						// if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.birthName = actor.model.actorNames[i];
+						// 	birthNameChanged = true;
 						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
@@ -658,18 +680,29 @@
 						}
 						// update display name
 						var displayNameChanged = false;
-						if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						if (formNameList[i].isDisplayName) {
 							actor.model.displayName = actor.model.actorNames[i];
-							displayNameChanged = true;
-						} else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
-							actor.model.displayName = null;
 							displayNameChanged = true;
 						}
 						// update birth name
-						var birthNameChanged = false;
-						if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						var birthNameChanged = false
+						if (formNameList[i].isBirthName) {
 							actor.model.birthName = actor.model.actorNames[i];
 							birthNameChanged = true;
+						// // update display name
+						// var displayNameChanged = false;
+						// if (formNameList[i].isDisplayName && (actor.model.displayName == null || actor.model.displayName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.displayName = actor.model.actorNames[i];
+						// 	displayNameChanged = true;
+						// } else if (!formNameList[i].isDisplayName && actor.model.displayName != null && actor.model.displayName.id == actor.model.actorNames[i].id) {
+						// 	actor.model.displayName = null;
+						// 	displayNameChanged = true;
+						// }
+						// // update birth name
+						// var birthNameChanged = false;
+						// if (formNameList[i].isBirthName && (actor.model.birthName == null || actor.model.birthName.id != actor.model.actorNames[i].id)) {
+						// 	actor.model.birthName = actor.model.actorNames[i];
+						// 	birthNameChanged = true;
 						} else if (!formNameList[i].isBirthName && actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
 							birthNameChanged = true;
@@ -3576,7 +3609,6 @@
 							// TODO remove deletions once implemented
 							tempSubtypeModel.placeOfBirth = null;
 							tempSubtypeModel.placeOfDeath = null;
-							// delete tempSubtypeModel.actorPersonIsMemberOfActorCollectives;
 						break;
 						case 'collective':
 							tempSubtypeModel = actor.model.actorCollective;
@@ -3857,13 +3889,14 @@
 			actor.model.displayName.name = formDataObject.displayName;
 			actor.model.displayName.usedFrom = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
 			actor.model.displayName.usedUntil = moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD");
-			// var i = 0;
-			// for (; i < actor.model.actorNames.length; i++) {
-			// 	if (actor.model.actorNames[i].isDisplayName) {
-			// 		actor.model.actorNames[i] = actor.model.displayName;
-			// 		break;
-			// 	}
-			// }
+			var i = 0;
+			for (; i < actor.model.actorNames.length; i++) {
+				if (actor.model.actorNames[i].id == actor.model.displayName.id) {
+					actor.model.actorNames[i] = actor.model.displayName;
+					break;
+				}
+			}
+      console.log("TCL: actor", actor);
 			return actor;
 		},
 

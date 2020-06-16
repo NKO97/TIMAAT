@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.MediaService = {
 
 		listMediaTypes(callback) {

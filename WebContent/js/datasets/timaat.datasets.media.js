@@ -759,7 +759,7 @@
 					};
 					var i = medium.model.titles.length - 1;
 					for (; i >= formTitleList.length; i-- ) { // remove obsolete titles
-						if (medium.model.originalTitle.id == medium.model.titles[i].id) {
+						if (medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
 							medium.model.originalTitle = null;
 							console.log("TCL: remove originalTitle before deleting title");		
 							await TIMAAT.MediaDatasets.updateMedium(mediumType, medium);
