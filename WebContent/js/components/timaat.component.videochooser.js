@@ -476,6 +476,7 @@
 							if (video.originalTitle != null && video.displayTitle.id != video.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+video.originalTitle.name+`)</i></p>`;
 							}
+							// TODO not working anymore due to server side datatable data search
 							video.titles.forEach(function(title) { // make additional titles searchable in medialibrary
 								if (title.id != video.displayTitle.id && (video.originalTitle == null || title.id != video.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
@@ -488,7 +489,7 @@
 							return TIMAAT.Util.formatTime(data);
 						}
 					},
-					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, video, meta) {
+					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', render: function(data, type, video, meta) {
 							return TIMAAT.VideoChooser._getProducer(video);
 						}
 					},
@@ -838,21 +839,28 @@
 		},
 		
 		_getProducer: function(video) {
-			var producer = "";
-			if ( !video || !video.mediumHasActorWithRoles ) return producer;
+			if ( !video || !video.mediumHasActorWithRoles ) return "";
 			var actors = [];
 			video.mediumHasActorWithRoles.forEach(function(role) {
 				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
 			});
-			if ( actors.length == 0 ) return producer;
+			if ( actors.length == 0 ) return "";
+			var producer = "";
 			var i = 0;
 			for (; i < actors.length; i++) {
 				if (producer.length == 0) {
 					producer += actors[i].displayName.name;
+					if (actors[i].birthName) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
 				} else {
-					producer += ", "+actors[i].displayName.name;
+					producer += ",<br>"+actors[i].displayName.name;
+					if (actors[i].birthName) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
 				}
 			}
+      console.log("TCL: producer", producer);
 			return producer;
 		},
 
