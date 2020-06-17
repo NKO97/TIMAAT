@@ -80,20 +80,26 @@
         var formSelectData = formDataRaw;
         formSelectData.splice(0,1); // remove entries not part of multi select data
         // console.log("TCL: formSelectData", formSelectData);
+        // TODO split id lists properly
         // create proper id list
         var i = 0;
         var roleOrRoleGroupIdList = [];
+        var roleActorIdList = [];
         for (; i < formSelectData.length; i++) {
-          roleOrRoleGroupIdList.push( {id: formSelectData[i].value})
+          if (formSelectData[i].name == 'roleId' || formSelectData[i].name == 'roleGroupId' )
+            roleOrRoleGroupIdList.push( {id: formSelectData[i].value})
+          if (formSelectData[i].name == 'actorId' )
+            roleActorIdList.push( {id: formSelectData[i].value})
         }
         // console.log("TCL: roleOrRoleGroupIdList", roleOrRoleGroupIdList);
+        // console.log("TCL: roleActorIdList", roleActorIdList);
 
 				if (roleOrRoleGroup) { // update role or role group
           roleOrRoleGroup = await TIMAAT.RoleLists.updateRoleOrRoleGroupModelData(type, roleOrRoleGroup, formDataObject);
           // console.log("TCL: roleOrRoleGroup", roleOrRoleGroup);
           let roleOrRoleGroupData = roleOrRoleGroup.model;
           delete roleOrRoleGroupData.ui;
-          await TIMAAT.RoleLists.updateRoleOrRoleGroup(type, roleOrRoleGroupData, roleOrRoleGroupIdList);
+          await TIMAAT.RoleLists.updateRoleOrRoleGroup(type, roleOrRoleGroupData, roleOrRoleGroupIdList, roleActorIdList);
 					// roleOrRoleGroup.updateUI();
 					await TIMAAT.RoleLists.refreshDatatable(type);
 					TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', type, roleOrRoleGroup);
@@ -513,6 +519,10 @@
       while (node.lastChild) {
         node.removeChild(node.lastChild)
       }
+      node = document.getElementById("dynamic-role-actor-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+      }
       node = document.getElementById("dynamic-rolegroup-contains-role-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -561,10 +571,10 @@
             },
             minimumInputLength: 0,
           });
-          var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
-          console.log("TCL: roleGroupSelect", roleGroupSelect);
           await TIMAAT.RoleService.getRoleGroupHasRoleList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
+            var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
+            // console.log("TCL: roleGroupSelect", roleGroupSelect);
             if (data.length > 0) {
               // create the options and append to Select2
               var i = 0;
@@ -581,6 +591,59 @@
               });
             }
           });
+          $('#dynamic-role-actor-fields').append(TIMAAT.RoleLists.appendRoleActorsDataset());
+          $('#actors-multi-select-dropdown').select2({
+            closeOnSelect: false,
+            scrollAfterSelect: true,
+            allowClear: true,
+            ajax: {
+              url: 'api/actor/selectlist',
+              type: 'GET',
+              dataType: 'json',
+              delay: 250,
+              headers: {
+                "Authorization": "Bearer "+TIMAAT.Service.token,
+                "Content-Type": "application/json",
+              },
+              // additional parameters
+              data: function(params) {
+                // console.log("TCL: data: params", params);
+                return {
+                  search: params.term,
+                  page: params.page
+                };          
+              },
+              processResults: function(data, params) {
+                // console.log("TCL: processResults: data", data);
+                params.page = params.page || 1;
+                return {
+                  results: data
+                };
+              },
+              cache: true
+            },
+            minimumInputLength: 0,
+          });
+          await TIMAAT.ActorService.getActorsWithThisRoleList(data.model.id).then(function (data) {
+            var actorSelect = $('#actors-multi-select-dropdown');
+            // console.log("TCL: actorSelect", actorSelect);
+            console.log("TCL: then: data", data);
+            if (data.length > 0) {
+              var i = 0;
+              for (; i < data.length; i++) {
+                var option = new Option(data[i].displayName.name, data[i].id, true, true);
+                actorSelect.append(option).trigger('change');
+              }
+              // manually trigger the 'select2:select' event
+              actorSelect.trigger({
+                type: 'select2:select',
+                params: {
+                  data: data
+                }
+              });
+            }
+          });
+          
         break;
         case 'rolegroup':
           $('#dynamic-rolegroup-contains-role-fields').append(TIMAAT.RoleLists.appendRoleGroupContainsRolesDataset());
@@ -761,7 +824,7 @@
 			return (model);
 		},
 
-    updateRoleOrRoleGroup: async function(type, roleOrRoleGroup, roleOrRoleGroupIdList) {
+    updateRoleOrRoleGroup: async function(type, roleOrRoleGroup, roleOrRoleGroupIdList, roleActorIdList) {
       console.log("TCL: updateRoleOrRoleGroup: async function -> role/roleGroup at beginning of update process: ", type, roleOrRoleGroup, roleOrRoleGroupIdList);
       
       try { // update translation
@@ -909,9 +972,105 @@
       } catch(error) {
         console.log( "error: ", error);
       };
+
+      try { // update actor.roles entries
+        if (type == 'role' && roleActorIdList.length > 0) {
+          var existingActorHasRolesEntries = await TIMAAT.ActorService.getActorsWithThisRoleList(roleOrRoleGroup.id);
+          // console.log("TCL: existingActorHasRolesEntries", existingActorHasRolesEntries);
+          // console.log("TCL: roleActorIdList", roleActorIdList);
+          if (roleActorIdList == null) { //* all entries will be deleted
+            // console.log("TCL: delete all existingActorHasRolesEntries: ", existingActorHasRolesEntries);
+            var i = 0;
+            for (; i < existingActorHasRolesEntries.length; i++) {
+              var index = existingActorHasRolesEntries.findIndex( ({actor}) => actor.model.roles.id === roleOrRoleGroup.id)
+              existingActorHasRolesEntries[i].model.roles.splice(index,1);
+              await TIMAAT.ActorService.updateActor(existingActorHasRolesEntries[i]);
+            }       
+          } else if (existingActorHasRolesEntries.length == 0) { //* all entries will be added
+            // console.log("TCL: add all roleActorIdList: ", roleActorIdList);
+            var i = 0;
+            for (; i < roleActorIdList.length; i++) {
+              // console.log("TCL: roleActorIdList[i].id", roleActorIdList[i].id);
+              var actor = await TIMAAT.ActorService.getActor(roleActorIdList[i].id);
+              actor.roles.push(roleOrRoleGroup);
+              await TIMAAT.ActorService.updateActor(actor);
+            }
+          } else { //* add/remove entries
+            // delete removed entries
+            var actorHasRoleEntriesToDelete = [];
+            var i = 0;
+            for (; i < existingActorHasRolesEntries.length; i++) {
+              var deleteId = true;
+              var item = {};
+              var j = 0;
+              for (; j < roleActorIdList.length; j++) {
+                if( existingActorHasRolesEntries[i].id == roleActorIdList[j].id) {
+                  deleteId = false;
+                  break; // no need to check further if match was found
+                }
+              }
+              if (deleteId) { // id is in existingActorHasRolesEntries but not in roleActorIdList
+                // console.log("TCL: delete entry: ", existingActorHasRolesEntries[i]);
+                item = existingActorHasRolesEntries[i];
+                actorHasRoleEntriesToDelete.push(item);
+                existingActorHasRolesEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+                i--; // so the next list item is not jumped over due to the splicing
+              }
+            }
+            // console.log("TCL: actorHasRoleEntriesToDelete", actorHasRoleEntriesToDelete);
+            if (actorHasRoleEntriesToDelete.length > 0) { // anything to delete?
+              var i = 0;
+              for (; i < actorHasRoleEntriesToDelete.length; i++) {
+                // console.log("TCL: actorHasRoleEntriesToDelete[i].id", actorHasRoleEntriesToDelete[i].id);
+                var actor = await TIMAAT.ActorService.getActor(actorHasRoleEntriesToDelete[i].id);
+                var index = actor.roles.findIndex(({id}) => id === roleOrRoleGroup.id);
+                actor.roles.splice(index,1);
+                await TIMAAT.ActorService.updateActor(actor);
+              }
+            }
+
+            // create new entries
+            var idsToCreate = [];
+            i = 0;
+            for (; i < roleActorIdList.length; i++) {
+              // console.log("TCL: roleActorIdList", roleActorIdList);
+              var idExists = false;
+              var item = { id: 0 };
+              var j = 0;
+              for (; j < existingActorHasRolesEntries.length; j++) {
+                // console.log("TCL: existingActorHasRolesEntries", existingActorHasRolesEntries);
+                if (roleActorIdList[i].id == existingActorHasRolesEntries[j].id) {
+                  idExists = true;
+                  break; // no need to check further if match was found
+                }
+              }
+              if (!idExists) {
+                item.id = roleActorIdList[i].id;
+                idsToCreate.push(item);
+              }
+            }
+            // console.log("TCL: idsToCreate", idsToCreate);
+            if (idsToCreate.length > 0) { // anything to add?
+              // console.log("TCL: idsToCreate", idsToCreate);
+              var i = 0;
+              for (; i < idsToCreate.length; i++ ) {
+                // console.log("TCL: idsToCreate[i].id", idsToCreate[i].id);
+                var actor = await TIMAAT.ActorService.getActor(idsToCreate[i].id);
+                actor.roles.push(roleOrRoleGroup);
+                await TIMAAT.ActorService.updateActor(actor);
+              }
+            }
+          }
+        }
+      } catch(error) {
+        console.log( "error: ", error);
+      };
       
       TIMAAT.RoleLists.refreshDatatable('role');
       TIMAAT.RoleLists.refreshDatatable('rolegroup');
+      TIMAAT.ActorDatasets.refreshDatatable('actor');
+      TIMAAT.ActorDatasets.refreshDatatable('person');
+      TIMAAT.ActorDatasets.refreshDatatable('collective');
     },
 
     _roleOrRoleGroupRemoved: async function(type, model) {
@@ -925,7 +1084,7 @@
     },
 
     appendRoleIsPartOfRoleGroupsDataset: function() {
-      var isPartOfRoleGroupFormData =
+      var multiSelectFormData =
 			`<div class="form-group" data-role="roleispartofrolegroup-entry">
 				<div class="form-row">
 					<div class="col-md-12">
@@ -940,7 +1099,26 @@
 					</div>
 				</div>
 			</div>`;
-			return isPartOfRoleGroupFormData;
+			return multiSelectFormData;
+    },
+
+    appendRoleActorsDataset: function() {
+      var multiSelectFormData =
+			`<div class="form-group" data-role="role-actor-entry">
+				<div class="form-row">
+					<div class="col-md-12">
+            <label class="sr-only">Actors with this role</label>
+            <select class="form-control form-control-sm"
+                    id="actors-multi-select-dropdown"
+                    name="actorId"
+                    data-placeholder="Select actor(s)"
+                    multiple="multiple"
+                    readonly="true">
+            </select>
+					</div>
+				</div>
+			</div>`;
+			return multiSelectFormData;
     },
 
     appendRoleGroupContainsRolesDataset: function() {

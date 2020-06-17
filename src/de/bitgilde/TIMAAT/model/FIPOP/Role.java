@@ -41,7 +41,6 @@ public class Role implements Serializable {
 	@JsonIgnore
 	private List<Actor> actors;
 
-
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
 	@JsonIgnore

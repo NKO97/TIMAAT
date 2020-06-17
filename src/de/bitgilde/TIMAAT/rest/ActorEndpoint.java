@@ -464,6 +464,21 @@ public class ActorEndpoint {
 		return Response.ok().entity(roleList).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("withrole/{role_id}")
+	public Response getActorsWithThisRoleList(@PathParam("role_id") Integer roleId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		List<Actor> actorList = role.getActors();
+		System.out.println("Number of actors found: "+ actorList.size());
+
+		return Response.ok().entity(actorList).build();
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
