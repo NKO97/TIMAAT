@@ -1953,6 +1953,9 @@
                         <li class="nav-item actors-data-tabs actorroles-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-roles-form" href="#actorRoles">Roles</a>
                         </li>
+                        <li class="nav-item actors-data-tabs actorrolemedium-data-tab">
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-role-medium-form" href="#actorRoleMedium">Roles Medium</a>
+                        </li>
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
@@ -2524,7 +2527,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorRolesLabel">Person has roles</h5>
+                              <h5 class="form-title caps-title" id="actorRolesLabel">Actor has role(s)</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-role-form-edit" name="edit">
@@ -2546,6 +2549,33 @@
                         <!-- Save/Cancel buttons -->
                         <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-form-dismiss" name="dismiss">Cancel</button>
+                      </form>
+                      <!-- actor role medium form -->
+                      <form class="form" role="form" id="timaat-actordatasets-actor-role-medium-form" name="timaat-actordatasets-actor-role-medium-form" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="actorRoleMediumLabel">Actor has role(s) in medium</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-role-medium-form-edit" name="edit">
+                                <i class="fas fa-edit"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <h6 class="form-header form-subheader">Producer in video(s):</h6>
+                          </div>
+                        </div>
+                        <div class="actor-role-medium-container">
+                          <div data-role="dynamic-actorroleinmedium-fields" id="dynamic-actorroleinmedium-fields">
+                            <div class="form-group">
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-medium-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-medium-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                     </div>
                   </div>

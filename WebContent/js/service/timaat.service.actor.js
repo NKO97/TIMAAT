@@ -192,6 +192,31 @@
 			});	
 		},
 
+		async getActorRoleInMediumList(actorId, roleId) {
+			console.log("TCL: getActorRoleInMediumList -> actorId, roleId: ", actorId, roleId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/role/"+roleId+"/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorRoleInMediumList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
+
 		async getActorsWithThisRoleList(roleId) {
 			console.log("TCL: getActorsWithThisRoleList -> roleId: ", roleId);
 			return new Promise(resolve => {

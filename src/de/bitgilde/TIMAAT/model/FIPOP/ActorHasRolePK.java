@@ -12,18 +12,20 @@ public class ActorHasRolePK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="actor_id") // PK table would not be necessary for plain actor_has_role-table. Since other tables link to this table, the PK table is needed
+	@Column(name="actor_id", insertable=false, updatable=false) // PK table would not be necessary for plain actor_has_role-table. Since other tables link to this table, the PK table is needed
 	private int actorId;
 
-	@Column(name="role_id")
+	@Column(name="role_id", insertable=false, updatable=false)
 	private int roleId;
 
 	public ActorHasRolePK() {
 	}
-	// public ActorHasRolePK(int actorId, int roleId) {
-	// 	this.actorId = actorId;
-	// 	this.roleId = roleId;
-	// }
+
+	public ActorHasRolePK(int actorId, int roleId) {
+		this.actorId = actorId;
+		this.roleId = roleId;
+	}
+
 	public int getActorId() {
 		return this.actorId;
 	}

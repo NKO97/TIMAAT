@@ -21,6 +21,17 @@ public class ActorHasRole implements Serializable {
 	@EmbeddedId
 	private ActorHasRolePK id;
 
+	//bi-directional many-to-one association to Actor
+	@ManyToOne
+	@JoinColumn(name="actor_id")
+	@JsonIgnore
+	private Actor actor;
+
+	//bi-directional many-to-one association to ROle
+	@ManyToOne
+	@JoinColumn(name="role_id")
+	private Role role;
+
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="actorHasRoles")
 	@JsonIgnore
@@ -32,6 +43,12 @@ public class ActorHasRole implements Serializable {
 	private List<Medium> mediums;
 
 	public ActorHasRole() {
+	}
+
+	public ActorHasRole(Actor actor, Role role) {
+		this.actor = actor;
+		this.role = role;
+		this.id = new ActorHasRolePK(actor.getId(), role.getId());
 	}
 
 	public ActorHasRolePK getId() {

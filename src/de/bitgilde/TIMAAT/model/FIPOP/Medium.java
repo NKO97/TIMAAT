@@ -177,7 +177,6 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<MediumHasActorWithRole> mediumHasActorWithRoles;
 
-	
 	//bi-directional many-to-many association to RatingCategory
 	// @ManyToMany(mappedBy="mediums")
 	// private List<RatingCategory> ratingCategories;
@@ -186,7 +185,7 @@ public class Medium implements Serializable {
 	@ManyToMany(mappedBy="mediums")
 	private List<Tag> tags;
 
-		//bi-directional many-to-many association to TargetAudience
+	//bi-directional many-to-many association to TargetAudience
 	// @ManyToMany(mappedBy="mediums")
 	// private List<TargetAudience> targetAudiences;
 

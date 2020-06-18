@@ -67,7 +67,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumText;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
-import de.bitgilde.TIMAAT.model.FIPOP.RoleTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Source;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
@@ -157,6 +156,117 @@ public class MediumServiceEndpoint {
 		}
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("selectlist")
+	public Response getMediumSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("MediumServiceEndpoint: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "m.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// TODO search all titles, not displayTitle only
+		// define default query strings
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("mediumName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : mediumList) {
+			mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+		}
+
+		return Response.ok().entity(mediumSelectList).build();
+
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("video/selectlist")
+	public Response getVideoSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("MediumServiceEndpoint: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "m.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// TODO search all titles, not displayTitle only
+		// define default query strings
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("mediumName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : mediumList) {
+			if (medium.getMediumVideo() != null) {
+				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+			}
+		}
+
+		return Response.ok().entity(mediumSelectList).build();
 	}
 
 	@GET

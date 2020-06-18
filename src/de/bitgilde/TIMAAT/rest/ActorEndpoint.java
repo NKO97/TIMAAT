@@ -53,6 +53,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
@@ -454,7 +456,7 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/role/list")
-	public Response getActorHasRoleList(@PathParam("id") Integer actorId)
+	public Response getActorHasRoleList(@PathParam("id") int actorId)
 	{
 		System.out.println("RoleServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -467,8 +469,35 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("{actor_id}/role/{role_id}/list")
+	public Response getActorRoleInMediumList(@PathParam("actor_id") int actorId,
+																					 @PathParam("role_id") int roleId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.actor.id = :actorId AND mhawr.role.id = :roleId";
+		// String sql = "SELECT DISTINCT m FROM Medium m WHERE m.actorHasRoles.actor.id = :actorId AND m.actorHasRoles.role.id = :roleId";
+		Query query = entityManager.createQuery(sql)
+			.setParameter("actorId", actorId)
+			.setParameter("roleId", roleId);
+		// Actor actor = entityManager.find(Actor.class, actorId);
+		// Role role = entityManager.find(Role.class, roleId);
+		// ActorHasRole actorHasRole = new ActorHasRole(actor, role);
+		List<MediumHasActorWithRole> mhawrList = castList(MediumHasActorWithRole.class, query.getResultList());
+		List<Medium> mediumList = new ArrayList<>();
+		for (MediumHasActorWithRole mhawr : mhawrList) {
+			mediumList.add(mhawr.getMedium());
+		}
+
+		return Response.ok().entity(mediumList).build();
+	}
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("withrole/{role_id}")
-	public Response getActorsWithThisRoleList(@PathParam("role_id") Integer roleId)
+	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
 	{
 		System.out.println("RoleServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
