@@ -22,17 +22,25 @@
 	TIMAAT.Datasets = {
 
 		init: function() {
+			// Datasets
 			TIMAAT.ActorDatasets.init();
 			TIMAAT.EventDatasets.init();
 			TIMAAT.LocationDatasets.init();   
 			TIMAAT.MediaDatasets.init();
+			// Lists
+			TIMAAT.RoleLists.init();
+			TIMAAT.CategoryLists.init();
 		},
 
-		load: function() {
+		load: async function() {
+			// Datasets
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();
 			TIMAAT.LocationDatasets.load();   
 			TIMAAT.MediaDatasets.load();
+			// Lists
+			TIMAAT.RoleLists.load();
+			// TIMAAT.CategoryLists.load();
 		},
 
 	}

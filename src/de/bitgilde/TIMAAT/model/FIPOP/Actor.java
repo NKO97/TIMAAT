@@ -81,7 +81,7 @@ public class Actor implements Serializable {
 	private List<ActorHasPhoneNumber> actorHasPhoneNumbers;
 
 	//bi-directional many-to-many association to Role
-	@ManyToMany(mappedBy="actors")
+	@ManyToMany
 	@JoinTable(
 		name="actor_has_role"
 		, joinColumns={
@@ -296,6 +296,20 @@ public class Actor implements Serializable {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Role addRole(Role role) {
+		getRoles().add(role);
+		role.addActor(this);
+
+		return role;
+	}
+
+	public Role removeRole(Role role) {
+		getRoles().remove(role);
+		role.removeActor(this);
+
+		return role;
 	}
 
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {

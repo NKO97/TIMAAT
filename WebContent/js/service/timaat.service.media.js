@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.MediaService = {
 
 		listMediaTypes(callback) {
@@ -100,10 +100,58 @@
 			});			
 		},
 
-		async getMediumSubtypeDatasetsTotal(mediumSubtype) {
+		async getActorList(mediumId) {
+      console.log("TCL: getActorHasRoleList -> mediumId", mediumId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactorlist/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorRolesList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
+		async getActorHasRoleList(mediumId, actorId) {
+      console.log("TCL: getActorHasRoleList -> mediumId, actorId", mediumId, actorId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrolelist/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getActorHasRoleList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
+		async getMedium(id) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/total",
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+id,
 					type:"GET",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -111,7 +159,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getMediaDatasetsTotal -> data", data);
+					console.log("TCL: getMedium -> data", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log(e.responseText);
@@ -266,9 +314,32 @@
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
-				}).done(function(trackData) {
-					// console.log("TCL: addTrack -> trackData", trackData);
-					resolve(trackData);
+				}).done(function(data) {
+					// console.log("TCL: addTrack -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.log( "error: ", error );
+					console.log( "ajax call fail - error: ", error.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async addMediumHasActorWithRoles(mediumId, actorId, roleId) {
+    	console.log("TCL: addActorToMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrole/"+roleId,
+					type:"POST",
+					// data: JSON.stringify(roleIds),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
 				}).fail(function(error) {
 					console.log( "error: ", error );
 					console.log( "ajax call fail - error: ", error.responseText );
@@ -456,25 +527,8 @@
 			});
 		},
 
-		// removeMediumSubtype(subtype, subtypeData) {
-    //   // console.log("TCL: removesubtypeData -> subtype, subtypeData", subtype, subtypeData);
-		// 	$.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+subtype+"/"+subtypeData.model.mediumId,
-		// 		type:"DELETE",
-		// 		contentType:"application/json; charset=utf-8",
-		// 		beforeSend: function (xhr) {
-		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 		},
-		// 	}).done(function(data) {
-		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
-		// 	});
-		// },
-
 		removeTitle(title) {
-			// console.log("TCL: removeTitle -> title", title);
+			// console.log("TCL: removeTitle -> title ", title);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,
 				type:"DELETE",
@@ -491,7 +545,7 @@
 		},
 
 		async removeLanguageTrack(track) {
-			// console.log("TCL: removeLanguageTrack -> track", track);
+			// console.log("TCL: removeLanguageTrack -> track ", track);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.id.mediumId+"/languagetrack/"+track.id.mediumLanguageTypeId+"/"+track.id.languageId,
@@ -502,6 +556,48 @@
 					},
 				}).done(function(data) {
 					// console.log("TCL: removed language track from medium_has_language.");
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
+			});
+		},
+
+		async removeActorFromMediumHasActorWithRoles(mediumId, actorId) {
+      console.log("TCL: removeActorFromMediumHasActorWithRoles -> mediumId, actorId", mediumId, actorId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
+			});
+		},
+
+		async removeRoleFromMediumHasActorWithRoles(mediumId, actorId, roleId) {
+      console.log("TCL: removeRoleFromMediumHasActorWithRoles -> mediumId, actorId, roleId", mediumId, actorId, roleId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrole/"+roleId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error", e );

@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -18,15 +21,34 @@ public class ActorHasRole implements Serializable {
 	@EmbeddedId
 	private ActorHasRolePK id;
 
+	//bi-directional many-to-one association to Actor
+	@ManyToOne
+	@JoinColumn(name="actor_id")
+	@JsonIgnore
+	private Actor actor;
+
+	//bi-directional many-to-one association to ROle
+	@ManyToOne
+	@JoinColumn(name="role_id")
+	private Role role;
+
 	//bi-directional many-to-many association to Event
 	@ManyToMany(mappedBy="actorHasRoles")
+	@JsonIgnore
 	private List<Event> events;
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="actorHasRoles")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	public ActorHasRole() {
+	}
+
+	public ActorHasRole(Actor actor, Role role) {
+		this.actor = actor;
+		this.role = role;
+		this.id = new ActorHasRolePK(actor.getId(), role.getId());
 	}
 
 	public ActorHasRolePK getId() {

@@ -4,8 +4,8 @@
       });
 
     // <!-- client side form validation -->
-      var mediumFormMetadata = $("#timaat-mediadatasets-media-metadata-form");
-      var mediumFormMetadataValidator = $("#timaat-mediadatasets-media-metadata-form").validate({
+      var mediumFormMetadata = $('#timaat-mediadatasets-metadata-form');
+      var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').validate({
         rules: {
           displayTitle: {
             required: true,
@@ -102,8 +102,8 @@
           mediumFormMetadata.submit();
         },
       });
-      var mediumFormTitles = $("#timaat-mediadatasets-medium-titles-form");
-      var mediumFormTitlesValidator = $("#timaat-mediadatasets-medium-titles-form").validate({
+      var mediumFormTitles = $('#timaat-mediadatasets-medium-titles-form');
+      var mediumFormTitlesValidator = $('#timaat-mediadatasets-medium-titles-form').validate({
         rules: {
           title: {
             required: true,
@@ -125,8 +125,8 @@
           mediumFormTitles.submit();
         },
       });
-      var mediumFormLanguageTracks = $("#timaat-mediadatasets-medium-languagetracks-form");
-      var mediumFormLanguageTracksValidator = $("#timaat-mediadatasets-medium-languagetracks-form").validate({
+      var mediumFormLanguageTracks = $('#timaat-mediadatasets-medium-languagetracks-form');
+      var mediumFormLanguageTracksValidator = $('#timaat-mediadatasets-medium-languagetracks-form').validate({
         rules: {
           languageTrackTypeId: {
             required: true,
@@ -139,8 +139,31 @@
           mediumFormLanguageTracks.submit();
         },
       });
-      var actorFormMetadata = $("#timaat-actordatasets-actor-metadata-form");
-      var actorFormMetadataValidator = $("#timaat-actordatasets-actor-metadata-form").validate({
+      var mediumFormActorRoles = $('#timaat-mediadatasets-medium-actorwithroles-form');
+      var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithroles-form').validate({
+        ignore: [],
+        rules: {
+          actorId: {
+            required: true,
+          },
+          roleId: {
+            required: true,
+          },
+        },
+        messages: {
+          actorId: {
+            required: 'Please select an actor.'
+          },
+          roleId: {
+            required: 'Please select at least one role.'
+          }
+        },
+        submitHandler: function(mediumFormLanguageTracks) {
+          mediumFormLanguageTracks.submit();
+        },
+      })
+      var actorFormMetadata = $('#timaat-actordatasets-metadata-form');
+      var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').validate({
         rules: {
           displayName: {
             required: true,
@@ -165,8 +188,8 @@
           actorFormMetadata.submit();
         },
       });
-      var actorFormNames = $("#timaat-actordatasets-actor-actornames-form");
-      var actorFormNamesValidator = $("#timaat-actordatasets-actor-actornames-form").validate({
+      var actorFormNames = $('#timaat-actordatasets-actor-actornames-form');
+      var actorFormNamesValidator = $('#timaat-actordatasets-actor-actornames-form').validate({
         rules: {
           actorName: {
             required: true,
@@ -185,8 +208,8 @@
           actorFormNames.submit();
         },
       });
-      var actorFormAddresses = $("#timaat-actordatasets-actor-addresses-form");
-      var actorFormAddressesValidator = $("#timaat-actordatasets-actor-addresses-form").validate({
+      var actorFormAddresses = $('#timaat-actordatasets-actor-addresses-form');
+      var actorFormAddressesValidator = $('#timaat-actordatasets-actor-addresses-form').validate({
         rules: {
           streetNumber: {
             maxlength: 10,
@@ -225,8 +248,8 @@
           actorFormAddresses.submit();
         },
       });
-      var actorFormEmailAddresses = $("#timaat-actordatasets-actor-emailaddresses-form");
-      var actorFormEmailAddressesValidator = $("#timaat-actordatasets-actor-emailaddresses-form").validate({
+      var actorFormEmailAddresses = $('#timaat-actordatasets-actor-emailaddresses-form');
+      var actorFormEmailAddressesValidator = $('#timaat-actordatasets-actor-emailaddresses-form').validate({
         rules: {
           email: {
             email: true
@@ -247,8 +270,8 @@
           actorFormEmailAddresses.submit();
         },
       });
-      var actorFormPhoneNumbers = $("#timaat-actordatasets-actor-phonenumbers-form");
-      var actorFormPhoneNumbersValidator = $("#timaat-actordatasets-actor-phonenumbers-form").validate({
+      var actorFormPhoneNumbers = $('#timaat-actordatasets-actor-phonenumbers-form');
+      var actorFormPhoneNumbersValidator = $('#timaat-actordatasets-actor-phonenumbers-form').validate({
         rules: {
           phoneNumberTypeId: {
             required: true
@@ -263,8 +286,8 @@
           actorFormPhoneNumbers.submit();
         },
       });
-      var personFormMemberOfCollectives = $("#timaat-actordatasets-person-memberofcollective-form");
-      var personFormMemberOfCollectivesValidator = $("#timaat-actordatasets-person-memberofcollective-form").validate({
+      var personFormMemberOfCollectives = $('#timaat-actordatasets-person-memberofcollective-form');
+      var personFormMemberOfCollectivesValidator = $('#timaat-actordatasets-person-memberofcollective-form').validate({
         rules: {
           collectiveId: {
             required: true
@@ -279,6 +302,27 @@
           personFormMemberOfCollectives.submit();
         },
       });
+      var roleOrRoleGroupFormMetadata = $('#timaat-rolelists-metadata-form');
+      var roleOrRoleGroupFormMetadataValidator = $('#timaat-rolelists-metadata-form').validate({
+        rules: {
+          name: {
+            required: true,
+            minlength: 3,
+            maxlength: 200
+          }    
+        },
+        messages: {
+          name: {
+            required: "Enter a name (min length: 3)",
+            minlength: "Name too short: min length is 3",
+            maxlength: "Name is too long: max length is 200"
+          }
+        },
+        submitHandler: function(roleOrRoleGroupFormMetadata) {
+          roleOrRoleGroupFormMetadata.submit();
+        },
+      });
+
 
       function allocateArray(strOrArr) {
     		var arr = strOrArr instanceof Uint8Array || strOrArr instanceof Array ? strOrArr : Module.intArrayFromString(strOrArr);

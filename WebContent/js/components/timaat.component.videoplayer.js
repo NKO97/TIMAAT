@@ -827,8 +827,8 @@
 			
 			// setup annotation UI
 			$('#timaat-annotation-list-loader').show();
-			$('#timaat-videoplayer-annotation-add-button').prop("disabled", true);
-			$('#timaat-videoplayer-annotation-add-button').attr("disabled");
+			$('#timaat-videoplayer-annotation-add-button').prop('disabled', true);
+			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
 
 			// setup timeline UI
 			let token = TIMAAT.VideoPlayer.model.video.mediumVideo.viewToken;
@@ -847,8 +847,8 @@
 			$('#timaat-analysislist-delete').removeAttr('onclick');
 			$('#timaat-analysislist-add').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-add').removeAttr('onclick');
-			$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", true);
-			$('#timaat-videoplayer-annotation-quickadd-button').attr("disabled");
+			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
+			$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 
 			// setup inspector
 			TIMAAT.VideoPlayer.inspector.reset();
@@ -907,10 +907,10 @@
 			TIMAAT.VideoPlayer.sortSegments();
 			
 			// update UI
-			$('#timaat-analysislist-options').prop("disabled", false);
-			$('#timaat-analysislist-options').removeAttr("disabled");
-			$('#timaat-analysislist-chooser').prop("disabled", false);
-			$('#timaat-analysislist-chooser').removeAttr("disabled");
+			$('#timaat-analysislist-options').prop('disabled', false);
+			$('#timaat-analysislist-options').removeAttr('disabled');
+			$('#timaat-analysislist-chooser').prop('disabled', false);
+			$('#timaat-analysislist-chooser').removeAttr('disabled');
 			$('#timaat-analysislist-add').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysislist()');			
 			if ( lists.length > 0 ) {
@@ -922,8 +922,8 @@
 				$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 				$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
-				$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", false);
-				$('#timaat-videoplayer-annotation-quickadd-button').removeAttr("disabled");
+				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
+				$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
 			}
 			else {
 				TIMAAT.VideoPlayer.setupAnnotations(null);
@@ -935,8 +935,8 @@
 				$('#timaat-analysissegment-edit').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
-				$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", true);
-				$('#timaat-videoplayer-annotation-quickadd-button').attr("disabled");
+				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
+				$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 			}
 		},
 		
@@ -982,18 +982,18 @@
 
 			// setup annotations UI
 			$('#timaat-annotation-list-loader').hide();
-			$('#timaat-videoplayer-annotation-add-button').prop("disabled", TIMAAT.VideoPlayer.curList == null);
+			$('#timaat-videoplayer-annotation-add-button').prop('disabled', TIMAAT.VideoPlayer.curList == null);
 			if ( TIMAAT.VideoPlayer.curList )
-				$('#timaat-videoplayer-annotation-add-button').removeAttr("disabled");
+				$('#timaat-videoplayer-annotation-add-button').removeAttr('disabled');
 			else
-				$('#timaat-videoplayer-annotation-add-button').attr("disabled");
-			$('#timaat-user-log-analysislist').prop("disabled", TIMAAT.VideoPlayer.curList == null);
+				$('#timaat-videoplayer-annotation-add-button').attr('disabled');
+			$('#timaat-user-log-analysislist').prop('disabled', TIMAAT.VideoPlayer.curList == null);
 			if ( TIMAAT.VideoPlayer.curList ) {
-				$('#timaat-user-log-analysislist').removeAttr("disabled");
+				$('#timaat-user-log-analysislist').removeAttr('disabled');
 				// send notification to server
 				TIMAAT.UI.sendNotification('subscribe-list', TIMAAT.VideoPlayer.curList.id);
 			} else 
-				$('#timaat-user-log-analysislist').attr("disabled");
+				$('#timaat-user-log-analysislist').attr('disabled');
 			
 		},
 		
@@ -1111,11 +1111,11 @@
 			this.curAnnotation = annotation;
 			if ( this.curAnnotation ) {
 				this.curAnnotation.setSelected(true);
-				$('#timaat-videoplayer-annotation-remove-button').prop("disabled", false);
-				$('#timaat-videoplayer-annotation-remove-button').removeAttr("disabled");
+				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', false);
+				$('#timaat-videoplayer-annotation-remove-button').removeAttr('disabled');
 			} else {
-				$('#timaat-videoplayer-annotation-remove-button').prop("disabled", true);
-				$('#timaat-videoplayer-annotation-remove-button').attr("disabled");
+				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', true);
+				$('#timaat-videoplayer-annotation-remove-button').attr('disabled');
 				// stop editing in progress
 				if ( TIMAAT.VideoPlayer.viewer.editTools.drawing() ) {
 					try {
@@ -1324,8 +1324,8 @@
 			$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 			$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');			
-			$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", false);
-			$('#timaat-videoplayer-annotation-quickadd-button').removeAttr("disabled");
+			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
+			$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
 			
 
 		},
@@ -1353,8 +1353,8 @@
 				$('#timaat-analysissegment-edit').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
-				$('#timaat-videoplayer-annotation-quickadd-button').prop("disabled", true);
-				$('#timaat-videoplayer-annotation-quickadd-button').attr("disabled");
+				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
+				$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 			}
 			// update annotation UI
 		},

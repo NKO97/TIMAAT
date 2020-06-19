@@ -57,7 +57,7 @@
 				</li>`
 			);
 
-			$('#timaat-actordatasets-'+actorType+'-list').append(this.listView);
+			// $('#timaat-actordatasets-'+actorType+'-list').append(this.listView);
 			// console.log("TCL: Actor -> constructor -> this.updateUI()");    
 			var actor = this; // save actor for system events
 
@@ -149,19 +149,19 @@
 			// this.listView.find('.timaat-actordatasets-actor-list-tags').dblclick(function(ev) {ev.stopPropagation();});
 
 			// attach actor handlers
-			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: Actor -> constructor -> open actor datasheet");
-				ev.stopPropagation();
-				// show tag editor - trigger popup
-				TIMAAT.UI.hidePopups();
-				$('.form').hide();
-				$('.actors-nav-tabs').show();
-				$('.actors-data-tabs').hide();
-				$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
-				$('#timaat-actordatasets-actor-metadata-form').data('actor', actor);
-				TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
-				// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
-			});
+			// $(this.listView).on('click', this, function(ev) {
+			// 	// console.log("TCL: Actor -> constructor -> open actor datasheet");
+			// 	ev.stopPropagation();
+			// 	// show tag editor - trigger popup
+			// 	TIMAAT.UI.hidePopups();
+			// 	$('.form').hide();
+			// 	$('.actors-nav-tabs').show();
+			// 	$('.actors-data-tabs').hide();
+			// 	$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
+			// 	$('#timaat-actordatasets-metadata-form').data('actor', actor);
+			// 	TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
+			// 	// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
+			// });
 
 		}
 
@@ -169,7 +169,7 @@
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
 			// console.log("TCL: Actor -> updateUI -> this", this);
-			var actorType = $('#timaat-actordatasets-actor-metadata-form').data('actorType');
+			var actorType = $('#timaat-actordatasets-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
 			var name = this.model.displayName.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;
@@ -196,50 +196,7 @@
 			// remove actor from UI
 			this.listView.remove(); // TODO remove tags from actor_has_tags
       // console.log("TCL: Actor -> remove -> this", this);
-			$('#timaat-actordatasets-actor-metadata-form').data('actor', null);
-			// remove from actors list
-			// var index;
-			// for (var i = 0; i < TIMAAT.ActorDatasets.actors.length; i++) {
-			// 	if (TIMAAT.ActorDatasets.actors[i].model.id == this.model.id) {
-			// 		index = i;	
-			// 		break;				
-			// 	}
-			// }
-			// if (index > -1) {
-			// 	TIMAAT.ActorDatasets.actors.splice(index, 1);
-			// 	TIMAAT.ActorDatasets.actors.model.splice(index, 1);
-			// }
-			// // remove from subactor list
-			// switch (this.model.actorType.id) {
-			// 	case 1: 
-			// 		// remove from person list
-			// 		var personIndex;
-			// 		for (var i = 0; i < TIMAAT.ActorDatasets.persons.length; i++) {
-			// 			if (TIMAAT.ActorDatasets.persons[i].model.id == this.model.id) {
-			// 				personIndex = i;
-			// 				break;
-			// 			}
-			// 		}
-			// 		if (personIndex > -1) {
-			// 			 TIMAAT.ActorDatasets.persons.splice(personIndex, 1);
-			// 			 TIMAAT.ActorDatasets.persons.model.splice(personIndex, 1);
-			// 		}
-			// 	break;
-			// 	case 2: 
-			// 		// remove from collective list
-			// 		var collectiveIndex;
-			// 		for (var i = 0; i < TIMAAT.ActorDatasets.collectives.length; i++) {
-			// 			if (TIMAAT.ActorDatasets.collectives[i].model.id == this.model.id) {
-			// 				collectiveIndex = i;
-			// 				break;
-			// 			}
-			// 		}
-			// 		if (collectiveIndex > -1) {
-			// 			 TIMAAT.ActorDatasets.collectives.splice(collectiveIndex, 1);
-			// 			 TIMAAT.ActorDatasets.collectives.model.splice(collectiveIndex, 1);
-			// 		}
-			// 	break;
-			// }
+			$('#timaat-actordatasets-metadata-form').data('actor', null);
 		}
 	}
 	

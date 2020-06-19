@@ -79,6 +79,28 @@
 			});		
 		},
 
+		async getActor(id) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id,
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActor -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
 		listActorSubtype(actorSubtype, callback) {
 			// console.log("TCL: listActorSubtype", actorSubtype);
 			jQuery.ajax({
@@ -134,7 +156,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCollectiveSelectList -> data", data);
+					// console.log("TCL: getCollectiveSelectList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -144,6 +166,79 @@
 			}).catch((error) => {
 				console.log( "error: ", error );
 			});		
+		},
+
+		async getActorHasRoleList(id) {
+			console.log("TCL: getActorRolesList -> id: ", id);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/role/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorRolesList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
+		async getActorRoleInMediumList(actorId, roleId) {
+			console.log("TCL: getActorRoleInMediumList -> actorId, roleId: ", actorId, roleId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/role/"+roleId+"/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getActorRoleInMediumList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
+
+		async getActorsWithThisRoleList(roleId) {
+			console.log("TCL: getActorsWithThisRoleList -> roleId: ", roleId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/withrole/"+roleId,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getRoleGroupHasRoleList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
 		},
 
 		listAddressTypes(callback) {
@@ -303,11 +398,11 @@
 			});
 		},
 
-		async addName(name) {
-      // console.log("TCL: addName -> name", name);
+		async addName(actorId, name) {
+      console.log("TCL: addName -> name", name);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+name.actor.id+"/name/"+name.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
 					type:"POST",
 					data: JSON.stringify(name),
 					contentType:"application/json; charset=utf-8",
@@ -634,6 +729,7 @@
 			tempActorModel.primaryAddress = actorModel.primaryAddress;
 			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
 			tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
+			tempActorModel.roles = actorModel.roles;
 			// tempActorModel.actorNames = actorModel.actorNames;
       // console.log("TCL: updateActor -> tempActorModel", tempActorModel);
 			// delete tempActorModel.ui;

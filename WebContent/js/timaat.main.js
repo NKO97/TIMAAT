@@ -4,13 +4,13 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	var today = new Date();
-	var dd = String(today.getDate()).padStart(2, '0');
-	var mm = String(today.getMonth() + 1).padStart(2, '0');
-	var yyyy = today.getFullYear();	
-	today = yyyy + '-' + mm + '-' + dd;
+	// var today = new Date();
+	// var dd = String(today.getDate()).padStart(2, '0');
+	// var mm = String(today.getMonth() + 1).padStart(2, '0');
+	// var yyyy = today.getFullYear();	
+	// today = yyyy + '-' + mm + '-' + dd;
 
-	var version = 'v0.2.0-dev-trunk (2020-05-11)';
+	var version = 'v0.4.5-dev-trunk (2020-06-19)';
 
 	document.title = 'TIMAAT - Client '+version;
 	$('#timaat-version-info').text(version);

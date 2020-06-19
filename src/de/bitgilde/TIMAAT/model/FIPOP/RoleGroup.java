@@ -17,6 +17,7 @@ public class RoleGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-many association to Role
@@ -33,9 +34,12 @@ public class RoleGroup implements Serializable {
 	private List<Role> roles;
 
 	//bi-directional many-to-one association to RoleGroupTranslation
-	@OneToMany(mappedBy="roleGroup")
-	// @JsonManagedReference(value = "RoleGroup-RoleGroupTranslation")
+	@OneToMany(mappedBy="roleGroup", cascade=CascadeType.PERSIST)
 	private List<RoleGroupTranslation> roleGroupTranslations;
+
+	// tables cannot contain identifier id alone, or a query exception is thrown
+	@Column(columnDefinition = "BOOLEAN")
+	private Boolean dummy;
 
 	public RoleGroup() {
 	}
@@ -54,6 +58,20 @@ public class RoleGroup implements Serializable {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Role addRole(Role role) {
+		getRoles().add(role);
+		role.addRoleGroup(this);
+
+		return role;
+	}
+
+	public Role removeRole(Role role) {
+		getRoles().remove(role);
+		role.removeRoleGroup(this);
+
+		return role;
 	}
 
 	public List<RoleGroupTranslation> getRoleGroupTranslations() {

@@ -26,6 +26,7 @@
 		initialized: false,
 		curVideos: [],
 		videos: null,
+		videoChooserLoaded: false,
 	
 		loadCollections: function() {
 			// load media collections
@@ -36,6 +37,16 @@
 				TIMAAT.VideoChooser.collection = 'init';
 				TIMAAT.VideoChooser.setCollection(null);
 //			}
+		},
+
+		initVideoChooserComponent: function() {
+			console.log("TCL: initVideochooserComponent");
+			if (!TIMAAT.VideoChooser.videoChooserLoaded) {
+				TIMAAT.VideoChooser.setMedia();
+				TIMAAT.VideoChooser.videoChooserLoaded = true;
+			}
+			TIMAAT.VideoChooser.dt.ajax.reload();
+			TIMAAT.UI.showComponent('videochooser');
 		},
 		
 		init: function() {		
@@ -86,11 +97,11 @@
 
 			$('#timaat-mediacollection-meta-title').on('input', function(ev) {
 				if ( $("#timaat-mediacollection-meta-title").val().length > 0 ) {
-					$('#timaat-mediacollection-meta-submit').prop("disabled", false);
-					$('#timaat-mediacollection-meta-submit').removeAttr("disabled");
+					$('#timaat-mediacollection-meta-submit').prop('disabled', false);
+					$('#timaat-mediacollection-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-mediacollection-meta-submit').prop("disabled", true);
-					$('#timaat-mediacollection-meta-submit').attr("disabled");
+					$('#timaat-mediacollection-meta-submit').prop('disabled', true);
+					$('#timaat-mediacollection-meta-submit').attr('disabled');
 				}
 			});
 			
@@ -410,21 +421,14 @@
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.UI.showComponent('media');
+						TIMAAT.MediaDatasets.initMediaComponent();
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
 						$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-						var id = video.id;
-						var selectedVideo;
-						var i = 0;
-						for (; i < TIMAAT.MediaDatasets.media.length; i++) {
-							if (TIMAAT.MediaDatasets.media[i].model.id == id) {
-								selectedVideo = TIMAAT.MediaDatasets.media[i];
-								break;
-							}
-						}
-						$('#timaat-mediadatasets-media-metadata-form').data('medium', selectedVideo);
+						var selectedVideo = {}
+						selectedVideo.model = video;
+						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 						TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
 					});
 
@@ -472,6 +476,7 @@
 							if (video.originalTitle != null && video.displayTitle.id != video.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+video.originalTitle.name+`)</i></p>`;
 							}
+							// TODO not working anymore due to server side datatable data search
 							video.titles.forEach(function(title) { // make additional titles searchable in medialibrary
 								if (title.id != video.displayTitle.id && (video.originalTitle == null || title.id != video.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
@@ -834,17 +839,28 @@
 		},
 		
 		_getProducer: function(video) {
-			var producer = "";
-			if ( !video || !video.mediumHasActorWithRoles ) return producer;
-			var actor = null;
+			if ( !video || !video.mediumHasActorWithRoles ) return "";
+			var actors = [];
 			video.mediumHasActorWithRoles.forEach(function(role) {
-				if ( role.role.id == 112 ) actor = role.actor; // 112 == Producer, according to TIMAAT DB definition
+				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
 			});
-			if ( !actor || !actor.displayName ) return producer;
-			// actor.actorNames.forEach(function(name) {
-				// if ( actor.displayName.name.isPrimary && name.name ) producer = name.name; 
-			producer = actor.displayName.name; 
-			// });
+			if ( actors.length == 0 ) return "";
+			var producer = "";
+			var i = 0;
+			for (; i < actors.length; i++) {
+				if (producer.length == 0) {
+					producer += actors[i].displayName.name;
+					if (actors[i].birthName) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
+				} else {
+					producer += ",<br>"+actors[i].displayName.name;
+					if (actors[i].birthName) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
+				}
+			}
+      // console.log("TCL: producer", producer);
 			return producer;
 		},
 
@@ -975,7 +991,7 @@
 						break;
 					}
 				}
-				$('#timaat-mediadatasets-media-metadata-form').data('medium', selectedVideo);
+				$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
 			});
 

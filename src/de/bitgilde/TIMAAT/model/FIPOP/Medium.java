@@ -139,7 +139,7 @@ public class Medium implements Serializable {
 			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
 			}
 		)
-	@JsonIgnore
+	// @JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-many association to Category
@@ -177,7 +177,6 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<MediumHasActorWithRole> mediumHasActorWithRoles;
 
-	
 	//bi-directional many-to-many association to RatingCategory
 	// @ManyToMany(mappedBy="mediums")
 	// private List<RatingCategory> ratingCategories;
@@ -186,7 +185,7 @@ public class Medium implements Serializable {
 	@ManyToMany(mappedBy="mediums")
 	private List<Tag> tags;
 
-		//bi-directional many-to-many association to TargetAudience
+	//bi-directional many-to-many association to TargetAudience
 	// @ManyToMany(mappedBy="mediums")
 	// private List<TargetAudience> targetAudiences;
 

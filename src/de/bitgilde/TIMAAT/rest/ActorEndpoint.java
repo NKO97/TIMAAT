@@ -53,9 +53,12 @@ import de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
+import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -103,47 +106,155 @@ public class ActorEndpoint {
 		// define default query strings
 		String actorQuery = "SELECT a FROM Actor a ORDER BY ";
 		String actorCountQuery = "SELECT COUNT(a) FROM Actor a";
-		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-		String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+		// String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+		// String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
 
-		// exclude actory from annotation if specified
+		// exclude actors from annotation if specified
 		if ( annotationID != null ) {
 			Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, annotationID);
 			if ( anno != null && anno.getActors().size() > 0 ) {
 				actorQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors ORDER BY ";
 				actorCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors";
-				actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-				actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+				// actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+				// actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
 			}
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorCountQuery);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery(actorCountQuery);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (annotationID != null) {
+					Boolean annoConnected = false;
+					for (Annotation annotation : actorName.getActor().getAnnotations()) {
+						if (annotation.getId() == annotationID) {
+							annoConnected = true;
+						}
+					}
+					if (!annoConnected && !(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+						actorList.add(actorName.getActor());
+					}
+				}
+				else if (!(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
+
 			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorSearchCountQuery);
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				actorSearchQuery+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// countQuery = entityManager.createQuery(actorSearchCountQuery);
+			// countQuery.setParameter("title1", search);
+			// recordsFiltered = (long) countQuery.getSingleResult();
+			// // perform search
+			// query = entityManager.createQuery(
+			// 	actorSearchQuery+column+" "+direction);
+			// query.setParameter("name", search);
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
+			query = entityManager.createQuery(
 				actorQuery+column+" "+direction);
+				actorList = castList(Actor.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
-
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("selectlist")
+	public Response getActorSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// define default query strings
+		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
+		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+		List<SelectElement> actorSelectList = new ArrayList<>();
+		for (Actor actor : actorList) {
+			actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+		}
+
+		return Response.ok().entity(actorSelectList).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/select")
+	public Response getActorSelect(@PathParam("id") int id,
+																 @QueryParam("start") Integer start,
+																 @QueryParam("length") Integer length,
+																 @QueryParam("orderby") String orderby,
+																 @QueryParam("search") String search)
+	{
+		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, id);
+		List<SelectElement> actorSelectList = new ArrayList<>();
+			actorSelectList.add(new SelectElement(id, actor.getDisplayName().getName()));
+
+		return Response.ok().entity(actorSelectList).build();
 
 	}
 
@@ -192,31 +303,35 @@ public class ActorEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ap.actor) FROM ActorPerson ap");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ap.actor) FROM ActorPerson ap");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ap.actor) FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ap.actor FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorPerson() != null)) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction);
+			sql = "SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			actorList = castList(Actor.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
@@ -256,30 +371,35 @@ public class ActorEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ac.actor) FROM ActorCollective ac");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ac.actor) FROM ActorCollective ac");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ac.actor) FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ac.actor FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorCollective() != null)) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction);
+			sql = "SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			actorList = castList(Actor.class, query.getResultList());
 		}		
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
@@ -353,7 +473,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("{id}/names/list")
 	public Response getNamesList(@PathParam("id") int id) {
-		// // System.out.println("ActorServiceEndpoint: getNamesList");
+		// System.out.println("ActorServiceEndpoint: getNamesList");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -366,6 +486,62 @@ public class ActorEndpoint {
 		return Response.ok(actor.getActorNames()).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/role/list")
+	public Response getActorHasRoleList(@PathParam("id") int actorId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		List<Role> roleList = actor.getRoles();
+
+		return Response.ok().entity(roleList).build();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{actor_id}/role/{role_id}/list")
+	public Response getActorRoleInMediumList(@PathParam("actor_id") int actorId,
+																					 @PathParam("role_id") int roleId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.actor.id = :actorId AND mhawr.role.id = :roleId";
+		// String sql = "SELECT DISTINCT m FROM Medium m WHERE m.actorHasRoles.actor.id = :actorId AND m.actorHasRoles.role.id = :roleId";
+		Query query = entityManager.createQuery(sql)
+			.setParameter("actorId", actorId)
+			.setParameter("roleId", roleId);
+		// Actor actor = entityManager.find(Actor.class, actorId);
+		// Role role = entityManager.find(Role.class, roleId);
+		// ActorHasRole actorHasRole = new ActorHasRole(actor, role);
+		List<MediumHasActorWithRole> mhawrList = castList(MediumHasActorWithRole.class, query.getResultList());
+		List<Medium> mediumList = new ArrayList<>();
+		for (MediumHasActorWithRole mhawr : mhawrList) {
+			mediumList.add(mhawr.getMedium());
+		}
+
+		return Response.ok().entity(mediumList).build();
+	}
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("withrole/{role_id}")
+	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
+	{
+		System.out.println("RoleServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Role role = entityManager.find(Role.class, roleId);
+		List<Actor> actorList = role.getActors();
+		System.out.println("Number of actors found: "+ actorList.size());
+
+		return Response.ok().entity(actorList).build();
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -418,6 +594,17 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: createActor - done");
 		return Response.ok().entity(newActor).build();
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getActor(@PathParam("id") int id) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor e = entityManager.find(Actor.class, id);
+		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		return Response.ok().entity(e).build();
+	}
 
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
@@ -442,6 +629,7 @@ public class ActorEndpoint {
 		}
 		if ( updatedActor == null ) return Response.notModified().build();
 
+		List<Role> oldRoles = actor.getRoles();
     // update actor
 		if (updatedActor.getIsFictional() != null ) actor.setIsFictional(updatedActor.getIsFictional());
 		if (updatedActor.getDisplayName() != null ) actor.setDisplayName(updatedActor.getDisplayName());
@@ -449,6 +637,7 @@ public class ActorEndpoint {
 		actor.setPrimaryAddress(updatedActor.getPrimaryAddress());
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
 		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
+		actor.setRoles(updatedActor.getRoles());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -458,12 +647,20 @@ public class ActorEndpoint {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actor);
 		entityManager.persist(actor);
 		entityTransaction.commit();
 		entityManager.refresh(actor);
+		for (Role role : actor.getRoles()) {
+			entityManager.refresh(role);
+		}
+		for (Role role : oldRoles) {
+			entityManager.refresh(role);
+		}
+
 
 		// add log entry
 		UserLogManager.getLogger()
@@ -2422,17 +2619,6 @@ public class ActorEndpoint {
   //   	} 	
 	// 	return Response.ok().build();
 	// }
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("{id}")
-	public Response getActorInfo(@PathParam("id") int id) {    	
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Actor e = entityManager.find(Actor.class, id);
-		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
-	return Response.ok().entity(e).build();
-	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());

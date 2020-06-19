@@ -90,11 +90,11 @@
 			// TODO validate all required fields			
 			$('#timaat-locationtype-meta-name').on('input', function(ev) {
 				if ( $("#timaat-locationtype-meta-name").val().length > 0 ) {
-					$('#timaat-locationtype-meta-submit').prop("disabled", false);
-					$('#timaat-locationtype-meta-submit').removeAttr("disabled");
+					$('#timaat-locationtype-meta-submit').prop('disabled', false);
+					$('#timaat-locationtype-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-locationtype-meta-submit').prop("disabled", true);
-					$('#timaat-locationtype-meta-submit').attr("disabled");
+					$('#timaat-locationtype-meta-submit').prop('disabled', true);
+					$('#timaat-locationtype-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -164,11 +164,11 @@
 			// TODO: validate all required fields
 			$('#timaat-location-meta-name').on('input', function(ev) {
 				if ( $("#timaat-location-meta-name").val().length > 0) {
-					$('#timaat-location-meta-submit').prop("disabled", false);
-					$('#timaat-location-meta-submit').removeAttr("disabled");
+					$('#timaat-location-meta-submit').prop('disabled', false);
+					$('#timaat-location-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-location-meta-submit').prop("disabled", true);
-					$('#timaat-location-meta-submit').attr("disabled");
+					$('#timaat-location-meta-submit').prop('disabled', true);
+					$('#timaat-location-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -269,11 +269,11 @@
 			// TODO validate all required fields
 			$('#timaat-country-meta-name').on('input', function(ev) {
 				if ( $("#timaat-country-meta-name").val().length > 0 ) {
-					$('#timaat-country-meta-submit').prop("disabled", false);
-					$('#timaat-country-meta-submit').removeAttr("disabled");
+					$('#timaat-country-meta-submit').prop('disabled', false);
+					$('#timaat-country-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-country-meta-submit').prop("disabled", true);
-					$('#timaat-country-meta-submit').attr("disabled");
+					$('#timaat-country-meta-submit').prop('disabled', true);
+					$('#timaat-country-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -349,11 +349,11 @@
 			// TODO validate all required fields
 			$('#timaat-province-meta-name').on('input', function(ev) {
 				if ( $("#timaat-province-meta-name").val().length > 0 ) {
-					$('#timaat-province-meta-submit').prop("disabled", false);
-					$('#timaat-province-meta-submit').removeAttr("disabled");
+					$('#timaat-province-meta-submit').prop('disabled', false);
+					$('#timaat-province-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-province-meta-submit').prop("disabled", true);
-					$('#timaat-province-meta-submit').attr("disabled");
+					$('#timaat-province-meta-submit').prop('disabled', true);
+					$('#timaat-province-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -429,11 +429,11 @@
 			// TODO validate all required fields
 			$('#timaat-county-meta-name').on('input', function(ev) {
 				if ( $("#timaat-county-meta-name").val().length > 0 ) {
-					$('#timaat-county-meta-submit').prop("disabled", false);
-					$('#timaat-county-meta-submit').removeAttr("disabled");
+					$('#timaat-county-meta-submit').prop('disabled', false);
+					$('#timaat-county-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-county-meta-submit').prop("disabled", true);
-					$('#timaat-county-meta-submit').attr("disabled");
+					$('#timaat-county-meta-submit').prop('disabled', true);
+					$('#timaat-county-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -509,11 +509,11 @@
 			// TODO validate all required fields
 			$('#timaat-city-meta-name').on('input', function(ev) {
 				if ( $("#timaat-city-meta-name").val().length > 0 ) {
-					$('#timaat-city-meta-submit').prop("disabled", false);
-					$('#timaat-city-meta-submit').removeAttr("disabled");
+					$('#timaat-city-meta-submit').prop('disabled', false);
+					$('#timaat-city-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-city-meta-submit').prop("disabled", true);
-					$('#timaat-city-meta-submit').attr("disabled");
+					$('#timaat-city-meta-submit').prop('disabled', true);
+					$('#timaat-city-meta-submit').attr('disabled');
 				}
 			});
 		},
@@ -592,11 +592,11 @@
 			// TODO validate all required fields
 			$('#timaat-street-meta-name').on('input', function(ev) {
 				if ( $("#timaat-street-meta-name").val().length > 0 ) {
-					$('#timaat-street-meta-submit').prop("disabled", false);
-					$('#timaat-street-meta-submit').removeAttr("disabled");
+					$('#timaat-street-meta-submit').prop('disabled', false);
+					$('#timaat-street-meta-submit').removeAttr('disabled');
 				} else {
-					$('#timaat-street-meta-submit').prop("disabled", true);
-					$('#timaat-street-meta-submit').attr("disabled");
+					$('#timaat-street-meta-submit').prop('disabled', true);
+					$('#timaat-street-meta-submit').attr('disabled');
 				}
 			});
 		},

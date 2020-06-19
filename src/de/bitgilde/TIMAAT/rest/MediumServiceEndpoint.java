@@ -50,12 +50,15 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.VideoInformation;
+import de.bitgilde.TIMAAT.model.FIPOP.Actor;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudio;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumDocument;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumImage;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageType;
@@ -63,6 +66,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumText;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame;
+import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Source;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
@@ -109,33 +113,40 @@ public class MediumServiceEndpoint {
 			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
 		}
 
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(m) FROM Medium m");
+		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(m) FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-		//			query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium))) {
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT m FROM Medium m ORDER BY "+column+" "+direction);
+			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
 
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		for (Medium m : mediumList) {
 			MediumVideo video = m.getMediumVideo();
@@ -145,13 +156,123 @@ public class MediumServiceEndpoint {
 				m.setMediumVideo(video);
 				video.getStatus();
 				video.getViewToken();
-				// System.out.println("MediumServiceEndpoint: getMediaList - mediumVideo " + m.getMediumVideo().getMediumId());
 			}
 			// strip analysis lists for faster response --> get lists via AnalysislistEndpoint
 			m.getMediumAnalysisLists().clear();
 		}
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("selectlist")
+	public Response getMediumSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("MediumServiceEndpoint: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "m.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// TODO search all titles, not displayTitle only
+		// define default query strings
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("mediumName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : mediumList) {
+			mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+		}
+
+		return Response.ok().entity(mediumSelectList).build();
+
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("video/selectlist")
+	public Response getVideoSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("MediumServiceEndpoint: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "m.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// TODO search all titles, not displayTitle only
+		// define default query strings
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("mediumName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : mediumList) {
+			if (medium.getMediumVideo() != null) {
+				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+			}
+		}
+
+		return Response.ok().entity(mediumSelectList).build();
 	}
 
 	@GET
@@ -202,30 +323,37 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ma.medium) FROM MediumAudio ma");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ma.medium) FROM MediumAudio ma");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-
+		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ma.medium) FROM MediumAudio ma WHERE lower(ma.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ma.medium FROM MediumAudio ma WHERE lower(ma.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumAudio() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction);
+			sql = "SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -252,31 +380,37 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(md.medium) FROM MediumDocument md");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(md.medium) FROM MediumDocument md");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-
+		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(md.medium) FROM MediumDocument md WHERE lower(md.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT md.medium FROM MediumDocument md WHERE lower(md.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumDocument() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction);
+			sql = "SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -303,31 +437,37 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mi.medium) FROM MediumImage mi");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(mi.medium) FROM MediumImage mi");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-
+		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(mi.medium) FROM MediumImage mi WHERE lower(mi.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mi.medium FROM MediumImage mi WHERE lower(mi.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumImage() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction);
+			sql = "SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -354,31 +494,37 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ms.medium) FROM MediumSoftware ms");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ms.medium) FROM MediumSoftware ms");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-
+		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ms.medium) FROM MediumSoftware ms WHERE lower(ms.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ms.medium FROM MediumSoftware ms WHERE lower(ms.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumSoftware() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction);
+			sql = "SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}	
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -405,31 +551,38 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mt.medium) FROM MediumText mt");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(mt.medium) FROM MediumText mt");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-
+		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(mt.medium) FROM MediumText mt WHERE lower(mt.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mt.medium FROM MediumText mt WHERE lower(mt.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumText() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction);
+			sql = "SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}		
+
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -456,37 +609,44 @@ public class MediumServiceEndpoint {
 			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
 			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
-			// TODO producer, seems way to complex to put in DB query // should be easier with MediumHasActorWithRole-table
+			// TODO producer, seems way to complex to put in DB query // should be ordered in front end instead
 			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
-			// + --> role == 112 --> producer
+			// + --> role == 5 --> producer
 		}
-		
+
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT COUNT(mv.medium) FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT mv.medium FROM MediumVideo mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumVideo() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction);
+			sql = "SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
+
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 				
 		for (Medium m : mediumList ) {
 			if ( m.getMediumVideo() != null ) {
@@ -496,6 +656,7 @@ public class MediumServiceEndpoint {
 				m.getMediumVideo().getMedium().getMediumAnalysisLists().clear();
 			}
 		}
+
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
@@ -522,33 +683,124 @@ public class MediumServiceEndpoint {
 		}
 
 		// calculate total # of records
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideogame mv");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT COUNT(mv.medium) FROM MediumVideogame mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mv.medium FROM MediumVideogame mv WHERE lower(mv.medium.title1.name) LIKE lower(concat('%', :title1,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
-			// query.setParameter("title2", search);
+			// find all matching titles
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium)) && (medium.getMediumVideogame() != null)) { // TODO medium.getMediaType().. may be more efficient
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction);
+			sql = "SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			mediumList = castList(Medium.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+	
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("hasactor/{actor_id}/withroles/selectlist")
+	public Response getRoleSelectList(@PathParam("actor_id") int actorId,
+																		@QueryParam("search") String search,
+																		@QueryParam("page") Integer page,
+																		@QueryParam("per_page") Integer per_page,
+																		@QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all roles of this actor
+		System.out.println("MediumServiceEndpoint: getRoleSelectList for actor id: "+ actorId);
+		System.out.println("MediumServiceEndpoint: getRoleSelectList - search string: "+ search);
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		List<Role> roleList = actor.getRoles();
+		List<SelectElement> roleSelectList = new ArrayList<>();
+		for (Role role: roleList) {
+			if (search != null && search.length() > 0) {
+				if (role.getRoleTranslations().get(0).getName().toLowerCase().contains(search.toLowerCase())) {
+					roleSelectList.add(new SelectElement(role.getId(),
+																							 role.getRoleTranslations().get(0).getName()));
+				}
+			} else {
+				roleSelectList.add(new SelectElement(role.getId(),
+																						 role.getRoleTranslations().get(0).getName()));
+			}
+		}
+		return Response.ok().entity(roleSelectList).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{medium_id}/hasactorlist")
+	public Response getActorList(@PathParam("medium_id") Integer mediumId)
+	{
+		System.out.println("MediumServiceEndpoint: getActorList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		List<ActorHasRole> actorHasRoleList = medium.getActorHasRoles();
+		List<Actor> actorList = new ArrayList<>();
+		for (ActorHasRole actorHasRole : actorHasRoleList) {
+			if (!actorList.contains(entityManager.find(Actor.class, actorHasRole.getId().getActorId()))) {
+				actorList.add(entityManager.find(Actor.class, actorHasRole.getId().getActorId()));
+			}
+		}
+		return Response.ok().entity(actorList).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{medium_id}/hasactor/{actor_id}/withrolelist")
+	public Response getActorHasRoleList(@PathParam("medium_id") Integer mediumId,
+																			@PathParam("actor_id") Integer actorId)
+	{
+		System.out.println("MediumServiceEndpoint: getActorHasRoleList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		List<ActorHasRole> actorHasRoleList = medium.getActorHasRoles();
+		List<Role> roleList = new ArrayList<>();
+		for (ActorHasRole actorHasRole : actorHasRoleList) {
+			if (actorHasRole.getId().getActorId() == actorId) {
+				System.out.println("MediumServiceEndpoint: getActorHasRoleList - role found");
+				roleList.add(entityManager.find(Role.class, actorHasRole.getId().getRoleId()));
+			}
+		}
+
+		return Response.ok().entity(roleList).build();
 	}
 	
 	@GET
@@ -655,6 +907,16 @@ public class MediumServiceEndpoint {
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMCREATED);
 		System.out.println("MediumServiceEndpoint: createMedium - done");
 		return Response.ok().entity(newMedium).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getMedium(@PathParam("id") int id) {    	
+		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		return Response.ok().entity(medium).build();
 	}
 
 	@PATCH
@@ -1783,21 +2045,21 @@ public class MediumServiceEndpoint {
 		}
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: db query passed");
 		if ( mhl == null ) {
-				mhl = new MediumHasLanguage();
-				mhl.setLanguage(language);
-				mhl.setMedium(medium);
-				mhl.setMediumLanguageType(mediumLanguageType);
-					try {
-						EntityTransaction entityTransaction = entityManager.getTransaction();
-						entityTransaction.begin();
-						entityManager.persist(mhl);
-						entityTransaction.commit();
-						entityManager.refresh(medium);
-						entityManager.refresh(mhl);
-					} catch (Exception e) {
-						e.printStackTrace();
-						return Response.notModified().build();
-					}
+			mhl = new MediumHasLanguage();
+			mhl.setLanguage(language);
+			mhl.setMedium(medium);
+			mhl.setMediumLanguageType(mediumLanguageType);
+				try {
+					EntityTransaction entityTransaction = entityManager.getTransaction();
+					entityTransaction.begin();
+					entityManager.persist(mhl);
+					entityTransaction.commit();
+					entityManager.refresh(medium);
+					entityManager.refresh(mhl);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Response.notModified().build();
+				}
 			}
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: entity transaction complete");
 					
@@ -1920,6 +2182,141 @@ public class MediumServiceEndpoint {
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMHASLANGUAGEDELETED);
 		System.out.println("MediumServiceEndpoint: deleteMediumHasLanguageItem - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/hasactor/{actorid}/withrole/{roleid}")
+	@Secured
+	public Response addMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
+																						 @PathParam("actorid") int actorId,
+																						 @PathParam("roleid") int roleId) {
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles");
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - entityManager created");
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if (medium == null) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - medium found");
+		Actor actor = entityManager.find(Actor.class, actorId);
+		if (actor == null) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - actor found");
+		Role role = entityManager.find(Role.class, roleId);
+		if (role == null) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - role found");
+
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - check if medium-actor-role combination already exists");
+		MediumHasActorWithRole mhawr = null;
+		try {
+			mhawr = (MediumHasActorWithRole) entityManager.createQuery(
+				"SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.medium=:medium AND mhawr.actor=:actor AND mhawr.role=:role")
+					.setParameter("medium", medium)
+					// .setParameter("actor", actor)
+					// .setParameter("role", role)
+					.getSingleResult();
+		} catch (Exception e) {
+			// doesn't matter
+		}
+		if ( mhawr == null ) {
+			System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles - create new entry");
+			mhawr = new MediumHasActorWithRole();
+			mhawr.setMedium(medium);
+			mhawr.setActor(actor);
+			mhawr.setRole(role);
+				try {
+					EntityTransaction entityTransaction = entityManager.getTransaction();
+					entityTransaction.begin();
+					entityManager.persist(mhawr);
+					entityTransaction.commit();
+					entityManager.refresh(medium);
+					entityManager.refresh(actor);
+					entityManager.refresh(role);
+					entityManager.refresh(mhawr);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Response.notModified().build();
+				}
+			}
+		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles: entity transaction complete");
+					
+		// System.out.println("MediumServiceEndpoint: addActorToMediumHasActorWithRoles: add log entry");
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);
+
+		return Response.ok().entity(mhawr).build();
+	}
+
+	@DELETE
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/hasactor/{actorid}")
+	@Secured
+	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
+																												 @PathParam("actorid") int actorId) {    
+		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem");
+		// deletes all entries of medium-actor matches
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+
+		try {
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.createQuery("DELETE FROM MediumHasActorWithRole mhawr WHERE mhawr.medium=:medium AND mhawr.actor=:actor")
+				.setParameter("medium", medium)
+				.setParameter("actor", actor)
+				.executeUpdate();
+			entityTransaction.commit();
+			entityManager.refresh(medium);
+			// entityManager.refresh(actor);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.notModified().build();
+		}
+
+		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem - delete complete");	
+		return Response.ok().build();
+	}
+
+	@DELETE
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("{mediumid}/hasactor/{actorid}/withrole/{roleid}")
+	@Secured
+	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
+																												@PathParam("actorid") int actorId,
+																												@PathParam("roleid") int roleId) {    
+		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem");
+		// deletes all entries of medium-actor matches
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+		Role role = entityManager.find(Role.class, roleId);
+		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
+
+		try {
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.createQuery("DELETE FROM MediumHasActorWithRole mhawr WHERE mhawr.medium=:medium AND mhawr.actor=:actor AND mhawr.role=:role")
+				.setParameter("medium", medium)
+				.setParameter("actor", actor)
+				.setParameter("role", role)
+				.executeUpdate();
+			entityTransaction.commit();
+			entityManager.refresh(medium);
+			// entityManager.refresh(actor);
+			// entityManager.refresh(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.notModified().build();
+		}
+
+		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem - delete complete");	
 		return Response.ok().build();
 	}
 
@@ -2162,20 +2559,6 @@ public class MediumServiceEndpoint {
 		return Response.ok().entity(mediumVideo).build();
 	}
 		
-	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public Response getMediaInfo(@PathParam("id") int id) {
-    	
-    	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);   
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
-    	
-//		m.setStatus(videoStatus(id));
-//    	m.setViewToken(issueFileToken(m.getId()));
-    	
-		return Response.ok().entity(m).build();
-	}
-
 	@HEAD
 	@Path("video/{id}/download")
 	@Produces("video/mp4")
@@ -2682,7 +3065,6 @@ public class MediumServiceEndpoint {
 			e1.printStackTrace();
 		}
 	}
-
 
 	public static String issueFileToken(int mediumID) {
 		Key key = new TIMAATKeyGenerator().generateKey();

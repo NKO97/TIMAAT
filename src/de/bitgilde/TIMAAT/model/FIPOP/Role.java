@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -18,33 +19,41 @@ public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-many association to Actor
-	@ManyToMany
-	@JoinTable(
-		name="actor_has_role"
-		, joinColumns={
-			@JoinColumn(name="role_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="actor_id")
-			}
-		)
+	// @ManyToMany
+	// @JsonIgnore
+	// @JoinTable(
+	// 	name="actor_has_role"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="role_id")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="actor_id")
+	// 		}
+	// 	)
+	// private List<Actor> actors;
+
+	//bi-directional many-to-many association to RoleGroup
+	@ManyToMany(mappedBy="roles")
 	@JsonIgnore
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to RoleGroup
 	@ManyToMany(mappedBy="roles")
+	@JsonIgnore
 	private List<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
-	@OneToMany(mappedBy="role")
-	// @JsonManagedReference(value = "Role-RoleTranslation")
+	@OneToMany(mappedBy="role", cascade=CascadeType.PERSIST)
+	@JsonManagedReference(value="Role-RoleTranslation")
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to MembershipDetail
 	@OneToMany(mappedBy="role")
+	@JsonIgnore
 	private List<MembershipDetail> membershipDetails;
 
 	//bi-directional many-to-one association to SiocContainerHasRoleInArea
@@ -58,6 +67,10 @@ public class Role implements Serializable {
 	//bi-directional many-to-one association to SiocSiteHasSiocUserAccount
 	// @OneToMany(mappedBy="role")
 	// private List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts;
+
+	// tables cannot contain identifier id alone, or a query exception is thrown
+	@Column(columnDefinition = "BOOLEAN")
+	private Boolean dummy;
 
 	public Role() {
 	}
@@ -78,12 +91,40 @@ public class Role implements Serializable {
 		this.actors = actors;
 	}
 
+	public Actor addActor(Actor actor) {
+		getActors().add(actor);
+		// actor.addRole(this);
+
+		return actor;
+	}
+
+	public Actor removeActor(Actor actor) {
+		getActors().remove(actor);
+		// actor.removeRole(this);
+
+		return actor;
+	}
+
 	public List<RoleGroup> getRoleGroups() {
 		return this.roleGroups;
 	}
 
 	public void setRoleGroups(List<RoleGroup> roleGroups) {
 		this.roleGroups = roleGroups;
+	}
+
+		public RoleGroup addRoleGroup(RoleGroup roleGroup) {
+		getRoleGroups().add(roleGroup);
+		// roleGroup.addRole(this);
+
+		return roleGroup;
+	}
+
+	public RoleGroup removeRoleGroup(RoleGroup roleGroup) {
+		getRoleGroups().remove(roleGroup);
+		// roleGroup.removeRole(this);
+
+		return roleGroup;
 	}
 
 	public List<RoleTranslation> getRoleTranslations() {
