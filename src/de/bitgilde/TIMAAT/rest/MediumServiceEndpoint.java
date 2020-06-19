@@ -130,6 +130,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -142,11 +144,11 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		for (Medium m : mediumList) {
 			MediumVideo video = m.getMediumVideo();
@@ -338,6 +340,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -350,10 +354,10 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -395,6 +399,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -407,10 +413,10 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -452,6 +458,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -464,10 +472,10 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -509,6 +517,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -521,10 +531,10 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}	
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -566,6 +576,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -578,11 +590,11 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}		
 
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -700,6 +712,8 @@ public class MediumServiceEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
 				for (Medium medium : title.getMediums3()) {
@@ -712,10 +726,10 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
