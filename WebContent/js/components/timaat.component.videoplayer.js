@@ -175,20 +175,23 @@
 			TIMAAT.VideoPlayer.animCtrl = L.control.custom({
 			    position: 'topleft',
 			    content : `<div class="text-center bg-light border-bottom" onclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">Keyframes</div>
-			    			<div class="btn-group btn-group-sm">
-			    				<button title="vorheriges Keyframe auswählen" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
-			    					<i class="fas fa-arrow-left"></i>
-			    				</button>
-								<div title="aktuelles Keyframe" class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
-									<i class="fas fa-fw keyframeinfo">2</i>
-								</div>
-								<button title="nächstes Keyframe auswählen" id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
-									<i class="fas fa-arrow-right"></i>
-			    				</button>
+			    			<div class="keyframe-controls">
+			    				<div class="btn-group btn-group-sm">
+			    					<button title="vorheriges Keyframe auswählen" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
+			    						<i class="fas fa-arrow-left"></i>
+			    					</button>
+									<div title="aktuelles Keyframe" class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
+										<i class="fas fa-fw keyframeinfo">2</i>
+									</div>
+									<button title="nächstes Keyframe auswählen" id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
+										<i class="fas fa-arrow-right"></i>
+			    					</button>
+			    				</div>
 			    			</div>
 			    			<button title="neues Keyframe an diesem Timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
 			    			<button title="aktuelles Keyframe entfernen" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
 			    classes : 'leaflet-bar',
+			    id: 'timaat-animation-controlwidget',
 			    style   : { margin: '10px', padding: '0px 0 0 0', },
 			});
 			TIMAAT.VideoPlayer.animCtrl.updateUI = function() {

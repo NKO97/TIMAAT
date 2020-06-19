@@ -232,6 +232,12 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-item-disabled:hover {
 	background-color: white !important;
 }
+#timaat-animation-controlwidget .keyframe-controls {
+	overflow: hidden;
+}
+#timaat-animation-controlwidget .keyframe-controls.collapsed {
+	height: 0px
+}
 
 .timaat-volumecontrol {
 	display: inline-block;
