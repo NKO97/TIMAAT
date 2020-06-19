@@ -629,6 +629,8 @@ public class MediumServiceEndpoint {
 			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			// find all media belonging to those titles
 			List<Title> titleList = castList(Title.class, query.getResultList());
 			for (Title title : titleList) {
@@ -642,11 +644,11 @@ public class MediumServiceEndpoint {
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 				
 		for (Medium m : mediumList ) {
 			if ( m.getMediumVideo() != null ) {
