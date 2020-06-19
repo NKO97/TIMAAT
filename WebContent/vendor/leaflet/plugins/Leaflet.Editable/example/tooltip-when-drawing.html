@@ -75,7 +75,7 @@ var map = L.map('map', {editable: true}).setView(startPoint, 16),
 
     function moveTooltip (e) {
       tooltip.style.left = e.clientX + 20 + 'px';
-      tooltip.style.top = e.clientY + 40 + 'px';
+      tooltip.style.top = e.clientY - 10 + 'px';
     }
 
     function updateTooltip (e) {
