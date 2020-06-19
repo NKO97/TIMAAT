@@ -489,7 +489,7 @@
 							return TIMAAT.Util.formatTime(data);
 						}
 					},
-					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', render: function(data, type, video, meta) {
+					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, video, meta) {
 							return TIMAAT.VideoChooser._getProducer(video);
 						}
 					},
@@ -860,7 +860,7 @@
 					}
 				}
 			}
-      console.log("TCL: producer", producer);
+      // console.log("TCL: producer", producer);
 			return producer;
 		},
 

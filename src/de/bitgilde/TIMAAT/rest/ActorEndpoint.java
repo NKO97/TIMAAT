@@ -106,45 +106,70 @@ public class ActorEndpoint {
 		// define default query strings
 		String actorQuery = "SELECT a FROM Actor a ORDER BY ";
 		String actorCountQuery = "SELECT COUNT(a) FROM Actor a";
-		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-		String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+		// String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+		// String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
 
-		// exclude actory from annotation if specified
+		// exclude actors from annotation if specified
 		if ( annotationID != null ) {
 			Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, annotationID);
 			if ( anno != null && anno.getActors().size() > 0 ) {
 				actorQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors ORDER BY ";
 				actorCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors";
-				actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-				actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+				// actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
+				// actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
 			}
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorCountQuery);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery(actorCountQuery);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (annotationID != null) {
+					Boolean annoConnected = false;
+					for (Annotation annotation : actorName.getActor().getAnnotations()) {
+						if (annotation.getId() == annotationID) {
+							annoConnected = true;
+						}
+					}
+					if (!annoConnected && !(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+						actorList.add(actorName.getActor());
+					}
+				}
+				else if (!(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
+
 			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(actorSearchCountQuery);
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				actorSearchQuery+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// countQuery = entityManager.createQuery(actorSearchCountQuery);
+			// countQuery.setParameter("title1", search);
+			// recordsFiltered = (long) countQuery.getSingleResult();
+			// // perform search
+			// query = entityManager.createQuery(
+			// 	actorSearchQuery+column+" "+direction);
+			// query.setParameter("name", search);
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
+			query = entityManager.createQuery(
 				actorQuery+column+" "+direction);
+				actorList = castList(Actor.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 
@@ -278,31 +303,35 @@ public class ActorEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ap.actor) FROM ActorPerson ap");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ap.actor) FROM ActorPerson ap");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ap.actor) FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ap.actor FROM ActorPerson ap WHERE lower(ap.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorPerson() != null)) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction);
+			sql = "SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			actorList = castList(Actor.class, query.getResultList());
 		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
@@ -342,30 +371,35 @@ public class ActorEndpoint {
 		}
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(ac.actor) FROM ActorCollective ac");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(ac.actor) FROM ActorCollective ac");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		
 		// search
 		Query query;
+		String sql;
+		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(ac.actor) FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("title1", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ac.actor FROM ActorCollective ac WHERE lower(ac.actor.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
+			// find all matching names
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media belonging to those titles
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			for (ActorName actorName : actorNameList) {
+				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorCollective() != null)) { // TODO actor.getActorType().. may be more efficient
+					actorList.add(actorName.getActor());
+				}
+			}
+			recordsFiltered = actorList.size();
 		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction);
+			sql = "SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			actorList = castList(Actor.class, query.getResultList());
 		}		
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
