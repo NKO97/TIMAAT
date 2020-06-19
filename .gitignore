@@ -5,6 +5,6 @@ target/
 .settings/
 src/model*/
 WebContent/app/
-WebContent/vendor/
+
 .classpath
 *.bak
