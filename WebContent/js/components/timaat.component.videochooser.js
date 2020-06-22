@@ -850,12 +850,12 @@
 			for (; i < actors.length; i++) {
 				if (producer.length == 0) {
 					producer += actors[i].displayName.name;
-					if (actors[i].birthName) {
+					if (actors[i].birthName && actors[i].birthName.name != actors[i].displayName.name) {
 						producer += " <i>("+ actors[i].birthName.name+")<i>";
 					}
 				} else {
 					producer += ",<br>"+actors[i].displayName.name;
-					if (actors[i].birthName) {
+					if (actors[i].birthName && actors[i].birthName.name != actors[i].displayName.name) {
 						producer += " <i>("+ actors[i].birthName.name+")<i>";
 					}
 				}
