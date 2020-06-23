@@ -297,11 +297,8 @@
 						TIMAAT.MediaDatasets.loadMediaDatatables();
 						TIMAAT.ActorDatasets.loadActorDatatables();
 						TIMAAT.RoleLists.loadRolesDatatables();
-						TIMAAT.CategoryLists.loadCategorySets();
-						// TIMAAT.Settings.loadCategorySets();
+						TIMAAT.CategoryLists.loadCategoriesDatatables();
 						TIMAAT.Datasets.load();
-						// load categories
-						TIMAAT.CategoryLists.loadCategories(null,true);
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
 						console.log("TCL: processLogin fail: e", e);

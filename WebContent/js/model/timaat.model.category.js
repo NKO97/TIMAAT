@@ -19,9 +19,9 @@
 
 }(function (TIMAAT) {
 
-	TIMAAT.CategorySet = class CategorySet {
+	TIMAAT.Category = class Category {
     constructor(model) {
-      // console.log("TCL: CategorySet -> constructor -> model", model);
+      // console.log("TCL: Category -> constructor -> model", model);
 			// setup model
 			this.model = model;
 
@@ -30,7 +30,7 @@
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-categorylists-categoryset-list-name">
+							`<span class="timaat-categorylists-category-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
@@ -44,63 +44,63 @@
 				</li>`
 			);
 
-			// $('#timaat-categorylists-categoryset-list').append(this.listView);
-			// console.log("TCL: CategorySet -> constructor -> this.updateUI()");    
-			var categorySet = this; // save categoryset for system events
+			// $('#timaat-categorylists-category-list').append(this.listView);
+			// console.log("TCL: Category -> constructor -> this.updateUI()");    
+			var category = this; // save category for system events
 
 			this.updateUI();  
 
-			// attach categoryset handlers
+			// attach category handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: CategorySet -> constructor -> open categoryset datasheet");
+				// console.log("TCL: Category -> constructor -> open category datasheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.categorysets-nav-tabs').show();
-				$('.categorysets-data-tabs').hide();
-				$('.nav-tabs a[href="#categorySetDatasheet"]').tab('show');
-				$('#timaat-categorylists-metadata-form').data('categoryset', categorySet);
-        console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
-				TIMAAT.CategoryLists.categoryOrCategorySetFormDatasheet('show', 'categoryset', categorySet);
+				$('.categories-nav-tabs').show();
+				$('.categories-data-tabs').hide();
+				$('.nav-tabs a[href="#categoryDatasheet"]').tab('show');
+				$('#timaat-categorylists-metadata-form').data('category', category);
+        console.log("TCL: Category -> constructor -> category", category);
+				TIMAAT.CategoryLists.categoryOrCategorySetFormDatasheet('show', 'category', category);
 			});
     }
 
 		updateUI() {
 			var name = this.model.name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-categorylists-categoryset-list-name').text(name);
+			this.listView.find('.timaat-categorylists-category-list-name').text(name);
 	
 		}
 
 		remove() {
-			// remove categoryset from UI
+			// remove category from UI
 			this.listView.remove();
-      console.log("TCL: CategorySet -> remove -> this", this);
-			$('#timaat-categorylists-metadata-form').data('categoryset', null);
+      console.log("TCL: Category -> remove -> this", this);
+			$('#timaat-categorylists-metadata-form').data('category', null);
 			// remove from categoryset lists
 			var index;
-			for (var i = 0; i < TIMAAT.CategoryLists.categorySets.length; i++) {
-				if (TIMAAT.CategoryLists.categorySets[i].model.id == this.model.id) {
+			for (var i = 0; i < TIMAAT.CategoryLists.categories.length; i++) {
+				if (TIMAAT.CategoryLists.categories[i].model.id == this.model.id) {
 					index = i;
 					break;
 				}
 			}
 			if (index > -1) {
-				TIMAAT.CategoryLists.categorySets.splice(index, 1);
-				TIMAAT.CategoryLists.categorySets.model.splice(index, 1);
+				TIMAAT.CategoryLists.categories.splice(index, 1);
+				TIMAAT.CategoryLists.categories.model.splice(index, 1);
 			}
 			// remove from categories list
-      var categoryIndex;
-      for (var i = 0; i < TIMAAT.CategoryLists.categories.length; i++) {
-        if (TIMAAT.CategoryLists.categories[i].model.id == this.model.id) {
-          categoryIndex = i;
+      var categorySetIndex;
+      for (var i = 0; i < TIMAAT.CategoryLists.categorySets.length; i++) {
+        if (TIMAAT.CategoryLists.categorySets[i].model.id == this.model.id) {
+          categorySetIndex = i;
           break;
         }
       }
-      if (categoryIndex > -1) {
-        TIMAAT.CategoryLists.categories.splice(categoryIndex, 1);
-        TIMAAT.CategoryLists.categories.model.splice(categoryIndex, 1);
+      if (categorySetIndex > -1) {
+        TIMAAT.CategoryLists.categorySets.splice(categorySetIndex, 1);
+        TIMAAT.CategoryLists.categorySets.model.splice(categorySetIndex, 1);
       }
 		}
 	}

@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.eclipse.persistence.annotations.CascadeOnDelete;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -51,11 +52,13 @@ public class CategorySet implements Serializable {
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
-	@OneToMany(mappedBy="categorySet")
+	@OneToMany(mappedBy="categorySet", cascade=CascadeType.PERSIST)
+	@JsonManagedReference(value = "CategorySet-CategorySetHasCategory")
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
 	//bi-directional many-to-one association to UserAccountHasCategorySet
 	@OneToMany(mappedBy="categorySet")
+	@JsonIgnore
 	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
 
 //	private List<CategorySetHasCategory> categories = new ArrayList<>();
@@ -199,15 +202,15 @@ public class CategorySet implements Serializable {
 		return userAccountHasCategorySet;
 	}
 
-	public void addCategories(List<Category> categories) {
+// 	public void addCategories(List<Category> categories) {
 
-	}
+// 	}
 
-	public void addCategory(Category category) {
-		CategorySetHasCategory categorySetHasCategory = new CategorySetHasCategory(this, category);
-//		categories.add(categorySetHasCategory);
-		// category.getCategorySets().add(categorySetHasCategory);
-	}
+// 	public void addCategory(Category category) {
+// 		CategorySetHasCategory categorySetHasCategory = new CategorySetHasCategory(this, category);
+// //		categories.add(categorySetHasCategory);
+// 		// category.getCategorySets().add(categorySetHasCategory);
+// 	}
 
 	// public void removeCategory(Category category) {
 	// 	for (Iterator<CategorySetHasCategory> iterator = categories.iterator();

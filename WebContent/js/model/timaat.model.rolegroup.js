@@ -59,7 +59,7 @@
 				$('.form').hide();
 				$('.rolegroups-nav-tabs').show();
 				$('.rolegroups-data-tabs').hide();
-				$('.nav-tabs a[href="#rolegroupDatasheet"]').tab('show');
+				$('.nav-tabs a[href="#roleGroupDatasheet"]').tab('show');
 				$('#timaat-rolelists-metadata-form').data('rolegroup', roleGroup);
         console.log("TCL: RoleGroup -> constructor -> roleGroup", roleGroup);
 				TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'rolegroup', roleGroup);
