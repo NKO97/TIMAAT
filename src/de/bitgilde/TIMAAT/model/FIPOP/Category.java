@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.Set;
  * 
  */
 @Entity
+@Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,7 +42,8 @@ public class Category implements Serializable {
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="category")
-	@JsonIgnore
+	// @JsonIgnore
+	@JsonManagedReference(value = "Category-CategorySetHsCategory")
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
 	//bi-directional many-to-many association to Medium
@@ -50,10 +53,6 @@ public class Category implements Serializable {
 
 	public Category() {
 	}
-
-	// public Category(String name) {
-	// 	this.name = name;
-	// }
 
 	public int getId() {
 		return this.id;
@@ -110,11 +109,11 @@ public class Category implements Serializable {
 	}
 
 	// get all CategorySets this category is a member of
-	@JsonIgnore
-	public List<CategorySet> getCategorySets() { // TODO
-		// Find all CategorySetHasCategory where Category appears
-		// list all CategorySets found that way
-		return null;
-	}
+	// @JsonIgnore
+	// public List<CategorySet> getCategorySets() { // TODO
+	// 	// Find all CategorySetHasCategory where Category appears
+	// 	// list all CategorySets found that way
+	// 	return null;
+	// }
 
 }

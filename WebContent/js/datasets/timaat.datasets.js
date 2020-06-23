@@ -40,7 +40,7 @@
 			TIMAAT.MediaDatasets.load();
 			// Lists
 			TIMAAT.RoleLists.load();
-			// TIMAAT.CategoryLists.load();
+			TIMAAT.CategoryLists.load();
 		},
 
 	}

@@ -191,7 +191,7 @@
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-lists">
                   <a href="#lists"
-                    onclick="TIMAAT.UI.showComponent('lists')"
+                    onclick="TIMAAT.CategoryLists.initListsComponent()"
                     data-toggle="popover"
                     data-trigger="hover"
                     data-animation="false"
@@ -805,7 +805,7 @@
               </div>
             </div>
             <!-- delete category -->
-            <div class="modal fade" id="timaat-lists-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
+            <div class="modal fade" id="timaat-categorylists-category-delete" tabindex="-1" role="dialog" aria-labelledby="categoryDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -819,17 +819,17 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-category-delete-submit">Kategorie löschen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-categorylists-category-delete-submit">Kategorie löschen</button>
                   </div>
                 </div>
               </div>
             </div>
             <!-- delete category set -->
-            <div class="modal fade" id="timaat-lists-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorysetDeleteLabel" aria-hidden="true">
+            <div class="modal fade" id="timaat-categorylists-categoryset-delete" tabindex="-1" role="dialog" aria-labelledby="categorySetDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="categorysetDeleteLabel">CategorySet löschen</h5>
+                    <h5 class="modal-title" id="categorySetDeleteLabel">CategorySet löschen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -839,13 +839,33 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-categoryset-delete-submit">CategorySet löschen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-categorylists-categoryset-delete-submit">CategorySet löschen</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal fade" id="timaat-lists-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorysettMetaLabel" aria-hidden="true">
+          <div> <!-- duplicate categoryset modal -->
+            <div class="modal fade" id="timaat-categorylists-categoryset-duplicate" tabindex="-1" role="dialog" aria-labelledby="categorySetDuplicateLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="categorySetDuplicateLabel">Category set with this name already exists</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    This name already exists.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+          <div class="modal fade" id="timaat-categorylists-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorySetMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -870,17 +890,17 @@
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="lists-tab" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-lists-categorysets" role="tab" aria-controls="categorysets" aria-selected="true">
+                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-categorylists-categorysets" role="tab" aria-controls="categorysets" aria-selected="true">
                     <i class="fas fa-tags"></i> Category Sets
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="categories-tab" onclick="TIMAAT.CategoryLists.loadCategories()" data-toggle="tab" href="#timaat-lists-categories" role="tab" aria-controls="categories" aria-selected="false">
+                  <a class="nav-link" id="categories-tab" onclick="TIMAAT.CategoryLists.loadCategories()" data-toggle="tab" href="#timaat-categorylists-categories" role="tab" aria-controls="categories" aria-selected="false">
                     <i class="fas fa-tag"></i> Categories
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-rolelists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="fale">
+                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-rolelists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="false">
                     <i class="fas fa-users-cog"></i> RoleGroups
                   </a>
                 </li>
@@ -896,27 +916,27 @@
                     <div class="col-lg-4">
                       <div class="card lists-cards categories-cards categorysets-card">
                         <div class="card-header">Category sets
-                          <button type="button" id="timaat-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" id="timaat-categorylists-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i></button>
                           </div>
-                        <div class="timaat-categoryset-list-wrapper" style="max-height: 480px;min-height: 100px">
-                          <div id="timaat-categoryset-list-loader" class="text-center card-body bg-info text-white">
+                        <div class="timaat-lists-list-wrapper">
+                          <div id="timaat-categorylists-categoryset-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Load data...
                           </div>
                           <div class="card-body">
-                            <table id="timaat-lists-categoryset-table" class="table table-striped table-bordered table-hover timaat-lists-categoryset-table">
+                            <table id="timaat-categorylists-categoryset-table" class="table table-striped table-bordered table-hover timaat-categorylists-categoryset-table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th id="timaat-lists-categoryset-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <!-- <th id="timaat-categorylists-categoryset-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
                                   <th>Name</th>
-                                  <th style="max-width:150px;width:150px">Action</th>
+                                  <!-- <th style="max-width:150px;width:150px">Action</th> -->
                                 </tr>
                               </thead>
-                              <tbody id="timaat-lists-categoryset-list">
+                              <tbody id="timaat-categorylists-categoryset-list">
                               </tbody>
                             </table>
                             <!-- <ul class="list-group list-group-flush">
-                              <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
                                 <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
                               </li>
                             </ul>
@@ -925,29 +945,29 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card lists-cards categories-cards category-card">
+                      <div class="card lists-cards categories-cards categories-card">
                         <div class="card-header">Categories
-                          <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" id="timaat-categorylists-category-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i></button>
                           </div>
-                        <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
-                          <div id="timaat-category-list-loader" class="text-center card-body bg-info text-white">
+                        <div class="timaat-lists-list-wrapper">
+                          <div id="timaat-categorylists-category-list-loader" class="text-center card-body bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Load data...
                           </div>
                           <div class="card-body">
-                            <table id="timaat-lists-category-table" class="table table-striped table-bordered table-hover timaat-lists-category-table">
+                            <table id="timaat-categorylists-category-table" class="table table-striped table-bordered table-hover timaat-categorylists-category-table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th id="timaat-lists-category-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <!-- <th id="timaat-categorylists-category-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
                                   <th>Name</th>
-                                  <th style="max-width:150px;width:150px">Action</th>
+                                  <!-- <th style="max-width:150px;width:150px">Action</th> -->
                                 </tr>
                               </thead>
-                              <tbody id="timaat-lists-category-list">
+                              <tbody id="timaat-categorylists-category-list">
                               </tbody>
                             </table>
                             <!-- <ul class="list-group list-group-flush">
-                              <li id="timaat-lists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
                                 <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
                               </li>
                             </ul>
@@ -1014,7 +1034,7 @@
                           <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th id="timaat-lists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
+                                  <th id="timaat-categorylists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
                                     <th>Name</th>
                                     <th style="max-width:150px;width:150px">Aktion</th>
                                   </tr>
@@ -1025,7 +1045,69 @@
                         </div>
                       </div> -->
                       <!-- Data tab content -->
-                      <!-- datasheet form -->
+                      <!-- category/categorysets datasheet form -->
+                      <form class="form" role="form" id="timaat-categorylists-metadata-form" name="timaat-categorylists-metadata-form" data-type="" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="categoryOrCategorySetFormHeader">Category</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-categorylists-metadata-form-delete" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- name data -->
+                        <div class="form-group datasheet-data name-data">
+                          <div class="form-row">
+                            <label class="col-form-label col-form-label-sm" for="timaat-categorylists-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-categorylists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                          </div>
+                        </div>
+                        <!-- category data -->
+                        <div class="form-group datasheet-data category-data">
+                          <div class="form-header">
+                            <div class="form-row">
+                              <h6 class="form-header">Is part of categoryset(s)</h6>
+                            </div>
+                          </div>
+                          <div class="category-ispartof-categoryset-container">
+                            <div data-role="dynamic-category-ispartof-categoryset-fields" id="dynamic-category-ispartof-categoryset-fields">
+                              <div class="form-group">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- categoryset data -->
+                        <div class="form-group datasheet-data categoryset-data">
+                          <div class="form-header">
+                            <div class="form-row">
+                              <h6 class="form-header">Contains category(s)</h6>
+                            </div>
+                          </div>
+                          <div class="category-ispartof-categoryset-container">
+                            <div data-role="dynamic-categoryset-contains-category-fields" id="dynamic-categoryset-contains-category-fields">
+                              <div class="form-group">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <div class="category-datasheet-form-submit">
+                          <button type="submit" class="btn btn-primary" id="timaat-categorylists-metadata-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="timaat-categorylists-metadata-form-dismiss" name="dismiss">Cancel</button>
+                        </div>
+                      </form>
+                      <!-- role/rolegroups datasheet form -->
                       <form class="form" role="form" id="timaat-rolelists-metadata-form" name="timaat-rolelists-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
@@ -1083,8 +1165,8 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <div class="role-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary" id="timaat-rolelists-metadata-form-submit" name="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Abbruch</button>
+                          <button type="submit" class="btn btn-primary" id="timaat-rolelists-metadata-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>

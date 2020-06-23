@@ -67,7 +67,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumText;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumVideogame;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
-import de.bitgilde.TIMAAT.model.FIPOP.RoleTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Source;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;

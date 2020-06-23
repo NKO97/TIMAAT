@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.Set;
 
@@ -23,12 +23,15 @@ public class CategorySetHasCategory implements Serializable {
 
 	//bi-directional many-to-one association to Category
 	@ManyToOne
+	@JsonBackReference(value = "Category-CategorySetHsCategory")
+	@JoinColumn(name="category_id")
 	private Category category;
 
 	//bi-directional many-to-one association to CategorySet
 	@ManyToOne
+	// @JsonIgnore
+	@JsonBackReference(value = "CategorySet-CategorySetHasCategory")
 	@JoinColumn(name="category_set_id")
-	@JsonIgnore
 	private CategorySet categorySet;
 
 	//bi-directional many-to-one association to CategorySetHasCategory

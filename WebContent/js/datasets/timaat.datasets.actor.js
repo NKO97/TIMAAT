@@ -1927,7 +1927,6 @@
 						formEntriesIdIndexes.push({entryIndex: i, numDetailSets: 0});
 					}
 				}
-				console.log("TCL: formEntriesIdIndexes", formEntriesIdIndexes);
 				var numDetailElements = 3; // hidden membershipDetailId, joinedAt, leftAt
 				i = 0;
 				for (; i < formEntriesIdIndexes.length; i++) {
@@ -1937,10 +1936,8 @@
 						formEntriesIdIndexes[i].numDetailSets = (formDataRaw.length - formEntriesIdIndexes[i].entryIndex - 1) / numDetailElements;
 					}
 				}
-				console.log("TCL: formEntriesIdIndexes", formEntriesIdIndexes);
 				i = 0;
 				for (; i < formEntriesIdIndexes.length; i++) {
-					console.log("TCL: formEntriesIdIndexes[i]", formEntriesIdIndexes[i]);
 						var element = {
 							actorId: actor.model.id,
 							collectiveId: Number(formDataRaw[formEntriesIdIndexes[i].entryIndex].value),
@@ -1959,7 +1956,6 @@
 					}
 					formEntries.push(element);
 				}
-				console.log("TCL: formEntries", formEntries);
 				// create collective id list for all already existing memberships
 				i = 0;
 				var existingEntriesIdList = [];
@@ -1967,9 +1963,6 @@
 					existingEntriesIdList.push(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId);
 				}
 				// DELETE memberOfCollective data if id is in existingEntriesIdList but not in formEntryIds
-				// console.log("TCL: DELETE memberOfCollectives (start)");
-				// console.log("TCL: formEntryIds", formEntryIds);
-				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
 				for (; i < existingEntriesIdList.length; i++) {
 					// console.log("TCL: check for DELETE COLLECTIVE: ", existingEntriesIdList[i]);
@@ -1982,21 +1975,15 @@
 						}
 					}
 					if (deleteDataset) {
-            console.log("TCL: REMOVE memberOfCollective: ", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
 						await TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i]);
 						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.splice(i,1); // TODO should be moved to ActorDatasets.removeMemberOfCollective(..)
 						existingEntriesIdList.splice(i,1);
 						i--; // so the next list item is not jumped over due to the splicing
 					}
 				}
-				// console.log("TCL: DELETE memberOfCollectives (end)");
 				// ADD memberOfCollective data if id is not in existingEntriesIdList but in formEntryIds
-				// console.log("TCL: ADD new memberOfCollectives (start)");
-				// console.log("TCL: formEntryIds", formEntryIds);
-				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
 				for (; i < formEntryIds.length; i++) {
-					// console.log("TCL: check for ADD COLLECTIVE: ", formEntryIds[i]);
 					var j = 0;
 					var datasetExists = false;
 					for (; j < existingEntriesIdList.length; j++) {
@@ -2006,42 +1993,32 @@
 						}
 					}
 					if (!datasetExists) {
-						console.log("TCL: add memberOfCollective: ", formEntries[i]);
 						await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor, formEntries[i]);
 						formEntryIds.splice(i,1);
 						formEntries.splice(i,1);
-            // console.log("TCL: formEntryIds", formEntryIds);
 						i--; // so the next list item is not jumped over due to the splicing
 					}
 				}
-				// console.log("TCL: ADD new memberOfCollectives (end)");
 				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
 				// UPDATE memberOfCollective data if id is in existingEntriesIdList and in formEntryIds
-				// console.log("TCL: UPDATE memberOfCollectives (start)");
-				// console.log("TCL: formEntryIds", formEntryIds);
-				// console.log("TCL: existingEntriesIdList", existingEntriesIdList);
 				i = 0;
 				for (; i < existingEntriesIdList.length; i++) {
 					// console.log("TCL: check for UPDATE COLLECTIVE: ", existingEntriesIdList[i]);
 					// find corresponding actorPersonIsMemberOfActorCollectives id/index
-					// var currentCollectiveId = existingEntriesIdList[i];
 					var currentMemberOfCollectiveIndex = -1;
 					var j = 0;
 					for (; j < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; j++) {
 						if (existingEntriesIdList[i] == actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[j].id.memberOfActorCollectiveActorId) {
 							currentMemberOfCollectiveIndex = j;
-              console.log("TCL: currentMemberOfCollectiveIndex", currentMemberOfCollectiveIndex);
 							break; // no need to check further if index was found
 						}
 					}
 					var currentMemberOfCollective = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex];
 					var currentMemberOfCollectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex].id.memberOfActorCollectiveActorId;
 					// go through all membershipDetails and update/delete/add entries
-					console.log("TCL: currentMemberOfCollectiveId", currentMemberOfCollectiveId);
 					// create membershipDetail id list for all already existing memberships with this collective
 					var existingMembershipDetailIdList = [];
 					j = 0;
-					console.log("TCL: currentMemberOfCollective.membershipDetails", currentMemberOfCollective.membershipDetails);
 					for (; j < currentMemberOfCollective.membershipDetails.length; j++) {
 						existingMembershipDetailIdList.push(currentMemberOfCollective.membershipDetails[j].id);
 					}
@@ -2052,27 +2029,17 @@
 						formMembershipDetailIdList.push(formEntries[i].membershipDetails[j].id);
 					}
 					// DELETE membershipDetail data if id is in existingMembershipDetailIdList but not in membershipDetails of formEntries
-					console.log("TCL: DELETE membershipDetail (start)");
-					console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
-					console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
 					j = 0;
 					for (; j < existingMembershipDetailIdList.length; j++) {
-						console.log("TCL: check for REMOVE COLLECTIVEDETAIL: ", formMembershipDetailIdList[j]);
-						// console.log("TCL: i", i);
-            // console.log("TCL: j", j);
 						var k = 0;
 						var deleteDataset = true;
 						for (; k < formMembershipDetailIdList.length; k++) { // 'j' since bot collective id lists match after delete and add memberOfCollective operations
 							if (existingMembershipDetailIdList[j] == formMembershipDetailIdList[k]) {
-                console.log("TCL: existingMembershipDetailIdList[j]", existingMembershipDetailIdList[j]);
-                console.log("TCL: formMembershipDetailIdList[k]", formMembershipDetailIdList[k]);
 								deleteDataset = false;
 								break; // no need to check further if match was found
 							}
 						}
 						if (deleteDataset) {
-							console.log("TCL: actor", actor);
-							console.log("TCL: REMOVE membershipDetail: ", actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j]); //? TODO 'j' or membershipDetailIdIndex
 							await TIMAAT.ActorService.removeMembershipDetails(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j]);
 							actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.splice(j,1); // TODO should be moved to ActorDatasets.removeMembershipDetail(..)
 							existingMembershipDetailIdList.splice(j,1);
@@ -2081,44 +2048,24 @@
 					}
 					console.log("TCL: DELETE membershipDetail (end)");
 					// ADD membershipDetail data if id is not in existingMembershipDetailIdList but in membershipDetails of formEntries
-					// console.log("TCL: ADD membershipDetail (start)");
-					// console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
-					// console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
 					j = 0;
 					for (; j < formMembershipDetailIdList.length; j++) {
-						// console.log("TCL: check for ADD COLLECTIVEDETAIL: ", formMembershipDetailIdList[j]);
 						if (formMembershipDetailIdList[j] == 0) {
-							console.log("TCL: add membershipDetail: ", formEntries[i].membershipDetails[j]);
 							var newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(actor.model.id, formEntries[i].collectiveId, formEntries[i].membershipDetails[j]);
-              console.log("TCL: newMembershipDetails", newMembershipDetails);
 							actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.push(newMembershipDetails);
-							// existingMembershipDetailIdList.push(newMembershipDetails.id);
-              // console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
-              console.log("TCL: actor", actor);
 							formMembershipDetailIdList.splice(j,1);
-              console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
 							j--; // so the next list item is not jumped over due to the splicing
 						}
 					}
-					// console.log("TCL: ADD membershipDetail (end)");
 					//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
 					// UPDATE membershipDetail data if id is in existingMembershipDetailIdList and in membershipDetails of formEntries
-					// console.log("TCL: UPDATE membershipDetail (start)");
-					// console.log("TCL: existingMembershipDetailIdList", existingMembershipDetailIdList);
-					// console.log("TCL: formMembershipDetailIdList", formMembershipDetailIdList);
 					j = 0;
 					for (; j < existingMembershipDetailIdList.length; j++) {
-						// console.log("TCL: check for UPDATE COLLECTIVEDETAIL: ", existingMembershipDetailIdList[j]);
-						// formEntries[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorPerson = actor.model.id;
-						// formEntries[i].membershipDetails[j].actorPersonIsMemberOfActorCollective.actorCollective = formEntries[i].collectiveId;
-						console.log("TCL: update membershipDetail: ", formEntries[i].membershipDetails[j]);
 						await TIMAAT.ActorService.updateMembershipDetails(formEntries[i].membershipDetails[j]);
 						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j] = formEntries[i].membershipDetails[j];
 					}
-					// console.log("TCL: UPDATE membershipDetail (end)");
 				}
 				actor.updateUI();
-				console.log("TCL: show actor memberOfCollective form");
 				TIMAAT.ActorDatasets.personFormMemberOfCollectives('show', actor);
 			});
 

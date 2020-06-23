@@ -1123,13 +1123,13 @@
 			this.updateUI();
 		},
 
-		setCategorySet: function(categoryset) {
-			console.log("TCL: setCategorySet: function(categoryset)");
-			console.log("TCL: categoryset", categoryset);
-			TIMAAT.VideoPlayer.curCategorySet = categoryset;
+		setCategorySet: function(categorySet) {
+			console.log("TCL: setCategorySet: function(categorySet)");
+			console.log("TCL: categorySet", categorySet);
+			TIMAAT.VideoPlayer.curCategorySet = categorySet;
 			TIMAAT.VideoPlayer.categoryAutocomplete.length = 0;
-			if ( categoryset ) {
-				$(categoryset.model.categories).each(function(index,category) {
+			if ( categorySet ) {
+				$(categorySet.model.categories).each(function(index,category) {
 					TIMAAT.VideoPlayer.categoryAutocomplete.push(category.name);
 				});
 			}
