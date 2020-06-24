@@ -459,7 +459,7 @@
 		loadCategorySets: function() {
 			// console.log("TCL: loadCategorySets: function()");
 			$('.lists-datatables').hide();
-			$('.categoriesets-datatable').show();
+			$('.categorysets-datatable').show();
 			TIMAAT.CategoryLists.setCategorySetsList();
 
 			// load categorysets
