@@ -407,11 +407,18 @@ public class CategorySetEndpoint {
 
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
 
+		Set<CategorySetHasCategory> cshcSet = category.getCategorySetHasCategories();
+		List<CategorySet> categorySetList = new ArrayList<>();
+		cshcSet.forEach((element) -> categorySetList.add(element.getCategorySet()));
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(category);
 		entityTransaction.commit();
-		
+		for (CategorySet categorySet : categorySetList) {
+			entityManager.refresh(categorySet);
+		}
+				
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
@@ -546,10 +553,17 @@ public class CategorySetEndpoint {
 
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
 
+		Set<CategorySetHasCategory> cshcSet = categorySet.getCategorySetHasCategories();
+		List<Category> categoryList = new ArrayList<>();
+		cshcSet.forEach((element) -> categoryList.add(element.getCategory()));
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(categorySet);
 		entityTransaction.commit();
+		for (Category category : categoryList) {
+			entityManager.refresh(category);
+		}
 
 		// add log entry
 		UserLogManager.getLogger()
@@ -711,6 +725,8 @@ public class CategorySetEndpoint {
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		// categorySet.getCategorySetHasCategories().remove(cshc);
+		// category.getCategorySetHasCategories().remove(cshc);
 		entityManager.remove(cshc);
 		entityTransaction.commit();
 		entityManager.refresh(category);
