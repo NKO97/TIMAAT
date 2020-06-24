@@ -65,7 +65,7 @@
 		initMediaTypes: function() {
 			// console.log("TCL: MediaDatasets: initMediaTypes: function()");		
 			// delete mediaType functionality
-			$('#timaat-mediatype-delete-submit').click(function(ev) {
+			$('#timaat-mediatype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-mediadatasets-mediumtype-delete');
 				var mediaType = modal.data('mediaType');
 				if (mediaType) TIMAAT.MediaDatasets._mediaTypeRemoved(mediaType);
@@ -95,7 +95,7 @@
 			});
 
 			// Submit mediaType data
-			$('#timaat-mediadatasets-mediumtype-meta-submit').click(function(ev) {
+			$('#timaat-mediadatasets-mediumtype-meta-submit').on('click', function(ev) {
 				// Create/Edit mediaType window submitted data validation
 				var modal = $('#timaat-mediadatasets-mediumtype-meta');
 				var mediaType = modal.data('mediaType');
@@ -286,12 +286,6 @@
 				}
 			});
 
-			$('#timaat-mediadatasets-metadata-form').keypress( function(event) {
-				if (event.which == '13') {
-					$('#timaat-mediadatasets-metadata-form-submit').trigger('click');
-				}
-			});
-
 			// edit content form button handler
 			$('#timaat-mediadatasets-metadata-form-upload').on('click', function(event) {
 				event.stopPropagation();
@@ -303,7 +297,23 @@
 					medium.listView.find('.timaat-video-upload-file').click();
           console.log("TCL: medium", medium);
 				}
-			});			
+			});		
+			
+			// Key press events
+			$('#timaat-mediadatasets-metadata-form-submit').keypress(function(event) {
+				event.stopPropagation();
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-metadata-form-submit').trigger('click');
+				}
+			});
+
+			$('#timaat-mediadatasets-metadata-form-dismiss').keypress(function(event) {
+				event.stopPropagation();
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-metadata-form-dismiss').trigger('click');
+				}
+			});
+			
 
 		},
 
@@ -434,7 +444,7 @@
 		},
 		
 		initTitles: function() {
-			$('#media-tab-medium-titles-form').click(function(event) {
+			$('#media-tab-medium-titles-form').on('click', function(event) {
 				$('.nav-tabs a[href="#mediumTitles"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.subNavTab = 'mediumTitles';
@@ -776,13 +786,37 @@
 			});
 
 			// Cancel add/edit button in titles form functionality
-			$('#timaat-mediadatasets-medium-titles-form-dismiss').click( function(event) {
+			$('#timaat-mediadatasets-medium-titles-form-dismiss').on('click', function(event) {
 				TIMAAT.MediaDatasets.mediumFormTitles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
-			$('#timaat-mediadatasets-medium-titles-form').keypress( function(event) {
+			// Key press events
+			$('#timaat-mediadatasets-medium-titles-form-submit').keypress(function(event) {
+				event.stopPropagation();
 				if (event.which == '13') {
 					$('#timaat-mediadatasets-medium-titles-form-submit').trigger('click');
+				}
+			});
+
+			$('#timaat-mediadatasets-medium-titles-form-dismiss').keypress(function(event) {
+				event.stopPropagation();
+				if (event.which == '13') {
+					$('#timaat-mediadatasets-medium-titles-form-dismiss').trigger('click');
+				}
+			});
+
+			$('#dynamic-title-fields').keypress(function(event) {
+				// event.stopPropagation();
+				if (event.which == '13') {
+					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
+				}
+			});
+
+			$('#new-title-fields').keypress(function(event) {
+				event.stopPropagation();
+				if (event.which == '13') {
+					event.preventDefault();
+					$('#new-title-fields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
@@ -907,11 +941,6 @@
 				TIMAAT.MediaDatasets.mediumFormLanguageTracks('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
-			$('#timaat-mediadatasets-medium-languagetracks-form').keypress( function(event) {
-				if (event.which == '13') {
-					$('#timaat-mediadatasets-medium-languagetracks-form-done').trigger('click');
-				}
-			});
 		},
 
 		initActorRoles: function() {
@@ -1277,11 +1306,6 @@
 				TIMAAT.MediaDatasets.mediumFormActorRoles('show', $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
-			$('#timaat-mediadatasets-medium-actorwithroles-form').keypress( function(event) {
-				if (event.which == '13') {
-					$('#timaat-mediadatasets-medium-actorwithroles-form-submit').trigger('click');
-				}
-			});
 		},
 
 		load: function() {
