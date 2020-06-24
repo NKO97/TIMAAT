@@ -136,6 +136,8 @@ public class ActorEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			for (ActorName actorName : actorNameList) {
 				if (annotationID != null) {
@@ -166,10 +168,10 @@ public class ActorEndpoint {
 		} else {
 			query = entityManager.createQuery(
 				actorQuery+column+" "+direction);
+				if ( start != null && start > 0 ) query.setFirstResult(start);
+				if ( length != null && length > 0 ) query.setMaxResults(length);
 				actorList = castList(Actor.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 
@@ -318,6 +320,8 @@ public class ActorEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			for (ActorName actorName : actorNameList) {
 				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorPerson() != null)) { // TODO actor.getActorType().. may be more efficient
@@ -328,11 +332,10 @@ public class ActorEndpoint {
 		} else {
 			sql = "SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			actorList = castList(Actor.class, query.getResultList());
 		}
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
-
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
 
@@ -386,6 +389,8 @@ public class ActorEndpoint {
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			for (ActorName actorName : actorNameList) {
 				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorCollective() != null)) { // TODO actor.getActorType().. may be more efficient
@@ -396,10 +401,10 @@ public class ActorEndpoint {
 		} else {
 			sql = "SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
 			actorList = castList(Actor.class, query.getResultList());
 		}		
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
