@@ -2413,8 +2413,8 @@ public class MediumServiceEndpoint {
 		// System.out.println("MediumServiceEndpoint: UPDATE SOURCE - source.id:"+source.getId());
 		// System.out.println("MediumServiceEndpoint: UPDATE SOURCE - language id:"+updatedSource.getLanguage().getId());
 		if ( updatedSource.getIsPrimarySource() != null ) source.setIsPrimarySource(updatedSource.getIsPrimarySource());
-		if ( updatedSource.getUrl() != null ) source.setUrl(updatedSource.getUrl());
-		if ( updatedSource.getLastAccessed() != null ) source.setLastAccessed(updatedSource.getLastAccessed());
+		source.setUrl(updatedSource.getUrl());
+		source.setLastAccessed(updatedSource.getLastAccessed());
 		if ( updatedSource.getIsStillAvailable() != null ) source.setIsStillAvailable(updatedSource.getIsStillAvailable());
 
 		// update log metadata

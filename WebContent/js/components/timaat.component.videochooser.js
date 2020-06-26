@@ -497,7 +497,7 @@
 						}
 					},
 					{ data: 'releaseDate', name: 'releaseDate', className: 'date', render: function(data, type, video, meta) {
-							return moment(data).format('YYYY-MM-DD');
+							return moment.utc(data).format('YYYY-MM-DD');
 						}
 					},
 					{ data: null, className: 'actions', orderable: false, render: function(data, type, video, meta) {
@@ -924,7 +924,7 @@
 			videoelement.find('.title').html(titleDisplay);
 			videoelement.find('.duration').html(TIMAAT.Util.formatTime(video.mediumVideo.length));
 			videoelement.find('.producer').html(TIMAAT.VideoChooser._getProducer(video));
-			videoelement.find('.date').html(moment(video.releaseDate).format('YYYY-MM-DD'));
+			videoelement.find('.date').html(moment.utc(video.releaseDate).format('YYYY-MM-DD'));
 
 			videoelement.data('medium', video);
 			videoelement.find('input:checkbox').prop('checked', false);

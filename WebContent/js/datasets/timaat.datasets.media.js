@@ -223,49 +223,64 @@
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
+				// console.log("TCL: formDataObject", formDataObject);
+				// sanitize form data
+				var formDataSanitized = formDataObject;
+				// console.log("TCL: formDataSanitized", formDataSanitized);
+				formDataSanitized.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+				// formDataSanitized.releaseDate = (formDataObject.releaseDate != null && !(isNaN(formDataObject.releaseDate))) ? moment.utc(formDataObject.releaseDate, "YYYY-MM-DD") : null;
+				formDataSanitized.displayTitleLanguageId = Number(formDataObject.displayTitleLanguageId);
+				formDataSanitized.sourceUrl = (formDataObject.sourceUrl.length == 0 ) ? null : formDataObject.sourceUrl;
+				formDataSanitized.sourceIsPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
+				formDataSanitized.sourceLastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+				// formDataSanitized.sourceLastAccessed = (formDataObject.sourceLastAccessed != null && !(isNaN(formDataObject.sourceLastAccessed))) ? moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm") : null;
+				formDataSanitized.sourceIsStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+				formDataSanitized.length = TIMAAT.Util.parseTime(formDataObject.length);
+				formDataSanitized.isEpisode = (formDataObject.isEpisode == "on") ? true : false;
+        // console.log("TCL: formDataSanitized", formDataSanitized);
 
 				if (medium) { // update medium
 					// medium data
-					medium = await TIMAAT.MediaDatasets.updateMediumModelData(medium, formDataObject);
+					medium = await TIMAAT.MediaDatasets.updateMediumModelData(medium, formDataSanitized);
 					// medium subtype data
 					switch (type) {
 						case "audio":
-							medium.model.mediumAudio.length = TIMAAT.Util.parseTime(formDataObject.length);
+							medium.model.mediumAudio.length = formDataSanitized.length;
 						break;
 						case "document":
 						break;
 						case "image":
-							medium.model.mediumImage.width = formDataObject.width;
-							medium.model.mediumImage.height = formDataObject.height;
-							medium.model.mediumImage.bitDepth = formDataObject.bitDepth;
+							medium.model.mediumImage.width = formDataSanitized.width;
+							medium.model.mediumImage.height = formDataSanitized.height;
+							medium.model.mediumImage.bitDepth = formDataSanitized.bitDepth;
 						break;
 						case "software":
-							medium.model.mediumSoftware.version = formDataObject.version;
+							medium.model.mediumSoftware.version = formDataSanitized.version;
 						break;
 						case "text":
-							medium.model.mediumText.content = formDataObject.content;
+							medium.model.mediumText.content = formDataSanitized.content;
 						break;
 						case "video":
-							medium.model.mediumVideo.length = TIMAAT.Util.parseTime(formDataObject.length);
-							medium.model.mediumVideo.videoCodec = formDataObject.videoCodec;
-							medium.model.mediumVideo.width = formDataObject.width;
-							medium.model.mediumVideo.height = formDataObject.height;
-							medium.model.mediumVideo.frameRate = formDataObject.frameRate;
-							medium.model.mediumVideo.dataRate = formDataObject.dataRate;
-							medium.model.mediumVideo.totalBitrate = formDataObject.totalBitrate;
-							medium.model.mediumVideo.isEpisode = (formDataObject.isEpisode) ? true : false;
+							medium.model.mediumVideo.length = formDataSanitized.length;
+							medium.model.mediumVideo.videoCodec = formDataSanitized.videoCodec;
+							medium.model.mediumVideo.width = formDataSanitized.width;
+							medium.model.mediumVideo.height = formDataSanitized.height;
+							medium.model.mediumVideo.frameRate = formDataSanitized.frameRate;
+							medium.model.mediumVideo.dataRate = formDataSanitized.dataRate;
+							medium.model.mediumVideo.totalBitrate = formDataSanitized.totalBitrate;
+							medium.model.mediumVideo.isEpisode = formDataSanitized.isEpisode;
 						break;
 						case "videogame":
-							medium.model.mediumVideogame.isEpisode = (formDataObject.isEpisode) ? true : false;
+							medium.model.mediumVideogame.isEpisode = formDataSanitized.isEpisode;
 						break;
 					}
 					await TIMAAT.MediaDatasets.updateMedium(type, medium);
 					// medium.updateUI();
 				} else { // create new medium
-					var mediumModel = await TIMAAT.MediaDatasets.createMediumModel(formDataObject, type);
-					var displayTitleModel = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataObject);
-					var sourceModel = await TIMAAT.MediaDatasets.createSourceModel(formDataObject);
-					var mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataObject, type);
+					var mediumModel = await TIMAAT.MediaDatasets.createMediumModel(formDataSanitized, type);
+					var displayTitleModel = await TIMAAT.MediaDatasets.createDisplayTitleModel(formDataSanitized);
+					var sourceModel = await TIMAAT.MediaDatasets.createSourceModel(formDataSanitized);
+					var mediumSubtypeModel = await TIMAAT.MediaDatasets.createMediumSubtypeModel(formDataSanitized, type);
 
 					var newMedium = await TIMAAT.MediaDatasets.createMedium(type, mediumModel, mediumSubtypeModel, displayTitleModel, sourceModel);
 					medium = new TIMAAT.Medium(newMedium, type);
@@ -1387,14 +1402,7 @@
 		},
 
 		loadAllMediumSubtypes: function() {
-    	console.log("TCL: loadAllMediumSubtypes()");
-			// TIMAAT.MediaService.listMediumSubtype('audio', TIMAAT.MediaDatasets.setAudioList);
-			// TIMAAT.MediaService.listMediumSubtype('document', TIMAAT.MediaDatasets.setDocumentList);
-			// TIMAAT.MediaService.listMediumSubtype('image', TIMAAT.MediaDatasets.setImageList);
-			// TIMAAT.MediaService.listMediumSubtype('software', TIMAAT.MediaDatasets.setSoftwareList);
-			// TIMAAT.MediaService.listMediumSubtype('text', TIMAAT.MediaDatasets.setTextList);
-			// TIMAAT.MediaService.listMediumSubtype('video', TIMAAT.MediaDatasets.setVideoList);
-			// TIMAAT.MediaService.listMediumSubtype('videogame', TIMAAT.MediaDatasets.setVideogameList);
+    	// console.log("TCL: loadAllMediumSubtypes()");
 			TIMAAT.MediaDatasets.setAudioList();
 			TIMAAT.MediaDatasets.setDocumentList();
 			TIMAAT.MediaDatasets.setImageList();
@@ -1704,9 +1712,9 @@
 			$('#timaat-mediadatasets-metadata-medium-mediatype-id').val(data.mediaType.id);
 			$('#timaat-mediadatasets-metadata-medium-remark').val(data.remark);
 			$('#timaat-mediadatasets-metadata-medium-copyright').val(data.copyright);
-			if (isNaN(moment(data.releaseDate)))
-				$('#timaat-mediadatasets-metadata-medium-releasedate').val('');
-				else $('#timaat-mediadatasets-metadata-medium-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
+			if (data.releaseDate != null && !(isNaN(data.releaseDate)))
+				$('#timaat-mediadatasets-metadata-medium-releasedate').val(moment.utc(data.releaseDate).format('YYYY-MM-DD'));
+				else $('#timaat-mediadatasets-metadata-medium-releasedate').val('');
 			// display-title data
 			$('#timaat-mediadatasets-metadata-medium-title').val(data.displayTitle.name);
 			$('#timaat-mediadatasets-metadata-medium-title-language-id').val(data.displayTitle.language.id);
@@ -1715,9 +1723,9 @@
 				$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
 				else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
 			$('#timaat-mediadatasets-metadata-medium-source-url').val(data.sources[0].url);
-			if (isNaN(moment.utc(data.sources[0].lastAccessed))) 
-				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val('');
-				else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+			if (data.sources[0].lastAccessed != null && !(isNaN(data.sources[0].lastAccessed)))
+				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+				else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val('');
 			if (data.sources[0].isStillAvailable)
 				$('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', true);
 				else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
@@ -2541,12 +2549,12 @@
 		updateMediumModelData: async function(medium, formDataObject) {
     	// console.log("TCL: medium, formDataObject", medium, formDataObject);
 			// medium data
-			medium.model.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+			medium.model.releaseDate = formDataObject.releaseDate;
 			medium.model.copyright = formDataObject.copyright;
 			medium.model.remark = formDataObject.remark;
 			// display-title data
 			medium.model.displayTitle.name = formDataObject.displayTitle;
-			medium.model.displayTitle.language.id = Number(formDataObject.displayTitleLanguageId);
+			medium.model.displayTitle.language.id = formDataObject.displayTitleLanguageId;
 			var i = 0;
 			for (; i < medium.model.titles.length; i++) {
 				if (medium.model.displayTitle.id == medium.model.titles[i].id) {
@@ -2556,9 +2564,9 @@
 			}
 			// source data
 			medium.model.sources[0].url = formDataObject.sourceUrl;
-			medium.model.sources[0].isPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-			medium.model.sources[0].lastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
-			medium.model.sources[0].isStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
+			medium.model.sources[0].isPrimarySource = formDataObject.sourceIsPrimarySource;
+			medium.model.sources[0].lastAccessed = formDataObject.sourceLastAccessed;
+			medium.model.sources[0].isStillAvailable = formDataObject.sourceIsStillAvailable;
 
 			return medium;
 		},
@@ -2592,14 +2600,14 @@
 				id: 0,
 				remark: formDataObject.remark,
 				copyright: formDataObject.copyright,
-				releaseDate: moment.utc(formDataObject.releaseDate, "YYYY-MM-DD"),
+				releaseDate: formDataObject.releaseDate,
 				mediaType: {
 					id: typeId,
 				},
 				titles: [{
 					id: 0,
 					language: {
-						id: Number(formDataObject.displayTitleLanguageId),
+						id: formDataObject.displayTitleLanguageId,
 					},
 					name: formDataObject.displayTitle,
 				}],
@@ -2616,7 +2624,7 @@
 						audioCodecInformation: { // TODO get correct audio codec information
 							id: 1,
 						},
-						length: TIMAAT.Util.parseTime(formDataObject.length),
+						length: formDataObject.length,
 					};
 				break;
 				case 'document':
@@ -2650,21 +2658,21 @@
 						audioCodecInformation: { // TODO get correct audio codec information
 							id: 1,
 						},
-						length: TIMAAT.Util.parseTime(formDataObject.length),
+						length: formDataObject.length,
 						videoCodec: formDataObject.videoCodec,
 						width: formDataObject.width,
 						height: formDataObject.height,
 						frameRate: formDataObject.frameRate,
 						dataRate: formDataObject.dataRate,
 						totalBitrate: formDataObject.totalBitrate,
-						isEpisode: (formDataObject.isEpisode) ? true : false,
+						isEpisode: formDataObject.isEpisode,
 						status: "nofile"
 					};
 				break;
 				case 'videogame':
 					mediumSubtypeModel = {
 						mediumId: 0,
-						isEpisode: (formDataObject.isEpisode) ? true : false,
+						isEpisode: formDataObject.isEpisode,
 					};
 				break;
 			}
@@ -2675,7 +2683,7 @@
 			var displayTitle = {
 				id: 0,
 				language: {
-					id: Number(formDataObject.displayTitleLanguageId),
+					id: formDataObject.displayTitleLanguageId,
 				},
 				name: formDataObject.displayTitle,
 			};
@@ -2683,15 +2691,16 @@
 		},
 
 		createSourceModel: async function(formDataObject) {
+    	// console.log("TCL: formDataObject", formDataObject);
 			var source = {
 				id: 0,
 				medium: {
 					id: 0,
 				},
-				isPrimarySource: ( formDataObject.sourceIsPrimarySource == "on" ) ? true : false,            
+				isPrimarySource: formDataObject.sourceIsPrimarySource,            
 				url: formDataObject.sourceUrl,
-				lastAccessed: moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm"),
-				isStillAvailable: (formDataObject.sourceIsStillAvailable == "on") ? true : false,
+				lastAccessed: formDataObject.sourceLastAccessed,
+				isStillAvailable: formDataObject.sourceIsStillAvailable,
 			};
 			return source;
 		},
@@ -3901,8 +3910,8 @@
 		},
 
 		selectLastSelection: function(type, id) {
-			console.log("TCL: selectLastSelection: type, id", type, id);
-			console.log("TCL: TIMAAT.MediaDatasets.selectedId", TIMAAT.MediaDatasets.selectedId);
+			// console.log("TCL: selectLastSelection: type, id", type, id);
+			// console.log("TCL: TIMAAT.MediaDatasets.selectedId", TIMAAT.MediaDatasets.selectedId);
 			var table;
 			switch(type) {
 				case 'medium':
@@ -3934,7 +3943,7 @@
 					table = TIMAAT.MediaDatasets.dataTableVideogame;
 				break;
 			}
-			console.log("TCL: table", table);
+			// console.log("TCL: table", table);
 			// remove selection from old rows
 			if (TIMAAT.MediaDatasets.selectedId && TIMAAT.MediaDatasets.selectedId != id) {
 				$(table.row('#'+TIMAAT.MediaDatasets.selectedId).node()).removeClass('selected');
