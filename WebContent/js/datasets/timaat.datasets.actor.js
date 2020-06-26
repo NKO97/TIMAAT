@@ -2771,10 +2771,10 @@
 			$('#timaat-actordatasets-metadata-actor-name').val(data.displayName.name);
 			if(isNaN(moment(data.displayName.usedFrom)))
 				$('#timaat-actordatasets-metadata-actor-name-usedfrom').val('');
-			else $('#timaat-actordatasets-metadata-actor-name-usedfrom').val(moment.utc(data.displayName.usedFrom).format('YYYY-MM-DD'));
+				else $('#timaat-actordatasets-metadata-actor-name-usedfrom').val(moment.utc(data.displayName.usedFrom).format('YYYY-MM-DD'));
 			if(isNaN(moment(data.displayName.usedUntil)))
 				$('#timaat-actordatasets-metadata-actor-name-useduntil').val('');
-			else $('#timaat-actordatasets-metadata-actor-name-useduntil').val(moment.utc(data.displayName.usedUntil).format('YYYY-MM-DD'));
+				else $('#timaat-actordatasets-metadata-actor-name-useduntil').val(moment.utc(data.displayName.usedUntil).format('YYYY-MM-DD'));
 			if (data.isFictional)
 				$('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', true);
 				else $('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
@@ -2855,11 +2855,11 @@
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used from]" aria-describedby="Name used from">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" id="nameUsedFrom[`+i+`]" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used from]" aria-describedby="Name used from">
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used until]" aria-describedby="Name used until">
+								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="nameUsedUntil[`+i+`]" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used until]" aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
@@ -2875,18 +2875,14 @@
 				if (actor.model.birthName && actor.model.actorNames[i].id == actor.model.birthName.id) {
 					$('[data-role="birthName['+actor.model.actorNames[i].id+']"]').prop('checked', true);
 				}
-				$('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
+				$('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200 });
 				$('[data-role="actorName['+actor.model.actorNames[i].id+']"]').attr('value', actor.model.actorNames[i].name);
-				if (actor.model.actorNames[i].usedFrom) {
-					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
-				} else {
-					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].idi+']"]').val('');
-				}
-				if (actor.model.actorNames[i].usedUntil) {
-					$('[data-role="nameUsedUntil['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
-				} else {
+				if (isNaN(actor.model.actorNames[i].usedFrom))
+					$('[data-role="nameUsedFrom['+actor.model.actorNames[i].id+']"]').val('');
+					else $('[data-role="nameUsedFrom['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedFrom).format('YYYY-MM-DD'));
+				if (isNaN(actor.model.actorNames[i].usedUntil))
 					$('[data-role="nameUsedUntil['+actor.model.actorNames[i].id+']"]').val('');
-				}
+					else $('[data-role="nameUsedUntil['+actor.model.actorNames[i].id+']"]').val(moment.utc(actor.model.actorNames[i].usedUntil).format('YYYY-MM-DD'));
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-actornames-form :input').prop('disabled', true);
@@ -3031,16 +3027,12 @@
 				$('[data-role="addressTypeId['+actor.model.actorHasAddresses[i].id.addressId+']"]')
 				.find('option[value='+actor.model.actorHasAddresses[i].addressType.id+']')
 				.attr('selected',true);
-				if (actor.model.actorHasAddresses[i].usedFrom) {
-					$('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedFrom).format('YYYY-MM-DD'));
-				} else {
+				if (isNaN(actor.model.actorHasAddresses[i].usedFrom))
 					$('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val('');
-				}
-				if (actor.model.actorHasAddresses[i].usedUntil) {
-					$('[data-role="addressUsedUntil['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedUntil).format('YYYY-MM-DD'));
-				} else {
+					else $('[data-role="addressUsedFrom['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedFrom).format('YYYY-MM-DD'));
+				if (isNaN(actor.model.actorHasAddresses[i].usedUntil))
 					$('[data-role="addressUsedUntil['+actor.model.actorHasAddresses[i].id.addressId+']"]').val('');
-				}
+					else $('[data-role="addressUsedUntil['+actor.model.actorHasAddresses[i].id.addressId+']"]').val(moment.utc(actor.model.actorHasAddresses[i].usedUntil).format('YYYY-MM-DD'));
 			}
 			if ( action == 'show') {
 				$('#timaat-actordatasets-actor-addresses-form :input').prop('disabled', true);
@@ -3307,16 +3299,12 @@
 				$('[data-role="collectiveId['+collectiveId+']"]').find('option[value='+collectiveId+']').attr('selected', true);
 				var j = 0;
 				for (; j < numMembershipDetails; j++) {
-					if (actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt) {
-						$('[data-role="joinedAt['+collectiveId+']['+j+']"]').val(moment.utc(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt).format('YYYY-MM-DD'));
-					} else {
+					if (isNaN(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt))
 						$('[data-role="joinedAt['+collectiveId+']['+j+']"]').val('');
-					}
-					if (actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].leftAt) {
-						$('[data-role="leftAt['+collectiveId+']['+j+']"]').val(moment.utc(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].leftAt).format('YYYY-MM-DD'));
-					} else {
+						else $('[data-role="joinedAt['+collectiveId+']['+j+']"]').val(moment.utc(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].joinedAt).format('YYYY-MM-DD'));
+					if (isNaN(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].leftAt))
 						$('[data-role="leftAt['+collectiveId+']['+j+']"]').val('');
-					}
+						else $('[data-role="leftAt['+collectiveId+']['+j+']"]').val(moment.utc(actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails[j].leftAt).format('YYYY-MM-DD'));
 				}
 			}
 			if ( action == 'show') {
@@ -3676,16 +3664,16 @@
 			return (newActorModel);
 		},
 
-		createName: async function(nameModel) {
-			// console.log("TCL: createName: async function -> nameModel", nameModel);
-			try {
-				// create name
-				var newNameModel = await TIMAAT.ActorService.createName(nameModel.model);
-        // console.log("TCL: newNameModel", newNameModel);
-			} catch(error) {
-				console.log( "error: ", error);
-			}
-		},
+		// createName: async function(nameModel) {
+		// 	// console.log("TCL: createName: async function -> nameModel", nameModel);
+		// 	try {
+		// 		// create name
+		// 		var newNameModel = await TIMAAT.ActorService.createName(nameModel.model);
+    //     // console.log("TCL: newNameModel", newNameModel);
+		// 	} catch(error) {
+		// 		console.log( "error: ", error);
+		// 	}
+		// },
 
 		addNames: async function(actor, newNames) {
 			console.log("TCL: addNames: async function -> actor, newNames", actor, newNames);
@@ -4295,7 +4283,7 @@
 		},
 
 		createNameModel: async function(formDataObject) {
-    // console.log("TCL: createNameModel: formDataObject", formDataObject);
+    	console.log("TCL: createNameModel: formDataObject", formDataObject);
 			var model = {
 				id: 0,
 				actor: {
@@ -5231,8 +5219,8 @@
 		},
 
 		selectLastSelection: function(type, id) {
-			console.log("TCL: selectLastSelection: type, id", type, id);
-			console.log("TCL: TIMAAT.ActorDatasets.selectedId", TIMAAT.ActorDatasets.selectedId);
+			// console.log("TCL: selectLastSelection: type, id", type, id);
+			// console.log("TCL: TIMAAT.ActorDatasets.selectedId", TIMAAT.ActorDatasets.selectedId);
 			var table;
 			switch(type) {
 				case 'actor':
@@ -5245,7 +5233,7 @@
 					table = TIMAAT.ActorDatasets.dataTableCollective;
 				break;
 			}
-			console.log("TCL: table", table);
+			// console.log("TCL: table", table);
 			// remove selection from old rows
 			if (TIMAAT.ActorDatasets.selectedId && TIMAAT.ActorDatasets.selectedId != id) {
 				$(table.row('#'+TIMAAT.ActorDatasets.selectedId).node()).removeClass('selected');
@@ -5263,7 +5251,7 @@
 		},
 
 		refreshDatatable: async function(type) {
-			console.log("TCL: refreshDatatable - type: ", type);
+			// console.log("TCL: refreshDatatable - type: ", type);
 			// set ajax data source
 			switch(type) {
 				case 'actor':

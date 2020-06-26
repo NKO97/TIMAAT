@@ -1706,21 +1706,21 @@
 			$('#timaat-mediadatasets-metadata-medium-copyright').val(data.copyright);
 			if (isNaN(moment(data.releaseDate)))
 				$('#timaat-mediadatasets-metadata-medium-releasedate').val('');
-			else $('#timaat-mediadatasets-metadata-medium-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
+				else $('#timaat-mediadatasets-metadata-medium-releasedate').val(moment(data.releaseDate).format('YYYY-MM-DD'));
 			// display-title data
 			$('#timaat-mediadatasets-metadata-medium-title').val(data.displayTitle.name);
 			$('#timaat-mediadatasets-metadata-medium-title-language-id').val(data.displayTitle.language.id);
 			// source data
 			if (data.sources[0].isPrimarySource)
 				$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
-			else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
+				else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
 			$('#timaat-mediadatasets-metadata-medium-source-url').val(data.sources[0].url);
 			if (isNaN(moment.utc(data.sources[0].lastAccessed))) 
 				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val('');
-			else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+				else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
 			if (data.sources[0].isStillAvailable)
 				$('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', true);
-			else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
+				else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
 				
 			// medium subtype specific data
 			switch (mediumType) {
