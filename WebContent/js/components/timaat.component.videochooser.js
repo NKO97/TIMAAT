@@ -346,7 +346,8 @@
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"scrollX"       : true,
-				"serverSide": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
 				"ajax": {
 					"url": "api/medium/video/list",
 					"contentType": "application/json; charset=utf-8",
@@ -417,7 +418,7 @@
 						// TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 					});
 
-					videoelement.on('click', '.timaat-mediadatasets-media-metadata', function(event) {
+					videoelement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -428,8 +429,10 @@
 						$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 						var selectedVideo = {}
 						selectedVideo.model = video;
+						TIMAAT.MediaDatasets.selectLastSelection('medium', selectedVideo.model.id);
+						TIMAAT.MediaDatasets.dataTableMedia.search(selectedVideo.model.displayTitle.name).draw();
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
-						TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
+						TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', selectedVideo);
 					});
 
 					videoelement.on('click', '.timaat-video-collectionitemremove', function(ev) {
