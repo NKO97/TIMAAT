@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.RoleGroup;
@@ -161,7 +162,6 @@ public class EndpointRole {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
   }
 	
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -334,6 +334,8 @@ public class EndpointRole {
 		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
 
 		List<RoleGroup> roleGroupList = role.getRoleGroups();
+		List<Actor> actorList = role.getActors();
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(role);
@@ -342,6 +344,9 @@ public class EndpointRole {
 		for (RoleGroup roleGroup : roleGroupList) {
 			entityManager.refresh(roleGroup);
 		}	
+		for (Actor actor : actorList) {
+			entityManager.refresh(actor);
+		}
 		
 		// add log entry
 		UserLogManager.getLogger()

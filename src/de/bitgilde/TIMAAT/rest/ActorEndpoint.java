@@ -530,7 +530,6 @@ public class ActorEndpoint {
 
 		return Response.ok().entity(mediumList).build();
 	}
-	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

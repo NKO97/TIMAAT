@@ -884,7 +884,6 @@
           var i = 0;
           for (; i < existingRoleGroupHasRoleEntries.length; i++) {
             var deleteId = true;
-            var item = {};
             var j = 0;
             for (; j < roleOrRoleGroupIdList.length; j++) {
               if( existingRoleGroupHasRoleEntries[i].id == roleOrRoleGroupIdList[j].id) {
@@ -894,8 +893,7 @@
             }
             if (deleteId) { // id is in existingRoleGroupHasRoleEntries but not in roleOrRoleGroupIdList
               // console.log("TCL: delete entry: ", existingRoleGroupHasRoleEntries[i]);
-              item = existingRoleGroupHasRoleEntries[i];
-              roleGroupHasRoleEntriesToDelete.push(item);
+              roleGroupHasRoleEntriesToDelete.push(existingRoleGroupHasRoleEntries[i]);
               existingRoleGroupHasRoleEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
               i--; // so the next list item is not jumped over due to the splicing
             }
@@ -972,7 +970,7 @@
       };
 
       try { // update actor.roles entries
-        if (type == 'role' && roleActorIdList.length > 0) {
+        if (type == 'role') {
           var existingActorHasRolesEntries = await TIMAAT.ActorService.getActorsWithThisRoleList(roleOrRoleGroup.id);
           // console.log("TCL: existingActorHasRolesEntries", existingActorHasRolesEntries);
           // console.log("TCL: roleActorIdList", roleActorIdList);
@@ -999,7 +997,6 @@
             var i = 0;
             for (; i < existingActorHasRolesEntries.length; i++) {
               var deleteId = true;
-              var item = {};
               var j = 0;
               for (; j < roleActorIdList.length; j++) {
                 if( existingActorHasRolesEntries[i].id == roleActorIdList[j].id) {
@@ -1009,8 +1006,7 @@
               }
               if (deleteId) { // id is in existingActorHasRolesEntries but not in roleActorIdList
                 // console.log("TCL: delete entry: ", existingActorHasRolesEntries[i]);
-                item = existingActorHasRolesEntries[i];
-                actorHasRoleEntriesToDelete.push(item);
+                actorHasRoleEntriesToDelete.push(existingActorHasRolesEntries[i]);
                 existingActorHasRolesEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
                 i--; // so the next list item is not jumped over due to the splicing
               }
