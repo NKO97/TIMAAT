@@ -333,11 +333,15 @@ public class EndpointRole {
 
 		if ( role == null ) return Response.status(Status.NOT_FOUND).build();
 
+		List<RoleGroup> roleGroupList = role.getRoleGroups();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(role);
 		//* ON DELETE CASCADE deletes connected role_translation entries
 		entityTransaction.commit();
+		for (RoleGroup roleGroup : roleGroupList) {
+			entityManager.refresh(roleGroup);
+		}	
 		
 		// add log entry
 		UserLogManager.getLogger()
@@ -562,11 +566,16 @@ public class EndpointRole {
 
 		if ( roleGroup == null ) return Response.status(Status.NOT_FOUND).build();
 
+		List<Role> roleList = roleGroup.getRoles();
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(roleGroup);
 		//* ON DELETE CASCADE deletes connected role_group_translation entries
 		entityTransaction.commit();
+		for (Role role : roleList) {
+			entityManager.refresh(role);
+		}
 
 		// add log entry
 		UserLogManager.getLogger()
