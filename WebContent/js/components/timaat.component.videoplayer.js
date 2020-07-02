@@ -651,7 +651,7 @@
 			});
 			$('#timaat-video-seek-bar').mousemove(function (ev) {
 				if ( !TIMAAT.VideoPlayer.video ) return;
-				var token = TIMAAT.VideoPlayer.model.video.mediumVideo.viewToken;
+				var token = TIMAAT.VideoPlayer.model.video.viewToken;
 				var bar = $(this);
 				var time = Math.round(ev.originalEvent.offsetX/bar.width()*TIMAAT.VideoPlayer.duration);
 				var preview = $('#timaat-video-seek-bar-preview');
@@ -831,7 +831,7 @@
 			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
 
 			// setup timeline UI
-			let token = TIMAAT.VideoPlayer.model.video.mediumVideo.viewToken;
+			let token = TIMAAT.VideoPlayer.model.video.viewToken;
 			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "img/audio-placeholder.png");
 			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.id+"/audio/combined?token="+token);
 			
@@ -858,7 +858,7 @@
 			$('.timaat-videoplayer-ui').show();
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
-			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.mediumVideo.viewToken;
+			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 //			this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
 			TIMAAT.VideoPlayer.viewer.setMaxBounds(this.videoBounds);

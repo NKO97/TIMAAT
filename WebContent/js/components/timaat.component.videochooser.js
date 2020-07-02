@@ -169,29 +169,32 @@
 				if ( !video ) return;
 				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
 				if ( !myvideo ) return;
-				myvideo.ui.find('.timaat-video-upload').css('display', 'none');
+				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
 			});
+
 			$(document).on('success.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
 				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
 				if ( !myvideo ) return;
-				myvideo.mediumVideo.status = video.mediumVideo.status;
+				myvideo.fileStatus = video.fileStatus;
 				myvideo.mediumVideo.width = video.mediumVideo.width;
 				myvideo.mediumVideo.height = video.mediumVideo.height;
 				myvideo.mediumVideo.length = video.mediumVideo.length;
 				myvideo.mediumVideo.frameRate = video.mediumVideo.frameRate;
 
-				myvideo.ui.find('.timaat-video-upload').css('display', 'none');
+				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
 				myvideo.ui.find('.timaat-video-annotate').show();
-				myvideo.ui.find('.timaat-video-status').show();
+				myvideo.ui.find('.timaat-medium-status').show();
 				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length));
 				TIMAAT.VideoChooser.updateVideoStatus(myvideo);
+				// TIMAAT.MediaService.updateFileStatus(video, 'video');
 			});
+
 			$(document).on('removed.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
 				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
 				if ( !myvideo ) return;
-				if ( myvideo.mediumVideo.status == 'nofile' ) myvideo.ui.find('.timaat-video-upload').css('display', 'block');
+				if ( myvideo.fileStatus == 'nofile' ) myvideo.ui.find('.timaat-medium-upload').css('display', 'block');
 			});
 
 			
@@ -359,7 +362,7 @@
 								length: data.length,
 								orderby: data.columns[data.order[0].column].name,
 								dir: data.order[0].dir,
-								mediumsubtype: 'video'
+								// mediumsubtype: 'video'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -397,16 +400,16 @@
 						$('#timaat-videochooser-list-action-submit').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);				
 					});
 
-					if ( video.mediumVideo.status != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
+					if ( video.fileStatus != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
 					TIMAAT.VideoChooser.setVideoStatus(video);
 					
 					// set up events
-					videoelement.on('click', '.timaat-video-thumbnail', function(ev) {
+					videoelement.on('click', '.timaat-medium-thumbnail', function(ev) {
 						videoelement.find('.timaat-video-annotate').click();
 					});
 
 					videoelement.on('click', '.timaat-video-annotate', function(ev) {
-						if ( video.mediumVideo.status && video.mediumVideo.status != 'ready' && video.mediumVideo.status != 'transcoding' && video.mediumVideo.status != 'waiting' ) return;
+						if ( video.fileStatus && video.fileStatus != 'ready' && video.fileStatus != 'transcoding' && video.fileStatus != 'waiting' ) return;
 //						$('.timaat-video-card').removeClass('bg-info text-white');
 //						$(this).addClass('bg-info text-white');
 						TIMAAT.UI.showComponent('videoplayer');
@@ -441,20 +444,20 @@
 					});
 					
 					videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
-						if ( video.mediumVideo.status && video.mediumVideo.status == "nofile" ) return;
+						if ( video.fileStatus && video.fileStatus == "nofile" ) return;
 						let length = video.mediumVideo.length;
 						if ( length < 0 ) length += 3600;
 						let timecode = Math.round((ev.originalEvent.offsetX/254)*length);
 						timecode = Math.min(Math.max(0, timecode),length);
-						videoelement.find('.timaat-video-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.mediumVideo.viewToken);
+						videoelement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 					});
 					
 					videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
-						if ( video.mediumVideo.status && video.mediumVideo.status == "nofile" ) return;
-						videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+						if ( video.fileStatus && video.fileStatus == "nofile" ) return;
+						videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 					});
 								
-					if ( video.mediumVideo.status != "ready" && video.mediumVideo.status != "unavailable" && video.mediumVideo.status != "nofile" )
+					if ( video.fileStatus != "ready" && video.fileStatus != "unavailable" && video.fileStatus != "nofile" )
 						TIMAAT.VideoChooser.updateVideoStatus(video);
 
 				},
@@ -466,10 +469,10 @@
 					}
 					},
 					{ data: null, className: 'videochooser-item-preview', orderable: false, render: function(data, type, video, meta) {
-						let ui = `<div class="timaat-video-status">
+						let ui = `<div class="timaat-medium-status">
 								<i class="fas fa-cog fa-spin"></i>
 								</div>
-							<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>`;
+							<img class="card-img-top timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>`;
 						return ui;
 						}
 					},
@@ -503,8 +506,8 @@
 					{ data: null, className: 'actions', orderable: false, render: function(data, type, video, meta) {
 						let ui = `<div>
 								<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept=".mp4" class="timaat-video-upload-file d-none" type="file" />
-									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
+									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
+									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
 
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
@@ -559,19 +562,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					if ( video.mediumVideo.status && video.mediumVideo.status == data ) return;
-					video.mediumVideo.status = data;
+        	// console.log("TCL: data", data);
+					if ( video.fileStatus && video.fileStatus == data ) return;
+					video.fileStatus = data;
 					
 					TIMAAT.VideoChooser.setVideoStatus(video);
 					
-					if (video.mediumVideo.status == 'unavailable' || video.mediumVideo.status == 'ready')
+					if (video.fileStatus == 'unavailable' || video.fileStatus == 'ready')
 						window.clearInterval(video.poll);
-					
+						// console.log("TCL: video.fileStatus", video.fileStatus);
 				})
 				.fail(function(e) {
 					// TODO handle error
 					window.clearInterval(video.poll);
-					video.ui.find('.timaat-video-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+					video.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
 					console.log( "error", e );
 				});
 
@@ -582,40 +586,40 @@
 		setVideoStatus: function (video) {			
 			if ( !video || !video.ui ) return;
 			// clear ui status
-			video.ui.find('.timaat-video-status').hide();
-			video.ui.find('.timaat-video-status i').removeClass('fa-cog');
-			video.ui.find('.timaat-video-status i').removeClass('fa-hourglass-half');
-			video.ui.find('.timaat-video-status i').addClass('fa-cog');
-			video.ui.find('.timaat-video-transcoding').hide();
+			video.ui.find('.timaat-medium-status').hide();
+			video.ui.find('.timaat-medium-status i').removeClass('fa-cog');
+			video.ui.find('.timaat-medium-status i').removeClass('fa-hourglass-half');
+			video.ui.find('.timaat-medium-status i').addClass('fa-cog');
+			video.ui.find('.timaat-medium-transcoding').hide();
 			
-			if (video.mediumVideo.status == 'unavailable' || video.mediumVideo.status == 'ready') 
+			if (video.fileStatus == 'unavailable' || video.fileStatus == 'ready') 
 				window.clearInterval(video.poll);
 
-			if ( video.mediumVideo.status == 'unavailable' ) {
-				video.ui.find('.timaat-video-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
-				video.ui.find('.timaat-video-transcoding').show();
+			if ( video.fileStatus == 'unavailable' ) {
+				video.ui.find('.timaat-medium-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+				video.ui.find('.timaat-medium-transcoding').show();
 			}
 
-			if ( video.mediumVideo.status != 'ready'  &&  video.mediumVideo.status != 'nofile' ) video.ui.find('.timaat-video-status').show();
-			if ( video.mediumVideo.status == 'waiting' ) video.ui.find('.timaat-video-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
-			if ( video.mediumVideo.status == 'nofile'  ) {
-				video.ui.find('.timaat-video-upload').css('display', 'block');
+			if ( video.fileStatus != 'ready'  &&  video.fileStatus != 'nofile' ) video.ui.find('.timaat-medium-status').show();
+			if ( video.fileStatus == 'waiting' ) video.ui.find('.timaat-medium-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
+			if ( video.fileStatus == 'nofile'  ) {
+				video.ui.find('.timaat-medium-upload').css('display', 'block');
 				video.ui.find('.timaat-video-annotate').hide();
 				
 				// upload button click triggers file selection
-				video.ui.find('.timaat-video-upload').off('click').on('click', function(ev) {
+				video.ui.find('.timaat-medium-upload').off('click').on('click', function(ev) {
 					ev.preventDefault();
 					ev.stopPropagation();
-					video.ui.find('.timaat-video-upload-file').click();
+					video.ui.find('.timaat-medium-upload-file').click();
 				});
 
 				// user selected file, trigger form submit / upload
-				video.ui.find('.timaat-video-upload-file').off('change').on('change', function(ev) {
-					let filelist = video.ui.find('.timaat-video-upload-file')[0].files;
+				video.ui.find('.timaat-medium-upload-file').off('change').on('change', function(ev) {
+					let filelist = video.ui.find('.timaat-medium-upload-file')[0].files;
 					if ( filelist.length  > 0 ) TIMAAT.UploadManager.queueUpload(video, video.ui.find('form'));
 				});
 			}
-			if ( TIMAAT.UploadManager.isUploading(video) ) video.ui.find('.timaat-video-upload').css('display', 'none');
+			if ( TIMAAT.UploadManager.isUploading(video) ) video.ui.find('.timaat-medium-upload').css('display', 'none');
 		},
 		
 		setCollection: function(collection) {
@@ -726,7 +730,7 @@
 			img.data('video', video );
 			img.on('load', function(ev) {
 				var video = $(ev.target).data('video');
-				video.ui.find('.card-img-top').attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+				video.ui.find('.card-img-top').attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 				$(ev.target).remove();			
 			});
 			img.on('error', function(ev) {
@@ -734,7 +738,7 @@
 				ev.stopPropagation();
 				$(ev.target).remove();
 			});
-			img.attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+			img.attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 		},
 		
 		addMediacollection: function() {
@@ -895,10 +899,10 @@
 					`<tr>
 						<td class="videochooser-item" id="videochooser-item-`+video.id+`"><input type="checkbox" aria-label="Checkbox"></td>
 						<td style="padding:0; width: 150px;">
-							<div class="timaat-video-status">
+							<div class="timaat-medium-status">
 								<i class="fas fa-cog fa-spin"></i>
 							</div>
-							<img class="card-img-top timaat-video-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>
+							<img class="card-img-top timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>
 						</td>
 						<td class="title"></td>
 						<td class="duration">00:00:00</td>
@@ -907,8 +911,8 @@
 						<td class="actions" style="padding:5px 5px">
 							<div>
 								<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept=".mp4" class="timaat-video-upload-file d-none" type="file" />
-									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-video-upload"><i class="fas fa-upload"></i></button>
+									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
+									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
 
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
@@ -950,21 +954,21 @@
 				}
 			}
 
-			if ( video.mediumVideo.status != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
+			if ( video.fileStatus != "nofile" ) TIMAAT.VideoChooser.loadThumbnail(video);
 			TIMAAT.VideoChooser.setVideoStatus(video);
 			
 				
 			// set up events
-			videoelement.on('click', '.timaat-video-thumbnail', function(ev) {
+			videoelement.on('click', '.timaat-medium-thumbnail', function(ev) {
 				videoelement.find('.timaat-video-annotate').click();
 			});
 
 			videoelement.on('click', '.timaat-video-annotate', function(ev) {
-				if ( video.mediumVideo.status && video.mediumVideo.status == 'nofile' ) {
+				if ( video.fileStatus && video.fileStatus == 'nofile' ) {
 					// start upload process
 					
 				};
-				if ( video.mediumVideo.status && video.mediumVideo.status != 'ready' && video.mediumVideo.status != 'transcoding' && video.mediumVideo.status != 'waiting' ) return;
+				if ( video.fileStatus && video.fileStatus != 'ready' && video.fileStatus != 'transcoding' && video.fileStatus != 'waiting' ) return;
 				$('.timaat-video-card').removeClass('bg-info text-white');
 				$(this).addClass('bg-info text-white');
 				TIMAAT.UI.showComponent('videoplayer');
@@ -1004,18 +1008,18 @@
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
-				if ( video.mediumVideo.status && video.mediumVideo.status == "nofile" ) return;
+				if ( video.fileStatus && video.fileStatus == "nofile" ) return;
 				var timecode = Math.round((ev.originalEvent.offsetX/254)*video.mediumVideo.length);
 				timecode = Math.min(Math.max(0, timecode),video.mediumVideo.length);
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.mediumVideo.viewToken);
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?time="+timecode+"&token="+video.viewToken);
 			});
 			
 			videoelement.find('.card-img-top').bind("mouseleave", function(ev) {
-				if ( video.mediumVideo.status && video.mediumVideo.status == "nofile" ) return;
-				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.mediumVideo.viewToken);
+				if ( video.fileStatus && video.fileStatus == "nofile" ) return;
+				videoelement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
 			});
 						
-			if ( video.mediumVideo.status != "ready" && video.mediumVideo.status != "unavailable" && video.mediumVideo.status != "nofile" )
+			if ( video.fileStatus != "ready" && video.fileStatus != "unavailable" && video.fileStatus != "nofile" )
 				TIMAAT.VideoChooser.updateVideoStatus(video);
 
 		},

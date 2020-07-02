@@ -4,11 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import de.bitgilde.TIMAAT.rest.MediumServiceEndpoint;
-
-// import model.AudioCodecInformation;
-
 import java.sql.Timestamp;
 
 
@@ -60,12 +55,6 @@ public class MediumVideo implements Serializable {
 	@PrimaryKeyJoinColumn(name="medium_id")
 	@JsonIgnore // MediumVideo is accessed through Medium --> avoid reference cycle
 	private Medium medium;
-
-	@Transient
-	private String status;
-
-	@Transient
-	private String viewToken;
 
 
 	public MediumVideo() {
@@ -157,28 +146,6 @@ public class MediumVideo implements Serializable {
 	
 	public void setEpisodeInformation(EpisodeInformation episodeInformation) {
 		this.episodeInformation = episodeInformation;
-	}
-	
-	
-	public String getStatus() {
-		if ( this.getMedium() != null )	this.status = MediumServiceEndpoint.videoStatus(this.getMedium().getId());
-				
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getViewToken() {
-		if ( this.getMedium() != null && this.viewToken == null )
-			this.viewToken = MediumServiceEndpoint.issueFileToken(this.getMedium().getId());
-
-		return viewToken;
-	}
-
-	public void setViewToken(String viewToken) {
-		this.viewToken = viewToken;
 	}
 
 	public Medium getMedium() {

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import de.bitgilde.TIMAAT.rest.MediumServiceEndpoint;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -231,6 +233,16 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	// @JsonManagedReference(value = "Medium-Source")
 	private List<Source> sources;
+
+	@Transient
+	private String fileStatus;
+
+	@Transient
+	private String fileExtension;
+
+	@Transient
+	private String viewToken;
+
 
 	public Medium() {
 	}
@@ -692,5 +704,38 @@ public class Medium implements Serializable {
 		return mediumHasActorWithRole;
 	}
 
+	public String getFileStatus() {
+		return fileStatus;
+	}
+
+	public void setFileStatus(String fileStatus) {
+		this.fileStatus = fileStatus;
+	}
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
+
+	public String getViewToken() {
+		return viewToken;
+	}
+
+	public void setViewToken(String viewToken) {
+		this.viewToken = viewToken;
+	}
+
+	@PostLoad
+	public void setFileStatusAndViewTokenAfterLoad() {
+		if (this.fileStatus == null) {
+			this.fileStatus = MediumServiceEndpoint.mediumFileStatus(this.id, this.getMediaType().getMediaTypeTranslations().get(0).getType());
+		}
+		if (this.viewToken == null) {
+			this.viewToken = MediumServiceEndpoint.issueFileToken(this.id);
+		}
+	}
 
 }

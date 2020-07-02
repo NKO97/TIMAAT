@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.model;
+package de.bitgilde.TIMAAT.model.fileInformation;
 
 public class VideoInformation {
 	

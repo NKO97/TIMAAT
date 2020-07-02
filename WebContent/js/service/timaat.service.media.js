@@ -457,6 +457,43 @@
 			});
 		},
 
+		updateFileStatus(medium, type) {
+			// console.log("TCL: updateFileStatus(medium, type)", type);
+			// medium.poll = window.setInterval(function() {
+				// if ( medium.ui && !medium.ui.is(':visible') ) return;
+				// return new Promise(resolve => {
+					$.ajax({
+						url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+type+"/"+medium.id+'/status',
+						type:"GET",
+						beforeSend: function (xhr) {
+							xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+						},
+					}).done(function(data) {
+          	console.log("TCL: updateFileStatus -> data", data);
+						// if ( medium.fileStatus && medium.fileStatus == data ) return;
+						// medium.fileStatus = data;
+						
+						// TIMAAT.VideoChooser.setVideoStatus(video);
+						// TIMAAT.MediaDatasets.displayFileStatus(medium);
+						
+						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
+						// 	window.clearInterval(medium.poll);
+						return(data);
+						// resolve(data);					
+					}).fail(function(e) {
+						// TODO handle error
+						// window.clearInterval(medium.poll);
+						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+						console.log( "error", e );
+						console.log(e.responseText);
+					});
+				// }).catch((error) => {
+				// 	console.log( "error: ", error);
+				// 	console.log(error.responseText);
+				// });
+			// }, Math.round(30000+(Math.random()*15000)));
+		},
+
 		async updateTitle(title) {
 			// console.log("TCL: MediaService: async updateTitle -> title", title);
 			return new Promise(resolve => {

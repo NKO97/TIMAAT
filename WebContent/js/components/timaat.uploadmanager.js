@@ -20,8 +20,8 @@
 }(function (TIMAAT) {
 	
 	TIMAAT.UploadItem = class UploadItem {
-		constructor(video, form) {
-			this.video = video;
+		constructor(medium, type, form) {
+			this.medium = medium;
 			this.form = form;
 			this.state = 'init';
 			this.ui = $(`<li class="list-group-item">
@@ -35,7 +35,7 @@
 			
 			this.attachListeners();
 			
-			let filelist = $(form).find('.timaat-video-upload-file')[0].files;
+			let filelist = $(form).find('.timaat-medium-upload-file')[0].files;
 			if ( filelist && filelist.length > 0 ) {
 				this.filename = filelist[0].name;
 				this.filesize = filelist[0].size;
@@ -74,18 +74,32 @@
 		            	if (event.target.status == 200) {
 				            uploaditem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload erfolgreich');
 		            		uploaditem.state = 'done';
-		            		console.log('UPLOAD::SUCCESS');
-			            	var newvideo = JSON.parse(event.target.responseText);
-							uploaditem.video.mediumVideo.status = newvideo.status;
-							uploaditem.video.mediumVideo.width = newvideo.width;
-							uploaditem.video.mediumVideo.height = newvideo.height;
-							uploaditem.video.mediumVideo.length = newvideo.length;
-							uploaditem.video.mediumVideo.frameRate = newvideo.frameRate;
-							// send event
-							$(document).trigger('success.upload.TIMAAT', uploaditem.video);
-							
-							// remove this item from upload manager
-							TIMAAT.UploadManager.removeUpload(uploaditem);
+										console.log('UPLOAD::SUCCESS');
+										switch (type) {
+											case 'image':
+												var newImage = JSON.parse(event.target.responseText);
+                        console.log("TCL: UploadItem -> constructor -> newImage", newImage);
+												uploaditem.medium.fileStatus = newImage.status; // TODO newImage.fileStatus
+												uploaditem.medium.mediumImage.width = newImage.width;
+												uploaditem.medium.mediumImage.height = newImage.height;
+												uploaditem.medium.mediumImage.bitDepth = newImage.bitDepth;
+											break;
+											case 'video':
+												var newVideo = JSON.parse(event.target.responseText);
+                        console.log("TCL: UploadItem -> constructor -> newVideo", newVideo);
+												uploaditem.medium.fileStatus = newVideo.status;
+												uploaditem.medium.fileStatus = newVideo.status;
+												uploaditem.medium.mediumVideo.width = newVideo.width;
+												uploaditem.medium.mediumVideo.height = newVideo.height;
+												uploaditem.medium.mediumVideo.length = newVideo.length;
+												uploaditem.medium.mediumVideo.frameRate = newVideo.frameRate;
+											break;
+										}
+										// send event
+										$(document).trigger('success.upload.TIMAAT', uploaditem.medium);
+										
+										// remove this item from upload manager
+										TIMAAT.UploadManager.removeUpload(uploaditem);
 		            	} else {
 		            		uploaditem.state = 'fail';
 			                console.log('UPLOAD FAILED: Error in the response.', event);
@@ -157,19 +171,17 @@
 				$('.timaat-upload-details').append(TIMAAT.UploadManager.ui);
 				for (let uploaditem of TIMAAT.UploadManager.uploads) uploaditem.attachListeners();
 			});
-
-			
 		},
 		
-		isUploading: function(video) {
-			for (let item of TIMAAT.UploadManager.uploads) if ( item.video.id == video.id ) return true;
+		isUploading: function(medium) {
+			for (let item of TIMAAT.UploadManager.uploads) if ( item.medium.id == medium.id ) return true;
 			return false;
 		},
 		
-		queueUpload: function(video, form) {
-			if ( !video || !form ) return;
-			for (let uploaditem of TIMAAT.UploadManager.uploads) if (uploaditem.video.id == video.id) return;
-			let uploaditem = new TIMAAT.UploadItem(video, form);
+		queueUpload: function(medium, form) {
+			if ( !medium || !form ) return;
+			for (let uploaditem of TIMAAT.UploadManager.uploads) if (uploaditem.medium.id == medium.id) return;
+			let uploaditem = new TIMAAT.UploadItem(medium, medium.mediaType.mediaTypeTranslations[0].type, form);
 			TIMAAT.UploadManager.uploads.push(uploaditem);
 			// add UI
 			TIMAAT.UploadManager.ui.find('ul.timaat-upload-list').append(uploaditem.ui);
@@ -177,7 +189,7 @@
 			$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-info');
 						
 			// send event
-			$(document).trigger('added.upload.TIMAAT', video);
+			$(document).trigger('added.upload.TIMAAT', medium);
 		},
 		
 		removeUpload: function(item) {
@@ -192,7 +204,7 @@
 			}
 			
 			// send event
-			$(document).trigger('removed.upload.TIMAAT', item.video);
+			$(document).trigger('removed.upload.TIMAAT', item.medium);
 
 		}
 		

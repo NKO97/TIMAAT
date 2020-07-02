@@ -27,23 +27,27 @@ public class TranscoderThread extends Thread {
 		Process p;
 		Process pFrames;
 
-		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id);
+		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "video/" + id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
-		File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames");
+		File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "video/" + id + "/frames");
 		if ( !frameDir.exists() ) frameDir.mkdirs();
 		
 		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 		"-i", filename, "-c:v", "libx264",
 		"-crf", "23", // transcoded quality setting
 		"-c:a", "aac", "-movflags", "faststart", "-movflags", "rtphint", "-y",
-		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video-transcoding.mp4" };
+		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "video/" + id + "/" + id + "-video-transcoding.mp4" };
 		ProcessBuilder pb = new ProcessBuilder(commandLine);
 //		pb.inheritIO();
 
 		String[] commandLineFrames = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 		"-i", filename, "-vf", 
 		"fps=1,scale=240:-1,pad=max(iw\\,ih)",
-		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/frames/"+id+"-frame-%05d.jpg" };
+		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "video/" + id + "/frames/" + id + "-frame-%05d.jpg" };
 		ProcessBuilder pbFrames = new ProcessBuilder(commandLineFrames);
 
 
@@ -62,13 +66,15 @@ public class TranscoderThread extends Thread {
 				System.err.println(e);  // "can't happen"
 			}
 
-			File transcodedVideo = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video-transcoding.mp4");
+			File transcodedVideo = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "video/" + id + "/" + id + "-video-transcoding.mp4");
 			
 			if ( !transcodedVideo.exists() || !transcodedVideo.canRead() ) {
 				// TODO handle transcoding error
 			} else if ( transcodedVideo.length() == 0 ) {
 				transcodedVideo.delete();
-			} else transcodedVideo.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+id+"/"+id+"-video.mp4"));
+			} else transcodedVideo.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "video/" + id + "/" + id + "-video.mp4"));
 			
 
 		} catch (IOException e1) {

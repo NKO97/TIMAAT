@@ -76,10 +76,8 @@ public class MediaCollectionEndpoint {
 			if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
 			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 				m.getMedium().getMediumAnalysisLists().clear();
-				if (m.getMedium().getMediumVideo() != null) {
-					m.getMedium().getMediumVideo().getStatus();
-					m.getMedium().getMediumVideo().getViewToken();
-				}
+				m.getMedium().getFileStatus();
+				m.getMedium().getViewToken();
 			}
 		}
 		
@@ -104,10 +102,8 @@ public class MediaCollectionEndpoint {
 		// strip analysislists
 		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 			m.getMedium().getMediumAnalysisLists().clear();
-			if (m.getMedium().getMediumVideo() != null) {
-				m.getMedium().getMediumVideo().getStatus();
-				m.getMedium().getMediumVideo().getViewToken();
-			}
+			m.getMedium().getFileStatus();
+			m.getMedium().getViewToken();
 
 		}
 	
@@ -186,10 +182,8 @@ public class MediaCollectionEndpoint {
 		// strip analysislists
 		for ( Medium m : media ) {
 			m.getMediumAnalysisLists().clear();
-			if (m.getMediumVideo() != null) {
-				m.getMediumVideo().getStatus();
-				m.getMediumVideo().getViewToken();
-			}
+			m.getFileStatus();
+			m.getViewToken();
 		}
 	
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
