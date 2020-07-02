@@ -3268,7 +3268,7 @@ public class MediumServiceEndpoint {
 
 	public static String issueFileToken(int mediumID) {
 		// System.out.println("issueFileToken for id "+ mediumID);
-		Key key = new TIMAATKeyGenerator().generateKey();
+		Key key = TIMAATKeyGenerator.generateKey();
 		String token = Jwts.builder().claim("file", mediumID).setIssuer(
 			TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME))
 			.setIssuedAt(new Date())
@@ -3281,7 +3281,7 @@ public class MediumServiceEndpoint {
 			// Check if the token was issued by the server and if it's not expired
 			// Throw an Exception if the token is invalid
 
-		Key key = new TIMAATKeyGenerator().generateKey();
+		Key key = TIMAATKeyGenerator.generateKey();
 		int mediumID = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("file", Integer.class);
 	
 	return mediumID;
