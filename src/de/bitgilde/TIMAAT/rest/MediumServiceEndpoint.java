@@ -2762,11 +2762,11 @@ public class MediumServiceEndpoint {
 	@Path("{type}/{id}/status")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	@Secured
-	public Response getFileStatus(@PathParam("type") String type,
-																@PathParam("id") int id) {
+	public Response updateFileStatus(@PathParam("type") String type,
+																	 @PathParam("id") int id) {
 		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ type + "/" + id);
-//		if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
+		// if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
 		return Response.ok().entity(mediumFileStatus(id, type)).build();
 	}

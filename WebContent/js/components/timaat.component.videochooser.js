@@ -176,7 +176,6 @@
 				if ( !video ) return;
 				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
 				if ( !myvideo ) return;
-				myvideo.fileStatus = video.fileStatus;
 				myvideo.mediumVideo.width = video.mediumVideo.width;
 				myvideo.mediumVideo.height = video.mediumVideo.height;
 				myvideo.mediumVideo.length = video.mediumVideo.length;
@@ -187,7 +186,7 @@
 				myvideo.ui.find('.timaat-medium-status').show();
 				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length));
 				TIMAAT.VideoChooser.updateVideoStatus(myvideo);
-				// TIMAAT.MediaService.updateFileStatus(video, 'video');
+				TIMAAT.VideoChooser.dt.ajax.reload(null, false);
 			});
 
 			$(document).on('removed.upload.TIMAAT', function(event, video) {
@@ -357,12 +356,12 @@
 					"dataType": "json",
 					"data": function(data) {
 						let serverData = {
-								draw: data.draw,
-								start: data.start,
-								length: data.length,
-								orderby: data.columns[data.order[0].column].name,
-								dir: data.order[0].dir,
-								// mediumsubtype: 'video'
+							draw: data.draw,
+							start: data.start,
+							length: data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir: data.order[0].dir,
+							// mediumsubtype: 'video'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -505,13 +504,12 @@
 					},
 					{ data: null, className: 'actions', orderable: false, render: function(data, type, video, meta) {
 						let ui = `<div>
-								<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
-									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
-								</form>
-
-								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
-								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>`;
+							<form action="/TIMAAT/api/medium/video/`+video.id+`/upload" method="post" enctype="multipart/form-data">
+								<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
+								<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
+							</form>
+							<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
+							<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>`;
 						if ( TIMAAT.VideoChooser.collection ) ui += `<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>`;
 						ui += '</div>';
 							return ui;

@@ -315,6 +315,39 @@
           console.log("TCL: medium", medium);
 				// }
 			});
+
+			// file upload success event handler
+			$(document).on('success.upload.medium.TIMAAT', function(event, uploadedMedium) {
+      	// console.log("TCL: Medium -> constructor -> event, uploadedMedium", event, uploadedMedium);
+				if ( !uploadedMedium ) return;
+				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
+				if ( medium == undefined || medium.model.id != uploadedMedium.id ) return;
+				// console.log("TCL: (document).one('success.upload.medium.TIMAAT') for id: ", uploadedMedium.id);
+				// console.log("TCL: uploadedMedium.fileStatus", uploadedMedium.fileStatus);
+				switch (medium.model.mediaType.mediaTypeTranslations[0].type) {
+					case 'image':
+						if ( event.type == 'success' ) {
+							medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
+							medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
+							medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth;
+							TIMAAT.MediaDatasets.refreshDatatable('image');
+							TIMAAT.MediaDatasets.refreshDatatable('medium');
+						}
+					break;
+					case 'video':
+						if ( event.type == 'success' ) {
+							medium.model.mediumVideo.width = uploadedMedium.mediumVideo.width;
+							medium.model.mediumVideo.height = uploadedMedium.mediumVideo.height;
+							medium.model.mediumVideo.length = uploadedMedium.mediumVideo.length;
+							medium.model.mediumVideo.frameRate = uploadedMedium.mediumVideo.frameRate;
+							TIMAAT.MediaDatasets.refreshDatatable('video');
+							TIMAAT.MediaDatasets.refreshDatatable('medium');
+						}
+					break;
+				}
+				$('.datasheet-form-upload-button').hide();
+				$('.datasheet-form-upload-button').prop('disabled', true);
+			});
 			
 			// Key press events
 			$('#timaat-mediadatasets-metadata-form-submit').keypress(function(event) {
@@ -2870,16 +2903,6 @@
 						var meds = Array();
 						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
-								if (!medium.viewToken) {
-									console.log("TCL: viewToken not received yet");
-								}
-								if (!medium.fileStatus) {
-									console.log("TCL: fileStatus not received yet");
-									// medium.fileStatus = "notInitialized";
-									medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, medium.mediaType.mediaTypeTranslations[0].type);
-                  console.log("TCL: medium.fileStatus", medium.fileStatus);
-									// console.log("file status == ", TIMAAT.MediaService.updateFileStatus(medium, medium.mediaType.mediaTypeTranslations[0].type));
-								}
 								meds.push(new TIMAAT.Medium(medium, 'medium'));
 							}
 						});
@@ -2939,8 +2962,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, medium.mediaType.mediaTypeTranslations[0].type);
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, medium.mediaType.mediaTypeTranslations[0].type);
 				},
 				"columns": [
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta)
@@ -3107,14 +3130,13 @@
 							TIMAAT.MediaDatasets.showLastForm();
 						} else {
 							TIMAAT.MediaDatasets.subNavTab = null;
-              console.log("TCL: TIMAAT.MediaDatasets.subNavTab", TIMAAT.MediaDatasets.subNavTab);
 							$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', selectedMedium);
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'audio');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'audio');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
@@ -3259,8 +3281,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'document');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'document');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -3404,8 +3426,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'image');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'image');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -3549,8 +3571,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'software');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'software');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -3694,8 +3716,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'text');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'text');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -3837,8 +3859,11 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'video');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" ) {
+					// 	console.log("TCL: medium.fileStatus", medium.fileStatus);
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'video');
+					// }
+          // console.log("TCL: medium.fileStatus", medium.fileStatus);
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -3985,8 +4010,8 @@
 						}
 					});
 
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
-						medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'videogame');
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'videogame');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
@@ -4085,7 +4110,7 @@
 		},
 
 		refreshDatatable: async function(type) {
-			console.log("TCL: refreshDatatable - type: ", type);
+			// console.log("TCL: refreshDatatable - type: ", type);
 			// set ajax data source
 			switch(type) {
 				case 'medium':

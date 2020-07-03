@@ -53,7 +53,7 @@
 		        let oldpercent = 0;
 		        xhr.upload.addEventListener('loadstart', function(event) {
 		        	uploaditem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
-		        	console.log('UPLOAD::Start', uploaditem.video);
+		        	console.log('UPLOAD::Start', uploaditem.medium);
 		        }, false);
 
 		        xhr.upload.addEventListener('progress', function(event) {
@@ -78,25 +78,24 @@
 										switch (type) {
 											case 'image':
 												var newImage = JSON.parse(event.target.responseText);
-                        console.log("TCL: UploadItem -> constructor -> newImage", newImage);
-												uploaditem.medium.fileStatus = newImage.status; // TODO newImage.fileStatus
+                        // console.log("TCL: UploadItem -> constructor -> newImage", newImage);
 												uploaditem.medium.mediumImage.width = newImage.width;
 												uploaditem.medium.mediumImage.height = newImage.height;
 												uploaditem.medium.mediumImage.bitDepth = newImage.bitDepth;
 											break;
 											case 'video':
 												var newVideo = JSON.parse(event.target.responseText);
-                        console.log("TCL: UploadItem -> constructor -> newVideo", newVideo);
-												uploaditem.medium.fileStatus = newVideo.status;
-												uploaditem.medium.fileStatus = newVideo.status;
+                        // console.log("TCL: UploadItem -> constructor -> newVideo", newVideo);
 												uploaditem.medium.mediumVideo.width = newVideo.width;
 												uploaditem.medium.mediumVideo.height = newVideo.height;
 												uploaditem.medium.mediumVideo.length = newVideo.length;
 												uploaditem.medium.mediumVideo.frameRate = newVideo.frameRate;
+												// send event
+												$(document).trigger('success.upload.TIMAAT', uploaditem.medium);
 											break;
 										}
-										// send event
-										$(document).trigger('success.upload.TIMAAT', uploaditem.medium);
+										// send event										
+										$(document).trigger('success.upload.medium.TIMAAT', uploaditem.medium);
 										
 										// remove this item from upload manager
 										TIMAAT.UploadManager.removeUpload(uploaditem);
@@ -105,7 +104,7 @@
 			                console.log('UPLOAD FAILED: Error in the response.', event);
 				            uploaditem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload fehlgeschlagen');
 		            	}
-		            } else console.log('STATE CHANGE: ',event);
+		            } else console.log('STATE CHANGE: ', event);
 		        }, false);
 
 		        // posting the form with the same method and action as specified by the HTML markup

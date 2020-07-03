@@ -469,7 +469,7 @@
 							xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 						},
 					}).done(function(data) {
-          	console.log("TCL: updateFileStatus -> data", data);
+          	// console.log("TCL: updateFileStatus -> data: ", data);
 						// if ( medium.fileStatus && medium.fileStatus == data ) return;
 						// medium.fileStatus = data;
 						
