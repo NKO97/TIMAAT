@@ -8,3 +8,4 @@ WebContent/app/
 
 .classpath
 *.bak
+.vscode/settings.json
