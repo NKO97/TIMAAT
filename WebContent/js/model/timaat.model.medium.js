@@ -27,38 +27,41 @@
 			
 			// create and style list view element
 			var displayMediumTypeIcon = '';
-			if (mediumType == 'medium') { // only display icon in media list
-				displayMediumTypeIcon = '  <i class="fas fa-photo-video"></i>'; // default media icon
-				switch (this.model.mediaType.mediaTypeTranslations[0].type) {
+			var fileTypesAccepted = '*.*';
+			// if (mediumType == 'medium') { // only display icon in media list
+				// displayMediumTypeIcon = '  <i class="fas fa-photo-video"></i> '; // default media icon
+				switch (mediumType) {
 					case 'audio':
-						displayMediumTypeIcon = '  <i class="far fa-file-audio"></i>';
+						// displayMediumTypeIcon = '  <i class="far fa-file-audio"></i> ';
 					break;
 					case 'document':
-						displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i>';
+						// displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i> ';
 					break;
 					case 'image':
-						displayMediumTypeIcon = '  <i class="far fa-file-image"></i>';
+						// displayMediumTypeIcon = '  <i class="far fa-file-image"></i> ';
+						fileTypesAccepted = '.png';
 					break;
 					case 'software':
-						displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i>';
+						// displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i> ';
 					break;
 					case 'text':
-						displayMediumTypeIcon = '  <i class="far fa-file-alt"></i>';
+						// displayMediumTypeIcon = '  <i class="far fa-file-alt"></i> ';
 					break;
 					case 'video':
-						displayMediumTypeIcon = '  <i class="far fa-file-video"></i>';
+						// displayMediumTypeIcon = '  <i class="far fa-file-video"></i> ';
+						fileTypesAccepted = '.mp4';
 					break;
 					case 'videogame':
-						displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i>';
+						// displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i> ';
 					break;
 				}
-			}
+			// }
 			this.listView = $(
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayMediumTypeIcon +
-							`  <span class="timaat-mediadatasets-`+mediumType+`-list-name">
+							`<span class="timaat-mediadatasets-`+mediumType+`-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
@@ -67,10 +70,9 @@
 									<i class="fas fa-user"></i>							
 								</div>
 								<form action="/TIMAAT/api/medium/`+mediumType+`/`+this.model.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
+									<input name="file" accept="`+fileTypesAccepted+`" class="timaat-medium-upload-file d-none" type="file" />
 									<button type="submit" title="Datei hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
 								</form>
-								
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
 						</div>
@@ -92,8 +94,8 @@
 
 			// user selected file, trigger form submit / upload
 			this.listView.find('.timaat-medium-upload-file').on('change', function(ev) {
-				let filelist = medium.listView.find('.timaat-medium-upload-file')[0].files;
-				if ( filelist.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium.model, medium.listView.find('form'));
+				let fileList = medium.listView.find('.timaat-medium-upload-file')[0].files;
+				if ( fileList.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium.model, medium.listView.find('form'));
 			});
 
 			this.updateUI(); 
@@ -177,13 +179,13 @@
 				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
 			}
 
-			if ( this.model.fileStatus == "nofile" && !TIMAAT.UploadManager.isUploading(this.model) ) {
+			if ( this.model.fileStatus == "noFile" && !TIMAAT.UploadManager.isUploading(this.model) ) {
 				this.listView.find('.timaat-mediadatasets-medium-upload').show();
 			} else {
 				this.listView.find('.timaat-mediadatasets-medium-upload').hide();
 			}
 
-			if ( this.model.fileStatus != "nofile" && this.model.fileStatus != "unavailable" ) {
+			if ( this.model.fileStatus != "noFile" && this.model.fileStatus != "unavailable" ) {
 				this.listView.find('.timaat-mediadatasets-medium-annotate').show();
 			} else {
 				this.listView.find('.timaat-mediadatasets-medium-annotate').hide();

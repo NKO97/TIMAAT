@@ -1,11 +1,21 @@
 package de.bitgilde.TIMAAT.rest;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
@@ -26,14 +36,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.fileInformation.ImageInformation;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
@@ -55,6 +69,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumImage;
 import de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
@@ -447,7 +462,7 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("addresstype/list")
-	public Response getAddresstypeList() {
+	public Response getAddressTypeList() {
 		System.out.println("ActorServiceEndpoint: getAddressTypeList");		
 		List<AddressType> addressTypeList = castList(AddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("AddressType.findAll").getResultList());
 		return Response.ok().entity(addressTypeList).build();
@@ -457,7 +472,7 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("emailaddresstype/list")
-	public Response getEmailAddresstypeList() {
+	public Response getEmailAddressTypeList() {
 		System.out.println("ActorServiceEndpoint: getEmailAddressTypeList");		
 		List<EmailAddressType> emailAddressTypeList = castList(EmailAddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("EmailAddressType.findAll").getResultList());
 		return Response.ok().entity(emailAddressTypeList).build();
@@ -467,7 +482,7 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("phonenumbertype/list")
-	public Response getPhoneNumbertypeList() {
+	public Response getPhoneNumberTypeList() {
 		System.out.println("ActorServiceEndpoint: getPhoneNumberTypeList");		
 		List<PhoneNumberType> emailAddressTypeList = castList(PhoneNumberType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("PhoneNumberType.findAll").getResultList());
 		return Response.ok().entity(emailAddressTypeList).build();
@@ -497,7 +512,7 @@ public class ActorEndpoint {
 	@Path("{id}/role/list")
 	public Response getActorHasRoleList(@PathParam("id") int actorId)
 	{
-		System.out.println("RoleServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
+		System.out.println("ActorServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		List<Role> roleList = actor.getRoles();
@@ -512,7 +527,7 @@ public class ActorEndpoint {
 	public Response getActorRoleInMediumList(@PathParam("actor_id") int actorId,
 																					 @PathParam("role_id") int roleId)
 	{
-		System.out.println("RoleServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
+		System.out.println("ActorServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		String sql = "SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.actor.id = :actorId AND mhawr.role.id = :roleId";
 		// String sql = "SELECT DISTINCT m FROM Medium m WHERE m.actorHasRoles.actor.id = :actorId AND m.actorHasRoles.role.id = :roleId";
@@ -537,7 +552,7 @@ public class ActorEndpoint {
 	@Path("withrole/{role_id}")
 	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
 	{
-		System.out.println("RoleServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
+		System.out.println("ActorServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = entityManager.find(Role.class, roleId);
 		List<Actor> actorList = role.getActors();
@@ -546,6 +561,21 @@ public class ActorEndpoint {
 		return Response.ok().entity(actorList).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/image/list")
+	public Response getActorHasImageList(@PathParam("id") int actorId)
+	{
+		System.out.println("ActorServiceEndpoint: getActorHasImageList - ID: "+ actorId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		List<MediumImage> imageList = actor.getProfileImages();
+
+		return Response.ok().entity(imageList).build();
+	}
+	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -592,6 +622,8 @@ public class ActorEndpoint {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newActor);
+
+		// TODO check if anything additional has to be done for adding profile image m-n relations
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newActor.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORCREATED);
@@ -642,6 +674,7 @@ public class ActorEndpoint {
 		actor.setPrimaryEmailAddress(updatedActor.getPrimaryEmailAddress());
 		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
 		actor.setRoles(updatedActor.getRoles());
+		actor.setProfileImages(updatedActor.getProfileImages());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -664,7 +697,6 @@ public class ActorEndpoint {
 		for (Role role : oldRoles) {
 			entityManager.refresh(role);
 		}
-
 
 		// add log entry
 		UserLogManager.getLogger()
@@ -903,7 +935,7 @@ public class ActorEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{person_id}/translation/{id}")
-	public Response updateActorPersonTranslation(@PathParam("person_id") int personid, @PathParam("id") int id, String jsonData) {
+	public Response updateActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2548,6 +2580,36 @@ public class ActorEndpoint {
 		return Response.ok().build();
 	}
 
+	@GET
+	@Path("profileImage/{imageId}")
+	@Produces("image/png")
+	public Response getProfileImage(@PathParam("imageId") int imageId,
+																	@QueryParam("token") String fileToken) {
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = MediumServiceEndpoint.validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}		
+		if ( tokenMediumID != imageId ) return Response.status(401).build();
+
+		// load profile image from storage
+		File profileImage = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			// + "medium/image/" + imageId + "/" + imageId + "-audio-all.png");
+			+ "medium/image/" + imageId + "-image-original.png");  // TODO access resized file in png format and subfolder
+		// if ( !profileImage.exists() ) {
+		// 	// try to create waveform
+		// 	createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+		// 		+ "medium/video/" + id + "-video-original.mp4");
+		// 	thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+		// 		+ "medium/video/" + id + "/" + id + "-audio-all.png");
+		// }
+		if ( !profileImage.exists() || !profileImage.canRead() ) profileImage = new File(servletContext.getRealPath("img/image-placeholder.png"));
+				
+		return Response.ok().entity(profileImage).build();
+	}
 	// @SuppressWarnings("unchecked")
 	// @POST
   //   @Produces(MediaType.APPLICATION_JSON)

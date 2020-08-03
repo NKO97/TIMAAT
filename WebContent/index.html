@@ -2063,6 +2063,47 @@
                         <div> <!-- Actor data -->
                           <div class="form-group datasheet-data actor-data"> <!-- actor base information -->
                             <fieldset>
+                              <div class="form-row"> <!-- profile image carousel -->
+                                <div class="col-md-12">
+                                  <div class="actor-profile-image-container">
+                                    <div id="dynamic-profile-image-fields-placeholder">
+                                      <img src="img/image-placeholder.png" class="center" title="image placeholder" alt="image placeholder"/>
+                                    </div>
+                                    <div data-role="dynamic-profile-image-fields" id="dynamic-profile-image-fields" class="carousel slide" data-interval="false"> <!-- data-ride="carousel"> -->
+                                      <!-- Indicators -->
+                                      <ul class="carousel-indicators">
+                                      </ul>
+                                      <!-- The slideshow -->
+                                      <div class="carousel-inner">
+                                      </div>
+                                      <!-- Left and right controls -->
+                                      <a class="carousel-control-prev" href="#prev" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                      </a>
+                                      <a class="carousel-control-next" href="#next" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                      </a>
+                                      <!-- additional profile image form content will be created dynamically --> 
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-md-12" id="actor-datasheet-form-profile-image-buttons">
+                                  <div class="btn-toolbar justify-content-center" style="margin-top:5px" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                      <button type="button" class="btn btn-outline btn-primary btn-sm datasheet-form-add-profile-image-button" title="Add image (max. 5)" name="add">
+                                        <i class="fas fa-plus"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-remove-profile-image-button" title="Remove this image" name="remove">
+                                        <i class="fas fa-trash-alt"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </fieldset>
+                            <fieldset>
                               <legend>Name</legend>
                               <div class="form-row">
                                 <div class="col-md-12">
@@ -2071,10 +2112,10 @@
                                 </div>
                               </div>
                               <div class="form-row">
-                                <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-metadata-actor-name-usedfrom">Name used from</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-metadata-actor-name-usedfrom" name="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
-                                </div>
+                                    <div class="col-md-5">
+                                      <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-metadata-actor-name-usedfrom">Name used from</label>
+                                      <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-metadata-actor-name-usedfrom" name="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
+                                    </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-metadata-actor-name-useduntil">Name used until</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-metadata-actor-name-useduntil" name="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">

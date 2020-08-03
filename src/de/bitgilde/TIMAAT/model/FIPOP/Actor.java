@@ -93,6 +93,19 @@ public class Actor implements Serializable {
 		)
 	private List<Role> roles;
 
+		//bi-directional many-to-many association to Medium_Image
+		@ManyToMany
+		@JoinTable(
+			name="actor_has_medium_image"
+			, joinColumns={
+				@JoinColumn(name="actor_id")
+				}
+			, inverseJoinColumns={
+				@JoinColumn(name="medium_image_medium_id")
+				}
+			)
+		private List<MediumImage> profileImages;
+
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
 	// @OneToMany(mappedBy="actor")
 	// private List<ActorIsLocatedInCountry> actorIsLocatedInCountries;
@@ -310,6 +323,28 @@ public class Actor implements Serializable {
 		role.removeActor(this);
 
 		return role;
+	}
+
+	public List<MediumImage> getProfileImages() {
+		return this.profileImages;
+	}
+
+	public void setProfileImages(List<MediumImage> profileImages) {
+		this.profileImages = profileImages;
+	}
+
+	public MediumImage addProfileImage(MediumImage profileImage) {
+		getProfileImages().add(profileImage);
+		profileImage.addActor(this);
+
+		return profileImage;
+	}
+
+	public MediumImage removeProfileImage(MediumImage profileImage) {
+		getProfileImages().remove(profileImage);
+		profileImage.removeActor(this);
+
+		return profileImage;
 	}
 
 	// public List<ActorIsLocatedInCountry> getActorIsLocatedInCountries() {

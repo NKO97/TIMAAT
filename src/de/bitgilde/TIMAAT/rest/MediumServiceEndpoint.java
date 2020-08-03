@@ -13,9 +13,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
@@ -947,6 +954,18 @@ public class MediumServiceEndpoint {
 		return Response.ok().entity(medium).build();
 	}
 
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
+	@Secured
+	@Path("{id}/viewToken")
+	public Response getViewToken(@PathParam("id") int id) {    	
+		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		String viewToken = medium.getViewToken();
+		// System.out.println("ViewToken: " + viewToken);
+		return Response.ok().entity(viewToken).build();
+	}
+
 	@PATCH
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -1327,8 +1346,8 @@ public class MediumServiceEndpoint {
 
 		// update image
 		// System.out.println("MediumServiceEndpoint: UPDATE IMAGE - image.id:"+image.getMediumId());
-		if ( updatedImage.getWidth() != null ) image.setWidth(updatedImage.getWidth());
-		if ( updatedImage.getHeight() != null ) image.setHeight(updatedImage.getHeight());
+		if ( updatedImage.getWidth() > 0 ) image.setWidth(updatedImage.getWidth());
+		if ( updatedImage.getHeight() > 0 ) image.setHeight(updatedImage.getHeight());
 		if ( updatedImage.getBitDepth() != null ) image.setBitDepth(updatedImage.getBitDepth());
 		// update log metadata
 		image.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -2043,11 +2062,11 @@ public class MediumServiceEndpoint {
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
   // @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/languagetrack/{languagetypeid}/{languageid}")
+	@Path("{mediumid}/languagetrack/{languageTypeId}/{languageId}")
 	@Secured
 	public Response addMediumHasLanguageItem(@PathParam("mediumid") int mediumId, 
-																					 @PathParam("languagetypeid") int mediumLanguageTypeId, 
-																					 @PathParam("languageid") int languageId) {
+																					 @PathParam("languageTypeId") int mediumLanguageTypeId, 
+																					 @PathParam("languageId") int languageId) {
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: "+mediumId+" "+mediumLanguageTypeId+ " "+languageId);
 		// System.out.println("MediumServiceEndpoint: addLanguageTrack: jsonData: "+jsonData);
 
@@ -2104,11 +2123,11 @@ public class MediumServiceEndpoint {
 	@PATCH
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/languagetrack/{languagetypeid}/{languageid}")
+	@Path("{mediumId}/languagetrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response updateMediumHasLanguageItem(@PathParam("mediumid") int mediumId, 
-																							@PathParam("languagetypeid") int mediumLanguageTypeId, 
-																							@PathParam("languageid") int languageId, 
+	public Response updateMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
+																							@PathParam("languageTypeId") int mediumLanguageTypeId, 
+																							@PathParam("languageId") int languageId, 
 																							String jsonData) throws IOException {
 		
 		System.out.println("MediumServiceEndpoint: updateLanguageTrack: jsonData: "+jsonData);
@@ -2183,9 +2202,11 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/languagetrack/{languagetypeid}/{languageid}")
+	@Path("{mediumid}/languagetrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response deleteMediumHasLanguageItem(@PathParam("mediumid") int mediumId, @PathParam("languagetypeid") int mediumLanguageTypeId, @PathParam("languageid") int languageId) {    
+	public Response deleteMediumHasLanguageItem(@PathParam("mediumid") int mediumId,
+																							@PathParam("languageTypeId") int mediumLanguageTypeId,
+																							@PathParam("languageId") int languageId) {    
 		System.out.println("MediumServiceEndpoint: deleteMediumHasLanguageItem");	
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2218,11 +2239,11 @@ public class MediumServiceEndpoint {
 
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/hasactor/{actorid}/withrole/{roleid}")
+	@Path("{mediumid}/hasactor/{actorId}/withrole/{roleId}")
 	@Secured
 	public Response addMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
-																						 @PathParam("actorid") int actorId,
-																						 @PathParam("roleid") int roleId) {
+																						 @PathParam("actorId") int actorId,
+																						 @PathParam("roleId") int roleId) {
 		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2280,10 +2301,10 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/hasactor/{actorid}")
+	@Path("{mediumId}/hasactor/{actorId}")
 	@Secured
-	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
-																												 @PathParam("actorid") int actorId) {    
+	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
+																												 @PathParam("actorId") int actorId) {    
 		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem");
 		// deletes all entries of medium-actor matches
 
@@ -2314,11 +2335,11 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/hasactor/{actorid}/withrole/{roleid}")
+	@Path("{mediumid}/hasactor/{actorId}/withrole/{roleId}")
 	@Secured
 	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
-																												@PathParam("actorid") int actorId,
-																												@PathParam("roleid") int roleId) {    
+																												@PathParam("actorId") int actorId,
+																												@PathParam("roleId") int roleId) {    
 		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem");
 		// deletes all entries of medium-actor matches
 
@@ -2482,25 +2503,24 @@ public class MediumServiceEndpoint {
 	@Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	public Response uploadMediumImage(
-			@PathParam("id") int id,
-			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+	public Response uploadImage(@PathParam("id") int id,
+															@FormDataParam("file") InputStream uploadedInputStream,
+															@FormDataParam("file") FormDataContentDisposition fileDetail) {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumImage mediumImage = entityManager.find(MediumImage.class, id);
 		if (mediumImage == null) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumImage.getMedium().getFileStatus().compareTo("nofile") != 0 )
-			return Response.status(Status.FORBIDDEN).entity("ERROR::Imagefile already exists").build();
+		if ( mediumImage.getMedium().getFileStatus().compareTo("noFile") != 0 )
+			return Response.status(Status.FORBIDDEN).entity("ERROR::Image file already exists").build();
 		
 		try {
-			// TODO assume png only upload
+			// TODO assume png upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
 					+ "-upload.png";
 			File uploadTempFile = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "image/" + tempName);
+					+ "medium/image/" + tempName);
 
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
 			byte[] bytes = new byte[1024];
@@ -2511,54 +2531,37 @@ public class MediumServiceEndpoint {
 			stream.flush();
 			stream.close();
 			System.out.println("You successfully uploaded !");
-			/*
-			 * int read = 0; byte[] bytes = new byte[1024];
-			 * 
-			 * while ((read = uploadedInputStream.read(bytes)) != -1) { out.write(bytes, 0,
-			 * read); out.flush(); } out.close();
-			 */
-			// persist mediumImage changes
-			// TODO load from config
-			// MediaType mt = entityManager.find(MediaType.class, 6);
-			// Language lang = entityManager.find(Language.class, 1);
 
-			/*
-			Title title = new Title();
-			title.setLanguage(lang);
-			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length() - 4));
-			*/
-			
-//			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "image/" + tempName);
-//			mediumImage.getMedium().setMediaType(mt);
-
-			// get data from ffmpeg
-			ImageInformation info = getImageFileInfo(
+			// get image metadata 
+			ImageInformation info = getImageFileInfo( new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "image/" + tempName
+					+ "medium/image/" + tempName)
 			);
 			mediumImage.setWidth(info.getWidth());
 			mediumImage.setHeight(info.getHeight());
-			mediumImage.setBitDepth(info.getBitdepth());
-			mediumImage.getMedium().setFileExtension(info.getFileExtension());
-
-			/*
-			EntityTransaction entityTransaction = entityManager.getTransaction();
-			entityTransaction.begin();
-			entityManager.persist(mediumImage);
-			entityManager.persist(mediumImage.getMedium());
-			entityManager.flush();
-			entityTransaction.commit();
-			entityManager.refresh(mediumImage);
-			*/
-			
+			// mediumImage.setBitDepth(info.getBitdepth());
+			// mediumImage.getMedium().setFileExtension(info.getFileExtension());
 			// rename file with medium
 			String fileExtension = "png"; // TODO check for input file extension type
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "image/" + tempName);
+				+ "medium/image/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "image/" + mediumImage.getMediumId() + "-image-original."+fileExtension));
+				+ "medium/image/" + mediumImage.getMediumId() + "-image-original." + fileExtension));
 			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
-				+ "image/" + mediumImage.getMediumId() + "-image-original."+fileExtension);
+				+ "medium/image/" + mediumImage.getMediumId() + "-image-original." + fileExtension);
+			File imageDirectory =	new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/image/" + mediumImage.getMediumId());
+				imageDirectory.mkdir(); // empty directory for the image id for later
+				// TODO copy scaled version of original image into id folder
+			// create thumbnail
+			double aspectRatio = mediumImage.getWidth() / mediumImage.getHeight();
+			double sixteenToNine = 16/9;
+			// Image thumbnail;
+			if ( aspectRatio >= sixteenToNine ) {
+				
+			}
+
+
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
 			entityManager.merge(mediumImage);
@@ -2585,25 +2588,24 @@ public class MediumServiceEndpoint {
 	@Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	public Response uploadMediumVideo(
-			@PathParam("id") int id,
-			@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+	public Response uploadVideo(@PathParam("id") int id,
+															@FormDataParam("file") InputStream uploadedInputStream,
+															@FormDataParam("file") FormDataContentDisposition fileDetail) {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumVideo mediumVideo = entityManager.find(MediumVideo.class, id);
 		if (mediumVideo == null) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumVideo.getMedium().getFileStatus().compareTo("nofile") != 0 )
-			return Response.status(Status.FORBIDDEN).entity("ERROR::Videofile already exists").build();
+		if ( mediumVideo.getMedium().getFileStatus().compareTo("noFile") != 0 )
+			return Response.status(Status.FORBIDDEN).entity("ERROR::Video file already exists").build();
 		
 		try {
-			// TODO assume MP4 only upload
+			// TODO assume MP4 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
 				+ "-upload.mp4";
 			File uploadTempFile = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + tempName);
+					+ "medium/video/" + tempName);
 
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
 			byte[] bytes = new byte[1024];
@@ -2631,13 +2633,13 @@ public class MediumServiceEndpoint {
 			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length() - 4));
 			*/
 			
-			// mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "video/" + tempName);
+			// mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "medium/video/" + tempName);
 			// mediumVideo.getMedium().setMediaType(mt);
 
 			// get data from ffmpeg
 			VideoInformation info = getVideoFileInfo(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + tempName
+					+ "medium/video/" + tempName
 			);
 			mediumVideo.setWidth(info.getWidth());
 			mediumVideo.setHeight(info.getHeight());
@@ -2657,11 +2659,12 @@ public class MediumServiceEndpoint {
 			
 			// rename file with medium
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
-				+ "video/" + tempName);
+				+ "medium/video/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + mediumVideo.getMediumId() + "-video-original.mp4")); // TODO assume only mp4 upload
+				+ "medium/video/" + mediumVideo.getMediumId() + "-video-original.mp4")); // TODO assume mp4 upload only
 			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
-				+ "video/" + mediumVideo.getMediumId()	+ "-video-original.mp4");
+				+ "medium/video/" + mediumVideo.getMediumId()	+ "-video-original.mp4");
+
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
 			entityManager.merge(mediumVideo);
@@ -2673,7 +2676,7 @@ public class MediumServiceEndpoint {
 			entityManager.refresh(mediumVideo);
 
 			createThumbnails(mediumVideo.getMediumId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + mediumVideo.getMediumId() + "-video-original.mp4");
+				+ "medium/video/" + mediumVideo.getMediumId() + "-video-original.mp4");
 
 			// start transcoding video
 			// TODO refactor
@@ -2681,7 +2684,7 @@ public class MediumServiceEndpoint {
 //			newMedium.setStatus("transcoding");
 //			newMedium.setViewToken(issueFileToken(newMedium.getId()));
 /*			TranscoderThread videoTranscoder = new TranscoderThread(mediumVideo.getMediumId(),
-					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "video/" + mediumVideo.getMediumId()
+					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "medium/video/" + mediumVideo.getMediumId()
 							+ "-video-original.mp4");
 			videoTranscoder.start();
 */
@@ -2699,9 +2702,8 @@ public class MediumServiceEndpoint {
 	@HEAD
 	@Path("video/{id}/download")
 	@Produces("video/mp4")
-	public Response getMediaFileInfo(
-			@PathParam("id") int id,
-			@QueryParam("token") String fileToken) {
+	public Response getVideoFileInfo(@PathParam("id") int id,
+																	 @QueryParam("token") String fileToken) {
 		
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -2716,7 +2718,7 @@ public class MediumServiceEndpoint {
 
 			File file = new File( 
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + id + "/" + id + "-video.mp4"
+					+ "medium/video/" + id + "/" + id + "-video.mp4"
 			);
 			
 			return Response.ok()
@@ -2729,10 +2731,9 @@ public class MediumServiceEndpoint {
 	@GET
 	@Path("video/{id}/download")
   @Produces("video/mp4")
-	public Response getMediaFile(
-		@Context HttpHeaders headers,
-		@PathParam("id") int id,
-		@QueryParam("token") String fileToken) {
+	public Response getVideoFile(@Context HttpHeaders headers,
+															 @PathParam("id") int id,
+															 @QueryParam("token") String fileToken) {
 		
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -2748,14 +2749,14 @@ public class MediumServiceEndpoint {
     	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	if ( mediumFileStatus(id, "video").compareTo("nofile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+    	if ( mediumFileStatus(id, "video").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
     	
     	if ( mediumFileStatus(id, "video").compareTo("waiting") == 0 || mediumFileStatus(id, "video").compareTo("transcoding") == 0 )
 				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + id + "-video-original.mp4", headers);
+					+ "medium/video/" + id + "-video-original.mp4", headers);
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id + "/" + id + "-video.mp4", headers);
+			+ "medium/video/" + id + "/" + id + "-video.mp4", headers);
 	}
 
 	@GET
@@ -2765,7 +2766,7 @@ public class MediumServiceEndpoint {
 	public Response updateFileStatus(@PathParam("type") String type,
 																	 @PathParam("id") int id) {
 		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ type + "/" + id);
+			+ "medium/" + type + "/" + id);
 		// if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
     	
 		return Response.ok().entity(mediumFileStatus(id, type)).build();
@@ -2790,13 +2791,13 @@ public class MediumServiceEndpoint {
 
 			// load audio waveform image from storage
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-audio-all.png");
+				+ "medium/video/" + id + "/" + id + "-audio-all.png");
 			if ( !thumbnail.exists() ) {
 				// try to create waveform
 				createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + id + "-video-original.mp4");
+					+ "medium/video/" + id + "-video-original.mp4");
 				thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "video/" + id + "/" + id + "-audio-all.png");
+					+ "medium/video/" + id + "/" + id + "-audio-all.png");
 			}
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
 		    	
@@ -2830,23 +2831,23 @@ public class MediumServiceEndpoint {
 		if ( seks < 0 ) {
 			// load thumbnail from storage
 /*
-			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "video/" +id);
+			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id);
 			if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
  */
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-thumb.png");
+				+ "medium/video/" + id + "/" + id + "-thumb.png");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 		    	
 			return Response.ok().entity(thumbnail).build();
 		} else {
 			// load timecode thumbnail from storage
 /*
-			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "video/" +id+"/frames");
+			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id+"/frames");
 			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
 */
    	
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seks) + ".jpg");
+				+ "medium/video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seks) + ".jpg");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 			return Response.ok().entity(thumbnail).build();
@@ -3065,13 +3066,13 @@ public class MediumServiceEndpoint {
 			int from,to=0;
 			if (!headers.getRequestHeaders().containsKey("Range")) {
 				builder.header("Content-Length", file.length());
-				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", "medium/video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
 				from = 0;
 				to = (int)file.length();
 			} else {
 				String rangeHeader = headers.getHeaderString("Range");
 				builder.status(Status.PARTIAL_CONTENT);
-				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", "medium/video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
 
 				String[] acceptRanges = rangeHeader.split("=");
 				String[] bounds = acceptRanges[1].split("-");
@@ -3106,8 +3107,9 @@ public class MediumServiceEndpoint {
 	}
 	
 	public static String mediumFileStatus(int id, String type) {
-		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)	+ type + "/" + id);
-		String fileStatus = "nofile";
+		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)	+ "medium/" + type + "/" + id);
+		// System.out.println("mediumDir: " + mediumDir);
+		String fileStatus = "noFile";
 		if ( !mediumDir.exists() ) {
 			return fileStatus;
 		}
@@ -3126,45 +3128,78 @@ public class MediumServiceEndpoint {
 		return fileStatus;
 	}
 
-	private ImageInformation getImageFileInfo(String filename) {
-		Runtime r = Runtime.getRuntime();
-		Process p;     // Process tracks one external native process
-		BufferedReader is;  // reader for output of process
-		String line;
-		
-		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
-		"-v", "error", "-select_streams", "v:0",
-		"-show_entries", "stream=width,height,r_frame_rate,codec_name",
-		"-show_entries", "format=duration",
-		"-of", "json", filename };
-		ImageInformation imageInfo = new ImageInformation("0", "0", "0", "");
-
-		try {
-			p = r.exec(commandLine);
-			is = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
+	private ImageInformation getImageFileInfo(File imgFile) throws IOException {
+		int pos = imgFile.getName().lastIndexOf(".");
+		if (pos == -1)
+			throw new IOException("No extension for file: " + imgFile.getAbsolutePath());
+		String suffix = imgFile.getName().substring(pos + 1);
+		ImageInformation imageInfo = new ImageInformation(0, 0, "0", "");
+		Iterator<ImageReader> iter = ImageIO.getImageReadersBySuffix(suffix);
+		while(iter.hasNext()) {
+			ImageReader reader = iter.next();
 			try {
-				p.waitFor();  // wait for process to complete
-			} catch (InterruptedException e) {
-				System.err.println(e);  // "can't happen"
+				ImageInputStream stream = new FileImageInputStream(imgFile);
+				reader.setInput(stream);
+				int width = reader.getWidth(reader.getMinIndex());
+				int height = reader.getHeight(reader.getMinIndex());
+				// IIOMetadata metadata = reader.getImageMetadata(0);
+				// if (metadata.isStandardMetadataFormatSupported()) { // true for all bundled formats
+				// IIOMetadataNode bitDepth = (IIOMetadataNode) metadata.getAsTree("javax_imageio_1.0")
+				// 	.getElementsByTagName('Data').item(0)
+				// 	.get_elements_by_tag_name('BitsPerSample').item(0)
+				// 	.getAttribute('value');
+				imageInfo.setWidth(width);
+				imageInfo.setHeight(height);
+				stream.flush();
+				stream.close();
+				// imageInfo.setBitDepth(bitDepth);
+				return imageInfo;
+			} catch (IOException e) {
+				System.out.println("Error reading: " + imgFile.getAbsolutePath() + e);
+			} finally {
+				reader.dispose();
 			}
+		}	
+		throw new IOException("Not a known image file: " + imgFile.getAbsolutePath());
+		// Runtime r = Runtime.getRuntime();
+		// Process p;     // Process tracks one external native process
+		// BufferedReader is;  // reader for output of process
+		// String line;
+		
+		// String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
+		// "-v", "error", "-select_streams", "v:0",
+		// "-show_entries", "stream=width,height,r_frame_rate,codec_name",
+		// "-show_entries", "format=duration",
+		// "-of", "json", filename };
+		// ImageInformation imageInfo = new ImageInformation("0", "0", "0", "");
 
-			String jsonString = "";
-			while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+		// try {
+		// 	p = r.exec(commandLine);
+		// 	is = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-			JSONObject json = new JSONObject(jsonString);
-			imageInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getString("width"));
-			imageInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getString("height"));
-			imageInfo.setbitDepth(json.getJSONArray("streams").getJSONObject(0).getString("bitDepth"));
-			imageInfo.setFileExtension(json.getJSONArray("streams").getJSONObject(0).getString("fileExtension"));
+		// 	try {
+		// 		p.waitFor();  // wait for process to complete
+		// 	} catch (InterruptedException e) {
+		// 		System.err.println(e);  // "can't happen"
+		// 	}
+
+		// 	String jsonString = "";
+		// 	while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+
+		// 	JSONObject json = new JSONObject(jsonString);
+		// 	System.out.println("jsonString "+ jsonString);
+		// 	imageInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getString("width"));
+		// 	imageInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getString("height"));
+		// 	imageInfo.setbitDepth(json.getJSONArray("streams").getJSONObject(0).getString("bitDepth"));
+		// 	imageInfo.setFileExtension(json.getJSONArray("streams").getJSONObject(0).getString("fileExtension"));
 
 
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		// } catch (IOException e1) {
+		// 	// TODO Auto-generated catch block
+		// 	e1.printStackTrace();
+		// }
 
-		return imageInfo;
+		// return imageInfo;
 }
 
 	private VideoInformation getVideoFileInfo(String filename) {
@@ -3212,7 +3247,7 @@ public class MediumServiceEndpoint {
 	
 	private void createThumbnails(int id, String filename) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id);
+			+ "medium/video/" + id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
 
 		Runtime r = Runtime.getRuntime();
@@ -3223,7 +3258,7 @@ public class MediumServiceEndpoint {
 	    "-ss", "00:00:01.000", // timecode of thumbnail
 	    "-vframes", "1", "-y", 
 			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-thumb.png" };
+				+ "medium/video/" + id + "/" + id + "-thumb.png" };
 
 	    try {
 			p = r.exec(commandLine);
@@ -3240,7 +3275,7 @@ public class MediumServiceEndpoint {
 	
 	private void createAudioWaveform(int id, String filename) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id);
+			+ "medium/video/" + id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
 
 		Runtime r = Runtime.getRuntime();
@@ -3251,7 +3286,7 @@ public class MediumServiceEndpoint {
 	    "-filter_complex", "aformat=channel_layouts=mono,showwavespic=s=5000x300:colors=395C8D", // waveform settings
 	    "-frames:v", "1", "-y", 
 			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-audio-all.png" };
+				+ "medium/video/" + id + "/" + id + "-audio-all.png" };
 
 	    try {
 			p = r.exec(commandLine);
@@ -3277,7 +3312,7 @@ public class MediumServiceEndpoint {
 		return token;
 	}
 
-	private int validateFileToken(String token) throws Exception {
+	public static int validateFileToken(String token) throws Exception {
 			// Check if the token was issued by the server and if it's not expired
 			// Throw an Exception if the token is invalid
 

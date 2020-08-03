@@ -28,10 +28,10 @@ public class TranscoderThread extends Thread {
 		Process pFrames;
 
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id);
+			+ "medium/video/" + id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
 		File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id + "/frames");
+			+ "medium/video/" + id + "/frames");
 		if ( !frameDir.exists() ) frameDir.mkdirs();
 		
 		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
@@ -39,7 +39,7 @@ public class TranscoderThread extends Thread {
 		"-crf", "23", // transcoded quality setting
 		"-c:a", "aac", "-movflags", "faststart", "-movflags", "rtphint", "-y",
 		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id + "/" + id + "-video-transcoding.mp4" };
+			+ "medium/video/" + id + "/" + id + "-video-transcoding.mp4" };
 		ProcessBuilder pb = new ProcessBuilder(commandLine);
 //		pb.inheritIO();
 
@@ -47,7 +47,7 @@ public class TranscoderThread extends Thread {
 		"-i", filename, "-vf", 
 		"fps=1,scale=240:-1,pad=max(iw\\,ih)",
 		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "video/" + id + "/frames/" + id + "-frame-%05d.jpg" };
+			+ "medium/video/" + id + "/frames/" + id + "-frame-%05d.jpg" };
 		ProcessBuilder pbFrames = new ProcessBuilder(commandLineFrames);
 
 
@@ -67,14 +67,14 @@ public class TranscoderThread extends Thread {
 			}
 
 			File transcodedVideo = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-video-transcoding.mp4");
+				+ "medium/video/" + id + "/" + id + "-video-transcoding.mp4");
 			
 			if ( !transcodedVideo.exists() || !transcodedVideo.canRead() ) {
 				// TODO handle transcoding error
 			} else if ( transcodedVideo.length() == 0 ) {
 				transcodedVideo.delete();
 			} else transcodedVideo.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "video/" + id + "/" + id + "-video.mp4"));
+				+ "medium/video/" + id + "/" + id + "-video.mp4"));
 			
 
 		} catch (IOException e1) {

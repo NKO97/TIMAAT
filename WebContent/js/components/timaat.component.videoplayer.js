@@ -859,7 +859,7 @@
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
-//			this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
+			// this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
 			TIMAAT.VideoPlayer.viewer.setMaxBounds(this.videoBounds);
 			TIMAAT.VideoPlayer.viewer.fitBounds(this.videoBounds);

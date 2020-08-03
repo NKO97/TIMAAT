@@ -329,7 +329,7 @@
 						if ( event.type == 'success' ) {
 							medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
 							medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
-							medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth;
+							// medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth; // TODO
 							TIMAAT.MediaDatasets.refreshDatatable('image');
 							TIMAAT.MediaDatasets.refreshDatatable('medium');
 						}
@@ -1696,7 +1696,7 @@
 				$('#timaat-mediadatasets-metadata-form-edit').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-edit :input').prop('disabled', false);
 				$('#timaat-mediadatasets-metadata-form-edit').show();
-				if ( mediumTypeData.model.fileStatus == 'nofile') {
+				if ( mediumTypeData.model.fileStatus == 'noFile') {
 					$('.datasheet-form-upload-button').prop('disabled', false);
 					$('.datasheet-form-upload-button').show();
 				} else {
@@ -2463,9 +2463,9 @@
 				medium.ui.find('.timaat-medium-transcoding').show();
 			}
 
-			if ( medium.fileStatus != 'ready'  &&  medium.fileStatus != 'nofile' ) medium.ui.find('.timaat-medium-status').show();
+			if ( medium.fileStatus != 'ready'  &&  medium.fileStatus != 'noFile' ) medium.ui.find('.timaat-medium-status').show();
 			if ( medium.fileStatus == 'waiting' ) medium.ui.find('.timaat-medium-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
-			if ( medium.fileStatus == 'nofile'  ) {
+			if ( medium.fileStatus == 'noFile'  ) {
 				medium.ui.find('.timaat-medium-upload').css('display', 'block');
 				medium.ui.find('.timaat-video-annotate').hide();
 				
@@ -2962,7 +2962,7 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, medium.mediaType.mediaTypeTranslations[0].type);
 				},
 				"columns": [
@@ -2996,7 +2996,7 @@
 								break;
 							}
 							let noFileIcon = ' ';
-							if (medium.fileStatus == 'nofile') {
+							if (medium.fileStatus == 'noFile') {
 								noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 							}
 							let titleDisplay = `<p>` + displayMediumTypeIcon + noFileIcon + medium.displayTitle.name + `</p>`;
@@ -3135,7 +3135,7 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'audio');
 				},
 				"columns": [
@@ -3143,7 +3143,7 @@
 					{
 						// console.log("TCL: medium.fileStatus", medium.fileStatus);
 						let noFileIcon = '';
-						if (medium.fileStatus == 'nofile') {
+						if (medium.fileStatus == 'noFile') {
 							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 						}
 						let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;		
@@ -3281,14 +3281,14 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'document');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					if (medium.fileStatus == 'nofile') {
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
@@ -3426,14 +3426,14 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'image');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					if (medium.fileStatus == 'nofile') {
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
@@ -3571,14 +3571,14 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'software');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					if (medium.fileStatus == 'nofile') {
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
@@ -3716,14 +3716,14 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'text');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					if (medium.fileStatus == 'nofile') {
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
@@ -3859,7 +3859,7 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" ) {
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" ) {
 					// 	console.log("TCL: medium.fileStatus", medium.fileStatus);
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'video');
 					// }
@@ -3869,10 +3869,7 @@
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					// console.log("TCL: medium.viewToken", medium.viewToken);
-					// console.log("TCL: medium.fileStatus", medium.fileStatus);
-					if (medium.fileStatus == 'nofile') {
-						// console.log("TCL: medium", medium);
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
@@ -4010,14 +4007,14 @@
 						}
 					});
 
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "nofile" )
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, 'videogame');
 				},
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 					// console.log("TCL: medium", medium);
 					let noFileIcon = '';
-					if (medium.fileStatus == 'nofile') {
+					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
 					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;

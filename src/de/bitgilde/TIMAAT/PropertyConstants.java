@@ -30,6 +30,7 @@ public enum PropertyConstants {
     DATABASE_USER ("database.user"),
     DATABASE_PASSWORD ("database.password"),
     FFMPEG_LOCATION ("app.ffmpeg.location"),
+    IMAGEMAGICK_LOCATION("app.imagemagic.location"),
 	SERVER_NAME ("server.name");
     
     private final String propertyKey;

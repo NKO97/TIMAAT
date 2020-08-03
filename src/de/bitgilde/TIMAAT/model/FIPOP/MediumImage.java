@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -25,9 +26,9 @@ public class MediumImage implements Serializable {
 	@Column(name="bit_depth")
 	private String bitDepth;
 
-	private String height;
+	private int height;
 
-	private String width;
+	private int width;
 
 	//bi-directional many-to-many association to ImageGallery
 	@ManyToMany(fetch=FetchType.EAGER)
@@ -40,6 +41,7 @@ public class MediumImage implements Serializable {
 			@JoinColumn(name="image_gallery_id")
 			}
 		)
+	@JsonIgnore
 	private Set<ImageGallery> imageGalleries;
 
 	//bi-directional one-to-one association to Medium
@@ -50,7 +52,13 @@ public class MediumImage implements Serializable {
 
 	//bi-directional many-to-one association to MediumVideoHasMediumImage
 	@OneToMany(mappedBy="mediumImage")
+	@JsonIgnore
 	private Set<MediumVideoHasMediumImage> mediumVideoHasMediumImages;
+
+	//bi-directional many-to-many association to RoleGroup
+	@ManyToMany(mappedBy="profileImages")
+	@JsonIgnore
+	private List<Actor> actors;
 
 	// //bi-directional many-to-one association to SiocContainer
 	// @OneToMany(mappedBy="mediumImage1")
@@ -91,19 +99,19 @@ public class MediumImage implements Serializable {
 		this.bitDepth = bitDepth;
 	}
 
-	public String getHeight() {
+	public int getHeight() {
 		return this.height;
 	}
 
-	public void setHeight(String height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
-	public String getWidth() {
+	public int getWidth() {
 		return this.width;
 	}
 
-	public void setWidth(String width) {
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
@@ -143,6 +151,26 @@ public class MediumImage implements Serializable {
 		mediumVideoHasMediumImage.setMediumImage(null);
 
 		return mediumVideoHasMediumImage;
+	}
+
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public Actor addActor(Actor actor) {
+		getActors().add(actor);
+
+		return actor;
+	}
+
+	public Actor removeActor(Actor actor) {
+		getActors().remove(actor);
+
+		return actor;
 	}
 
 	// public Set<SiocContainer> getSiocContainers1() {

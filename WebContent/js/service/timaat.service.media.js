@@ -170,6 +170,28 @@
 			});		
 		},
 
+		async getViewToken(id) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+id+"/viewToken",
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"text",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getViewToken -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
 		async createMedium(mediumModel) {
 			// console.log("TCL: async createMedium -> mediumModel", mediumModel);
 			var newMediumModel = {
