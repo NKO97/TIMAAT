@@ -1484,6 +1484,9 @@
                     <!-- Media data -->
                     <div class="col-md-8" id="timaat-mediadatasets-media-tabs">
                       <ul class="nav nav-tabs media-nav-tabs">
+                        <li class="nav-item media-data-tabs preview-data-tab">
+                          <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
+                        </li>
                         <li class="nav-item media-data-tabs medium-data-tab">
                           <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form" href="#mediumDatasheet">Datasheet</a>
                         </li>
@@ -1519,6 +1522,41 @@
                         </li>
                       </ul>
                       <!-- Data tab content -->
+                      <!-- preview form -->
+                      <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-9">
+                              <h5 class="form-title caps-title" id="mediumPreviewFormHeader">Medium Preview</h5>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-medium-preview-form-edit" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button> -->
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" id="timaat-mediadatasets-medium-preview-form-upload" title="Upload file" name="upload">
+                                    <i class="fas fa-file-upload"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-mediadatasets-medium-preview-form-delete" title="Delete medium">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div> <!-- Medium data -->
+                          <div class="form-group preview-data medium-preview-data">
+                            <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:640px; width:auto"/>
+                          </div>
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                          <!-- <div class="medium-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          </div> -->
+                      </form>
                       <!-- datasheet form -->
                       <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">

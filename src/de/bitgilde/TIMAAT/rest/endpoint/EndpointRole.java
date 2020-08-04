@@ -177,7 +177,7 @@ public class EndpointRole {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("selectlist")
+	@Path("selectList")
 	public Response getRoleSelectList(@QueryParam("search") String search,
 																		@QueryParam("page") Integer page,
 																		@QueryParam("per_page") Integer per_page,
@@ -219,7 +219,7 @@ public class EndpointRole {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("group/selectlist")
+	@Path("group/selectList")
 	public Response getRoleGroupSelectList(@QueryParam("search") String search,
 																				 @QueryParam("page") Integer page,
 																				 @QueryParam("per_page") Integer per_page,

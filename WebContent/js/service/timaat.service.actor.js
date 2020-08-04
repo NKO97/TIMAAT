@@ -148,7 +148,7 @@
 			return new Promise(resolve => {
 				// console.log("TCL: getCollectiveSelectList", getCollectiveSelectList);
 				jQuery.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/collective/selectlist",
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/collective/selectList",
 					type:"GET",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -220,7 +220,7 @@
 			console.log("TCL: getActorsWithThisRoleList -> roleId: ", roleId);
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/withrole/"+roleId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/withRole/"+roleId,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",

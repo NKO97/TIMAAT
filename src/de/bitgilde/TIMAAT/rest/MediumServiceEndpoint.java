@@ -186,7 +186,7 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("selectlist")
+	@Path("selectList")
 	public Response getMediumSelectList(
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
@@ -241,7 +241,7 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("video/selectlist")
+	@Path("video/selectList")
 	public Response getVideoSelectList(
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
@@ -756,7 +756,7 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("hasactor/{actor_id}/withroles/selectlist")
+	@Path("hasActor/{actor_id}/withRoles/selectList")
 	public Response getRoleSelectList(@PathParam("actor_id") int actorId,
 																		@QueryParam("search") String search,
 																		@QueryParam("page") Integer page,
@@ -799,8 +799,8 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{medium_id}/hasactorlist")
-	public Response getActorList(@PathParam("medium_id") Integer mediumId)
+	@Path("{mediumId}/hasActorList")
+	public Response getActorList(@PathParam("mediumId") Integer mediumId)
 	{
 		System.out.println("MediumServiceEndpoint: getActorList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -818,9 +818,9 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{medium_id}/hasactor/{actor_id}/withrolelist")
-	public Response getActorHasRoleList(@PathParam("medium_id") Integer mediumId,
-																			@PathParam("actor_id") Integer actorId)
+	@Path("{mediumId}/hasActor/{actorId}/withRoleList")
+	public Response getActorHasRoleList(@PathParam("mediumId") Integer mediumId,
+																			@PathParam("actorId") Integer actorId)
 	{
 		System.out.println("MediumServiceEndpoint: getActorHasRoleList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1922,9 +1922,9 @@ public class MediumServiceEndpoint {
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
   @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/title/{id}")
+	@Path("{mediumId}/title/{id}")
 	@Secured
-	public Response addTitle(@PathParam("mediumid") int mediumId, @PathParam("id") int id, String jsonData) {
+	public Response addTitle(@PathParam("mediumId") int mediumId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("MediumServiceEndpoint: addTitle: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2062,9 +2062,9 @@ public class MediumServiceEndpoint {
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
   // @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/languagetrack/{languageTypeId}/{languageId}")
+	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response addMediumHasLanguageItem(@PathParam("mediumid") int mediumId, 
+	public Response addMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
 																					 @PathParam("languageTypeId") int mediumLanguageTypeId, 
 																					 @PathParam("languageId") int languageId) {
 		System.out.println("MediumServiceEndpoint: addLanguageTrack: "+mediumId+" "+mediumLanguageTypeId+ " "+languageId);
@@ -2123,7 +2123,7 @@ public class MediumServiceEndpoint {
 	@PATCH
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumId}/languagetrack/{languageTypeId}/{languageId}")
+	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
 	public Response updateMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
 																							@PathParam("languageTypeId") int mediumLanguageTypeId, 
@@ -2202,9 +2202,9 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/languagetrack/{languageTypeId}/{languageId}")
+	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response deleteMediumHasLanguageItem(@PathParam("mediumid") int mediumId,
+	public Response deleteMediumHasLanguageItem(@PathParam("mediumId") int mediumId,
 																							@PathParam("languageTypeId") int mediumLanguageTypeId,
 																							@PathParam("languageId") int languageId) {    
 		System.out.println("MediumServiceEndpoint: deleteMediumHasLanguageItem");	
@@ -2239,9 +2239,9 @@ public class MediumServiceEndpoint {
 
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/hasactor/{actorId}/withrole/{roleId}")
+	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response addMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
+	public Response addMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
 																						 @PathParam("actorId") int actorId,
 																						 @PathParam("roleId") int roleId) {
 		System.out.println("MediumServiceEndpoint: addMediumHasActorWithRoles");
@@ -2301,7 +2301,7 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumId}/hasactor/{actorId}")
+	@Path("{mediumId}/hasActor/{actorId}")
 	@Secured
 	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
 																												 @PathParam("actorId") int actorId) {    
@@ -2335,9 +2335,9 @@ public class MediumServiceEndpoint {
 
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{mediumid}/hasactor/{actorId}/withrole/{roleId}")
+	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumid") int mediumId, 
+	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
 																												@PathParam("actorId") int actorId,
 																												@PathParam("roleId") int roleId) {    
 		System.out.println("MediumServiceEndpoint: deleteMediumHasActorWithRolesItem");
@@ -2804,6 +2804,29 @@ public class MediumServiceEndpoint {
 			return Response.ok().entity(thumbnail).build();
 	}
 	
+	@GET
+	@Path("image/{id}/preview")
+	@Produces("image/png")
+	public Response getImagePreview(@PathParam("id") int id,
+																	@QueryParam("token") String fileToken){
+		// verify token
+		if (fileToken == null) return Response.status(401).build();
+		int tokenMediumId = 0;
+		try {
+			tokenMediumId = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}
+		if (tokenMediumId != id) return Response.status(401).build();
+
+		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			// + "medium/image/" + id + "/" + id + "-scaled.png");
+			+ "medium/image/" + id + "-image-original.png"); // TODO create scaled image and link to it
+		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/image-placeholder.png"));
+
+		return Response.ok().entity(image).build();
+	}
+
 	@GET
 	@Path("video/{id}/thumbnail")
 	@Produces("image/jpg")

@@ -192,7 +192,7 @@ public class CategorySetEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("selectlist")
+	@Path("selectList")
 	public Response getCategorySelectList(@QueryParam("search") String search,
 																				@QueryParam("page") Integer page,
 																				@QueryParam("per_page") Integer per_page) {
@@ -230,7 +230,7 @@ public class CategorySetEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("set/selectlist")
+	@Path("set/selectList")
 	public Response getCategorySetSelectList(@QueryParam("search") String search,
 																					 @QueryParam("page") Integer page,
 																					 @QueryParam("per_page") Integer per_page) {

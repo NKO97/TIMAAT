@@ -782,7 +782,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/category/set/selectlist',
+              url: 'api/category/set/selectList',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -837,7 +837,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/category/selectlist',
+              url: 'api/category/selectList',
               type: 'GET',
               dataType: 'json',
               delay: 250,

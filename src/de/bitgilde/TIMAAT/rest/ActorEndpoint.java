@@ -195,7 +195,7 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("selectlist")
+	@Path("selectList")
 	public Response getActorSelectList(
 			@QueryParam("start") Integer start,
 			@QueryParam("length") Integer length,
@@ -439,7 +439,7 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("collective/selectlist")
+	@Path("collective/selectList")
 	public Response getCollectiveSelectList() {
 		// returns list of id and displayName combinations of all collectives
 		System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
@@ -549,7 +549,7 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("withrole/{role_id}")
+	@Path("withRole/{role_id}")
 	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
 	{
 		System.out.println("ActorServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);

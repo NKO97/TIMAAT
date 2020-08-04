@@ -543,7 +543,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/group/selectlist',
+              url: 'api/role/group/selectList',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -596,7 +596,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/actor/selectlist',
+              url: 'api/actor/selectList',
               type: 'GET',
               dataType: 'json',
               delay: 250,
@@ -651,7 +651,7 @@
             scrollAfterSelect: true,
             allowClear: true,
             ajax: {
-              url: 'api/role/selectlist',
+              url: 'api/role/selectList',
               type: 'GET',
               dataType: 'json',
               delay: 250,

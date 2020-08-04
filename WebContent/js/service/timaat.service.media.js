@@ -104,7 +104,7 @@
       console.log("TCL: getActorHasRoleList -> mediumId", mediumId);
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactorlist/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActorList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -128,7 +128,7 @@
       console.log("TCL: getActorHasRoleList -> mediumId, actorId", mediumId, actorId);
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrolelist/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRoleList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -328,7 +328,7 @@
       // console.log("TCL: async addLanguageTrack -> track", track);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.mediumId+"/languagetrack/"+track.mediumLanguageTypeId+"/"+track.languageId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.mediumId+"/languageTrack/"+track.mediumLanguageTypeId+"/"+track.languageId,
 					type:"POST",
 					// data: JSON.stringify(track),
 					contentType:"application/json; charset=utf-8",
@@ -352,7 +352,7 @@
     	console.log("TCL: addActorToMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrole/"+roleId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRole/"+roleId,
 					type:"POST",
 					// data: JSON.stringify(roleIds),
 					contentType:"application/json; charset=utf-8",
@@ -607,7 +607,7 @@
 			// console.log("TCL: removeLanguageTrack -> track ", track);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.id.mediumId+"/languagetrack/"+track.id.mediumLanguageTypeId+"/"+track.id.languageId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+track.id.mediumId+"/languageTrack/"+track.id.mediumLanguageTypeId+"/"+track.id.languageId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -629,7 +629,7 @@
       console.log("TCL: removeActorFromMediumHasActorWithRoles -> mediumId, actorId", mediumId, actorId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -650,7 +650,7 @@
       console.log("TCL: removeRoleFromMediumHasActorWithRoles -> mediumId, actorId, roleId", mediumId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasactor/"+actorId+"/withrole/"+roleId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRole/"+roleId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {

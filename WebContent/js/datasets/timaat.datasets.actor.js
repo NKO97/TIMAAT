@@ -3463,7 +3463,7 @@
 				scrollAfterSelect: true,
 				allowClear: true,
 				ajax: {
-					url: 'api/role/selectlist/',
+					url: 'api/role/selectList/',
 					type: 'GET',
 					dataType: 'json',
 					delay: 250,
@@ -3565,7 +3565,7 @@
 					scrollAfterSelect: false,
 					allowClear: true,
 					ajax: {
-						url: 'api/medium/video/selectlist/',
+						url: 'api/medium/video/selectList/',
 						type: 'GET',
 						dataType: 'json',
 						delay: 250,
