@@ -241,6 +241,69 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("image/selectList")
+	public Response getImageSelectList(
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("search") String search)
+	{
+		System.out.println("MediumServiceEndpoint: getImageSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		String column = "m.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		}
+
+		class SelectElement{
+			public int id; 
+			public String text;
+			public String token;
+			public SelectElement(int id, String text, String token) {
+				this.id = id;
+				this.text = text;
+				this.token = token;
+			};
+		}
+		
+		// TODO search all titles, not displayTitle only
+		// define default query strings
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("mediumName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				mediumQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : mediumList) {
+			if (medium.getMediumImage() != null) {
+				// System.out.println("id + viewToken: " + medium.getId() + " - " + medium.getViewToken());
+				// if (medium.getViewToken() == null) {
+				// 	medium.setViewToken(issueFileToken(medium.getId()));
+				// }
+				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName(), medium.getViewToken()));
+			}
+		}
+
+		return Response.ok().entity(mediumSelectList).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("video/selectList")
 	public Response getVideoSelectList(
 			@QueryParam("start") Integer start,
@@ -2810,14 +2873,18 @@ public class MediumServiceEndpoint {
 	public Response getImagePreview(@PathParam("id") int id,
 																	@QueryParam("token") String fileToken){
 		// verify token
-		if (fileToken == null) return Response.status(401).build();
+		if (fileToken == null) {
+			return Response.status(401).build();
+		}
 		int tokenMediumId = 0;
 		try {
 			tokenMediumId = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
 		}
-		if (tokenMediumId != id) return Response.status(401).build();
+		if (tokenMediumId != id) {
+			return Response.status(401).build();
+		}
 
 		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			// + "medium/image/" + id + "/" + id + "-scaled.png");
