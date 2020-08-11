@@ -2826,20 +2826,19 @@ public class MediumServiceEndpoint {
 			tokenMediumID = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
-		}		
+		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 			if ( mediumFileStatus(id, "video").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-
 			File file = new File( 
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/video/" + id + "/" + id + "-video.mp4"
 			);
 			
 			return Response.ok()
-					.status( Response.Status.PARTIAL_CONTENT )
-					.header( HttpHeaders.CONTENT_LENGTH, file.length() )
-					.header( "Accept-Ranges", "bytes" )
-					.build();
+				.status( Response.Status.PARTIAL_CONTENT )
+				.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+				.header( "Accept-Ranges", "bytes" )
+				.build();
 	}
 
 	@GET
@@ -2858,16 +2857,15 @@ public class MediumServiceEndpoint {
 			return Response.status(401).build();
 		}		
 		if ( tokenMediumID != id ) return Response.status(401).build();
-		
-    	
-    	Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	if ( mediumFileStatus(id, "video").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
-    	
-    	if ( mediumFileStatus(id, "video").compareTo("waiting") == 0 || mediumFileStatus(id, "video").compareTo("transcoding") == 0 )
-				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "-video-original.mp4", headers);
+		Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
+		if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumFileStatus(id, "video").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumFileStatus(id, "video").compareTo("waiting") == 0 || mediumFileStatus(id, "video").compareTo("transcoding") == 0 )
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/video/" + id + "-video-original.mp4", headers);
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id + "/" + id + "-video.mp4", headers);
@@ -3232,13 +3230,13 @@ public class MediumServiceEndpoint {
 			int from,to=0;
 			if (!headers.getRequestHeaders().containsKey("Range")) {
 				builder.header("Content-Length", file.length());
-				builder.header("Content-Type", "medium/video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
 				from = 0;
 				to = (int)file.length();
 			} else {
 				String rangeHeader = headers.getHeaderString("Range");
 				builder.status(Status.PARTIAL_CONTENT);
-				builder.header("Content-Type", "medium/video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
 
 				String[] acceptRanges = rangeHeader.split("=");
 				String[] bounds = acceptRanges[1].split("-");
