@@ -1532,9 +1532,6 @@
                             <div class="col-md-3">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-medium-preview-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button> -->
                                   <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" id="timaat-mediadatasets-medium-preview-form-upload" title="Upload file" name="upload">
                                     <i class="fas fa-file-upload"></i>
                                   </button>
@@ -1548,14 +1545,17 @@
                         </div>
                         <div> <!-- Medium data -->
                           <div class="form-group preview-data medium-preview-data">
-                            <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                            <div class="image-preview">
+                              <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                            </div>
+                            <div class="video-preview">
+                              <video id="videoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                <!-- <source src="" id="videoSource" type="video/mp4">Your browser does not support the video tag. -->
+                              </video>
+                            </div>
+                            
                           </div>
                         </div>
-                        <!-- Save/Cancel buttons -->
-                          <!-- <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
-                          </div> -->
                       </form>
                       <!-- datasheet form -->
                       <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>

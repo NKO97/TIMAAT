@@ -2831,8 +2831,7 @@ public class MediumServiceEndpoint {
 			if ( mediumFileStatus(id, "video").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
 			File file = new File( 
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "/" + id + "-video.mp4"
-			);
+					+ "medium/video/" + id + "/" + id + "-video.mp4");
 			
 			return Response.ok()
 				.status( Response.Status.PARTIAL_CONTENT )

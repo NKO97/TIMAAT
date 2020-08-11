@@ -1859,6 +1859,8 @@
 			if ( mediumTypeData.model.fileStatus == 'noFile') {
 				$('.datasheet-form-upload-button').prop('disabled', false);
 				$('.datasheet-form-upload-button').show();
+				$('.video-preview').hide();
+				$('.image-preview').show();
 				switch (mediumType) {
 					case 'image':
 						$('#mediumPreview').attr('src' , 'img/image-placeholder.png');
@@ -1868,14 +1870,30 @@
 					break;
 				}
 			} else {
-				console.log("TCL: display image preview");
+				// console.log("TCL: display image preview");
 				$('.datasheet-form-upload-button').hide();
 				$('.datasheet-form-upload-button').prop('disabled', true);
 				switch (mediumType) {
 					case 'image':
+						$('.video-preview').hide();
 						$('#mediumPreview').attr('src', '/TIMAAT/api/medium/image/'+mediumTypeData.model.id+'/preview'+'?token='+mediumTypeData.model.viewToken);
 						$('#mediumPreview').attr('title', mediumTypeData.model.displayTitle.name);
 						$('#mediumPreview').attr('alt', mediumTypeData.model.displayTitle.name);
+						$('.image-preview').show();
+					break;
+					case 'video':
+						if ( mediumTypeData.model.fileStatus && mediumTypeData.model.fileStatus != 'ready' && mediumTypeData.model.fileStatus != 'transcoding' && mediumTypeData.model.fileStatus != 'waiting' ) {
+							$('.video-preview').hide();
+							$('#mediumPreview').attr('src', 'img/preview-placeholder.png');
+							$('.image-preview').show();
+						} else {
+							$('.image-preview').hide();
+							// $('#videoSource').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
+							$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
+							$('.video-preview').show();
+						}
+					default:
+						$('#mediumPreview').attr('src', 'img/preview-placeholder.png');
 					break;
 				}
 			}
