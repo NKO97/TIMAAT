@@ -2598,7 +2598,7 @@ public class ActorEndpoint {
 		// load profile image from storage
 		File profileImage = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			// + "medium/image/" + imageId + "/" + imageId + "-audio-all.png");
-			+ "medium/image/" + imageId + "-image-original.png");  // TODO access resized file in png format and subfolder
+			+ "medium/image/" + imageId + "/" + imageId + "-image-scaled.png");
 		// if ( !profileImage.exists() ) {
 		// 	// try to create waveform
 		// 	createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
@@ -2610,6 +2610,9 @@ public class ActorEndpoint {
 				
 		return Response.ok().entity(profileImage).build();
 	}
+
+
+
 	// @SuppressWarnings("unchecked")
 	// @POST
   //   @Produces(MediaType.APPLICATION_JSON)

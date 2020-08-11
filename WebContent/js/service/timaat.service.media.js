@@ -479,11 +479,11 @@
 			});
 		},
 
-		updateFileStatus(medium, type) {
+		async updateFileStatus(medium, type) {
 			// console.log("TCL: updateFileStatus(medium, type)", type);
 			// medium.poll = window.setInterval(function() {
 				// if ( medium.ui && !medium.ui.is(':visible') ) return;
-				// return new Promise(resolve => {
+				return new Promise(resolve => {
 					$.ajax({
 						url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+type+"/"+medium.id+'/status',
 						type:"GET",
@@ -500,8 +500,8 @@
 						
 						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
 						// 	window.clearInterval(medium.poll);
-						return(data);
-						// resolve(data);					
+						// return(data);
+						resolve(data);					
 					}).fail(function(e) {
 						// TODO handle error
 						// window.clearInterval(medium.poll);
@@ -509,11 +509,33 @@
 						console.log( "error", e );
 						console.log(e.responseText);
 					});
-				// }).catch((error) => {
-				// 	console.log( "error: ", error);
-				// 	console.log(error.responseText);
-				// });
+				}).catch((error) => {
+					console.log( "error: ", error);
+					console.log(error.responseText);
+				});
 			// }, Math.round(30000+(Math.random()*15000)));
+		},
+
+		async updateViewToken(medium) {
+			// console.log("TCL: updateViewToken(medium)", medium);
+				return new Promise(resolve => {
+					$.ajax({
+						url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+'/viewToken',
+						type:"GET",
+						beforeSend: function (xhr) {
+							xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+						},
+					}).done(function(data) {
+          	// console.log("TCL: updateViewToken -> data: ", data);
+						resolve(data);					
+					}).fail(function(e) {
+						console.log( "error", e );
+						console.log(e.responseText);
+					});
+				}).catch((error) => {
+					console.log( "error: ", error);
+					console.log(error.responseText);
+				});
 		},
 
 		async updateTitle(title) {

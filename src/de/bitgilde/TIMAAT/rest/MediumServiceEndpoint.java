@@ -1,5 +1,8 @@
 package de.bitgilde.TIMAAT.rest;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,8 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
 import javax.persistence.EntityManager;
@@ -2606,24 +2607,13 @@ public class MediumServiceEndpoint {
 			// mediumImage.getMedium().setFileExtension(info.getFileExtension());
 			// rename file with medium
 			String fileExtension = "png"; // TODO check for input file extension type
+			int mediumId = mediumImage.getMediumId();
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/image/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumImage.getMediumId() + "-image-original." + fileExtension));
+				+ "medium/image/" + mediumId + "-image-original." + fileExtension));
 			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
-				+ "medium/image/" + mediumImage.getMediumId() + "-image-original." + fileExtension);
-			File imageDirectory =	new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumImage.getMediumId());
-				imageDirectory.mkdir(); // empty directory for the image id for later
-				// TODO copy scaled version of original image into id folder
-			// create thumbnail
-			double aspectRatio = mediumImage.getWidth() / mediumImage.getHeight();
-			double sixteenToNine = 16/9;
-			// Image thumbnail;
-			if ( aspectRatio >= sixteenToNine ) {
-				
-			}
-
+				+ "medium/image/" + mediumId + "-image-original." + fileExtension);
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -2635,9 +2625,69 @@ public class MediumServiceEndpoint {
 			entityTransaction.commit();
 			entityManager.refresh(mediumImage);
 
+			File imageDirectory =	new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/image/" + mediumId);
+			imageDirectory.mkdir();
+
+			double width = mediumImage.getWidth();
+			double height = mediumImage.getHeight();
+			double aspectRatio = (double) width / height;
+			double sixteenToNine = 16.0 / 9.0;
+			double scaleFactor = 1.0;
+			int targetWidth = 0;
+			int targetHeight = 0;
+			// create thumbnail
+			if ( aspectRatio >= sixteenToNine && width > 160) {
+				targetWidth = 160;
+				scaleFactor = 160 / width;
+				targetHeight = (int)Math.floor(height * scaleFactor);
+			} else if (aspectRatio < sixteenToNine && height > 90) {
+				scaleFactor = 90 / height;
+				targetWidth = (int)Math.floor(width * scaleFactor);
+				targetHeight = 90;
+			}
+			if (targetHeight > 0 && targetWidth > 0) {
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
+				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
+			} else { // original image is smaller than thumbnail dimensions
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
+			}
+			targetHeight = 0;
+			targetWidth = 0;
+			// create scaled image for default view
+			if ( aspectRatio >= sixteenToNine && width > 854) {
+				targetWidth = 854;
+				scaleFactor = 854 / width;
+				targetHeight = (int)Math.floor(height * scaleFactor);
+			} else if (aspectRatio < sixteenToNine && height > 480) {
+				scaleFactor = 480 / height;
+				targetWidth = (int)Math.floor(width * scaleFactor);
+				targetHeight = 480;
+			}
+			if (targetHeight > 0 && targetWidth > 0) {
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
+				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
+			} else { // original image is smaller than 480p dimensions
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
+			}
+
+			mediumImage.getMedium().setViewToken(issueFileToken(mediumImage.getMediumId()));
+			System.out.println("ViewToken: "+ mediumImage.getMedium().getViewToken());
 			// add log entry
-			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
-					UserLogManager.LogEvents.MEDIUMCREATED);
+			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+																						 UserLogManager.LogEvents.MEDIUMCREATED);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -2721,12 +2771,13 @@ public class MediumServiceEndpoint {
 			*/
 			
 			// rename file with medium
+			int mediumId = mediumVideo.getMediumId();
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
 				+ "medium/video/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + mediumVideo.getMediumId() + "-video-original.mp4")); // TODO assume mp4 upload only
+				+ "medium/video/" + mediumId + "-video-original.mp4")); // TODO assume mp4 upload only
 			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
-				+ "medium/video/" + mediumVideo.getMediumId()	+ "-video-original.mp4");
+				+ "medium/video/" + mediumId	+ "-video-original.mp4");
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -2738,8 +2789,8 @@ public class MediumServiceEndpoint {
 			entityTransaction.commit();
 			entityManager.refresh(mediumVideo);
 
-			createThumbnails(mediumVideo.getMediumId(), TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + mediumVideo.getMediumId() + "-video-original.mp4");
+			createVideoThumbnails(mediumId, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/video/" + mediumId + "-video-original.mp4");
 
 			// start transcoding video
 			// TODO refactor
@@ -2887,8 +2938,33 @@ public class MediumServiceEndpoint {
 		}
 
 		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			// + "medium/image/" + id + "/" + id + "-scaled.png");
-			+ "medium/image/" + id + "-image-original.png"); // TODO create scaled image and link to it
+			+ "medium/image/" + id + "/" + id + "-image-scaled.png");
+		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/image-placeholder.png"));
+
+		return Response.ok().entity(image).build();
+	}
+
+	@GET
+	@Path("image/{id}/thumbnail")
+	@Produces("image/png")
+	public Response getImageThumbnail(@PathParam("id") int id,
+																	@QueryParam("token") String fileToken){
+		// verify token
+		if (fileToken == null) {
+			return Response.status(401).build();
+		}
+		int tokenMediumId = 0;
+		try {
+			tokenMediumId = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}
+		if (tokenMediumId != id) {
+			return Response.status(401).build();
+		}
+
+		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/image/" + id + "/" + id + "-image-thumb.png");
 		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/image-placeholder.png"));
 
 		return Response.ok().entity(image).build();
@@ -3208,9 +3284,18 @@ public class MediumServiceEndpoint {
 		if (type.equalsIgnoreCase("video")) fileExtension = "mp4";
 		if (type.equalsIgnoreCase("image")) fileExtension = "png";
 
-		if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "waiting";
-		if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
-		if ( new File(mediumDir + "/" + id + "-transcoding.pid" ).exists() ) fileStatus = "transcoding";
+		switch (type) {
+			case "image":
+			if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "uploaded";
+			if ( new File(mediumDir + "/" + id + "-" + type + "-thumb." + fileExtension ).exists() ) fileStatus = "thumbCreated";
+			if ( new File(mediumDir + "/" + id + "-" + type + "-scaled." + fileExtension ).exists() ) fileStatus = "ready";
+		break;
+			case "video":
+				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "waiting";
+				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
+				if ( new File(mediumDir + "/" + id + "-transcoding.pid" ).exists() ) fileStatus = "transcoding";
+			break;
+		}
 
 		// TODO implement status "unavailable"
 		// System.out.println("mediumFileStatus end - id: "+ id + ", type: "+ type + ", fileStatus: " + fileStatus);
@@ -3335,7 +3420,17 @@ public class MediumServiceEndpoint {
 	    return videoInfo;
 	}
 	
-	private void createThumbnails(int id, String filename) {
+	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException
+	{
+		BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics2D = resizedImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+		graphics2D.dispose();
+		return resizedImage;
+	}
+	
+	private void createVideoThumbnails(int id, String filename) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id);
 		if ( !videoDir.exists() ) videoDir.mkdirs();
@@ -3362,7 +3457,7 @@ public class MediumServiceEndpoint {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	private void createAudioWaveform(int id, String filename) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id);
