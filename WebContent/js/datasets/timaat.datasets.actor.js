@@ -2807,7 +2807,7 @@
 					$(`<div class="carousel-item"
 									data-id=`+actorTypeData.model.profileImages[i].mediumId+`>
 							<img src="/TIMAAT/api/actor/profileImage/`+actorTypeData.model.profileImages[i].mediumId+`?token=`+viewToken+`"
-									style="max-height:480px; max-width:854px"
+									style="max-height:100%; max-width:100%"
 									class="center">
 						</div>`).appendTo('.carousel-inner');
 					$(`<li data-target="#dynamic-profile-image-fields"
@@ -2880,7 +2880,7 @@
 					}
 					var $container = $(
 						"<div class='select2-result-repository clearfix' style='display:flex'>" +
-							"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:90px; max-width:160px'></div>" +
+							"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
 							"<div class='select2-result-repository__meta'>" +
 								"<div class='select2-result-repository__title'></div>" +
 								"<div class='select2-result-repository__description'></div>" +
