@@ -4071,10 +4071,8 @@
 					} else if (existingActorHasImageEntries.length == 0) { //* all entries will be added
 						// console.log("TCL: add all imageIdList: ", imageIdList);
 						var i = 0;
-						var item = { mediumId: 0 };
 						for (; i < imageIdList.length; i++ ) {
-							item.mediumId = imageIdList[i];
-							actor.model.profileImages.push(item);
+							actor.model.profileImages.push({mediumId: imageIdList[i]});
 						}
 						console.log("TCL: actor.model.profileImages", actor.model.profileImages);
 						await TIMAAT.ActorService.updateActor(actor.model);          
