@@ -272,7 +272,7 @@
       console.log("TCL: setupRoleDatatable");
       // setup datatable
       TIMAAT.RoleLists.dataTableRoles = $('#timaat-rolelists-role-table').DataTable({
-        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
         "pagingType"    : "full", // "simple_numbers",
         "dom"           : '<lf<t>ip>',
@@ -374,7 +374,7 @@
       console.log("TCL: setupRoleGroupDatatable");
       // setup datatable
       TIMAAT.RoleLists.dataTableRoleGroups = $('#timaat-rolelists-rolegroup-table').DataTable({
-        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
         "pagingType"    : "full", // "simple_numbers",
         "dom"           : '<lf<t>ip>',

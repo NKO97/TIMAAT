@@ -5106,7 +5106,7 @@
 			console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -5254,7 +5254,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -5391,7 +5391,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',

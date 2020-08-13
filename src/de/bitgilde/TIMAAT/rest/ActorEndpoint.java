@@ -107,7 +107,7 @@ public class ActorEndpoint {
 			@QueryParam("search") String search,
 			@QueryParam("exclude_annotation") Integer annotationID)
 	{
-		System.out.println("ActorServiceEndpoint: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
+		// System.out.println("ActorServiceEndpoint: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -202,7 +202,7 @@ public class ActorEndpoint {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("search") String search)
 	{
-		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "a.id";
 		if ( orderby != null ) {
@@ -256,7 +256,7 @@ public class ActorEndpoint {
 																 @QueryParam("orderby") String orderby,
 																 @QueryParam("search") String search)
 	{
-		System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		class SelectElement{ 
 			public int id; 
@@ -280,7 +280,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("total")
 	public Response getActorDatasetsTotal() {
-		System.out.println("ActorServiceEndpoint: getActorDatasetsTotal");
+		// System.out.println("ActorServiceEndpoint: getActorDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
 															 .createQuery("SELECT COUNT (a.id) FROM Actor a");
 		long count = (long)query.getSingleResult();														
@@ -308,7 +308,7 @@ public class ActorEndpoint {
 																@QueryParam("dir") String direction,
 																@QueryParam("search") String search )
 	{
-		System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -359,7 +359,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("person/total")
 	public Response getPersonDatasetsTotal() {
-		System.out.println("ActorServiceEndpoint: getPersonDatasetsTotal");
+		// System.out.println("ActorServiceEndpoint: getPersonDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
 															 .createQuery("SELECT COUNT (ap.id) FROM ActorPerson ap");
 		long count = (long)query.getSingleResult();														
@@ -377,7 +377,7 @@ public class ActorEndpoint {
 																		@QueryParam("dir") String direction,
 																		@QueryParam("search") String search )
 	{
-		System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("ActorServiceEndpoint: getActorPersonList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -429,7 +429,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("collective/total")
 	public Response getCollectiveDatasetsTotal() {
-		System.out.println("ActorServiceEndpoint: getCollectiveDatasetsTotal");
+		// System.out.println("ActorServiceEndpoint: getCollectiveDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
 															 .createQuery("SELECT COUNT (ac.id) FROM ActorCollective ac");
 		long count = (long)query.getSingleResult();														
@@ -442,7 +442,7 @@ public class ActorEndpoint {
 	@Path("collective/selectList")
 	public Response getCollectiveSelectList() {
 		// returns list of id and displayName combinations of all collectives
-		System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
+		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
 		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
 		class SelectElement{ 
 			public int collectiveId; 
@@ -463,7 +463,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("addresstype/list")
 	public Response getAddressTypeList() {
-		System.out.println("ActorServiceEndpoint: getAddressTypeList");		
+		// System.out.println("ActorServiceEndpoint: getAddressTypeList");		
 		List<AddressType> addressTypeList = castList(AddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("AddressType.findAll").getResultList());
 		return Response.ok().entity(addressTypeList).build();
 	}
@@ -473,7 +473,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("emailaddresstype/list")
 	public Response getEmailAddressTypeList() {
-		System.out.println("ActorServiceEndpoint: getEmailAddressTypeList");		
+		// System.out.println("ActorServiceEndpoint: getEmailAddressTypeList");		
 		List<EmailAddressType> emailAddressTypeList = castList(EmailAddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("EmailAddressType.findAll").getResultList());
 		return Response.ok().entity(emailAddressTypeList).build();
 	}
@@ -483,7 +483,7 @@ public class ActorEndpoint {
 	@Secured
 	@Path("phonenumbertype/list")
 	public Response getPhoneNumberTypeList() {
-		System.out.println("ActorServiceEndpoint: getPhoneNumberTypeList");		
+		// System.out.println("ActorServiceEndpoint: getPhoneNumberTypeList");		
 		List<PhoneNumberType> emailAddressTypeList = castList(PhoneNumberType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("PhoneNumberType.findAll").getResultList());
 		return Response.ok().entity(emailAddressTypeList).build();
 	}
@@ -512,7 +512,7 @@ public class ActorEndpoint {
 	@Path("{id}/role/list")
 	public Response getActorHasRoleList(@PathParam("id") int actorId)
 	{
-		System.out.println("ActorServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
+		// System.out.println("ActorServiceEndpoint: getActorHasRoleList - ID: "+ actorId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		List<Role> roleList = actor.getRoles();
@@ -527,7 +527,7 @@ public class ActorEndpoint {
 	public Response getActorRoleInMediumList(@PathParam("actor_id") int actorId,
 																					 @PathParam("role_id") int roleId)
 	{
-		System.out.println("ActorServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
+		// System.out.println("ActorServiceEndpoint: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		String sql = "SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.actor.id = :actorId AND mhawr.role.id = :roleId";
 		// String sql = "SELECT DISTINCT m FROM Medium m WHERE m.actorHasRoles.actor.id = :actorId AND m.actorHasRoles.role.id = :roleId";
@@ -552,7 +552,7 @@ public class ActorEndpoint {
 	@Path("withRole/{role_id}")
 	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
 	{
-		System.out.println("ActorServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
+		// System.out.println("ActorServiceEndpoint: getActorsWithThisRoleList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = entityManager.find(Role.class, roleId);
 		List<Actor> actorList = role.getActors();
@@ -567,7 +567,7 @@ public class ActorEndpoint {
 	@Path("{id}/image/list")
 	public Response getActorHasImageList(@PathParam("id") int actorId)
 	{
-		System.out.println("ActorServiceEndpoint: getActorHasImageList - ID: "+ actorId);
+		// System.out.println("ActorServiceEndpoint: getActorHasImageList - ID: "+ actorId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		List<MediumImage> imageList = actor.getProfileImages();

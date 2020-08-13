@@ -64,7 +64,7 @@ public class EndpointRole {
 															@QueryParam("search") String search,
 															@QueryParam("language") String languageCode)
 	{
-		System.out.println("RoleServiceEndpoint: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("RoleServiceEndpoint: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
@@ -120,7 +120,7 @@ public class EndpointRole {
 																	 @QueryParam("search") String search,
 																	 @QueryParam("language") String languageCode)
 	{
-		System.out.println("RoleServiceEndpoint: getRoleGroupList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("RoleServiceEndpoint: getRoleGroupList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
@@ -305,7 +305,7 @@ public class EndpointRole {
 		Role role = new Role();
 		role.setId(0);
 
-		System.out.println("RoleServiceEndpioint: createRole - persist role");
+		System.out.println("RoleServiceEndpoint: createRole - persist role");
 		// persist role
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -318,7 +318,7 @@ public class EndpointRole {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLECREATED);
-		System.out.println("RoleServiceEndpioint: createRole - done");
+		System.out.println("RoleServiceEndpoint: createRole - done");
 		return Response.ok().entity(role).build();
 	}
 
@@ -486,7 +486,7 @@ public class EndpointRole {
 		RoleGroup roleGroup = new RoleGroup();
 		roleGroup.setId(0);
 
-		// System.out.println("RoleServiceEndpioint: createRoleGroup - persist roleGroup");
+		// System.out.println("RoleServiceEndpoint: createRoleGroup - persist roleGroup");
 
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -500,7 +500,7 @@ public class EndpointRole {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPCREATED);
-		System.out.println("RoleServiceEndpioint: createRoleGroup - done");
+		System.out.println("RoleServiceEndpoint: createRoleGroup - done");
 		return Response.ok().entity(roleGroup).build();
 	}
 

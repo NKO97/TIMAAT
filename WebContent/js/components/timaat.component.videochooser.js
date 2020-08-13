@@ -340,7 +340,7 @@
 		setupDatatable: function() {
 			// setup datatable
 			TIMAAT.VideoChooser.dt = $('#timaat-videochooser-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 2, 'asc' ]],
 				"pagingType"    : "simple_numbers",
 				"processing"    : true,

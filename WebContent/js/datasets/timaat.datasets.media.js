@@ -2977,7 +2977,7 @@
 			console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3149,7 +3149,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableAudio = $('#timaat-mediadatasets-audio-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3296,7 +3296,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableDocument = $('#timaat-mediadatasets-document-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3442,7 +3442,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableImage = $('#timaat-mediadatasets-image-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3588,7 +3588,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableSoftware = $('#timaat-mediadatasets-software-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3734,7 +3734,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableText = $('#timaat-mediadatasets-text-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -3880,7 +3880,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableVideo = $('#timaat-mediadatasets-video-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',
@@ -4027,7 +4027,7 @@
 			// console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.MediaDatasets.dataTableVideogame = $('#timaat-mediadatasets-videogame-table').DataTable({
-				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
 				"dom"           : '<lf<t>ip>',

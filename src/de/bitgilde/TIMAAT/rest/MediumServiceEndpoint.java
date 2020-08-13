@@ -111,7 +111,7 @@ public class MediumServiceEndpoint {
 																@QueryParam("orderby") String orderby,
 																@QueryParam("dir") String direction,
 																@QueryParam("search") String search ) {
-		System.out.println("MediumServiceEndpoint: getMediaList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getMediaList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -194,7 +194,7 @@ public class MediumServiceEndpoint {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("search") String search)
 	{
-		System.out.println("MediumServiceEndpoint: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "m.id";
 		if ( orderby != null ) {
@@ -249,7 +249,7 @@ public class MediumServiceEndpoint {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("search") String search)
 	{
-		System.out.println("MediumServiceEndpoint: getImageSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getImageSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "m.id";
 		if ( orderby != null ) {
@@ -312,7 +312,7 @@ public class MediumServiceEndpoint {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("search") String search)
 	{
-		System.out.println("MediumServiceEndpoint: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "m.id";
 		if ( orderby != null ) {
@@ -363,7 +363,7 @@ public class MediumServiceEndpoint {
 	@Secured
 	@Path("total")
 	public Response getMediaDatasetsTotal() {
-		System.out.println("MediumServiceEndpoint: getMediaDatasetsTotal");
+		// System.out.println("MediumServiceEndpoint: getMediaDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
 																.createQuery("SELECT COUNT (m.id) FROM Medium m");
 		long count = (long)query.getSingleResult();														
@@ -394,7 +394,7 @@ public class MediumServiceEndpoint {
 																@QueryParam("orderby") String orderby,
 																@QueryParam("dir") String direction,
 																@QueryParam("search") String search) {
-		System.out.println("MediumServiceEndpoint: getAudioList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getAudioList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
 		// sanitize user input
@@ -453,7 +453,7 @@ public class MediumServiceEndpoint {
 																	@QueryParam("orderby") String orderby,
 																	@QueryParam("dir") String direction,
 																	@QueryParam("search") String search ) {
-		System.out.println("MediumServiceEndpoint: getDocumentList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getDocumentList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -512,7 +512,7 @@ public class MediumServiceEndpoint {
 																@QueryParam("orderby") String orderby,
 																@QueryParam("dir") String direction,
 																@QueryParam("search") String search) {
-		System.out.println("MediumServiceEndpoint: getImageList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getImageList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -571,7 +571,7 @@ public class MediumServiceEndpoint {
 																	@QueryParam("orderby") String orderby,
 																	@QueryParam("dir") String direction,
 																	@QueryParam("search") String search) {
-		System.out.println("MediumServiceEndpoint: getSoftwareList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getSoftwareList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -630,7 +630,7 @@ public class MediumServiceEndpoint {
 															@QueryParam("orderby") String orderby,
 															@QueryParam("dir") String direction,
 															@QueryParam("search") String search) {
-		System.out.println("MediumServiceEndpoint: getTextList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getTextList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -690,7 +690,7 @@ public class MediumServiceEndpoint {
 																@QueryParam("dir") String direction,
 																@QueryParam("search") String search	) {
 
-		System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -767,7 +767,7 @@ public class MediumServiceEndpoint {
 																		@QueryParam("orderby") String orderby,
 																		@QueryParam("dir") String direction,
 																		@QueryParam("search") String search )	{
-		System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("MediumServiceEndpoint: getVideoList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 
 		if (draw == null) draw = 0;
 
@@ -827,8 +827,8 @@ public class MediumServiceEndpoint {
 																		@QueryParam("per_page") Integer per_page,
 																		@QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all roles of this actor
-		System.out.println("MediumServiceEndpoint: getRoleSelectList for actor id: "+ actorId);
-		System.out.println("MediumServiceEndpoint: getRoleSelectList - search string: "+ search);
+		// System.out.println("MediumServiceEndpoint: getRoleSelectList for actor id: "+ actorId);
+		// System.out.println("MediumServiceEndpoint: getRoleSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 		
@@ -866,7 +866,7 @@ public class MediumServiceEndpoint {
 	@Path("{mediumId}/hasActorList")
 	public Response getActorList(@PathParam("mediumId") Integer mediumId)
 	{
-		System.out.println("MediumServiceEndpoint: getActorList");
+		// System.out.println("MediumServiceEndpoint: getActorList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		List<ActorHasRole> actorHasRoleList = medium.getActorHasRoles();
@@ -886,7 +886,7 @@ public class MediumServiceEndpoint {
 	public Response getActorHasRoleList(@PathParam("mediumId") Integer mediumId,
 																			@PathParam("actorId") Integer actorId)
 	{
-		System.out.println("MediumServiceEndpoint: getActorHasRoleList");
+		// System.out.println("MediumServiceEndpoint: getActorHasRoleList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Medium medium = entityManager.find(Medium.class, mediumId);

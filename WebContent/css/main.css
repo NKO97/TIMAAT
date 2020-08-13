@@ -155,7 +155,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	min-height: 6rem;
 }
 
-.timmat-medium-thumbnail {
+.timaat-medium-thumbnail {
 	cursor: ew-resize;
 }
 
@@ -195,7 +195,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	margin-top: 30px;
 }
 
-.timmat-medium-thumbnail {
+.timaat-medium-thumbnail {
 	width: 254px !important;
 	height: 133px;
 }

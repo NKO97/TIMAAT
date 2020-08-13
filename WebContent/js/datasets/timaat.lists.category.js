@@ -379,7 +379,7 @@
 			//     },
 			//     rowId: 'id',
 			//     processing: true,
-		  //       "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+		  //       "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 			// 	"order": [[ 1, 'desc' ]],
 			// 	"pagingType": "simple_numbers",
 			// 	"columns": [
@@ -473,9 +473,10 @@
 		},
 
 		setCategoriesList: function() {
+      console.log("TCL: setCategoriesList: function()");
 			$('.form').hide();
-			$('.categories-data-tabs').hide();
-			if ( TIMAAT.CategoryLists.categories == null) return;
+      $('.categories-data-tabs').hide();
+      if ( TIMAAT.CategoryLists.categories == null) return;
       console.log("TCL: TIMAAT.CategoryLists.categories", TIMAAT.CategoryLists.categories);
 
 			$('#timaat-categorylists-category-list-loader').remove();
@@ -514,7 +515,7 @@
       console.log("TCL: setupCategoryDatatable");
       // setup datatable
       TIMAAT.CategoryLists.dataTableCategories = $('#timaat-categorylists-category-table').DataTable({
-        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
         "pagingType"    : "full", // "simple_numbers",
         "dom"           : '<lf<t>ip>',
@@ -616,7 +617,7 @@
       console.log("TCL: setupCategorySetDatatable");
       // setup datatable
       TIMAAT.CategoryLists.dataTableCategorySets = $('#timaat-categorylists-categoryset-table').DataTable({
-        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Alle"]],
+        "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
         "pagingType"    : "full", // "simple_numbers",
         "dom"           : '<lf<t>ip>',

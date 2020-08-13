@@ -70,7 +70,7 @@ public class CategorySetEndpoint {
 																	@QueryParam("dir") String direction,
 																	@QueryParam("search") String search)
 	{
-		System.out.println("CategoryServiceEndpoint: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("CategoryServiceEndpoint: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
 		// sanitize user input
@@ -121,7 +121,7 @@ public class CategorySetEndpoint {
 																	 	 @QueryParam("dir") String direction,
 																	 	 @QueryParam("search") String search)
 	{
-		System.out.println("CategoryServiceEndpoint: getCategorySetList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("CategoryServiceEndpoint: getCategorySetList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -165,7 +165,7 @@ public class CategorySetEndpoint {
 	@Secured
 	@Path("set/{id}")
 	public Response getCategorySet(@PathParam("id") Integer id) {
-		System.out.println("CategoryServiceEndpoint: getCategorySet with id "+ id);
+		// System.out.println("CategoryServiceEndpoint: getCategorySet with id "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, id);
 
@@ -178,7 +178,7 @@ public class CategorySetEndpoint {
 	@Path("{category_id}/set/{categoryset_id}")
 	public Response getCategoryHasCategorySet(@PathParam("category_id") Integer categoryId,
 																						@PathParam("categoryset_id") Integer categorySetId) {
-		System.out.println("CategoryServiceEndpoint: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
+		// System.out.println("CategoryServiceEndpoint: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Category category = entityManager.find(Category.class, categoryId);
@@ -197,7 +197,7 @@ public class CategorySetEndpoint {
 																				@QueryParam("page") Integer page,
 																				@QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all categories
-		System.out.println("CategoryServiceEndpoint: getCategorySelectList - search string: "+ search);
+		// System.out.println("CategoryServiceEndpoint: getCategorySelectList - search string: "+ search);
 
 		class SelectElement{ 
 			public int id; 
@@ -235,7 +235,7 @@ public class CategorySetEndpoint {
 																					 @QueryParam("page") Integer page,
 																					 @QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all categorysets
-		System.out.println("CategoryServiceEndpoint: getCategorySetSelectList - search string: "+ search);
+		// System.out.println("CategoryServiceEndpoint: getCategorySetSelectList - search string: "+ search);
 		
 		class SelectElement{ 
 			public int id; 
@@ -277,7 +277,7 @@ public class CategorySetEndpoint {
 	@Path("set/{categoryset_id}/haslist")
 	public Response getCategorySetHasCategoryList(@PathParam("categoryset_id") Integer categorySetId)
 	{
-		System.out.println("CategoryServiceEndpoint: getCategorySetHasCategoryList - ID: "+ categorySetId);
+		// System.out.println("CategoryServiceEndpoint: getCategorySetHasCategoryList - ID: "+ categorySetId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		Set<CategorySetHasCategory> categorySetHasCategoryList = categorySet.getCategorySetHasCategories(); // TODO List<Category> ?
@@ -330,7 +330,7 @@ public class CategorySetEndpoint {
 		}
 		newCategory.setId(0);
 
-		System.out.println("CategoryServiceEndpioint: createCategory - persist category");
+		System.out.println("CategoryServiceEndpoint: createCategory - persist category");
 		// persist category
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -343,7 +343,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYCREATED);
-		System.out.println("CategoryServiceEndpioint: createCategory - done");
+		System.out.println("CategoryServiceEndpoint: createCategory - done");
 		return Response.ok().entity(newCategory).build();
 	}
 
@@ -465,7 +465,7 @@ public class CategorySetEndpoint {
 			return Response.serverError().build();
 		}
 
-		// System.out.println("CategoryServiceEndpioint: createCategorySet - persist categorySet");
+		// System.out.println("CategoryServiceEndpoint: createCategorySet - persist categorySet");
 
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -479,7 +479,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETCREATED);
-		System.out.println("CategoryServiceEndpioint: createCategorySet - done");
+		System.out.println("CategoryServiceEndpoint: createCategorySet - done");
 		return Response.ok().entity(newCategorySet).build();
 	}
 
@@ -585,7 +585,7 @@ public class CategorySetEndpoint {
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
-		System.out.println("CategoryServiceEndpioint: categorySetDuplicateCheck - done");
+		System.out.println("CategoryServiceEndpoint: categorySetDuplicateCheck - done");
 		return Response.ok().entity(duplicate).build();
 	}
 
@@ -607,7 +607,7 @@ public class CategorySetEndpoint {
 		// CategorySetHasCategory cshc = entityManager.find(CategorySetHasCategory.class, cshcKey.getId());
 		CategorySetHasCategory cshc = new CategorySetHasCategory(categorySet, category);
 
-		System.out.println("CategoryServiceEndpioint: createCategorySetHasCategory - persist categorySetHasCategory");
+		System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - persist categorySetHasCategory");
 		// Create CategorySetHasCategory entry
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -629,7 +629,7 @@ public class CategorySetEndpoint {
 
 
 		// TODO once tree hierarchy for categorysets is implemented
-		// System.out.println("CategoryServiceEndpioint: createCategorySetHasCategory - prepare categorySetHasCategory content");
+		// System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - prepare categorySetHasCategory content");
 		// // Fill CategorySetHasCategory entry with additional data
 		// ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -647,7 +647,7 @@ public class CategorySetEndpoint {
 		// cshc.setCategorySetHasCategory(categorySetHasCategory.getCategorySetHasCategory());
 
 		// TODO persist data once data is updated
-		// System.out.println("CategoryServiceEndpioint: createCategorySetHasCategory - persist categorySetHasCategory data");
+		// System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - persist categorySetHasCategory data");
 		// entityTransaction.begin();
 		// entityManager.merge(cshc);
 		// entityManager.persist(cshc);
@@ -655,7 +655,7 @@ public class CategorySetEndpoint {
 		// entityManager.refresh(cshc);
 
 
-		System.out.println("CategoryServiceEndpioint: createCategorySetHasCategory - done");
+		System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - done");
 		return Response.ok().entity(cshc).build();
 	}
 

@@ -329,21 +329,6 @@ var categoryOrCategorySetFormMetadataValidator = $('#timaat-categorylists-metada
       required: true,
       minlength: 3,
       maxlength: 200,
-      // remote: {
-      //   url        : "api/category/set/isduplicate/",
-      //   type       : "post",
-      //   contentType: "application/json; charset=utf-8",
-      //   dataType   : "json",
-      //   headers: {
-      // 		"Authorization": "Bearer "+TIMAAT.Service.token,
-      // 		"Content-Type": "application/json",
-      // 	},
-      //   data       : {
-      //     name: function() {
-      //       return $('#timaat-categorylists-metadata-name').val();
-      //     }
-      //   }
-      // }
     }    
   },
   messages: {
@@ -351,11 +336,40 @@ var categoryOrCategorySetFormMetadataValidator = $('#timaat-categorylists-metada
       required: "Enter a name (min length: 3)",
       minlength: "Name too short: min length is 3",
       maxlength: "Name is too long: max length is 200",
-      // remote: "A category set with this name already exists."
     }
   },
   submitHandler: function(categoryOrCategorySetFormMetadata) {
     categoryOrCategorySetFormMetadata.submit();
+  },
+});
+var languageFormMetadata = $('#timaat-languagelists-metadata-form');
+var languageFormMetadataValidator = $('#timaat-languagelists-metadata-form').validate({
+  rules: {
+    name: {
+      required: true,
+      minlength: 3,
+      maxlength: 200
+    },
+    code: {
+      required: true,
+      minlength: 2,
+      maxlength: 10
+    }
+  },
+  messages: {
+    name: {
+      required: "Enter a name (min length: 3)",
+      minlength: "Name too short: min length is 3",
+      maxlength: "Name is too long: max length is 200"
+    },
+    name: {
+      required: "Enter the language code (length: 2)",
+      minlength: "Code too short: min length is 2",
+      maxlength: "Code is too long: max length is 10"
+    }
+  },
+  submitHandler: function(languageFormMetadata) {
+    languageFormMetadata.submit();
   },
 });
 

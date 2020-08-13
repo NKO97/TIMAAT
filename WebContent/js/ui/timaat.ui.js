@@ -298,6 +298,7 @@
 						TIMAAT.ActorDatasets.loadActorDatatables();
 						TIMAAT.RoleLists.loadRolesDatatables();
 						TIMAAT.CategoryLists.loadCategoriesDatatables();
+						TIMAAT.LanguageLists.loadLanguagesDatatables();
 						TIMAAT.Datasets.load();
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
