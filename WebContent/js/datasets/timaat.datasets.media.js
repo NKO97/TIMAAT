@@ -560,11 +560,13 @@
 				var listEntry = $(this).closest('[data-role="new-title-fields"]');
 				var title = '';
 				var languageId = null;
+				var languageName = '';
 				if (listEntry.find('input').each(function(){           
 					title = $(this).val();
 				}));
 				if (listEntry.find('select').each(function(){
 					languageId = $(this).val();
+					languageName =$(this).text();
 				}));
 				if (!$('#timaat-mediadatasets-medium-titles-form').valid()) 
 					return false;
@@ -593,17 +595,23 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="newTitle[`+i+`]" data-role="newTitle[`+i+`]" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
+											 name="newTitle[`+i+`]"
+											 data-role="newTitle[`+i+`]"
+											 placeholder="[Enter title]"
+											 aria-describedby="Title"
+											 minlength="3"
+											 maxlength="200"
+											 rows="1"
+											 required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="newTitleLanguageId[`+i+`]" data-role="newTitleLanguageId[`+i+`]" required>
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
+												id="new-title-language-select-dropdown_`+i+`"
+												name="newTitleLanguageId[`+i+`]"
+												data-role="newTitleLanguageId[`+i+`]"
+												required>
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
@@ -614,10 +622,43 @@
 						</div>
 					</div>`
 					);
+					$('#new-title-language-select-dropdown_'+i).select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/language/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								// console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								// console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
+					var languageSelect = $('#new-title-language-select-dropdown_'+i);
+					var option = new Option(languageName, languageId, true, true);
+					languageSelect.append(option).trigger('change');
 					$('input[name="newTitle['+i+']"').rules('add', { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="newTitle['+i+']"').attr('value', TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
-					$('[data-role="newTitleLanguageId['+i+']"]').find('option[value='+languageId+']').attr('selected',true);
-					$('select[name="newTitleLanguageId['+i+']"').rules('add', { required: true, });
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -657,6 +698,38 @@
 				// test if form is valid 
 				if (!$('#timaat-mediadatasets-medium-titles-form').valid()) {
 					$('[data-role="new-title-fields"]').append(TIMAAT.MediaDatasets.titleFormTitleToAppend());
+					$('#title-language-select-dropdown').select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/language/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								// console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								// console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
 					return false;
 				}
 				// console.log("TCL: Titles form: valid");
@@ -927,6 +1000,7 @@
 				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
+				var languageName = listEntry.find('[data-role="languageTrackLanguageId"]').text();
 				// if (!$('#timaat-mediadatasets-medium-languagetracks-form').valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
 					var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
@@ -947,26 +1021,28 @@
 					}
 					if (!duplicate) {
 						var i = Math.floor((languageTracksInForm.length -2) / 2 ); // length -2 as the 'add new track' row is still part of the form and has to be removed
-							// console.log("TCL: i", i);
+						// console.log("TCL: i", i);
 						$('#dynamic-languagetrack-fields').append(
 							`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
 							<div class="form-row">
 								<div class="col-md-5">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+i+`]" required readonly="true">
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+													name="languageTrackTypeId[`+i+`]"
+													data-role="languageTrackTypeId[`+i+`]"
+													required
+													readonly="true">
 										<option value="1">Audio track</option>
 										<option value="2">Subtitle track</option>
 									</select>
 								</div>
 								<div class="col-md-5">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+i+`]" required readonly="true">
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
+									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
+													id="new-languagetrack-language-select-dropdown_`+i+`"
+													name="languageTrackLanguageId[`+i+`]"
+													data-role="languageTrackLanguageId[`+i+`]"
+													required>
 									</select>
 								</div>
 								<div class="col-md-2 text-center">
@@ -977,10 +1053,43 @@
 							</div>
 						</div>`
 						);
+						$('#new-languagetrack-language-select-dropdown_'+i).select2({
+							closeOnSelect: true,
+							scrollAfterSelect: true,
+							allowClear: true,
+							ajax: {
+								url: 'api/language/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									// console.log("TCL: data: params", params);
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									// console.log("TCL: processResults: data", data);
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						var languageSelect = $('#new-languagetrack-language-select-dropdown_'+i);
+						var option = new Option(languageName, languageId, true, true);
+						languageSelect.append(option).trigger('change');
 						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected',true);
 						$('select[name="languageTrackTypeId['+i+']"').rules('add', { required: true, });
-						$('[data-role="languageTrackLanguageId['+i+']"]').find('option[value='+languageId+']').attr('selected',true);
-						$('select[name="languageTrackLanguageId['+i+']"').rules('add', { required: true, });
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
 						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
@@ -1700,7 +1809,7 @@
 			// $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
 		},
 
-		mediumFormDatasheet: function(action, mediumType, mediumTypeData) {
+		mediumFormDatasheet: async function(action, mediumType, mediumTypeData) {
 			console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
 			TIMAAT.MediaDatasets.selectLastSelection(mediumType, mediumTypeData.model.id);
 			TIMAAT.MediaDatasets.selectLastSelection('medium', mediumTypeData.model.id);
@@ -1723,6 +1832,42 @@
 
 			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
 			$('#timaat-mediadatasets-metadata-form').show();
+
+			$('#medium-title-language-select-dropdown').select2({
+				closeOnSelect: true,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/language/selectList/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};          
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: true
+				},
+				minimumInputLength: 0,
+			});
+			var languageSelect = $('#medium-title-language-select-dropdown');
+			var option = new Option(mediumTypeData.model.displayTitle.language.name, mediumTypeData.model.displayTitle.language.id, true, true);
+			languageSelect.append(option).trigger('change');
 
 			if ( action == 'show') {
 				$('#timaat-mediadatasets-metadata-form :input').prop('disabled', true);
@@ -1751,6 +1896,7 @@
 				$('#timaat-mediadatasets-metadata-form-submit').hide();
 				$('#timaat-mediadatasets-metadata-form-dismiss').hide();
 				$('#mediumFormHeader').html(mediumType+" Datasheet (#"+ mediumTypeData.model.id+')');
+				$('#medium-title-language-select-dropdown').select2('destroy').attr("readonly", true);
 			}
 			else if (action == 'edit') {
 				// if (mediumType == 'medium') { $('#timaat-mediadatasets-metadata-medium-mediatype-id').prop('disabled', true);
@@ -1789,7 +1935,6 @@
 				else $('#timaat-mediadatasets-metadata-medium-releasedate').val('');
 			// display-title data
 			$('#timaat-mediadatasets-metadata-medium-title').val(data.displayTitle.name);
-			$('#timaat-mediadatasets-metadata-medium-title-language-id').val(data.displayTitle.language.id);
 			// source data
 			if (data.sources[0].isPrimarySource)
 				$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
@@ -1935,39 +2080,90 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayTitle"></label>
-									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" data-role="displayTitle[`+medium.model.titles[i].id+`]" placeholder="Is Display Title">
+									<input class="form-check-input isDisplayTitle"
+												 type="radio"
+												 name="isDisplayTitle"
+												 data-role="displayTitle[`+medium.model.titles[i].id+`]"
+												 placeholder="Is Display Title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle[`+medium.model.titles[i].id+`]" data-waschecked="true" placeholder="Is Original Title">
+									<input class="form-check-input isOriginalTitle" 
+												 type="radio"
+												 name="isOriginalTitle"
+												 data-role="originalTitle[`+medium.model.titles[i].id+`]"
+												 data-waschecked="true"
+												 placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
+											 name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]"
+											 placeholder="[Enter title]"
+											 aria-describedby="Title"
+											 minlength="3"
+											 maxlength="200"
+											 rows="1"
+											 required>
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId[`+i+`]" data-role="titleLanguageId[`+medium.model.titles[i].id+`]" required>
-									<!-- <option value="" disabled selected hidden>[Choose title language...]</option> -->
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" 
+												id="title-language-select-dropdown_`+medium.model.titles[i].id+`"
+												name="titleLanguageId[`+i+`]" 
+												data-role="titleLanguageId[`+medium.model.titles[i].id+`]" 
+												data-placeholder="Select title language"
+												required>
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
+								<button class="btn btn-danger" 
+												data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
 					</div>`
 					);
+					$('#title-language-select-dropdown_'+medium.model.titles[i].id).select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/language/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								// console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								// console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
+					var languageSelect = $('#title-language-select-dropdown_'+medium.model.titles[i].id);
+					var option = new Option(medium.model.titles[i].language.name, medium.model.titles[i].language.id, true, true);
+					languageSelect.append(option).trigger('change');
+
 					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
 						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop('checked',true);							
 					}
@@ -1976,10 +2172,6 @@
 					}
 					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
-					$('[data-role="titleLanguageId['+medium.model.titles[i].id+']"')
-					.find('option[value='+medium.model.titles[i].language.id+']')
-					.attr('selected',true);
-					$('select[name="titleLanguageId['+medium.model.titles[i].id+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
@@ -1994,6 +2186,10 @@
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
 				$('#mediumTitlesLabel').html("Medium titles");
+				let i = 0;
+				for (; i < numTitles; i++) {
+					$('#title-language-select-dropdown_'+medium.model.titles[i].id).select2('destroy').attr("readonly", true);
+				}
 			}
 			else if (action == 'edit') {
 				$('#timaat-mediadatasets-medium-titles-form :input').prop('disabled', false);
@@ -2010,6 +2206,39 @@
 
 				// fields for new title entry
 				$('[data-role="new-title-fields"]').append(TIMAAT.MediaDatasets.titleFormTitleToAppend());
+				$('#title-language-select-dropdown').select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: true,
+					ajax: {
+						url: 'api/language/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+
 				$('#timaat-mediadatasets-medium-titles-form').data('medium', medium);
 			}
 		},
@@ -2040,7 +2269,10 @@
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track Type</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId[`+i+`]" data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageType.id+`]" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+												name="languageTrackTypeId[`+i+`]"
+												data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageType.id+`]"
+												required>
 									<!-- <option value="" disabled selected hidden>[Choose Track type...]</option> -->
 									<option value="1">Audio Track</option>
 									<option value="2">Subtitle Track</option>
@@ -2048,14 +2280,11 @@
 							</div>
 							<div class="col-md-5">
 								<label class="sr-only">Track Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId[`+i+`]" data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].language.id+`]" required>
-									<!-- <option value="" disabled selected hidden>[Choose Track language...]</option> -->
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
+												id="languagetrack-language-select-dropdown_`+i+`"
+												name="languageTrackLanguageId[`+i+`]"
+												data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].language.id+`]"
+												required>
 								</select>
 							</div>
 							<div class="col-md-2 text-center">
@@ -2066,14 +2295,45 @@
 						</div>
 					</div>`
 					);
+					$('#languagetrack-language-select-dropdown_'+i).select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/language/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								// console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};          
+							},
+							processResults: function(data, params) {
+								// console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						minimumInputLength: 0,
+					});
+					var languageSelect = $('#languagetrack-language-select-dropdown_'+i);
+					var option = new Option(medium.model.mediumHasLanguages[i].language.name, medium.model.mediumHasLanguages[i].language.id, true, true);
+					languageSelect.append(option).trigger('change');
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
 						.attr('selected',true);
 					$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
-					$('[data-role="languageTrackLanguageId['+medium.model.mediumHasLanguages[i].language.id+']"')
-						.find('option[value='+medium.model.mediumHasLanguages[i].language.id+']')
-						.attr('selected',true);
-					$('select[name="languageTrackLanguageId['+i+']"').rules("add", { required: true, });
 			};
 
 			if ( action == 'show') {
@@ -2087,6 +2347,10 @@
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
 				$('#mediumLanguageTracksLabel').html("Medium track list");
+				let i = 0;
+				for (; i < numLanguageTracks; i++) {
+					$('#languagetrack-language-select-dropdown_'+i).select2('destroy').attr("readonly", true);
+				}
 			}
 			else if (action == 'edit') {
 				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop('disabled', true);
@@ -2115,7 +2379,10 @@
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track type</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id" name="languageTrackTypeId" data-role="languageTrackTypeId" required>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+												name="languageTrackTypeId"
+												data-role="languageTrackTypeId"
+												required>
 									<option value="" disabled selected hidden>[Choose Track type...]</option>
 									<option value="1">Audio Track</option>
 									<option value="2">Subtitle Track</option>
@@ -2123,14 +2390,12 @@
 							</div>
 							<div class="col-md-5">
 								<label class="sr-only">Track language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id" name="languageTrackLanguageId" data-role="languageTrackLanguageId" required>
-									<option value="" disabled selected hidden>[Choose Track language...]</option>
-									<option value="2">English</option>
-									<option value="3">German</option>
-									<option value="4">French</option>
-									<option value="5">Spanish</option>
-									<option value="6">Russian</option>
-									<option value="7">Arabic</option>
+								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
+												id="languagetrack-language-select-dropdown"
+												name="languageTrackLanguageId"
+												data-role="languageTrackLanguageId"
+												data-placeholder="Select language"
+												required>
 								</select>
 							</div>
 							<div class="col-md-2 text-center">
@@ -2141,6 +2406,39 @@
 						</div>
 					</div>`
 				);
+				$('#languagetrack-language-select-dropdown').select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: true,
+					ajax: {
+						url: 'api/language/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+
 				$('#timaat-mediadatasets-medium-languagetracks-form').data('medium', medium);
 			}
 		},
@@ -2888,36 +3186,42 @@
 		titleFormTitleToAppend: function() {
 			var titleToAppend =
 			`<div class="form-group" data-role="title-entry">
-							<div class="form-row">
-								<div class="col-md-2 text-center">
-									<div class="form-check">
-										<span>Add new title:</span>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label class="sr-only">Title</label>
-									<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" name="title" data-role="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" rows="1" required>
-								</div>
-								<div class="col-md-3">
-									<label class="sr-only">Title's Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" name="titleLanguageId" data-role="titleLanguageId" required>
-										<option value="" disabled selected hidden>[Choose title language...]</option>
-										<option value="2">English</option>
-										<option value="3">German</option>
-										<option value="4">French</option>
-										<option value="5">Spanish</option>
-										<option value="6">Russian</option>
-										<option value="7">Arabic</option>
-									</select>
-								</div>
-								<div class="col-md-1 text-center">
-									<button class="btn btn-primary" data-role="add">
-										<i class="fas fa-plus"></i>
-									</button>
-								</div>
-							</div>
-						</div>`;
-						return titleToAppend;
+				<div class="form-row">
+					<div class="col-md-2 text-center">
+						<div class="form-check">
+							<span>Add new title:</span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label class="sr-only">Title</label>
+						<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name" 
+									 name="title"
+									 data-role="title"
+									 placeholder="[Enter title]"
+									 aria-describedby="Title"
+									 minlength="3"
+									 maxlength="200"
+									 rows="1"
+									 required>
+					</div>
+					<div class="col-md-3">
+						<label class="sr-only">Title's Language</label>
+						<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
+										id="title-language-select-dropdown"
+										name="titleLanguageId"
+										data-role="titleLanguageId"
+										data-placeholder="Select title language"
+										required>
+						</select>
+					</div>
+					<div class="col-md-1 text-center">
+						<button class="btn btn-primary" data-role="add">
+							<i class="fas fa-plus"></i>
+						</button>
+					</div>
+				</div>
+			</div>`;
+			return titleToAppend;
 		},
 
 		appendActorWithRolesDataset: function(i, actorId) {

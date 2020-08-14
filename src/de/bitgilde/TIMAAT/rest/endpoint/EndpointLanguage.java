@@ -62,7 +62,7 @@ public class EndpointLanguage {
 		if ( draw == null ) draw = 0;
 		
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-		String languageQuery = "SELECT l.name FROM Language l"; //  WHERE l.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
+		// String languageQuery = "SELECT l.name FROM Language l"; //  WHERE l.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery = "SELECT rt.name FROM Language rt WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery2 = "SELECT rt.name WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
 		
@@ -83,12 +83,12 @@ public class EndpointLanguage {
 		if (search != null && search.length() > 0 ) {
 			// calculate search result # of records
 			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(l) FROM Language l WHERE lower("+languageQuery+") LIKE lower(concat('%', :name,'%'))");
+				"SELECT COUNT(l) FROM Language l WHERE lower(l.name) LIKE lower(concat('%', :name,'%'))");
 			countQuery.setParameter("name", search);
 			recordsFiltered = (long) countQuery.getSingleResult();
 			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT l FROM Language l WHERE lower("+languageQuery+") LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+				"SELECT l FROM Language l WHERE lower(l.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
 			query.setParameter("name", search);
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
@@ -129,12 +129,14 @@ public class EndpointLanguage {
 		if (search != null && search.length() > 0) {
 			System.out.println("LanguageServiceEndpoint: getLanguageSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rt.name ASC");
+				// "SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rt.name ASC");
+				"SELECT l FROM Language l WHERE lower(l.name) LIKE lower(concat('%', :name,'%')) ORDER BY l.name ASC");
 				query.setParameter("name", search);
 		} else {
 			System.out.println("LanguageServiceEndpoint: getLanguageSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
+				// "SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
+				"SELECT l FROM Language l ORDER BY l.name ASC");
 		}
 		List<SelectElement> LanguageSelectList = new ArrayList<>();
 		List<Language> LanguageList = castList(Language.class, query.getResultList());

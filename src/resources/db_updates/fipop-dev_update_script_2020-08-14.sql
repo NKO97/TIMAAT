@@ -1,0 +1,10 @@
+START TRANSACTION;
+USE `FIPOP`;
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'tr', 'Turkish', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'ku', 'Kurdish', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'ug', 'Uighur', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'zh', 'Chinese', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'bn', 'Bengali', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'pt', 'Portuguese', '0');
+INSERT INTO `FIPOP`.`language` (`id`, `code`, `name`, `is_system_language`) VALUES (NULL, 'dv', 'Divehi', '0');
+COMMIT;

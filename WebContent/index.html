@@ -1701,16 +1701,12 @@
                                 <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
                               </div>                            
                               <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title-language-id">Title's Language*</label>
-                                <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title-language-id" name="displayTitleLanguageId" required>
-                                  <option value="" disabled selected hidden>[Choose title language...]</option>
-                                  <!-- <option value="1">default-untranslated</option> -->
-                                  <option value="2">English</option>
-                                  <option value="3">German</option>
-                                  <option value="4">French</option>
-                                  <option value="5">Spanish</option>
-                                  <option value="6">Russian</option>
-                                  <option value="7">Arabic</option>
+                                <label class="col-form-label col-form-label-sm" for="medium-title-language-select-dropdown">Title's Language*</label>
+                                <select class="form-control form-control-sm" 
+                                        id="medium-title-language-select-dropdown" 
+                                        name="displayTitleLanguageId" 
+                                        data-placeholder="Select title language"
+                                        required>
                                 </select>
                               </div>
                             </div>

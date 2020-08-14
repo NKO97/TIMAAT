@@ -42,6 +42,7 @@
     },
 
 		initCategoriesAndCategorySets: function() {
+      // console.log("TCL: initCategoriesAndCategorySets: function()");
 			// delete button (in form) handler
       $('#timaat-categorylists-metadata-form-delete').on('click', function(event) {
         event.stopPropagation();
@@ -142,6 +143,7 @@
 		},
 
 		initCategories: function() {
+      // console.log("TCL: initCategories: function()");
 			// nav-bar functionality
       $('#category-tab-category-metadata-form').on('click',function(event) {
         // $('.categories-data-tabs').show();
@@ -338,6 +340,7 @@
 		},
 
 		load: function() {
+      // console.log("TCL: load: function()");
 			TIMAAT.CategoryLists.loadCategories();
 			TIMAAT.CategoryLists.loadCategorySets();
 		},

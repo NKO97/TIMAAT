@@ -21,7 +21,6 @@
 
 	TIMAAT.LanguageLists = {
     languages: null,
-    // listsLoaded: null,
 		
 		init: function() {
     console.log("TCL: init: function()");
@@ -31,6 +30,7 @@
     },
 
 		initLanguages: function() {
+      // console.log("TCL: initLanguages: function()");
       // nav-bar functionality
       $('#language-tab-language-metadata-form').on('click',function(event) {
         // $('.languages-data-tabs').show();
@@ -89,11 +89,11 @@
         event.preventDefault();        
 				if (!$('#timaat-languagelists-metadata-form').valid()) return false;
 
-				// the original language or language set model (in case of editing an existing language or language set)
+				// the original language model (in case of editing an existing language)
 				var language = $('#timaat-languagelists-metadata-form').data('language');				
         // console.log("TCL: language", language);
 
-				// create/edit language or language set window submitted data
+				// create/edit language window submitted data
 				var formDataRaw = $('#timaat-languagelists-metadata-form').serializeArray();
         // console.log("TCL: formDataRaw", formDataRaw);
         var formDataObject = {};
@@ -124,7 +124,7 @@
           await TIMAAT.LanguageLists.refreshDatatable();
           TIMAAT.LanguageLists.languageFormDatasheet('show', language);
         }
-        else {// duplicate language set name entered
+        else {// duplicate language name or code entered
           $('#timaat-languagelists-language-duplicate').modal('show');
         }
 			});
@@ -134,7 +134,7 @@
 				var language = $('#timaat-languagelists-metadata-form').data('language');
 				if (language != null) {
 					TIMAAT.LanguageLists.languageFormDatasheet('show', language);
-				} else { // dismiss language or language set creation
+				} else { // dismiss language creation
 					$('.form').hide();
 				}
 			});
@@ -150,7 +150,6 @@
 			$('.lists-datatables').hide();
 			$('.languages-datatable').show();
 			TIMAAT.LanguageLists.setLanguageList();
-
 		},
 
 		loadLanguagesDatatables: function() {
@@ -209,7 +208,7 @@
             xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
           },
           "dataSrc": function(data) {
-            console.log("TCL: data", data);
+            // console.log("TCL: data", data);
             // setup model
             var langs = Array();
             data.data.forEach(function(language) { 
@@ -311,7 +310,7 @@
 		},
 		
 		languageFormDatasheet: async function(action, data) {
-      console.log("TCL: action, data: ", action, data);
+      // console.log("TCL: action, data: ", action, data);
       $('#timaat-languagelists-metadata-form').trigger('reset');
       $('.datasheet-data').hide();
       $('.name-data').show();
