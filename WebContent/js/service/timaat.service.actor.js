@@ -322,20 +322,20 @@
 		},
 
 		async createActor(actorModel) {
-			// console.log("TCL: async createActor -> actorModel", actorModel);
-			var newActorModel = {
-				id: 0,
-				actorType: {
-					id: actorModel.actorType.id,
-				},
-				isFictional: actorModel.isFictional,
-			};
-      console.log("TCL: createActor -> newActorModel", newActorModel);
+			console.log("TCL: async createActor -> actorModel", actorModel);
+			// var newActorModel = {
+			// 	id: 0,
+			// 	actorType: {
+			// 		id: actorModel.actorType.id,
+			// 	},
+			// 	isFictional: actorModel.isFictional,
+			// };
+      // console.log("TCL: createActor -> newActorModel", newActorModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/0",
 					type:"POST",
-					data: JSON.stringify(newActorModel),
+					data: JSON.stringify(actorModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -744,24 +744,24 @@
 		},
 
 		async updateActor(actorModel) {
-			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
-			var tempActorModel = {};
-			tempActorModel.displayName = actorModel.displayName;
-			tempActorModel.isFictional = actorModel.isFictional;
-			tempActorModel.birthName = actorModel.birthName;
-			tempActorModel.primaryAddress = actorModel.primaryAddress;
-			tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
-			tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
-			tempActorModel.roles = actorModel.roles;
-			tempActorModel.profileImages = actorModel.profileImages;
+			console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
+			// var tempActorModel = {};
+			// tempActorModel.displayName = actorModel.displayName;
+			// tempActorModel.isFictional = actorModel.isFictional;
+			// tempActorModel.birthName = actorModel.birthName;
+			// tempActorModel.primaryAddress = actorModel.primaryAddress;
+			// tempActorModel.primaryEmailAddress = actorModel.primaryEmailAddress;
+			// tempActorModel.primaryPhoneNumber = actorModel.primaryPhoneNumber;
+			// tempActorModel.roles = actorModel.roles;
+			// tempActorModel.profileImages = actorModel.profileImages;
 			// tempActorModel.actorNames = actorModel.actorNames;
       // console.log("TCL: updateActor -> tempActorModel", tempActorModel);
-			// delete tempActorModel.ui;
+			delete actorModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorModel.id,
 					type:"PATCH",
-					data: JSON.stringify(tempActorModel),
+					data: JSON.stringify(actorModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {

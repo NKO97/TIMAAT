@@ -272,9 +272,12 @@
 				var i = 0;
 				for (; i < formDataRaw.length; i++) {
 					if (formDataRaw[i].name == 'imageId') {
-						formImageIds.push(Number(formDataRaw[i].value));
+						formImageIds.push({ mediumId: Number(formDataRaw[i].value)});
 					}
 				}
+				// console.log("TCL: formImageIds", formImageIds);
+				formDataSanitized.profileImages = formImageIds;
+        // console.log("TCL: formDataSanitized", formDataSanitized);
 				
 				if (actor) { // update actor
 					// actor data
@@ -299,7 +302,7 @@
 					await TIMAAT.ActorDatasets.updateActor(type, actor, formImageIds);
 					// actor.updateUI();
 				} else { // create new actor
-					var actorModel = await TIMAAT.ActorDatasets.createActorModel(type, formDataSanitized, formImageIds);
+					var actorModel = await TIMAAT.ActorDatasets.createActorModel(type, formDataSanitized);
 					var actorSubtypeModel = await TIMAAT.ActorDatasets.createActorSubtypeModel(type, formDataSanitized);
 					var displayNameModel = await TIMAAT.ActorDatasets.createNameModel(formDataSanitized);
 					var actorSubtypeTranslationModel = null;
@@ -2729,8 +2732,20 @@
 			$('#timaat-actordatasets-metadata-form').data(actorType, null);
 			actorFormMetadataValidator.resetForm();
 
+			$('.carousel-inner').empty();
+			$('.carousel-indicators').empty();
+			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+			}
+
 			$('#timaat-actordatasets-metadata-form').trigger('reset');
 			$('#timaat-actordatasets-metadata-form').show();
+			$('#dynamic-profile-image-fields').hide();
+			$('#dynamic-profile-image-fields-placeholder').show();
+			$('.carousel-item').first().addClass('active');
+			$('.carousel-indicators > li').first().addClass('active');
+			$('#dynamic-profile-image-fields').carousel();
 			$('.datasheet-data').hide();
 			$('.name-data').show();
 			$('.actor-data').show();
@@ -2744,11 +2759,89 @@
       $('#timaat-actordatasets-metadata-form-delete').hide();
       $('#timaat-actordatasets-metadata-form-submit').html('Add');
       $('#timaat-actordatasets-metadata-form-submit').show();
-      $('#timaat-actordatasets-metadata-form-dismiss').show();
+			$('#timaat-actordatasets-metadata-form-dismiss').show();
+			$('#actor-datasheet-form-profile-image-selection').show();
 			$('#timaat-actordatasets-metadata-form :input').prop('disabled', false);
 			$('#actorFormHeader').html("Add "+actorType);
 
 			$('#timaat-actordatasets-metadata-actor-name').focus();
+
+			let imageSelect =
+					`<label class="col-form-label col-form-label-sm">Change the associated profile images (max. 5 in total):</label>
+					<div class="form-group" data-role="profileImages-entry">
+						<div class="form-row">
+							<div class="col-md-12">
+								<label class="sr-only">Profile Image(s)</label>
+								<select class="form-control form-control-sm"
+												id="actor-profile-image-multi-select-dropdown"
+												name="imageId"
+												data-placeholder="Select images"
+												multiple="multiple"
+												readonly="true">
+								</select>
+							</div>
+						</div>
+					</div>`;
+				$('#actor-datasheet-form-profile-image-selection').append(imageSelect);
+				  function formatPreview(data) {
+          // console.log("TCL: formatPreview -> data", data);
+					if (data.loading) {
+						return data.text;
+					}
+					var $container = $(
+						"<div class='select2-result-repository clearfix' style='display:flex'>" +
+							"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
+							"<div class='select2-result-repository__meta'>" +
+								"<div class='select2-result-repository__title'></div>" +
+								"<div class='select2-result-repository__description'></div>" +
+							"</div>" +
+						"</div>");
+					$container.find('.select2-result-repository__title').text(data.text);
+					return $container;
+				};
+				
+				function formatSelection(data) {
+					return data.text;
+				}
+				$('#actor-profile-image-multi-select-dropdown').select2({
+					closeOnSelect: false,
+					scrollAfterSelect: false,
+					maximumSelectionLength: 5,
+					allowClear: true,
+					ajax: {
+						url: 'api/medium/image/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data,
+								// pagination: {
+								// 	more: (params.page * 10) < data.total_count
+								// }
+							};
+						},
+						cache: true
+					},
+					templateResult: formatPreview,
+					templateSelection: formatSelection,
+					minimumInputLength: 0,
+					placeholder: 'Select image(s) (max. 5)'
+				});
 
 			// setup form
 			$('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
@@ -4072,7 +4165,7 @@
 						// console.log("TCL: add all imageIdList: ", imageIdList);
 						var i = 0;
 						for (; i < imageIdList.length; i++ ) {
-							actor.model.profileImages.push({mediumId: imageIdList[i]});
+							actor.model.profileImages.push(imageIdList[i]);
 						}
 						console.log("TCL: actor.model.profileImages", actor.model.profileImages);
 						await TIMAAT.ActorService.updateActor(actor.model);          
@@ -4106,6 +4199,7 @@
 								var index = actor.model.profileImages.findIndex(({mediumId}) => mediumId === actorHasImageEntriesToDelete[i].mediumId);
 								actor.model.profileImages.splice(index,1);
 							}
+							// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
 							await TIMAAT.ActorService.updateActor(actor.model);
 						}
 	
@@ -4115,7 +4209,6 @@
 						for (; i < imageIdList.length; i++) {
 							// console.log("TCL: imageIdList", imageIdList);
 							var idExists = false;
-							var item = { mediumId: 0 };
 							var j = 0;
 							for (; j < existingActorHasImageEntries.length; j++) {
 								// console.log("TCL: existingActorHasImageEntries", existingActorHasImageEntries);
@@ -4125,8 +4218,7 @@
 								}
 							}
 							if (!idExists) {
-								item.mediumId = imageIdList[i];
-								idsToCreate.push(item);
+								idsToCreate.push(imageIdList[i]);
 							}
 						}
 						// console.log("TCL: idsToCreate", idsToCreate);
@@ -4135,8 +4227,9 @@
 							var i = 0;
 							for (; i < idsToCreate.length; i++) {
 								actor.model.profileImages.push(idsToCreate[i]);
-								await TIMAAT.ActorService.updateActor(actor.model);
 							}
+							// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
+							await TIMAAT.ActorService.updateActor(actor.model);
 						}
 					}
 				} catch(error) {
@@ -4500,8 +4593,8 @@
 			return actorModel;
 		},
 
-		createActorModel: async function(actorType, formDataObject, profileImageList) {
-			// console.log("TCL: createActorModel: formDataObject", formDataObject);
+		createActorModel: async function(actorType, formDataObject) {
+   	//  console.log("TCL: actorType, formDataObject", actorType, formDataObject);
 			let typeId = 0;
 			switch (actorType) {
 				case 'person':
@@ -4526,22 +4619,22 @@
 					usedFrom: formDataObject.nameUsedFrom,
 					usedUntil: formDataObject.nameUsedUntil,
 				},
-				actorNames: [{}],
-				actorHasPhoneNumbers: [{}],
-				actorHasAddresses: [{}],
-				actorHasEmailAddresses: [{}],
-				profileImages: [{}]
+				// actorNames: [{}],
+				// actorHasPhoneNumbers: [{}],
+				// actorHasAddresses: [{}],
+				// actorHasEmailAddresses: [{}],
+				profileImages: formDataObject.profileImages,
 			};
-			var i = 0;
-			for (; i < profileImageList.length; i++) {
-				profileImages[i].mediumId = profileImageList[i];
-			}
-			console.log("TCL: actorModel", model);
+			// var i = 0;
+			// for (; i < profileImageList.length; i++) {
+			// 	model.profileImages[i] = {mediumId: profileImageList[i]};
+			// }
+			// console.log("TCL: actorModel", model);
 			return model;
 		},
 
 		createActorSubtypeModel: async function(actorType, formDataObject) {
-    	console.log("TCL: formDataObject, actorType", formDataObject, actorType);
+    	// console.log("TCL: formDataObject, actorType", formDataObject, actorType);
 			var model = {};
 			switch(actorType) {
 				case 'person':

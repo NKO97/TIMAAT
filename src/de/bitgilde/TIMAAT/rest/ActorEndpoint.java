@@ -43,6 +43,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -584,6 +585,8 @@ public class ActorEndpoint {
 	public Response createActor(@PathParam("id") int id, String jsonData) {
 		System.out.println("ActorServiceEndpoint: createActor: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 		Actor newActor = null;  
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();  	
 
@@ -601,6 +604,9 @@ public class ActorEndpoint {
 		}
 		// sanitize object data
 		newActor.setId(0);
+		// ActorType actorType = entityManager.find(ActorType.class, newActor.getActorType().getId());
+		// newActor.setActorType(actorType);
+		newActor.setDisplayName(null); //* displayName will be set once name is created
 
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
@@ -651,6 +657,7 @@ public class ActorEndpoint {
 		System.out.println("ActorServiceEndpoint: updateActor - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 		Actor updatedActor = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
