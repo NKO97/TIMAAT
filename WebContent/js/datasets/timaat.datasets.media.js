@@ -1088,7 +1088,7 @@
 						var languageSelect = $('#new-languagetrack-language-select-dropdown_'+i);
 						var option = new Option(languageName, languageId, true, true);
 						languageSelect.append(option).trigger('change');
-						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected',true);
+						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected', true);
 						$('select[name="languageTrackTypeId['+i+']"').rules('add', { required: true, });
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
@@ -2165,10 +2165,10 @@
 					languageSelect.append(option).trigger('change');
 
 					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
-						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop('checked',true);							
+						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop('checked', true);							
 					}
 					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
-						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop('checked',true);							
+						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop('checked', true);							
 					}
 					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
@@ -2332,8 +2332,9 @@
 					languageSelect.append(option).trigger('change');
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
-						.attr('selected',true);
+						.attr('selected', true);
 					$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
+					$('#languagetrack-language-select-dropdown_'+i).select2('destroy').attr("readonly", true);
 			};
 
 			if ( action == 'show') {
@@ -2347,14 +2348,9 @@
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
 				$('#mediumLanguageTracksLabel').html("Medium track list");
-				let i = 0;
-				for (; i < numLanguageTracks; i++) {
-					$('#languagetrack-language-select-dropdown_'+i).select2('destroy').attr("readonly", true);
-				}
 			}
 			else if (action == 'edit') {
 				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop('disabled', true);
-				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-language-id').prop('disabled', true);
 				$('#timaat-mediadatasets-medium-languagetracks-form :input').prop('disabled', false);
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').hide();
 				$('#timaat-mediadatasets-medium-languagetracks-form-edit').prop('disabled', true);

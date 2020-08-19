@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (actorType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actorType.model.createdByUserAccount.id+'">[ID '+actorType.model.createdByUserAccount.id+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccount.id+'">[ID '+actorType.model.createdByUserAccount.id+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actorType.model.createdByUserAccount.id+'">[ID '+actorType.model.createdByUserAccount.id+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccount.id+'">[ID '+actorType.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actorType.model.lastEditedByUserAccount.id+'">[ID '+actorType.model.lastEditedByUserAccount.id+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+actorType.model.lastEditedByUserAccount.id+'">[ID '+actorType.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				}
 			});
 

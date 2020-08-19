@@ -20,14 +20,14 @@
 }(function (TIMAAT) {
 	
 	TIMAAT.Actor = class Actor {
-		constructor(model, actorType) {
-      // console.log("TCL: Actor -> constructor -> model, actorType", model, actorType);
+		constructor(model, type) {
+      // console.log("TCL: Actor -> constructor -> model, type", model, type);
 			// setup model
 			this.model = model;
 
 			// create and style list view element
 			var displayActorTypeIcon = '';
-			if (actorType == 'actor') { // only display icon in actor list
+			if (type == 'actor') { // only display icon in actor list
 				displayActorTypeIcon = '  <i class="fas fa-id-badge"></i>'; // default actor icon
 				switch(this.model.actorType.actorTypeTranslations[0].type) {
 					case 'person': 
@@ -43,7 +43,7 @@
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayActorTypeIcon +
-							`  <span class="timaat-actordatasets-`+actorType+`-list-name">
+							`  <span class="timaat-actordatasets-`+type+`-list-name">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
@@ -57,7 +57,7 @@
 				</li>`
 			);
 
-			// $('#timaat-actordatasets-'+actorType+'-list').append(this.listView);
+			// $('#timaat-actordatasets-'+type+'-list').append(this.listView);
 			// console.log("TCL: Actor -> constructor -> this.updateUI()");    
 			var actor = this; // save actor for system events
 
@@ -91,18 +91,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (actor.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(actor.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actor.model.createdByUserAccount.id+'">[ID '+actor.model.createdByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+actor.model.lastEditedByUserAccount.id+'">[ID '+actor.model.lastEditedByUserAccount.id+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+actor.model.lastEditedByUserAccount.id+'">[ID '+actor.model.lastEditedByUserAccount.id+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actor.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				}
 			});
 
@@ -159,7 +159,7 @@
 			// 	$('.actors-data-tabs').hide();
 			// 	$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
 			// 	$('#timaat-actordatasets-metadata-form').data('actor', actor);
-			// 	TIMAAT.ActorDatasets.actorFormDatasheet("show", actorType, actor);
+			// 	TIMAAT.ActorDatasets.actorFormDatasheet("show", type, actor);
 			// 	// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
 			// });
 
@@ -169,13 +169,13 @@
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
 			// console.log("TCL: Actor -> updateUI -> this", this);
-			var actorType = $('#timaat-actordatasets-metadata-form').data('actorType');
+			var type = $('#timaat-actordatasets-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
 			var name = this.model.displayName.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
-			this.listView.find('.timaat-actordatasets-'+actorType+'-list-name').html(name);
-			if (actorType == 'actor') {
+			this.listView.find('.timaat-actordatasets-'+type+'-list-name').html(name);
+			if (type == 'actor') {
 				this.listView.find('.timaat-actordatasets-actor-list-actortype').html(type);
 			}
 

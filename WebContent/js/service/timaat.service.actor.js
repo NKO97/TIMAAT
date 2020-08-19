@@ -101,6 +101,28 @@
 			});		
 		},
 
+		async getActorName(id) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/name",
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getActorName -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
 		listActorSubtype(actorSubtype, callback) {
 			// console.log("TCL: listActorSubtype", actorSubtype);
 			jQuery.ajax({
@@ -652,19 +674,19 @@
 		},
 
 		async addPersonIsMemberOfCollective(actorId, collectiveId) {
-      console.log("TCL: addpersonIsMemberOfCollective -> actorId, collectiveId", actorId, collectiveId);
+      console.log("TCL: addPersonIsMemberOfCollective -> actorId, collectiveId", actorId, collectiveId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personismemberofcollective/"+collectiveId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personIsMemberOfCollective/"+collectiveId,
 					type:"POST",
-					// data: JSON.stringify(tempPersonIsMemberOfCollectiveData),
+					// data: JSON.stringify(),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(personIsMemberOfCollectiveData) {
-					// console.log("TCL: addpersonIsMemberOfCollective -> personIsMemberOfCollectiveData", personIsMemberOfCollectiveData);
+					// console.log("TCL: addPersonIsMemberOfCollective -> personIsMemberOfCollectiveData", personIsMemberOfCollectiveData);
 					resolve(personIsMemberOfCollectiveData);
 				}).fail(function(e) {
 					console.log( "error: ", e.responseText );
@@ -678,7 +700,7 @@
       console.log("TCL: addMembershipDetails -> actorId, collectiveId, membershipDetails", actorId, collectiveId, membershipDetails);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/"+collectiveId+"/membershipdetails/"+membershipDetails.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/"+collectiveId+"/membershipDetails/"+membershipDetails.id,
 					type:"POST",
 					data: JSON.stringify(membershipDetails),
 					contentType:"application/json; charset=utf-8",
@@ -1023,35 +1045,36 @@
 			});
 		},
 
-		async updatePersonIsMemberOfCollective(personIsMemberOfCollective) {
-			// console.log("TCL: async updatepersonIsMemberOfCollective -> personIsMemberOfCollective", personIsMemberOfCollective);
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+personIsMemberOfCollective.id.actorPersonActorId+"/personismemberofcollective/"+personIsMemberOfCollective.id.memberOfActorCollectiveActorId,
-					type:"PATCH",
-					data: JSON.stringify(personIsMemberOfCollective),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(updateData) {
-					// console.log("TCL: async updatepersonIsMemberOfCollective -> updateData", updateData);
-					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
-				});
-			}).catch((error) => {
-				console.log( "error: ", error);
-			});
-		},
+		//? not in use
+		// async updatePersonIsMemberOfCollective(personIsMemberOfCollective) {
+		// 	// console.log("TCL: async updatePersonIsMemberOfCollective -> personIsMemberOfCollective", personIsMemberOfCollective);
+		// 	return new Promise(resolve => {
+		// 		$.ajax({
+		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+personIsMemberOfCollective.id.actorPersonActorId+"/personIsMemberOfCollective/"+personIsMemberOfCollective.id.memberOfActorCollectiveActorId,
+		// 			type:"PATCH",
+		// 			data: JSON.stringify(personIsMemberOfCollective),
+		// 			contentType:"application/json; charset=utf-8",
+		// 			dataType:"json",
+		// 			beforeSend: function (xhr) {
+		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 			},
+		// 		}).done(function(updateData) {
+		// 			// console.log("TCL: async updatePersonIsMemberOfCollective -> updateData", updateData);
+		// 			resolve(updateData);
+		// 		}).fail(function(e) {
+		// 			console.log( "error", e );
+		// 			console.log( e.responseText );
+		// 		});
+		// 	}).catch((error) => {
+		// 		console.log( "error: ", error);
+		// 	});
+		// },
 
 		async updateMembershipDetails(membershipDetailsData) {
 			// console.log("TCL: async updateMembershipDetails -> actorId, collectiveId, membershipDetailsData", membershipDetailsData);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipdetails/"+membershipDetailsData.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipDetails/"+membershipDetailsData.id,
 					type:"PATCH",
 					data: JSON.stringify(membershipDetailsData),
 					contentType:"application/json; charset=utf-8",
@@ -1205,7 +1228,7 @@
 		async removeMemberOfCollective(memberOfCollective) {
 			console.log("TCL: removeMemberOfCollective -> memberOfCollective", memberOfCollective);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.actorPersonActorId+"/personismemberofcollective/"+memberOfCollective.id.memberOfActorCollectiveActorId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.actorPersonActorId+"/personIsMemberOfCollective/"+memberOfCollective.id.memberOfActorCollectiveActorId,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -1222,7 +1245,7 @@
 		async removeMembershipDetails(membershipDetails) {
 			console.log("TCL: removeMembershipDetails -> removeMembershipDetails", membershipDetails);
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipdetails/"+membershipDetails.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipDetails/"+membershipDetails.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

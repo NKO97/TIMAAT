@@ -66,12 +66,12 @@
 					this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 		      console.log("TCL: Event -> constructor -> Display Bearbeitungslog");
 						$('.timaat-user-log-details').html(
-								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+event.model.createdByUserAccount.id+'">[ID '+event.model.createdByUserAccount.id+']</span></b><br>\
+								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+event.model.createdByUserAccount.id+'">[ID '+event.model.createdByUserAccount.id+']</span></b><br>\
 								 '+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>\
-								 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+event.model.lastEditedByUserAccount.id+'">[ID '+event.model.lastEditedByUserAccount.id+']</span></b><br>\
+								 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+event.model.lastEditedByUserAccount.id+'">[ID '+event.model.lastEditedByUserAccount.id+']</span></b><br>\
 								 '+TIMAAT.Util.formatDate(event.model.lastEditedAt)+'<br>'
 						);
-						$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+						$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 					});
 					// attach tag editor
 					this.listView.find('.timaat-event-list-tags').on('inserted.bs.popover', function () {

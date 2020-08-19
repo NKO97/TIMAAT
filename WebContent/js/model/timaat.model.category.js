@@ -145,12 +145,12 @@
 	// 				// });
 	// 				// this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 	// 				// 	$('.timaat-user-log-details').html(
-	// 				// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-user-id" data-userid="'+categorySet.model.createdByUserAccount.id+'">[ID '+categorySet.model.createdByUserAccount.id+']</span></b><br>\
+	// 				// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+categorySet.model.createdByUserAccount.id+'">[ID '+categorySet.model.createdByUserAccount.id+']</span></b><br>\
 	// 				// 			 '+TIMAAT.Util.formatDate(categorySet.model.createdAt)+'<br>\
-	// 				// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-user-id" data-userid="'+categorySet.model.lastEditedByUserAccount.id+'">[ID '+categorySet.model.lastEditedByUserAccount.id+']</span></b><br>\
+	// 				// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+categorySet.model.lastEditedByUserAccount.id+'">[ID '+categorySet.model.lastEditedByUserAccount.id+']</span></b><br>\
 	// 				// 			 '+TIMAAT.Util.formatDate(categorySet.model.lastEditedAt)+'<br>'
 	// 				// 	);
-	// 				// 	$('.timaat-user-log-details').find('.timaat-user-id').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+	// 				// 	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 	// 				// });
 	// 				// attach category editor
 	// 				// console.log("TCL: CategorySet -> constructor -> categorySet.updateUI()");

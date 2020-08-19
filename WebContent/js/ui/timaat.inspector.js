@@ -356,13 +356,13 @@
 				duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.video.duration));
 				startTime = TIMAAT.VideoPlayer.video.currentTime;
 				endTime = startTime+duration;
-				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime,true));
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime,true));
+				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 			$('#timaat-inspector-meta-setend').click(function() {
 				var endTime = TIMAAT.VideoPlayer.video.currentTime;
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime,true));
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 			$('#timaat-inspector-meta-duration').change(function(ev) {
@@ -475,8 +475,8 @@
 					var stroke = (anno) ? anno.stroke : 2;
 					var layerVisual = (anno) ? anno.layerVisual : (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 					var comment = (anno) ? anno.model.comment : "";
-					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
-					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
+					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
@@ -535,8 +535,8 @@
 						if ( segment.model.startTime > startTime && segment.model.endTime < endTime )
 							endTime = segment.model.endTime;
 					});
-					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.startTime,true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime,true);
-					var end = TIMAAT.Util.formatTime(endTime,true);
+					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var end = TIMAAT.Util.formatTime(endTime, true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
@@ -552,8 +552,8 @@
 		updateItem() {
 			if ( !this.state.item ) return;
 			if (  this.state.type == 'annotation' ) {
-				var start = TIMAAT.Util.formatTime(this.state.item.startTime,true);
-				var end = TIMAAT.Util.formatTime(this.state.item.endTime,true);
+				var start = TIMAAT.Util.formatTime(this.state.item.startTime, true);
+				var end = TIMAAT.Util.formatTime(this.state.item.endTime, true);
 				// update UI
 				// metadata panel
 				$("#timaat-inspector-meta-start").val(start);

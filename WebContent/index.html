@@ -2169,7 +2169,7 @@
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-phonenumbers-form" href="#actorPhoneNumbers">Phone Numbers</a>
                         </li>
                         <li class="nav-item actors-data-tabs memberofcollective-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-person-memberofcollectives-form" href="#personMemberOfCollectives">Memberships</a>
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-memberofcollectives-form" href="#actorMemberOfCollectives">Memberships</a>
                         </li>
                         <li class="nav-item actors-data-tabs actoractorrelationship-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-actorrelationships-form" href="#actorActorRelatiohships">Actor Relationships</a>
@@ -2704,14 +2704,14 @@
                         <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- member of collective form -->
-                      <form class="form" role="form" id="timaat-actordatasets-person-memberofcollective-form" name="timaat-actordatasets-person-memberofcollective-form" method="POST" novalidate>
+                      <form class="form" role="form" id="timaat-actordatasets-actor-memberofcollective-form" name="timaat-actordatasets-actor-memberofcollective-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="personMemberOfCollectivesLabel">Person is member of collectives</h5>
+                              <h5 class="form-title caps-title" id="actorMemberOfCollectiveLabel">Person is member of collectives</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-person-memberofcollective-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-memberofcollective-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -2720,7 +2720,7 @@
                             <div class="col-md-11">
                               <div class="form-row">
                                 <div class="col-md-6">
-                                  <h6 class="form-header">Member of collective</h6>
+                                  <h6 class="form-header" id="memberLabel">Member of collective</h6>
                                 </div>
                                 <div class="col-md-3">
                                   <h6 class="form-header">Joined at</h6>
@@ -2735,7 +2735,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="person-memberofcollectives-container">
+                        <div class="actor-memberofcollectives-container">
                           <div data-role="dynamic-personismemberofcollective-fields" id="dynamic-personismemberofcollective-fields">
                             <div class="form-group"> 
                               <!-- <div data-role="dynamic-personismemberofcollective-details-fields" id="dynamic-personismemberofcollective-details-fields">
@@ -2753,7 +2753,7 @@
                               <div class="col-md-11">
                                 <div class="form-row">
                                   <div class="col-md-6">
-                                    <h6 class="form-header">Member of collective</h6>
+                                    <h6 class="form-header" id="newMemberLabel">Member of collective</h6>
                                   </div>
                                   <div class="col-md-3">
                                     <h6 class="form-header">Joined at</h6>
@@ -2777,8 +2777,8 @@
                         <div class="memberofcollective-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-person-memberofcollective-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-person-memberofcollective-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-memberofcollective-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-memberofcollective-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- actor role form -->
                       <form class="form" role="form" id="timaat-actordatasets-actor-role-form" name="timaat-actordatasets-actor-role-form" method="POST" novalidate>

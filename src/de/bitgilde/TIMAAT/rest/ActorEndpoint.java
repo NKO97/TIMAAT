@@ -197,11 +197,10 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("selectList")
-	public Response getActorSelectList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length,
-			@QueryParam("orderby") String orderby,
-			@QueryParam("search") String search)
+	public Response getActorSelectList(@QueryParam("start") Integer start,
+																		 @QueryParam("length") Integer length,
+																		 @QueryParam("orderby") String orderby,
+																		 @QueryParam("search") String search)
 	{
 		// System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
@@ -370,6 +369,56 @@ public class ActorEndpoint {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("person/selectList")
+	public Response getPersonSelectList(@QueryParam("start") Integer start,
+																			@QueryParam("length") Integer length,
+																			@QueryParam("orderby") String orderby,
+																			@QueryParam("search") String search)	{
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		}
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		
+		// define default query strings
+		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
+		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
+
+		// search
+		Query query;
+		if ( search != null && search.length() > 0 ) {
+			// perform search
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorSearchQuery);
+			query.setParameter("name", search);
+			// query.setParameter("actorName", search); // birthName
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				actorQuery);
+		}
+		// if ( start != null && start > 0 ) query.setFirstResult(start);
+		// if ( length != null && length > 0 ) query.setMaxResults(length);
+
+		List<Actor> actorList = castList(Actor.class, query.getResultList());
+		List<SelectElement> actorSelectList = new ArrayList<>();
+		for (Actor actor : actorList) {
+			if (actor.getActorPerson() != null) {
+				actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+			}
+		}
+		return Response.ok().entity(actorSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("collective/list")
 	public Response getCollectiveList(@QueryParam("draw") Integer draw,
 																		@QueryParam("start") Integer start,
@@ -441,22 +490,50 @@ public class ActorEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("collective/selectList")
-	public Response getCollectiveSelectList() {
-		// returns list of id and displayName combinations of all collectives
-		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList");
-		List<ActorCollective> actorCollectiveList = castList(ActorCollective.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorCollective.findAll").getResultList());
-		class SelectElement{ 
-			public int collectiveId; 
-			public String name;
-			public SelectElement(int collectiveId, String name) {this.collectiveId = collectiveId; this.name = name;}
-		}
-		List<SelectElement> collectiveSelectList = new ArrayList<>();
-		for (ActorCollective actorCollective : actorCollectiveList) {
-			collectiveSelectList.add(new SelectElement(actorCollective.getActorId(), actorCollective.getActor().getDisplayName().getName()));
-			// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ actorCollective.getActorId() + " " + name);
-		}
-		// System.out.println("ActorServiceEndpoint: getCollectiveSelectList - collectiveSelectList: "+ collectiveSelectList.id + " " + collectiveSelectList.name);
-		return Response.ok().entity(collectiveSelectList).build();
+	public Response getCollectiveSelectList(@QueryParam("start") Integer start,
+																					@QueryParam("length") Integer length,
+																					@QueryParam("orderby") String orderby,
+																					@QueryParam("search") String search) {
+			String column = "a.id";
+			if ( orderby != null ) {
+				if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+			}
+	
+			class SelectElement{ 
+				public int id; 
+				public String text;
+				public SelectElement(int id, String text) {
+					this.id = id; this.text = text;
+				};
+			}
+			
+			// define default query strings
+			String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
+			String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
+	
+			// search
+			Query query;
+			if ( search != null && search.length() > 0 ) {
+				// perform search
+				query = TIMAATApp.emf.createEntityManager().createQuery(
+					actorSearchQuery);
+				query.setParameter("name", search);
+				// query.setParameter("actorName", search); // birthName
+			} else {
+				query = TIMAATApp.emf.createEntityManager().createQuery(
+					actorQuery);
+			}
+			// if ( start != null && start > 0 ) query.setFirstResult(start);
+			// if ( length != null && length > 0 ) query.setMaxResults(length);
+	
+			List<Actor> actorList = castList(Actor.class, query.getResultList());
+			List<SelectElement> actorSelectList = new ArrayList<>();
+			for (Actor actor : actorList) {
+				if (actor.getActorCollective() != null) {
+					actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+				}
+			}
+			return Response.ok().entity(actorSelectList).build();
 	}
 
 	@GET
@@ -643,9 +720,20 @@ public class ActorEndpoint {
 	@Path("{id}")
 	public Response getActor(@PathParam("id") int id) {    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Actor e = entityManager.find(Actor.class, id);
-		if ( e == null ) return Response.status(Status.NOT_FOUND).build();    	    	
-		return Response.ok().entity(e).build();
+		Actor actor = entityManager.find(Actor.class, id);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		return Response.ok().entity(actor).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/name")
+	public Response getActorName(@PathParam("id") int id) {    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, id);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+		return Response.ok().entity(actor.getDisplayName()).build();
 	}
 
 	@PATCH
@@ -2068,10 +2156,10 @@ public class ActorEndpoint {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/personismemberofcollective/{collectiveid}")
+	@Path("{actorId}/personIsMemberOfCollective/{collectiveId}")
 	@Secured
-	public Response addPersonIsMemberOfCollective(@PathParam("actorid") int actorId, 
-																								@PathParam("collectiveid") int collectiveId) throws IOException {
+	public Response addPersonIsMemberOfCollective(@PathParam("actorId") int actorId, 
+																								@PathParam("collectiveId") int collectiveId) throws IOException {
 
 		System.out.println("ActorServiceEndpoint: addPersonIsMemberOfCollective:");
 		ObjectMapper mapper = new ObjectMapper();
@@ -2122,10 +2210,10 @@ public class ActorEndpoint {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actor_id}/personismemberofcollective/{collective_id}")
+	@Path("{actorId}/personIsMemberOfCollective/{collectiveId}")
 	@Secured
-	public Response updatePersonIsMemberOfCollective(@PathParam("actor_id") int actorId, 
-																									 @PathParam("collective_id") int collectiveId, 
+	public Response updatePersonIsMemberOfCollective(@PathParam("actorId") int actorId, 
+																									 @PathParam("collectiveId") int collectiveId, 
 																									 String jsonData) {
 
 		System.out.println("ActorServiceEndpoint: updateActorPersonIsMemberOfActorCollective - jsonData: " + jsonData);
@@ -2174,10 +2262,10 @@ public class ActorEndpoint {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{person_id}/personismemberofcollective/{collective_id}")
+	@Path("{personId}/personIsMemberOfCollective/{collectiveId}")
 	@Secured
-	public Response deletePersonIsMemberOfCollective(@PathParam("person_id") int personId, 
-																									 @PathParam("collective_id") int collectiveId) {    
+	public Response deletePersonIsMemberOfCollective(@PathParam("personId") int personId, 
+																									 @PathParam("collectiveId") int collectiveId) {    
 		System.out.println("ActorServiceEndpoint: deletePersonIsMemberOfCollective");	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -2206,10 +2294,10 @@ public class ActorEndpoint {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{person_id}/{collective_id}/membershipdetails/{id}")
+	@Path("{personId}/{collectiveId}/membershipDetails/{id}")
 	@Secured
-	public Response addMembership(@PathParam("person_id") int personId, 
-																@PathParam("collective_id") int collectiveId,
+	public Response addMembership(@PathParam("personId") int personId, 
+																@PathParam("collectiveId") int collectiveId,
 																@PathParam("id") int id, 
 																String jsonData) {
 
@@ -2270,7 +2358,7 @@ public class ActorEndpoint {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("membershipdetails/{id}")
+	@Path("membershipDetails/{id}")
 	@Secured
 	public Response updateMembership(@PathParam("id") int id, 
 																	 String jsonData) {
@@ -2313,7 +2401,7 @@ public class ActorEndpoint {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("membershipdetails/{id}")
+	@Path("membershipDetails/{id}")
 	@Secured
 	public Response deleteMembership(@PathParam("id") int id) {    
 		System.out.println("ActorServiceEndpoint: deleteMembership");	

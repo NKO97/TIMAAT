@@ -286,8 +286,8 @@ var actorFormPhoneNumbersValidator = $('#timaat-actordatasets-actor-phonenumbers
     actorFormPhoneNumbers.submit();
   },
 });
-var personFormMemberOfCollectives = $('#timaat-actordatasets-person-memberofcollective-form');
-var personFormMemberOfCollectivesValidator = $('#timaat-actordatasets-person-memberofcollective-form').validate({
+var actorFormMemberOfCollectives = $('#timaat-actordatasets-actor-memberofcollective-form');
+var actorFormMemberOfCollectivesValidator = $('#timaat-actordatasets-actor-memberofcollective-form').validate({
   rules: {
     collectiveId: {
       required: true
@@ -298,8 +298,8 @@ var personFormMemberOfCollectivesValidator = $('#timaat-actordatasets-person-mem
       required: "Select a collective"
     }
   },
-  submitHandler: function(personFormMemberOfCollectives) {
-    personFormMemberOfCollectives.submit();
+  submitHandler: function(actorFormMemberOfCollectives) {
+    actorFormMemberOfCollectives.submit();
   },
 });
 var roleOrRoleGroupFormMetadata = $('#timaat-rolelists-metadata-form');

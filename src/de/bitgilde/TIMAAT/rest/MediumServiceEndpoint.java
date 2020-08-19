@@ -188,12 +188,10 @@ public class MediumServiceEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("selectList")
-	public Response getMediumSelectList(
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length,
-			@QueryParam("orderby") String orderby,
-			@QueryParam("search") String search)
-	{
+	public Response getMediumSelectList(@QueryParam("start") Integer start,
+																			@QueryParam("length") Integer length,
+																			@QueryParam("orderby") String orderby,
+																			@QueryParam("search") String search)	{
 		// System.out.println("MediumServiceEndpoint: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "m.id";
