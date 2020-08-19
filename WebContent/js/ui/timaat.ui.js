@@ -195,17 +195,17 @@
 				case 'add-segment':
 					color = 'badge-success';
 					action = 'fa-plus';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> hinzugefügt';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> hinzugefügt';
 					break;
 				case 'edit-segment':
 					color = 'badge-warning';
 					action = 'fa-edit';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> bearbeitet';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> bearbeitet';
 					break;
 				case 'remove-segment':
 					color = 'badge-danger';
 					action = 'fa-trash-alt';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].name+'"</strong> gelöscht';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> gelöscht';
 					break;
 				case 'add-annotation':
 					color = 'badge-success';

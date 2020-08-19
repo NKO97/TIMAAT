@@ -1,0 +1,2 @@
+ALTER TABLE `FIPOP`.`analysis_segment_translation` CHANGE `name` `title` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `FIPOP`.`analysis_segment_translation` ADD `short_description` VARCHAR(255) NULL AFTER `title`, ADD `comment` VARCHAR(4096) NULL AFTER `short_description`;

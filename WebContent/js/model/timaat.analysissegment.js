@@ -27,18 +27,21 @@
 					this.active = false;
 					
 					// create and style list view element
-					this.listView = $(
-							`<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+					this.listView = $(`
+						<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+							<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
 								<div class="d-flex justify-content-between">
 									<span class="timaat-annotation-segment-title font-weight-bold align-middle pt-1 text-light pl-1"></span>
-									<button type="button" class="btn btn-sm btn-danger" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();"><i class="fas fa-trash"></i></button>
-								</div>
-							</li>`
+								<button type="button" class="btn btn-sm btn-danger" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();">
+									<i class="fas fa-trash"></i>
+								</button>
+							</div>
+						</li>`
 					);
-					this.timelineView = $(
-							`<div class="timaat-timeline-segment">
-								<div class="timaat-timeline-segment-title text-white font-weight-bold"></div>
-							</div>`
+					this.timelineView = $(`
+						<div class="timaat-timeline-segment">
+							<div class="timaat-timeline-segment-title text-white font-weight-bold"></div>
+						</div>`
 					);
 					
 					var segment = this; // save annotation for events
@@ -50,9 +53,17 @@
 					this.listView.attr('data-starttime', this.model.startTime * 1000);
 					let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-					this.listView.find('.timaat-annotation-segment-title').html(this.model.analysisSegmentTranslations[0].name);
-					this.timelineView.find('.timaat-timeline-segment-title ').html(this.model.analysisSegmentTranslations[0].name);
-
+					this.listView.find('.timaat-annotation-segment-title').html(this.model.analysisSegmentTranslations[0].title);
+					this.listView.find('.timaat-annotation-segment-shortDescription').html(this.model.analysisSegmentTranslations[0].shortDescription);
+					this.listView.find('.timaat-annotation-segment-comment').html(this.model.analysisSegmentTranslations[0].comment);
+					this.timelineView.find('.timaat-timeline-segment-title ').html(this.model.analysisSegmentTranslations[0].title);
+					
+					// comment
+					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
+						this.listView.find('.timaat-annotation-segment-comment-icon').show();
+					else
+						this.listView.find('.timaat-annotation-segment-comment-icon').hide();
+					
 					// update timeline position
 					let magicoffset = 0; // TODO replace input slider
 					let width =  $('#timaat-video-seek-bar').width();

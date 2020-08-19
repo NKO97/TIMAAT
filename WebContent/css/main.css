@@ -155,6 +155,10 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	min-height: 6rem;
 }
 
+#timaat-inspector-meta-shortDescription-group textarea {
+	min-height: 3rem;
+}
+
 .timaat-medium-thumbnail {
 	cursor: ew-resize;
 }

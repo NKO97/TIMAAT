@@ -479,17 +479,8 @@
 		},
 		
 
-		createSegment(name, startTime, endTime, list, callback) {
-			console.log("TCL: createSegment -> name, startTime, endTime, list, callback", name, startTime, endTime, list, callback);
-			var model = { 	
-				id: 0,
-				analysisSegmentTranslations: [{
-					id: 0,
-					name: name,
-				}],
-				startTime: startTime,
-				endTime: endTime,
-			};
+		createSegment(model, list, callback) {
+			console.log("TCL: createSegment -> model, list, callback", model, list, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list+"/segment",
 				type:"POST",

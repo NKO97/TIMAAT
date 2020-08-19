@@ -20,7 +20,12 @@ public class AnalysisSegmentTranslation implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String name;
+	private String title;
+
+	@Column(name="short_description")
+	private String shortDescription;
+
+	private String comment;
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@ManyToOne
@@ -44,12 +49,28 @@ public class AnalysisSegmentTranslation implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getTitle() {
+		return this.title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getShortDescription() {
+		return this.shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getComment() {
+		return this.comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public AnalysisSegment getAnalysisSegment() {

@@ -47,17 +47,18 @@
 			this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
 			
 			// create and style list view element
-			this.listView = $(`<li class="list-group-item" style="padding:0">
-							    <div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
-						 		<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
-								<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
-								<span class="timaat-annotation-list-time"></span>
-								<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
-								<div class="d-flex justify-content-between">
-									<div class="timaat-annotation-list-title text-muted"></div>
-									<div class="text-muted timaat-user-log pr-1"><i class="fas fa-user"></i></div>
-								</div>
-							</li>`
+			this.listView = $(`
+				<li class="list-group-item" style="padding:0">
+					<div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
+					<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
+					<span class="timaat-annotation-list-time"></span>
+					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
+					<div class="d-flex justify-content-between">
+						<div class="timaat-annotation-list-title text-muted"></div>
+						<div class="text-muted timaat-user-log pr-1"><i class="fas fa-user"></i></div>
+					</div>
+				</li>`
 			);
 			
 //			console.log("TCL: Annotation -> constructor -> this.updateUI()");

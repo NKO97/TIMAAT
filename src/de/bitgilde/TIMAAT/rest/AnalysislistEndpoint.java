@@ -251,7 +251,9 @@ public class AnalysislistEndpoint {
 		if ( updatedSegment == null ) return Response.notModified().build();
 		    	
     	// update analysislist
-		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getName() != null ) seg.getAnalysisSegmentTranslations().get(0).setName(updatedSegment.getAnalysisSegmentTranslations().get(0).getName());
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle() != null ) seg.getAnalysisSegmentTranslations().get(0).setTitle(updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle());
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription() != null ) seg.getAnalysisSegmentTranslations().get(0).setShortDescription(updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription());
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getComment() != null ) seg.getAnalysisSegmentTranslations().get(0).setComment(updatedSegment.getAnalysisSegmentTranslations().get(0).getComment());
 		if ( updatedSegment.getSegmentStartTime() != null ) seg.setSegmentStartTime(updatedSegment.getSegmentStartTime());
 		if ( updatedSegment.getSegmentEndTime() != null ) seg.setSegmentEndTime(updatedSegment.getSegmentEndTime());
 				
