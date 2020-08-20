@@ -148,7 +148,25 @@
 				$('#timaat-actordatasets-metadata-form').data('actor', null);
 				TIMAAT.ActorDatasets.addActor('actor');
 			});
-			
+
+			$('.toggleAble > legend').on('click', function(event) {
+				if ($('#actor-profile-images').css('visibility') == 'hidden') {
+					$('#actor-profile-images').css('visibility', 'visible');
+					$('#legend-collapse-icon').toggleClass('fa-caret-down fa-caret-up');
+					let actor = $('#timaat-actordatasets-metadata-form').data('actor');
+					let maxHeight = Math.max.apply(Math, actor.model.profileImages.map(function(o) {return o.height}));
+					if (maxHeight > 480)
+						$('#profile-image-carousel-inner').css('height', 480);
+					else
+						$('#profile-image-carousel-inner').css('height', maxHeight);
+				}
+				else {
+					$('#actor-profile-images').css('visibility', 'hidden');
+					$('#profile-image-carousel-inner').css('height', 0);
+					$('#legend-collapse-icon').toggleClass('fa-caret-down fa-caret-up');
+				}
+			});
+
 			// delete actor button (in form) handler
 			$('#timaat-actordatasets-metadata-form-delete').on('click', function(event) {
 				event.stopPropagation();
@@ -3021,6 +3039,7 @@
 			$('.actorrolemedium-data-tab').show();
 			$('.memberofcollective-data-tab').show();
 
+			$('#actor-profile-images').css('visibility', 'visible');
 			$('.nav-tabs a[href="#'+actorType+'Datasheet"]').focus();
 			$('#timaat-actordatasets-metadata-form').show();
 
