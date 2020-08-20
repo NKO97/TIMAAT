@@ -3044,6 +3044,11 @@
 								data-slide-to="`+i+`">
 						</li>`).appendTo('.carousel-indicators');
 				}
+				let maxHeight = Math.max.apply(Math, actorTypeData.model.profileImages.map(function(o) {return o.height}));
+				if (maxHeight > 480)
+					$('#profile-image-carousel-inner').css('height', 480);
+				else
+					$('#profile-image-carousel-inner').css('height', maxHeight);
 				$('.carousel-item').first().addClass('active');
 				$('.carousel-indicators > li').first().addClass('active');
 				$('#dynamic-profile-image-fields').carousel();
