@@ -1790,6 +1790,38 @@
 			$('.source-data').show();
 			$('.'+mediumType+'-data').show();
 
+			$('#medium-title-language-select-dropdown').select2({
+				closeOnSelect: true,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/language/selectList/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};          
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: true
+				},
+				minimumInputLength: 0,
+			});
 			$('#timaat-mediadatasets-metadata-form-edit').hide();
 			$('#timaat-mediadatasets-metadata-form-delete').hide();
 			$('.datasheet-form-upload-button').hide();
