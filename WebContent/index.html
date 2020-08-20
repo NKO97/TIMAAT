@@ -1644,10 +1644,13 @@
                             <div class="col-md-3">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" id="timaat-mediadatasets-medium-preview-form-upload" title="Upload file" name="upload">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
                                     <i class="fas fa-file-upload"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-mediadatasets-medium-preview-form-delete" title="Delete medium">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                    <i class="fas fa-draw-polygon"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1679,16 +1682,16 @@
                             <div class="col-md-3">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-mediadatasets-metadata-form-edit" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" id="timaat-mediadatasets-metadata-form-upload" title="Upload file" name="upload">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
                                     <i class="fas fa-file-upload"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" id="timaat-mediadatasets-metadata-form-annotate" title="Annotate medium" name="annotate">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                     <i class="fas fa-draw-polygon"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-mediadatasets-metadata-form-delete" title="Delete medium">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1854,13 +1857,23 @@
                       <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                               <h5 class="form-title caps-title" id="mediumTitlesLabel">Medium titles</h5>
                             </div>
-                            <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-titles-form-edit" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
+                            <div class="col-md-3">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                    <i class="fas fa-file-upload"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                    <i class="fas fa-draw-polygon"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <div class="form-row">
@@ -1907,13 +1920,23 @@
                       <form class="form" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                               <h5 class="form-title caps-title" id="mediumLanguageTracksLabel">Medium language tracks</h5>
                             </div>
-                            <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-languagetracks-form-edit" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
+                            <div class="col-md-3">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                    <i class="fas fa-file-upload"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                    <i class="fas fa-draw-polygon"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <div class="form-row">
@@ -1953,13 +1976,23 @@
                       <form class="form" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                               <h5 class="form-title caps-title" id="mediumActorRolesLabel">Medium actor roles</h5>
                             </div>
-                            <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-mediadatasets-medium-actorwithroles-form-edit" name="edit">
-                                <i class="fas fa-edit"></i>
-                              </button>
+                            <div class="col-md-3">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                    <i class="fas fa-file-upload"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                    <i class="fas fa-draw-polygon"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <div class="form-row">
