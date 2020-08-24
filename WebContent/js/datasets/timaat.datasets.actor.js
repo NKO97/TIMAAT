@@ -2117,7 +2117,7 @@
 						j += 3;
 					}
 					let actorName = await TIMAAT.ActorService.getActorName(newEntryId);
-					var appendNewFormDataEntry = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(existingEntriesIdList.length, actorName, newEntryDetails, 'sr-only', true);
+					var appendNewFormDataEntry = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(existingEntriesIdList.length, newEntryId, actorName, newEntryDetails, 'sr-only', true);
 					$('#dynamic-personismemberofcollective-fields').append(appendNewFormDataEntry);
 					$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', true);
 
@@ -3834,7 +3834,7 @@
 				} else numMembershipDetails = apimoac.membershipDetails.length;
 				let actorName = await TIMAAT.ActorService.getActorName(actorId);
 				var editMode = (action == 'edit') ? true : false;
-				var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(i, actorName, apimoac.membershipDetails, 'sr-only', editMode);
+				var memberOfCollectiveFormData = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(i, actorId, actorName, apimoac.membershipDetails, 'sr-only', editMode);
 				// TODO expand form by membershipDetail information
 				$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
 				var j = 0;
@@ -5305,10 +5305,10 @@
 			return phoneNumberToAppend;
 		},
 
-		appendMemberOfCollectiveDataset: function(i, actorName, memberOfCollectiveData, labelClassString, editMode) {
-			console.log("TCL: appendMemberOfCollectiveDataset -> i, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorName, memberOfCollectiveData, labelClassString, editMode);
+		appendMemberOfCollectiveDataset: function(i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode) {
+			console.log("TCL: appendMemberOfCollectiveDataset -> i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode);
 			var memberOfCollectiveFormData = 
-			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=`+i+` data-actor-id=`+actorName.id+`>
+			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=`+i+` data-actor-id=`+actorId+`>
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
@@ -5318,15 +5318,15 @@
 									<input type="hidden"
 												class="form-control form-control-sm"
 												name="actorId"
-												value="`+actorName.id+`">
+												value="`+actorId+`">
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Member of collective</label>
 									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollective-actor-id"
-													id="actorName_`+actorName.id+`"
+													id="actorName_`+actorId+`"
 													name="actorName"
 													value="`+actorName.name+`"
-													data-role="actorId[`+actorName.id+`]"
+													data-role="actorId[`+actorId+`]"
 													placeholder="Select actor"
 													aria-describedby="actor name"
 													required>
@@ -5336,7 +5336,7 @@
 			// append list of membership details
 			var j = 0;
 			for (; j < memberOfCollectiveData.length; j++) {
-				memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(i, j, actorName.id, memberOfCollectiveData[j], labelClassString);
+				memberOfCollectiveFormData +=	TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(i, j, actorId, memberOfCollectiveData[j], labelClassString);
 			}
 			memberOfCollectiveFormData +=	
 									`</div>
