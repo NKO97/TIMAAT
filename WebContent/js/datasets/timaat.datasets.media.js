@@ -3526,7 +3526,11 @@
 							if (medium.fileStatus == 'noFile') {
 								noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 							}
-							let titleDisplay = `<p>` + displayMediumTypeIcon + noFileIcon + medium.displayTitle.name + `</p>`;
+							let commentIcon = ' ';
+							if (medium.remark.length > 0) {
+								commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+							}
+							let titleDisplay = `<p>` + displayMediumTypeIcon + noFileIcon + commentIcon + medium.displayTitle.name + `</p>`;
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
@@ -3674,7 +3678,11 @@
 						if (medium.fileStatus == 'noFile') {
 							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 						}
-						let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;		
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;		
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -3820,7 +3828,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -3966,7 +3978,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4112,7 +4128,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4258,7 +4278,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4405,7 +4429,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4551,7 +4579,11 @@
 					if (medium.fileStatus == 'noFile') {
 						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 					}
-					let titleDisplay = `<p>` + noFileIcon + medium.displayTitle.name +`</p>`;
+					let commentIcon = ' ';
+					if (medium.remark.length > 0) {
+						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+					}
+					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
