@@ -551,10 +551,12 @@
 					var startTime = (segment) ? segment.model.startTime : TIMAAT.VideoPlayer.video.currentTime;
 					var endTime = (segment) ? segment.model.endTime : TIMAAT.VideoPlayer.video.duration;				
 					// find closest segment to adjust end time
-					TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
-						if ( segment.model.startTime > startTime && segment.model.endTime < endTime )
-							endTime = segment.model.endTime;
-					});
+					if ( TIMAAT.VideoPlayer.curList != null && TIMAAT.VideoPlayer.curList.segments != null) {
+						TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
+							if ( segment.model.startTime > startTime && segment.model.endTime < endTime )
+								endTime = segment.model.endTime;
+						});
+					}
 					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
 					var end = TIMAAT.Util.formatTime(endTime, true);
 					// setup UI from Video Player state

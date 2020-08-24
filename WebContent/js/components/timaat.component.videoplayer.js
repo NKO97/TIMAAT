@@ -1102,8 +1102,8 @@
 		},
 				
 		selectAnnotation: function(annotation) {
-//			console.log("TCL: selectAnnotation: function(annotation)");
-//			console.log("TCL: annotation", annotation);
+			// console.log("TCL: selectAnnotation: function(annotation)");
+			// console.log("TCL: annotation", annotation);
 			if ( annotation ) TIMAAT.VideoPlayer.inspector.setItem(annotation, 'annotation');
 			else TIMAAT.VideoPlayer.inspector.setItem(null);
 			if ( this.curAnnotation == annotation && annotation != null ) return;
@@ -1143,8 +1143,8 @@
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null,'analysissegment');
-//			$('#timaat-videoplayer-segment-meta').data('segment', null);
-//			$('#timaat-videoplayer-segment-meta').modal('show');
+			// $('#timaat-videoplayer-segment-meta').data('segment', null);
+			// $('#timaat-videoplayer-segment-meta').modal('show');
 		},
 		
 		updateAnalysisSegment: function(segment) {
@@ -1282,7 +1282,7 @@
 					// repeat segment
 					let curSegment = null;
 					for (let index = TIMAAT.VideoPlayer.curList.segments.length-1; index >= 0; index-- ) {
-						let segment = TIMAAT.VideoPlayer.curList.segments[index]
+						let segment = TIMAAT.VideoPlayer.curList.segments[index];
 						if (segment.active) { curSegment = segment; break; }
 					}
 
@@ -1394,6 +1394,9 @@
 		_segmentAdded: function(segment, openInspector=true) {
 			console.log("TCL: _segmentAdded: function(segment)");
 			console.log("TCL: segment", segment);
+			if (!TIMAAT.VideoPlayer.curList.segments) {
+				TIMAAT.VideoPlayer.curList.segments = [];
+			}
 			TIMAAT.VideoPlayer.curList.segments.push(segment);
 			TIMAAT.VideoPlayer.sortSegments();
 			segment.addUI();

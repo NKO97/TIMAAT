@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Annotation = class Annotation {
 		constructor(model) {
 			console.log("TCL: Annotation -> constructor -> model", model);
@@ -336,7 +336,6 @@
 			// send event
 			$(document).trigger('keyframeremoved.annotation.TIMAAT', this);
 		}
-
 		
 		removeAnimationKeyframes() {
 			if ( this._destroyed ) return;
@@ -420,425 +419,425 @@
 
 		
 		updateUI() {
-//			  console.log("TCL: Annotation -> updateUI -> updateUI()");
-			  this.listView.attr('data-starttime', this.model.sequenceStartTime);
-			  this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-			  var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
-			  if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
-			  this.listView.find('.timaat-annotation-list-time').html(timeString);
-			  this.listView.find('.timaat-annotation-list-title').html(this.model.title);
-			  // categories
-			  this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Kategorien");			
-			  if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
-			  else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
-			  else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
-			  // type
-			  this._updateAnnotationType();
-			  
-			  // comment
-			  if ( this.model.comment && this.model.comment.length > 0 )
-				  this.listView.find('.timaat-annotation-list-comment').show();
-			  else
-				  this.listView.find('.timaat-annotation-list-comment').hide();
-				  
-			  // update svg
-			  for (let item of this.svg.items) {
-				  item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.opacity});
-			  };
+			// console.log("TCL: Annotation -> updateUI -> updateUI()");
+			this.listView.attr('data-starttime', this.model.sequenceStartTime);
+			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
+			var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
+			if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
+			this.listView.find('.timaat-annotation-list-time').html(timeString);
+			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
+			// categories
+			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Kategorien");			
+			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
+			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
+			else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
+			// type
+			this._updateAnnotationType();
+			
+			// comment
+			if ( this.model.comment && this.model.comment.length > 0 )
+				this.listView.find('.timaat-annotation-list-comment').show();
+			else
+				this.listView.find('.timaat-annotation-list-comment').hide();
 				
-			  // update marker
-			  if ( this.marker ) this.marker.updateView();
-		  }		  
+			// update svg
+			for (let item of this.svg.items) {
+				item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.opacity});
+			};
+			
+			// update marker
+			if ( this.marker ) this.marker.updateView();
+		}		  
 
-				_updateAnnotationType() {
-					let type = this.listView.find('.timaat-annotation-list-type');
-					type.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-headphones');
-					if ( this.isAnimation() ) type.text(' \uf70c'); else type.text('');
-					if ( this.layerVisual == 0 ) {
-						type.addClass('fa-headphones');
-					} else {
-						if ( this.svg.items.length > 0 ) type.addClass('fa-draw-polygon');
-						else type.addClass('fa-image');
-					}
-				};
-				
-				remove() {
-					console.log("TCL: Annotation -> remove -> remove()");
-					// remove annotation from UI
-					this.listView.remove();
-					this.marker.remove();
-					this.svg.layer.remove();
-					this.selected = false;
-					this._destroyed = true;
-				}
-				
-				addSVGItem (item) {
-					console.log("TCL: Annotation -> addSVGItem -> item", item);
-					if ( !item || this.svg.items.includes(item) ) return;
-					// generate UUID for shape and propagate through keyframes
-					if ( !item.options.id ) {
-						item.options.id = TIMAAT.Util.createUUIDv4();
-						let shape = { id: item.options.id };
-						if ( item instanceof L.Rectangle ) shape.type = 'rectangle';
-						else if ( item instanceof L.Polygon ) shape.type = 'polygon';
-						else if ( item instanceof L.Polyline ) shape.type = 'line';
-						else if ( item instanceof L.Circle ) shape.type = 'circle';
-						shape = this.syncShape(item, shape);
-						// propagate changes to keyframes
-						// TODO check if stringify needed to decouple references
-						for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
-					}
-					// add to list of shapes
-					this.svg.items.push(item);
-					this.svg.layer.addLayer(item);
-					
-					this.changed = true;
+		_updateAnnotationType() {
+			let type = this.listView.find('.timaat-annotation-list-type');
+			type.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-headphones');
+			if ( this.isAnimation() ) type.text(' \uf70c'); else type.text('');
+			if ( this.layerVisual == 0 ) {
+				type.addClass('fa-headphones');
+			} else {
+				if ( this.svg.items.length > 0 ) type.addClass('fa-draw-polygon');
+				else type.addClass('fa-image');
+			}
+		};
+		
+		remove() {
+			console.log("TCL: Annotation -> remove -> remove()");
+			// remove annotation from UI
+			this.listView.remove();
+			this.marker.remove();
+			this.svg.layer.remove();
+			this.selected = false;
+			this._destroyed = true;
+		}
+		
+		addSVGItem (item) {
+			console.log("TCL: Annotation -> addSVGItem -> item", item);
+			if ( !item || this.svg.items.includes(item) ) return;
+			// generate UUID for shape and propagate through keyframes
+			if ( !item.options.id ) {
+				item.options.id = TIMAAT.Util.createUUIDv4();
+				let shape = { id: item.options.id };
+				if ( item instanceof L.Rectangle ) shape.type = 'rectangle';
+				else if ( item instanceof L.Polygon ) shape.type = 'polygon';
+				else if ( item instanceof L.Polyline ) shape.type = 'line';
+				else if ( item instanceof L.Circle ) shape.type = 'circle';
+				shape = this.syncShape(item, shape);
+				// propagate changes to keyframes
+				// TODO check if stringify needed to decouple references
+				for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
+			}
+			// add to list of shapes
+			this.svg.items.push(item);
+			this.svg.layer.addLayer(item);
+			
+			this.changed = true;
 
-					// update UI
-					this._updateAnnotationType();
-					if ( this.marker ) this.marker.updateView();
-					
-					// attach item event handlers
-					let anno = this;
-					item.on('click', function(ev) {
-						TIMAAT.VideoPlayer.selectAnnotation(anno);
-						// delete annotation if user presses alt
-						if ( ev.originalEvent.altKey && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isOnKeyframe()  ) {
-							anno.removeSVGItem(ev.target);
-							TIMAAT.VideoPlayer.updateUI();
-							console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
-						}
-					});
-					item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
+			// update UI
+			this._updateAnnotationType();
+			if ( this.marker ) this.marker.updateView();
+			
+			// attach item event handlers
+			let anno = this;
+			item.on('click', function(ev) {
+				TIMAAT.VideoPlayer.selectAnnotation(anno);
+				// delete annotation if user presses alt
+				if ( ev.originalEvent.altKey && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isOnKeyframe()  ) {
+					anno.removeSVGItem(ev.target);
+					TIMAAT.VideoPlayer.updateUI();
 					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
-					item.on('dragend', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
-					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
-
 				}
-						
-				removeSVGItem (item) {
-					console.log("TCL: Annotation -> removeSVGItem -> item", item);
-					if ( !item || !this.svg.items.includes(item) ) return;
-					this.svg.layer.removeLayer(item);
-					var index = this.svg.items.indexOf(item);
-					if (index > -1) this.svg.items.splice(index, 1);
-					// propagate changes to keyframes
-					for (let keyframe of this.svg.keyframes) keyframe.removeShape(item.options.id);
-					
-					this.changed = true;
+			});
+			item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
+			console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+			item.on('dragend', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
+			console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 
-					// update UI
-					if ( this.svg.items.length == 0 ) {
-						this._updateAnnotationType();
-						if ( this.marker ) this.marker.updateView();
-					}
-				}
+		}
 				
-				setChanged() {
+		removeSVGItem (item) {
+			console.log("TCL: Annotation -> removeSVGItem -> item", item);
+			if ( !item || !this.svg.items.includes(item) ) return;
+			this.svg.layer.removeLayer(item);
+			var index = this.svg.items.indexOf(item);
+			if (index > -1) this.svg.items.splice(index, 1);
+			// propagate changes to keyframes
+			for (let keyframe of this.svg.keyframes) keyframe.removeShape(item.options.id);
+			
+			this.changed = true;
+
+			// update UI
+			if ( this.svg.items.length == 0 ) {
+				this._updateAnnotationType();
+				if ( this.marker ) this.marker.updateView();
+			}
+		}
+		
+		setChanged() {
 //					console.log("TCL: Annotation -> setChanged -> setChanged()");
-					this.changed = true;
-				}
-				
-				hasChanges() {
+			this.changed = true;
+		}
+		
+		hasChanges() {
 //					console.log("TCL: Annotation -> hasChanges -> hasChanges()");
-					return this.changed;
-				}
+			return this.changed;
+		}
 
-				
-				getModel() {
+		
+		getModel() {
 //					console.log("TCL: Annotation -> getModel -> getModel()");
 //					this.model.sequenceStartTime = TIMAAT.Util.formatTime(this.model.startTime, true);
 //					this.model.sequenceEndTime = TIMAAT.Util.formatTime(this.model.startTime, true);
-					return this.model;
-				}
-				
-				discardChanges() {
-					console.log("TCL: Annotation -> discardChanges -> discardChanges()");
-					if ( !this.changed ) return;
-					this.svg.layer.clearLayers();
-					this.svg.items = Array();
-					this._layerVisual = this.model.layerVisual;
-					this._startTime = this.model.sequenceStartTime/1000.0;
-					this._endTime = this.model.sequenceEndTime/1000.0;
-					this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
-					this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
-					this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
+			return this.model;
+		}
+		
+		discardChanges() {
+			console.log("TCL: Annotation -> discardChanges -> discardChanges()");
+			if ( !this.changed ) return;
+			this.svg.layer.clearLayers();
+			this.svg.items = Array();
+			this._layerVisual = this.model.layerVisual;
+			this._startTime = this.model.sequenceStartTime/1000.0;
+			this._endTime = this.model.sequenceEndTime/1000.0;
+			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
+			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
+			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
 
-					this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
-					this._upgradeModel();
-					for (let svgitem of this.svg.model.keyframes[0].shapes) {
-						let item = this._parseSVG(svgitem);
-						this.addSVGItem(item);
-					}
-					
-					for (let keyframe of this.svg.keyframes) keyframe.remove();
-					this.svg.keyframes = new Array();
-					for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
-					
-					// update UI
-					this.changed = false;
-					this.updateUI();
-					this._updateShapeUI();
-					this.updateEditableUI();
-					// update keyframe UI
-					if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
+			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
+			this._upgradeModel();
+			for (let svgitem of this.svg.model.keyframes[0].shapes) {
+				let item = this._parseSVG(svgitem);
+				this.addSVGItem(item);
+			}
+			
+			for (let keyframe of this.svg.keyframes) keyframe.remove();
+			this.svg.keyframes = new Array();
+			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
+			
+			// update UI
+			this.changed = false;
+			this.updateUI();
+			this._updateShapeUI();
+			this.updateEditableUI();
+			// update keyframe UI
+			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
 
-				}
-				
-				saveChanges() {
-					console.log("TCL: Annotation -> saveChanges -> saveChanges()");
-					this._syncToModel();
-					this.changed = false;
-				}
+		}
+		
+		saveChanges() {
+			console.log("TCL: Annotation -> saveChanges -> saveChanges()");
+			this._syncToModel();
+			this.changed = false;
+		}
 
-				updateStatus(time) {
-					time = parseFloat(time.toFixed(3));
+		updateStatus(time) {
+			time = parseFloat(time.toFixed(3));
 //					console.log("TCL: Annotation -> updateStatus -> time", time);
-					let animTime = time - this._startTime;
-					animTime = parseFloat(animTime.toFixed(3));
-					var active = false;
-					if ( time >= this.startTime && time <= this.endTime ) active = true;
-					this.setActive(active);
-					if ( animTime == this._animTime ) return;
-					this._animTime = animTime;
-					this._updateShapeUI();
-					this.updateEditableUI();
-					// update keyframe UI
-					if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
-				}
-				
-				isActive() {
+			let animTime = time - this._startTime;
+			animTime = parseFloat(animTime.toFixed(3));
+			var active = false;
+			if ( time >= this.startTime && time <= this.endTime ) active = true;
+			this.setActive(active);
+			if ( animTime == this._animTime ) return;
+			this._animTime = animTime;
+			this._updateShapeUI();
+			this.updateEditableUI();
+			// update keyframe UI
+			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
+		}
+		
+		isActive() {
 //					console.log("TCL: Annotation -> isActive -> isActive()");
-					return this.active;
-				}
-				
-				setActive(active) {
+			return this.active;
+		}
+		
+		setActive(active) {
 //					console.log("TCL: Annotation -> setActive -> active", active);
-					if ( this.active == active ) return;
-					this.active = active;
-					if ( active ) {
-						this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
-						TIMAAT.VideoPlayer.viewer.annoLayer.addLayer(this.svg.layer);
-						// scroll list
-						this._scrollIntoView(this.listView);
-					} else {
-						this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
-						TIMAAT.VideoPlayer.viewer.annoLayer.removeLayer(this.svg.layer);
-						this.svg.layer.options.removed = true;
+			if ( this.active == active ) return;
+			this.active = active;
+			if ( active ) {
+				this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
+				TIMAAT.VideoPlayer.viewer.annoLayer.addLayer(this.svg.layer);
+				// scroll list
+				this._scrollIntoView(this.listView);
+			} else {
+				this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
+				TIMAAT.VideoPlayer.viewer.annoLayer.removeLayer(this.svg.layer);
+				this.svg.layer.options.removed = true;
+			}
+		}
+		
+		updateEditableUI() {
+			let added = false;
+			for (let item of this.svg.items) {
+				item.dragging.disable();
+				item.disableEdit();
+				if ( this.isSelected() && this.isActive() && this.isOnKeyframe() ) {
+					if ( this.svg.layer.options.removed ) {
+						item.dragging._draggable = null;
+						item.dragging.addHooks();
+						added = true;
+					}
+					item.dragging.enable();
+					item.enableEdit();
+					if ( this.isAnimation() ) {
+						item.editor.options.skipMiddleMarkers = true;
+						item.editor.reset();
 					}
 				}
+			};
+			if ( added ) this.svg.layer.options.removed = false;
+		}
 				
-				updateEditableUI() {
-					let added = false;
-					for (let item of this.svg.items) {
-						item.dragging.disable();
-						item.disableEdit();
-						if ( this.isSelected() && this.isActive() && this.isOnKeyframe() ) {
-							if ( this.svg.layer.options.removed ) {
-								item.dragging._draggable = null;
-								item.dragging.addHooks();
-								added = true;
-							}
-							item.dragging.enable();
-							item.enableEdit();
-							if ( this.isAnimation() ) {
-								item.editor.options.skipMiddleMarkers = true;
-								item.editor.reset();
-							}
-						}
-					};
-					if ( added ) this.svg.layer.options.removed = false;
-				}
-						
-				setSelected(selected) {
-					if (this._destroyed) return;
+		setSelected(selected) {
+			if (this._destroyed) return;
 //					console.log("TCL: Annotation -> setSelected -> selected", selected);
-					if ( this.selected == selected ) return;			
-					this.selected = selected;
-					if ( selected ) {
+			if ( this.selected == selected ) return;			
+			this.selected = selected;
+			if ( selected ) {
 
-						this.listView.addClass('timaat-annotation-list-selected');
-						
-						for (let item of this.svg.items) {
-							item.bringToFront();
+				this.listView.addClass('timaat-annotation-list-selected');
+				
+				for (let item of this.svg.items) {
+					item.bringToFront();
 /*
-							item.dragging.enable();
-							item.enableEdit();
-							if ( this.isAnimation() ) {
-								item.editor.options.skipMiddleMarkers = true;
-								item.editor.reset();
-							}
-*/
-						};
+					item.dragging.enable();
+					item.enableEdit();
+					if ( this.isAnimation() ) {
+						item.editor.options.skipMiddleMarkers = true;
+						item.editor.reset();
 					}
-					else {
-						this.discardChanges();
-						this.listView.removeClass('timaat-annotation-list-selected');
+*/
+				};
+			}
+			else {
+				this.discardChanges();
+				this.listView.removeClass('timaat-annotation-list-selected');
 /*
-						this.svg.items.forEach(function(item) {
-							item.dragging.disable();
-							item.disableEdit();
-						});
+				this.svg.items.forEach(function(item) {
+					item.dragging.disable();
+					item.disableEdit();
+				});
 */
-					}
-					// update marker
-					if ( this.marker ) this.marker.updateView();
-					// update keyframe UI
-					if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
-					// update editing UI
-					this.updateEditableUI();
-				}
+			}
+			// update marker
+			if ( this.marker ) this.marker.updateView();
+			// update keyframe UI
+			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
+			// update editing UI
+			this.updateEditableUI();
+		}
 
-				isSelected() {
+		isSelected() {
 //					console.log("TCL: Annotation -> isSelected -> isSelected()");
-					return this.selected;
-				}
-				
-				syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
-					if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
-					let id = svgitem.options.id;
-					if ( !shape ) shape = this.currentKeyframe.getShape(id);
-					if ( !shape ) return;
-					switch (shape.type) {
-						case 'rectangle':
-							shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
-							break;
+			return this.selected;
+		}
+		
+		syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
+			if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
+			let id = svgitem.options.id;
+			if ( !shape ) shape = this.currentKeyframe.getShape(id);
+			if ( !shape ) return;
+			switch (shape.type) {
+				case 'rectangle':
+					shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
+					break;
 
-						case "polygon":
-							shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
-							break;
-						case "line":
-							shape.points = this._copyLatLngs(svgitem.getLatLngs());
-							break;
+				case "polygon":
+					shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
+					break;
+				case "line":
+					shape.points = this._copyLatLngs(svgitem.getLatLngs());
+					break;
 
-						case "circle":
-							shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
-							shape.radius = svgitem.getRadius();
-							break;
-					}
-					return shape;
-				}
-				
-				_copyLatLngs(latlngs) {
-					let points = new Array();
-					for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
-					return points;
-				}
-				
-				_updateShapeUI() {
-					if ( this._destroyed || !this.isAnimation() || !this.isActive() ) return;
-					let fromKeyframe = this.currentKeyframe;
-					let toKeyframe = this.nextKeyframe;
-					let interpolate = ( fromKeyframe != toKeyframe );
-					let percent = (this._animTime-fromKeyframe.time) / (toKeyframe.time-fromKeyframe.time);
-					for (let item of this.svg.items) {
-						if ( interpolate ) {
-							this._updateSVGItem(item, TIMAAT.Util.getInterpolatedShape(
-									fromKeyframe.getShape(item.options.id),
-									toKeyframe.getShape(item.options.id),
-									percent
-							));
-						} else this._updateSVGItem(item, fromKeyframe.getShape(item.options.id));
-					}
-				}
+				case "circle":
+					shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
+					shape.radius = svgitem.getRadius();
+					break;
+			}
+			return shape;
+		}
+		
+		_copyLatLngs(latlngs) {
+			let points = new Array();
+			for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
+			return points;
+		}
+		
+		_updateShapeUI() {
+			if ( this._destroyed || !this.isAnimation() || !this.isActive() ) return;
+			let fromKeyframe = this.currentKeyframe;
+			let toKeyframe = this.nextKeyframe;
+			let interpolate = ( fromKeyframe != toKeyframe );
+			let percent = (this._animTime-fromKeyframe.time) / (toKeyframe.time-fromKeyframe.time);
+			for (let item of this.svg.items) {
+				if ( interpolate ) {
+					this._updateSVGItem(item, TIMAAT.Util.getInterpolatedShape(
+							fromKeyframe.getShape(item.options.id),
+							toKeyframe.getShape(item.options.id),
+							percent
+					));
+				} else this._updateSVGItem(item, fromKeyframe.getShape(item.options.id));
+			}
+		}
 
-				_updateSVGItem(item, shape) {
-					if ( !item || !shape ) return;
-					if ( item.options.id != shape.id ) return;
-					switch (shape.type) {
-						case 'rectangle':
-							item.setBounds(shape.bounds);
-							return;
+		_updateSVGItem(item, shape) {
+			if ( !item || !shape ) return;
+			if ( item.options.id != shape.id ) return;
+			switch (shape.type) {
+				case 'rectangle':
+					item.setBounds(shape.bounds);
+					return;
 
-						case "polygon":
-							item.setLatLngs([shape.points]);
-							return;
-						case "line":
-							item.setLatLngs(shape.points);
-							return;
-						
-						case "circle":
-							item.setLatLng(shape.point);
-							item.setRadius(shape.radius);
-							return;
-					}
-				}
+				case "polygon":
+					item.setLatLngs([shape.points]);
+					return;
+				case "line":
+					item.setLatLngs(shape.points);
+					return;
 				
-				_scrollIntoView(listItem) {
-					console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
-					var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
-					var listHeight = $('.timaat-annotation-list-wrapper').height();
-					var elementTop = listItem.position().top;
-					// TODO scroll from bottom if out of view
-					if ( elementTop < 0 )
-						$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
-					if ( elementTop > listHeight )
-						$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
-						
-				}
+				case "circle":
+					item.setLatLng(shape.point);
+					item.setRadius(shape.radius);
+					return;
+			}
+		}
+		
+		_scrollIntoView(listItem) {
+			console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
+			var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
+			var listHeight = $('.timaat-annotation-list-wrapper').height();
+			var elementTop = listItem.position().top;
+			// TODO scroll from bottom if out of view
+			if ( elementTop < 0 )
+				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
+			if ( elementTop > listHeight )
+				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
 				
-				_parseSVG(svgitem) {
-					console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
-					let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-					let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-					let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-					let id = svgitem.id;
-					if ( !id ) {
-						id = TIMAAT.Util.createUUIDv4();
-						console.log("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
-					}
-					switch (svgitem.type) {
-						case "rectangle":
-							// [[ height, x], [ y, width]]
-							var bounds = [[ Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
-							return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
-						case "polygon":
-							var points = new Array();
-							$(svgitem.points).each(function(index,point) {
-								var lat = 450-(point[1]*factor*height);
-								var lng = point[0]*factor*width;
-								points.push([lat,lng]);
-							});
-							return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
-						case "line":
-							var points = new Array();
-							$(svgitem.points).each(function(index,point) {
-								var lat = 450-(point[1]*factor*height);
-								var lng = point[0]*factor*width;
-								points.push([lat,lng]);
-							});
-							return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
-						case "circle":
-							var lat = 450-(svgitem.y*factor*height);
-							var lng = svgitem.x*factor*width;
-							var radius = svgitem.radius * factor;
+		}
+		
+		_parseSVG(svgitem) {
+			console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
+			let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+			let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			let id = svgitem.id;
+			if ( !id ) {
+				id = TIMAAT.Util.createUUIDv4();
+				console.log("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+			}
+			switch (svgitem.type) {
+				case "rectangle":
+					// [[ height, x], [ y, width]]
+					var bounds = [[ Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+				case "polygon":
+					var points = new Array();
+					$(svgitem.points).each(function(index,point) {
+						var lat = 450-(point[1]*factor*height);
+						var lng = point[0]*factor*width;
+						points.push([lat,lng]);
+					});
+					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+				case "line":
+					var points = new Array();
+					$(svgitem.points).each(function(index,point) {
+						var lat = 450-(point[1]*factor*height);
+						var lng = point[0]*factor*width;
+						points.push([lat,lng]);
+					});
+					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+				case "circle":
+					var lat = 450-(svgitem.y*factor*height);
+					var lng = svgitem.x*factor*width;
+					var radius = svgitem.radius * factor;
 
-							return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
-					}
-				}
-				
-				_syncToModel() {
-					console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
-					let jsonData = { keyframes: [] };
-					this.model.sequenceStartTime = this._startTime*1000.0;
-					this.model.sequenceEndTime = this._endTime*1000.0;
-					this.model.layerVisual = this._layerVisual;
+					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+			}
+		}
+		
+		_syncToModel() {
+			console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
+			let jsonData = { keyframes: [] };
+			this.model.sequenceStartTime = this._startTime*1000.0;
+			this.model.sequenceEndTime = this._endTime*1000.0;
+			this.model.layerVisual = this._layerVisual;
 
-					var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
-					var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-					var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-					this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
-					this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
-					
-					this.svg.keyframes[0].time = 0;
-					for (let keyframe of this.svg.keyframes) {
-						keyframe.saveChanges();
-						jsonData.keyframes.push(keyframe.model);
-						
-					}
-					this.model.selectorSvgs[0].svgData = JSON.stringify(jsonData);
-				}
+			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
+			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
+			this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
+			
+			this.svg.keyframes[0].time = 0;
+			for (let keyframe of this.svg.keyframes) {
+				keyframe.saveChanges();
+				jsonData.keyframes.push(keyframe.model);
 				
 			}
+			this.model.selectorSvgs[0].svgData = JSON.stringify(jsonData);
+		}
+		
+	}
 	
 }, window));
