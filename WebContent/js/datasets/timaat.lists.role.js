@@ -99,8 +99,6 @@
           delete roleOrRoleGroupData.ui;
           await TIMAAT.RoleLists.updateRoleOrRoleGroup(type, roleOrRoleGroupData, roleOrRoleGroupIdList, roleActorIdList);
 					// roleOrRoleGroup.updateUI();
-					await TIMAAT.RoleLists.refreshDatatable(type);
-					TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', type, roleOrRoleGroup);
         } 
         else { // create new role or role group
 					var roleOrRoleGroupModel = await TIMAAT.RoleLists.createRoleOrRoleGroupModel(type, formDataObject);
@@ -111,9 +109,9 @@
           } else if (type == 'rolegroup') {
             roleOrRoleGroup = new TIMAAT.RoleGroup(newRoleOrRoleGroup);
           }
-					await TIMAAT.RoleLists.refreshDatatable(type);
-					TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', type, roleOrRoleGroup);
         }
+        await TIMAAT.RoleLists.refreshDatatable(type);
+        TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', type, roleOrRoleGroup);
 			});
 
       // cancel add/edit button in content form functionality
@@ -232,7 +230,7 @@
     },
 
     loadRolesDatatables: function() {
-      console.log("TCL: loadRolesDatatables: function()");
+      // console.log("TCL: loadRolesDatatables: function()");
       TIMAAT.RoleLists.setupRoleDatatable();
       TIMAAT.RoleLists.setupRoleGroupDatatable();
     },
@@ -269,7 +267,7 @@
     },
 
     setupRoleDatatable: function() {			
-      console.log("TCL: setupRoleDatatable");
+      // console.log("TCL: setupRoleDatatable");
       // setup datatable
       TIMAAT.RoleLists.dataTableRoles = $('#timaat-rolelists-role-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -340,7 +338,7 @@
                 break;
               }
             }
-            $('#timaat-rolelists-role-metadata-form').data('role', selectedRole);
+            $('#timaat-rolelists-metadata-form').data('role', selectedRole);
             TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'role', selectedRole);
           });
         },
@@ -371,7 +369,7 @@
     },
 
     setupRoleGroupDatatable: function() {			
-      console.log("TCL: setupRoleGroupDatatable");
+      // console.log("TCL: setupRoleGroupDatatable");
       // setup datatable
       TIMAAT.RoleLists.dataTableRoleGroups = $('#timaat-rolelists-rolegroup-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -404,6 +402,7 @@
             xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
           },
           "dataSrc": function(data) {
+            // console.log("TCL: data", data);
             // setup model
             var rolegrps = Array();
             data.data.forEach(function(roleGroup) { 
@@ -441,7 +440,7 @@
                 break;
               }
             }
-            $('#timaat-rolelists-rolegroups-metadata-form').data('rolegroup', selectedRoleGroup);
+            $('#timaat-rolelists-metadata-form').data('rolegroup', selectedRoleGroup);
             TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'rolegroup', selectedRoleGroup);
           });
         },

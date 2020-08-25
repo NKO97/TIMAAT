@@ -63,9 +63,9 @@
 
       // add language button functionality (in language list - opens datasheet form)
       $('#timaat-languagelists-language-add').on('click', function(event) {
-        console.log("TCL: add language");
+        // console.log("TCL: add language");
         $('#timaat-languagelists-metadata-form').data('language', null);
-        TIMAAT.LanguageLists.addLanguage('language');
+        TIMAAT.LanguageLists.addLanguage();
       });
 
 			// delete button (in form) handler
@@ -141,24 +141,24 @@
 		},
 
 		load: function() {
-    console.log("TCL: load: function()");
+    // console.log("TCL: load: function()");
 			TIMAAT.LanguageLists.loadLanguages();
 		},
 		
 		loadLanguages: function() {
-    console.log("TCL: loadLanguages: function()");
+    // console.log("TCL: loadLanguages: function()");
 			$('.lists-datatables').hide();
 			$('.languages-datatable').show();
 			TIMAAT.LanguageLists.setLanguageList();
 		},
 
 		loadLanguagesDatatables: function() {
-			console.log("TCL: loadLanguagesDatatables: function()");
+			// console.log("TCL: loadLanguagesDatatables: function()");
       TIMAAT.LanguageLists.setupLanguageDatatable();
 		},
 
 		setLanguageList: function() {
-      console.log("TCL: setLanguageList: function()");
+      // console.log("TCL: setLanguageList: function()");
 			$('.form').hide();
 			$('.languages-data-tabs').hide();
 			if ( TIMAAT.LanguageLists.languages == null) return;
@@ -175,7 +175,7 @@
 		},
 
 		setupLanguageDatatable: function() {			
-      console.log("TCL: setupLanguageDatatable");
+      // console.log("TCL: setupLanguageDatatable");
       // setup datatable
       TIMAAT.LanguageLists.dataTableLanguages = $('#timaat-languagelists-language-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -238,16 +238,15 @@
             $('.languages-nav-tabs').show();
             $('.languages-data-tabs').hide();
             $('.nav-tabs a[href="#languageDatasheet"]').tab('show');
-            var id = language.id;
             var selectedLanguage;
             var i = 0;
             for (; i < TIMAAT.LanguageLists.languages.length; i++) {
-              if (TIMAAT.LanguageLists.languages[i].model.id == id) {
+              if (TIMAAT.LanguageLists.languages[i].model.id == language.id) {
                 selectedLanguage = TIMAAT.LanguageLists.languages[i];
                 break;
               }
             }
-            $('#timaat-languagelists-language-metadata-form').data('language', selectedLanguage);
+            $('#timaat-languagelists-metadata-form').data('language', selectedLanguage);
             TIMAAT.LanguageLists.languageFormDatasheet('show', selectedLanguage);
           });
         },
@@ -278,7 +277,7 @@
     },
 
     refreshDatatable: async function() {
-      console.log("TCL: refreshDatatable");
+      // console.log("TCL: refreshDatatable");
       // set ajax data source
       if (TIMAAT.LanguageLists.dataTableLanguages) {
         TIMAAT.LanguageLists.dataTableLanguages.ajax.reload(null, false);
@@ -286,8 +285,7 @@
     },
 
 		addLanguage: function() {	
-			console.log("TCL: addLanguage: function()");
-			console.log("TCL: addLanguage");
+			// console.log("TCL: addLanguage");
 			$('.form').hide();
 			$('#timaat-languagelists-metadata-form').data(null);
       languageFormMetadataValidator.resetForm();
@@ -353,7 +351,7 @@
     },
 
     createLanguageModel: async function(formDataObject) {
-      console.log("TCL: formDataObject", formDataObject);
+      // console.log("TCL: formDataObject", formDataObject);
       var model = {
         id: 0,
         name: formDataObject.name,

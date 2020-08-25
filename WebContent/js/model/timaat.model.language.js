@@ -61,7 +61,6 @@
 				$('.languages-data-tabs').hide();
 				$('.nav-tabs a[href="#languageDatasheet"]').tab('show');
 				$('#timaat-languagelists-metadata-form').data('language', language);
-        console.log("TCL: Language -> constructor -> language", language);
 				TIMAAT.LanguageLists.languageFormDatasheet('show', language);
 			});
     }

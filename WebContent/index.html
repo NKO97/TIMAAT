@@ -190,7 +190,7 @@
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-lists">
-                  <a href="#lists"
+                  <a href="#listdatasets"
                     onclick="TIMAAT.CategoryLists.initListsComponent()"
                     data-toggle="popover"
                     data-trigger="hover"
@@ -911,32 +911,11 @@
               </div>
             </div> 
           </div>
-          <!-- <div class="modal fade" id="timaat-categorylists-categoryset-meta" tabindex="-1" role="dialog" aria-labelledby="categorySetMetaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="categorysetMetaLabel">CategorySet hinzufügen</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control form-control-sm" id="timaat-categoryset-meta-title" placeholder="Titel" aria-label="Titel">
-              </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-categoryset-meta-submit" disabled>Hinzufügen</button>
-                </div>
-              </div>
-            </div>
-          </div> -->
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="lists-tab" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#timaat-categorylists-categorysets" role="tab" aria-controls="categorysets" aria-selected="true">
+                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#categorySetDatasheet" role="tab" aria-controls="categorysets" aria-selected="true">
                     <i class="fas fa-tags"></i> Category Sets
                   </a>
                 </li>
@@ -1130,10 +1109,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm categorylist-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-categorylists-metadata-form-delete" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm categorylist-form-delete-button" id="timaat-categorylists-metadata-form-delete" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1192,10 +1171,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm rolelist-form-edit-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm rolelist-form-delete-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1267,10 +1246,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-languagelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm language-form-edit-button" id="timaat-languagelists-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <!-- <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" id="timaat-languagelists-metadata-form-delete" title="Delete">
+                                  <!-- <button type="button" class="btn btn-outline btn-danger btn-sm language-form-delete-button" id="timaat-languagelists-metadata-form-delete" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button> -->
                                 </div>

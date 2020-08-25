@@ -41,8 +41,8 @@
 			TIMAAT.MediaDatasets.load();
 			// Lists
 			TIMAAT.RoleLists.load();
-			TIMAAT.CategoryLists.load();
 			TIMAAT.LanguageLists.load();
+			TIMAAT.CategoryLists.load();
 		},
 
 	}
