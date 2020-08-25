@@ -865,7 +865,11 @@
 			if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
 				$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', medium);
-			} else {
+			} else if ( TIMAAT.MediaDatasets.subNavTab == 'mediumPreview') {
+				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
+				TIMAAT.MediaDatasets.lastForm = 'datasheet';
+			}
+			else {
 				// show tabs
 				$('.video-data-tab').show();
 				$('.title-data-tab').show();
@@ -874,6 +878,8 @@
 				$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
 				TIMAAT.MediaDatasets.showLastForm();
 			}
+			$('.preview-data-tab').hide();
+			$('#previewTab').addClass('annotationView');
 			$('#timaat-videoplayer-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
