@@ -477,7 +477,6 @@
 				return false;
 			});
 		},
-		
 
 		createSegment(model, list, callback) {
 			console.log("TCL: createSegment -> model, list, callback", model, list, callback);

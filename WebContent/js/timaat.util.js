@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Util = {
 		serverprefix: "",
 		
@@ -262,7 +262,7 @@
 			Module._free(encoded);
 	
 			return argonHash;
-		},	
+		},
 	}
 	
 }, window));

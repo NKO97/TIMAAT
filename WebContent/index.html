@@ -473,170 +473,161 @@
               </div>
             </div>
           </div>
-          
-          
-          
-          
           <div id="timaat-inspector" class="leaflet-sidebar collapsed">
-    <!-- Nav tabs -->
-    <div class="leaflet-sidebar-tabs">
-        <ul role="tablist"> <!-- top aligned tabs -->
-            <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
-            <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
-            <li><a title="Kategorien und Tags verknüpfen (nur bei Annotationen)" href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
-            <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-            <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
-            <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
-        </ul>
-        <ul role="tablist"> <!-- bottom aligned tabs -->
-            <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
-        </ul>
+            <!-- Nav tabs -->
+            <div class="leaflet-sidebar-tabs">
+              <ul role="tablist"> <!-- top aligned tabs -->
+                <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+                <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
+                <li><a title="Kategorien und Tags verknüpfen (nur bei Annotationen)" href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
+                <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+                <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
+                <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
+              </ul>
+              <ul role="tablist"> <!-- bottom aligned tabs -->
+                <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
+              </ul>
+            </div>
+            <!-- Tab panes -->
+            <div class="leaflet-sidebar-content">
+              <div id="timaat-inspector-metadata" class="leaflet-sidebar-pane">
+                <h1 class="leaflet-sidebar-header">
+                  <span id="timaat-inspector-metadata-title">Metadaten</span>
+                  <div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div>
+                </h1>
+              <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
+    <div class="input-group input-group-sm mb-1">
+      <div id="timaat-inspector-meta-color-group" class="input-group-prepend">
+        <span class="input-group-text">
+          <div class="timaat-colorPicker" id="timaat-inspector-meta-colorPicker">
+            <a class="color"><div class="colorInner"></div></a>
+            <div class="track"></div>
+            <ul class="dropdown"><li></li></ul>
+            <input type="hidden" id="timaat-inspector-meta-color" class="colorInput"/>
+          </div>
+        </span>
+      </div>
+      <input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Title" aria-label="Title"/>
+    </div>
+    <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
+      <div class="input-group-prepend"><span class="input-group-text">Deckkraft</span></div>
+      <div class="form-control form-control-sm">
+        <input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
+      </div>
+      <div class="input-group-append">
+        <button class="btn btn-primary" id="timaat-inspector-meta-outline" type="button"><i class="far fa-square"></i></button>
+      </div>
     </div>
 
-    <!-- Tab panes -->
-    <div class="leaflet-sidebar-content">
-        <div id="timaat-inspector-metadata" class="leaflet-sidebar-pane">
-            <h1 class="leaflet-sidebar-header">
-                <span id="timaat-inspector-metadata-title">Metadaten</span>
-                <div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div>
-            </h1>
-          <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
-	<div class="input-group input-group-sm mb-1">
-		<div id="timaat-inspector-meta-color-group" class="input-group-prepend">
-			<span class="input-group-text">
-				<div class="timaat-colorPicker" id="timaat-inspector-meta-colorPicker">
-					<a class="color"><div class="colorInner"></div></a>
-					<div class="track"></div>
-					<ul class="dropdown"><li></li></ul>
-					<input type="hidden" id="timaat-inspector-meta-color" class="colorInput"/>
-				</div>
-			</span>
-		</div>
-    <input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Title" aria-label="Title"/>
-	</div>
-	<div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
-		<div class="input-group-prepend"><span class="input-group-text">Deckkraft</span></div>
-		<div class="form-control form-control-sm">
-	 		<input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
- 		</div>
- 		<div class="input-group-append">
- 			<button class="btn btn-primary" id="timaat-inspector-meta-outline" type="button"><i class="far fa-square"></i></button>
- 		</div>
-	</div>
-
-	<div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
-			<div class="input-group-prepend"><span class="input-group-text">Annotationsziel</span></div>
-			<div class="btn-group">
-				<button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
-				<button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
-			</div>
-	</div>
-	
-	<div id="timaat-inspector-meta-timecode-group">
-	<div class="input-group input-group-sm mb-1">
-		<div class="input-group-prepend">
-			<span class="input-group-text">Start</span>
-		</div>
-		<input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
-		<div class="input-group-append">
-			<button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
-		</div>
-		</div>
-			<div class="input-group input-group-sm mb-3">
-		<div class="input-group-prepend">				
-			<button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
-			<div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
-				<a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
-				<div role="separator" class="dropdown-divider"></div>
-				<a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
-			</div>
-		</div>
-		<input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-inspector-meta-end" aria-label="Ende Timecode" />
-		<div class="input-group-append">
-			<button class="btn btn-secondary" id="timaat-inspector-meta-setend" type="button"><i class="fas fa-clock"></i></button>
-		</div>
-	</div>
-  </div>
-  <div id="timaat-inspector-meta-shortDescription-group" class="input-group input-group-sm mb-3">
-    <textarea class="form-control form-control-sm" id="timaat-inspector-meta-shortDescription" placeholder="Short description" aria-label="Short description"></textarea>
-  </div>
-	<div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
-		<textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Comment"></textarea>
-	</div>
-	<button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
-  </div>
-</div>
-
-        <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
-            <h1 class="leaflet-sidebar-header">Animationseinstellungen<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-            <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
-	            <p>
-					<strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
-				</p>
-				<br>
-				<button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block"><i class="fas fa-running fa-fw"></i> Animation erstellen</button>
-				<button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block"><i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen</button>
-				<br>
-				<h6>Keyframes</h6>
-        	    <div id="timaat-inspector-animation-keyframes"></div>
-            </div>
+    <div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend"><span class="input-group-text">Annotationsziel</span></div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
+          <button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
         </div>
-
-        <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
-            <h1 class="leaflet-sidebar-header">Kategorien und Tags<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-            <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane">
-			Diese Funktion steht in Kürze zur Verfügung.
-            </div>
-        </div>
-
-        <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
-            <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-            <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
-	            <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
-	            <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
-					<table class="actors-available table table-striped table-bordered table-hover">
-						<thead class="thead-dark">
-							<tr><th>Titel</th></tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-	            </div>
-	            <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
-	            <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
-					<table class="actors-annotation table table-striped table-bordered table-hover">
-						<thead class="thead-light">
-							<tr><th>Titel</th></tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-				</div>
-            </div>
-        </div>
-
-        <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
-            <h1 class="leaflet-sidebar-header">Events<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-            <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
-			Events werden von FIPOP noch nicht unterstützt.
-            </div>
-        </div>
-
-        <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
-            <h1 class="leaflet-sidebar-header">Locations<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-            <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane">
-			Locations werden von FIPOP noch nicht unterstützt.
-            </div>
-        </div>
-	</div>
-        
-
     </div>
-          
-          
+    
+    <div id="timaat-inspector-meta-timecode-group">
+    <div class="input-group input-group-sm mb-1">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Start</span>
+      </div>
+      <input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
+      <div class="input-group-append">
+        <button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
+      </div>
+      </div>
+        <div class="input-group input-group-sm mb-3">
+      <div class="input-group-prepend">				
+        <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+        <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
+          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
+        </div>
+      </div>
+      <input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-inspector-meta-end" aria-label="Ende Timecode" />
+      <div class="input-group-append">
+        <button class="btn btn-secondary" id="timaat-inspector-meta-setend" type="button"><i class="fas fa-clock"></i></button>
+      </div>
+    </div>
+    </div>
+    <div id="timaat-inspector-meta-shortDescription-group" class="input-group input-group-sm mb-3">
+      <textarea class="form-control form-control-sm" id="timaat-inspector-meta-shortDescription" placeholder="Short description" aria-label="Short description"></textarea>
+    </div>
+    <div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
+      <textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Comment"></textarea>
+    </div>
+    <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
+    </div>
+  </div>
+
+          <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
+              <h1 class="leaflet-sidebar-header">Animationseinstellungen<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+              <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
+                <p>
+            <strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
+          </p>
+          <br>
+          <button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block"><i class="fas fa-running fa-fw"></i> Animation erstellen</button>
+          <button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block"><i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen</button>
+          <br>
+          <h6>Keyframes</h6>
+                <div id="timaat-inspector-animation-keyframes"></div>
+              </div>
+          </div>
+
+          <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
+              <h1 class="leaflet-sidebar-header">Kategorien und Tags<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+              <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane">
+        Diese Funktion steht in Kürze zur Verfügung.
+              </div>
+          </div>
+
+          <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
+              <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+              <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
+                <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
+                <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
+            <table class="actors-available table table-striped table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>Titel</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+                </div>
+                <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
+                <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+            <table class="actors-annotation table table-striped table-bordered table-hover">
+              <thead class="thead-light">
+                <tr><th>Titel</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+              </div>
+          </div>
+
+          <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
+              <h1 class="leaflet-sidebar-header">Events<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+              <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
+        Events werden von FIPOP noch nicht unterstützt.
+              </div>
+          </div>
+
+          <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
+              <h1 class="leaflet-sidebar-header">Locations<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
+              <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane">
+        Locations werden von FIPOP noch nicht unterstützt.
+              </div>
+          </div>
+            </div>
+          </div>  
           <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
             <div class="d-flex justify-content-center col-lg-12">
               <h1>Kein Video geladen</h1>
@@ -737,26 +728,38 @@
               <div class="card">
                 <div class="card-body">
                 	<div class="d-flex justify-content-between align-items-end mb-2">
-						<div>00:00</div>
+						        <div>00:00</div>
                 		<div class="btn-group">
                 			<button type="button" class="btn btn-sm btn-primary timaat-button-videolayer"><i class="fas fa-video"></i> Video</button>
                 			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audiolayer"><i class="fas fa-headphones"></i> Audio</button>
                 		</div>
-						<div class="timaat-videoduration">xx:xx</div>
+						        <div class="timaat-videoduration">xx:xx</div>
                 	</div>
-                	<div id="timaat-timeline-zoomable-wrapper" class="pb-2"><div id="timaat-timeline-zoomable">
-                  <div id="timaat-timeline-segment-pane"></div>
-                  <div id="timaat-timeline-keyframe-pane"></div>
-                  <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
-                  <br>
-                  <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
-					<div class="timaat-audiolayer mb-2">
-						<div class="timaat-audio-baseline"></div>
-						<img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
-					</div>
-				</div>
+                	<div id="timaat-timeline-zoomable-wrapper" class="pb-2">
+                    <div id="timaat-timeline-zoomable">
+                      <div id="timaat-timeline-segment-pane"></div>
+                      <div id="timaat-timeline-keyframe-pane"></div>
+                      <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
+                      <br>
+                      <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
+                        <div class="timaat-audiolayer mb-2">
+                          <div class="timaat-audio-baseline"></div>
+                          <img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
+                        </div>
+                      </div>
+                    </div>
                 	</div>
-                	</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row timaat-videoplayer-ui">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div id="timaat-videoplayer-media-tabs-container">
+                    
+                  </div>
                 </div>
               </div>
             </div>
@@ -1594,441 +1597,443 @@
                       </div>
                     </div>
                     <!-- Media data -->
-                    <div class="col-md-8" id="timaat-mediadatasets-media-tabs">
-                      <ul class="nav nav-tabs media-nav-tabs">
-                        <li class="nav-item media-data-tabs preview-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
-                        </li>
-                        <li class="nav-item media-data-tabs medium-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form" href="#mediumDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs audio-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-audio-metadata-form" href="#audioDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs document-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-document-metadata-form" href="#documentDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs image-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-image-metadata-form" href="#imageDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs software-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-software-metadata-form" href="#softwareDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs text-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-text-metadata-form" href="#textDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs video-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-video-metadata-form" href="#videoDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs videogame-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datasheet</a>
-                        </li>
-                        <li class="nav-item media-data-tabs title-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-titles-form" href="#mediumTitles">Medium titles</a>
-                        </li>
-                        <li class="nav-item media-data-tabs languagetrack-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Languages</a>
-                        </li>
-                        <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
-                          <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form" href="#mediumActorRoles">Actors</a>
-                        </li>
-                      </ul>
-                      <!-- Data tab content -->
-                      <!-- preview form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
-                        <div class="form-header">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <h5 class="form-title caps-title" id="mediumPreviewFormHeader">Medium Preview</h5>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
-                                    <i class="fas fa-file-upload"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
-                                    <i class="fas fa-draw-polygon"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
-                                    <i class="fas fa-trash-alt"></i>
-                                  </button>
+                    <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
+                      <div id="timaat-mediadatasets-media-tabs">
+                        <ul class="nav nav-tabs media-nav-tabs">
+                          <li class="nav-item media-data-tabs preview-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
+                          </li>
+                          <li class="nav-item media-data-tabs medium-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form" href="#mediumDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs audio-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-audio-metadata-form" href="#audioDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs document-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-document-metadata-form" href="#documentDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs image-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-image-metadata-form" href="#imageDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs software-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-software-metadata-form" href="#softwareDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs text-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-text-metadata-form" href="#textDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs video-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-video-metadata-form" href="#videoDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs videogame-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs title-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-medium-titles-form" href="#mediumTitles">Medium titles</a>
+                          </li>
+                          <li class="nav-item media-data-tabs languagetrack-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Languages</a>
+                          </li>
+                          <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form" href="#mediumActorRoles">Actors</a>
+                          </li>
+                        </ul>
+                        <!-- Data tab content -->
+                        <!-- preview form -->
+                        <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumPreviewFormHeader">Medium Preview</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div> <!-- Medium data -->
-                          <div class="form-group preview-data medium-preview-data">
-                            <div class="image-preview">
-                              <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                          <div> <!-- Medium data -->
+                            <div class="form-group preview-data medium-preview-data">
+                              <div class="image-preview">
+                                <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                              </div>
+                              <div class="video-preview">
+                                <video id="videoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                  <!-- <source src="" id="videoSource" type="video/mp4">Your browser does not support the video tag. -->
+                                </video>
+                              </div>
+                              
                             </div>
-                            <div class="video-preview">
-                              <video id="videoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
-                                <!-- <source src="" id="videoSource" type="video/mp4">Your browser does not support the video tag. -->
-                              </video>
-                            </div>
-                            
                           </div>
-                        </div>
-                      </form>
-                      <!-- datasheet form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>
-                        <div class="form-header">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <h5 class="form-title caps-title" id="mediumFormHeader">Medium</h5>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
-                                    <i class="fas fa-file-upload"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
-                                    <i class="fas fa-draw-polygon"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
-                                    <i class="fas fa-trash-alt"></i>
-                                  </button>
+                        </form>
+                        <!-- datasheet form -->
+                        <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumFormHeader">Medium</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div> <!-- Medium data -->
-                          <div class="form-group datasheet-data title-data">
-                            <div class="form-row">
-                              <div class="col-md-9">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title">Display Title*</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
-                              </div>                            
-                              <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="medium-title-language-select-dropdown">Title's Language*</label>
-                                <select class="form-control form-control-sm" 
-                                        id="medium-title-language-select-dropdown" 
-                                        name="displayTitleLanguageId" 
-                                        data-placeholder="Select title language"
-                                        required>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- <div class="form-group datasheet-data mediumtype-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-mediatype-id">Medium Type*</label>
-                            <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-mediatype-id" name="typeId" required>
-                              <option value="" disabled selected hidden>[Choose medium type...]</option>
-                              <option value="1">Audio</option>
-                              <option value="2">Document</option>
-                              <option value="3">Image</option>
-                              <option value="4">Software</option>
-                              <option value="5">Text</option>
-                              <option value="6">Video</option>
-                              <option value="7">Videogame</option>
-                            </select>
-                          </div> -->
-                          <div class="form-group datasheet-data medium-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-releasedate">Release Date</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
-                          </div>
-                          <div class="form-group datasheet-data source-data">
-                            <div class="form-row">
-                              <div class="col-md-9">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Quelle (URL)</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
-                              </div> 
-                              <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primärquelle?</label>
-                                <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data source-data">
-                            <div class="form-row">
-                              <div class="col-md-9">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Quelle (letzter Zugriff)</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
-                              </div> 
-                              <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Quelle verfügbar?</label>
-                                <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data audio-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-length">Länge</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-length" name="length" placeholder="[Length]" aria-describedby="Length">
-                          </div>
-                          <div class="form-group datasheet-data audio-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-audiocodec">Audio Codec</label>
-                            <input class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
-                          </div>
-                          <div class="form-group datasheet-data image-data">
-                            <div class="form-row">
-                              <div class="col-md-4">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Bildbreite</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
-                              </div>
-                              <div class="col-md-4">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Bildhöhe</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[Enter image height]" aria-describedby="Image Height">
-                              </div>
-                              <div class="col-md-4">                                
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bittiefe</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[Enter image bit depth]" aria-describedby="Bit Depth">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data software-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-software-version">Version</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-software-version" name="version" placeholder="[Enter version]" aria-describedby="Version">
-                          </div>
-                          <div class="form-group datasheet-data text-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-text-content">Content</label>
-                            <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-text-content" name="content" placeholder="[Enter text content]" aria-describedby="Content"></textarea>
-                          </div>
-                          <div class="form-group datasheet-data video-data">
-                            <div class="form-row">
-                              <div class="col-md-9">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Länge</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
-                              </div>
-                              <div class="col-md-3">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
-                                <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data video-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-videocodec">Video codec</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
-                          </div>
-                          <div class="form-group datasheet-data video-data">
-                            <div class="form-row">
-                              <div class="col-md-6">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Videobreite</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
-                              </div>
-                              <div class="col-md-6">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Videohöhe</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
-                              </div>  
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data video-data">
-                            <div class="form-row">
-                              <div class="col-md-4">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-framerate">Frame rate</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
-                              </div>
-                              <div class="col-md-4">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-datarate">Data rate</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
-                            </div>
-                            <div class="col-md-4">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-totalbitrate">Total bitrate</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group datasheet-data videogame-data col-md-2 ">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
-                            <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-videogame-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
-                          </div>
-                          <div class="form-group datasheet-data medium-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-copyright">Copyright</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
-                          </div>
-                          <div class="form-group datasheet-data medium-data">
-                            <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-remark">Remark</label>
-                            <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
-                          </div>
-                        </div>
-                        <!-- Save/Cancel buttons -->
-                          <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
-                          </div>
-                      </form>
-                      <!-- titles form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
-                        <div class="form-header">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <h5 class="form-title caps-title" id="mediumTitlesLabel">Medium titles</h5>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
-                                    <i class="fas fa-file-upload"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
-                                    <i class="fas fa-draw-polygon"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
+                          <div> <!-- Medium data -->
+                            <div class="form-group datasheet-data title-data">
+                              <div class="form-row">
+                                <div class="col-md-9">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title">Display Title*</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
+                                </div>                            
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="medium-title-language-select-dropdown">Title's Language*</label>
+                                  <select class="form-control form-control-sm" 
+                                          id="medium-title-language-select-dropdown" 
+                                          name="displayTitleLanguageId" 
+                                          data-placeholder="Select title language"
+                                          required>
+                                  </select>
                                 </div>
                               </div>
                             </div>
+                            <!-- <div class="form-group datasheet-data mediumtype-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-mediatype-id">Medium Type*</label>
+                              <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-mediatype-id" name="typeId" required>
+                                <option value="" disabled selected hidden>[Choose medium type...]</option>
+                                <option value="1">Audio</option>
+                                <option value="2">Document</option>
+                                <option value="3">Image</option>
+                                <option value="4">Software</option>
+                                <option value="5">Text</option>
+                                <option value="6">Video</option>
+                                <option value="7">Videogame</option>
+                              </select>
+                            </div> -->
+                            <div class="form-group datasheet-data medium-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-releasedate">Release Date</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
+                            </div>
+                            <div class="form-group datasheet-data source-data">
+                              <div class="form-row">
+                                <div class="col-md-9">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Quelle (URL)</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
+                                </div> 
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primärquelle?</label>
+                                  <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data source-data">
+                              <div class="form-row">
+                                <div class="col-md-9">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Quelle (letzter Zugriff)</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
+                                </div> 
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Quelle verfügbar?</label>
+                                  <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data audio-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-length">Länge</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-length" name="length" placeholder="[Length]" aria-describedby="Length">
+                            </div>
+                            <div class="form-group datasheet-data audio-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-audiocodec">Audio Codec</label>
+                              <input class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
+                            </div>
+                            <div class="form-group datasheet-data image-data">
+                              <div class="form-row">
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Bildbreite</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Bildhöhe</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[Enter image height]" aria-describedby="Image Height">
+                                </div>
+                                <div class="col-md-4">                                
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bittiefe</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[Enter image bit depth]" aria-describedby="Bit Depth">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data software-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-software-version">Version</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-software-version" name="version" placeholder="[Enter version]" aria-describedby="Version">
+                            </div>
+                            <div class="form-group datasheet-data text-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-text-content">Content</label>
+                              <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-text-content" name="content" placeholder="[Enter text content]" aria-describedby="Content"></textarea>
+                            </div>
+                            <div class="form-group datasheet-data video-data">
+                              <div class="form-row">
+                                <div class="col-md-9">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Länge</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
+                                  <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data video-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-videocodec">Video codec</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
+                            </div>
+                            <div class="form-group datasheet-data video-data">
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Videobreite</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Videohöhe</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
+                                </div>  
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data video-data">
+                              <div class="form-row">
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-framerate">Frame rate</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-datarate">Data rate</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
+                              </div>
+                              <div class="col-md-4">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-totalbitrate">Total bitrate</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data videogame-data col-md-2 ">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
+                              <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-videogame-isepisode" name="isEpisode" aria-describedby="Is This An Episode?">
+                            </div>
+                            <div class="form-group datasheet-data medium-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-copyright">Copyright</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-copyright" name="copyright" placeholder="[Enter copyright information]" aria-describedby="Copyright">
+                            </div>
+                            <div class="form-group datasheet-data medium-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-remark">Remark</label>
+                              <textarea class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
+                            </div>
                           </div>
-                          <div class="form-row">
-                            <div class="col-sm-2 col-md-1">
-                              <h6 class="form-header">Display title</h6>
+                          <!-- Save/Cancel buttons -->
+                            <div class="medium-datasheet-form-submit">
+                              <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
+                              <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
                             </div>
-                            <div class="col-sm-2 col-md-1">
-                              <h6 class="form-header">Original title</h6>
+                        </form>
+                        <!-- titles form -->
+                        <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumTitlesLabel">Medium titles</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-sm-5 col-md-7">
-                              <h6 class="form-header">Medium title</h6>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                              <h6 class="form-header">Title's language</h6>
-                            </div>
-                            <div class="col-sm-1 col-md-1">
-                              <h6 class="form-header"></h6>
+                            <div class="form-row">
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header">Display title</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header">Original title</h6>
+                              </div>
+                              <div class="col-sm-5 col-md-7">
+                                <h6 class="form-header">Medium title</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Title's language</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="medium-titles-container">
-                          <div data-role="dynamic-title-fields" id="dynamic-title-fields">
-                            <div class="form-group">                              
+                          <div class="medium-titles-container">
+                            <div data-role="dynamic-title-fields" id="dynamic-title-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!-- additional title form content will be created dynamically --> 
                             </div>
-                          <!-- additional title form content will be created dynamically --> 
+                            <div class="title-form-divider">
+                              <br>
+                              <hr>                            
+                            </div>
+                            <div data-role="new-title-fields" id="new-title-fields">
+                              <!-- one row for new title information that shall be added to the titles list --> 
+                              <div class="form-group">                              
+                              </div>
+                            </div>
                           </div>
                           <div class="title-form-divider">
-                            <br>
                             <hr>                            
                           </div>
-                          <div data-role="new-title-fields" id="new-title-fields">
-                            <!-- one row for new title information that shall be added to the titles list --> 
-                            <div class="form-group">                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="title-form-divider">
-                          <hr>                            
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
-                      </form>
-                      <!-- language tracks form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
-                        <div class="form-header">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <h5 class="form-title caps-title" id="mediumLanguageTracksLabel">Medium language tracks</h5>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
-                                    <i class="fas fa-file-upload"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
-                                    <i class="fas fa-draw-polygon"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
+                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
+                        </form>
+                        <!-- language tracks form -->
+                        <form class="form" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumLanguageTracksLabel">Medium language tracks</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
+                            <div class="form-row">
+                              <div class="col-md-5">
+                                <h6 class="form-header">Track type</h6>
+                              </div>
+                              <div class="col-md-5">
+                                <h6 class="form-header">Track language</h6>
+                              </div>
+                              <div class="col-md-2">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
                           </div>
-                          <div class="form-row">
-                            <div class="col-md-5">
-                              <h6 class="form-header">Track type</h6>
+                          <div class="medium-languagetracks-container">
+                            <div data-role="dynamic-languagetrack-fields" id="dynamic-languagetrack-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!-- additional language track form content will be created dynamically --> 
                             </div>
-                            <div class="col-md-5">
-                              <h6 class="form-header">Track language</h6>
+                            <div class="languagetrack-form-divider">
+                              <br>
+                              <hr>                            
                             </div>
-                            <div class="col-md-2">
-                              <h6 class="form-header"></h6>
+                            <div data-role="new-languagetrack-fields" id="new-languagetrack-fields">
+                              <!-- one row for new language track information that shall be added to the language track list --> 
+                              <div class="form-group">                              
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div class="medium-languagetracks-container">
-                          <div data-role="dynamic-languagetrack-fields" id="dynamic-languagetrack-fields">
-                            <div class="form-group">                              
-                            </div>
-                          <!-- additional language track form content will be created dynamically --> 
                           </div>
                           <div class="languagetrack-form-divider">
-                            <br>
                             <hr>                            
                           </div>
-                          <div data-role="new-languagetrack-fields" id="new-languagetrack-fields">
-                            <!-- one row for new language track information that shall be added to the language track list --> 
-                            <div class="form-group">                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="languagetrack-form-divider">
-                          <hr>                            
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Done</button>
-                      </form>
-                      <!-- actor-roles form -->
-                      <form class="form" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
-                        <div class="form-header">
-                          <div class="form-row">
-                            <div class="col-md-9">
-                              <h5 class="form-title caps-title" id="mediumActorRolesLabel">Medium actor roles</h5>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
-                                    <i class="fas fa-file-upload"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
-                                    <i class="fas fa-draw-polygon"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
-                                    <i class="fas fa-edit"></i>
-                                  </button>
+                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Done</button>
+                        </form>
+                        <!-- actor-roles form -->
+                        <form class="form" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumActorRolesLabel">Medium actor roles</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <h6 class="form-header">Actor</h6>
+                              </div>
+                              <div class="col-md-7">
+                                <h6 class="form-header">Has role(s)</h6>
+                              </div>
+                              <div class="col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
                           </div>
-                          <div class="form-row">
-                            <div class="col-md-4">
-                              <h6 class="form-header">Actor</h6>
+                          <div class="medium-actorwithrole-container">
+                            <div data-role="dynamic-actorwithrole-fields" id="dynamic-actorwithrole-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!-- additional actor role form content will be created dynamically --> 
                             </div>
-                            <div class="col-md-7">
-                              <h6 class="form-header">Has role(s)</h6>
+                            <div class="actorwithrole-form-divider">
+                              <br>
+                              <hr>                            
                             </div>
-                            <div class="col-md-1">
-                              <h6 class="form-header"></h6>
+                            <div data-role="new-actorwithrole-fields" id="new-actorwithrole-fields">
+                              <!-- one row for new actor role information that shall be added to the actor role list --> 
+                              <div class="form-group">                              
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div class="medium-actorwithrole-container">
-                          <div data-role="dynamic-actorwithrole-fields" id="dynamic-actorwithrole-fields">
-                            <div class="form-group">                              
-                            </div>
-                          <!-- additional actor role form content will be created dynamically --> 
                           </div>
                           <div class="actorwithrole-form-divider">
-                            <br>
                             <hr>                            
                           </div>
-                          <div data-role="new-actorwithrole-fields" id="new-actorwithrole-fields">
-                            <!-- one row for new actor role information that shall be added to the actor role list --> 
-                            <div class="form-group">                              
-                            </div>
-                          </div>
-                        </div>
-                        <div class="actorwithrole-form-divider">
-                          <hr>                            
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-actorwithroles-form-submit" name="submit">Save</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
-                      </form>
+                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-actorwithroles-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
