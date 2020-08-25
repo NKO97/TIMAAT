@@ -5576,6 +5576,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.ActorDatasets.selectedId) {
+						TIMAAT.ActorDatasets.clearLastSelection();
 						$(row).addClass('selected');
 					}
 				},
@@ -5722,6 +5723,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.ActorDatasets.selectedId) {
+						TIMAAT.ActorDatasets.clearLastSelection();
 						$(row).addClass('selected');
 					}
 				},
@@ -5858,6 +5860,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.ActorDatasets.selectedId) {
+						TIMAAT.ActorDatasets.clearLastSelection();
 						$(row).addClass('selected');
 					}
 				},
