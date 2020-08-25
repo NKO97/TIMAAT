@@ -892,7 +892,6 @@ public class MediumServiceEndpoint {
 		List<Role> roleList = new ArrayList<>();
 		for (ActorHasRole actorHasRole : actorHasRoleList) {
 			if (actorHasRole.getId().getActorId() == actorId) {
-				System.out.println("MediumServiceEndpoint: getActorHasRoleList - role found");
 				roleList.add(entityManager.find(Role.class, actorHasRole.getId().getRoleId()));
 			}
 		}
