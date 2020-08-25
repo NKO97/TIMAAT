@@ -306,12 +306,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	padding: 0px;
 }
 
-#timaat-mediadatasets-metadata-form,
-#timaat-mediadatasets-medium-titles-form,
-#timaat-mediadatasets-medium-languagetracks-form {
-	display: none;
-}
-
 .timaat-library-list-wrapper {
 	height: 100%;
 	width: 100%;
