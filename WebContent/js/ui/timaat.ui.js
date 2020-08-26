@@ -298,11 +298,12 @@
 						$('#timaat-login-modal').modal('hide');
 						$('#timaat-user-info').html(e.accountName);							
 						TIMAAT.VideoChooser.loadCollections();
-						TIMAAT.MediaDatasets.loadMediaDatatables();
-						TIMAAT.ActorDatasets.loadActorDatatables();
-						TIMAAT.RoleLists.loadRolesDatatables();
-						TIMAAT.LanguageLists.loadLanguagesDatatables();
-						TIMAAT.CategoryLists.loadCategoriesDatatables();
+						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
+						TIMAAT.MediaDatasets.loadMediaDataTables();
+						TIMAAT.ActorDatasets.loadActorDataTables();
+						TIMAAT.RoleLists.loadRolesDataTables();
+						TIMAAT.LanguageLists.loadLanguagesDataTables();
+						TIMAAT.CategoryLists.loadCategoriesDataTables();
 						TIMAAT.Datasets.load();
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);

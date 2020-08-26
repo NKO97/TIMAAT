@@ -116,21 +116,17 @@
         </div>
       </div>
     </div>
-    <div id="wrapper" class="toggled">
-    
-        <!-------------------------------------------------------------------->
-        <!-- Notifications                                                  -->
-        <!-------------------------------------------------------------------->
-
-<div aria-live="polite" aria-atomic="true" style="position: relative; z-index:1500">
-  <div id="timaat-notification-pane">
-  </div>
-</div>
-
-      
-        <!-------------------------------------------------------------------->
-        <!-- Navigation                                                     -->
-        <!-------------------------------------------------------------------->
+    <div id="wrapper" class="toggled"> 
+      <!-------------------------------------------------------------------->
+      <!-- Notifications                                                  -->
+      <!-------------------------------------------------------------------->
+      <div aria-live="polite" aria-atomic="true" style="position: relative; z-index:1500">
+        <div id="timaat-notification-pane">
+        </div>
+      </div>
+      <!-------------------------------------------------------------------->
+      <!-- Navigation                                                     -->
+      <!-------------------------------------------------------------------->
       <div class="navigation">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top pt-1 pb-1 pl-1" role="navigation" style="margin-bottom: 0">
@@ -1350,8 +1346,10 @@
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-md-12">
-              <!-- Nav bar tabs -->
-              <ul class="nav nav-pills" id="media-tabs" role="tablist">
+              <ul class="nav nav-pills" id="media-tabs" role="tablist"> <!-- Nav bar tabs -->
+                <li class="nav-item">
+                  <a class="nav-link" id="collections-tab" onclick="TIMAAT.MediaCollectionDatasets.loadMediaCollections()" data-toggle="tab" href="#mediaCollections" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
+                </li>
                 <li class="nav-item active">
                   <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="media" aria-selected="true"><i class="fas fa-photo-video"></i> Media</a>
                 </li>
@@ -1382,6 +1380,30 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Media lists -->
                     <div class="col-md-4">
+                      <div class="card media-datatables mediacollection-datatable">
+                        <div class="card-header">Media Collections
+                           <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="timaat-datasets-list-wrapper">
+                          <div id="timaat-mediacollectiondatasets-mediumcollection-list-loader" class="text-center bg-info text-white">
+                            <i class="fas fa-spinner fa-spin"></i> Lade Daten...
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediacollectiondatasets-mediacollection-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediacollection-table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Titel</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediacollectiondatasets-mediumcollection-list">
+                              </tbody>
+                            </table>
+                            <!-- <ul id="timaat-mediadatasets-medium-list" class="list-group list-group-flush"></ul> -->
+                          </div>
+                        </div>
+                      </div>
                       <div class="card media-datatables media-datatable">
                         <div class="card-header">Media
                            <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
@@ -1579,6 +1601,9 @@
                     <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
                       <div id="timaat-mediadatasets-media-tabs">
                         <ul class="nav nav-tabs media-nav-tabs">
+                          <li class="nav-item media-data-tabs mediumcollection-data-tab">
+                            <a class="nav-link nav-link-media" id="media-tab-mediumcollection-metadata-form" href="#mediumCollectionDatasheet">Datasheet</a>
+                          </li>
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
                             <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
                           </li>
@@ -3465,6 +3490,5 @@
       </div>
       <img class="popover-body" style="width:128px;" src="img/preview-placeholder.png" alt="Vorschau"/>
     </div>
-
   </body>
 </html>

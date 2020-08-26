@@ -30,7 +30,7 @@
 	
 		loadCollections: function() {
 			// load media collections
-			TIMAAT.Service.getMediaCollections(TIMAAT.VideoChooser.setupMediaCollections);
+			TIMAAT.MediaCollectionService.getMediaCollections(TIMAAT.VideoChooser.setupMediaCollections);
 			// init datatable
 			TIMAAT.VideoChooser.setupDatatable();
 //			if ( !TIMAAT.VideoChooser.collection ) {
@@ -90,7 +90,7 @@
 					TIMAAT.VideoChooser.collection.note = comment;
 					TIMAAT.VideoChooser.updateMediacollection(TIMAAT.VideoChooser.collection);
 				} else {
-					TIMAAT.Service.createMediacollection(title, comment, TIMAAT.VideoChooser._mediacollectionAdded);
+					TIMAAT.MediaCollectionService.createMediaCollection(title, comment, TIMAAT.VideoChooser._mediacollectionAdded);
 				}
 				modal.modal('hide');
 			});
@@ -135,7 +135,7 @@
 						var medium = $(row).data('medium');
 						if ( medium != null ) {
 							// sync to server
-							TIMAAT.Service.addCollectionItem(target, medium);
+							TIMAAT.MediaCollectionService.addCollectionItem(target, medium);
 							// sync to model
 							var found = false;
 							target.mediaCollectionHasMediums.forEach(function(item) {
@@ -664,7 +664,7 @@
 */
 				// set ajax data source
 				if ( TIMAAT.VideoChooser.dt ) {
-					TIMAAT.VideoChooser.dt.ajax.url('/TIMAAT/api/mediacollection/'+collection.id+'/media');
+					TIMAAT.VideoChooser.dt.ajax.url('/TIMAAT/api/mediaCollection/'+collection.id+'/media');
 					TIMAAT.VideoChooser.dt.ajax.reload();
 				}
 				
@@ -748,7 +748,7 @@
 			console.log("TCL: updateMediacollection: function(collection)");
 			console.log("TCL: collection", collection);
 			// sync to server
-			TIMAAT.Service.updateMediacollection(collection);
+			TIMAAT.MediaCollectionService.updateMediaCollection(collection);
 			// update UI collection view
 			collection.ui.find('.collection-title').html(collection.title);
 			$('#timaat-videochooser-list-target-collection option[value="'+collection.id+'"]').text(collection.title);
@@ -773,7 +773,7 @@
 			console.log("TCL: _mediacollectionRemoved: function(col)");
 			console.log("TCL: col", col);
 			// sync to server
-			TIMAAT.Service.removeMediacollection(col);
+			TIMAAT.MediaCollectionService.removeMediaCollection(col);
 
 			// remove from model lists
 			var index = TIMAAT.VideoChooser.collections.indexOf(col);
@@ -798,7 +798,7 @@
 			console.log(row, video);
 			
 			// remove from server
-			TIMAAT.Service.removeCollectionItem(TIMAAT.VideoChooser.collection, video).then((success) => {
+			TIMAAT.MediaCollectionService.removeCollectionItem(TIMAAT.VideoChooser.collection, video).then((success) => {
 				// sync changes with UI
 				TIMAAT.VideoChooser.dt.row(row).remove().draw();
 			});

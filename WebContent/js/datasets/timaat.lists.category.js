@@ -468,8 +468,8 @@
 			// TIMAAT.CategoryService.getAllCategorySets(TIMAAT.CategoryLists.setCategorySetsLists); // TODO uncomment once working
 		},
 
-		loadCategoriesDatatables: function() {
-			// console.log("TCL: loadCategoriesDatatables: function()");
+		loadCategoriesDataTables: function() {
+			// console.log("TCL: loadCategoriesDataTables: function()");
       TIMAAT.CategoryLists.setupCategoryDatatable();
       TIMAAT.CategoryLists.setupCategorySetDatatable();
 		},

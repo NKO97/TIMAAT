@@ -25,7 +25,8 @@
 			// Datasets
 			TIMAAT.ActorDatasets.init();
 			TIMAAT.EventDatasets.init();
-			TIMAAT.LocationDatasets.init();   
+			TIMAAT.LocationDatasets.init();
+			TIMAAT.MediaCollectionDatasets.init();
 			TIMAAT.MediaDatasets.init();
 			// Lists
 			TIMAAT.RoleLists.init();
@@ -37,7 +38,8 @@
 			// Datasets
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();
-			TIMAAT.LocationDatasets.load();   
+			TIMAAT.LocationDatasets.load();
+			TIMAAT.MediaCollectionDatasets.load();
 			TIMAAT.MediaDatasets.load();
 			// Lists
 			TIMAAT.RoleLists.load();

@@ -152,8 +152,8 @@
 			TIMAAT.LanguageLists.setLanguageList();
 		},
 
-		loadLanguagesDatatables: function() {
-			// console.log("TCL: loadLanguagesDatatables: function()");
+		loadLanguagesDataTables: function() {
+			// console.log("TCL: loadLanguagesDataTables: function()");
       TIMAAT.LanguageLists.setupLanguageDatatable();
 		},
 

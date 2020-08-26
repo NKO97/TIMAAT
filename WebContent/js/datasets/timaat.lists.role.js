@@ -229,8 +229,8 @@
       TIMAAT.RoleLists.setRoleGroupsList();
     },
 
-    loadRolesDatatables: function() {
-      // console.log("TCL: loadRolesDatatables: function()");
+    loadRolesDataTables: function() {
+      // console.log("TCL: loadRolesDataTables: function()");
       TIMAAT.RoleLists.setupRoleDatatable();
       TIMAAT.RoleLists.setupRoleGroupDatatable();
     },

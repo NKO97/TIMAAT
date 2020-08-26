@@ -2623,8 +2623,8 @@
 			// TIMAAT.ActorDatasets.setActorList();
 		},
 
-		loadActorDatatables: async function() {
-			console.log("TCL: loadActorDatatables: async function()")
+		loadActorDataTables: async function() {
+			console.log("TCL: loadActorDataTables: async function()")
 			TIMAAT.ActorDatasets.setupActorDatatable();
 			TIMAAT.ActorDatasets.setupPersonDatatable();
 			TIMAAT.ActorDatasets.setupCollectiveDatatable();

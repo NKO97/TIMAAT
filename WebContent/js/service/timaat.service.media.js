@@ -39,23 +39,23 @@
 			});			
 		},
 
-		listMedia(callback) {
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// console.log("TCL: listMedia -> data", data);
-				callback(data);
-			}).fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
-			});			
-		},
+		// listMedia(callback) {
+		// 	jQuery.ajax({
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/list",
+		// 		type:"GET",
+		// 		contentType:"application/json; charset=utf-8",
+		// 		dataType:"json",
+		// 		beforeSend: function (xhr) {
+		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+		// 		},
+		// 	}).done(function(data) {
+		// 		// console.log("TCL: listMedia -> data", data);
+		// 		callback(data);
+		// 	}).fail(function(e) {
+		// 		console.log(e.responseText);
+		// 		console.log( "error", e );
+		// 	});			
+		// },
 
 		async getMediaDatasetsTotal() {
 			return new Promise(resolve => {

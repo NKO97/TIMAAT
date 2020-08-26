@@ -39,41 +39,90 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
-
-
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
 */
 
 @Service
-@Path("/mediacollection")
+@Path("/mediaCollection")
 public class MediaCollectionEndpoint {
 	@Context
 	private UriInfo uriInfo;
 	@Context
-	ContainerRequestContext crc;
+	ContainerRequestContext containerRequestContext;
 	@Context
-	ServletContext ctx;
+	ServletContext servletContext;
 
-	
 	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("list")
+	public Response getMediaCollectionList(@QueryParam("draw") Integer draw,
+																				 @QueryParam("start") Integer start,
+																				 @QueryParam("length") Integer length,
+																				 @QueryParam("orderby") String orderby,
+																				 @QueryParam("dir") String direction,
+																				 @QueryParam("search") String search ) {
+		System.out.println("MediumCollectionServiceEndpoint: getMediaCollectionList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "mc.id";
+		if ( orderby != null) {
+			if (orderby.equalsIgnoreCase("title")) column = "mc.title";
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// calculate total # of records
+		Query countQuery = entityManager.createQuery("SELECT COUNT(mc) FROM MediaCollection mc");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
+		// search
+		Query query;
+		String sql;
+		List<MediaCollection> mediumCollectionList = new ArrayList<>();
+		if (search != null && search.length() > 0 ) {
+			// find all matching titles
+			sql = "SELECT mc FROM MediaCollection mc WHERE lower(mc.title) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all mediacollections
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			mediumCollectionList = castList(MediaCollection.class, query.getResultList());
+			recordsFiltered = mediumCollectionList.size();
+		} else {
+			sql = "SELECT mc FROM MediaCollection mc ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			mediumCollectionList = castList(MediaCollection.class, query.getResultList());
+		}
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumCollectionList)).build();
+	}
+
+
+
+	@GET
+	@Path("listCard")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@SuppressWarnings("unchecked")
-	public Response getAllCollections(
-			@QueryParam("nocontents") String nocontents
-			) {
+	public Response getAllCollections(@QueryParam("noContents") String noContents) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
+		// TODO get all mediacollections no matter the type, display type in frontend instead
 		List<MediaCollection> cols = (List<MediaCollection>) em.createQuery("SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC")
 				.setParameter("type", em.find(MediaCollectionType.class, 2)) // TODO refactor type
 				.getResultList();
 		
 		// strip analysislists
 		for ( MediaCollection col : cols ) {
-			if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
+			if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
 			for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 				m.getMedium().getMediumAnalysisLists().clear();
 				m.getMedium().getFileStatus();
@@ -90,7 +139,7 @@ public class MediaCollectionEndpoint {
 	@Secured
 	public Response getCollection(
 			@PathParam("id") int id,
-			@QueryParam("nocontents") String nocontents
+			@QueryParam("noContents") String noContents
 			) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
@@ -98,7 +147,7 @@ public class MediaCollectionEndpoint {
 		
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 		
-		if ( nocontents != null ) col.getMediaCollectionHasMediums().clear();
+		if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
 		// strip analysislists
 		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 			m.getMedium().getMediumAnalysisLists().clear();
@@ -228,8 +277,8 @@ public class MediaCollectionEndpoint {
 		em.refresh(newCol);
 		
 		// add log entry
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			UserLogManager.getLogger().addLogEntry((int)crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONCREATED);
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			UserLogManager.getLogger().addLogEntry((int)containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONCREATED);
 
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
@@ -276,7 +325,7 @@ public class MediaCollectionEndpoint {
 		em.refresh(col);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
 		return Response.ok().entity(col).build();
 	}
@@ -299,21 +348,21 @@ public class MediaCollectionEndpoint {
 		tx.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
 
 		return Response.ok().build();
 	}
 	
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/medium/{mediumID}")
+	@Path("{id}/medium/{mediumId}")
 	@Secured
-	public Response addMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumID") int mediumID) {
+	public Response addMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = em.find(MediaCollection.class, id);
     	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-    	Medium m = em.find(Medium.class, mediumID);
+    	Medium m = em.find(Medium.class, mediumId);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
     	
@@ -345,7 +394,7 @@ public class MediaCollectionEndpoint {
     	}
     	    	
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
 		return Response.ok().build();
 	}
@@ -353,14 +402,14 @@ public class MediaCollectionEndpoint {
 
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/medium/{mediumID}")
+	@Path("{id}/medium/{mediumId}")
 	@Secured
-	public Response deleteMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumID") int mediumID) {
+	public Response deleteMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = em.find(MediaCollection.class, id);
     	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-    	Medium m = em.find(Medium.class, mediumID);
+    	Medium m = em.find(Medium.class, mediumId);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
     	try {
@@ -378,7 +427,7 @@ public class MediaCollectionEndpoint {
     	}
     	
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
 
 		return Response.ok().build();
 	}
