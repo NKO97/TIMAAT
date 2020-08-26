@@ -1,0 +1,1 @@
+ALTER TABLE `FIPOP`.`medium_analysis_list_translation` DROP INDEX `title_UNIQUE`;
