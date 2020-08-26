@@ -2888,6 +2888,7 @@
 				// create medium
 				var tempMediumModel = mediumModel;
 				tempMediumModel.displayTitle = newDisplayTitle;
+				tempMediumModel.originalTitle = newDisplayTitle;
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediaService.createMedium(tempMediumModel);
 			} catch(error) {

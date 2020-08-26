@@ -684,6 +684,7 @@ public class ActorEndpoint {
 		// ActorType actorType = entityManager.find(ActorType.class, newActor.getActorType().getId());
 		// newActor.setActorType(actorType);
 		newActor.setDisplayName(null); //* displayName will be set once name is created
+		newActor.setBirthName(null); //* birthName will be set once name is created
 
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());

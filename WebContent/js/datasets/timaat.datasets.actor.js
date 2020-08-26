@@ -4190,7 +4190,9 @@
 				// create display name
 				displayNameModel.actor.id = newActorModel.id;
 				var newDisplayName = await TIMAAT.ActorService.addName(newActorModel.id, displayNameModel);
+        console.log("TCL: newDisplayName", newDisplayName);
 				newActorModel.displayName = newDisplayName;
+				newActorModel.birthName = newDisplayName;
 				newActorModel.actorNames[0] = newDisplayName;
         console.log("TCL: newActorModel", newActorModel);
 			} catch(error) {
@@ -4198,7 +4200,7 @@
 			}
 
 			try {
-				// update display name in actor
+				// update display and birth name in actor
 				await TIMAAT.ActorService.updateActor(newActorModel);
 				console.log("TCL: newActorModel", newActorModel);
 			} catch(error) {
@@ -4902,6 +4904,15 @@
 					id: typeId,
 				},
 				displayName: {
+					id: 0,
+					actor: {
+						id: 0
+					},
+					name: formDataObject.displayName,
+					usedFrom: formDataObject.nameUsedFrom,
+					usedUntil: formDataObject.nameUsedUntil,
+				},
+				birthName: {
 					id: 0,
 					actor: {
 						id: 0

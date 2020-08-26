@@ -948,6 +948,7 @@ public class MediumServiceEndpoint {
 		newMedium.setId(0);
 		Title displayTitle = entityManager.find(Title.class, newMedium.getDisplayTitle().getId());
 		newMedium.setDisplayTitle(displayTitle);
+		newMedium.setOriginalTitle(displayTitle);
 		Source source = new Source();
 
 		// update log metadata
@@ -971,6 +972,7 @@ public class MediumServiceEndpoint {
 		entityManager.persist(newMedium);
 		entityManager.flush();
 		newMedium.setDisplayTitle(displayTitle);
+		newMedium.setOriginalTitle(displayTitle);
 		entityTransaction.commit();
 		entityManager.refresh(newMedium);
 		entityManager.refresh(displayTitle);
