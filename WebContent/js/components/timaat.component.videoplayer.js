@@ -860,7 +860,7 @@
 			$('.timaat-videoplayer-ui').show();
 			var medium = new TIMAAT.Medium(video, 'video');
 			TIMAAT.VideoPlayer.selectedVideo = medium;
-			TIMAAT.MediaDatasets.clearLastSelection();
+			TIMAAT.MediaDatasets.clearLastMediumSelection();
 			$('#timaat-mediadatasets-metadata-form').data('medium', medium);
 			$('#timaat-mediadatasets-media-tabs').show();
 			if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
