@@ -351,10 +351,10 @@
 				"rowId"					: 'id',
 				"serverSide"		: true,
 				"ajax": {
-					"url": "api/medium/video/list",
+					"url"        : "api/medium/video/list",
 					"contentType": "application/json; charset=utf-8",
-					"dataType": "json",
-					"data": function(data) {
+					"dataType"   : "json",
+					"data"       : function(data) {
 						let serverData = {
 							draw: data.draw,
 							start: data.start,

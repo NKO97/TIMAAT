@@ -1391,7 +1391,7 @@
                             <i class="fas fa-spinner fa-spin"></i> Lade Daten...
                           </div>
                           <div class="card-body">
-                            <table id="timaat-mediacollectiondatasets-mediacollection-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediacollection-table">
+                            <table id="timaat-mediacollectiondatasets-mediacollection-list-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediacollection-table">
                               <thead class="thead-dark">
                                 <tr>
                                   <th>Titel</th>
@@ -1642,6 +1642,111 @@
                           </li>
                         </ul>
                         <!-- Data tab content -->
+                        <!-- collection form -->
+                        <form class="form" role="form" id="timaat-mediacollectiondatasets-metadata-form" name="timaat-mediacollectiondatasets-metadata-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="mediumCollectionFormHeader">Medium Collection</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediumcollection-form-edit-button" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediumcollection-form-delete-button" title="Delete medium collection">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div> <!-- Medium collection data -->
+                            <fieldset>
+                              <legend>Collection Metadata</legend>
+                              <div class="form-group datasheet-data mediumcollection-data">
+                                <div class="form-row">
+                                  <div class="col-md-12">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-title">Title*</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
+                                  </div>                            
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data mediumcollection-data">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-type-id">Collection Type*</label>
+                                    <select class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-type-id" name="typeId" required>
+                                      <option value="" disabled selected hidden>[Choose collection type...]</option>
+                                      <option value="1">Album</option>
+                                      <option value="2">Collection</option>
+                                      <option value="3">Series</option>
+                                    </select>
+                                  </div>
+                                  <div class="col-md-6" style="display:block; text-align:center">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
+                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="collectionIsSystemic" aria-describedby="Is Collection Systemic">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data mediumcollection-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-remark">Remark</label>
+                                <textarea class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
+                              </div>
+                              <div class="form-group datasheet-data mediumcollection-series-data">
+                                <div class="form-row">
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-seasons">Seasons</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-startyear">Start Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-startyear" name="startYear" placeholder="[Enter start year]" aria-describedby="Start Year">
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-endyear">End Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-endyear" name="endYear" placeholder="[Enter end year]" aria-describedby="End Year">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data mediumcollection-album-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-album-tracks">Tracks</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-almbum-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
+                              </div>
+                            </fieldset>
+                            <div class="mediacollection-items-container">
+                              <div class="card lists-datatables mediumcollection-datatable">
+                                <div class="card-header">Collection Items
+                                  <button type="button" id="timaat-mediacollectiondatasets-mediacollection-add" class="btn btn-outline btn-success btn-sm float-right">
+                                    <i class="fas fa-plus"></i></button>
+                                  </div>
+                                <div class="timaat-datasets-list-wrapper">
+                                  <div id="timaat-mediacollectiondatasets-mediacollection-list-loader" class="text-center card-body bg-info text-white">
+                                    <i class="fas fa-spinner fa-spin"></i> Load data...
+                                  </div>
+                                  <div class="card-body">
+                                    <table id="timaat-mediacollectiondatasets-mediacollection-table" class="table table-striped table-bordered table-hover">
+                                      <thead class="thead-dark">
+                                        <tr>
+                                          <th>Name</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody id="timaat-mediacollectiondatasets-mediacollection-list">
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Save/Cancel buttons -->
+                          <div class="mediumcollection-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary" id="timaat-mediacollectiondatasets-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary" id="timaat-mediacollectiondatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
                         <!-- preview form -->
                         <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
@@ -1856,10 +1961,10 @@
                             </div>
                           </div>
                           <!-- Save/Cancel buttons -->
-                            <div class="medium-datasheet-form-submit">
-                              <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
-                              <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
-                            </div>
+                          <div class="medium-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
                         </form>
                         <!-- titles form -->
                         <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
