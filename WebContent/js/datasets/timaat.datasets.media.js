@@ -4534,7 +4534,7 @@
 					}
 				},
 				"rowCallback": function( row, data ) {
-					// console.log("TCL: row, data", row, data);
+					console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
 						TIMAAT.MediaDatasets.clearLastMediumSelection();
 						$(row).addClass('selected');
@@ -4671,9 +4671,9 @@
 			if (TIMAAT.MediaDatasets.selectedMediumId && TIMAAT.MediaDatasets.selectedMediumId != id) {
 				$(table.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
 			}
-			TIMAAT.MediaDatasets.selectedMediumId = id;
 			// add selection to new rows
-			$(table.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).addClass('selected');
+			$(table.row('#'+id).node()).addClass('selected');
+			TIMAAT.MediaDatasets.selectedMediumId = id;
 		},
 
 		clearLastMediumSelection: function () {

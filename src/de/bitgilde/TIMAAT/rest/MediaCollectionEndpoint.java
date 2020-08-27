@@ -366,7 +366,7 @@ public class MediaCollectionEndpoint {
 		    	
     	// update analysislist
 		if ( updatedCol.getTitle() != null ) col.setTitle(updatedCol.getTitle());
-		if ( updatedCol.getNote() != null ) col.setNote(updatedCol.getNote());
+		if ( updatedCol.getRemark() != null ) col.setRemark(updatedCol.getRemark());
 
 		// TODO update log metadata in general log
 		

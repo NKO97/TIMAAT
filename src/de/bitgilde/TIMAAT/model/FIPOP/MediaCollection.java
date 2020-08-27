@@ -25,7 +25,7 @@ public class MediaCollection implements Serializable {
 	private int isSystemic;
 
 	@Column(length=400)
-	private String note;
+	private String remark;
 
 	@Column(nullable=false, length=255)
 	private String title;
@@ -80,12 +80,12 @@ public class MediaCollection implements Serializable {
 		this.isSystemic = isSystemic;
 	}
 
-	public String getNote() {
-		return this.note;
+	public String getRemark() {
+		return this.remark;
 	}
 
-	public void setNote(String note) {
-		this.note = note;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public String getTitle() {
