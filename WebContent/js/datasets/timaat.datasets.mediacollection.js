@@ -152,7 +152,7 @@
 
 		setupMediumCollectionDataTable: async function(action, collectionData) {
 			console.log("TCL: action, collectionData", action, collectionData);
-			TIMAAT.MediaCollectionDatasets.selectLastSelection('mediumCollection', collectionData.model.id);
+			TIMAAT.MediaCollectionDatasets.selectLastSelection(collectionData.model.id);
 			$('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
 			$('.datasheet-data').hide();
 			$('.mediumcollection-data').show();
@@ -246,7 +246,7 @@
 						$('.nav-tabs a[href="#mediumCollectionDatasheet"]').tab("show");
 						var selectedVideo = {}
 						selectedVideo.model = medium;
-						TIMAAT.MediaCollectionDatasets.selectLastSelection('medium', selectedVideo.model.id);
+						TIMAAT.MediaCollectionDatasets.selectLastSelection(selectedVideo.model.id);
 						TIMAAT.MediaCollectionDatasets.dataTableMedia.search(selectedVideo.model.displayTitle.name).draw();
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
 						TIMAAT.MediaCollectionDatasets.mediumFormDatasheet('show', 'medium', selectedVideo);
@@ -469,7 +469,7 @@
 								break;
 							}
 						}
-						TIMAAT.MediaCollectionDatasets.selectLastSelection('mediumCollection', mediumCollection.id);
+						TIMAAT.MediaCollectionDatasets.selectLastSelection(mediumCollection.id);
 
 						console.log("TCL: selectedMediumCollection", selectedMediumCollection);
 						$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', selectedMediumCollection);
@@ -560,8 +560,7 @@
 		},
 		
 		selectLastSelection: function(id) {
-			// console.log("TCL: selectLastSelection: type, id", type, id);
-			// console.log("TCL: TIMAAT.MediaCollectionDatasets.selectedMediumId", TIMAAT.MediaCollectionDatasets.selectedMediumId);
+			// console.log("TCL: selectLastSelection: id", id);
       if (TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId && TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId != id) {
         $(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId).node()).removeClass('selected');
       }
