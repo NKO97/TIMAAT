@@ -1,1 +1,1 @@
-UPDATE `FIPOP`.`language` SET `name` = 'unknown' WHERE `language`.`id` = 1
+UPDATE `FIPOP`.`language` SET `name` = 'unknown' WHERE `language`.`id` = 1;
