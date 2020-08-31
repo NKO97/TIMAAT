@@ -9,5 +9,5 @@ ALTER TABLE `FIPOP`.`media_collection_album` ADD CONSTRAINT `fk_media_collection
 ALTER TABLE `FIPOP`.`media_collection_series` DROP FOREIGN KEY `fk_media_collection_series_media_collection1`; 
 ALTER TABLE `FIPOP`.`media_collection_series` ADD CONSTRAINT `fk_media_collection_series_media_collection1` FOREIGN KEY (`media_collection_id`) REFERENCES `media_collection`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
-ALTER TABLE `media_collection_series` CHANGE `start_year` `started` DATE NULL DEFAULT NULL;
-ALTER TABLE `media_collection_series` CHANGE `end_year` `ended` DATE NULL DEFAULT NULL;
+ALTER TABLE `FIPOP`.`media_collection_series` CHANGE `start_year` `started` DATE NULL DEFAULT NULL;
+ALTER TABLE `FIPOP`.`media_collection_series` CHANGE `end_year` `ended` DATE NULL DEFAULT NULL;
