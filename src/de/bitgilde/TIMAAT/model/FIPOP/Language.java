@@ -248,9 +248,9 @@ public class Language implements Serializable {
 	// private List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations;
 
 	//bi-directional many-to-one association to MediaCollectionTypeTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations;
 
 	//bi-directional many-to-one association to MediaTypeTranslation
 	@OneToMany(mappedBy="language")
@@ -1485,27 +1485,27 @@ public class Language implements Serializable {
 	// 	return mediaCollectionAnalysisListTranslation;
 	// }
 
-	// public List<MediaCollectionTypeTranslation> getMediaCollectionTypeTranslations() {
-	// 	return this.mediaCollectionTypeTranslations;
-	// }
+	public List<MediaCollectionTypeTranslation> getMediaCollectionTypeTranslations() {
+		return this.mediaCollectionTypeTranslations;
+	}
 
-	// public void setMediaCollectionTypeTranslations(List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations) {
-	// 	this.mediaCollectionTypeTranslations = mediaCollectionTypeTranslations;
-	// }
+	public void setMediaCollectionTypeTranslations(List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations) {
+		this.mediaCollectionTypeTranslations = mediaCollectionTypeTranslations;
+	}
 
-	// public MediaCollectionTypeTranslation addMediaCollectionTypeTranslation(MediaCollectionTypeTranslation mediaCollectionTypeTranslation) {
-	// 	getMediaCollectionTypeTranslations().add(mediaCollectionTypeTranslation);
-	// 	mediaCollectionTypeTranslation.setLanguage(this);
+	public MediaCollectionTypeTranslation addMediaCollectionTypeTranslation(MediaCollectionTypeTranslation mediaCollectionTypeTranslation) {
+		getMediaCollectionTypeTranslations().add(mediaCollectionTypeTranslation);
+		mediaCollectionTypeTranslation.setLanguage(this);
 
-	// 	return mediaCollectionTypeTranslation;
-	// }
+		return mediaCollectionTypeTranslation;
+	}
 
-	// public MediaCollectionTypeTranslation removeMediaCollectionTypeTranslation(MediaCollectionTypeTranslation mediaCollectionTypeTranslation) {
-	// 	getMediaCollectionTypeTranslations().remove(mediaCollectionTypeTranslation);
-	// 	mediaCollectionTypeTranslation.setLanguage(null);
+	public MediaCollectionTypeTranslation removeMediaCollectionTypeTranslation(MediaCollectionTypeTranslation mediaCollectionTypeTranslation) {
+		getMediaCollectionTypeTranslations().remove(mediaCollectionTypeTranslation);
+		mediaCollectionTypeTranslation.setLanguage(null);
 
-	// 	return mediaCollectionTypeTranslation;
-	// }
+		return mediaCollectionTypeTranslation;
+	}
 
 	public List<MediaTypeTranslation> getMediaTypeTranslations() {
 		return this.mediaTypeTranslations;

@@ -144,10 +144,9 @@
 		},
 
 		initMedia: function() {
-			// console.log("TCL: MediaDatasets: initMedia: function()");		
-			
 			// nav-bar functionality
-			$('#media-tab-medium-metadata-form').on('click',function(event) {
+			$('#media-tab-medium-metadata-form').on('click', function(event) {
+				console.log("TCL: Media Tab clicked");
 				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
 				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				$('.form').hide();
@@ -157,7 +156,7 @@
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, $('#timaat-mediadatasets-metadata-form').data('medium'));
 			});
 
-			$('#media-tab-medium-preview-form').on('click',function(event) {
+			$('#media-tab-medium-preview-form').on('click', function(event) {
 				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
 				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				$('.form').hide();
@@ -1531,7 +1530,7 @@
 		loadMedia: function() {
 			$('.media-datatables').hide();
 			$('.media-datatable').show();
-			TIMAAT.MediaDatasets.clearLastMediumSelection();
+			$('.form').hide();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', 'medium');
 			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
 			// TIMAAT.MediaDatasets.setMediumList();
@@ -1548,40 +1547,40 @@
 			TIMAAT.MediaDatasets.setupVideogameDatatable();
 		},
 
-		loadMediumSubtype: function(mediumSubtype) {
-    	console.log("TCL: loadMediumSubtype - mediumSubtype", mediumSubtype);
+		loadMediumSubtype: function(type) {
+    	console.log("TCL: loadMediumSubtype - type", type);
 			$('.media-datatables').hide();
 			$('.form').hide();
-			TIMAAT.MediaDatasets.clearLastMediumSelection();
-			$('.'+mediumSubtype+'s-datatable').show();
-			$('#timaat-mediadatasets-metadata-form').data('mediumType', mediumSubtype);
-			switch (mediumSubtype) {
+			TIMAAT.MediaDatasets.clearLastMediumSelection(type);
+			$('.'+type+'s-datatable').show();
+			$('#timaat-mediadatasets-metadata-form').data('mediumType', type);
+			switch (type) {
 				case 'audio':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setAudioList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setAudioList);
 					TIMAAT.MediaDatasets.setAudioList();
 				break;
 				case 'document':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setDocumentList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setDocumentList);
 					TIMAAT.MediaDatasets.setDocumentList();
 				break;
 				case 'image':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setImageList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setImageList);
 					TIMAAT.MediaDatasets.setImageList();
 				break;
 				case 'software':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setSoftwareList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setSoftwareList);
 					TIMAAT.MediaDatasets.setSoftwareList();
 				break;
 				case 'text':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setTextList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setTextList);
 					TIMAAT.MediaDatasets.setTextList();
 				break;
 				case 'video':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideoList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setVideoList);
 					TIMAAT.MediaDatasets.setVideoList();
 				break;
 				case 'videogame':
-					// TIMAAT.MediaService.listMediumSubtype(mediumSubtype, TIMAAT.MediaDatasets.setVideogameList);
+					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setVideogameList);
 					TIMAAT.MediaDatasets.setVideogameList();
 				break;
 			};
@@ -1616,7 +1615,8 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaDatasets.media == null ) return;
-			
+
+			TIMAAT.MediaDatasets.clearLastMediumSelection('medium');
 			$('#timaat-mediadatasets-medium-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediadatasets-medium-list').empty();
@@ -3456,7 +3456,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('medium');
 						$(row).addClass('selected');
 					}
 				},
@@ -3479,6 +3479,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('medium');
 						var selectedMedium;
 						var i = 0;
 						for (; i < TIMAAT.MediaDatasets.media.length; i++) {
@@ -3634,7 +3635,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('audio');
 						$(row).addClass('selected');
 					}
 				},
@@ -3657,6 +3658,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('audio');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3785,7 +3787,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('document');
 						$(row).addClass('selected');
 					}
 				},
@@ -3808,6 +3810,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('document');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -3935,7 +3938,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('image');
 						$(row).addClass('selected');
 					}
 				},
@@ -3958,6 +3961,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('image');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -4085,7 +4089,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('software');
 						$(row).addClass('selected');
 					}
 				},
@@ -4108,6 +4112,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('software');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -4235,7 +4240,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('text');
 						$(row).addClass('selected');
 					}
 				},
@@ -4258,6 +4263,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('text');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -4383,7 +4389,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('video');
 						$(row).addClass('selected');
 					}
 				},
@@ -4406,6 +4412,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('video');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -4536,7 +4543,7 @@
 				"rowCallback": function( row, data ) {
 					console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.MediaDatasets.selectedMediumId) {
-						TIMAAT.MediaDatasets.clearLastMediumSelection();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('videogame');
 						$(row).addClass('selected');
 					}
 				},
@@ -4559,6 +4566,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaDatasets.clearLastMediumSelection('videogame');
 						var id = medium.id;
 						var selectedMedium;
 						var i = 0;
@@ -4676,16 +4684,64 @@
 			TIMAAT.MediaDatasets.selectedMediumId = id;
 		},
 
-		clearLastMediumSelection: function () {
-			$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableAudio.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableDocument.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableImage.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableSoftware.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableText.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableVideo.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
-			$(TIMAAT.MediaDatasets.dataTableVideogame.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+		clearLastMediumSelection: function (type) {
+    	console.log("TCL: clearLastMediumSelection");
+			let i = 0;
+			switch (type) {
+				case 'medium':
+					for (; i < TIMAAT.MediaDatasets.media.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+						$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'audio':
+					for (; i < TIMAAT.MediaDatasets.audios.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableAudio.row('#'+TIMAAT.MediaDatasets.audios[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'document':
+					for (; i < TIMAAT.MediaDatasets.documents.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableDocument.row('#'+TIMAAT.MediaDatasets.documents[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'image':
+					for (; i < TIMAAT.MediaDatasets.images.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableImage.row('#'+TIMAAT.MediaDatasets.images[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'software':
+					for (; i < TIMAAT.MediaDatasets.softwares.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableSoftware.row('#'+TIMAAT.MediaDatasets.softwares[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'text':
+					for (; i < TIMAAT.MediaDatasets.texts.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableText.row('#'+TIMAAT.MediaDatasets.texts[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'video':
+					for (; i < TIMAAT.MediaDatasets.videos.length; i++) {
+						// $(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+						$(TIMAAT.MediaDatasets.dataTableVideo.row('#'+TIMAAT.MediaDatasets.videos[i].model.id).node()).removeClass('selected');
+					}
+				break;
+				case 'videogame':
+					for (; i < TIMAAT.MediaDatasets.videogames.length; i++) {
+						$(TIMAAT.MediaDatasets.dataTableVideogame.row('#'+TIMAAT.MediaDatasets.videogames[i].model.id).node()).removeClass('selected');
+					}
+				break;
+			}
+			// for (; i < TIMAAT.MediaDatasets.media.length; i++) {
+				$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableAudio.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableDocument.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableImage.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableSoftware.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableText.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableVideo.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+				$(TIMAAT.MediaDatasets.dataTableVideogame.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
+			// }
 			TIMAAT.MediaDatasets.selectedMediumId = null;
 		},
 

@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="media_type")
-@NamedQuery(name="MediaType.findAll", query="SELECT m FROM MediaType m")
+@NamedQuery(name="MediaType.findAll", query="SELECT mt FROM MediaType mt")
 public class MediaType implements Serializable {
 	private static final long serialVersionUID = 1L;
 

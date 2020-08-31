@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -12,25 +13,28 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name="media_collection_type_translation")
-@NamedQuery(name="MediaCollectionTypeTranslation.findAll", query="SELECT m FROM MediaCollectionTypeTranslation m")
+@NamedQuery(name="MediaCollectionTypeTranslation.findAll", query="SELECT mctt FROM MediaCollectionTypeTranslation mctt")
 public class MediaCollectionTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(unique=true, nullable=false)
+	// @GeneratedValue(strategy=GenerationType.IDENTITY)
+	// @Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(name="language_id", nullable=false)
-	private int languageId;
+	//bi-directional many-to-one association to Language
+	@ManyToOne
+	// @Column(name="language_id", nullable=false)
+	private Language language;
 
-	@Column(nullable=false, length=45)
+	// @Column(nullable=false, length=45)
 	private String type;
 
 	//bi-directional many-to-one association to MediaCollectionType
 	@ManyToOne
 	@JoinColumn(name="media_collection_type_id", nullable=false)
-	@JsonBackReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
+	@JsonIgnore
+	// @JsonBackReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
 	private MediaCollectionType mediaCollectionType;
 
 	public MediaCollectionTypeTranslation() {
@@ -44,12 +48,12 @@ public class MediaCollectionTypeTranslation implements Serializable {
 		this.id = id;
 	}
 
-	public int getLanguageId() {
-		return this.languageId;
+	public Language getLanguage() {
+		return this.language;
 	}
 
-	public void setLanguageId(int languageId) {
-		this.languageId = languageId;
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public String getType() {

@@ -25,7 +25,7 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 	@Column(length=4096)
 	private String text;
 
-	@Column(nullable=false, length=100)
+	@Column(nullable=false, length=255)
 	private String title;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList

@@ -1283,7 +1283,7 @@
         <!-- Media                                                          -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-media">
-          <div> <!-- delete modal-->
+          <div> <!-- delete modals-->
             <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -1299,6 +1299,25 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
                     <button type="button" class="btn btn-danger" id="timaat-mediadatasets-modal-delete-submit">Medium löschen</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-mediacollectiondatasets-mediumcollection-delete" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="mediumCollectionDeleteLabel">Delete media collection</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Do you want to delete the selected media collection?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-mediacollectiondatasets-modal-delete-submit">Delete media collection</button>
                   </div>
                 </div>
               </div>
@@ -1602,7 +1621,7 @@
                       <div id="timaat-mediadatasets-media-tabs">
                         <ul class="nav nav-tabs media-nav-tabs">
                           <li class="nav-item media-data-tabs mediumcollection-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-mediumcollection-metadata-form" href="#mediumCollectionDatasheet">Datasheet</a>
+                            <a class="nav-link nav-link-media" id="media-tab-mediumcollection-metadata-form" href="#mediumCollectionDataSheet">Datasheet</a>
                           </li>
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
                             <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
@@ -1687,7 +1706,7 @@
                                   </div>
                                   <div class="col-md-6" style="display:block; text-align:center">
                                     <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
-                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="collectionIsSystemic" aria-describedby="Is Collection Systemic">
+                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="isSystemic" aria-describedby="Is Collection Systemic">
                                   </div>
                                 </div>
                               </div>
@@ -1695,25 +1714,25 @@
                                 <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-remark">Remark</label>
                                 <textarea class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                               </div>
-                              <div class="form-group datasheet-data mediumcollection-series-data">
+                              <div class="form-group datasheet-data mediumcollection-Series-data">
                                 <div class="form-row">
                                   <div class="col-md-4">
                                     <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-seasons">Seasons</label>
                                     <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-startyear">Start Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-startyear" name="startYear" placeholder="[Enter start year]" aria-describedby="Start Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-started">Start Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-started" name="started" placeholder="[Enter start year]" aria-describedby="Start Year">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-endyear">End Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-endyear" name="endYear" placeholder="[Enter end year]" aria-describedby="End Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-ended">End Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-ended" name="ended" placeholder="[Enter end year]" aria-describedby="End Year">
                                   </div>
                                 </div>
                               </div>
-                              <div class="form-group datasheet-data mediumcollection-album-data">
+                              <div class="form-group datasheet-data mediumcollection-Album-data">
                                 <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-album-tracks">Tracks</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-almbum-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-album-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
                               </div>
                             </fieldset>
                             <div class="mediacollection-items-container">

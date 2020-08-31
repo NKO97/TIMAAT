@@ -1036,6 +1036,7 @@ public class MediumServiceEndpoint {
 	@Secured
 	public Response updateMedium(@PathParam("id") int id, String jsonData) {
 		System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - jsonData"+ jsonData);
+
 		ObjectMapper mapper = new ObjectMapper();
 		Medium updatedMedium = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1089,8 +1090,8 @@ public class MediumServiceEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.MEDIUMEDITED);
 		System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - update complete");
 		return Response.ok().entity(medium).build();
 	}

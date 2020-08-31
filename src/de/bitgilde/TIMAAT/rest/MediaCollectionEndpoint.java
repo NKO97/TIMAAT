@@ -27,14 +27,17 @@ import javax.ws.rs.core.UriInfo;
 
 import org.jvnet.hk2.annotations.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAlbum;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -297,8 +300,10 @@ public class MediaCollectionEndpoint {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	// @Path("/")
-	public Response createMediaCollection(String jsonData) {
+	public Response createMediaCollectionOld(String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: createMediaCollection OLD : " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		MediaCollection newCol = null;    	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	// parse JSON data
@@ -311,7 +316,7 @@ public class MediaCollectionEndpoint {
 		if ( newCol == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newCol.setId(0);
-		newCol.setIsSystemic(0);
+		newCol.setIsSystemic(false);
 		newCol.setMediaCollectionAlbum(null);
 		newCol.setMediaCollectionAnalysisLists(new ArrayList<MediaCollectionAnalysisList>());
 		newCol.setMediaCollectionHasMediums(new ArrayList<MediaCollectionHasMedium>());
@@ -341,46 +346,99 @@ public class MediaCollectionEndpoint {
 		return Response.ok().entity(newCol).build();
 	}
 	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("/{id}")
+	public Response createMediaCollection(String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: createMediaCollection: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		MediaCollection newCol = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			newCol = mapper.readValue(jsonData, MediaCollection.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newCol == null ) return Response.status(Status.BAD_REQUEST).build();
+		// sanitize object data
+		newCol.setId(0);
+		// newCol.setMediaCollectionAlbum(null);
+		newCol.setMediaCollectionAnalysisLists(new ArrayList<MediaCollectionAnalysisList>());
+		newCol.setMediaCollectionHasMediums(new ArrayList<MediaCollectionHasMedium>());
+		newCol.setMediaCollectionHasTags(new ArrayList<MediaCollectionHasTag>());
+		// newCol.setMediaCollectionSeries(null);
+		// newCol.setMediaCollectionType(entityManager.find(MediaCollectionType.class, 2)); // TODO refactor
+		// update log metadata
+		// TODO log not in model
+
+		// persist mediacollection
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(newCol);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(newCol);
+		
+		// add log entry
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			UserLogManager.getLogger().addLogEntry((int)containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONCREATED);
+
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error		
+			return Response.serverError().build();
+		}
+		
+		return Response.ok().entity(newCol).build();
+	}
+	
 	@PATCH
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response updateMediaCollection(@PathParam("id") int id, String jsonData) {
-		ObjectMapper mapper = new ObjectMapper();
-		MediaCollection updatedCol = null;
+		System.out.println("MediumCollectionServiceEndpoint: updateMediaCollection: " + jsonData);
 
-    	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	MediaCollection col = em.find(MediaCollection.class, id);
-    	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-		
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		MediaCollection updatedCollection = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection collection = entityManager.find(MediaCollection.class, id);
+
+		if ( collection == null ) return Response.status(Status.NOT_FOUND).build();
     	// parse JSON data
 		try {
-			updatedCol = mapper.readValue(jsonData, MediaCollection.class);
+			updatedCollection = mapper.readValue(jsonData, MediaCollection.class);
 		} catch (IOException e) {
 			System.out.println(e);
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedCol == null ) return Response.notModified().build();
+		if ( updatedCollection == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
-		if ( updatedCol.getTitle() != null ) col.setTitle(updatedCol.getTitle());
-		if ( updatedCol.getRemark() != null ) col.setRemark(updatedCol.getRemark());
+    // update medium collection data
+		if ( updatedCollection.getTitle() != null ) collection.setTitle(updatedCollection.getTitle());
+		if ( updatedCollection.getRemark() != null ) collection.setRemark(updatedCollection.getRemark());
 
 		// TODO update log metadata in general log
 		
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		em.merge(col);
-		em.persist(col);
-		tx.commit();
-		em.refresh(col);
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(collection);
+		entityManager.persist(collection);
+		entityTransaction.commit();
+		entityManager.refresh(collection);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
-		return Response.ok().entity(col).build();
+		return Response.ok().entity(collection).build();
 	}
 	
 	@DELETE
@@ -388,6 +446,7 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteMediaCollection(@PathParam("id") int id) {
+		System.out.println("MediumCollectionServiceEndpoint: deleteMediaCollection: ");
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = em.find(MediaCollection.class, id);
@@ -406,6 +465,238 @@ public class MediaCollectionEndpoint {
 		return Response.ok().build();
 	}
 	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("Album/{id}")
+	@Secured
+	public Response createAlbum(@PathParam("id") int id, String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: createAlbum jsonData: "+jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		MediaCollectionAlbum newAlbum = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			newAlbum = mapper.readValue(jsonData, MediaCollectionAlbum.class);
+		} catch (IOException e) {
+			System.out.println("MediumCollectionServiceEndpoint: createAlbum: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newAlbum == null ) {
+			System.out.println("MediumCollectionServiceEndpoint: createAlbum: newAlbum == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// sanitize object data
+
+		// update log metadata
+		// Not necessary, a album will always be created in conjunction with a medium
+
+		// persist album
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(newAlbum);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(newAlbum);
+		entityManager.refresh(newAlbum.getMediaCollection());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAlbum.getMediaCollection().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ALBUMCREATED);
+		System.out.println("MediumCollectionServiceEndpoint: album created with id "+newAlbum.getMediaCollectionId());
+		return Response.ok().entity(newAlbum).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("Album/{id}")
+	@Secured
+	public Response updateAlbum(@PathParam("id") int id, String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: updateAlbum - jsonData: " + jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		MediaCollectionAlbum updatedAlbum = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollectionAlbum album = entityManager.find(MediaCollectionAlbum.class, id);
+		
+		if ( album == null ) return Response.status(Status.NOT_FOUND).build();		
+		// parse JSON data
+		try {
+			updatedAlbum = mapper.readValue(jsonData, MediaCollectionAlbum.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedAlbum == null ) return Response.notModified().build();    	
+		
+		// update album
+		// System.out.println("MediumCollectionServiceEndpoint: updateAlbum - album.id:"+album.getMediaCollectionId());
+		if ( updatedAlbum.getTracks() > 0) album.setTracks(updatedAlbum.getTracks());
+		
+		// update log metadata
+		// album.getMediaCollection().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	album.getMediaCollection().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// }		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(album);
+		entityManager.persist(album);
+		entityTransaction.commit();
+		entityManager.refresh(album);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.ALBUMEDITED);
+		System.out.println("MediumCollectionServiceEndpoint: updateAlbum - update complete");	
+		return Response.ok().entity(album).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("Album/{id}")
+	@Secured
+	public Response deleteAlbum(@PathParam("id") int id) {  
+		System.out.println("MediumCollectionServiceEndpoint: deleteAlbum with id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
+		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
+		MediaCollectionAlbum album = entityManager.find(MediaCollectionAlbum.class, id);
+		if ( album == null ) return Response.status(Status.NOT_FOUND).build();		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(album);
+		entityManager.remove(album.getMediaCollection()); // remove album, then corresponding medium collection
+		entityTransaction.commit();
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 														UserLogManager.LogEvents.ALBUMDELETED);
+		System.out.println("MediumCollectionServiceEndpoint: deleteAlbum - album deleted");  
+		return Response.ok().build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("Series/{id}")
+	@Secured
+	public Response createSeries(@PathParam("id") int id, String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: createSeries jsonData: "+jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		MediaCollectionSeries newSeries = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			newSeries = mapper.readValue(jsonData, MediaCollectionSeries.class);
+		} catch (IOException e) {
+			System.out.println("MediumCollectionServiceEndpoint: createSeries: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newSeries == null ) {
+			System.out.println("MediumCollectionServiceEndpoint: createSeries: newSeries == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// sanitize object data
+
+		// update log metadata
+		// Not necessary, a series will always be created in conjunction with a medium
+
+		// persist series
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(newSeries);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(newSeries);
+		entityManager.refresh(newSeries.getMediaCollection());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newSeries.getMediaCollection().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.SERIESCREATED);
+		System.out.println("MediumCollectionServiceEndpoint: series created with id "+newSeries.getMediaCollectionId());
+		return Response.ok().entity(newSeries).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("Series/{id}")
+	@Secured
+	public Response updateSeries(@PathParam("id") int id, String jsonData) {
+		System.out.println("MediumCollectionServiceEndpoint: updateSeries - jsonData: " + jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		MediaCollectionSeries updatedSeries = null;    	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollectionSeries series = entityManager.find(MediaCollectionSeries.class, id);
+		
+		if ( series == null ) return Response.status(Status.NOT_FOUND).build();		
+		// parse JSON data
+		try {
+			updatedSeries = mapper.readValue(jsonData, MediaCollectionSeries.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedSeries == null ) return Response.notModified().build();    	
+		
+		// update series
+		// System.out.println("MediumCollectionServiceEndpoint: updateSeries - series.id:"+series.getMediaCollectionId());
+		if ( updatedSeries.getSeasons() > 0) series.setSeasons(updatedSeries.getSeasons());
+		if ( updatedSeries.getStarted() != null) series.setStarted(updatedSeries.getStarted());
+		if ( updatedSeries.getEnded() != null) series.setEnded(updatedSeries.getEnded());
+		
+		// update log metadata
+		// series.getMediaCollection().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	series.getMediaCollection().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// }		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(series);
+		entityManager.persist(series);
+		entityTransaction.commit();
+		entityManager.refresh(series);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 																				UserLogManager.LogEvents.SERIESEDITED);
+		System.out.println("MediumCollectionServiceEndpoint: updateSeries - update complete");	
+		return Response.ok().entity(series).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("Series/{id}")
+	@Secured
+	public Response deleteSeries(@PathParam("id") int id) {  
+		System.out.println("MediumCollectionServiceEndpoint: deleteSeries with id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
+		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
+		MediaCollectionSeries series = entityManager.find(MediaCollectionSeries.class, id);
+		if ( series == null ) return Response.status(Status.NOT_FOUND).build();		
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(series);
+		entityManager.remove(series.getMediaCollection()); // remove series, then corresponding medium collection
+		entityTransaction.commit();
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 														UserLogManager.LogEvents.SERIESDELETED);
+		System.out.println("MediumCollectionServiceEndpoint: deleteSeries - series deleted");  
+		return Response.ok().build();
+	}
+
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/medium/{mediumId}")
@@ -451,7 +742,6 @@ public class MediaCollectionEndpoint {
 
 		return Response.ok().build();
 	}
-
 
 	@DELETE
     @Produces(MediaType.APPLICATION_JSON)

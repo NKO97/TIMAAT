@@ -161,7 +161,33 @@ var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithrol
   submitHandler: function(mediumFormLanguageTracks) {
     mediumFormLanguageTracks.submit();
   },
-})
+});
+var mediumCollectionFormMetadata = $('#timaat-mediacollectiondatasets-metadata-form');
+var mediumCollectionFormMetadataValidator = $('#timaat-mediacollectiondatasets-metadata-form').validate({
+  rules: {
+    title: {
+      required: true,
+      minlength: 3,
+      maxlength: 200
+    },
+    typeId: {
+      required: true,
+    }    
+  },
+  messages: {
+    title: {
+      required: "Enter a title (min length: 3)",
+      minlength: "Title too short: min length is 3",
+      maxlength: "Title is too long: max length is 200"
+    },
+    typeId: {
+      required: "Please provide the type of the medium collection"
+    }
+  },
+  submitHandler: function(mediumCollectionFormMetadata) {
+    mediumCollectionFormMetadata.submit();
+  },
+});
 var actorFormMetadata = $('#timaat-actordatasets-metadata-form');
 var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').validate({
   rules: {

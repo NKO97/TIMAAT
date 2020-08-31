@@ -65,7 +65,7 @@
 				var heading = (col) ? "Mediensammlung bearbeiten" : "Mediensammlung hinzufügen";
 				var submit = (col) ? "Speichern" : "Hinzufügen";
 				var title = (col) ? col.title : "";
-				var comment = (col) ? col.note : "";
+				var comment = (col) ? col.remark : "";
 				// setup UI from Video Player state
 				$('#mediacollectionMetaLabel').html(heading);
 				$('#timaat-mediacollection-meta-submit').html(submit);
@@ -87,11 +87,12 @@
 				var comment = $("#timaat-mediacollection-meta-comment").val();				
 				if (col) {
 					TIMAAT.VideoChooser.collection.title = title;
-					TIMAAT.VideoChooser.collection.note = comment;
+					TIMAAT.VideoChooser.collection.remark = comment;
 					TIMAAT.VideoChooser.updateMediacollection(TIMAAT.VideoChooser.collection);
 				} else {
 					TIMAAT.MediaCollectionService.createMediaCollection(title, comment, TIMAAT.VideoChooser._mediacollectionAdded);
 				}
+				TIMAAT.MediaCollectionDatasets.refreshDataTable();
 				modal.modal('hide');
 			});
 
@@ -774,6 +775,7 @@
 			console.log("TCL: col", col);
 			// sync to server
 			TIMAAT.MediaCollectionService.removeMediaCollection(col);
+			TIMAAT.MediaCollectionDatasets.refreshDataTable();
 
 			// remove from model lists
 			var index = TIMAAT.VideoChooser.collections.indexOf(col);

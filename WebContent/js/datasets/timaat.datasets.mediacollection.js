@@ -32,6 +32,148 @@
 		},
 
 		initMediaCollections: function() {
+			// add medium collection button functionality (in medium collection list - opens datasheet form)
+			$('#timaat-mediacollectiondatasets-mediumcollection-add').on('click', function(event) {
+				// $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type', 'Collection');
+				$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', null);
+				TIMAAT.MediaCollectionDatasets.addMediumCollection();
+			});
+
+			// delete medium collection button (in form) handler
+			$('.mediumcollection-form-delete-button').on('click', function(event) {
+				console.log("TCL: delete media collection button pressed");
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				$('#timaat-mediacollectiondatasets-mediumcollection-delete').data('Collection', $('#timaat-mediacollectiondatasets-metadata-form').data('Collection'));
+				$('#timaat-mediacollectiondatasets-mediumcollection-delete').modal('show');
+			});
+
+			// confirm delete medium collection modal functionality
+			$('#timaat-mediacollectiondatasets-modal-delete-submit').on('click', async function(ev) {
+				console.log("TCL: delete media collection modal submit pressed");
+				var modal = $('#timaat-mediacollectiondatasets-mediumcollection-delete');
+				var mediumCollection = modal.data('Collection');
+        console.log("TCL: mediumCollection", mediumCollection);
+				if (mediumCollection) {
+					try {	
+						await TIMAAT.MediaCollectionDatasets._mediumCollectionRemoved(mediumCollection);
+					} catch(error) {
+						console.log("error: ", error);
+					}
+					try {
+						await TIMAAT.MediaCollectionDatasets.refreshDataTable();
+					} catch(error) {
+						console.log("error: ", error);
+					}
+				}
+				modal.modal('hide');
+				$('#timaat-mediacollectiondatasets-metadata-form').hide();
+				$('.mediacollection-data-tabs').hide();
+				$('.form').hide();
+			});
+
+			// edit content form button handler
+			$('.mediumcollection-form-edit-button').on('click', function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
+				TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('edit', type, $('#timaat-mediacollectiondatasets-metadata-form').data('Collection'));
+				// medium.listView.find('.timaat-mediacollectiondatasets-medium-list-tags').popover('show');
+			});
+
+			// medium collection form handlers
+			// submit medium collection metadata button functionality
+			$('#timaat-mediacollectiondatasets-metadata-form-submit').on('click', async function(event) {
+				// continue only if client side validation has passed
+				event.preventDefault();
+				if (!$('#timaat-mediacollectiondatasets-metadata-form').valid()) return false;
+
+				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
+				// the original medium model (in case of editing an existing medium collection)
+				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('Collection');				
+
+				// create/edit medium collection window submitted data
+				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', false);
+				var formData = $('#timaat-mediacollectiondatasets-metadata-form').serializeArray();
+				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', true);
+        console.log("TCL: formData", formData);
+				var formDataObject = {};
+				$(formData).each(function(i, field){
+					formDataObject[field.name] = field.value;
+				});
+				console.log("TCL: formDataObject", formDataObject);
+				// sanitize form data
+				var formDataSanitized = formDataObject;
+				formDataSanitized.typeId = Number(formDataObject.typeId);
+				formDataSanitized.tracks = Number(formDataObject.tracks);
+				if (isNaN(formDataSanitized.tracks)) {
+					formDataSanitized.tracks = 0;
+				}
+				formDataSanitized.seasons = Number(formDataObject.seasons);
+				if (isNaN(formDataSanitized.seasons)) {
+					formDataSanitized.seasons = 0;
+				}
+				formDataSanitized.isSystemic = (formDataObject.isSystemic == "on") ? true : false;
+				if (formDataSanitized.typeId == 3) { // 3 == Series
+					formDataSanitized.started = moment.utc(formDataObject.started, "YYYY-MM-DD");
+					formDataSanitized.ended = moment.utc(formDataObject.ended, "YYYY-MM-DD");
+					}
+				console.log("TCL: formDataSanitized", formDataSanitized);
+				
+				if (mediumCollection) { // update medium collection
+					// medium collection data
+					mediumCollection.model.title = formDataSanitized.title;
+					mediumCollection.model.isSystemic = formDataSanitized.isSystemic;
+					mediumCollection.model.remark = formDataSanitized.remark;
+					// medium collection subtype data
+					switch (type) {
+						case "Album":
+							mediumCollection.model.mediaCollectionAlbum.tracks = formDataSanitized.tracks;
+						break;
+						case "Series":
+							mediumCollection.model.mediaCollectionSeries.started = formDataSanitized.started;
+							mediumCollection.model.mediaCollectionSeries.ended = formDataSanitized.ended;
+							mediumCollection.model.mediaCollectionSeries.seasons = formDataSanitized.seasons;
+						break;
+					}
+					await TIMAAT.MediaCollectionDatasets.updateMediumCollection(type, mediumCollection);
+					// medium.updateUI();
+				} else { // create new medium collection
+					type = $('#timaat-mediacollectiondatasets-metadata-type-id').find('option:selected').html();
+					var mediumCollectionModel = await TIMAAT.MediaCollectionDatasets.createMediumCollectionModel(formDataSanitized);
+					var mediumCollectionSubtypeModel = await TIMAAT.MediaCollectionDatasets.createMediumCollectionSubtypeModel(formDataSanitized, type);
+
+					var newMediumCollection = await TIMAAT.MediaCollectionDatasets.createMediumCollection(type, mediumCollectionModel, mediumCollectionSubtypeModel);
+					mediumCollection = new TIMAAT.MediumCollection(newMediumCollection);
+					$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', mediumCollection);
+					// $('#media-tab-mediumcollection-metadata-form').trigger('click');
+				}
+				await TIMAAT.MediaCollectionDatasets.refreshDataTable();
+				TIMAAT.MediaCollectionDatasets.selectLastSelection('mediumCollection', mediumCollection.model.id);
+				TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, mediumCollection);
+			});
+
+			// cancel add/edit button in content form functionality
+			$('#timaat-mediacollectiondatasets-metadata-form-dismiss').on('click', function(event) {
+				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('Collection');
+				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
+				if (mediumCollection != null) {
+					TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, mediumCollection);
+				} else { // dismiss medium creation
+					$('.form').hide();
+				}
+			});
+
+			$('#timaat-mediacollectiondatasets-metadata-type-id').on('change', function(event) {
+				event.stopPropagation();
+				var type = $('#timaat-mediacollectiondatasets-metadata-type-id').find('option:selected').html();
+        console.log("TCL: type", type);
+				$('.datasheet-data').hide();
+				$('.mediumcollection-data').show();
+				if (type == 'Album' || type == 'Series') {
+					$('.mediumcollection-'+type+'-data').show();
+				}
+			});
 
 		},
 
@@ -42,7 +184,6 @@
 		loadMediaCollections: function() {
 			$('.media-datatables').hide();
 			$('.mediacollection-datatable').show();
-      TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
       TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
     },
     
@@ -56,7 +197,7 @@
 			$('.form').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionList == null ) return;
-			
+			TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
 			$('#timaat-mediacollectiondatasets-mediumcollection-list-loader').remove();
 			// clear old UI list
 			$('#timaat-mediacollectiondatasets-mediumcollection-list').empty();
@@ -68,6 +209,43 @@
 			}
 		},
 
+		addMediumCollection: function() {	
+			// console.log("TCL: addMediumCollection: type", type);
+			$('.form').hide();
+			$('.mediacollection-data-tabs').hide();
+			$('.nav-tabs a[href="#mediumCollectionDataSheet"]').show();
+			$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', null);
+			mediumFormMetadataValidator.resetForm();
+
+			$('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
+			$('#timaat-mediacollectiondatasets-metadata-form').show();
+			var type = $('#timaat-mediacollectiondatasets-metadata-type-id').find('option:selected').html();
+      console.log("TCL: type", type);
+			$('.datasheet-data').hide();
+			$('.mediumcollection-data').show();
+			if (type == 'Album' || type == 'Series') {
+				$('.mediumcollection-'+type+'-data').show();
+			}
+
+			$('.mediumcollection-form-edit-button').hide();
+			$('.mediumcollection-form-edit-button').prop('disabled', true);
+			$('.mediumcollection-form-edit-button :input').prop('disabled', true);
+			$('.mediumcollection-form-delete-button').hide();
+			$('.mediumcollection-form-delete-button').prop('disabled', true);
+			$('.mediumcollection-form-delete-button :input').prop('disabled', true);
+			$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', false);
+			$('#timaat-mediacollectiondatasets-metadata-type-id :input').prop('disabled', false);
+      $('#timaat-mediacollectiondatasets-metadata-form-submit').html('Add');
+      $('#timaat-mediacollectiondatasets-metadata-form-submit').show();
+      $('#timaat-mediacollectiondatasets-metadata-form-dismiss').show();
+			$('#timaat-mediacollectiondatasets-metadata-form :input').prop('disabled', false);
+			$('#mediumCollectionFormHeader').html("Add Collection");
+			$('#timaat-mediacollectiondatasets-metadata-title').focus();
+			// setup form
+				$('#timaat-mediacollectiondatasets-metadata-series-started').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-mediacollectiondatasets-metadata-series-ended').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+		},
+
 		mediumCollectionFormDataSheet: async function(action, type, data) {
 			console.log("TCL: action, type, modelData", action, type, data);
 			TIMAAT.MediaCollectionDatasets.selectLastSelection(data.model.id);
@@ -75,19 +253,12 @@
 			$('#timaat-mediacollectiondatasets-metadata-form').attr('data-type', type);
 			$('.datasheet-data').hide();
 			$('.mediumcollection-data').show();
-			switch (type) {
-				case 'album':
-					$('.mediumcollection-album-data').show();
-				break;
-				case 'series':
-					$('.mediumcollection-series-data').show();
-				break;
-			}
+			$('.mediumcollection-'+type+'-data').show();
 			mediumFormMetadataValidator.resetForm();
 
 			// show tabs
 
-			$('.nav-tabs a[href="#mediumCollectionDatasheet"]').focus();
+			$('.nav-tabs a[href="#mediumCollectionDataSheet"]').focus();
 			$('#timaat-mediacollectiondatasets-metadata-form').show();
 
 			if ( action == 'show') {
@@ -100,14 +271,16 @@
 				$('.mediumcollection-form-delete-button').show();
 				$('#timaat-mediacollectiondatasets-metadata-form-submit').hide();
 				$('#timaat-mediacollectiondatasets-metadata-form-dismiss').hide();
-				$('#mediumFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+				$('#mediumCollectionFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
-				if (type == 'series') {
-					$('#timaat-mediacollectiondatasets-metadata-series-startyear').datepicker({format: ' YYYY', viewMode: "years", minViewMode: "years"});
-					$('#timaat-mediacollectiondatasets-metadata-series-endyear').datepicker({format: ' YYYY', viewMode: "years", minViewMode: "years"});
+				if (type == 'Series') {
+					$('#timaat-mediacollectiondatasets-metadata-series-started').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('#timaat-mediacollectiondatasets-metadata-series-ended').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				}
 				$('#timaat-mediacollectiondatasets-metadata-form :input').prop('disabled', false);
+				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', true);
+				$('#timaat-mediacollectiondatasets-metadata-type-id :input').prop('disabled', true);
 				$('.mediumcollection-form-edit-button').hide();
 				$('.mediumcollection-form-edit-button').prop('disabled', true);
 				$('.mediumcollection-form-edit-button :input').prop('disabled', true);
@@ -117,7 +290,7 @@
 				$('#timaat-mediacollectiondatasets-metadata-form-submit').html('Save');
 				$('#timaat-mediacollectiondatasets-metadata-form-submit').show();
 				$('#timaat-mediacollectiondatasets-metadata-form-dismiss').show();
-				$('#mediumFormHeader').html("Edit "+type);
+				$('#mediumCollectionFormHeader').html("Edit "+type);
 				$('#timaat-mediacollectiondatasets-metadata-title').focus();
 			}
 
@@ -134,17 +307,17 @@
 
 			// medium collection subtype specific data
 			switch (type) {
-				case 'album':
+				case 'Album':
 					$('#timaat-mediacollectiondatasets-metadata-album-tracks').val(data.model.mediaCollectionAlbum.tracks);
 				break;
-				case 'series':
+				case 'Series':
 					$('#timaat-mediacollectiondatasets-metadata-series-seasons').val(data.model.mediaCollectionSeries.seasons);
-					if (data.model.mediaCollectionSeries.startYear != null && !(isNaN(data.model.mediaCollectionSeries.startYear)))
-						$('#timaat-mediacollectiondatasets-metadata-series-startyear').val(moment.utc(data.model.mediaCollectionSeries.startYear).format('YYYY'));
-						else $('#timaat-mediacollectiondatasets-metadata-series-startyear').val('');
-					if (data.model.mediaCollectionSeries.endYear != null && !(isNaN(data.model.mediaCollectionSeries.endYear)))
-						$('#timaat-mediacollectiondatasets-metadata-series-endyear').val(moment.utc(data.model.mediaCollectionSeries.endYear).format('YYYY'));
-						else $('#timaat-mediacollectiondatasets-metadata-series-endyear').val('');
+					if (data.model.mediaCollectionSeries.started != null && !(isNaN(data.model.mediaCollectionSeries.started)))
+						$('#timaat-mediacollectiondatasets-metadata-series-started').val(moment.utc(data.model.mediaCollectionSeries.started).format('YYYY-MM-DD'));
+						else $('#timaat-mediacollectiondatasets-metadata-series-started').val('');
+					if (data.model.mediaCollectionSeries.ended != null && !(isNaN(data.model.mediaCollectionSeries.ended)))
+						$('#timaat-mediacollectiondatasets-metadata-series-ended').val(moment.utc(data.model.mediaCollectionSeries.ended).format('YYYY-MM-DD'));
+						else $('#timaat-mediacollectiondatasets-metadata-series-ended').val('');
 				break;
 			}
 			$('#timaat-mediacollectiondatasets-metadata-form').data(type, data);
@@ -235,7 +408,8 @@
 						// TIMAAT.VideoPlayer.setupAnalysisLists(medium.medium.mediumAnalysisLists);
 					});
 
-					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) { // TODO
+						console.log("TCL: TODO");
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
@@ -243,13 +417,13 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
-						$('.nav-tabs a[href="#mediumCollectionDatasheet"]').tab("show");
+						$('.nav-tabs a[href="#mediumCollectionDataSheet"]').tab("show");
 						var selectedVideo = {}
 						selectedVideo.model = medium;
-						TIMAAT.MediaCollectionDatasets.selectLastSelection(selectedVideo.model.id);
-						TIMAAT.MediaCollectionDatasets.dataTableMedia.search(selectedVideo.model.displayTitle.name).draw();
+						TIMAAT.MediaDatasets.selectLastSelection(selectedVideo.model.id);
+						TIMAAT.MediaDatasets.dataTableMedia.search(selectedVideo.model.displayTitle.name).draw();
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
-						TIMAAT.MediaCollectionDatasets.mediumFormDatasheet('show', 'medium', selectedVideo);
+						TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', selectedVideo);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-medium-collectionitemremove', function(ev) {
@@ -349,7 +523,7 @@
 				},				
 			});	
 
-			// $('.nav-tabs a[href="#mediumCollectionDatasheet"]').focus(); // TODO proper id
+			// $('.nav-tabs a[href="#mediumCollectionDataSheet"]').focus(); // TODO proper id
 			// $('#timaat-mediacollectiondatasets-metadata-form').show();
 
 			// if ( action == 'show') {
@@ -448,7 +622,7 @@
 					let mediumCollectionElement = $(row);
 					let mediumCollection = data;
 					mediumCollection.ui = mediumCollectionElement;
-					mediumCollectionElement.data('mediumCollection', mediumCollection);
+					mediumCollectionElement.data('Collection', mediumCollection);
 					// TIMAAT.MediaCollectionDatasets.displayFileStatus(medium);
 
 					mediumCollectionElement.on('click', '.title', function(event) {
@@ -461,6 +635,7 @@
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
+						TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
 						var selectedMediumCollection;
 						var i = 0;
 						for (; i < TIMAAT.MediaCollectionDatasets.mediaCollectionList.length; i++) {
@@ -472,10 +647,10 @@
 						TIMAAT.MediaCollectionDatasets.selectLastSelection(mediumCollection.id);
 
 						console.log("TCL: selectedMediumCollection", selectedMediumCollection);
-						$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', selectedMediumCollection);
+						$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', selectedMediumCollection);
 						var type = selectedMediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
 						// if (TIMAAT.MediaCollectionDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#mediumCollectionDatasheet"]').tab('show');
+							$('.nav-tabs a[href="#mediumCollectionDataSheet"]').tab('show');
 							TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, selectedMediumCollection);
 						// } else {
 							// show tabs
@@ -488,9 +663,6 @@
 							// TIMAAT.MediaCollectionDatasets.showLastForm();
 						// }
 					});
-
-					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-					// 	medium.fileStatus = TIMAAT.MediaService.updateFileStatus(medium, medium.mediaCollectionType.mediaCollectionTypeTranslations[0].type);
 				},
 				"columns": [
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumCollection, meta)
@@ -518,7 +690,114 @@
 					},
 				},				
 			});
-    },
+		},
+		
+		createMediumCollectionModel: async function(formDataObject) {
+    	console.log("TCL: formDataObject, type", formDataObject);
+			var model = {
+				id: 0,
+				isSystemic: formDataObject.isSystemic,
+				title: formDataObject.title,
+				remark: formDataObject.remark,
+				mediaCollectionType: {
+					id: formDataObject.typeId,
+				}
+			};
+			return model;
+		},
+
+		createMediumCollectionSubtypeModel: async function(formDataObject, type) {
+			var model = {};
+			switch(type) {
+				case 'Album':
+					model = {
+						mediaCollectionId: 0,
+						tracks: formDataObject.tracks
+					};
+				break;
+				case 'Series':
+					model = {
+						mediaCollectionId: 0,
+						started: formDataObject.started,
+						ended: formDataObject.ended
+					};
+				break;
+			}
+      console.log("TCL: model", model);
+			return model;
+		},
+
+		createMediumCollection: async function(type, model, subTypeModel) {
+    	console.log("TCL: createMediumCollection: type, model, subTypeModel", type, model, subTypeModel);
+			try {				
+				// create medium collection
+				var newModel = await TIMAAT.MediaCollectionService.createMediumCollection(model);
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+
+			try {
+				// create subtype with medium collection id
+				subTypeModel.mediaCollectionId = newModel.id;
+				if (type != 'Collection') { //* Collection has no extra data table
+					await TIMAAT.MediaCollectionService.createMediumCollectionSubtype(type, newModel, subTypeModel);
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+
+			try {
+				// push new medium collection to dataset model
+				switch (type) {
+					case 'Album':
+						newModel.mediaCollectionAlbum = subTypeModel;
+					break;
+					case 'Series':
+						newModel.mediaCollectionSeries = subTypeModel;
+					break;
+				};
+			} catch(error) {
+				console.log( "error: ", error);
+			};
+			return (newModel);
+		},
+
+		updateMediumCollection: async function(subType, mediumCollection) {
+			console.log("TCL: updateMediumCollection: async function -> mediumCollection at beginning of update process: ", subType, mediumCollection);
+				try { // update subtype
+					var tempSubtypeModel;
+					switch (subType) {
+						case 'Album':
+							tempSubtypeModel = mediumCollection.model.mediaCollectionAlbum;
+							await TIMAAT.MediaCollectionService.updateMediumCollectionSubtype(subType, tempSubtypeModel);
+						break;
+						case 'Series':
+							tempSubtypeModel = mediumCollection.model.mediaCollectionSeries;
+							await TIMAAT.MediaCollectionService.updateMediumCollectionSubtype(subType, tempSubtypeModel);
+							break;
+					}
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+				
+				try { // update mediumCollection
+					await TIMAAT.MediaCollectionService.updateMediaCollection(mediumCollection.model);
+				} catch(error) {
+					console.log( "error: ", error);
+				};
+		},
+
+		_mediumCollectionRemoved: async function(mediumCollection) {
+    	// console.log("TCL: _mediumCollectionRemoved: ", mediumCollection);
+			// sync to server
+			try {
+				await TIMAAT.MediaCollectionService.removeMediaCollection(mediumCollection.model);
+			} catch(error) {
+				console.log("error: ", error);
+			}
+
+			mediumCollection.remove();
+		},
     
     setMediumStatus: function (medium) {			
 			if ( !medium || !medium.ui ) return;
@@ -568,12 +847,16 @@
 		},
 
 		clearLastMediumCollectionSelection: function () {
-			$(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId).node()).removeClass('selected');
+			// $(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId).node()).removeClass('selected');
+			let i = 0;
+			for (; i < TIMAAT.MediaCollectionDatasets.mediaCollectionList.length; i++) {
+				$(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+TIMAAT.MediaCollectionDatasets.mediaCollectionList[i].model.id).node()).removeClass('selected');
+			}
 			TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId = null;
 		},
 
-		refreshDatatable: async function() {
-			// console.log("TCL: refreshDatatable - type: ", type);
+		refreshDataTable: async function() {
+			// console.log("TCL: refreshDataTable";
 			// set ajax data source
       if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList) {
         // TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');

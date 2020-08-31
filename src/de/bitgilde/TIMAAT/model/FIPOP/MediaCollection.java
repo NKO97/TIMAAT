@@ -10,21 +10,21 @@ import java.util.List;
  * The persistent class for the media_collection database table.
  * 
  */
-@Entity(name = "MediaCollection")
+@Entity
 @Table(name="media_collection")
-@NamedQuery(name="MediaCollection.findAll", query="SELECT m FROM MediaCollection m")
+@NamedQuery(name="MediaCollection.findAll", query="SELECT mc FROM MediaCollection mc")
 public class MediaCollection implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(unique=true, nullable=false)
+	// @Column(unique=true, nullable=false)
 	private int id;
 
 	@Column(name="is_systemic", nullable=false)
-	private int isSystemic;
+	private Boolean isSystemic;
 
-	@Column(length=400)
+	@Column(length=4096)
 	private String remark;
 
 	@Column(nullable=false, length=255)
@@ -72,11 +72,11 @@ public class MediaCollection implements Serializable {
 		this.id = id;
 	}
 
-	public int getIsSystemic() {
+	public Boolean getIsSystemic() {
 		return this.isSystemic;
 	}
 
-	public void setIsSystemic(int isSystemic) {
+	public void setIsSystemic(Boolean isSystemic) {
 		this.isSystemic = isSystemic;
 	}
 
