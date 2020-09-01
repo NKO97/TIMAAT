@@ -630,8 +630,8 @@
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
-						// $('#timaat-mediacollectiondatasets-media-tabs-container').append($('#timaat-mediacollectiondatasets-media-tabs'));
-						// $('#previewTab').removeClass('annotationView');
+						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
