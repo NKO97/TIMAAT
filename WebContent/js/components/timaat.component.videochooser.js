@@ -768,6 +768,7 @@
 			TIMAAT.VideoChooser.collections.push(col);
 			TIMAAT.VideoChooser._addCollection(col);			
 			TIMAAT.VideoChooser._sortCollections();
+			TIMAAT.MediaCollectionDatasets.refreshDataTable();
 		},
 		
 		_mediacollectionRemoved: function(col) {
@@ -800,7 +801,7 @@
 			console.log(row, video);
 			
 			// remove from server
-			TIMAAT.MediaCollectionService.removeCollectionItem(TIMAAT.VideoChooser.collection, video).then((success) => {
+			TIMAAT.MediaCollectionService.removeCollectionItem(TIMAAT.VideoChooser.collection.id, video.id).then((success) => {
 				// sync changes with UI
 				TIMAAT.VideoChooser.dt.row(row).remove().draw();
 			});

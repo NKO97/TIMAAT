@@ -298,7 +298,7 @@
 						$('#timaat-login-modal').modal('hide');
 						$('#timaat-user-info').html(e.accountName);							
 						TIMAAT.VideoChooser.loadCollections();
-						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTable();
+						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
 						TIMAAT.MediaDatasets.loadMediaDataTables();
 						TIMAAT.ActorDatasets.loadActorDataTables();
 						TIMAAT.RoleLists.loadRolesDataTables();

@@ -3439,7 +3439,6 @@
 					},
 					"dataSrc": function(data) {
           	// console.log("TCL: data", data);
-						// console.log("TCL: TIMAAT.MediaDatasets.media (last)", TIMAAT.MediaDatasets.media);
 						// setup model
 						var meds = Array();
 						data.data.forEach(function(medium) { 
@@ -3449,7 +3448,6 @@
 						});
 						TIMAAT.MediaDatasets.media = meds;
 						TIMAAT.MediaDatasets.media.model = data.data;
-						// console.log("TCL: TIMAAT.MediaDatasets.media (current)", TIMAAT.MediaDatasets.media);
 						return data.data; // data.map(medium => new TIMAAT.Medium(medium));;
 					}
 				},

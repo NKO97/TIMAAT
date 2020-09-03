@@ -207,11 +207,11 @@
 			});
 		},
 
-		async removeCollectionItem(collection, medium) {
-      console.log("TCL: removeCollectionItem -> collection, medium", collection, medium);
+		async removeCollectionItem(collectionId, mediumId) {
+      console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id+"/medium/"+medium.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {

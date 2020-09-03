@@ -202,7 +202,7 @@
 
 		initMediaCollectionItems: function() {
 			// nav-bar functionality
-			$('#mediacollection-tab-mediumcollection-items-form').on('click', function(event) {
+			$('#mediacollection-tab-mediumcollection-items-form').on('click', async function(event) {
 				console.log("TCL: Media Collection Items Tab clicked");
 				$('.form').hide();
 				$('.mediacollection-items-datatable').hide();
@@ -216,7 +216,8 @@
 					TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediaCollection/'+collection.model.id+'/list')
 					TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
 				} else {
-					TIMAAT.MediaCollectionDatasets.setupMediumCollectionItemListDataTable(collection.model.id);
+					await TIMAAT.MediaCollectionDatasets.setupMediumCollectionItemListDataTable(collection.model.id);
+					TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
 				}
 				TIMAAT.MediaCollectionDatasets.mediumCollectionFormItems('show', $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
 			});
@@ -230,12 +231,16 @@
 			$('.media-datatables').hide();
 			$('.mediacollection-datatable').show();
 			TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
-			// TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
+		},
+		
+		loadMediaCollectionItems: function() {
+			TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
     },
     
-    loadMediaCollectionDataTable: async function() {
-    	console.log("TCL: loadMediaCollectionDataTable: async function()");
+    loadMediaCollectionDataTables: async function() {
+    	console.log("TCL: loadMediaCollectionDataTables: async function()");
 			TIMAAT.MediaCollectionDatasets.setupMediumCollectionListDataTable();
+			TIMAAT.MediaCollectionDatasets.setupMediumCollectionItemListDataTable(0);
 		},
 
 		setMediumCollectionList: function() {
@@ -261,12 +266,12 @@
 			$('.mediacollection-items-datatable').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionItemList == null ) return;
+
 			TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionItemSelection();
 			$('#timaat-mediacollectiondatasets-mediumcollection-items-loader').remove();
 			// clear old UI list
 			$('#timaat-mediacollectiondatasets-mediumcollection-items').empty();
 			
-			console.log("TCL: TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList", TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList);
 			// set ajax data source
 			if ( TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList ) {
 				TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
@@ -559,9 +564,12 @@
 						TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, selectedMedium);
 					});
 
-					mediumCollectionElement.on('click', '.timaat-medium-collectionitemremove', function(ev) {
+					mediumCollectionElement.on('click', '.timaat-medium-collectionitemremove', async function(ev) {
 						var row = $(this).parents('tr');
-						TIMAAT.VideoChooser._removeCollectionItemRow(row);
+						let collection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');
+						let medium = $(row).data('medium');
+						TIMAAT.MediaCollectionService.removeCollectionItem(collection.model.id, medium.id);
+						await TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
 					});
 					
 // 					mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
