@@ -21,21 +21,35 @@
 
 	TIMAAT.MediaCollectionDatasets = {
     mediaCollectionList: null,
-		mediaCollection: null,
+		mediaCollectionItemList: null,
 		selectedMediumCollectionId: null,
+		selectedMediumCollectionItemId: null,
+		lastForm: null,
+		subNavTab: 'datasheet',
 
 		init: function() {
 			TIMAAT.MediaCollectionDatasets.initMediaCollections();
+			TIMAAT.MediaCollectionDatasets.initMediaCollectionItems();
 			$('.media-data-tabs').hide();
 			$('.media-datatables').hide();
 			// $('.mediacollection-datatable').show();
 		},
 
 		initMediaCollections: function() {
+			// nav-bar functionality
+			$('#mediacollection-tab-mediumcollection-metadata-form').on('click', function(event) {
+				console.log("TCL: Media Collection Datasheet Tab clicked");
+				$('.form').hide();
+				$('.mediacollection-items-datatable').hide();
+				TIMAAT.MediaCollectionDatasets.subNavTab = 'datasheet';
+				TIMAAT.MediaCollectionDatasets.lastForm = 'datasheet';
+				$('.nav-tabs a[href="#mediumCollectionDatasheet"]').tab('show');
+				TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type'), $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+			});
+
 			// add medium collection button functionality (in medium collection list - opens datasheet form)
 			$('#timaat-mediacollectiondatasets-mediumcollection-add').on('click', function(event) {
-				// $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type', 'Collection');
-				$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', null);
+				$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', null);
 				TIMAAT.MediaCollectionDatasets.addMediumCollection();
 			});
 
@@ -44,7 +58,7 @@
 				console.log("TCL: delete media collection button pressed");
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediacollectiondatasets-mediumcollection-delete').data('Collection', $('#timaat-mediacollectiondatasets-metadata-form').data('Collection'));
+				$('#timaat-mediacollectiondatasets-mediumcollection-delete').data('mediumCollection', $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
 				$('#timaat-mediacollectiondatasets-mediumcollection-delete').modal('show');
 			});
 
@@ -52,7 +66,7 @@
 			$('#timaat-mediacollectiondatasets-modal-delete-submit').on('click', async function(ev) {
 				console.log("TCL: delete media collection modal submit pressed");
 				var modal = $('#timaat-mediacollectiondatasets-mediumcollection-delete');
-				var mediumCollection = modal.data('Collection');
+				var mediumCollection = modal.data('mediumCollection');
         console.log("TCL: mediumCollection", mediumCollection);
 				if (mediumCollection) {
 					try {	
@@ -70,14 +84,22 @@
 				$('#timaat-mediacollectiondatasets-metadata-form').hide();
 				$('.mediacollection-data-tabs').hide();
 				$('.form').hide();
+				$('.mediacollection-items-datatable').hide();
 			});
 
 			// edit content form button handler
 			$('.mediumcollection-form-edit-button').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
-				TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('edit', type, $('#timaat-mediacollectiondatasets-metadata-form').data('Collection'));
+				switch(TIMAAT.MediaCollectionDatasets.lastForm) {
+					case 'items':
+						TIMAAT.MediaCollectionDatasets.mediumCollectionFormItems('edit',  $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+					break;
+					default:
+						var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
+						TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('edit', type, $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+					break;
+				}
 				// medium.listView.find('.timaat-mediacollectiondatasets-medium-list-tags').popover('show');
 			});
 
@@ -90,7 +112,7 @@
 
 				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
 				// the original medium model (in case of editing an existing medium collection)
-				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('Collection');				
+				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');				
 
 				// create/edit medium collection window submitted data
 				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', false);
@@ -145,22 +167,23 @@
 
 					var newMediumCollection = await TIMAAT.MediaCollectionDatasets.createMediumCollection(type, mediumCollectionModel, mediumCollectionSubtypeModel);
 					mediumCollection = new TIMAAT.MediumCollection(newMediumCollection);
-					$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', mediumCollection);
+					$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', mediumCollection);
 					// $('#media-tab-mediumcollection-metadata-form').trigger('click');
 				}
 				await TIMAAT.MediaCollectionDatasets.refreshDataTable();
-				TIMAAT.MediaCollectionDatasets.selectLastSelection('mediumCollection', mediumCollection.model.id);
+				TIMAAT.MediaCollectionDatasets.selectLastListSelection(mediumCollection.model.id);
 				TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, mediumCollection);
 			});
 
 			// cancel add/edit button in content form functionality
 			$('#timaat-mediacollectiondatasets-metadata-form-dismiss').on('click', function(event) {
-				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('Collection');
+				var mediumCollection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');
 				var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
 				if (mediumCollection != null) {
 					TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, mediumCollection);
 				} else { // dismiss medium creation
 					$('.form').hide();
+					$('.mediacollection-items-datatable').hide();
 				}
 			});
 
@@ -177,6 +200,28 @@
 
 		},
 
+		initMediaCollectionItems: function() {
+			// nav-bar functionality
+			$('#mediacollection-tab-mediumcollection-items-form').on('click', function(event) {
+				console.log("TCL: Media Collection Items Tab clicked");
+				$('.form').hide();
+				$('.mediacollection-items-datatable').hide();
+				TIMAAT.MediaCollectionDatasets.subNavTab = 'items';
+				TIMAAT.MediaCollectionDatasets.lastForm = 'items';
+				$('.nav-tabs a[href="#mediumCollectionItems"]').tab('show');
+				TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
+				let collection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');
+				console.log("TCL: collection", collection);
+				if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList) {
+					TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediaCollection/'+collection.model.id+'/list')
+					TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
+				} else {
+					TIMAAT.MediaCollectionDatasets.setupMediumCollectionItemListDataTable(collection.model.id);
+				}
+				TIMAAT.MediaCollectionDatasets.mediumCollectionFormItems('show', $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+			});
+		},
+
 		load: function() {
 			TIMAAT.MediaCollectionDatasets.loadMediaCollections();
 		},
@@ -184,17 +229,19 @@
 		loadMediaCollections: function() {
 			$('.media-datatables').hide();
 			$('.mediacollection-datatable').show();
-      TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
+			TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
+			// TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
     },
     
-    loadMediaCollectionDataTables: async function() {
-    	console.log("TCL: loadMediaCollectionDataTables: async function()");
-			TIMAAT.MediaCollectionDatasets.setupMediaCollectionListDataTable();
+    loadMediaCollectionDataTable: async function() {
+    	console.log("TCL: loadMediaCollectionDataTable: async function()");
+			TIMAAT.MediaCollectionDatasets.setupMediumCollectionListDataTable();
 		},
 
 		setMediumCollectionList: function() {
     	console.log("TCL: setMediumCollectionList");
 			$('.form').hide();
+			$('.mediacollection-items-datatable').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionList == null ) return;
 			TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
@@ -204,17 +251,35 @@
 			
 			// set ajax data source
 			if ( TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList ) {
-				// TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/mediumcollection/list');
 				TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.ajax.reload(null, false);
+			}
+		},
+
+		setMediumCollectionItemList: function() {
+    	console.log("TCL: setMediumCollectionItemList");
+			$('.form').hide();
+			$('.mediacollection-items-datatable').hide();
+			$('.media-data-tabs').hide();
+			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionItemList == null ) return;
+			TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionItemSelection();
+			$('#timaat-mediacollectiondatasets-mediumcollection-items-loader').remove();
+			// clear old UI list
+			$('#timaat-mediacollectiondatasets-mediumcollection-items').empty();
+			
+			console.log("TCL: TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList", TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList);
+			// set ajax data source
+			if ( TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList ) {
+				TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
 			}
 		},
 
 		addMediumCollection: function() {	
 			// console.log("TCL: addMediumCollection: type", type);
 			$('.form').hide();
+			$('.mediacollection-items-datatable').hide();
 			$('.mediacollection-data-tabs').hide();
 			$('.nav-tabs a[href="#mediumCollectionDataSheet"]').show();
-			$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', null);
+			$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', null);
 			mediumFormMetadataValidator.resetForm();
 
 			$('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
@@ -247,8 +312,8 @@
 		},
 
 		mediumCollectionFormDataSheet: async function(action, type, data) {
-			console.log("TCL: action, type, modelData", action, type, data);
-			TIMAAT.MediaCollectionDatasets.selectLastSelection(data.model.id);
+			console.log("TCL: action, type, data", action, type, data);
+			TIMAAT.MediaCollectionDatasets.selectLastListSelection(data.model.id);
 			$('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
 			$('#timaat-mediacollectiondatasets-metadata-form').attr('data-type', type);
 			$('.datasheet-data').hide();
@@ -257,6 +322,7 @@
 			mediumFormMetadataValidator.resetForm();
 
 			// show tabs
+			$('.mediacollection-data-tabs').show();
 
 			$('.nav-tabs a[href="#mediumCollectionDataSheet"]').focus();
 			$('#timaat-mediacollectiondatasets-metadata-form').show();
@@ -323,18 +389,71 @@
 			$('#timaat-mediacollectiondatasets-metadata-form').data(type, data);
 		},
 
-		setupMediumCollectionDataTable: async function(action, collectionData) {
-			console.log("TCL: action, collectionData", action, collectionData);
-			TIMAAT.MediaCollectionDatasets.selectLastSelection(collectionData.model.id);
-			$('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
+		mediumCollectionFormItems: async function(action, data) {
+			console.log("TCL: action, data", action, data);
+			// TIMAAT.MediaCollectionDatasets.selectLastItemSelection(data.model.id); // TODO get medium Id of item
+			$('#timaat-mediacollectiondatasets-items-form').trigger('reset');
+			var type = $('#timaat-mediacollectiondatasets-metadata-form').attr('data-type');
 			$('.datasheet-data').hide();
 			$('.mediumcollection-data').show();
+			$('.mediacollection-items-datatable').show();
+			// $('.mediumcollection-'+type+'-data').show();
+			mediumFormMetadataValidator.resetForm();
+
+			// show tabs
+			$('.mediacollection-data-tabs').show();
+
+			$('.nav-tabs a[href="#mediumCollectionItems"]').focus();
+			$('#timaat-mediacollectiondatasets-items-form').show();
+
+			if ( action == 'show') {
+				$('#timaat-mediacollectiondatasets-items-form :input').prop('disabled', true);
+				$('.mediumcollection-form-edit-button').prop('disabled', false);
+				$('.mediumcollection-form-edit-button :input').prop('disabled', false);
+				$('.mediumcollection-form-edit-button').show();
+				$('.mediumcollection-form-delete-button').prop('disabled', false);
+				$('.mediumcollection-form-delete-button :input').prop('disabled', false);
+				$('.mediumcollection-form-delete-button').show();
+				$('#timaat-mediacollectiondatasets-items-form-submit').hide();
+				$('#timaat-mediacollectiondatasets-items-form-dismiss').hide();
+				$('#mediumCollectionFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+			}
+			else if (action == 'edit') {
+				$('#timaat-mediacollectiondatasets-items-form :input').prop('disabled', false);
+				// $('#timaat-mediacollectiondatasets-items-type-id').prop('disabled', true);
+				// $('#timaat-mediacollectiondatasets-items-type-id :input').prop('disabled', true);
+				$('.mediumcollection-form-edit-button').hide();
+				$('.mediumcollection-form-edit-button').prop('disabled', true);
+				$('.mediumcollection-form-edit-button :input').prop('disabled', true);
+				$('.mediumcollection-form-delete-button').hide();
+				$('.mediumcollection-form-delete-button').prop('disabled', true);
+				$('.mediumcollection-form-delete-button :input').prop('disabled', true);
+				$('#timaat-mediacollectiondatasets-items-form-submit').html('Save');
+				$('#timaat-mediacollectiondatasets-items-form-submit').show();
+				$('#timaat-mediacollectiondatasets-items-form-dismiss').show();
+				$('#mediumCollectionFormHeader').html("Edit "+type);
+				$('#timaat-mediacollectiondatasets-metadata-title').focus();
+			}
+
+			// console.log("TCL: modelData", modelData);
+			// setup UI
+
+			// medium collection item data
+			$('#timaat-mediacollectiondatasets-items-form').data(type, data);
+		},
+
+		setupMediumCollectionItemListDataTable: async function(collectionId) {
+			console.log("TCL: setupMediumCollectionItemListDataTable - action, collectionId", collectionId);
+			// TIMAAT.MediaCollectionDatasets.selectLastItemSelection(collectionData.model.id); // TODO get medium Id of list item
+			// $('#timaat-mediacollectiondatasets-metadata-form').trigger('reset');
+			// $('.datasheet-data').hide();
+			// $('.mediumcollection-data').show();
       // mediumFormMetadataValidator.resetForm();
       
-      TIMAAT.MediaCollectionDatasets.dataTableMediaCollection = $('#timaat-mediacollectiondatasets-mediacollection-table').DataTable({
+      TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList = $('#timaat-mediacollectiondatasets-mediumcollection-items-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-				"order"         : [[ 2, 'asc' ]],
-				"pagingType"    : "simple_numbers",
+				"order"         : [[ 0, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
 				"scrollY"       : "60vh",
@@ -343,10 +462,11 @@
 				"rowId"					: 'id',
 				"serverSide"		: true,
 				"ajax": {
-					"url": "api/mediaCollection/"+collectionData.model.id+"/list",
+					"url": "api/mediaCollection/"+collectionId+"/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType": "json",
 					"data": function(data) {
+          	console.log("TCL: data", data);
 						let serverData = {
 							draw: data.draw,
 							start: data.start,
@@ -356,23 +476,30 @@
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
-
 						return serverData;
 					},
 					"beforeSend": function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 					"dataSrc": function(data) {
+          	console.log("TCL: dataSrc - data", data);
 						// setup model
-						var media = Array();
+						var mediaCollectionItems = Array();
 						data.data.forEach(function(medium) { 
 							if ( medium.id > 0 ) {
-								media.push(new TIMAAT.Medium(medium, 'medium'));
+								mediaCollectionItems.push(new TIMAAT.Medium(medium, 'medium'));
 							}
 						});
-						TIMAAT.MediaCollectionDatasets.mediaCollection = media;
-						TIMAAT.MediaCollectionDatasets.mediaCollection.model = data.data;
+						TIMAAT.MediaCollectionDatasets.mediaCollectionItemList = mediaCollectionItems;
+						TIMAAT.MediaCollectionDatasets.mediaCollectionItemList.model = data.data;
 						return data.data; // data.map(medium => new TIMAAT.Medium(medium));            
+					}
+				},
+				"rowCallback": function( row, data ) {
+					// console.log("TCL: rowCallback: row, data", row, data);
+					if (data.id == TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId) {
+						TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionItemSelection();
+						$(row).addClass('selected');
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -387,43 +514,49 @@
 					// 	$('#timaat-videochooser-list-action-submit').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);				
 					// });
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					TIMAAT.MediaCollectionDatasets.setMediumStatus(medium);
+					// if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.MediaCollectionDatasets.setMediumStatus(medium);
 					
 					// set up events
-					mediumCollectionElement.on('click', '.timaat-medium-thumbnail', function(ev) {
-						mediumCollectionElement.find('.timaat-medium-annotate').click();
-					});
+// 					mediumCollectionElement.on('click', '.timaat-medium-thumbnail', function(ev) {
+// 						mediumCollectionElement.find('.timaat-medium-annotate').click();
+// 					});
 
 					mediumCollectionElement.on('click', '.timaat-medium-annotate', function(ev) {
+						if (!medium.mediumVideo) return; //* allow annotating only for Videos
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
-//						$('.timaat-medium-card').removeClass('bg-info text-white');
-//						$(this).addClass('bg-info text-white');
 						TIMAAT.UI.showComponent('videoplayer');
-
 						// setup medium in player
 						TIMAAT.VideoPlayer.setupVideo(medium);
 						// load medium annotations from server
 						TIMAAT.Service.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupAnalysisLists);
-						// TIMAAT.VideoPlayer.setupAnalysisLists(medium.medium.mediumAnalysisLists);
 					});
 
-					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) { // TODO
-						console.log("TCL: TODO");
+					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.MediaCollectionDatasets.initMediaComponent();
+						TIMAAT.MediaDatasets.initMediaComponent();
+						var type = medium.mediaType.mediaTypeTranslations[0].type;
 						$('.form').hide();
+						$('.mediacollection-items-datatable').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
-						$('.nav-tabs a[href="#mediumCollectionDataSheet"]').tab("show");
-						var selectedVideo = {}
-						selectedVideo.model = medium;
-						TIMAAT.MediaDatasets.selectLastSelection(selectedVideo.model.id);
-						TIMAAT.MediaDatasets.dataTableMedia.search(selectedVideo.model.displayTitle.name).draw();
-						$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
-						TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'medium', selectedVideo);
+						$('.media-datatables').hide();
+						$('.media-datatable').show();
+						$('.nav-item').removeClass('active');
+						$('.nav-link').removeClass('active');
+						$('#media-tab').parent().addClass('active');
+						$('#media-tab').addClass('active');
+						$('.nav-tabs a[href="#'+type+'Datasheet"]').tab("show");
+						// $('#media-tab-medium-metadata-form').focus();
+						var selectedMedium = {}
+						selectedMedium.model = medium;
+            console.log("TCL: selectedMedium", selectedMedium);
+						TIMAAT.MediaDatasets.selectLastSelection(type, selectedMedium.model.id);
+						TIMAAT.MediaDatasets.dataTableMedia.search(selectedMedium.model.displayTitle.name).draw();
+						$('#timaat-mediadatasets-metadata-form').data(type, selectedMedium);
+						TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, selectedMedium);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-medium-collectionitemremove', function(ev) {
@@ -431,39 +564,39 @@
 						TIMAAT.VideoChooser._removeCollectionItemRow(row);
 					});
 					
-					mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
-						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
-						let length = medium.mediumVideo.length;
-						if ( length < 0 ) length += 3600;
-						let timecode = Math.round((ev.originalEvent.offsetX/254)*length);
-						timecode = Math.min(Math.max(0, timecode),length);
-						mediumCollectionElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/medium/"+medium.id+"/thumbnail"+"?time="+timecode+"&token="+medium.viewToken);
-					});
+// 					mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+// 						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+// 						let length = medium.mediumVideo.length;
+// 						if ( length < 0 ) length += 3600;
+// 						let timecode = Math.round((ev.originalEvent.offsetX/254)*length);
+// 						timecode = Math.min(Math.max(0, timecode),length);
+// 						mediumCollectionElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/"+medium.id+"/thumbnail"+"?time="+timecode+"&token="+medium.viewToken);
+// 					});
 					
-					mediumCollectionElement.find('.card-img-top').bind("mouseleave", function(ev) {
-						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
-						mediumCollectionElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/medium/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
-					});
+// 					mediumCollectionElement.find('.card-img-top').bind("mouseleave", function(ev) {
+// 						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+// 						mediumCollectionElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+// 					});
 								
-					if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+					// 	TIMAAT.VideoChooser.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: 'id', className: 'videochooser-item', orderable: false, render: function(data, type, medium, meta) {
-						return '<input type="checkbox" aria-label="Checkbox">';
-					}, createdCell( cell, cellData, rowData, rowIndex, colIndex ) {
-						$(cell).attr('id', 'videochooser-item-'+cellData);
-					}
-					},
-					{ data: null, className: 'videochooser-item-preview', orderable: false, render: function(data, type, medium, meta) {
-						let ui = `<div class="timaat-medium-status">
-								<i class="fas fa-cog fa-spin"></i>
-								</div>
-							<img class="card-img-top timaat-medium-thumbnail" src="img/medium-placeholder.png" width="150" height="85" alt="Videovorschau"/>`;
-						return ui;
-						}
-					},
+					// { data: 'id', className: 'videochooser-item', orderable: false, render: function(data, type, medium, meta) {
+					// 	return '<input type="checkbox" aria-label="Checkbox">';
+					// }, createdCell( cell, cellData, rowData, rowIndex, colIndex ) {
+					// 	$(cell).attr('id', 'videochooser-item-'+cellData);
+					// }
+					// },
+					// { data: null, className: 'videochooser-item-preview', orderable: false, render: function(data, type, medium, meta) {
+					// 	let ui = `<div class="timaat-medium-status">
+					// 			<i class="fas fa-cog fa-spin"></i>
+					// 			</div>
+					// 		<img class="card-img-top timaat-medium-thumbnail" src="img/medium-placeholder.png" width="150" height="85" alt="Videovorschau"/>`;
+					// 	return ui;
+					// 	}
+					// },
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
 						// console.log("TCL: medium", medium);
 						let titleDisplay = `<p>`+medium.displayTitle.name+`</p>`;
@@ -479,46 +612,51 @@
 							return titleDisplay;
 						}
 					},
-					{ data: 'mediumVideo.length', name: 'duration', className: 'duration' , render: function(data, type, row, meta) {
-							return TIMAAT.Util.formatTime(data);
-						}
-					},
-					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, medium, meta) {
-							return TIMAAT.VideoChooser._getProducer(medium);
-						}
-					},
-					{ data: 'releaseDate', name: 'releaseDate', className: 'date', render: function(data, type, medium, meta) {
-							return moment.utc(data).format('YYYY-MM-DD');
-						}
-					},
+					// { data: 'mediumVideo.length', name: 'duration', className: 'duration' , render: function(data, type, row, meta) {
+					// 		return TIMAAT.Util.formatTime(data);
+					// 	}
+					// },
+					// { data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, medium, meta) {
+					// 		return TIMAAT.VideoChooser._getProducer(medium);
+					// 	}
+					// },
+					// { data: 'releaseDate', name: 'releaseDate', className: 'date', render: function(data, type, medium, meta) {
+					// 		return moment.utc(data).format('YYYY-MM-DD');
+					// 	}
+					// },
 					{ data: null, className: 'actions', orderable: false, render: function(data, type, medium, meta) {
-						let ui = `<div>
-							<form action="/TIMAAT/api/medium/medium/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
-								<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
-								<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
-							</form>
-							<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
-							<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>`;
-						if ( TIMAAT.VideoChooser.collection ) ui += `<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-medium-collectionitemremove"><i class="fas fa-folder-minus"></i></button>`;
-						ui += '</div>';
-							return ui;
+          	// console.log("TCL: medium", medium);
+						let ui = `
+							<div>
+								<form action="/TIMAAT/api/medium/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
+									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
+									<button type="submit" title="Videodatei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
+								</form>`;
+							if (medium.mediumVideo && medium.fileStatus && (medium.fileStatus == 'ready' || medium.fileStatus == 'transcoding' || medium.fileStatus == 'waiting')) {
+								ui +=	`<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-medium-annotate"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+							ui +=	`
+								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+								<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-medium-collectionitemremove"><i class="fas fa-folder-minus"></i></button>
+							</div>`;
+						return ui;
 						},
-					}				
+					}
 				],
 				"language": {
-					"decimal": ",",
-					"thousands": ".",
-					"search": "Suche",
-					"lengthMenu": "Zeige _MENU_ Videos pro Seite",
-					"zeroRecords": "Keine Videos gefunden.",
-					"info": "Seite _PAGE_ von _PAGES_ &middot; (_MAX_ Videos gesamt)",
-					"infoEmpty": "Keine Videos verf&uuml;gbar.",
-                    "infoFiltered": " &mdash; _TOTAL_ von _MAX_ Videos angezeigt",
-                    "paginate": {
-						"first":      "Erste",
-						"previous":   "Vorherige",
-						"next":       "N&auml;chste",
-						"last":       "Letzte"
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No items found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
 					},
 				},				
 			});	
@@ -561,8 +699,8 @@
 			// $('#timaat-mediacollectiondatasets-metadata-form').data(mediumType, mediumTypeData);
 		},
 
-		setupMediaCollectionListDataTable: function() {			
-			console.log("TCL: setupMediaCollectionListDataTable");
+		setupMediumCollectionListDataTable: function() {			
+			console.log("TCL: setupMediumCollectionListDataTable");
 			// setup datatable
 			TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList = $('#timaat-mediacollectiondatasets-mediacollection-list-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -622,7 +760,7 @@
 					let mediumCollectionElement = $(row);
 					let mediumCollection = data;
 					mediumCollection.ui = mediumCollectionElement;
-					mediumCollectionElement.data('Collection', mediumCollection);
+					mediumCollectionElement.data('mediumCollection', mediumCollection);
 					// TIMAAT.MediaCollectionDatasets.displayFileStatus(medium);
 
 					mediumCollectionElement.on('click', '.title', function(event) {
@@ -633,6 +771,7 @@
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
+						$('.mediacollection-items-datatable').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
 						TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
@@ -644,24 +783,24 @@
 								break;
 							}
 						}
-						TIMAAT.MediaCollectionDatasets.selectLastSelection(mediumCollection.id);
+						TIMAAT.MediaCollectionDatasets.selectLastListSelection(mediumCollection.id);
+						if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList) {
+							TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediaCollection/'+mediumCollection.id+'/list')
+							TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
+						}
 
 						console.log("TCL: selectedMediumCollection", selectedMediumCollection);
-						$('#timaat-mediacollectiondatasets-metadata-form').data('Collection', selectedMediumCollection);
+						$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', selectedMediumCollection);
 						var type = selectedMediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
-						// if (TIMAAT.MediaCollectionDatasets.subNavTab == 'datasheet') {
+						if (TIMAAT.MediaCollectionDatasets.subNavTab == 'datasheet') {
 							$('.nav-tabs a[href="#mediumCollectionDataSheet"]').tab('show');
 							TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', type, selectedMediumCollection);
-						// } else {
+						} else {
 							// show tabs
-							// $('.preview-data-tab').show();
-							// $('.mediacollection-data-tab').show();
-							// $('.title-data-tab').show();
-							// $('.languagetrack-data-tab').show();
-							// $('.mediumactorwithrole-data-tab').show();
-							// $('.nav-tabs a[href="#'+TIMAAT.MediaCollectionDatasets.subNavTab+'"]').tab('show');
-							// TIMAAT.MediaCollectionDatasets.showLastForm();
-						// }
+							$('.mediacollection-data-tabs').show();
+							$('.nav-tabs a[href="#mediumCollection'+TIMAAT.MediaCollectionDatasets.subNavTab+'"]').tab('show');
+							TIMAAT.MediaCollectionDatasets.showLastForm();
+						}
 					});
 				},
 				"columns": [
@@ -838,12 +977,20 @@
 			if ( TIMAAT.UploadManager.isUploading(medium) ) medium.ui.find('.timaat-medium-upload').css('display', 'none');
 		},
 		
-		selectLastSelection: function(id) {
+		selectLastListSelection: function(id) {
       if (TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId && TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId != id) {
         $(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId).node()).removeClass('selected');
       }
 			$(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.row('#'+id).node()).addClass('selected');
 			TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId = id;
+		},
+
+		selectLastItemSelection: function(id) {
+      if (TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId && TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId != id) {
+        $(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.row('#'+TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId).node()).removeClass('selected');
+      }
+			$(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.row('#'+id).node()).addClass('selected');
+			TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId = id;
 		},
 
 		clearLastMediumCollectionSelection: function () {
@@ -855,12 +1002,35 @@
 			TIMAAT.MediaCollectionDatasets.selectedMediumCollectionId = null;
 		},
 
+		clearLastMediumCollectionItemSelection: function () {
+			let i = 0;
+			for (; i < TIMAAT.MediaCollectionDatasets.mediaCollectionItemList.length; i++) {
+				$(TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.row('#'+TIMAAT.MediaCollectionDatasets.mediaCollectionItemList[i].model.id).node()).removeClass('selected');
+			}
+			TIMAAT.MediaCollectionDatasets.selectedMediumCollectionItemId = null;
+		},
+
+		showLastForm: function() {
+			switch (TIMAAT.MediaCollectionDatasets.lastForm) {
+				case 'datasheet':
+					TIMAAT.MediaCollectionDatasets.mediumCollectionFormDataSheet('show', $('#timaat-mediacollectiondatasets-metadata-form').data('data-type'), $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+				break;
+				case 'items':
+					TIMAAT.MediaCollectionDatasets.mediumCollectionFormItems('show', $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection'));
+				break;
+			}
+		},
+
 		refreshDataTable: async function() {
 			// console.log("TCL: refreshDataTable";
 			// set ajax data source
       if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList) {
         // TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
         TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.ajax.reload(null, false);
+			}
+			if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList) {
+        // TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
+        TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
       }
 		},
 

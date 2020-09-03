@@ -208,12 +208,10 @@
 		},
 
 		async removeCollectionItem(collection, medium) {
-			console.log("TCL: removeCollectionItem -> collection", collection);
-			console.log("TCL: removeCollectionItem -> medium", medium);
-			var col = collection;
+      console.log("TCL: removeCollectionItem -> collection, medium", collection, medium);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+col.id+"/medium/"+medium.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id+"/medium/"+medium.id,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {

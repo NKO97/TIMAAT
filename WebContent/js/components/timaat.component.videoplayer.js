@@ -807,8 +807,7 @@
 		},
 		
 		setupVideo: function(video) {
-			console.log("TCL: setupVideo: function(video) ");
-			console.log("TCL: video", video);
+			console.log("TCL: setupVideo: function(video) ", video);
 			// setup model
 			if ( video.mediumVideo.length < 0 ) video.mediumVideo.length += 3600; // temp fix for DB problems
 			this.curFrameRate = 25; // TODO
@@ -912,8 +911,7 @@
 		},
 		
 		setupAnalysisLists: function (lists) {
-			console.log("TCL: setupAnalysisLists: function (lists)");
-			console.log("TCL: lists", lists);
+			console.log("TCL: setupAnalysisLists: ", lists);
 			// clear old lists if any
 			$('#timaat-analysislist-chooser').empty();			
 			// setup model
@@ -967,8 +965,7 @@
 		},
 		
 		setupAnnotations: function(annotations) {
-			console.log("TCL: setupAnnotations: function(annotations)");
-			console.log("TCL: annotations", annotations);
+			console.log("TCL: setupAnnotations: ", annotations);
 			if ( TIMAAT.VideoPlayer.curAnnotation ) TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 
 			// setup model

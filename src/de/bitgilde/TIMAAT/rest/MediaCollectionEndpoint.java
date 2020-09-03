@@ -40,6 +40,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -61,12 +62,12 @@ public class MediaCollectionEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getAllMediaCollections(@QueryParam("draw") Integer draw,
-																				 @QueryParam("start") Integer start,
-																				 @QueryParam("length") Integer length,
-																				 @QueryParam("orderby") String orderby,
-																				 @QueryParam("dir") String direction,
-																				 @QueryParam("search") String search ) {
+	public Response getMediaCollections(@QueryParam("draw") Integer draw,
+																			@QueryParam("start") Integer start,
+																			@QueryParam("length") Integer length,
+																			@QueryParam("orderby") String orderby,
+																			@QueryParam("dir") String direction,
+																			@QueryParam("search") String search ) {
 		System.out.println("MediumCollectionServiceEndpoint: getAllMediaCollections: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
@@ -112,14 +113,14 @@ public class MediaCollectionEndpoint {
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/list")
-	public Response getMediaCollection(@PathParam("id") Integer id,
-																		 @QueryParam("draw") Integer draw,
-																		 @QueryParam("start") Integer start,
-																		 @QueryParam("length") Integer length,
-																		 @QueryParam("orderby") String orderby,
-																		 @QueryParam("dir") String direction,
-																		 @QueryParam("search") String search ) {
-		System.out.println("MediumCollectionServiceEndpoint: getMediaCollectionList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+	public Response getMediaCollectionItems(@PathParam("id") Integer id,
+																					@QueryParam("draw") Integer draw,
+																					@QueryParam("start") Integer start,
+																					@QueryParam("length") Integer length,
+																					@QueryParam("orderby") String orderby,
+																					@QueryParam("dir") String direction,
+																					@QueryParam("search") String search ) {
+		System.out.println("MediumCollectionServiceEndpoint: getMediaCollectionItems: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -129,39 +130,45 @@ public class MediaCollectionEndpoint {
 			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
 		}
 
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-
 		// calculate total # of records
-		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m WHERE m.id = (SELECT mchm.mediumId FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollectionId = :id )")
-			.setParameter("id", id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m, MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id = "+id+" AND m.id = mchm.medium.id");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 
+		String mediumCollectionListQuery = "SELECT m FROM Medium m, MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id = "+id+" AND m.id = mchm.medium.id";
 		// search
 		Query query;
 		String sql;
-		List<MediaCollection> mediumCollectionList = new ArrayList<>();
+		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT mc FROM MediaCollection mc WHERE lower(mc.title) LIKE lower(concat('%', :search, '%'))";
+			
+			sql = "SELECT t FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
-			// find all mediacollections
+			// find all media
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			mediumCollectionList = castList(MediaCollection.class, query.getResultList());
-			recordsFiltered = mediumCollectionList.size();
+			// mediumList = castList(Medium.class, query.getResultList());
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium))) {
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
 		} else {
-			sql = "SELECT mc FROM MediaCollection mc ORDER BY "+column+" "+direction;
+			sql = mediumCollectionListQuery+" ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			mediumCollectionList = castList(MediaCollection.class, query.getResultList());
+			mediumList = castList(Medium.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumCollectionList)).build();
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
-
-
 
 	@GET
 	@Path("listCard")

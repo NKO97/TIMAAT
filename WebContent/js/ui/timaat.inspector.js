@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Inspector = class Inspector {
 		constructor(viewer) {
 			console.log('TCL: Inspector -> constructor');

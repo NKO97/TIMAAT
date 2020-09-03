@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.UploadItem = class UploadItem {
 		constructor(medium, type, form) {
 			this.medium = medium;

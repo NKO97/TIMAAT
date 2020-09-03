@@ -21,7 +21,7 @@
 	
 	TIMAAT.AnalysisSegment = class AnalysisSegment {
 		constructor(model) {
-		      console.log("TCL: AnalysisSegment -> constructor -> model", model);
+		      // console.log("TCL: AnalysisSegment -> constructor -> model", model);
 					// setup model
 					this.model = model;
 					this.active = false;
@@ -49,7 +49,7 @@
 				}
 				
 				updateUI() {
-					console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
+					// console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
 					this.listView.attr('data-starttime', this.model.startTime * 1000);
 					let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
@@ -76,7 +76,7 @@
 				}
 				
 				addUI() {
-					console.log("TCL: AnalysisSegment -> addUI -> addUI()");
+					// console.log("TCL: AnalysisSegment -> addUI -> addUI()");
 					$('#timaat-annotation-list').append(this.listView);
 					$('#timaat-timeline-segment-pane').append(this.timelineView);
 
@@ -108,15 +108,15 @@
 						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
-					console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");
+					// console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");
 					this.updateUI();
 				}
 				
 				removeUI() {
-					console.log("TCL: AnalysisSegment -> removeUI -> removeUI()");
+					// console.log("TCL: AnalysisSegment -> removeUI -> removeUI()");
 					this.listView.remove();
 					this.timelineView.remove();
-					console.log("TCL: AnalysisSegment -> removeUI -> this.updateUI()");
+					// console.log("TCL: AnalysisSegment -> removeUI -> this.updateUI()");
 					this.updateUI();      
 				}
 					

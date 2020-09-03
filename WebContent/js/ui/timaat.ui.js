@@ -255,8 +255,8 @@
 		
 		
 		setWaiting: function(waiting) {
-			console.log("TCL: setWaiting: function(waiting)");
-			console.log("TCL: waiting", waiting);
+			// console.log("TCL: setWaiting: function(waiting)");
+			// console.log("TCL: waiting", waiting);
 			if (waiting) $('#timaat-ui-waiting').modal('show');
 			else $('#timaat-ui-waiting').modal('hide');
 		},
@@ -298,7 +298,7 @@
 						$('#timaat-login-modal').modal('hide');
 						$('#timaat-user-info').html(e.accountName);							
 						TIMAAT.VideoChooser.loadCollections();
-						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
+						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTable();
 						TIMAAT.MediaDatasets.loadMediaDataTables();
 						TIMAAT.ActorDatasets.loadActorDataTables();
 						TIMAAT.RoleLists.loadRolesDataTables();

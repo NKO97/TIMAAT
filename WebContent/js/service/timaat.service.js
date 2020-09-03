@@ -135,10 +135,10 @@
 		},
 
 		createAnalysislist(title, comment, mediumID, callback) {
-			console.log("TCL: createAnalysislist -> createAnalysislist(title, comment, mediumID, callback)");
-			console.log("TCL: createAnalysislist -> title", title);
-			console.log("TCL: createAnalysislist -> comment", comment);
-			console.log("TCL: createAnalysislist -> mediumID", mediumID);
+			// console.log("TCL: createAnalysislist -> createAnalysislist(title, comment, mediumID, callback)");
+			// console.log("TCL: createAnalysislist -> title", title);
+			// console.log("TCL: createAnalysislist -> comment", comment);
+			// console.log("TCL: createAnalysislist -> mediumID", mediumID);
 			var model = {
 					"id": 0,
 					"analysisSegments": [],
@@ -169,7 +169,7 @@
 		},
 
 		updateAnalysislist(analysislist) {
-			console.log("TCL: updateAnalysislist -> analysislist", analysislist);
+			// console.log("TCL: updateAnalysislist -> analysislist", analysislist);
 			var list = {
 					id: analysislist.id,
 					mediumAnalysisListTranslations: analysislist.mediumAnalysisListTranslations,
@@ -197,7 +197,7 @@
 		},
 
 		removeAnalysislist(analysislist) {
-			console.log("TCL: removeAnalysislist -> analysislist", analysislist);
+			// console.log("TCL: removeAnalysislist -> analysislist", analysislist);
 			var list = analysislist;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
@@ -215,7 +215,7 @@
 		},
 
 		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
-			console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
+			// console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
 				id: 0, 
 				analysisListID: list,
@@ -263,7 +263,7 @@
 		},
 
 		updateAnnotation(annotation) {
-			console.log("TCL: updateAnnotation -> annotation", annotation);
+			// console.log("TCL: updateAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+anno.model.id,
@@ -284,7 +284,7 @@
 		},
 
 		removeAnnotation(annotation) {
-			console.log("TCL: removeAnnotation -> annotation", annotation);
+			// console.log("TCL: removeAnnotation -> annotation", annotation);
 			var anno = annotation;
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+anno.model.id,
@@ -302,8 +302,8 @@
 		},
 		
 		addAnnotationActor(annotationId, actorId) {
-			console.log("TCL: addAnnotationActor -> annotationId", annotationId);
-			console.log("TCL: addAnnotationActor -> actorId", actorId);
+			// console.log("TCL: addAnnotationActor -> annotationId", annotationId);
+			// console.log("TCL: addAnnotationActor -> actorId", actorId);
 			return jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
 				type:"POST",
@@ -322,8 +322,8 @@
 		},
 
 		removeAnnotationActor(annotationId, actorId) {
-			console.log("TCL: removeAnnotationActor -> annotationId", annotationId);
-			console.log("TCL: removeAnnotationActor -> actorId", actorId);
+			// console.log("TCL: removeAnnotationActor -> annotationId", annotationId);
+			// console.log("TCL: removeAnnotationActor -> actorId", actorId);
 			return jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
 				type:"DELETE",
@@ -342,7 +342,7 @@
 		},
 
 		createSegment(model, list, callback) {
-			console.log("TCL: createSegment -> model, list, callback", model, list, callback);
+			// console.log("TCL: createSegment -> model, list, callback", model, list, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list+"/segment",
 				type:"POST",
@@ -362,7 +362,7 @@
 		},
 
 		updateSegment(segment) {
-			console.log("TCL: updateSegment -> segment", segment);
+			// console.log("TCL: updateSegment -> segment", segment);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/segment/"+segment.model.id,
 				type:"PATCH",
@@ -382,7 +382,7 @@
 		},
 
 		removeSegment(segment) {
-			console.log("TCL: removeSegment -> segment", segment);
+			// console.log("TCL: removeSegment -> segment", segment);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/segment/"+segment.model.id,
 				type:"DELETE",
@@ -506,7 +506,7 @@
 		},
 
 		addMediumTag(medium, tagname, callback) {
-			console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
+			// console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
 				type:"POST",
@@ -526,7 +526,7 @@
 		},
 
 		removeMediumTag(medium, tagname, callback) {
-			console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
+			// console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
 				type:"DELETE",
@@ -544,13 +544,13 @@
 		},
 
 		updateCategorySets(categoryname) {
-			console.log("TCL: updateCategorySets -> categoryname", categoryname);
+			// console.log("TCL: updateCategorySets -> categoryname", categoryname);
 			// TODO implement for updating unassigned categories
 		},
 
 		createCategorySet(name, callback) {
-			console.log("TCL: createCategorySet -> createCategorySet(name, callback)");
-			console.log("TCL:   -> createCategorySet -> name", name);
+			// console.log("TCL: createCategorySet -> createCategorySet(name, callback)");
+			// console.log("TCL:   -> createCategorySet -> name", name);
 			// console.log("TCL: createCategorySet -> callback", callback);
 			// console.log("TCL: createCategorySet -> name, callback", name, callback);
 			var model = {
@@ -577,7 +577,7 @@
 		},
 
 		updateCategorySet(categoryset) {
-			console.log("TCL: updateCategorySet -> categoryset", categoryset);
+			// console.log("TCL: updateCategorySet -> categoryset", categoryset);
 			var set = {
 					id: categoryset.model.id,
 					name: categoryset.model.name,
@@ -624,7 +624,7 @@
 		// },	
 
 		deleteCategory(id) {
-			console.log("TCL: removeCategory -> id", id);
+			// console.log("TCL: removeCategory -> id", id);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
 				type:"DELETE",

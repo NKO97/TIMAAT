@@ -21,7 +21,7 @@
 	
 	TIMAAT.Marker = class Marker {
 		  constructor(annotation) {
-			  console.log("TCL: Marker -> constructor -> annotation", annotation);
+			  // console.log("TCL: Marker -> constructor -> annotation", annotation);
 			  this.parent = annotation;
 			  this.annotation = annotation;
 			  this.annotationID = annotation.model.id;
