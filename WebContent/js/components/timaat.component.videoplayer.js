@@ -881,6 +881,9 @@
 			$('.preview-data-tab').hide();
 			$('#previewTab').addClass('annotationView');
 			$('#timaat-videoplayer-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+			$('.mediacollection-data-tabs').hide();
+			$('.mediacollection-items-datatable').hide();
+			$('#timaat-mediadatasets-metadata-form').show();
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
