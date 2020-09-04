@@ -55,7 +55,6 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 public class AnnotationEndpoint {
 	
 	@Context ContainerRequestContext crc;
-	
 
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -69,7 +68,6 @@ public class AnnotationEndpoint {
     	    	
 		return Response.ok().entity(annotation).build();
 	}
-	
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -124,7 +122,6 @@ public class AnnotationEndpoint {
 		return Response.ok().entity(true).build();
 	}
 	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -177,10 +174,6 @@ public class AnnotationEndpoint {
 		}
 
 	}
-
-	
-	
-	
 
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -309,7 +302,6 @@ public class AnnotationEndpoint {
 
 		return Response.ok().entity(newAnno).build();
 	}
-
 	
 	@PATCH
     @Produces(MediaType.APPLICATION_JSON)
@@ -416,7 +408,6 @@ public class AnnotationEndpoint {
 	@Path("{id}/category/{name}")
 	@Secured
 	public Response addCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {
-		
     	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
     	Annotation annotation = entityManager.find(Annotation.class, id);
@@ -470,7 +461,6 @@ public class AnnotationEndpoint {
 	@Secured
 	public Response removeCategory(@PathParam("id") int id, @PathParam("name") String categoryName) {
 		
-    	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
     	Annotation annotation = entityManager.find(Annotation.class, id);
     	if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
@@ -496,6 +486,5 @@ public class AnnotationEndpoint {
  	
 		return Response.ok().build();
 	}
-	
 	
 }

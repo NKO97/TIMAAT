@@ -218,6 +218,13 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	text-overflow: ellipsis;
 /*	white-space: nowrap; */
 }
+
+.card-img-top {
+	width: auto;
+	max-width: 100%;
+	max-height: 100%;
+}
+
 .timaat-sidebar-tab:hover {
 	background-color: white;
 }

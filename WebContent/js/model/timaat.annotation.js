@@ -49,7 +49,7 @@
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item" style="padding:0">
-					<div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
+					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
 					<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
 					<span class="timaat-annotation-list-time"></span>

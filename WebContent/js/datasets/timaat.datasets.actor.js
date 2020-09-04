@@ -3021,27 +3021,6 @@
 				node.removeChild(node.lastChild)
 			}
 			$('#timaat-actordatasets-metadata-form').trigger('reset');
-			$('#timaat-actordatasets-metadata-form').attr('data-type', actorType);
-			$('.datasheet-data').hide();
-			$('.name-data').show();
-			$('.actor-data').show();
-			// if (actorType == "actor") { $('.actortype-data').show(); }	else {	$('.actortype-data').hide(); }		
-			$('.'+actorType+'-data').show();
-			actorFormMetadataValidator.resetForm();
-
-			// show tabs
-			$('.'+actorType+'-data-tab').show();
-			$('.name-data-tab').show();
-			$('.address-data-tab').show();
-			$('.emailaddress-data-tab').show();
-			$('.phonenumber-data-tab').show();
-			$('.actorroles-data-tab').show();
-			$('.actorrolemedium-data-tab').show();
-			$('.memberofcollective-data-tab').show();
-
-			$('#actor-profile-images').css('visibility', 'visible');
-			$('.nav-tabs a[href="#'+actorType+'Datasheet"]').focus();
-			$('#timaat-actordatasets-metadata-form').show();
 
 			if (actorTypeData.model.profileImages.length == 0) {
 				$('#dynamic-profile-image-fields').hide();
@@ -3072,6 +3051,28 @@
 				$('.carousel-indicators > li').first().addClass('active');
 				$('#dynamic-profile-image-fields').carousel();
 			}
+
+			$('#timaat-actordatasets-metadata-form').attr('data-type', actorType);
+			$('.datasheet-data').hide();
+			$('.name-data').show();
+			$('.actor-data').show();
+			// if (actorType == "actor") { $('.actortype-data').show(); }	else {	$('.actortype-data').hide(); }		
+			$('.'+actorType+'-data').show();
+			actorFormMetadataValidator.resetForm();
+
+			// show tabs
+			$('.'+actorType+'-data-tab').show();
+			$('.name-data-tab').show();
+			$('.address-data-tab').show();
+			$('.emailaddress-data-tab').show();
+			$('.phonenumber-data-tab').show();
+			$('.actorroles-data-tab').show();
+			$('.actorrolemedium-data-tab').show();
+			$('.memberofcollective-data-tab').show();
+
+			$('#actor-profile-images').css('visibility', 'visible');
+			$('.nav-tabs a[href="#'+actorType+'Datasheet"]').focus();
+			$('#timaat-actordatasets-metadata-form').show();
 
 			if ( action == 'show') {
 				$('#timaat-actordatasets-metadata-form :input').prop('disabled', true);

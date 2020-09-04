@@ -120,7 +120,7 @@ public class MediaCollectionEndpoint {
 																					@QueryParam("orderby") String orderby,
 																					@QueryParam("dir") String direction,
 																					@QueryParam("search") String search ) {
-		System.out.println("MediumCollectionServiceEndpoint: getMediaCollectionItems: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("TCL: MediumCollectionServiceEndpoint: getMediaCollectionItems: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -162,6 +162,68 @@ public class MediaCollectionEndpoint {
 			recordsFiltered = mediumList.size();
 		} else {
 			sql = mediumCollectionListQuery+" ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			mediumList = castList(Medium.class, query.getResultList());
+		}
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/notInList")
+	public Response getMediaCollectionItemsNotInList(@PathParam("id") Integer id,
+																									 @QueryParam("draw") Integer draw,
+																									 @QueryParam("start") Integer start,
+																									 @QueryParam("length") Integer length,
+																									 @QueryParam("orderby") String orderby,
+																									 @QueryParam("dir") String direction,
+																									 @QueryParam("search") String search ) {
+		System.out.println("TCL: MediumCollectionServiceEndpoint: getMediaCollectionItemsNotInList: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "m.id";
+		if ( orderby != null) {
+			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
+		}
+
+		// calculate total # of records
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQueryMedia = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
+		Query countQueryCollectionItems = entityManager.createQuery("SELECT COUNT(m) FROM Medium m, MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id = "+id+" AND m.id = mchm.medium.id");
+		long recordsTotal = (long) countQueryMedia.getSingleResult() - (long) countQueryCollectionItems.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
+		String mediumNotInListQuery = "SELECT m FROM Medium m WHERE m NOT IN (SELECT m FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id = "+id+" AND m.id = mchm.medium.id)";
+		// search
+		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
+		if (search != null && search.length() > 0 ) {
+			// find all matching titles
+			
+			sql = "SELECT t FROM Title t, Medium m WHERE m IN ("+mediumNotInListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			// find all media
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			// mediumList = castList(Medium.class, query.getResultList());
+			List<Title> titleList = castList(Title.class, query.getResultList());
+			for (Title title : titleList) {
+				for (Medium medium : title.getMediums3()) {
+					if (!(mediumList.contains(medium))) {
+						mediumList.add(medium);
+					}
+				}
+			}
+			recordsFiltered = mediumList.size();
+		} else {
+			sql = mediumNotInListQuery+" ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -222,7 +284,6 @@ public class MediaCollectionEndpoint {
 		return Response.ok().entity(col).build();
 	}
 
-	
 	@GET
 	@Path("{id}/media")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -300,7 +361,6 @@ public class MediaCollectionEndpoint {
 	
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
 	}
-	
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -709,21 +769,21 @@ public class MediaCollectionEndpoint {
 	@Path("{id}/medium/{mediumId}")
 	@Secured
 	public Response addMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
+		System.out.println("TCL: MediaCollectionEndpoint -> addMediaCollectionItem");
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = em.find(MediaCollection.class, id);
     	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
     	Medium m = em.find(Medium.class, mediumId);
     	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
-
     	
     	MediaCollectionHasMedium mchm = null;
     	try {
-        	mchm = (MediaCollectionHasMedium) em.createQuery(
-        			"SELECT mchm FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
-                	.setParameter("collection", col)
-                	.setParameter("medium", m)
-                	.getSingleResult();    		
+				mchm = (MediaCollectionHasMedium) em.createQuery(
+					"SELECT mchm FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
+						.setParameter("collection", col)
+						.setParameter("medium", m)
+						.getSingleResult();    		
     	} catch (Exception e) {
     		// doesn't matter
     	}
@@ -747,7 +807,7 @@ public class MediaCollectionEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
-		return Response.ok().build();
+		return Response.ok().entity(true).build();
 	}
 
 	@DELETE
@@ -755,34 +815,32 @@ public class MediaCollectionEndpoint {
 	@Path("{id}/medium/{mediumId}")
 	@Secured
 	public Response deleteMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
-    	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	MediaCollection col = em.find(MediaCollection.class, id);
-    	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-    	Medium m = em.find(Medium.class, mediumId);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+		System.out.println("TCL: MediaCollectionEndpoint -> deleteMediaCollectionItem");
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		MediaCollection col = em.find(MediaCollection.class, id);
+		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium m = em.find(Medium.class, mediumId);
+		if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
-    	try {
-    		EntityTransaction tx = em.getTransaction();
-    		tx.begin();
-        	em.createQuery("DELETE FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
-        	.setParameter("collection", col)
-        	.setParameter("medium", m)
-        	.executeUpdate();
-    		tx.commit();
-        	em.refresh(col);
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return Response.notModified().build();
-    	}
+		try {
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+				em.createQuery("DELETE FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection=:collection AND mchm.medium=:medium")
+				.setParameter("collection", col)
+				.setParameter("medium", m)
+				.executeUpdate();
+			tx.commit();
+				em.refresh(col);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.notModified().build();
+		}
     	
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
 
-		return Response.ok().build();
+		return Response.ok().entity(true).build();
 	}
-
-
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());
