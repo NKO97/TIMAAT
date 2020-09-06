@@ -104,7 +104,6 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
-	@JsonBackReference(value = "Uuid-Annotation")
 	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
