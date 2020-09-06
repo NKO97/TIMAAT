@@ -255,8 +255,8 @@
 		
 		
 		setWaiting: function(waiting) {
-			console.log("TCL: setWaiting: function(waiting)");
-			console.log("TCL: waiting", waiting);
+			// console.log("TCL: setWaiting: function(waiting)");
+			// console.log("TCL: waiting", waiting);
 			if (waiting) $('#timaat-ui-waiting').modal('show');
 			else $('#timaat-ui-waiting').modal('hide');
 		},

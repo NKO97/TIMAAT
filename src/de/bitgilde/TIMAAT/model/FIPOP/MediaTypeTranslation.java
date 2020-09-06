@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name="media_type_translation")
-@NamedQuery(name="MediaTypeTranslation.findAll", query="SELECT m FROM MediaTypeTranslation m")
+@NamedQuery(name="MediaTypeTranslation.findAll", query="SELECT mtt FROM MediaTypeTranslation mtt")
 public class MediaTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 

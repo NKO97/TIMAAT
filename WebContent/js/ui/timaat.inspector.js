@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Inspector = class Inspector {
 		constructor(viewer) {
 			console.log('TCL: Inspector -> constructor');
@@ -129,8 +129,8 @@
 							break;
 						}
 						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`
-						<span class="add-actor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
-						</p>`;
+								<span class="add-actor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
+							</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
 						}
@@ -222,8 +222,6 @@
 				language: this.ui.actorlang,
 			});
 
-			
-			
 			// attach listeners
 			$('#timaat-inspector-meta-submit').click(function(ev) {
 				if ( !inspector.state.type ) return;

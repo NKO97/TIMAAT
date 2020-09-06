@@ -489,139 +489,183 @@
               <div id="timaat-inspector-metadata" class="leaflet-sidebar-pane">
                 <h1 class="leaflet-sidebar-header">
                   <span id="timaat-inspector-metadata-title">Metadaten</span>
-                  <div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div>
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
                 </h1>
-              <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
-    <div class="input-group input-group-sm mb-1">
-      <div id="timaat-inspector-meta-color-group" class="input-group-prepend">
-        <span class="input-group-text">
-          <div class="timaat-colorPicker" id="timaat-inspector-meta-colorPicker">
-            <a class="color"><div class="colorInner"></div></a>
-            <div class="track"></div>
-            <ul class="dropdown"><li></li></ul>
-            <input type="hidden" id="timaat-inspector-meta-color" class="colorInput"/>
-          </div>
-        </span>
-      </div>
-      <input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Title" aria-label="Title"/>
-    </div>
-    <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
-      <div class="input-group-prepend"><span class="input-group-text">Deckkraft</span></div>
-      <div class="form-control form-control-sm">
-        <input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
-      </div>
-      <div class="input-group-append">
-        <button class="btn btn-primary" id="timaat-inspector-meta-outline" type="button"><i class="far fa-square"></i></button>
-      </div>
-    </div>
-
-    <div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend"><span class="input-group-text">Annotationsziel</span></div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer"><i class="fas fa-video"></i> Video</button>
-          <button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary"><i class="fas fa-headphones"></i> Audio</button>
-        </div>
-    </div>
-    
-    <div id="timaat-inspector-meta-timecode-group">
-    <div class="input-group input-group-sm mb-1">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Start</span>
-      </div>
-      <input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
-      <div class="input-group-append">
-        <button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button"><i class="fas fa-clock"></i></button>
-      </div>
-      </div>
-        <div class="input-group input-group-sm mb-3">
-      <div class="input-group-prepend">				
-        <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
-        <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
-          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
-          <div role="separator" class="dropdown-divider"></div>
-          <a class="dropdown-item"><input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden"></a>
-        </div>
-      </div>
-      <input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-inspector-meta-end" aria-label="Ende Timecode" />
-      <div class="input-group-append">
-        <button class="btn btn-secondary" id="timaat-inspector-meta-setend" type="button"><i class="fas fa-clock"></i></button>
-      </div>
-    </div>
-    </div>
-    <div id="timaat-inspector-meta-shortDescription-group" class="input-group input-group-sm mb-3">
-      <textarea class="form-control form-control-sm" id="timaat-inspector-meta-shortDescription" placeholder="Short description" aria-label="Short description"></textarea>
-    </div>
-    <div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
-      <textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Comment"></textarea>
-    </div>
-    <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
-    </div>
-  </div>
-
-          <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
-              <h1 class="leaflet-sidebar-header">Animationseinstellungen<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-              <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
-                <p>
-            <strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
-          </p>
-          <br>
-          <button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block"><i class="fas fa-running fa-fw"></i> Animation erstellen</button>
-          <button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block"><i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen</button>
-          <br>
-          <h6>Keyframes</h6>
-                <div id="timaat-inspector-animation-keyframes"></div>
-              </div>
-          </div>
-
-          <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
-              <h1 class="leaflet-sidebar-header">Kategorien und Tags<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-              <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane">
-        Diese Funktion steht in Kürze zur Verfügung.
-              </div>
-          </div>
-
-          <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
-              <h1 class="leaflet-sidebar-header">Actors<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-              <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
-                <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper"><i class="collapse-icon fas fa-fw"></i> Actor hinzufügen</button>
-                <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
-            <table class="actors-available table table-striped table-bordered table-hover">
-              <thead class="thead-dark">
-                <tr><th>Titel</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+                <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
+                  <div class="input-group input-group-sm mb-1">
+                    <div id="timaat-inspector-meta-color-group" class="input-group-prepend">
+                      <span class="input-group-text">
+                        <div class="timaat-colorPicker" id="timaat-inspector-meta-colorPicker">
+                          <a class="color">
+                            <div class="colorInner"></div>
+                          </a>
+                          <div class="track"></div>
+                          <ul class="dropdown">
+                            <li></li>
+                          </ul>
+                          <input type="hidden" id="timaat-inspector-meta-color" class="colorInput"/>
+                        </div>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-title" placeholder="Title" aria-label="Title"/>
+                  </div>
+                  <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Deckkraft</span>
+                    </div>
+                    <div class="form-control form-control-sm">
+                      <input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
+                    </div>
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" id="timaat-inspector-meta-outline" type="button">
+                        <i class="far fa-square"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Annotationsziel</span>
+                    </div>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer">
+                        <i class="fas fa-video"></i> Video
+                      </button>
+                      <button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary">
+                        <i class="fas fa-headphones"></i> Audio
+                      </button>
+                    </div>
+                  </div>
+                  <div id="timaat-inspector-meta-timecode-group">
+                    <div class="input-group input-group-sm mb-1">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Start</span>
+                      </div>
+                      <input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
+                      <div class="input-group-append">
+                        <button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button">
+                          <i class="fas fa-clock"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                      <div class="input-group-prepend">				
+                        <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+                        <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">1 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">5 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">15 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">30 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">1 min</a>
+                          <div role="separator" class="dropdown-divider"></div>
+                          <a class="dropdown-item">
+                            <input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden">
+                          </a>
+                        </div>
+                      </div>
+                      <input type="text" class="form-control form-control-sm" placeholder="00:00:00" id="timaat-inspector-meta-end" aria-label="Ende Timecode" />
+                      <div class="input-group-append">
+                        <button class="btn btn-secondary" id="timaat-inspector-meta-setend" type="button">
+                          <i class="fas fa-clock"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="timaat-inspector-meta-shortDescription-group" class="input-group input-group-sm mb-3">
+                    <textarea class="form-control form-control-sm" id="timaat-inspector-meta-shortDescription" placeholder="Short description" aria-label="Short description"></textarea>
+                  </div>
+                  <div id="timaat-inspector-meta-comment-group" class="input-group input-group-sm mb-3">
+                    <textarea class="form-control form-control-sm" aria-label="Kommentar" id="timaat-inspector-meta-comment" placeholder="Comment"></textarea>
+                  </div>
+                  <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
                 </div>
-                <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper"><i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors</button>
-                <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
-            <table class="actors-annotation table table-striped table-bordered table-hover">
-              <thead class="thead-light">
-                <tr><th>Titel</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
               </div>
-          </div>
-
-          <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
-              <h1 class="leaflet-sidebar-header">Events<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-              <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
-        Events werden von FIPOP noch nicht unterstützt.
+              <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
+                <h1 class="leaflet-sidebar-header">Animationseinstellungen
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
+                </h1>
+                <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
+                  <p>
+                    <strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
+                  </p>
+                  <br>
+                  <button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block">
+                    <i class="fas fa-running fa-fw"></i> Animation erstellen
+                  </button>
+                  <button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block">
+                    <i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen
+                  </button>
+                  <br>
+                  <h6>Keyframes</h6>
+                  <div id="timaat-inspector-animation-keyframes"></div>
+                </div>
               </div>
-          </div>
-
-          <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
-              <h1 class="leaflet-sidebar-header">Locations<div class="leaflet-sidebar-close"><i class="fa fa-caret-right"></i></div></h1>
-              <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane">
-        Locations werden von FIPOP noch nicht unterstützt.
+              <div class="leaflet-sidebar-pane" id="timaat-inspector-tags">
+                <h1 class="leaflet-sidebar-header">Kategorien und Tags
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
+                </h1>
+                <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane"> Diese Funktion steht in Kürze zur Verfügung.
+                </div>
               </div>
-          </div>
+              <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
+                <h1 class="leaflet-sidebar-header">Actors
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
+                </h1>
+                <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
+                  <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper">
+                    <i class="collapse-icon fas fa-fw"></i> Actor hinzufügen
+                  </button>
+                  <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
+                    <table class="actors-available table table-striped table-bordered table-hover">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>Titel</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                  <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper">
+                    <i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors
+                  </button>
+                  <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                    <table class="actors-annotation table table-striped table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>Titel</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
+                <h1 class="leaflet-sidebar-header">Events
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
+                </h1>
+                <div id="timaat-inspector-events-pane" class="timaat-inspector-pane"> Events werden von FIPOP noch nicht unterstützt.
+                </div>
+              </div>
+              <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
+                <h1 class="leaflet-sidebar-header">Locations
+                  <div class="leaflet-sidebar-close">
+                    <i class="fa fa-caret-right"></i>
+                  </div>
+                </h1>
+                <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane"> Locations werden von FIPOP noch nicht unterstützt.
+                </div>
+              </div>
             </div>
           </div>  
           <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
@@ -632,88 +676,108 @@
           <div class="row timaat-videoplayer-ui" style="padding-top: 1em;">
             <div class="col-lg-3">
               <div class="card">
-                  <div class="card-header" style="padding:0">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i title="Annotationsliste" class="fas fa-fw fa-list-alt"></i></button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysislist()" id="timaat-analysislist-edit">Liste bearbeiten...</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-edit"><i class="fas fa-indent"></i> Neues Segment</a>
-                          <div role="separator" class="dropdown-divider">                          
-                          </div>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add" >Neue Liste erstellen</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Liste löschen</a>
+                <div class="card-header" style="padding:0">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i title="Annotationsliste" class="fas fa-fw fa-list-alt"></i>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysislist()" id="timaat-analysislist-edit">Liste bearbeiten...</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-edit">
+                          <i class="fas fa-indent"></i> Neues Segment
+                        </a>
+                        <div role="separator" class="dropdown-divider">                          
                         </div>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add" >Neue Liste erstellen</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Liste löschen</a>
                       </div>
-                      <select disabled class="custom-select bg-light text-info" id="timaat-analysislist-chooser">
-                      </select>
-                      <div class="input-group-append">
-                        <div class="input-group-text timaat-user-log" id="timaat-user-log-analysislist" onclick="TIMAAT.VideoPlayer.userLogForList()"><i class="fas fa-user"></i>
-                        </div>
+                    </div>
+                    <select disabled class="custom-select bg-light text-info" id="timaat-analysislist-chooser">
+                    </select>
+                    <div class="input-group-append">
+                      <div class="input-group-text timaat-user-log" id="timaat-user-log-analysislist" onclick="TIMAAT.VideoPlayer.userLogForList()">
+                        <i class="fas fa-user"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="timaat-annotation-list-wrapper" style="max-height: 486px;min-height: 486px">
-                    <div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white"><i class="fas fa-spinner fa-spin"></i> Loading Data...
-                    </div>
-                    <ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
+                </div>
+                <div class="timaat-annotation-list-wrapper" style="max-height: 486px;min-height: 486px">
+                  <div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white">
+                    <i class="fas fa-spinner fa-spin"></i> Loading Data...
                   </div>
-                  <!-- 
-                  <div class="card-footer">
-                    <button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
-                    <button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
-                  </div>
-                  -->
+                  <ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
+                </div>
+                <!-- 
+                <div class="card-footer">
+                  <button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
+                  <button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
+                </div>
+                -->
+              </div>
+            </div>
+            <div class="col-lg-9" id="timaat-annotation-metadata" style="max-height: 541px; min-height: 541px">
+              <div class="card">
+                <div class="card-header">
+                  Annotation Metadaten                    
+                </div>
+                <div class="card-body">			   	 
                 </div>
               </div>
-              <div class="col-lg-10" id="timaat-annotation-metadata" style="max-height: 541px;min-height: 541px">
-                <div class="card">
-                  <div class="card-header">
-                    Annotation Metadaten                    
+            </div>		
+            <div class="col-lg-9">
+              <div class="card">
+                <div class="list-group list-group-flush">
+                  <div id="timaat-videoplayer-viewer" style="height: 450px; width: 100%;">
                   </div>
-                  <div class="card-body">			   	 
+                  <div id="timaat-videoplayer-viewer-overlay">
+                    x                    
                   </div>
                 </div>
-              </div>		
-              <div class="col-lg-9">
-                <div class="card">
-                  <div class="list-group list-group-flush">
-                    <div id="timaat-videoplayer-viewer" style="height: 450px; width: 100%;">
-                    </div>
-                    <div id="timaat-videoplayer-viewer-overlay">
-                      x                    
-                    </div>
+                <div class="card-footer timaat-videoplayer-video-footer">
+                  <!-- Playback Controls -->
+                  <div class="btn-group btn-group-sm mr-1">
+                    <button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary">
+                      <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
+                      <i class="play fas fa-play fa-fw"></i>
+                      <i class="pause fa fa-pause fa-fw"></i>
+                    </button>
+                    <button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary">
+                      <i class="fas fa-step-forward"></i>
+                    </button>
                   </div>
-                  <div class="card-footer timaat-videoplayer-video-footer">
-                  	<!-- Playback Controls -->
-					<div class="btn-group btn-group-sm mr-1">
-						<button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary"><i class="fas fa-step-backward"></i></button>
-						<button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary"><i class="play fas fa-play fa-fw"></i><i class="pause fa fa-pause fa-fw"></i></button>
-						<button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary"><i class="fas fa-step-forward"></i></button>
-					</div>
-					<!-- Playback Repeat Control -->
-					<div class="btn-group btn-group-sm mr-3">
-						<button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary"><i class="fas fa-sync"></i> A&rarr;B</button>
-					</div>
-					<!-- Volume Control -->
-                    <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
-                      <span id="timaat-volumeicon"><i class="volume fas fa-volume-up"></i><i class="mute fas fa-volume-mute"></i></span>
-                      <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-control form-control-sm-range">
-                    </a>
-                    <span class="videotime" style="padding-left:20px">00:00.000</span>
-					<!-- Playback Speed Control -->
-					<div class="btn-group btn-group-sm float-right">
-						<button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
-							<span class="video-speed-info">1&times;</span>
-						</button>
-					</div>
-                    <hr style="margin: 2px; padding: 0"/>
-<!--
-                   <div id="timaat-mediadatasets-medium-tags" class="float-left"><i class="fas fa-tag"></i>&nbsp;&nbsp;
-                   </div>
--->
+                  <!-- Playback Repeat Control -->
+                  <div class="btn-group btn-group-sm mr-3">
+                    <button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary">
+                      <i class="fas fa-sync"></i> A&rarr;B
+                    </button>
+                  </div>
+                  <!-- Volume Control -->
+                  <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
+                    <span id="timaat-volumeicon">
+                      <i class="volume fas fa-volume-up"></i>
+                      <i class="mute fas fa-volume-mute"></i>
+                    </span>
+                    <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-control form-control-sm-range">
+                  </a>
+                  <span class="videotime" style="padding-left:20px">00:00.000</span>
+                  <!-- Playback Speed Control -->
+                  <div class="btn-group btn-group-sm float-right">
+                    <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
+                      <span class="video-speed-info">1&times;</span>
+                    </button>
+                  </div>
+                  <hr style="margin: 2px; padding: 0"/>
+                  <!--
+                  <div id="timaat-mediadatasets-medium-tags" class="float-left">
+                    <i class="fas fa-tag"></i>&nbsp;&nbsp;
+                  </div>
+                  -->
                   <span id="timaat-videoplayer-video-title">Video title</span>
-                  <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log"><i class="fas fa-user"></i>
+                  <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log">
+                    <i class="fas fa-user"></i>
                   </div>
                 </div>
               </div>
@@ -726,8 +790,12 @@
                 	<div class="d-flex justify-content-between align-items-end mb-2">
 						        <div>00:00</div>
                 		<div class="btn-group">
-                			<button type="button" class="btn btn-sm btn-primary timaat-button-videolayer"><i class="fas fa-video"></i> Video</button>
-                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audiolayer"><i class="fas fa-headphones"></i> Audio</button>
+                			<button type="button" class="btn btn-sm btn-primary timaat-button-videolayer">
+                        <i class="fas fa-video"></i> Video
+                      </button>
+                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audiolayer">
+                        <i class="fas fa-headphones"></i> Audio
+                      </button>
                 		</div>
 						        <div class="timaat-videoduration">xx:xx</div>
                 	</div>
@@ -740,7 +808,7 @@
                       <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
                         <div class="timaat-audiolayer mb-2">
                           <div class="timaat-audio-baseline"></div>
-                          <img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform" />
+                          <img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform"/>
                         </div>
                       </div>
                     </div>
@@ -754,7 +822,6 @@
               <div class="card">
                 <div class="card-body">
                   <div id="timaat-videoplayer-media-tabs-container">
-                    
                   </div>
                 </div>
               </div>
@@ -861,7 +928,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="timaat-languagelists-language-delete-submit">Delete languagen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-languagelists-language-delete-submit">Delete language</button>
                   </div>
                 </div>
               </div>
@@ -1283,7 +1350,7 @@
         <!-- Media                                                          -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-media">
-          <div> <!-- delete modal-->
+          <div> <!-- delete modals-->
             <div class="modal fade" id="timaat-mediadatasets-medium-delete" tabindex="-1" role="dialog" aria-labelledby="mediumDeleteLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -1299,6 +1366,25 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
                     <button type="button" class="btn btn-danger" id="timaat-mediadatasets-modal-delete-submit">Medium löschen</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-mediacollectiondatasets-mediumcollection-delete" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="mediumCollectionDeleteLabel">Delete media collection</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Do you want to delete the selected media collection?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger" id="timaat-mediacollectiondatasets-modal-delete-submit">Delete media collection</button>
                   </div>
                 </div>
               </div>
@@ -1343,6 +1429,52 @@
                 </div>
               </div>
             </div> 
+          </div>
+          <div class="modal fade" id="timaat-mediacollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionItemAddLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="mediaCollectionItemAddLabel">Add media to collection</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="timaat-mediacollection-items-modal" class="timaat-mediacollection-modal">
+                    <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-available-wrapper">
+                      <i class="collapse-icon fas fa-fw"></i> Add media to collection
+                    </button>
+                    <div class="media-available-wrapper p-2 border border-light bg-light collapse">
+                      <table class="media-available table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th>Title</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                    <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-collection-wrapper">
+                      <i class="collapse-icon fas fa-fw"></i> Associated Media
+                    </button>
+                    <div class="media-collection-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                      <table class="media-collection table table-striped table-bordered table-hover">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Title</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+                  <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereignis löschen</button>
+                </div> -->
+              </div>
+            </div>
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-md-12">
@@ -1601,8 +1733,11 @@
                     <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
                       <div id="timaat-mediadatasets-media-tabs">
                         <ul class="nav nav-tabs media-nav-tabs">
-                          <li class="nav-item media-data-tabs mediumcollection-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-mediumcollection-metadata-form" href="#mediumCollectionDatasheet">Datasheet</a>
+                          <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-data-tab">
+                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-metadata-form" href="#mediumCollectionDataSheet">Datasheet</a>
+                          </li>
+                          <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-items-tab">
+                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-items-form" href="#mediumCollectionItems">Items</a>
                           </li>
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
                             <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
@@ -1687,7 +1822,7 @@
                                   </div>
                                   <div class="col-md-6" style="display:block; text-align:center">
                                     <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
-                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="collectionIsSystemic" aria-describedby="Is Collection Systemic">
+                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="isSystemic" aria-describedby="Is Collection Systemic">
                                   </div>
                                 </div>
                               </div>
@@ -1695,28 +1830,28 @@
                                 <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-remark">Remark</label>
                                 <textarea class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                               </div>
-                              <div class="form-group datasheet-data mediumcollection-series-data">
+                              <div class="form-group datasheet-data mediumcollection-Series-data">
                                 <div class="form-row">
                                   <div class="col-md-4">
                                     <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-seasons">Seasons</label>
                                     <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-startyear">Start Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-startyear" name="startYear" placeholder="[Enter start year]" aria-describedby="Start Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-started">Start Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-started" name="started" placeholder="[Enter start year]" aria-describedby="Start Year">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-endyear">End Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-endyear" name="endYear" placeholder="[Enter end year]" aria-describedby="End Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-ended">End Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-ended" name="ended" placeholder="[Enter end year]" aria-describedby="End Year">
                                   </div>
                                 </div>
                               </div>
-                              <div class="form-group datasheet-data mediumcollection-album-data">
+                              <div class="form-group datasheet-data mediumcollection-Album-data">
                                 <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-album-tracks">Tracks</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-almbum-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-album-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
                               </div>
                             </fieldset>
-                            <div class="mediacollection-items-container">
+                            <!-- <div class="mediacollection-items-container">
                               <div class="card media-datatables mediumcollection-datatable">
                                 <div class="card-header">Collection Items
                                   <button type="button" id="timaat-mediacollectiondatasets-mediacollection-add" class="btn btn-outline btn-success btn-sm float-right">
@@ -1739,7 +1874,7 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </div> -->
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="mediumcollection-datasheet-form-submit">
@@ -1747,6 +1882,30 @@
                             <button type="button" class="btn btn-secondary" id="timaat-mediacollectiondatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
                           </div>
                         </form>
+                        <!-- collection items -->
+                        <div class="card media-datatables mediacollection-items-datatable"> <!-- Medium collection item data -->
+                          <div class="card-header">Collection Items
+                            <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-items-add" class="btn btn-outline btn-success btn-sm float-right">
+                              <i class="fas fa-plus"></i></button>
+                            </div>
+                          <div class="timaat-datasets-list-wrapper">
+                            <div id="timaat-mediacollectiondatasets-mediumcollection-items-loader" class="text-center card-body bg-info text-white">
+                              <i class="fas fa-spinner fa-spin"></i> Loading data...
+                            </div>
+                            <div class="card-body">
+                              <table id="timaat-mediacollectiondatasets-mediumcollection-items-table" class="table table-striped table-bordered table-hover">
+                                <thead class="thead-dark">
+                                  <tr>
+                                    <th>Title</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="timaat-mediacollectiondatasets-mediumcollection-items">
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                         <!-- preview form -->
                         <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
@@ -1801,7 +1960,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-delete-button" title="Delete medium">
@@ -1982,7 +2141,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right datasheet-form-edit-button" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right mediadatasheet-form-edit-button" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2045,7 +2204,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2101,7 +2260,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2345,7 +2504,7 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-edit-button" id="timaat-actordatasets-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm actormediadatasheet-form-edit-button" id="timaat-actordatasets-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
                                   <button type="button" class="btn btn-outline btn-danger btn-sm datasheet-form-remove-button" id="timaat-actordatasets-metadata-form-delete" title="Delete actor">

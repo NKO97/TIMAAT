@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the media_collection_album database table.
@@ -10,20 +12,23 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="media_collection_album")
-@NamedQuery(name="MediaCollectionAlbum.findAll", query="SELECT m FROM MediaCollectionAlbum m")
+@NamedQuery(name="MediaCollectionAlbum.findAll", query="SELECT mca FROM MediaCollectionAlbum mca")
 public class MediaCollectionAlbum implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="media_collection_id", unique=true, nullable=false)
+	// @GeneratedValue(strategy=GenerationType.IDENTITY)
+	// @Column(name="media_collection_id", unique=true, nullable=false)
+	@Column(name="media_collection_id")
 	private int mediaCollectionId;
 
 	private int tracks;
 
 	//bi-directional one-to-one association to MediaCollection
 	@OneToOne
-	@JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	@PrimaryKeyJoinColumn(name="media_collection_id")
+	// @JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	@JsonIgnore // MediaCollectionAlbum is accessed through MediumCollection --> avoid reference cycle
 	private MediaCollection mediaCollection;
 
 	public MediaCollectionAlbum() {

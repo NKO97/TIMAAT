@@ -807,8 +807,7 @@
 		},
 		
 		setupVideo: function(video) {
-			console.log("TCL: setupVideo: function(video) ");
-			console.log("TCL: video", video);
+			console.log("TCL: setupVideo: function(video) ", video);
 			// setup model
 			if ( video.mediumVideo.length < 0 ) video.mediumVideo.length += 3600; // temp fix for DB problems
 			this.curFrameRate = 25; // TODO
@@ -882,6 +881,9 @@
 			$('.preview-data-tab').hide();
 			$('#previewTab').addClass('annotationView');
 			$('#timaat-videoplayer-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+			$('.mediacollection-data-tabs').hide();
+			$('.mediacollection-items-datatable').hide();
+			$('#timaat-mediadatasets-metadata-form').show();
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
@@ -912,8 +914,7 @@
 		},
 		
 		setupAnalysisLists: function (lists) {
-			console.log("TCL: setupAnalysisLists: function (lists)");
-			console.log("TCL: lists", lists);
+			console.log("TCL: setupAnalysisLists: ", lists);
 			// clear old lists if any
 			$('#timaat-analysislist-chooser').empty();			
 			// setup model
@@ -967,8 +968,7 @@
 		},
 		
 		setupAnnotations: function(annotations) {
-			console.log("TCL: setupAnnotations: function(annotations)");
-			console.log("TCL: annotations", annotations);
+			console.log("TCL: setupAnnotations: ", annotations);
 			if ( TIMAAT.VideoPlayer.curAnnotation ) TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 
 			// setup model

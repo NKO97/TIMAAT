@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 
@@ -11,26 +14,29 @@ import java.util.Date;
  */
 @Entity
 @Table(name="media_collection_series")
-@NamedQuery(name="MediaCollectionSeries.findAll", query="SELECT m FROM MediaCollectionSeries m")
+@NamedQuery(name="MediaCollectionSeries.findAll", query="SELECT mcs FROM MediaCollectionSeries mcs")
 public class MediaCollectionSeries implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="media_collection_id", unique=true, nullable=false)
+	// @GeneratedValue(strategy=GenerationType.IDENTITY)
+	// @Column(name="media_collection_id", unique=true, nullable=false)
+	@Column(name="media_collection_id")
 	private int mediaCollectionId;
 
-	@Column(name="end_year", columnDefinition = "DATE")
-	private Date endYear;
+	@Column(columnDefinition = "DATE")
+	private Date ended;
 
 	private int seasons;
 
-	@Column(name="start_year", columnDefinition = "DATE")
-	private Date startYear;
+	@Column(columnDefinition = "DATE")
+	private Date started;
 
 	//bi-directional one-to-one association to MediaCollection
 	@OneToOne
-	@JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	// @JoinColumn(name="media_collection_id", nullable=false, insertable=false, updatable=false)
+	@PrimaryKeyJoinColumn(name="media_collection_id")
+	@JsonIgnore
 	private MediaCollection mediaCollection;
 
 	public MediaCollectionSeries() {
@@ -44,12 +50,12 @@ public class MediaCollectionSeries implements Serializable {
 		this.mediaCollectionId = mediaCollectionId;
 	}
 
-	public Date getEndYear() {
-		return this.endYear;
+	public Date getEnded() {
+		return this.ended;
 	}
 
-	public void setEndYear(Date endYear) {
-		this.endYear = endYear;
+	public void setEnded(Date ended) {
+		this.ended = ended;
 	}
 
 	public int getSeasons() {
@@ -60,12 +66,12 @@ public class MediaCollectionSeries implements Serializable {
 		this.seasons = seasons;
 	}
 
-	public Date getStartYear() {
-		return this.startYear;
+	public Date getStarted() {
+		return this.started;
 	}
 
-	public void setStartYear(Date startYear) {
-		this.startYear = startYear;
+	public void setStarted(Date started) {
+		this.started = started;
 	}
 
 	public MediaCollection getMediaCollection() {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -15,23 +16,24 @@ import java.util.List;
  */
 @Entity
 @Table(name="media_collection_type")
-@NamedQuery(name="MediaCollectionType.findAll", query="SELECT m FROM MediaCollectionType m")
+@NamedQuery(name="MediaCollectionType.findAll", query="SELECT mct FROM MediaCollectionType mct")
 public class MediaCollectionType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(unique=true, nullable=false)
+	// @Column(unique=true, nullable=false)
 	private int id;
 
 	//bi-directional many-to-one association to MediaCollection
 	@OneToMany(mappedBy="mediaCollectionType")
-	@JsonBackReference
+	// @JsonBackReference
+	@JsonIgnore
 	private List<MediaCollection> mediaCollections;
 
 	//bi-directional many-to-one association to MediaCollectionTypeTranslation
 	@OneToMany(mappedBy="mediaCollectionType")
-	@JsonManagedReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
+	// @JsonManagedReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
 	private List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations;
 
 	public MediaCollectionType() {

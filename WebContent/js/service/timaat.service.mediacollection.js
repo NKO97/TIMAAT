@@ -40,12 +40,12 @@
 		},
 
 		createMediaCollection(title, comment, callback) {
-      console.log("TCL: createMediaCollection -> title, comment, callback", title, comment, callback);
+      console.log("TCL: createMediaCollection -> title, comment, callback", title, comment);
 			var model = {
 					id: 0,
 					isSystemic: 0,
 					title: title,
-					note: comment,
+					remark: comment,
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection",
@@ -65,40 +65,116 @@
 			});			
 		},
 
-		updateMediaCollection(collection) {
-			console.log("TCL: updatMediaCollection -> collection", collection);
-			var col = {
-					id: collection.id,
-					isSystemic: 0,
-					title: collection.title,
-					note: collection.note,
-			};
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+col.id,
-				type:"PATCH",
-				data: JSON.stringify(col),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// TODO refactor
-				collection.id = data.id;
-				collection.title = data.title;
-				collection.note = data.note;
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+		async createMediumCollection(mediumCollectionModel) {
+      console.log("TCL: createMediumCollection -> mediumCollectionModel", mediumCollectionModel);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/0",
+					type:"POST",
+					data: JSON.stringify(mediumCollectionModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createMediumCollection - returning data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async createMediumCollectionSubtype(type, mediumCollectionModel, subTypeModel) {
+      console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subTypeModel", type, mediumCollectionModel, subTypeModel);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+type+"/"+mediumCollectionModel.id,
+					type:"POST",
+					data: JSON.stringify(subTypeModel),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createMediumCollectionSubtype - returning data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error: ", e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateMediaCollection(collection) {
+			console.log("TCL: updateMediaCollection -> collection", collection);
+			// var col = {
+			// 		id: collection.id,
+			// 		isSystemic: 0,
+			// 		title: collection.title,
+			// 		note: collection.note,
+			// };
+			delete collection.ui;
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id,
+					type:"PATCH",
+					data: JSON.stringify(collection),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// TODO refactor
+					// collection.id = data.id;
+					// collection.title = data.title;
+					// collection.note = data.note;
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
+		async updateMediumCollectionSubtype(type, collection) {
+			console.log("TCL: updateMediaCollectionSubtype -> type, collection", type, collection);
+			delete collection.ui;
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+type+"/"+collection.mediaCollectionId,
+					type:"PATCH",
+					data: JSON.stringify(collection),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
 			});
 		},
 
 		removeMediaCollection(collection) {
 			console.log("TCL: removeMediaCollection -> collection", collection);
-			var col = collection;
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+col.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -112,38 +188,41 @@
 			});
 		},
 
-		addCollectionItem(collection, medium) {
-			console.log("TCL: addCollectionItem -> collection", collection);
-			console.log("TCL: addCollectionItem -> medium", medium);
-			var col = collection;
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+col.id+"/medium/"+medium.id,
-				type:"POST",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+		async addCollectionItem(collectionId, mediumId) {
+			console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+        	console.log("TCL: addCollectionItem -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
 			});
 		},
 
-		async removeCollectionItem(collection, medium) {
-			console.log("TCL: removeCollectionItem -> collection", collection);
-			console.log("TCL: removeCollectionItem -> medium", medium);
-			var col = collection;
+		async removeCollectionItem(collectionId, mediumId) {
+      console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+col.id+"/medium/"+medium.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
+        	console.log("TCL: removeCollectionItem -> data", data);
 					console.log("TCL: removed medium from collection");
 					resolve(data);
 				}).fail(function(e) {

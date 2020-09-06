@@ -21,7 +21,7 @@
 
 	TIMAAT.Annotation = class Annotation {
 		constructor(model) {
-			console.log("TCL: Annotation -> constructor -> model", model);
+			// console.log("TCL: Annotation -> constructor -> model", model);
 			// setup model
 			this._destroyed = false;
 			this.active = false;
@@ -49,7 +49,7 @@
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item" style="padding:0">
-					<div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
+					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
 					<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
 					<span class="timaat-annotation-list-time"></span>
@@ -462,7 +462,7 @@
 		};
 		
 		remove() {
-			console.log("TCL: Annotation -> remove -> remove()");
+			// console.log("TCL: Annotation -> remove -> remove()");
 			// remove annotation from UI
 			this.listView.remove();
 			this.marker.remove();
@@ -472,7 +472,7 @@
 		}
 		
 		addSVGItem (item) {
-			console.log("TCL: Annotation -> addSVGItem -> item", item);
+			// console.log("TCL: Annotation -> addSVGItem -> item", item);
 			if ( !item || this.svg.items.includes(item) ) return;
 			// generate UUID for shape and propagate through keyframes
 			if ( !item.options.id ) {
@@ -505,18 +505,18 @@
 				if ( ev.originalEvent.altKey && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isOnKeyframe()  ) {
 					anno.removeSVGItem(ev.target);
 					TIMAAT.VideoPlayer.updateUI();
-					console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+					// console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 				}
 			});
 			item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
-			console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+			// console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 			item.on('dragend', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
-			console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+			// console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 
 		}
 				
 		removeSVGItem (item) {
-			console.log("TCL: Annotation -> removeSVGItem -> item", item);
+			// console.log("TCL: Annotation -> removeSVGItem -> item", item);
 			if ( !item || !this.svg.items.includes(item) ) return;
 			this.svg.layer.removeLayer(item);
 			var index = this.svg.items.indexOf(item);
@@ -552,7 +552,7 @@
 		}
 		
 		discardChanges() {
-			console.log("TCL: Annotation -> discardChanges -> discardChanges()");
+			// console.log("TCL: Annotation -> discardChanges -> discardChanges()");
 			if ( !this.changed ) return;
 			this.svg.layer.clearLayers();
 			this.svg.items = Array();
@@ -585,7 +585,7 @@
 		}
 		
 		saveChanges() {
-			console.log("TCL: Annotation -> saveChanges -> saveChanges()");
+			// console.log("TCL: Annotation -> saveChanges -> saveChanges()");
 			this._syncToModel();
 			this.changed = false;
 		}
@@ -764,7 +764,7 @@
 		}
 		
 		_scrollIntoView(listItem) {
-			console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
+			// console.log("TCL: Annotation -> _scrollIntoView -> listItem", listItem);
 			var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
 			var listHeight = $('.timaat-annotation-list-wrapper').height();
 			var elementTop = listItem.position().top;
@@ -777,7 +777,7 @@
 		}
 		
 		_parseSVG(svgitem) {
-			console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
+			// console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
 			let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
 			let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
 			let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
@@ -817,7 +817,7 @@
 		}
 		
 		_syncToModel() {
-			console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
+			// console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 			let jsonData = { keyframes: [] };
 			this.model.sequenceStartTime = this._startTime*1000.0;
 			this.model.sequenceEndTime = this._endTime*1000.0;
