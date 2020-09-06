@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Key;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -46,6 +49,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,6 +62,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.fileInformation.*;
+import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
@@ -677,6 +682,33 @@ public class MediumServiceEndpoint {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.TEXT_HTML)
+	@Path("video/offline/{id}.html")
+	public Response getVideoPublication(@PathParam("id") int id) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		
+		String content = "";
+		try {
+			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
+		} catch (IOException | URISyntaxException e1) {}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		PublicationSettings settings = new PublicationSettings();
+		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
+
+		String medium = "";
+		try {
+			medium = mapper.writeValueAsString(em.find(Medium.class, id));
+			medium = medium.replaceAll("\\\\", "\\\\\\\\");
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", medium);
+		} catch (JsonProcessingException e) {}
+		
+		return Response.ok().entity(content).build();
+	}
+	
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
