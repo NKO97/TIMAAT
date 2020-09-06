@@ -848,6 +848,8 @@
 			$('#timaat-analysislist-delete').removeAttr('onclick');
 			$('#timaat-analysislist-add').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-add').removeAttr('onclick');
+			$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
+			$('#timaat-medium-offlinepublication').removeAttr('onclick');
 			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
 			$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 
@@ -949,6 +951,8 @@
 				$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 				$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
+				$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
+				$('#timaat-medium-offlinepublication').attr('onclick','TIMAAT.VideoPlayer.offLinePublication()');
 				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
 				$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
 			}
@@ -962,6 +966,8 @@
 				$('#timaat-analysissegment-edit').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
+				$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
+				$('#timaat-medium-offlinepublication').removeAttr('onclick');
 				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
 				$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 			}
@@ -1197,6 +1203,13 @@
 			$('#timaat-videoplayer-segment-delete').modal('show');
 		},
 		
+		offLinePublication: function() {
+			let modal = $('#timaat-videoplayer-download-publication');
+			modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authtoken='+TIMAAT.Service.session.token);
+			modal.find('a.download-video-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
+			modal.modal('show');
+		},
+		
 		sortListUI: function() {
 //			console.log("TCL: sortListUI: function()");
 			$("#timaat-annotation-list li").sort(function (a, b) {
@@ -1349,7 +1362,9 @@
 			$('#timaat-analysissegment-edit').removeClass("timaat-item-disabled");
 			$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 			$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
-			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');			
+			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
+			$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
+			$('#timaat-medium-offlinepublication').attr('onclick','TIMAAT.VideoPlayer.offLinePublication()');
 			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
 			$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
 		},
@@ -1377,6 +1392,8 @@
 				$('#timaat-analysissegment-edit').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
+				$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
+				$('#timaat-medium-offlinepublication').removeAttr('onclick');
 				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
 				$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 			}

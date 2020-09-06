@@ -102,7 +102,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
     
     
-    private UserAccount validateAccountStatus(String username) throws Exception {
+    public static UserAccount validateAccountStatus(String username) throws Exception {
     	// verify user and user status
     	if ( username == null ) throw new Exception("provided credentials invalid");
 		
@@ -118,7 +118,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		return user;
     }
 
-    private String validateToken(String token) throws Exception {
+    public static String validateToken(String token) throws Exception {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
 

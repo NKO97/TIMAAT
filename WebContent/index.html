@@ -412,6 +412,46 @@
         <!-- Videoplayer                                                    -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid timaat-component" id="timaat-component-videoplayer">
+		
+		<div class="modal fade" id="timaat-videoplayer-download-publication" tabindex="-1" role="dialog" aria-labelledby="downloadPublicationLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="downloadPublicationLabel"><i class="fas fa-chalkboard-teacher"></i> Offline-Publikation herunterladen</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                
+				<div class="modal-body">
+  <p class="card-text mb-3" style="font-size: 85%">Die Offline-Publikation ist für eine Präsentation ohne Internetverbindung gedacht. Beide Dateien müssen im selben Verzeichnis liegen. Für ein Update des Bearbeitungsstans genügt es, den Player erneut herunterzuladen.</p>
+  <div class="d-flex justify-content-between">
+    <div class="card mr-1">
+  <div class="card-body">
+    <h5 class="card-title text-center"> Abspielumgebung</h5>
+    <h6 class="card-subtitle text-muted text-center mb-0">mit aktuellem Bearbeitungsstand</h6>
+    <p class="card-text text-center" style="font-size: 400%;"><i class="far fa-file-code"></i></p>
+    
+    <a href="#" download class="download-player-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Player herunterladen</button></a>
+  </div>
+</div><div class="card ml-1">
+  <div class="card-body">
+    <h5 class="card-title text-center">Videodatei</h5>
+    <h6 class="card-subtitle mb-0 text-center text-muted">Hinweis: darf nicht umbenannt werden</h6>
+    <p style="font-size: 400%" class="card-text text-center"><i class="far fa-file-video"></i></p>
+    
+    <a href="#" download class="download-video-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Video herunterladen</button></a>
+  </div>
+</div>
+  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fertig</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="modal fade" id="timaat-videoplayer-analysislist-delete" tabindex="-1" role="dialog" aria-labelledby="analysislistDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -687,10 +727,11 @@
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-edit">
                           <i class="fas fa-indent"></i> Neues Segment
                         </a>
-                        <div role="separator" class="dropdown-divider">                          
-                        </div>
+                        <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add" >Neue Liste erstellen</a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Liste löschen</a>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.offLinePublication()" id="timaat-medium-offlinepublication" ><i class="fas fa-chalkboard-teacher"></i> Offline-Publikation</a>
                       </div>
                     </div>
                     <select disabled class="custom-select bg-light text-info" id="timaat-analysislist-chooser">

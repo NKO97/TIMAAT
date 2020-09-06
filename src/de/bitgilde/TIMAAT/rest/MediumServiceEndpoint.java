@@ -60,9 +60,11 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.fileInformation.*;
 import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
@@ -86,6 +88,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -684,29 +687,58 @@ public class MediumServiceEndpoint {
 
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.TEXT_HTML)
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
 	@Path("video/offline/{id}.html")
-	public Response getVideoPublication(@PathParam("id") int id) {
+	public Response getVideoPublication(
+			@PathParam("id") int id,
+			@QueryParam("authtoken") String authToken) {
+
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		try {
+            String username = AuthenticationFilter.validateToken(authToken);
+            
+            try {
+            	// Validate user status
+            	UserAccount user = AuthenticationFilter.validateAccountStatus(username);
+            	
+                // Authentication succeeded, set request context
+                containerRequestContext.setProperty("TIMAAT.userID", user.getId());
+                containerRequestContext.setProperty("TIMAAT.userName", user.getAccountName());
+                containerRequestContext.setProperty("TIMAAT.user", user);
+
+            } catch (AccountSuspendedException e) {
+            	return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
+            }
+            
+        } catch (Exception e) {
+        	return Response.status(Status.UNAUTHORIZED).build();
+        }
+		
 		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Medium medium = em.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// TODO strip analysis lists depending on user rights, once rights system is finalized by project team
 		
 		String content = "";
 		try {
 			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
-		} catch (IOException | URISyntaxException e1) {}
+		} catch (IOException | URISyntaxException e1) {return Response.serverError().build();}
 		
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
 		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
 
-		String medium = "";
+		String serMedium = "";
 		try {
-			medium = mapper.writeValueAsString(em.find(Medium.class, id));
-			medium = medium.replaceAll("\\\\", "\\\\\\\\");
+			serMedium = mapper.writeValueAsString(medium);
+			serMedium = serMedium.replaceAll("\\\\", "\\\\\\\\");
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", medium);
-		} catch (JsonProcessingException e) {}
+			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", serMedium);
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
 		
-		return Response.ok().entity(content).build();
+		return Response.ok().header("Content-Disposition", "attachment; filename=\""+id+"-player.html\"").entity(content).build();
 	}
 	
 	@GET
@@ -2848,8 +2880,9 @@ public class MediumServiceEndpoint {
 	@HEAD
 	@Path("video/{id}/download")
 	@Produces("video/mp4")
-	public Response getVideoFileInfo(@PathParam("id") int id,
-																	 @QueryParam("token") String fileToken) {
+	public Response getVideoFileInfo(
+			@PathParam("id") int id,
+			@QueryParam("token") String fileToken) {
 		
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -2874,10 +2907,11 @@ public class MediumServiceEndpoint {
 
 	@GET
 	@Path("video/{id}/download")
-  @Produces("video/mp4")
+	@Produces("video/mp4")
 	public Response getVideoFile(@Context HttpHeaders headers,
 															 @PathParam("id") int id,
-															 @QueryParam("token") String fileToken) {
+															 @QueryParam("token") String fileToken,
+																@QueryParam("force") boolean force) {
 		
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -2896,10 +2930,10 @@ public class MediumServiceEndpoint {
 
 		if ( mediumFileStatus(id, "video").compareTo("waiting") == 0 || mediumFileStatus(id, "video").compareTo("transcoding") == 0 )
 			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "-video-original.mp4", headers);
+				+ "medium/video/" + id + "-video-original.mp4", headers, id+".mp4");
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/video/" + id + "/" + id + "-video.mp4", headers);
+			+ "medium/video/" + id + "/" + id + "-video.mp4", headers, id+".mp4");
 	}
 
 	@GET
@@ -3242,8 +3276,12 @@ public class MediumServiceEndpoint {
  	
 		return Response.ok().build();
 	}
+	
+	private Response downloadFile(String fileName, HttpHeaders headers) {
+		return downloadFile(fileName, headers, null);
+	}
 
-	private Response downloadFile(String fileName, HttpHeaders headers) {     
+	private Response downloadFile(String fileName, HttpHeaders headers, String asFile) {     
 		Response response = null;
 
 		// Retrieve the file 
@@ -3251,6 +3289,8 @@ public class MediumServiceEndpoint {
 
 		if (file.exists()) {
 			ResponseBuilder builder = Response.ok();
+			if ( asFile != null ) builder.header("Content-Disposition", "attachment; filename=\""+asFile+"\"");
+
 			builder.header("Accept-Ranges", "bytes");
 			if ( headers.getRequestHeaders().containsKey("Range") ) {
 				String rangeHeader = headers.getHeaderString("Range");
@@ -3516,11 +3556,18 @@ public class MediumServiceEndpoint {
 	}
 
 	public static String issueFileToken(int mediumID) {
+		return issueFileToken(mediumID, null);
+	}
+	public static String issueFileToken(int mediumID, ContainerRequestContext crc) {
 		// System.out.println("issueFileToken for id "+ mediumID);
 		Key key = TIMAATKeyGenerator.generateKey();
-		String token = Jwts.builder().claim("file", mediumID).setIssuer(
-			TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME))
-			.setIssuedAt(new Date())
+		
+		JwtBuilder tokenbuilder = Jwts.builder().claim("file", mediumID).setIssuer(
+			TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME));
+		if ( crc != null ) tokenbuilder
+		.setSubject(crc.getProperty("TIMAAT.userName").toString())
+		.claim("id", Integer.parseInt(crc.getProperty("TIMAAT.userID").toString()));
+		String token = tokenbuilder.setIssuedAt(new Date())
 			.setExpiration(AuthenticationEndpoint.toDate(LocalDateTime.now().plusHours(8L)))
 			.signWith(key, SignatureAlgorithm.HS512).compact();
 		return token;
