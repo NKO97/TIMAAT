@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -733,9 +734,14 @@ public class MediumServiceEndpoint {
 		String serMedium = "";
 		try {
 			serMedium = mapper.writeValueAsString(medium);
-			serMedium = serMedium.replaceAll("\\\\", "\\\\\\\\");
+//			serMedium = serMedium.replaceAll("\\\\", "\\\\\\\\");
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", serMedium);
+			
+			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
+			content = temp[0]+serMedium+temp[1];
+			
+//			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", serMedium);
+			
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 		
 		return Response.ok().header("Content-Disposition", "attachment; filename=\""+id+"-player.html\"").entity(content).build();
