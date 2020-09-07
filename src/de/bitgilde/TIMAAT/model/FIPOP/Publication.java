@@ -77,6 +77,14 @@ public class Publication implements Serializable {
 		this.slug = slug;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public MediaCollection getCollection() {
 		return collection;
 	}
