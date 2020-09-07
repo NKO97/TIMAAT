@@ -237,7 +237,7 @@
 				selectorSvgs: [{
 					id: 0,
 					colorRgba: color,
-					svgData: "[]",
+					svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
 					strokeWidth: strokeWidth,
 					svgShapeType: {
 						id: 5
