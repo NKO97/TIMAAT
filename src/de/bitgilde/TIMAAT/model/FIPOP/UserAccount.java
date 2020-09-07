@@ -58,6 +58,11 @@ public class UserAccount implements Serializable {
 	// @JsonManagedReference(value = "UserAccount-Annotation2")
 	private List<Annotation> annotations2;
 
+	@OneToMany(mappedBy="owner")
+	@JsonIgnore
+	// @JsonManagedReference(value = "UserAccount-Publication")
+	private List<Publication> publications;
+
 	//bi-directional many-to-one association to AnnotationTextualBody
 	// @OneToMany(mappedBy="createdByUserAccount")
 	// @JsonIgnore
@@ -757,6 +762,14 @@ public class UserAccount implements Serializable {
 		return userLog;
 	}
 
+	public List<Publication> getPublications() {
+		return publications;
+	}
+
+	public void setPublications(List<Publication> publications) {
+		this.publications = publications;
+	}
+
 	// public List<WorkAnalysisList> getWorkAnalysisLists1() {
 	// 	return this.workAnalysisLists1;
 	// }
@@ -801,4 +814,5 @@ public class UserAccount implements Serializable {
 	// 	return workAnalysisLists2;
 	// }
 
+	
 }
