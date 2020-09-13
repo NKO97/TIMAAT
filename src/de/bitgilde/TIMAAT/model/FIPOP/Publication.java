@@ -37,7 +37,7 @@ public class Publication implements Serializable {
 	@Transient
 	private Integer ownerId;
 
-	@Column(nullable = false, length = 4096)
+	@Column(nullable = false, length = 512)
 	private String slug;
 
 	@Column(nullable = false, length = 4096)
