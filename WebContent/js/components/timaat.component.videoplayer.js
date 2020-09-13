@@ -720,7 +720,32 @@
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
 				modal.modal('hide');
-			});			
+			});
+
+			// ------------------------------------------------------------------------------------
+			// publication dialog events
+
+			$('#timaat-publish-video-switch, #timaat-publication-protected-switch').on('change', ev => {
+				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-video-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
+			});
+			let dialog = $('#timaat-videoplayer-publication');
+			dialog.find('.reveal').on('click', ev => {
+				if ( dialog.find('.password').attr('type') === 'password' )
+					dialog.find('.password').attr('type', 'text');
+				else dialog.find('.password').attr('type', 'password');
+			});
+			dialog.find('.username, .password').on('change input', ev => {
+				let enabled = $('#timaat-publish-video-switch').prop('checked');
+				let restricted = $('#timaat-publication-protected-switch').prop('checked');
+				let username = dialog.find('.username').val();
+				let password = dialog.find('.password').val();
+				$('#timaat-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+			});
+			$('#timaat-publication-settings-submit').on('click', ev => {
+				TIMAAT.VideoPlayer._updatePublicationSettings();
+			})
+
+
 		},
 		
 		sortSegments: function() {
@@ -1209,7 +1234,24 @@
 			modal.find('a.download-video-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
 			modal.modal('show');
 		},
-		
+
+		managePublication: function() {
+			TIMAAT.Service.getSinglePublication(TIMAAT.VideoPlayer.model.video.id).then(publication => {
+				let modal = $('#timaat-videoplayer-publication');
+				TIMAAT.VideoPlayer.publication = publication;
+				TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+				modal.find('.saveinfo').hide();
+				modal.modal('show');
+			}).catch(publication => {
+				let modal = $('#timaat-videoplayer-publication');
+				console.log("managePublication:fail", publication);
+				TIMAAT.VideoPlayer.publication = publication;
+				TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+				modal.find('.saveinfo').hide();
+				modal.modal('show');
+			});
+		},
+
 		sortListUI: function() {
 //			console.log("TCL: sortListUI: function()");
 			$("#timaat-annotation-list li").sort(function (a, b) {
@@ -1305,6 +1347,90 @@
 			var curTime = this.video.currentTime;
 			if ( curTime < start || curTime > end ) this.video.currentTime = start;
 			this.updateListUI();
+		},
+		
+		_updatePublicationSettings: function() {
+			let dialog = $('#timaat-videoplayer-publication');
+			let enabled = $('#timaat-publish-video-switch').prop('checked');
+			let restricted = $('#timaat-publication-protected-switch').prop('checked');
+			let username = ( dialog.find('.username').val() && restricted ) ? dialog.find('.username').val() : '';
+			let password = ( dialog.find('.password').val() && restricted ) ? dialog.find('.password').val() : '';
+			$('#timaat-publication-settings-submit').prop('disabled', true);
+			$('#timaat-publication-settings-submit i.login-spinner').removeClass('d-none');
+			if ( enabled ) {
+				let publication = (TIMAAT.VideoPlayer.publication) ? TIMAAT.VideoPlayer.publication : { id: 0 };
+				publication.access = (restricted) ? 'protected' : 'public';
+				publication.collectionId = null;
+				publication.ownerId = TIMAAT.Service.session.id;
+				publication.settings = null;
+				publication.slug = TIMAAT.Util.createUUIDv4();
+				publication.startMediumId = TIMAAT.VideoPlayer.model.video.id;
+				publication.title = dialog.find('.publicationtitle').val();
+				publication.credentials = JSON.stringify({
+					scheme: 'password',
+					user: username,
+					password: password,
+				});
+				TIMAAT.Service.updateSinglePublication(publication).then(publication => {
+					TIMAAT.VideoPlayer.publication = publication;
+					TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+					$('#timaat-publication-settings-submit').prop('disabled', false);
+					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+					dialog.find('.saveinfo').show().delay(1000).fadeOut();
+				}).catch( e => {
+					$('#timaat-publication-settings-submit').prop('disabled', false);
+					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+				})
+			} else {
+				TIMAAT.Service.deleteSinglePublication(TIMAAT.VideoPlayer.model.video.id).then(status => {
+					TIMAAT.VideoPlayer.publication = null;
+					TIMAAT.VideoPlayer._setupPublicationDialog(false, false);
+					$('#timaat-publication-settings-submit').prop('disabled', false);
+					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+					dialog.find('.saveinfo').show().delay(1000).fadeOut();
+				}).catch( e => {
+					$('#timaat-publication-settings-submit').prop('disabled', false);
+					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+				})
+			}
+
+		},
+		
+		_setupPublicationDialog: function(enabled, restricted) {
+			$('#timaat-publish-video-switch').prop('checked', enabled);
+			$('#timaat-publication-protected-switch').prop('checked', restricted);
+			let credentials = {};
+			try {
+				credentials = JSON.parse(TIMAAT.VideoPlayer.publication.credentials);
+			} catch (e) { credentials = {}; }
+			let dialog = $('#timaat-videoplayer-publication');
+			let title = ( TIMAAT.VideoPlayer.publication ) ? TIMAAT.VideoPlayer.publication.title : '';
+			let username = ( credentials.user && enabled ) ? credentials.user : '';
+			let password = ( credentials.password && enabled ) ? credentials.password : '';
+			let url = ( TIMAAT.VideoPlayer.publication ) ? window.location.protocol+'//'+window.location.host+window.location.pathname+'publication/'+TIMAAT.VideoPlayer.publication.slug+'/' : '';
+			dialog.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
+			if ( restricted ) dialog.find('.protectedicon').addClass('fa-lock'); else dialog.find('.protectedicon').addClass('fa-lock-open');
+			
+			
+			dialog.find('.publicationtitle').prop('disabled', !enabled);
+			dialog.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
+			dialog.find('.username').prop('disabled', !enabled || !restricted);
+			dialog.find('.username').val(username);
+			dialog.find('.password').prop('disabled', !enabled || !restricted);
+			dialog.find('.password').val(password);
+			dialog.find('.password').attr('type', 'password');
+			$('#timaat-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+
+			if ( enabled ) {
+				dialog.find('.publicationtitle').val(title);
+				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>'; 
+				else url = '- Publikationslink nach dem Speichern verfügbar -';
+				dialog.find('.publicationurl').html(url);
+			} else {
+				dialog.find('.publicationtitle').val('');
+				dialog.find('.publicationurl').html('- Video nicht publiziert -');
+			}
+			
 		},
 		
 		_updateAnimations: function() {

@@ -27,6 +27,27 @@
       <file-size-threshold>0</file-size-threshold>
     </multipart-config> -->
   </servlet>
+
+  <servlet>
+    <servlet-name>TIMAATPublication</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>de.bitgilde.TIMAAT.publication</param-value>
+    </init-param>
+    <init-param>
+        <param-name>jersey.config.server.provider.classnames</param-name>
+        <param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+    <!-- <multipart-config>
+      <max-file-size>2097152000</max-file-size>
+      <max-request-size>2097152000</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config> -->
+  </servlet>
+
+  
    <!-- <listener>
     <listener-class>
             de.bitgilde.TIMAAT.ServiceScheduler
@@ -37,6 +58,11 @@
     <servlet-name>TIMAAT</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TIMAATPublication</servlet-name>
+    <url-pattern>/publication/*</url-pattern>
+  </servlet-mapping>
+
 <!--
   <security-constraint>
         <display-name>TIMAAT API Security</display-name>

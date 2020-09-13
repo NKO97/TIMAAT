@@ -729,18 +729,15 @@ public class MediumServiceEndpoint {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
-		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
+		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false).setOffline(true);
 
 		String serMedium = "";
 		try {
 			serMedium = mapper.writeValueAsString(medium);
-//			serMedium = serMedium.replaceAll("\\\\", "\\\\\\\\");
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
 			
 			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 			content = temp[0]+serMedium+temp[1];
-			
-//			content = content.replaceFirst("\\{\\{TIMAAT-DATA\\}\\}", serMedium);
 			
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 		

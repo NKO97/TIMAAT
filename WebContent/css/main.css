@@ -404,6 +404,12 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	color: #bbb;
 }
 
+#timaat-videoplayer-publication .publicationurl {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 #timaat-annotation-metadata {
 	display: none;
 }

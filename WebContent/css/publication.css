@@ -1,0 +1,241 @@
+.sidebar {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #EEEEEE;
+	overflow-x: hidden;
+	transition: 0.5s;
+	border-right: 3px solid #333;
+}
+
+.sidebar-right {
+	right: 0;
+	left: initial;
+	border-right: none;
+	border-left: 3px solid #333;
+}
+.sidebar.collapsed {
+	border: none;
+}
+
+.sidebar a.closebtn {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a.closebtn:hover {
+  color: black;
+}
+
+
+.sidebar .closebtn {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  padding-top: 0;
+}
+
+#timaat-right-sidebar .closebtn {
+	left: 15px;
+	padding-left: 0px;
+	right: initial;
+}
+
+.metadata-content {
+	font-size: 80%;
+}
+
+.metadata-field .empty-placeholder {
+	display: none;
+}
+.metadata-field .contents {
+	display: inline;
+}
+
+.metadata-field.empty .empty-placeholder {
+	display: block;
+}
+.metadata-field.empty .contents {
+	display: none;
+}
+
+#timaat-main::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	overflow: hidden;
+}
+
+#timaat-main {
+	overflow: auto;
+	position: absolute;
+	transition: margin-left .5s, margin-right .5s;
+	height: 100%;
+	right: 0;
+	left: 0;
+	
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+#timaat-viewer {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #111111;
+}
+
+.timaat-publication-settings {
+	min-width: 30em;
+}
+
+.timaat-list-info {
+	line-height: 1;
+}
+.timaat-annotation-list-selected {
+	background-color: #c9e2ff;
+}
+
+.timaat-annotation-list-selected:hover {
+	background-color: #c9e2ff !important;
+}
+
+#timaat-analysis-list {
+	cursor: pointer;
+}
+
+#timaat-analysis-list li i {
+	display: none;
+}
+#timaat-analysis-list li.selected i {
+	display: inline;
+}
+
+.timaat-list-title {
+	color: #CCCCCC;
+}
+
+.tooltip .tooltip-inner {
+	text-align: left;
+}
+
+.timaat-annotation-wrapper, .timaat-metadata-wrapper {
+	position: absolute;
+	min-width: 250px;
+	top: 3.5em;
+	bottom: 0;
+}
+
+#timaat-annotation-list {
+	font-size: 85%;
+}
+#timaat-annotation-list li {
+	cursor: pointer;
+}
+
+#timaat-video-controls {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	margin: auto;
+	z-index: 500;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,0.4);
+	transition: opacity 0.5s;
+	transition: all ease 0.5s;
+	
+	text-shadow: 0 0 2px rgba(0,0,0,0.5);
+	color: white;
+}
+
+#timaat-video-controls .time-info {
+	display: none;
+	border-radius: 0.25rem;
+	position: absolute;
+	opacity: 0.8;
+	top: -1.5em;
+	font-size: 70%;
+	width: 60px;	
+	z-index: 9000;	
+}
+#timaat-video-controls .time-info.show {
+	display: block !important;
+}
+
+#timaat-video-controls .video-timings {
+	font-family: sans-serif;
+}
+
+#timaat-video-controls .btn {
+	text-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+
+#timaat-video-controls .seekbar {
+	width: 100%;
+	height: 6px;
+	background-color: #555;
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+	border: 1px solid #333;
+	border-left: 0px;
+	border-right: 0px;
+}
+
+#timaat-video-controls .segment-seekbar {
+	border: 1px solid transparent;
+	background: transparent;
+	height: 6px;
+}
+
+#timaat-video-controls .video-seekbar {
+	height: 9px;
+}
+
+#timaat-video-controls .seekbar .progress {
+  background-color: red;
+  width: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  -webkit-transition: all ease 0.25s;
+  transition: all ease 0.25s;
+}
+
+#timaat-video-controls .toggle-play-pause.play .pause-icon {
+  display: none;
+}
+
+#timaat-video-controls .toggle-play-pause.pause .play-icon {
+  display: none;
+}
+
+#timaat-video-controls .toggle-volume.on .volume-off {
+  display: none;
+}
+
+#timaat-video-controls .toggle-volume.off .volume-on {
+  display: none;
+}
+
+#timaat-video-controls .video-volume-control {
+  width: 100px;
+}	
+
+#timaat-video-controls:hover {
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar a {font-size: 18px;}
+}

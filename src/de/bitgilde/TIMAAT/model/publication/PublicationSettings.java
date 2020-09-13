@@ -14,6 +14,7 @@ public class PublicationSettings implements Serializable {
 	boolean stopImage = false;
 	boolean stopPolygon = false;
 	boolean stopAudio = false;
+	boolean offline = false;
 	
 	
 	public int getDefList() {
@@ -49,6 +50,15 @@ public class PublicationSettings implements Serializable {
 	
 	public PublicationSettings setStopAudio(boolean stopAudio) {
 		this.stopAudio = stopAudio;
+		return this;
+	}
+
+	public boolean isOffline() {
+		return offline;
+	}
+
+	public PublicationSettings setOffline(boolean offline) {
+		this.offline = offline;
 		return this;
 	}
 	
