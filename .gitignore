@@ -9,3 +9,4 @@ WebContent/app/
 .classpath
 *.bak
 .vscode/
+.project

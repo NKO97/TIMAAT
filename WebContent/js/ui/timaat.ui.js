@@ -189,12 +189,12 @@
 				case 'subscribe-list':
 					color = 'badge-primary';
 					action = 'fa-eye';
-					message = 'aktuelle Liste geöffnet'
+					message = 'aktuelle Analyse geöffnet'
 					break;
 				case 'unsubscribe-list':
 					color = 'badge-secondary';
 					action = 'fa-eye';
-					message = 'aktuelle Liste geschlossen'
+					message = 'aktuelle Analyse geschlossen'
 					break;
 				case 'add-segment':
 					color = 'badge-success';
@@ -234,7 +234,7 @@
 					for (let subscriber of notification.data) message += ', '+subscriber;
 					message = '<strong>'+message.substring(2)+'</strong> ';
 					message += (notification.data.length == 1) ? 'bearbeitet ' : 'bearbeiten ';
-					message += 'die Liste ebenfalls';
+					message += 'die Analyse ebenfalls';
 					break;
 				default:
 					message = 'unbekannte Aktion: '+notification.message;
