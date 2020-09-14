@@ -25,9 +25,9 @@ public class Uuid implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="uuid")
-	@JsonManagedReference(value = "Uuid-Annotation")
+//	@JsonManagedReference(value = "Uuid-Annotation")
 	private List<Annotation> annotations;
-
+	
 	public Uuid() {
 	}
 
