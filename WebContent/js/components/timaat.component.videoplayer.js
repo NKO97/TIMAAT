@@ -672,7 +672,7 @@
 			});
 			$('#timaat-user-log-analysislist').on('inserted.bs.popover', function () {
 				if ( ! TIMAAT.VideoPlayer.curList ) {
-					$('.timaat-user-log-details').html("Keine Liste ausgewählt");
+					$('.timaat-user-log-details').html("Keine Analyse ausgewählt");
 					return;
 				}
 				$('.timaat-user-log-details').html(
@@ -838,7 +838,7 @@
 			
 			// setup analysis list UI
 			$('#timaat-analysislist-chooser').empty();
-			$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+			$('#timaat-analysislist-chooser').append('<option>keine Analyse vorhanden</option');
 			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeAttr('onclick');
@@ -954,7 +954,7 @@
 			}
 			else {
 				TIMAAT.VideoPlayer.setupAnnotations(null);
-				$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+				$('#timaat-analysislist-chooser').append('<option>keine Analyse vorhanden</option');
 				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeAttr('onclick');
@@ -1369,7 +1369,7 @@
 			$('#timaat-analysislist-chooser').trigger('change');
 			if ( TIMAAT.VideoPlayer.model.lists.length == 0 ) {
 				TIMAAT.VideoPlayer.setupAnnotations(null);
-				$('#timaat-analysislist-chooser').append('<option>keine Liste vorhanden</option');
+				$('#timaat-analysislist-chooser').append('<option>keine Analyse vorhanden</option');
 				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeAttr('onclick');

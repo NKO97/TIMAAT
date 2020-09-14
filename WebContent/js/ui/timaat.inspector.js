@@ -520,7 +520,7 @@
 					$('#timaat-inspector-meta-comment-group').show();
 					var list = item;
 					if ( !list ) this.open('timaat-inspector-metadata');
-					var heading = (list) ? '<i class="fas fa-list-alt"></i> Liste bearbeiten' : '<i class="fas fa-list-alt"></i> Liste hinzufügen';
+					var heading = (list) ? '<i class="fas fa-list-alt"></i> Analyse bearbeiten' : '<i class="fas fa-list-alt"></i> Analyse hinzufügen';
 					var submit = (list) ? "Speichern" : "Hinzufügen";
 					var title = (list) ? TIMAAT.Util.getDefTranslation(list, 'mediumAnalysisListTranslations', 'title') : "";
 					var comment = (list) ? TIMAAT.Util.getDefTranslation(list, 'mediumAnalysisListTranslations', 'text') : "";
