@@ -137,6 +137,10 @@
 				TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
 				TIMAAT.Service.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 			}
+			if (component == 'media') {
+				$('#previewTab').removeClass('annotationView');
+				$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+			}
 			$('.timaat-sidebar-tab-'+component).addClass('bg-info');
 			$('.timaat-sidebar-tab-'+component+' a').addClass('selected');
 		},
