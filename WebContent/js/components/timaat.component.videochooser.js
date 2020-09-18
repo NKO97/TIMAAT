@@ -165,6 +165,13 @@
 				
 			});
 			
+			$('#timaat-videochooser-table').on('page.dt', function() {
+				// $('html, body').animate({
+				// 	scrollTop: $(".dataTables_wrapper").offset().top
+				// }, 'slow');
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 			// upload event listeners
 			$(document).on('added.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
