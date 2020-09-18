@@ -3119,18 +3119,18 @@
     	// console.log("TCL: _mediumRemoved", medium);
 			// sync to server
 			// remove medium from all collections it is part of
-			function isMediumInMediaCollectionHasMediums(medium, mchm) {
-				if (mchm.filter(x => x.medium.id == medium.id)) {
-					return true
-				} else
-				return false;
-			};
-			var i = 0;
-			for (; i < TIMAAT.VideoChooser.collections.length; i++) {
-				if (isMediumInMediaCollectionHasMediums(medium, TIMAAT.VideoChooser.collections[i].mediaCollectionHasMediums)) {
-					await TIMAAT.MediaCollectionService.removeCollectionItem(TIMAAT.VideoChooser.collections[i].id, medium.model.id);
-				}
-			}
+			// function isMediumInMediaCollectionHasMediums(medium, mchm) {
+			// 	if (mchm.filter(x => x.medium.id == medium.id)) {
+			// 		return true
+			// 	} else
+			// 	return false;
+			// };
+			// var i = 0;
+			// for (; i < TIMAAT.VideoChooser.collections.length; i++) {
+			// 	if (isMediumInMediaCollectionHasMediums(medium, TIMAAT.VideoChooser.collections[i].mediaCollectionHasMediums)) {
+			// 		await TIMAAT.MediaCollectionService.removeCollectionItem(TIMAAT.VideoChooser.collections[i].id, medium.model.id);
+			// 	}
+			// }
 
 			try {
 				await TIMAAT.MediaService.removeMedium(medium);

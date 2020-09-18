@@ -64,7 +64,7 @@
 
 			// confirm delete medium collection modal functionality
 			$('#timaat-mediacollectiondatasets-modal-delete-submit').on('click', async function(ev) {
-				console.log("TCL: delete media collection modal submit pressed");
+				console.log("TCL: delete media collection");
 				var modal = $('#timaat-mediacollectiondatasets-mediumcollection-delete');
 				var mediumCollection = modal.data('mediumCollection');
         console.log("TCL: mediumCollection", mediumCollection);
