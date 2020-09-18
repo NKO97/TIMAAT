@@ -1185,8 +1185,8 @@ public class MediumServiceEndpoint {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMDELETED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.MEDIUMDELETED);
 		System.out.println("MediumServiceEndpoint: deleteMedium - delete complete");	
 		return Response.ok().build();
 	}

@@ -513,22 +513,22 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteMediaCollection(@PathParam("id") int id) {
-		System.out.println("MediumCollectionServiceEndpoint: deleteMediaCollection: ");
+		System.out.println("MediumCollectionServiceEndpoint: deleteMediaCollection");
     	
-    	EntityManager em = TIMAATApp.emf.createEntityManager();
-    	MediaCollection col = em.find(MediaCollection.class, id);
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	MediaCollection col = entityManager.find(MediaCollection.class, id);
     	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		for ( MediaCollectionHasMedium mchm : col.getMediaCollectionHasMediums() ) em.remove(mchm);
-	    col.getMediaCollectionHasMediums().clear();
-		em.remove(col);
-		tx.commit();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(col);
+		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
-
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
+		System.out.println("MediumCollectionServiceEndpoint: deleteMediumCollection - delete complete");	
 		return Response.ok().build();
 	}
 	

@@ -491,7 +491,7 @@
 					"contentType": "application/json; charset=utf-8",
 					"dataType": "json",
 					"data": function(data) {
-          	console.log("TCL: data", data);
+          	// console.log("TCL: data", data);
 						let serverData = {
 							draw: data.draw,
 							start: data.start,
@@ -507,7 +507,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 					"dataSrc": function(data) {
-          	console.log("TCL: dataSrc - data", data);
+          	// console.log("TCL: dataSrc - data", data);
 						// setup model
 						var mediaCollectionItems = Array();
 						data.data.forEach(function(medium) { 

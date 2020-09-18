@@ -650,7 +650,7 @@
             xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
           },
           "dataSrc": function(data) {
-          	console.log("TCL: data", data);
+          	// console.log("TCL: data", data);
             // setup model
             var catsets = Array();
             data.data.forEach(function(categorySet) { 
