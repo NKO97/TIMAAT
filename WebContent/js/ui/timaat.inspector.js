@@ -506,9 +506,11 @@
 					else this.updateItem();
 					
 					// actors panel
-					this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
-					this.ui.dataTableAnnoActors.ajax.reload();
-					this.ui.dataTableActors.ajax.reload();
+					if ( item ) {
+						this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
+						this.ui.dataTableAnnoActors.ajax.reload();
+						this.ui.dataTableActors.ajax.reload();
+					}
 				}
 				// analysis lists
 				if ( type == 'analysislist' ) {
