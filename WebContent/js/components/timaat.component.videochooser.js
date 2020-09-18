@@ -482,9 +482,14 @@
 									</div>
 								<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Videovorschau"/>`;
 						}
-						if (medium.mediumImage) {
+						else if (medium.mediumImage) {
 							ui = `<div style="display:flex">
 											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" style="max-height:100%; max-width:100%" alt="Image preview"/>
+										</div>`;
+						}
+						else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" style="max-height:100%; max-width:100%" alt="No preview available"/>
 										</div>`;
 						}
 						return ui;
