@@ -228,6 +228,10 @@
 				TIMAAT.MediaCollectionDatasets.addMediumCollectionItem(collection.model.id);
 			});
 
+			$('#timaat-mediacollectiondatasets-item-add').on('hide.bs.modal', function(event) {
+				TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
+			})
+
 		},
 
 		load: function() {
