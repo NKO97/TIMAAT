@@ -18,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
@@ -91,6 +92,32 @@ public class PublicationEndpoint {
 		return Response.ok().entity(pub).build();
 	}
 
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collection/{colId}")
+	public Response getPublicationByCollection(@PathParam("colId") int colId) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
+		
+		// find publication
+		Publication pub = null;
+		try {
+			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
+					.setParameter("collection", colId)
+					.setParameter("owner", userID)
+					.getSingleResult();
+		} catch (Exception e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
+		if ( pub.getOwner().getId() != userID )
+			return Response.status(Status.FORBIDDEN).build();
+
+		
+		return Response.ok().entity(pub).build();
+	}
+	
 	@POST
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -137,6 +164,53 @@ public class PublicationEndpoint {
 		return Response.ok().entity(pub).build();
 	}
 
+	@POST
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collection/{colId}")
+	public Response updatePublicationByCollection(@PathParam("colId") int colId, Publication publication) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
+		
+		// find publication
+		Publication pub = null;
+		try {
+			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
+					.setParameter("collection", colId)
+					.setParameter("owner", userID)
+					.getSingleResult();
+		} catch (Exception e) {
+			pub = null;
+		}
+		if ( pub == null ) {
+			// create publication
+			publication.setCollection(null);
+			MediaCollection c = em.find(MediaCollection.class, colId);
+			if ( c == null ) return Response.status(Status.BAD_REQUEST).build();
+			publication.setCollection(c);
+			UserAccount owner = em.find(UserAccount.class, userID);
+			if ( owner == null ) return Response.status(Status.BAD_REQUEST).build();
+			publication.setOwner(owner);
+			pub = publication;
+		} else {
+			pub.setTitle(publication.getTitle());
+			pub.setCredentials(publication.getCredentials());
+			pub.setSettings(publication.getSettings());
+			pub.setAccess(publication.getAccess());
+		}
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.persist(pub);
+		em.flush();
+		entityTransaction.commit();
+		em.refresh(pub);
+		em.refresh(pub.getOwner());
+		em.refresh(pub.getCollection());
+		
+		return Response.ok().entity(pub).build();
+	}
+	
+	
 	@DELETE
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -165,5 +239,32 @@ public class PublicationEndpoint {
 		return Response.ok().build();
 	}
 
+	@DELETE
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("collection/{colId}")
+	public Response deletePublicationByCollection(@PathParam("colId") int colId) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
+		
+		// find publication
+		Publication pub = null;
+		try {
+			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
+					.setParameter("collection", colId)
+					.setParameter("owner", userID)
+					.getSingleResult();
+		} catch (Exception e) {
+			pub = null;
+		}
+		if ( pub != null ) {
+			EntityTransaction entityTransaction = em.getTransaction();
+			entityTransaction.begin();
+			em.remove(pub);
+			em.flush();
+			entityTransaction.commit();
+		}
+		return Response.ok().build();
+	}
 
 }

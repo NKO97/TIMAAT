@@ -910,7 +910,7 @@ class Annotation {
 
 class TIMAATPublication {
 	constructor() {
-		this.version = "v1.1";
+		this.version = "v1.2";
 		// setup model
 		if ( TIMAATData.mediaCollectionHasMediums != null ) {
 			this.collection = TIMAATData;

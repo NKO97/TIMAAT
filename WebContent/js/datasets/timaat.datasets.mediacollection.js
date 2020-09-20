@@ -30,6 +30,7 @@
 		init: function() {
 			TIMAAT.MediaCollectionDatasets.initMediaCollections();
 			TIMAAT.MediaCollectionDatasets.initMediaCollectionItems();
+			TIMAAT.MediaCollectionDatasets.initMediaCollectionPublication();
 			$('.media-data-tabs').hide();
 			$('.media-datatables').hide();
 			// $('.mediacollection-datatable').show();
@@ -85,6 +86,7 @@
 				$('.mediacollection-data-tabs').hide();
 				$('.form').hide();
 				$('.mediacollection-items-datatable').hide();
+				$('.mediacollection-publication-sheet').hide();
 			});
 
 			// edit content form button handler
@@ -184,6 +186,7 @@
 				} else { // dismiss medium creation
 					$('.form').hide();
 					$('.mediacollection-items-datatable').hide();
+					$('.mediacollection-publication-sheet').hide();
 				}
 			});
 
@@ -206,6 +209,7 @@
 				console.log("TCL: Media Collection Items Tab clicked");
 				$('.form').hide();
 				$('.mediacollection-items-datatable').hide();
+				$('.mediacollection-publication-sheet').hide();
 				TIMAAT.MediaCollectionDatasets.subNavTab = 'items';
 				TIMAAT.MediaCollectionDatasets.lastForm = 'items';
 				$('.nav-tabs a[href="#mediumCollectionItems"]').tab('show');
@@ -231,6 +235,142 @@
 			$('#timaat-mediacollectiondatasets-item-add').on('hide.bs.modal', function(event) {
 				TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
 			})
+
+		},
+		
+		_setupPublicationSheet: function(enabled, restricted) {
+			$('#timaat-publish-mediacollection-switch').prop('checked', enabled);
+			$('#timaat-publication-mediacollection-protected-switch').prop('checked', restricted);
+			let credentials = {};
+			try {
+				credentials = JSON.parse(this.publication.credentials);
+			} catch (e) { credentials = {}; }
+			let sheet = $('.mediacollection-publication-wrapper');
+			let title = ( this.publication ) ? this.publication.title : '';
+			let username = ( credentials.user && enabled ) ? credentials.user : '';
+			let password = ( credentials.password && enabled ) ? credentials.password : '';
+			let url = ( this.publication ) ? window.location.protocol+'//'+window.location.host+window.location.pathname+'publication/'+this.publication.slug+'/' : '';
+			sheet.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
+			if ( restricted ) sheet.find('.protectedicon').addClass('fa-lock'); else sheet.find('.protectedicon').addClass('fa-lock-open');
+			
+			
+			sheet.find('.publicationtitle').prop('disabled', !enabled);
+			sheet.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
+			sheet.find('.username').prop('disabled', !enabled || !restricted);
+			sheet.find('.username').val(username);
+			sheet.find('.password').prop('disabled', !enabled || !restricted);
+			sheet.find('.password').val(password);
+			sheet.find('.password').attr('type', 'password');
+			$('#timaat-mediacollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+
+			if ( enabled ) {
+				sheet.find('.publicationtitle').val(title);
+				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>'; 
+				else url = '- Publikationslink nach dem Speichern verfügbar -';
+				sheet.find('.publicationurl').html(url);
+			} else {
+				sheet.find('.publicationtitle').val('');
+				sheet.find('.publicationurl').html('- Collection nicht publiziert -');
+			}
+			
+		},
+		
+		_updatePublicationSettings: function() {
+			let sheet = $('.mediacollection-publication-wrapper');
+			let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
+			let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
+			let username = ( sheet.find('.username').val() && restricted ) ? sheet.find('.username').val() : '';
+			let password = ( sheet.find('.password').val() && restricted ) ? sheet.find('.password').val() : '';
+			$('#timaat-mediacollection-publication-settings-submit').prop('disabled', true);
+			$('#timaat-mediacollection-publication-settings-submit i.login-spinner').removeClass('d-none');
+			let dataset = this;
+			let collection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');
+			if ( enabled ) {
+				let publication = (this.publication) ? this.publication : { id: 0 };
+				publication.access = (restricted) ? 'protected' : 'public';
+				publication.collectionId = null;
+				publication.ownerId = TIMAAT.Service.session.id;
+				publication.settings = null;
+				publication.slug = TIMAAT.Util.createUUIDv4();
+				publication.collectionId = collection.model.id;
+				publication.startMediumId = null;
+				publication.title = sheet.find('.publicationtitle').val();
+				publication.credentials = JSON.stringify({
+					scheme: 'password',
+					user: username,
+					password: password,
+				});
+				TIMAAT.Service.updateCollectionPublication(publication).then(publication => {
+					dataset.publication = publication;
+					dataset._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
+					$('#timaat-mediacollection-publication-settings-submit i.login-spinner').addClass('d-none');
+					sheet.find('.saveinfo').show().delay(1000).fadeOut();
+				}).catch( e => {
+					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
+					$('#timaat-mediacollection-publication-settings-submit i.login-spinner').addClass('d-none');
+				})
+			} else {
+				TIMAAT.Service.deleteCollectionPublication(collection.model.id).then(status => {
+					dataset.publication = null;
+					dataset._setupPublicationDialog(false, false);
+					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
+					$('#timaat-mediacollection-publication-settings-submit').addClass('d-none');
+					sheet.find('.saveinfo').show().delay(1000).fadeOut();
+				}).catch( e => {
+					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
+					$('#timaat-mediacollection-publication-settings-submit i.login-spinner').addClass('d-none');
+				})
+			}
+
+		},
+
+
+		initMediaCollectionPublication: function() {
+			let dataset = this;
+			// events
+			$('#timaat-publish-mediacollection-switch, #timaat-publication-mediacollection-protected-switch').on('change', ev => {
+				dataset._setupPublicationSheet($('#timaat-publish-mediacollection-switch').prop('checked'), $('#timaat-publication-mediacollection-protected-switch').prop('checked'));
+			});
+			let sheet = $('.mediacollection-publication-wrapper');
+			sheet.find('.reveal').on('click', ev => {
+				if ( sheet.find('.password').attr('type') === 'password' )
+					sheet.find('.password').attr('type', 'text');
+				else sheet.find('.password').attr('type', 'password');
+			});
+			sheet.find('.username, .password').on('change input', ev => {
+				let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
+				let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
+				let username = sheet.find('.username').val();
+				let password = sheet.find('.password').val();
+				$('#timaat-mediacollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+			});
+			$('#timaat-mediacollection-publication-settings-submit').on('click', ev => {
+				dataset._updatePublicationSettings();
+			})
+
+			// nav-bar functionality
+			$('#mediacollection-tab-mediumcollection-publication-form').on('click', async function(event) {
+				console.log("TCL: Media Collection Publication Tab clicked");
+				$('.form').hide();
+				$('.mediacollection-items-datatable').hide();
+				$('.mediacollection-publication-sheet').show();
+				$('#timaat-mediacollectiondatasets-mediumcollection-publication-loader').show();
+				$('.mediacollection-publication-wrapper').hide();
+				TIMAAT.MediaCollectionDatasets.subNavTab = 'publication';
+				TIMAAT.MediaCollectionDatasets.lastForm = 'publication';
+				$('.nav-tabs a[href="#mediumCollectionPublication"]').tab('show');
+//				TIMAAT.MediaCollectionDatasets.setMediumCollectionItemList();
+				let collection = $('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection');
+				console.log("TCL: collection", collection);
+				let publication = await TIMAAT.Service.getCollectionPublication(collection.model.id);
+				console.log("TCL: publication data", publication);
+				$('#timaat-mediacollectiondatasets-mediumcollection-publication-loader').hide();
+				$('.mediacollection-publication-wrapper').show();
+				dataset.publication = publication;
+				dataset._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
+				
+			});
 
 		},
 
@@ -260,6 +400,7 @@
     	console.log("TCL: setMediumCollectionList");
 			$('.form').hide();
 			$('.mediacollection-items-datatable').hide();
+			$('.mediacollection-publication-sheet').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionList == null ) return;
 			TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();
@@ -277,6 +418,7 @@
     	console.log("TCL: setMediumCollectionItemList");
 			$('.form').hide();
 			$('.mediacollection-items-datatable').hide();
+			$('.mediacollection-publication-sheet').hide();
 			$('.media-data-tabs').hide();
 			if ( TIMAAT.MediaCollectionDatasets.mediaCollectionItemList == null ) return;
 
@@ -295,6 +437,7 @@
 			// console.log("TCL: addMediumCollection: type", type);
 			$('.form').hide();
 			$('.mediacollection-items-datatable').hide();
+			$('.mediacollection-publication-sheet').hide();
 			$('.mediacollection-data-tabs').hide();
 			$('.nav-tabs a[href="#mediumCollectionDataSheet"]').show();
 			$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', null);
@@ -567,6 +710,7 @@
 						var type = medium.mediaType.mediaTypeTranslations[0].type;
 						$('.form').hide();
 						$('.mediacollection-items-datatable').hide();
+						$('.mediacollection-publication-sheet').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
 						$('.media-datatables').hide();
@@ -764,6 +908,7 @@
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.mediacollection-items-datatable').hide();
+						$('.mediacollection-publication-sheet').hide();
 						$('.media-nav-tabs').show();
 						$('.media-data-tabs').hide();
 						TIMAAT.MediaCollectionDatasets.clearLastMediumCollectionSelection();

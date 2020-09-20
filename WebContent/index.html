@@ -1849,6 +1849,9 @@
                           <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-items-tab">
                             <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-items-form" href="#mediumCollectionItems">Items</a>
                           </li>
+                          <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-publication-tab">
+                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-publication-form" href="#mediumCollectionPublication">Publication</a>
+                          </li>
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
                             <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
                           </li>
@@ -2016,6 +2019,55 @@
                             </div>
                           </div>
                         </div>
+                        <!-- collection publication settings -->
+                        <div class="card media-datatables mediacollection-publication-sheet"> <!-- Medium collection publication data -->
+                          <div class="card-header">Collection Publication Settings
+                            </div>
+                          <div class="timaat-datasets-list-wrapper">
+                            <div id="timaat-mediacollectiondatasets-mediumcollection-publication-loader" class="text-center card-body bg-info text-white">
+                              <i class="fas fa-spinner fa-spin"></i> Loading data...
+                            </div>
+                            <div class="card-body mediacollection-publication-wrapper">
+<div class="custom-control custom-switch mt-3">
+  <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
+  <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Collection publizieren</label>
+</div>
+
+
+<div class="input-group input-group-sm mt-2">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
+  </div>
+  <div class="text-muted form-control publicationurl">- Collection nicht publiziert -</div>
+</div>
+
+<hr>
+<div class="input-group input-group-sm">
+  
+  <input type="text" class="form-control publicationtitle" placeholder="Publikationstitel" aria-label="Publikationstitel">
+</div>
+
+
+    <div class="custom-control custom-switch mt-2 mr-2">
+  <input type="checkbox" class="custom-control-input" id="timaat-publication-mediacollection-protected-switch">
+  <label class="custom-control-label" for="timaat-publication-mediacollection-protected-switch">Zugriff beschränken</label>
+</div>
+
+<div class="input-group input-group-sm mt-2">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="protectedicon fas fa-lock-open"></i></span>
+  </div>
+  
+<input type="text" class="form-control username" placeholder="Username" aria-label="Username">
+<input type="password" class="form-control password" placeholder="Passwort" aria-label="Passwort">
+<div class="input-group-append">
+     <span class="input-group-text btn reveal"><i class="fas fa-eye"></i></span>
+  </div></div>
+	<button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediacollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
+  
+                              </div>
+                          </div>
+                        </div>                        
                         <!-- preview form -->
                         <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
                           <div class="form-header">

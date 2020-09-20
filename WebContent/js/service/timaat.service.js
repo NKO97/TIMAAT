@@ -99,6 +99,70 @@
 			});		
 		},
 
+		async getCollectionPublication(colID) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getCollectionPublication -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					resolve(null);
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+		
+		async updateCollectionPublication(publication) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+publication.collectionId,
+					type:"POST",
+					data: JSON.stringify(publication),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: updateCollectionPublication -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					resolve(null);
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async deleteCollectionPublication(colID) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: deleteCollectionPublication -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					resolve(null);
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+		
 		getAllCategorySets: function(callback) {
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);

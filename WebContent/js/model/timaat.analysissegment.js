@@ -29,9 +29,11 @@
 					// create and style list view element
 					this.listView = $(`
 						<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
-							<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
 								<div class="d-flex justify-content-between">
-									<span class="timaat-annotation-segment-title font-weight-bold align-middle pt-1 text-light pl-1"></span>
+									<span class="font-weight-bold pt-1 text-light pl-1">
+										<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
+										<span class="timaat-annotation-segment-title"></span>
+									</span>
 								<button type="button" class="btn btn-sm btn-danger" onclick="TIMAAT.VideoPlayer.removeAnalysisSegment();">
 									<i class="fas fa-trash"></i>
 								</button>
