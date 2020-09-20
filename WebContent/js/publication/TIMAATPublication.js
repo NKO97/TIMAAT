@@ -7,9 +7,11 @@ class AnalysisSegment {
 					// create and style list view element
 					this.listView = $(`
 						<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
-							<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-								<div class="d-flex justify-content-between">
-									<span class="timaat-annotation-segment-title font-weight-bold align-middle pt-1 text-light pl-1"></span>
+							<div class="d-flex justify-content-between">
+								<span class="font-weight-bold pt-1 text-light pl-1">
+									<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i> 
+									<span class="timaat-annotation-segment-title"></span>
+								</span>
 							</div>
 						</li>`
 					);
@@ -59,18 +61,26 @@ class AnalysisSegment {
 					this.listView.click(this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
+						TIMAATPub.selectAnnotation(null);
+						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.click(this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
+						TIMAATPub.selectAnnotation(null);
+						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.listView.dblclick(this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
+						TIMAATPub.selectAnnotation(null);
+						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.dblclick(this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
+						TIMAATPub.selectAnnotation(null);
+						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.updateUI();
 					this.timelineView.tooltip();
@@ -900,13 +910,19 @@ class Annotation {
 
 class TIMAATPublication {
 	constructor() {
-		this.version = "v1.01";
+		this.version = "v1.1";
 		// setup model
-		this.video = TIMAATData;
+		if ( TIMAATData.mediaCollectionHasMediums != null ) {
+			this.collection = TIMAATData;
+			this.video = null;
+		} else {
+			this.collection = null;
+			this.video = TIMAATData;
+			if ( this.video.mediumVideo.length < 0 ) this.video.mediumVideo.length += 3600; // temp fix for DB problems
+			this.duration = this.video.mediumVideo.length;
+		}
 		this.frameRate = 25;
 		this.volume = 1.0;
-		if ( this.video.mediumVideo.length < 0 ) this.video.mediumVideo.length += 3600; // temp fix for DB problems
-		this.duration = this.video.mediumVideo.length;
 		this.markerList = [];
 
 		// setup UI
@@ -919,17 +935,18 @@ class TIMAATPublication {
 
 		// animation player shape updater
 		let animFrameRate = 20;
-		this.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
+		if ( this.video ) this.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
 		
 		console.log("TIMAAT::Publication:"+this.version+" ready");
 	}
 	
 	run() {
 		let hash = location.hash;
-		let startList = TIMAATPub.video.mediumAnalysisLists[0];
-		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
+		let startList = (this.video) ? TIMAATPub.video.mediumAnalysisLists[0] : null;
+		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.video ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-		this.setupAnnotations(startList);
+		if ( this.video ) this.setupAnnotations(startList);
+
 		// restore session
 		if ( hash && hash.length > 1 ) location.hash = hash;
 	}
@@ -990,6 +1007,7 @@ class TIMAATPublication {
 	}
 	
 	fitVideo() {
+		if ( !this.video ) return;
 		this.viewer.invalidateSize();
 		this.viewer.fitBounds(TIMAATPub.videoBounds);
 /*
@@ -1093,10 +1111,53 @@ class TIMAATPublication {
 		return time;
 	}
 	
+	setListMetadata() {
+		if ( !this.curList ) return;
+
+		if ( !this.curList.mediumAnalysisListTranslations[0].title || this.curList.mediumAnalysisListTranslations[0].title.length == 0) this.ui.list.title.addClass('empty');
+		else {
+			this.ui.list.title.removeClass('empty');
+			this.ui.list.title.find('.contents').html(this.curList.mediumAnalysisListTranslations[0].title);
+		}
+		if ( !this.curList.mediumAnalysisListTranslations[0].text || this.curList.mediumAnalysisListTranslations[0].text.length == 0) this.ui.list.comment.addClass('empty');
+		else {
+			this.ui.list.comment.removeClass('empty');
+			this.ui.list.comment.find('.contents').html(this.curList.mediumAnalysisListTranslations[0].text);
+		}
+	}
+
+	setSegmentMetadata(segment) {
+		if ( !segment ) return;
+		
+		this.ui.segmentMetadata.removeClass('d-none');
+
+		let title = segment.model.analysisSegmentTranslations[0].title;
+		let desc = ( segment.model.analysisSegmentTranslations[0].shortDescription ) ? segment.model.analysisSegmentTranslations[0].shortDescription : '';
+		let comment = segment.model.analysisSegmentTranslations[0].comment;
+
+		if ( !title || title.length == 0) this.ui.segment.title.addClass('empty');
+		else {
+			this.ui.segment.title.removeClass('empty');
+			this.ui.segment.title.find('.contents').html(title);
+		}
+		if ( !desc || desc.length == 0) this.ui.segment.description.addClass('empty');
+		else {
+			this.ui.segment.description.removeClass('empty');
+			this.ui.segment.description.find('.contents').html(desc);
+		}
+		if ( !comment || comment.length == 0) this.ui.segment.comment.addClass('empty');
+		else {
+			this.ui.segment.comment.removeClass('empty');
+			this.ui.segment.comment.find('.contents').html(comment);
+		}
+	}
+	
+	
 	selectAnnotation(annotation, changehash=true) {
 		if ( this.curAnnotation == annotation && annotation != null ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		this.curAnnotation = annotation;
+		if ( this.curAnnotation ) this.ui.segmentMetadata.addClass('d-none');
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(true);
 		if ( this.curAnnotation ) this.ui.annoMetadata.removeClass('d-none'); else this.ui.annoMetadata.addClass('d-none');
 		if ( changehash ) if (annotation) location.hash = '#'+annotation.model.uuid.uuid; else location.hash = '#' // UUIDs not yet available in timaat db
@@ -1123,8 +1184,11 @@ class TIMAATPublication {
 		this.ui.annotation.links.addClass('empty');
 		
 	}
+
+
 	
 	setupAnnotations(annotations, changehash=true) {
+		if ( !this.video ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		
 		if ( this.annotations ) this.annotations.ui.removeClass('selected');
@@ -1147,6 +1211,7 @@ class TIMAATPublication {
 		}
 		this.annotationList = [];
 		this.curList = annotations;
+		this.setListMetadata();
 		
 		// setup segment model
 		if ( !this.curList.segments ) {
@@ -1224,67 +1289,105 @@ class TIMAATPublication {
 				places : $('.annotation-places'),
 				links : $('.annotation-links'),
 			},
+			list: {
+				title : $('.list-title'),
+				comment : $('.list-comment'),
+			},
+			segment: {
+				title : $('.segment-title'),
+				description : $('.segment-description'),
+				comment : $('.segment-comment'),
+			},
 			annoMetadata: $('.annotation-metadata'),
+			listMetadata: $('.list-metadata'),
+			segmentMetadata: $('.segment-metadata'),
+			videoTemplate: `<li class="card mr-2 mb-2 bg-dark" style="width: 268px">
+<a href="#" title="">
+			<img src="#" alt="" class="preview img-responsive card m-auto b-block border-dark" height="150px">
+			<h6 class="pt-1 pl-1 pr-1 text-light" style="font-size:80%;"><i class="fas fa-video"></i> <span class="title">Video</span></h6>
+			<span class="duration badge badge-dark badge-pill" style="position: absolute;top: 10px;right: 20px; opacity: 0.8;">00:00</span>
+		</a></li>`,
 		};
-		// viewer
-		this.viewer = L.map('timaat-viewer', {
-			zoomControl: false,
-			attributionControl: false,
-			zoom: 0.0,
-			zoomSnap: 0.0001,
-			maxZoom: 2.0,
-			minZoom: -2.0,
-			center: [0,0],
-			crs: L.CRS.Simple,
-			editable: true,
-			keyboard: false,
-		});
-		this.viewer.dragging.disable();
-		this.viewer.touchZoom.disable();
-		this.viewer.doubleClickZoom.disable();
-		this.viewer.scrollWheelZoom.disable();
 		
-		// video
-		this.videoBounds = L.latLngBounds([[ this.video.mediumVideo.height, 0], [ 0, this.video.mediumVideo.width]]);
-		this.viewer.setMaxBounds(this.videoBounds);
-		this.viewer.fitBounds(this.videoBounds);
-		let filename = ( TIMAATSettings.offline ) ? this.video.id+'.mp4' : window.location.pathname + 'item-'+this.video.id;
-		this.overlay = L.videoOverlay(filename, this.videoBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
-		this.ui.video = this.overlay.getElement();
+		if ( this.video ) {
+			// viewer
+			this.viewer = L.map('timaat-viewer', {
+				zoomControl: false,
+				attributionControl: false,
+				zoom: 0.0,
+				zoomSnap: 0.0001,
+				maxZoom: 2.0,
+				minZoom: -2.0,
+				center: [0,0],
+				crs: L.CRS.Simple,
+				editable: true,
+				keyboard: false,
+			});
+			this.viewer.dragging.disable();
+			this.viewer.touchZoom.disable();
+			this.viewer.doubleClickZoom.disable();
+			this.viewer.scrollWheelZoom.disable();
+		
+			// video
+			this.videoBounds = L.latLngBounds([[ this.video.mediumVideo.height, 0], [ 0, this.video.mediumVideo.width]]);
+			this.viewer.setMaxBounds(this.videoBounds);
+			this.viewer.fitBounds(this.videoBounds);
+			let filename = ( TIMAATSettings.offline ) ? this.video.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
+			this.overlay = L.videoOverlay(filename, this.videoBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
+			this.ui.video = this.overlay.getElement();
 
-		// polygon layer
-		this.viewer.annoLayer = new L.LayerGroup();;
-		this.viewer.addLayer(this.viewer.annoLayer);
+			// polygon layer
+			this.viewer.annoLayer = new L.LayerGroup();;
+			this.viewer.addLayer(this.viewer.annoLayer);
 		
-		// analysis lists
-		this.ui.analysislist = $('#timaat-analysis-list');
-		for (let list of this.video.mediumAnalysisLists) {
-			let item = $('<li class="list-group-item list-group-item-action pt-0 pb-0 pl-2 pr-2"><i class="fas fa-check-circle"></i> <span class="item-title">'+list.mediumAnalysisListTranslations[0].title+'</span></li>');
-			list.ui = item;
-			this.ui.analysislist.append(item);
-			item.on('click', ev => { TIMAATPub.setupAnnotations(list) });
-		}
-		
-		// mediumvideo metadata
-		let title = this.video.displayTitle.name+' ('+this.video.displayTitle.language.code+')';
-		if ( this.video.originalTitle ) title += '<br>OT: '+this.video.originalTitle.name+' ('+this.video.originalTitle.language.code+')'
-		this.ui.medium.title.find('.contents').html(title);
-		if ( !this.video.remark || this.video.remark.length == 0) this.ui.medium.remark.addClass('empty')
-		else this.ui.medium.remark.find('.contents').html(this.video.remark);
-		this.ui.medium.releaseDate.find('.contents').html(this.formatDate(this.video.releaseDate));
-		if ( !this.video.sources || this.video.sources.length == 0 ) this.ui.medium.source.addClass('empty');
-		else {
-			let sources = '';
-			for (let source of this.video.sources) {
-				if ( source.isPrimarySource ) sources += '<div class="d-flex justify-content-between"><span class="badge badge-primary mt-1">Primary</span><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
-				else sources += '<div class="d-flex justify-content-end"><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
-				if ( source.isStillAvailable ) sources += '<a href="'+source.url+'">'+source.url+'</a>'; else sources += '<span class="text-muted">'+source.url+'</span>';
+			// analysis lists
+			this.ui.analysislist = $('#timaat-analysis-list');
+			for (let list of this.video.mediumAnalysisLists) {
+				let item = $('<li class="list-group-item list-group-item-action pt-0 pb-0 pl-2 pr-2"><i class="fas fa-check-circle"></i> <span class="item-title">'+list.mediumAnalysisListTranslations[0].title+'</span></li>');
+				list.ui = item;
+				this.ui.analysislist.append(item);
+				item.on('click', ev => { TIMAATPub.setupAnnotations(list) });
 			}
-			this.ui.medium.source.find('.contents').html(sources);
+		
+			// mediumvideo metadata
+			let title = this.video.displayTitle.name+' ('+this.video.displayTitle.language.code+')';
+			if ( this.video.originalTitle ) title += '<br>OT: '+this.video.originalTitle.name+' ('+this.video.originalTitle.language.code+')'
+			this.ui.medium.title.find('.contents').html(title);
+			if ( !this.video.remark || this.video.remark.length == 0) this.ui.medium.remark.addClass('empty')
+			else this.ui.medium.remark.find('.contents').html(this.video.remark);
+			this.ui.medium.releaseDate.find('.contents').html(this.formatDate(this.video.releaseDate));
+			if ( !this.video.sources || this.video.sources.length == 0 ) this.ui.medium.source.addClass('empty');
+			else {
+				let sources = '';
+				for (let source of this.video.sources) {
+					if ( source.isPrimarySource ) sources += '<div class="d-flex justify-content-between"><span class="badge badge-primary mt-1">Primary</span><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
+					else sources += '<div class="d-flex justify-content-end"><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
+					if ( source.isStillAvailable ) sources += '<a href="'+source.url+'">'+source.url+'</a>'; else sources += '<span class="text-muted">'+source.url+'</span>';
+				}
+				this.ui.medium.source.find('.contents').html(sources);
+			}
+			if ( !this.video.copyright || this.video.copyright.length == 0) this.ui.medium.copyright.addClass('empty')
+			else this.ui.medium.copyright.find('.contents').html(this.video.copyright);
+			this.ui.medium.categories.addClass('empty');
+		} else {
+			// setup video list
+			let list = $('#timaat-collection');
+			for ( let medium of this.collection.mediaCollectionHasMediums ) {
+				medium = medium.medium;
+				let title = medium.displayTitle.name+' ('+medium.displayTitle.language.code+')';
+				if ( medium.originalTitle ) title += ' - OT: '+medium.originalTitle.name+' ('+medium.originalTitle.language.code+')';
+				if ( medium.mediumVideo.length < 0 ) medium.mediumVideo.length += 3600; // temp fix for DB problems
+				
+				let item = $(this.ui.videoTemplate);
+				item.find('a').attr('href', medium.id);
+				item.find('.preview').attr('src', 'item-'+medium.id+'/preview.jpg');
+				item.find('.preview').attr('alt', title);
+				item.find('.title').text(title);
+				item.find('.duration').html(this.formatTime(medium.mediumVideo.length));
+				list.append(item);
+			}
+			console.log(list);
 		}
-		if ( !this.video.copyright || this.video.copyright.length == 0) this.ui.medium.copyright.addClass('empty')
-		else this.ui.medium.copyright.find('.contents').html(this.video.copyright);
-		this.ui.medium.categories.addClass('empty');
 		
 
 		// settings events
@@ -1401,7 +1504,8 @@ class TIMAATPublication {
 		$(window).resize(function() { TIMAATPub.fitVideo(); });
 		
 		// key events
-		$([document.body,this.viewer]).keydown(function(ev) {
+		let viewElement = ( this.video ) ? this.viewer : $('#timaat-collection');
+		$([document.body,viewElement]).keydown(function(ev) {
 			if ( ev.target != document.body && ev.target != TIMAATPub.viewer ) return;
 			
 			var key;
@@ -1465,9 +1569,12 @@ class TIMAATPublication {
 		});
 		
 		// text
-		$('.video-title').text(this.video.displayTitle.name);
-		this.ui.durationLabel.html(this.formatTime(this.duration));
-		
+		if ( this.video ) {
+			$('.video-title').text(this.video.displayTitle.name);
+			this.ui.durationLabel.html(this.formatTime(this.duration));
+		} else {
+			$('.video-title').text(this.collection.title);
+		}
 		
 	}
 	

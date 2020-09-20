@@ -60,7 +60,7 @@
 
 	<!-- ***************************************************************************************************************** -->
 
-  <body onload="setupPublication()">
+  <body class="bg-light" onload="setupPublication()">
 		 
 		 <div id="timaat-left-sidebar" class="sidebar collapsed">
 			<div class="alert alert-dark mb-0">
@@ -126,47 +126,8 @@
 			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
 			</div>
 <hr />
+
 			</div>
-
-
-
-
-			<div class="metadata-section segment-metadata d-none">
-			<div class="metadata-field segment-title">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-indent"></i> Titel des Segments</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field segment-description">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-quote-right"></i> Kurzbeschreibung</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field segment-comment">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-comment"></i> Anmerkung Segment</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-<hr />
-			</div>
-
-
-
-
-			<div class="metadata-section list-metadata">
-			<div class="metadata-field list-title">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-list-alt"></i> Titel der Analyse</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field list-comment">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-comment"></i> Anmerkung zur Analyse</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			<hr />
-			</div>
-
-
-
 
 
 			<div class="metadata-section medium-metadata">
@@ -208,7 +169,7 @@
 			
 		 </div>
 
-		 <div id="timaat-main">
+		 <div id="timaat-main" class="collection">
 			
 			<div class="alert alert-dark timaat-header mb-0">
 			
@@ -244,95 +205,21 @@
 					</div>
 			</div>
 			
-				 &nbsp; <i class="fas fa-video"></i> <span class="video-title"></span>
+				 &nbsp; <i class="fas fa-folder-open"></i> <span class="video-title"></span>
 			</div>
 			<div class="right-header">
 				<button id="timaat-toggle-fullscreen" title="Vollbild-Modus" type="button" class="mr-2 btn btn-sm btn-outline-dark"><i class="fas fa-expand-alt"></i></button>
 			
 			
-				<button title="zum Video" type="button" onclick="javascript:$('#timaat-main').animate({scrollTop:60}, 100);" class="btn btn-sm btn-outline-dark"><i class="fas fa-arrow-down"></i></button>
-
 			</div>
 			</div>
 			
 			</div>
 
-			<div id="timaat-viewer"></div>
+			<ul id="timaat-collection" class="list-unstyled row p-3 m-auto"></ul>
 			
-			<div id="timaat-video-controls">
-			<div class="time-info p-1 bg-dark text-white text-center">00:00:00</div>
-				<div class="top-control">
-					<div class="segment-seekbar seekbar mt-1 mb-1">
-					</div>
-					<div class="video-seekbar seekbar">
-						<span class="progress"></span>
-					</div>
-				</div>
-				
-				<div class="d-flex justify-content-between">
-					<div class="left-controls mt-2 mb-2">
-				<!-- Annotation List Control -->
-				<div class="btn-group btn-group-sm ml-1 mr-2">
-					<button title="Annotationsliste [a]" class="btn btn-outline-secondary text-white toggle-left-sidebar">
-						<i class="fas fa-draw-polygon"></i>
-					</button>
-				</div>
-			
-				<div class="btn-group btn-group-sm playback-controls">
-					<button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-outline-secondary text-white"><i class="fas fa-step-backward"></i></button>
-					<button title="Abspielen / Pause [Leertaste]" class="toggle-play-pause play btn btn-outline-secondary text-white"><i class="play-icon icon fas fa-play fa-fw"></i><i class="pause-icon icon fa fa-pause fa-fw"></i></button>
-					<button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-outline-secondary text-white"><i class="fas fa-step-forward"></i></button>
-				</div>
-
-				<!-- Playback Speed Control -->
-				<div class="btn-group btn-group-sm">
-					<button title="Abspielgeschwindigkeit [S]" class="btn text-white video-speed">
-						<span class="video-speed-info">1&times;</span>
-					</button>
-				</div>
-				<!-- Volume Control -->
-         <div class="video-volume-control btn-group btn-group-sm" title="Lautstärke einstellen [M = Stumm an/aus]">
-           <button class="btn toggle-volume on text-white">
-             <i class="fas fa-volume-up icon volume-on"></i>
-             <i class="fas fa-volume-mute icon volume-off"></i>
-           </button>
-           <div class="volume-seekbar seekbar align-self-center">
-             <span class="progress" style="width:100%"></span>
-           </div>
-         </div>
-         <div class="video-timings ml-3 d-inline-flex">
-           <div class="start-time time">00:00:00</div>
-            &nbsp;/&nbsp; 
-           <div class="end-time time">00:00:00</div>
-         </div>
-
-
-
-
-
-
-					</div>
-			
-			
-			
-			<div class="right-controls mt-2 mb-2">
-				<!-- Metadata Info Control -->
-				<div class="btn-group btn-group-sm mr-1">
-					<button title="Metadaten anzeigen/ausblenden [i]" class="btn btn-outline-secondary text-white toggle-right-sidebar">
-						<i class="fas fa-info fa-fw"></i>
-					</button>
-				</div>
-			</div>
-				</div>
-				
-
-			
-			<div class="mb-2 d-inline-flex timaat-list-info"><i class="ml-2 fas fa-list fa-fw"></i> &nbsp;<span class="timaat-list-title"></span></div>
-						
 				
 				
-			
-			</div>
 
 		 </div>
   </body>

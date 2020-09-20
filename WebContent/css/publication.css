@@ -70,8 +70,16 @@
 	display: none;
 }
 
+#timaat-main.collection::-webkit-scrollbar {
+	display: block;
+}
+
 body {
 	overflow: hidden;
+}
+
+.collection-item img.preview {
+	width: 256px;
 }
 
 #timaat-main {
@@ -84,6 +92,10 @@ body {
 	
 	-ms-overflow-style: none;
 	scrollbar-width: none;
+}
+#timaat-main.collection {
+	-ms-overflow-style: unset;
+	scrollbar-width: unset;
 }
 
 #timaat-viewer {
