@@ -315,7 +315,7 @@
 					dataset.publication = null;
 					dataset._setupPublicationSheet(false, false);
 					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
-					$('#timaat-mediacollection-publication-settings-submit').addClass('d-none');
+					$('#timaat-mediacollection-publication-settings-submit i.login-spinner').addClass('d-none');
 					sheet.find('.saveinfo').show().delay(1000).fadeOut();
 				}).catch( e => {
 					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
