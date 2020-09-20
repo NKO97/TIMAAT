@@ -302,7 +302,7 @@
 				});
 				TIMAAT.Service.updateCollectionPublication(publication).then(publication => {
 					dataset.publication = publication;
-					dataset._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+					dataset._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
 					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
 					$('#timaat-mediacollection-publication-settings-submit i.login-spinner').addClass('d-none');
 					sheet.find('.saveinfo').show().delay(1000).fadeOut();
@@ -313,7 +313,7 @@
 			} else {
 				TIMAAT.Service.deleteCollectionPublication(collection.model.id).then(status => {
 					dataset.publication = null;
-					dataset._setupPublicationDialog(false, false);
+					dataset._setupPublicationSheet(false, false);
 					$('#timaat-mediacollection-publication-settings-submit').prop('disabled', false);
 					$('#timaat-mediacollection-publication-settings-submit').addClass('d-none');
 					sheet.find('.saveinfo').show().delay(1000).fadeOut();
