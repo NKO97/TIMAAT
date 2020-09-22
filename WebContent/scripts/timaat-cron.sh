@@ -21,6 +21,7 @@ ENCODING_COUNT=0
 MAX_ENCODING_THREADS=2
 
 TIMAAT_STORAGE=$(awk '/^storage.location/{print $3}' $CFG_FILE)
+TIMAAT_STORAGE=$TIMAAT_STORAGE"/medium/video"
 echo "$TIMAAT_STORAGE"|grep -qE '/$'
 if [ "$?" = "1" ]; then
   TIMAAT_STORAGE=$TIMAAT_STORAGE"/"
