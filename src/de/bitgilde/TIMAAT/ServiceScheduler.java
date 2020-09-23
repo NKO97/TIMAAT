@@ -96,7 +96,6 @@ public class ServiceScheduler implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent contextEvent) {
         // context is destroyed interrupts the thread
         t.interrupt();
-        t.stop();
         t = null;
     }
 
