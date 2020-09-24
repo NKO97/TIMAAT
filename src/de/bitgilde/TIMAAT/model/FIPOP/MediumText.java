@@ -25,11 +25,6 @@ public class MediumText implements Serializable {
 
 	private String content;
 
-	//bi-directional many-to-one association to AnalysisContentAudio
-	@OneToMany(mappedBy="mediumText")
-	@JsonManagedReference(value = "MediumText-AnalysisContentAudio")
-	private Set<AnalysisContentAudio> analysisContentAudios;
-
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
@@ -57,28 +52,6 @@ public class MediumText implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public Set<AnalysisContentAudio> getAnalysisContentAudios() {
-		return this.analysisContentAudios;
-	}
-
-	public void setAnalysisContentAudios(Set<AnalysisContentAudio> analysisContentAudios) {
-		this.analysisContentAudios = analysisContentAudios;
-	}
-
-	public AnalysisContentAudio addAnalysisContentAudio(AnalysisContentAudio analysisContentAudio) {
-		getAnalysisContentAudios().add(analysisContentAudio);
-		analysisContentAudio.setMediumText(this);
-
-		return analysisContentAudio;
-	}
-
-	public AnalysisContentAudio removeAnalysisContentAudio(AnalysisContentAudio analysisContentAudio) {
-		getAnalysisContentAudios().remove(analysisContentAudio);
-		analysisContentAudio.setMediumText(null);
-
-		return analysisContentAudio;
 	}
 
 	public Medium getMedium() {

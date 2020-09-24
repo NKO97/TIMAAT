@@ -51,29 +51,11 @@ public class Annotation implements Serializable {
 	@Column(name="sequence_end_time", columnDefinition = "INT")
 	private long sequenceEndTime;
 	
-	//bi-directional many-to-one association to AnalysisContentAudio
-	@ManyToOne
-	@JoinColumn(name="analysis_content_audio_id")
-	@JsonBackReference(value = "AnalysisContentAudio-Annotation")
-	private AnalysisContentAudio analysisContentAudio;
-
-	//bi-directional many-to-one association to AnalysisContentVisual
-	@ManyToOne
-	@JoinColumn(name="analysis_content_visual_id")
-	@JsonBackReference(value = "AnalysisContentVisual-Annotation")
-	private AnalysisContentVisual analysisContentVisual;
-
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
 	@JsonBackReference(value = "SegmentSelectorType-Annotation")
 	private SegmentSelectorType segmentSelectorType;
-
-	//bi-directional many-to-one association to AnalysisContent
-	@ManyToOne
-	@JoinColumn(name="analysis_content_id")
-	@JsonBackReference(value = "AnalysisContent-Annotation")
-	private AnalysisContent analysisContent;
 
 	//bi-directional many-to-one association to Iri
 	@ManyToOne
@@ -255,36 +237,12 @@ public class Annotation implements Serializable {
 		this.sequenceStartTime = sequenceStartTime;
 	}
 
-	public AnalysisContentAudio getAnalysisContentAudio() {
-		return this.analysisContentAudio;
-	}
-
-	public void setAnalysisContentAudio(AnalysisContentAudio analysisContentAudio) {
-		this.analysisContentAudio = analysisContentAudio;
-	} 
-
-	public AnalysisContentVisual getAnalysisContentVisual() {
-		return this.analysisContentVisual;
-	}
-
-	public void setAnalysisContentVisual(AnalysisContentVisual analysisContentVisual) {
-		this.analysisContentVisual = analysisContentVisual;
-	}
-
 	public SegmentSelectorType getSegmentSelectorType() {
 		return this.segmentSelectorType;
 	}
 
 	public void setSegmentSelectorType(SegmentSelectorType segmentSelectorType) {
 		this.segmentSelectorType = segmentSelectorType;
-	}
-
-	public AnalysisContent getAnalysisContent() {
-		return this.analysisContent;
-	}
-
-	public void setAnalysisContent(AnalysisContent analysisContent) {
-		this.analysisContent = analysisContent;
 	}
 
 	public Iri getIri() {

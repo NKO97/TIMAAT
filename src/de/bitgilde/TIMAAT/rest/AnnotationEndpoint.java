@@ -266,9 +266,6 @@ public class AnnotationEndpoint {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 
-		newAnno.setAnalysisContentAudio(null);
-		newAnno.setAnalysisContentVisual(null);
-		newAnno.setAnalysisContent(null);
 		newAnno.setSegmentSelectorType(entityManager.find(SegmentSelectorType.class, 1)); // TODO
 		
 		SelectorSvg newSVG = newAnno.getSelectorSvgs().get(0);
