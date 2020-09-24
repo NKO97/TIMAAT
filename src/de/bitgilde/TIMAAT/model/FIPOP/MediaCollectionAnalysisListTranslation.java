@@ -28,6 +28,10 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 	@Column(nullable=false, length=255)
 	private String title;
 
+	//bi-directional many-to-one association to Language
+	@ManyToOne
+	private Language language;
+
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	@ManyToOne
 	@JoinColumn(name="media_collection_analysis_list_id", nullable=false)
@@ -66,6 +70,14 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Language getLanguage() {
+		return this.language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public MediaCollectionAnalysisList getMediaCollectionAnalysisList() {

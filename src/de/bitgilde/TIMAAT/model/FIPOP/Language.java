@@ -23,9 +23,12 @@ public class Language implements Serializable {
 
 	private String code;
 
+	@Column(name="is_system_language")
+	private byte isSystemLanguage;
+
 	private String name;
 
-	//bi-directional many-to-one association to ActantialModelFacetTypeTranslation
+	// //bi-directional many-to-one association to ActantialModelFacetTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ActantialModelFacetTypeTranslation> actantialModelFacetTypeTranslations;
@@ -34,6 +37,10 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
+
+	//bi-directional many-to-one association to ActorPersonTranslation
+	@OneToMany(mappedBy="language")
+	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	//bi-directional many-to-one association to ActorTypeTranslation
 	@OneToMany(mappedBy="language")
@@ -45,23 +52,27 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<AddressTypeTranslation> addressTypeTranslations;
 
-	//bi-directional many-to-one association to AmbienceSubtypeTranslation
+	// //bi-directional many-to-one association to AmbienceSubtypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<AmbienceSubtypeTranslation> ambienceSubtypeTranslations;
 
-	//bi-directional many-to-one association to AmbienceTypeTranslation
+	// //bi-directional many-to-one association to AmbienceTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<AmbienceTypeTranslation> ambienceTypeTranslations;
 
+	//bi-directional many-to-one association to AnalysisMethodTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<AnalysisMethodTypeTranslation> analysisMethodTypeTranslations;
+
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
-	//bi-directional many-to-one association to AnnotationTextualBodyTranslation
+	// //bi-directional many-to-one association to AnnotationTextualBodyTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<AnnotationTextualBodyTranslation> annotationTextualBodyTranslations;
@@ -69,80 +80,79 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to AnnotationTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// @JsonManagedReference(value = "Language-AnnotationTranslation")
 	private List<AnnotationTranslation> annotationTranslations;
 
-	//bi-directional many-to-one association to ArticulationTranslation
+	// //bi-directional many-to-one association to ArticulationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ArticulationTranslation> articulationTranslations;
 
-	//bi-directional many-to-one association to AudienceTranslation
+	// //bi-directional many-to-one association to AudienceTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<AudienceTranslation> audienceTranslations;
 
-	//bi-directional many-to-one association to AudioPostProductionTranslation
+	// //bi-directional many-to-one association to AudioPostProductionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<AudioPostProductionTranslation> audioPostProductionTranslations;
 
-	//bi-directional many-to-one association to CameraAxisOfActionTranslation
+	// //bi-directional many-to-one association to CameraAxisOfActionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraAxisOfActionTranslation> cameraAxisOfActionTranslations;
 
-	//bi-directional many-to-one association to CameraDistanceTranslation
+	// //bi-directional many-to-one association to CameraDistanceTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraDistanceTranslation> cameraDistanceTranslations;
 
-	//bi-directional many-to-one association to CameraElevationTranslation
+	// //bi-directional many-to-one association to CameraElevationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraElevationTranslation> cameraElevationTranslations;
 
-	//bi-directional many-to-one association to CameraHandlingTranslation
+	// //bi-directional many-to-one association to CameraHandlingTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraHandlingTranslation> cameraHandlingTranslations;
 
-	//bi-directional many-to-one association to CameraHorizontalAngleTranslation
+	// //bi-directional many-to-one association to CameraHorizontalAngleTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraHorizontalAngleTranslation> cameraHorizontalAngleTranslations;
 
-	//bi-directional many-to-one association to CameraMovementCharacteristicTranslation
+	// //bi-directional many-to-one association to CameraMovementCharacteristicTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraMovementCharacteristicTranslation> cameraMovementCharacteristicTranslations;
 
-	//bi-directional many-to-one association to CameraMovementTranslation
+	// //bi-directional many-to-one association to CameraMovementTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CameraMovementTranslation> cameraMovementTranslations;
 
 	//bi-directional many-to-one association to CameraShotTypeTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<CameraShotTypeTranslation> cameraShotTypeTranslations;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<CameraShotTypeTranslation> cameraShotTypeTranslations;
 
 	//bi-directional many-to-one association to CameraVerticalAngleTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslations;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslations;
 
-	//bi-directional many-to-one association to ChangeInDynamicsTranslation
+	// //bi-directional many-to-one association to ChangeInDynamicsTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ChangeInDynamicsTranslation> changeInDynamicsTranslations;
 
-	//bi-directional many-to-one association to ChangeInTempoTranslation
+	// //bi-directional many-to-one association to ChangeInTempoTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ChangeInTempoTranslation> changeInTempoTranslations;
 
-	//bi-directional many-to-one association to CinematicStorytellingConventionTranslation
+	// //bi-directional many-to-one association to CinematicStorytellingConventionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<CinematicStorytellingConventionTranslation> cinematicStorytellingConventionTranslations;
@@ -152,27 +162,32 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<CitizenshipTranslation> citizenshipTranslations;
 
-	//bi-directional many-to-one association to ConceptColorTranslation
+	//bi-directional many-to-one association to ColorTemperatureTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<ColorTemperatureTranslation> colorTemperatureTranslations;
+
+	// //bi-directional many-to-one association to ConceptColorTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ConceptColorTranslation> conceptColorTranslations;
 
-	//bi-directional many-to-one association to ConceptDirectionTranslation
+	// //bi-directional many-to-one association to ConceptDirectionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ConceptDirectionTranslation> conceptDirectionTranslations;
 
-	//bi-directional many-to-one association to ConceptPositionTranslation
+	// //bi-directional many-to-one association to ConceptPositionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ConceptPositionTranslation> conceptPositionTranslations;
 
-	//bi-directional many-to-one association to ConceptTimeTranslation
+	// //bi-directional many-to-one association to ConceptTimeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ConceptTimeTranslation> conceptTimeTranslations;
 
-	//bi-directional many-to-one association to DynamicMarkingTranslation
+	// //bi-directional many-to-one association to DynamicMarkingTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<DynamicMarkingTranslation> dynamicMarkingTranslations;
@@ -202,27 +217,27 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<EventTypeTranslation> eventTypeTranslations;
 
-	//bi-directional many-to-one association to FrequencyOfEventsTranslation
+	// //bi-directional many-to-one association to FrequencyOfEventsTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<FrequencyOfEventsTranslation> frequencyOfEventsTranslations;
 
-	//bi-directional many-to-one association to GreimasActantialModelTranslation
+	// //bi-directional many-to-one association to GreimasActantialModelTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<GreimasActantialModelTranslation> greimasActantialModelTranslations;
 
-	//bi-directional many-to-one association to InstrumentSubtypeTranslation
+	// //bi-directional many-to-one association to InstrumentSubtypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<InstrumentSubtypeTranslation> instrumentSubtypeTranslations;
 
-	//bi-directional many-to-one association to InstrumentTypeTranslation
+	// //bi-directional many-to-one association to InstrumentTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<InstrumentTypeTranslation> instrumentTypeTranslations;
 
-	//bi-directional many-to-one association to LevelOfConcreteActionTranslation
+	// //bi-directional many-to-one association to LevelOfConcreteActionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<LevelOfConcreteActionTranslation> levelOfConcreteActionTranslations;
@@ -237,15 +252,15 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
-	//bi-directional many-to-one association to MartinezScheffelUnreliableNarrationTranslation
+	// //bi-directional many-to-one association to MartinezScheffelUnreliableNarrationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<MartinezScheffelUnreliableNarrationTranslation> martinezScheffelUnreliableNarrationTranslations;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisListTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations;
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations;
 
 	//bi-directional many-to-one association to MediaCollectionTypeTranslation
 	@OneToMany(mappedBy="language")
@@ -260,7 +275,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to MediumAnalysisListTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-MediumAnalysisListTranslation")
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to MediumEventRelationshipTypeTranslation
@@ -278,72 +292,67 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<MediumLanguageTypeTranslation> mediumLanguageTypeTranslations;
 
-	//bi-directional many-to-one association to MotivationTranslation
+	// //bi-directional many-to-one association to MotivationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<MotivationTranslation> motivationTranslations;
 
-	//bi-directional many-to-one association to MusicalKeyTranslation
+	// //bi-directional many-to-one association to MusicalKeyTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<MusicalKeyTranslation> musicalKeyTranslations;
 
-	//bi-directional many-to-one association to NarrativeDistanceTranslation
+	// //bi-directional many-to-one association to NarrativeDistanceTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarrativeDistanceTranslation> narrativeDistanceTranslations;
 
-	//bi-directional many-to-one association to NarrativeFocalizationTranslation
+	// //bi-directional many-to-one association to NarrativeFocalizationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarrativeFocalizationTranslation> narrativeFocalizationTranslations;
 
-	//bi-directional many-to-one association to NarrativeLevelTranslation
+	// //bi-directional many-to-one association to NarrativeLevelTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarrativeLevelTranslation> narrativeLevelTranslations;
 
-	//bi-directional many-to-one association to NarrativeMovementTranslation
+	// //bi-directional many-to-one association to NarrativeMovementTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarrativeMovementTranslation> narrativeMovementTranslations;
 
-	//bi-directional many-to-one association to NarrativeSituationTranslation
+	// //bi-directional many-to-one association to NarrativeSituationTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarrativeSituationTranslation> narrativeSituationTranslations;
 
-	//bi-directional many-to-one association to NarratorRelationshipTranslation
+	// //bi-directional many-to-one association to NarratorRelationshipTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NarratorRelationshipTranslation> narratorRelationshipTranslations;
 
-	//bi-directional many-to-one association to NoiseSubtypeTranslation
+	// //bi-directional many-to-one association to NoiseSubtypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NoiseSubtypeTranslation> noiseSubtypeTranslations;
 
-	//bi-directional many-to-one association to NoiseTypeTranslation
+	// //bi-directional many-to-one association to NoiseTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<NoiseTypeTranslation> noiseTypeTranslations;
-
-	//bi-directional many-to-one association to ActorPersonTranslation
-	@OneToMany(mappedBy="language")
-	@JsonIgnore
-	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	//bi-directional many-to-one association to PhoneNumberTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
 
-	//bi-directional many-to-one association to RatingCategoryTranslation
+	// //bi-directional many-to-one association to RatingCategoryTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<RatingCategoryTranslation> ratingCategoryTranslations;
 
-	//bi-directional many-to-one association to ReligiousReferenceTranslation
+	// //bi-directional many-to-one association to ReligiousReferenceTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ReligiousReferenceTranslation> religiousReferenceTranslations;
@@ -361,7 +370,6 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to SegmentSelectorTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-SegmentSelectorTypeTranslation")
 	private List<SegmentSelectorTypeTranslation> segmentSelectorTypeTranslations;
 
 	//bi-directional many-to-one association to SexTranslation
@@ -369,72 +377,72 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<SexTranslation> sexTranslations;
 
-	//bi-directional many-to-one association to SiocContainer
+	// //bi-directional many-to-one association to SiocContainer
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocContainer> siocContainers;
 
-	//bi-directional many-to-one association to SiocContainerAccessTypeTranslation
+	// //bi-directional many-to-one association to SiocContainerAccessTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocContainerAccessTypeTranslation> siocContainerAccessTypeTranslations;
 
-	//bi-directional many-to-one association to SiocContainerPermissionAreaTranslation
+	// //bi-directional many-to-one association to SiocContainerPermissionAreaTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocContainerPermissionAreaTranslation> siocContainerPermissionAreaTranslations;
 
-	//bi-directional many-to-one association to SiocContainerTypeTranslation
+	// //bi-directional many-to-one association to SiocContainerTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocContainerTypeTranslation> siocContainerTypeTranslations;
 
-	//bi-directional many-to-one association to SiocItem
+	// //bi-directional many-to-one association to SiocItem
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocItem> siocItems;
 
-	//bi-directional many-to-one association to SiocItemPostingTypeTranslation
+	// //bi-directional many-to-one association to SiocItemPostingTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocItemPostingTypeTranslation> siocItemPostingTypeTranslations;
 
-	//bi-directional many-to-one association to SiocReactionTranslation
+	// //bi-directional many-to-one association to SiocReactionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocReactionTranslation> siocReactionTranslations;
 
-	//bi-directional many-to-one association to SiocSiteTypeTranslation
+	// //bi-directional many-to-one association to SiocSiteTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocSiteTypeTranslation> siocSiteTypeTranslations;
 
-	//bi-directional many-to-one association to SiocUserAccountPrivacySettingTranslation
+	// //bi-directional many-to-one association to SiocUserAccountPrivacySettingTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SiocUserAccountPrivacySettingTranslation> siocUserAccountPrivacySettingTranslations;
 
-	//bi-directional many-to-one association to SongStructureElementTranslation
+	// //bi-directional many-to-one association to SongStructureElementTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SongStructureElementTranslation> songStructureElementTranslations;
 
-	//bi-directional many-to-one association to SoundEffectSubtypeTranslation
+	// //bi-directional many-to-one association to SoundEffectSubtypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SoundEffectSubtypeTranslation> soundEffectSubtypeTranslations;
 
-	//bi-directional many-to-one association to SoundEffectTypeTranslation
+	// //bi-directional many-to-one association to SoundEffectTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SoundEffectTypeTranslation> soundEffectTypeTranslations;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypeActorPersonTranslation
+	// //bi-directional many-to-one association to SpatialSemanticsTypeActorPersonTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations;
 
-	//bi-directional many-to-one association to SpatialSemanticsTypeSpaceTranslation
+	// //bi-directional many-to-one association to SpatialSemanticsTypeSpaceTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<SpatialSemanticsTypeSpaceTranslation> spatialSemanticsTypeSpaceTranslations;
@@ -442,15 +450,14 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to SvgShapeTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	// 	@JsonManagedReference(value = "Language-SvgShapeTypeTranslation")
 	private List<SvgShapeTypeTranslation> svgShapeTypeTranslations;
 
-	//bi-directional many-to-one association to TempoMarkingTranslation
+	// //bi-directional many-to-one association to TempoMarkingTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<TempoMarkingTranslation> tempoMarkingTranslations;
 
-	//bi-directional many-to-one association to TemporalOrderTranslation
+	// //bi-directional many-to-one association to TemporalOrderTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<TemporalOrderTranslation> temporalOrderTranslations;
@@ -460,7 +467,7 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<TerritoryTranslation> territoryTranslations;
 
-	//bi-directional many-to-one association to TimeOfTheNarratingTranslation
+	// //bi-directional many-to-one association to TimeOfTheNarratingTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<TimeOfTheNarratingTranslation> timeOfTheNarratingTranslations;
@@ -470,22 +477,23 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<Title> titles;
 
-	//bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation
+	// //bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation
 	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
+	@JsonIgnore
+
 	// private List<VanSijllCinematicStorytellingTranslation> vanSijllCinematicStorytellingTranslations;
 
-	//bi-directional many-to-one association to VoiceTypeTranslation
+	// //bi-directional many-to-one association to VoiceTypeTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<VoiceTypeTranslation> voiceTypeTranslations;
 
-	//bi-directional many-to-one association to WorkAnalysisListTranslation
+	// //bi-directional many-to-one association to WorkAnalysisListTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<WorkAnalysisListTranslation> workAnalysisListTranslations;
 
-	//bi-directional many-to-one association to ZelizerBeeseVoiceOfTheVisualTranslation
+	// //bi-directional many-to-one association to ZelizerBeeseVoiceOfTheVisualTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<ZelizerBeeseVoiceOfTheVisualTranslation> zelizerBeeseVoiceOfTheVisualTranslations;
@@ -507,6 +515,14 @@ public class Language implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public byte getIsSystemLanguage() {
+		return this.isSystemLanguage;
+	}
+
+	public void setIsSystemLanguage(byte isSystemLanguage) {
+		this.isSystemLanguage = isSystemLanguage;
 	}
 
 	public String getName() {
@@ -559,6 +575,28 @@ public class Language implements Serializable {
 		actorActorRelationshipTypeTranslation.setLanguage(null);
 
 		return actorActorRelationshipTypeTranslation;
+	}
+
+	public List<ActorPersonTranslation> getActorPersonTranslations() {
+		return this.actorPersonTranslations;
+	}
+
+	public void setActorPersonTranslations(List<ActorPersonTranslation> actorPersonTranslations) {
+		this.actorPersonTranslations = actorPersonTranslations;
+	}
+
+	public ActorPersonTranslation addActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().add(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(this);
+
+		return actorPersonTranslation;
+	}
+
+	public ActorPersonTranslation removeActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
+		getActorPersonTranslations().remove(actorPersonTranslation);
+		actorPersonTranslation.setLanguage(null);
+
+		return actorPersonTranslation;
 	}
 
 	public List<ActorTypeTranslation> getActorTypeTranslations() {
@@ -648,6 +686,28 @@ public class Language implements Serializable {
 
 	// 	return ambienceTypeTranslation;
 	// }
+
+	public List<AnalysisMethodTypeTranslation> getAnalysisMethodTypeTranslations() {
+		return this.analysisMethodTypeTranslations;
+	}
+
+	public void setAnalysisMethodTypeTranslations(List<AnalysisMethodTypeTranslation> analysisMethodTypeTranslations) {
+		this.analysisMethodTypeTranslations = analysisMethodTypeTranslations;
+	}
+
+	public AnalysisMethodTypeTranslation addAnalysisMethodTypeTranslation(AnalysisMethodTypeTranslation analysisMethodTypeTranslation) {
+		getAnalysisMethodTypeTranslations().add(analysisMethodTypeTranslation);
+		analysisMethodTypeTranslation.setLanguage(this);
+
+		return analysisMethodTypeTranslation;
+	}
+
+	public AnalysisMethodTypeTranslation removeAnalysisMethodTypeTranslation(AnalysisMethodTypeTranslation analysisMethodTypeTranslation) {
+		getAnalysisMethodTypeTranslations().remove(analysisMethodTypeTranslation);
+		analysisMethodTypeTranslation.setLanguage(null);
+
+		return analysisMethodTypeTranslation;
+	}
 
 	public List<AnalysisSegmentTranslation> getAnalysisSegmentTranslations() {
 		return this.analysisSegmentTranslations;
@@ -935,49 +995,49 @@ public class Language implements Serializable {
 	// 	return cameraMovementTranslation;
 	// }
 
-	// public List<CameraShotTypeTranslation> getCameraShotTypeTranslations() {
-	// 	return this.cameraShotTypeTranslations;
-	// }
+	public List<CameraShotTypeTranslation> getCameraShotTypeTranslations() {
+		return this.cameraShotTypeTranslations;
+	}
 
-	// public void setCameraShotTypeTranslations(List<CameraShotTypeTranslation> cameraShotTypeTranslations) {
-	// 	this.cameraShotTypeTranslations = cameraShotTypeTranslations;
-	// }
+	public void setCameraShotTypeTranslations(List<CameraShotTypeTranslation> cameraShotTypeTranslations) {
+		this.cameraShotTypeTranslations = cameraShotTypeTranslations;
+	}
 
-	// public CameraShotTypeTranslation addCameraShotTypeTranslation(CameraShotTypeTranslation cameraShotTypeTranslation) {
-	// 	getCameraShotTypeTranslations().add(cameraShotTypeTranslation);
-	// 	cameraShotTypeTranslation.setLanguage(this);
+	public CameraShotTypeTranslation addCameraShotTypeTranslation(CameraShotTypeTranslation cameraShotTypeTranslation) {
+		getCameraShotTypeTranslations().add(cameraShotTypeTranslation);
+		cameraShotTypeTranslation.setLanguage(this);
 
-	// 	return cameraShotTypeTranslation;
-	// }
+		return cameraShotTypeTranslation;
+	}
 
-	// public CameraShotTypeTranslation removeCameraShotTypeTranslation(CameraShotTypeTranslation cameraShotTypeTranslation) {
-	// 	getCameraShotTypeTranslations().remove(cameraShotTypeTranslation);
-	// 	cameraShotTypeTranslation.setLanguage(null);
+	public CameraShotTypeTranslation removeCameraShotTypeTranslation(CameraShotTypeTranslation cameraShotTypeTranslation) {
+		getCameraShotTypeTranslations().remove(cameraShotTypeTranslation);
+		cameraShotTypeTranslation.setLanguage(null);
 
-	// 	return cameraShotTypeTranslation;
-	// }
+		return cameraShotTypeTranslation;
+	}
 
-	// public List<CameraVerticalAngleTranslation> getCameraVerticalAngleTranslations() {
-	// 	return this.cameraVerticalAngleTranslations;
-	// }
+	public List<CameraVerticalAngleTranslation> getCameraVerticalAngleTranslations() {
+		return this.cameraVerticalAngleTranslations;
+	}
 
-	// public void setCameraVerticalAngleTranslations(List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslations) {
-	// 	this.cameraVerticalAngleTranslations = cameraVerticalAngleTranslations;
-	// }
+	public void setCameraVerticalAngleTranslations(List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslations) {
+		this.cameraVerticalAngleTranslations = cameraVerticalAngleTranslations;
+	}
 
-	// public CameraVerticalAngleTranslation addCameraVerticalAngleTranslation(CameraVerticalAngleTranslation cameraVerticalAngleTranslation) {
-	// 	getCameraVerticalAngleTranslations().add(cameraVerticalAngleTranslation);
-	// 	cameraVerticalAngleTranslation.setLanguage(this);
+	public CameraVerticalAngleTranslation addCameraVerticalAngleTranslation(CameraVerticalAngleTranslation cameraVerticalAngleTranslation) {
+		getCameraVerticalAngleTranslations().add(cameraVerticalAngleTranslation);
+		cameraVerticalAngleTranslation.setLanguage(this);
 
-	// 	return cameraVerticalAngleTranslation;
-	// }
+		return cameraVerticalAngleTranslation;
+	}
 
-	// public CameraVerticalAngleTranslation removeCameraVerticalAngleTranslation(CameraVerticalAngleTranslation cameraVerticalAngleTranslation) {
-	// 	getCameraVerticalAngleTranslations().remove(cameraVerticalAngleTranslation);
-	// 	cameraVerticalAngleTranslation.setLanguage(null);
+	public CameraVerticalAngleTranslation removeCameraVerticalAngleTranslation(CameraVerticalAngleTranslation cameraVerticalAngleTranslation) {
+		getCameraVerticalAngleTranslations().remove(cameraVerticalAngleTranslation);
+		cameraVerticalAngleTranslation.setLanguage(null);
 
-	// 	return cameraVerticalAngleTranslation;
-	// }
+		return cameraVerticalAngleTranslation;
+	}
 
 	// public List<ChangeInDynamicsTranslation> getChangeInDynamicsTranslations() {
 	// 	return this.changeInDynamicsTranslations;
@@ -1065,6 +1125,28 @@ public class Language implements Serializable {
 		citizenshipTranslation.setLanguage(null);
 
 		return citizenshipTranslation;
+	}
+
+	public List<ColorTemperatureTranslation> getColorTemperatureTranslations() {
+		return this.colorTemperatureTranslations;
+	}
+
+	public void setColorTemperatureTranslations(List<ColorTemperatureTranslation> colorTemperatureTranslations) {
+		this.colorTemperatureTranslations = colorTemperatureTranslations;
+	}
+
+	public ColorTemperatureTranslation addColorTemperatureTranslation(ColorTemperatureTranslation colorTemperatureTranslation) {
+		getColorTemperatureTranslations().add(colorTemperatureTranslation);
+		colorTemperatureTranslation.setLanguage(this);
+
+		return colorTemperatureTranslation;
+	}
+
+	public ColorTemperatureTranslation removeColorTemperatureTranslation(ColorTemperatureTranslation colorTemperatureTranslation) {
+		getColorTemperatureTranslations().remove(colorTemperatureTranslation);
+		colorTemperatureTranslation.setLanguage(null);
+
+		return colorTemperatureTranslation;
 	}
 
 	// public List<ConceptColorTranslation> getConceptColorTranslations() {
@@ -1463,27 +1545,27 @@ public class Language implements Serializable {
 	// 	return martinezScheffelUnreliableNarrationTranslation;
 	// }
 
-	// public List<MediaCollectionAnalysisListTranslation> getMediaCollectionAnalysisListTranslations() {
-	// 	return this.mediaCollectionAnalysisListTranslations;
-	// }
+	public List<MediaCollectionAnalysisListTranslation> getMediaCollectionAnalysisListTranslations() {
+		return this.mediaCollectionAnalysisListTranslations;
+	}
 
-	// public void setMediaCollectionAnalysisListTranslations(List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations) {
-	// 	this.mediaCollectionAnalysisListTranslations = mediaCollectionAnalysisListTranslations;
-	// }
+	public void setMediaCollectionAnalysisListTranslations(List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations) {
+		this.mediaCollectionAnalysisListTranslations = mediaCollectionAnalysisListTranslations;
+	}
 
-	// public MediaCollectionAnalysisListTranslation addMediaCollectionAnalysisListTranslation(MediaCollectionAnalysisListTranslation mediaCollectionAnalysisListTranslation) {
-	// 	getMediaCollectionAnalysisListTranslations().add(mediaCollectionAnalysisListTranslation);
-	// 	mediaCollectionAnalysisListTranslation.setLanguage(this);
+	public MediaCollectionAnalysisListTranslation addMediaCollectionAnalysisListTranslation(MediaCollectionAnalysisListTranslation mediaCollectionAnalysisListTranslation) {
+		getMediaCollectionAnalysisListTranslations().add(mediaCollectionAnalysisListTranslation);
+		mediaCollectionAnalysisListTranslation.setLanguage(this);
 
-	// 	return mediaCollectionAnalysisListTranslation;
-	// }
+		return mediaCollectionAnalysisListTranslation;
+	}
 
-	// public MediaCollectionAnalysisListTranslation removeMediaCollectionAnalysisListTranslation(MediaCollectionAnalysisListTranslation mediaCollectionAnalysisListTranslation) {
-	// 	getMediaCollectionAnalysisListTranslations().remove(mediaCollectionAnalysisListTranslation);
-	// 	mediaCollectionAnalysisListTranslation.setLanguage(null);
+	public MediaCollectionAnalysisListTranslation removeMediaCollectionAnalysisListTranslation(MediaCollectionAnalysisListTranslation mediaCollectionAnalysisListTranslation) {
+		getMediaCollectionAnalysisListTranslations().remove(mediaCollectionAnalysisListTranslation);
+		mediaCollectionAnalysisListTranslation.setLanguage(null);
 
-	// 	return mediaCollectionAnalysisListTranslation;
-	// }
+		return mediaCollectionAnalysisListTranslation;
+	}
 
 	public List<MediaCollectionTypeTranslation> getMediaCollectionTypeTranslations() {
 		return this.mediaCollectionTypeTranslations;
@@ -1836,28 +1918,6 @@ public class Language implements Serializable {
 
 	// 	return noiseTypeTranslation;
 	// }
-
-	public List<ActorPersonTranslation> getActorPersonTranslations() {
-		return this.actorPersonTranslations;
-	}
-
-	public void setActorPersonTranslations(List<ActorPersonTranslation> actorPersonTranslations) {
-		this.actorPersonTranslations = actorPersonTranslations;
-	}
-
-	public ActorPersonTranslation addActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
-		getActorPersonTranslations().add(actorPersonTranslation);
-		actorPersonTranslation.setLanguage(this);
-
-		return actorPersonTranslation;
-	}
-
-	public ActorPersonTranslation removeActorPersonTranslation(ActorPersonTranslation actorPersonTranslation) {
-		getActorPersonTranslations().remove(actorPersonTranslation);
-		actorPersonTranslation.setLanguage(null);
-
-		return actorPersonTranslation;
-	}
 
 	public List<PhoneNumberTypeTranslation> getPhoneNumberTypeTranslations() {
 		return this.phoneNumberTypeTranslations;
