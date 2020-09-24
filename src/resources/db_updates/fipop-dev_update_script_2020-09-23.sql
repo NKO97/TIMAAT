@@ -87,6 +87,7 @@ CREATE INDEX `fk_analysis_method_has_religious_reference_analysis_method_idx` ON
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`analysis_method_type` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `is_static` TINYINT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -604,30 +605,30 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (1);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (2);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (3);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (4);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (5);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (6);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (7);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (8);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (9);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (10);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (11);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (12);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (13);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (14);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (15);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (16);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (17);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (18);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (19);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (20);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (21);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (22);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (23);
-INSERT INTO `FIPOP`.`analysis_method_type` (`id`) VALUES (24);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (1, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (2, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (3, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (4, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (5, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (6, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (7, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (8, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (9, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (10, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (11, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (12, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (13, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (14, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (15, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (16, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (17, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (18, 1);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (19, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (20, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (21, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (22, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (23, 0);
+INSERT INTO `FIPOP`.`analysis_method_type` (`id`, `is_static`) VALUES (24, 0);
 COMMIT;
 
 -- -----------------------------------------------------
