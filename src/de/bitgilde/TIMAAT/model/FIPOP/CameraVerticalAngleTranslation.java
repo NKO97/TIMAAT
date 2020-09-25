@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the camera_vertical_angle_translation database table.
@@ -15,6 +17,7 @@ public class CameraVerticalAngleTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
@@ -22,6 +25,7 @@ public class CameraVerticalAngleTranslation implements Serializable {
 	//bi-directional many-to-one association to CameraVerticalAngle
 	@ManyToOne
 	@JoinColumn(name="camera_vertical_angle_analysis_method_id")
+	@JsonIgnore
 	private CameraVerticalAngle cameraVerticalAngle;
 
 	//bi-directional many-to-one association to Language

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the media_collection_analysis_list_translation database table.
@@ -19,8 +21,8 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(name="language_id", nullable=false)
-	private int languageId;
+	// @Column(name="language_id", nullable=false)
+	// private int languageId;
 
 	@Column(length=4096)
 	private String text;
@@ -35,6 +37,7 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	@ManyToOne
 	@JoinColumn(name="media_collection_analysis_list_id", nullable=false)
+	@JsonIgnore
 	private MediaCollectionAnalysisList mediaCollectionAnalysisList;
 
 	public MediaCollectionAnalysisListTranslation() {
@@ -48,13 +51,13 @@ public class MediaCollectionAnalysisListTranslation implements Serializable {
 		this.id = id;
 	}
 
-	public int getLanguageId() {
-		return this.languageId;
-	}
+	// public int getLanguageId() {
+	// 	return this.languageId;
+	// }
 
-	public void setLanguageId(int languageId) {
-		this.languageId = languageId;
-	}
+	// public void setLanguageId(int languageId) {
+	// 	this.languageId = languageId;
+	// }
 
 	public String getText() {
 		return this.text;

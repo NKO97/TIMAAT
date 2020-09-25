@@ -23,8 +23,8 @@ public class Language implements Serializable {
 
 	private String code;
 
-	@Column(name="is_system_language")
-	private byte isSystemLanguage;
+	@Column(name="is_system_language", columnDefinition = "BOOLEAN")
+	private Boolean isSystemLanguage;
 
 	private String name;
 
@@ -40,6 +40,7 @@ public class Language implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonTranslation
 	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	private List<ActorPersonTranslation> actorPersonTranslations;
 
 	//bi-directional many-to-one association to ActorTypeTranslation
@@ -479,8 +480,7 @@ public class Language implements Serializable {
 
 	// //bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation
 	// @OneToMany(mappedBy="language")
-	@JsonIgnore
-
+	// @JsonIgnore
 	// private List<VanSijllCinematicStorytellingTranslation> vanSijllCinematicStorytellingTranslations;
 
 	// //bi-directional many-to-one association to VoiceTypeTranslation
@@ -517,11 +517,11 @@ public class Language implements Serializable {
 		this.code = code;
 	}
 
-	public byte getIsSystemLanguage() {
+	public Boolean getIsSystemLanguage() {
 		return this.isSystemLanguage;
 	}
 
-	public void setIsSystemLanguage(byte isSystemLanguage) {
+	public void setIsSystemLanguage(Boolean isSystemLanguage) {
 		this.isSystemLanguage = isSystemLanguage;
 	}
 

@@ -50,6 +50,10 @@ public class Annotation implements Serializable {
 
 	@Column(name="sequence_end_time", columnDefinition = "INT")
 	private long sequenceEndTime;
+
+	//bi-directional many-to-one association to Analysis
+	@OneToMany(mappedBy="annotation")
+	private List<Analysis> analysis;
 	
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
@@ -72,6 +76,11 @@ public class Annotation implements Serializable {
 	@JsonProperty("analysisListID")
 	private int analysisListID;
 	
+	// //bi-directional many-to-one association to MediumAnalysisList
+	// @ManyToOne
+	// @JoinColumn(name="medium_analysis_list_id")
+	// private MediumAnalysisList mediumAnalysisList;
+
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
@@ -235,6 +244,28 @@ public class Annotation implements Serializable {
 
 	public void setSequenceStartTime(long sequenceStartTime) {
 		this.sequenceStartTime = sequenceStartTime;
+	}
+
+	public List<Analysis> getAnalysis() {
+		return this.analysis;
+	}
+
+	public void setAnalysis(List<Analysis> analysis) {
+		this.analysis = analysis;
+	}
+
+	public Analysis addAnalysis(Analysis analysis) {
+		getAnalysis().add(analysis);
+		analysis.setAnnotation(this);
+
+		return analysis;
+	}
+
+	public Analysis removeAnalysis(Analysis analysis) {
+		getAnalysis().remove(analysis);
+		analysis.setAnnotation(null);
+
+		return analysis;
 	}
 
 	public SegmentSelectorType getSegmentSelectorType() {

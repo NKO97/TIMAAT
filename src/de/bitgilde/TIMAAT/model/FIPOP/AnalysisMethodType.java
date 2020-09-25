@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -16,10 +19,12 @@ public class AnalysisMethodType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-one association to AnalysisMethod
 	@OneToMany(mappedBy="analysisMethodType")
+	@JsonIgnore
 	private List<AnalysisMethod> analysisMethods;
 
 	//bi-directional many-to-one association to AnalysisMethodTypeTranslation

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the color_temperature_translation database table.
@@ -15,6 +17,7 @@ public class ColorTemperatureTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
@@ -22,6 +25,7 @@ public class ColorTemperatureTranslation implements Serializable {
 	//bi-directional many-to-one association to ColorTemperature
 	@ManyToOne
 	@JoinColumn(name="color_temperature_analysis_method_id")
+	@JsonIgnore
 	private ColorTemperature colorTemperature;
 
 	//bi-directional many-to-one association to Language

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the camera_shot_type_translation database table.
@@ -15,6 +17,7 @@ public class CameraShotTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private String type;
@@ -22,6 +25,7 @@ public class CameraShotTypeTranslation implements Serializable {
 	//bi-directional many-to-one association to CameraShotType
 	@ManyToOne
 	@JoinColumn(name="camera_shot_type_analysis_method_id")
+	@JsonIgnore
 	private CameraShotType cameraShotType;
 
 	//bi-directional many-to-one association to Language
