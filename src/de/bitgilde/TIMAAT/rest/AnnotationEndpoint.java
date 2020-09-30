@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
+import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -169,10 +170,58 @@ public class AnnotationEndpoint {
 					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors.subList(start, start+length))).build();
 				} else 
 					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors)).build();
-				
 			}
 		}
+	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/analysis")
+	public Response getAnnotationAnalysis(
+			@PathParam("id") int id,
+			@QueryParam("draw") Integer draw,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search, // not supported
+			@QueryParam("as_datatable") String asDatatable
+	)	{
+		System.out.println("AnnotationEndpoint: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// sanitize user input
+		if ( draw == null ) draw = 0;
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "a.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "a.analysisMethod.analysisMethodType.analysisMethodTypeTranslation.name";
+		}
+
+		// retrieve annotation
+		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
+		if ( asDatatable == null ) {
+			if ( anno != null ) return Response.ok().entity(anno.getAnalysis()).build();
+			else return Response.status(Status.NOT_FOUND).build();
+		} else {
+			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Analysis>())).build();
+			else {
+				List<Analysis> analysis = anno.getAnalysis();
+				if ( analysis.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, analysis)).build();
+				if ( direction.compareTo("ASC") == 0 ) 
+					Collections.sort(analysis, (Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName() ));
+				else
+					Collections.sort(analysis, ((Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName() )).reversed());
+				if ( start != null ) {
+					if ( start < 0 ) start = 0;
+					if ( start > analysis.size()-1 ) start = analysis.size()-1;
+					if ( length == null ) length = 1;
+					if ( length < 1 ) length = 1;
+					if ( (start+length) > analysis.size() ) length = analysis.size()-start;
+					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis.subList(start, start+length))).build();
+				} else 
+					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis)).build();
+			}
+		}
 	}
 
 	@POST

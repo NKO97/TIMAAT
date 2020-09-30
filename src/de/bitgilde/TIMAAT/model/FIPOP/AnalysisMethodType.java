@@ -22,6 +22,9 @@ public class AnalysisMethodType implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name="is_static", columnDefinition = "BOOLEAN")
+	private Boolean isStatic;
+
 	//bi-directional many-to-one association to AnalysisMethod
 	@OneToMany(mappedBy="analysisMethodType")
 	@JsonIgnore
@@ -40,6 +43,14 @@ public class AnalysisMethodType implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Boolean getIsStatic() {
+		return this.isStatic;
+	}
+
+	public void setIsStatic(Boolean isStatic) {
+		this.isStatic = isStatic;
 	}
 
 	public List<AnalysisMethod> getAnalysisMethods() {

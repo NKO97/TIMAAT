@@ -87,7 +87,7 @@ CREATE INDEX `fk_analysis_method_has_religious_reference_analysis_method_idx` ON
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`analysis_method_type` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `is_static` TINYINT NULL,
+  `is_static` TINYINT(1) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 

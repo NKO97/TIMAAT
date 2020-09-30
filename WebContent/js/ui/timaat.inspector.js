@@ -46,23 +46,23 @@
 			let inspector = this;
 			
 			// actors panel
-			this.ui.actorlang = {
-					"decimal"     : ",",
-					"thousands"   : ".",
-					"search"      : "",
-					"searchPlaceholder": "Suche Actors",
-					"processing"  : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
-					"lengthMenu"  : "Zeige _MENU_ Einträge",
-					"zeroRecords" : "Keine Actors gefunden.",
-					"info"        : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
-					"infoEmpty"   : "Keine Actors gefunden.",
-					"infoFiltered": '&mdash; <i class="fas fa-search"></i> _TOTAL_',
-					"paginate"    : {
-						"first"   : "<<",
-						"previous": "<",
-						"next"    : ">",
-						"last"    : ">>"
-					}
+			this.ui.actorLang = {
+				"decimal"          : ",",
+				"thousands"        : ".",
+				"search"           : "",
+				"searchPlaceholder": "Suche Actors",
+				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
+				"lengthMenu"       : "Zeige _MENU_ Einträge",
+				"zeroRecords"      : "Keine Actors gefunden.",
+				"info"             : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
+				"infoEmpty"        : "Keine Actors gefunden.",
+				"infoFiltered"     : '&mdash; <i class="fas fa-search"></i> _TOTAL_',
+				"paginate"         : {
+					"first"   : "<<",
+					"previous": "<",
+					"next"    : ">",
+					"last"    : ">>"
+				}
 			};
 
 			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
@@ -142,7 +142,7 @@
 						return nameDisplay;
 					}
 				}],
-				language: this.ui.actorlang,
+				language: this.ui.actorLang,
 			});
 //			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Verfügbare Actors');
 			
@@ -219,7 +219,7 @@
 						return nameDisplay;
 					}
 				}],
-				language: this.ui.actorlang,
+				language: this.ui.actorLang,
 			});
 
 			// attach listeners
@@ -413,6 +413,9 @@
 			this.setItem(null);
 			this.ui.dataTableActors.clear();
 			this.ui.dataTableActors.ajax.reload();
+			console.log("TCL: reset");
+			TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.clear();
+			TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 		}
 		
 		switchPosition() {
@@ -444,10 +447,14 @@
 			this.disablePanel('timaat-inspector-actors');
 			this.disablePanel('timaat-inspector-events');
 			this.disablePanel('timaat-inspector-locations');
+			this.disablePanel('timaat-inspector-analysis');
 			this.ui.keyframeList.children().detach();
 			
 			// actors panel default UI setting
 			this.ui.dataTableAnnoActors.ajax.url('api/annotation/0/actors');
+
+			// analysis panel default UI setting
+			TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/0/analysis');
 
 			if ( !type ) {
 				if ( this.isOpen ) this.open('timaat-inspector-metadata');
@@ -464,6 +471,7 @@
 						this.enablePanel('timaat-inspector-actors');
 						this.enablePanel('timaat-inspector-events');
 						this.enablePanel('timaat-inspector-locations');
+						this.enablePanel('timaat-inspector-analysis');
 					}
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
@@ -510,6 +518,10 @@
 						this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
 						this.ui.dataTableAnnoActors.ajax.reload();
 						this.ui.dataTableActors.ajax.reload();
+
+						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/'+item.model.id+'/analysis');
+						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
+						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 					}
 				}
 				// analysis lists

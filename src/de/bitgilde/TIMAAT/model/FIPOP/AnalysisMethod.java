@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -21,6 +24,7 @@ public class AnalysisMethod implements Serializable {
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="analysisMethod")
+	@JsonIgnore
 	private List<Analysis> analysis;
 
 	// //bi-directional one-to-one association to AnalysisAmbientSound
@@ -147,18 +151,18 @@ public class AnalysisMethod implements Serializable {
 		this.analysis = analysis;
 	}
 
-	public Analysis addAnalysi(Analysis analysi) {
-		getAnalysis().add(analysi);
-		analysi.setAnalysisMethod(this);
+	public Analysis addAnalysis(Analysis analysis) {
+		getAnalysis().add(analysis);
+		analysis.setAnalysisMethod(this);
 
-		return analysi;
+		return analysis;
 	}
 
-	public Analysis removeAnalysi(Analysis analysi) {
-		getAnalysis().remove(analysi);
-		analysi.setAnalysisMethod(null);
+	public Analysis removeAnalysis(Analysis analysis) {
+		getAnalysis().remove(analysis);
+		analysis.setAnalysisMethod(null);
 
-		return analysi;
+		return analysis;
 	}
 
 	// public AnalysisAmbientSound getAnalysisAmbientSound() {

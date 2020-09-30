@@ -28,6 +28,7 @@
 			TIMAAT.LocationDatasets.init();
 			TIMAAT.MediaCollectionDatasets.init();
 			TIMAAT.MediaDatasets.init();
+			TIMAAT.AnalysisDatasets.init();
 			// Lists
 			TIMAAT.RoleLists.init();
 			TIMAAT.CategoryLists.init();

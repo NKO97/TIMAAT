@@ -2624,7 +2624,7 @@
 		},
 
 		loadActorDataTables: async function() {
-			console.log("TCL: loadActorDataTables: async function()")
+			console.log("TCL: loadActorDataTables: async function()");
 			TIMAAT.ActorDatasets.setupActorDatatable();
 			TIMAAT.ActorDatasets.setupPersonDatatable();
 			TIMAAT.ActorDatasets.setupCollectiveDatatable();
@@ -5535,7 +5535,7 @@
 			return entryToAppend;
 		},
 
-		setupActorDatatable: function() {			
+		setupActorDatatable: function() {
 			console.log("TCL: setupDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
