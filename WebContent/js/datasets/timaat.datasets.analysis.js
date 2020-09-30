@@ -360,10 +360,13 @@
 						// 	break;
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-						let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name +`
-								<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
-							</p>`;
-						return nameDisplay;
+						let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
+            if ([7].indexOf(analysisMethodType.id) > -1) { //* TODO allow adding only for existing methods
+              nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>`;
+            }
+						nameDisplay += `</p>`;
+            
+            return nameDisplay;
 					}
 				}],
 				language: {
