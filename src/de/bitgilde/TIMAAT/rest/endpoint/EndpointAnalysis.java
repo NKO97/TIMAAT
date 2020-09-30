@@ -1,7 +1,6 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -139,10 +138,102 @@ public class EndpointAnalysis {
 
 		List<SelectElement> analysisMethodSelectList = new ArrayList<>();
 		switch (methodTypeId) {
+			case 1: // Martinez Scheffel Unreliable Narration
+			for (AnalysisMethod analysisMethod : analysisMethodList) {
+				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMartinezScheffelUnreliableNarration().getMartinezScheffelUnreliableNarrationTranslations().get(0).getType()));
+			}
+			break;
+			case 2: // Greimas Actantial Model
+
+			break;
+			case 3: // Van Sijll Cinematic Storytelling
+
+			break;
+			case 4: // Lohtman Renner Spacial Semantics
+
+			break;
+			case 5: // Genette Narrative Discourse
+
+			break;
+			case 6: // Stanzel Narrative Situations
+
+			break;
 			case 7: // Color temperature
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
 					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getColorTemperature().getColorTemperatureTranslations().get(0).getName()));
 				}
+			break;
+			case 8: // Concept Camera Movement and Direction
+			
+			break;
+			case 9: // Camera Elevation
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraElevation().getCameraElevationTranslations().get(0).getName()));
+				}
+			break;
+			case 10: // Camera Axis of Action
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraAxisOfAction().getCameraAxisOfActionTranslations().get(0).getName()));
+				}
+			break;
+			case 11: // Camera Horizontal Angle
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraHorizontalAngle().getCameraHorizontalAngleTranslations().get(0).getName()));
+				}
+			break;
+			case 12: // Camera Vertical Angle
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraVerticalAngle().getCameraVerticalAngleTranslations().get(0).getName()));
+				}
+			break;
+			case 13: // Camera Shot Type
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraShotType().getCameraShotTypeTranslations().get(0).getType()));
+				}
+			break;
+			case 14: // Camera Distance
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraDistance().getCameraDistanceTranslations().get(0).getName()));
+				}
+			break;
+			case 15: // Concept Camera Movement and Handling
+
+			break;
+			case 16: // Camera Movement
+
+			break;
+			case 17: // Camera Handling
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraHandling().getCameraHandlingTranslations().get(0).getType()));
+				}
+			break;
+			case 18: // Zelizer Beese Voice of the Visual
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getZelizerBeeseVoiceOfTheVisual().getZelizerBeeseVoiceOfTheVisualTranslations().get(0).getType()));
+				}
+			break;
+			case 19: // Barthes Rhetoric of the Image
+
+			break;
+			case 20: // Sound Effect Descriptive
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), "Sound Effect (Descriptive)")); // TODO
+				}
+			break;
+			case 21: // Analysis Ambient Sound
+				
+			break;
+			case 22: // Analysis Music
+
+			break;
+			case 23: // Analysis Speech
+
+			break;
+			case 24: // Analysis Voice
+
+			break;
+			case 25: //? Lighting type
+
 			break;
 		}
 
@@ -220,10 +311,10 @@ public class EndpointAnalysis {
 	public Response deleteAnalysis(@PathParam("analysisId") int analysisId) {   
 		System.out.println("AnalysisServiceEndpoint: deleteAnalysis"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Analysis analysis = entityManager.find(Analysis.class, analysisId);
-		Annotation annotation = analysis.getAnnotation();
 
+		Analysis analysis = entityManager.find(Analysis.class, analysisId);
 		if ( analysis == null ) return Response.status(Status.NOT_FOUND).build();
+		Annotation annotation = analysis.getAnnotation();
 		if ( annotation.getAnalysis().contains(analysis) == false) return Response.ok().entity(false).build();
 
 		annotation.getAnalysis().remove(analysis);

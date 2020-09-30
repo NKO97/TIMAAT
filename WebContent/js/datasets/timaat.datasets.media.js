@@ -676,8 +676,8 @@
 					var languageSelect = $('#new-title-language-select-dropdown_'+i);
 					var option = new Option(languageName, languageId, true, true);
 					languageSelect.append(option).trigger('change');
-					$('input[name="newTitle['+i+']"').rules('add', { required: true, minlength: 3, maxlength: 200, });
-					$('input[data-role="newTitle['+i+']"').attr('value', TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
+					$('input[name="newTitle['+i+']"]').rules('add', { required: true, minlength: 3, maxlength: 200, });
+					$('input[data-role="newTitle['+i+']"]').attr('value', TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -1108,7 +1108,7 @@
 						var option = new Option(languageName, languageId, true, true);
 						languageSelect.append(option).trigger('change');
 						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected', true);
-						$('select[name="languageTrackTypeId['+i+']"').rules('add', { required: true, });
+						$('select[name="languageTrackTypeId['+i+']"]').rules('add', { required: true });
 						listEntry.find('[data-role="languageTrackTypeId"]').val('');
 						listEntry.find('[data-role="languageTrackLanguageId"]').val('');
 						await TIMAAT.MediaDatasets.addLanguageTrack(medium, newTrackEntry);
@@ -2229,13 +2229,13 @@
 					languageSelect.append(option).trigger('change');
 
 					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
-						$('[data-role="displayTitle['+medium.model.titles[i].id+']"').prop('checked', true);							
+						$('[data-role="displayTitle['+medium.model.titles[i].id+']"]').prop('checked', true);							
 					}
 					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
-						$('[data-role="originalTitle['+medium.model.titles[i].id+']"').prop('checked', true);							
+						$('[data-role="originalTitle['+medium.model.titles[i].id+']"]').prop('checked', true);							
 					}
-					$('input[name="title['+i+']"').rules("add", { required: true, minlength: 3, maxlength: 200, });
-					$('input[data-role="title['+medium.model.titles[i].id+']"').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
+					$('input[name="title['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
+					$('input[data-role="title['+medium.model.titles[i].id+']"]').attr("value", TIMAAT.MediaDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
 			};
 
 			if ( action == 'show') {
@@ -2417,7 +2417,7 @@
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
 						.attr('selected', true);
-					$('select[name="languageTrackTypeId['+i+']"').rules("add", { required: true, });
+					$('select[name="languageTrackTypeId['+i+']"]').rules("add", { required: true });
 					$('#languagetrack-language-select-dropdown_'+i).select2('destroy').attr("readonly", true);
 			};
 

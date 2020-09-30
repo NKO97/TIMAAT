@@ -28,26 +28,132 @@
       $('#timaat-analysis-add-submit').on('click', async function(event) {
         event.preventDefault();
         var modal = $('#timaat-videoplayer-analysis-add');
+        if (!$('#newAnalysisMethodModalForm').valid()) 
+					return false;
         var analysisMethodTypeId = modal.data('analysisMethodTypeId'); 
         var annotationId = modal.data('annotationId');
+        let remark = $('#analysis-remark').val();
+        let analysisModel = {
+          id: 0,
+          annotationId: annotationId,
+          analysisMethodId: 0,
+          preproduction: "",
+          remark: remark
+        }; 
+        var analysisMethodId;
+        var analysisMethodVariantModel = {};
+        var analysis;
 
         switch(analysisMethodTypeId) {
-          case 7:
-            let analysisMethodId = Number($('#color-temperature-select-dropdown').val());
-            let remark = $('#analysis-remark').val();
-            let analysisModel = {
+          case 1: // Martinez Scheffel Unreliable Narration
+            analysisMethodId = Number($('#martinez-scheffel-unreliable-narration-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 2: // Greimas Actantial Model
+
+          break;
+          case 3: // Van Sijll Cinematic Storytelling
+
+          break;
+          case 4: // Lohtman Renner Spacial Semantics
+
+          break;
+          case 5: // Genette Narrative Discourse
+
+          break;
+          case 6: // Stanzel Narrative Situations
+
+          break;
+          case 7: // Color Temperature
+            analysisMethodId = Number($('#color-temperature-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 8: // Concept Camera Movement and Direction
+
+          break;
+          case 9: // Camera Elevation
+            analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+            case 10: // Camera Axis of Action
+            analysisMethodId = Number($('#camera-axis-of-action-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 11: // Camera Horizontal Angle
+            analysisMethodId = Number($('#camera-horizontal-angle-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 12: // Camera Vertical Angle
+            analysisMethodId = Number($('#camera-vertical-angle-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 13: // Camera Shot Type
+            analysisMethodId = Number($('#camera-shot-type-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 14: // Camera Distance
+            analysisMethodId = Number($('#camera-distance-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 15: // Concept Camera Movement and Handling
+
+          break;
+          case 16: // Camera Movement
+
+          break;
+          case 17: // Camera Handling
+            analysisMethodId = Number($('#camera-handling-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 18: // Zelizer Beese Voice of the Visual
+            analysisMethodId = Number($('#zelizer-beese-voice-of-the-visual-select-dropdown').val());
+            analysisModel.analysisMethodId = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+          break;
+          case 19: // Barthes Rhetoric of the Image
+
+          break;
+          case 20: // Sound Effect Descriptive
+            analysisMethodVariantModel = {
               id: 0,
-              annotationId: annotationId,
-              analysisMethodId: analysisMethodId,
-              preproduction: "",
-              remark: remark
-            }; 
-            await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+              answerQ1: $('#sound-effect-descriptive-answer-q1').val(),
+              answerQ2: $('#sound-effect-descriptive-answer-q2').val(),
+              answerQ3: $('#sound-effect-descriptive-answer-q3').val(),
+              answerQ4: $('#sound-effect-descriptive-answer-q4').val(),
+              answerQ5: $('#sound-effect-descriptive-answer-q5').val(),
+              answerQ6: $('#sound-effect-descriptive-answer-q6').val()
+            };
+            analysis = await TIMAAT.AnalysisService.createDynamicAnalysis(analysisModel, analysisMethodTypeId, analysisMethodVariantModel);
+          break;
+          case 21: // Analysis Ambient Sound
+            
+          break;
+          case 22: // Analysis Music
+
+          break;
+          case 23: // Analysis Speech
+
+          break;
+          case 24: // Analysis Voice
+
+          break;
+          case 25: //? Lighting type
+
           break;
         }
         modal.modal('hide');
-        console.log("TCL: reload dataTableAnnoAnalysis");
-        TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
+        TIMAAT.VideoPlayer.curAnnotation.model.analysis.push(analysis);
+        TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload(null, false);
+        TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload(null, false);
         console.log("TCL: TIMAAT.VideoPlayer.curAnnotation", TIMAAT.VideoPlayer.curAnnotation);
       });
 
@@ -58,7 +164,7 @@
         var analysisId = modal.data('analysisId');
         var isStatic = modal.data('isStatic');
         if (isStatic) {
-          console.log("TCL: isStatic", isStatic);
+          // console.log("TCL: isStatic", isStatic);
           await TIMAAT.AnalysisService.removeStaticAnalysis(analysisId);
         } else {
           // delete analysis
@@ -66,8 +172,23 @@
           // delete analysismethod variant data
         }
         modal.modal('hide');
-        TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
+        var i = 0;
+        for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {
+          if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[i].id == analysisId) {
+            TIMAAT.VideoPlayer.curAnnotation.model.analysis.splice(i, 1);
+          }
+        }
+        TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload(null, false);
+        TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload(null, false);
       });
+
+      $('.select-dropdown').on('change', function(){
+        var text = $(this).find('option:selected').text()
+        var $aux = $('<select/>').append($('<option/>').text(text))
+        $(this).after($aux)
+        $(this).width($aux.width())
+        $aux.remove()
+      }).change();
 
       // Add event listener for opening and closing details
       $('#analysis-annotation-table tbody').on('click', 'td.details-control', function () {
@@ -119,9 +240,67 @@
       let modal = $('#timaat-videoplayer-analysis-add');
       modal.data('analysisMethodTypeId', analysisMethodType.id);
       modal.data('annotationId', annotationId);
+      var select2Options = {
+        closeOnSelect: true,
+        scrollAfterSelect: true,
+        allowClear: true,
+        minimumResultsForSearch: 10,
+        ajax: {
+          url: 'api/analysis/method/'+analysisMethodType.id+'/selectList/',
+          type: 'GET',
+          dataType: 'json',
+          delay: 250,
+          headers: {
+            "Authorization": "Bearer "+TIMAAT.Service.token,
+            "Content-Type": "application/json",
+          },
+          // additional parameters
+          data: function(params) {
+            return {
+              search: params.term,
+              page: params.page
+            };          
+          },
+          processResults: function(data, params) {
+            params.page = params.page || 1;
+            return {
+              results: data
+            };
+          },
+          cache: true
+        },
+      };
+      var remarkHtml = `<div class="form-group">
+                          <label for="analysis-remark">Remark</label>
+                          <div class="col-md-9">
+                            <textarea class="form-control form-control-sm"
+                                      id="analysis-remark"
+                                      aria-label="Remark"
+                                      placeholder="Remark"></textarea>
+                          </div>
+                        </div>`;
+
       switch (analysisMethodType.id) {
         case 1: // Martinez Scheffel Unreliable Narration
-          
+          $('#analysisAddLabel').text('Choose unreliable Narration (Martinez & Scheffel)');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="martinez-scheffel-unreliable-narration-select-dropdown">Unreliable Narration</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="martinez-scheffel-unreliable-narration-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select unreliable narration"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#martinez-scheffel-unreliable-narration-select-dropdown').select2(select2Options);
         break;
         case 2: // Greimas Actantial Model
 
@@ -138,89 +317,155 @@
         case 6: // Stanzel Narrative Situations
 
         break;
-        case 7: //* Color Temperature
+        case 7: // Color Temperature
           $('#analysisAddLabel').text('Choose color temperature');
           modal.find('.modal-body').html(`
-            <div class="row">
-              <label class="sr-only">Color temperature</label>
-              <select class="form-control form-control-md"
-                      style="width:100%;"
-                      id="color-temperature-select-dropdown"
-                      name="analysisMethodId"
-                      data-role="analysisMethodId"
-                      data-placeholder="Select color temperature"
-                      required>
-              </select>
-            </div>
-            <div class="row">
-              <label class"sr-only">Remark</label>
-              <textarea class="form-control form-control-sm"
-                        id="analysis-remark"
-                        aria-label="Remark"
-                        placeholder="Remark"></textarea>
-            </div>`);
-          $('#color-temperature-select-dropdown').select2({
-            closeOnSelect: true,
-            scrollAfterSelect: true,
-            allowClear: true,
-            minimumResultsForSearch: 10,
-            ajax: {
-              url: 'api/analysis/method/'+analysisMethodType.id+'/selectList/',
-              type: 'GET',
-              dataType: 'json',
-              delay: 250,
-              headers: {
-                "Authorization": "Bearer "+TIMAAT.Service.token,
-                "Content-Type": "application/json",
-              },
-              // additional parameters
-              data: function(params) {
-                // console.log("TCL: data: params", params);
-                return {
-                  search: params.term,
-                  page: params.page
-                };          
-              },
-              processResults: function(data, params) {
-                // console.log("TCL: processResults: data", data);
-                params.page = params.page || 1;
-                return {
-                  results: data
-                };
-              },
-              cache: true
-            },
-            // minimumInputLength: 0,
-          });
-          $('#color-temperature-select-dropdown').on('change', function(){
-            var text = $(this).find('option:selected').text()
-            var $aux = $('<select/>').append($('<option/>').text(text))
-            $(this).after($aux)
-            $(this).width($aux.width())
-            $aux.remove()
-          }).change();
-          modal.modal('show');
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="color-temperature-select-dropdown">Color temperature</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="color-temperature-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select color temperature"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#color-temperature-select-dropdown').select2(select2Options);
         break;
         case 8: // Concept Camera Movement and Direction
 
         break;
         case 9: // Camera Elevation
-
+          $('#analysisAddLabel').text('Choose camera elevation');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="camera-elevation-select-dropdown">Camera elevation</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-elevation-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera elevation"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-elevation-select-dropdown').select2(select2Options);
         break;
         case 10: // Camera Axis of Action
-
+        $('#analysisAddLabel').text('Choose axis of action');
+        modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <div class="form-group">
+              <label for="camera-axis-of-action-select-dropdown">Camera axis of action</label>
+              <div class="col-md-9">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-axis-of-action-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera axis of action"
+                        required>
+                </select>
+              </div>
+            </div>`+
+            remarkHtml +
+          `</form>`);
+        $('#camera-axis-of-action-select-dropdown').select2(select2Options);
         break;
         case 11: // Camera Horizontal Angle
-          
+        $('#analysisAddLabel').text('Choose camera horizontal angle');
+        modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <div class="form-group">
+            <label for="camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+              <div class="col-md-9">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-horizontal-angle-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera horizontal angle"
+                        required>
+                </select>
+              </div>
+            </div>`+
+            remarkHtml +
+          `</form>`);
+        $('#camera-horizontal-angle-select-dropdown').select2(select2Options);
         break;
-        case 12: //* Camera Vertical Angle
-
+        case 12: // Camera Vertical Angle
+          $('#analysisAddLabel').text('Choose camera vertical angle');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+              <label for="camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-vertical-angle-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera vertical angle"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-vertical-angle-select-dropdown').select2(select2Options);
         break;
-        case 13: //* Camera Shot Type
-
+        case 13: // Camera Shot Type
+          $('#analysisAddLabel').text('Choose camera shot type');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+              <label for="camera-shot-type-select-dropdown">Camera shot type</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-shot-type-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera shot type"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-shot-type-select-dropdown').select2(select2Options);
         break;
         case 14: // Camera Distance
-
+          $('#analysisAddLabel').text('Choose camera distance');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="camera-distance-select-dropdown">Camera distance</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-distance-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera distance"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-distance-select-dropdown').select2(select2Options);
         break;
         case 15: // Concept Camera Movement and Handling
 
@@ -229,16 +474,116 @@
 
         break;
         case 17: // Camera Handling
-
+          $('#analysisAddLabel').text('Choose camera handling');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+              <label for="camera-handling-select-dropdown">Camera handling</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-handling-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera handling"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-handling-select-dropdown').select2(select2Options);
         break;
         case 18: // Zelizer Beese Voice of the Visual
-
+          $('#analysisAddLabel').text('Choose Voice of the Visual (Zelizer & Beese)');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
+                <div class="col-md-9">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="zelizer-beese-voice-of-the-visual-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select voice of the visual"
+                          required>
+                  </select>
+              </div>
+            </div>`+
+            remarkHtml +
+          `</form>`);
+          $('#zelizer-beese-voice-of-the-visual-select-dropdown').select2(select2Options);
         break;
         case 19: // Barthes Rhetoric of the Image
 
         break;
-        case 20: //* Sound Effect Descriptive
-
+        case 20: // Sound Effect Descriptive
+          $('#analysisAddLabel').text('Describe sound effect');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="sound-effect-descriptive-answer-q1">1.) Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q1"
+                            aria-label="Question 1"
+                            name="question"
+                            placeholder="Answer to question 1"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sound-effect-descriptive-answer-q2">2.) Ist das Geräusch realistisch oder künstlich erzeugt?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q2"
+                            aria-label="Question 2"
+                            name="question"
+                            placeholder="Answer to question 2"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sound-effect-descriptive-answer-q3">3.) Von wo klingt das Geräusch?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q3"
+                            aria-label="Question 3"
+                            name="question"
+                            placeholder="Answer to question 3"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sound-effect-descriptive-answer-q4">4.) Bewegt sich das Geräusch oder ist es statisch?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q4"
+                            aria-label="Question 4"
+                            name="question"
+                            placeholder="Answer to question 4"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sound-effect-descriptive-answer-q5">5.) Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q5"
+                            aria-label="Question 5"
+                            name="question"
+                            placeholder="Answer to question 5"></textarea>
+                  </div>
+              </div>
+              <div class="form-group">
+                <label ="sound-effect-descriptive-answer-q6">6.) Wodurch ist das Auftreten des Geräusches motiviert (z.B. aus der Erzählung heraus, künstlerisch motiviert, es soll die Szene verfremden, es soll die Szene realistischer machen)?</label>
+                <div class="col-md-9">
+                  <textarea class="form-control form-control-sm"
+                            id="sound-effect-descriptive-answer-q6"
+                            aria-label="Question 6"
+                            name="question"
+                            placeholder="Answer to question 6"></textarea>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
         break;
         case 21: // Analysis Ambient Sound
           
@@ -256,16 +601,12 @@
 
         break;
       }
-      // if (analysisMethodType.isStatic) { // simple assignment of existing analysisMethod to analysis (analysis method information pre-exists)
-
-      // }
-      // else { // a new analysisMethod of that type has to be created since the data is dynamically created
-
-      // }
+      // $('select[name="analysisMethodId"]').rules('add', { required: true });
+      modal.modal('show');
     },
 
     annotationAnalysisMethodDeleteModal: function(analysis) {
-      console.log("TCL: analysis", analysis);
+      // console.log("TCL: analysis", analysis);
       let modal = $('#timaat-videoplayer-analysis-delete');
       modal.data('analysisId', analysis.id);
       modal.data('isStatic', analysis.analysisMethod.analysisMethodType.isStatic);
@@ -277,7 +618,33 @@
       var details = 
         `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">`;
       switch (data.analysisMethod.analysisMethodType.id) {
-        case 7:
+        case 1: // Martinez Scheffel Unreliable Narration
+          details +=
+            `<tr>
+              <td>Unreliable Narration (Martinez & Scheffel):</td>
+              <td>`+data.analysisMethod.martinezScheffelUnreliableNarration.martinezScheffelUnreliableNarrationTranslations[0].type+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 2: // Greimas Actantial Model
+
+        break;
+        case 3: // Van Sijll Cinematic Storytelling
+
+        break;
+        case 4: // Lohtman Renner Spacial Semantics
+
+        break;
+        case 5: // Genette Narrative Discourse
+
+        break;
+        case 6: // Stanzel Narrative Situations
+
+        break;
+        case 7: // Color Temperature
           details +=
             `<tr>
               <td>Color temperature:</td>
@@ -287,6 +654,152 @@
               <td>Remark:</td>
               <td>`+data.remark+`</td>
             </tr>`;
+        break;
+        case 8: // Concept Camera Movement and Direction
+
+        break;
+        case 9: // Camera Elevation
+          details +=
+            `<tr>
+              <td>Camera elevation:</td>
+              <td>`+data.analysisMethod.cameraElevation.cameraElevationTranslations[0].name+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 10: // Camera Axis of Action
+          details +=
+            `<tr>
+              <td>Camera axis of action:</td>
+              <td>`+data.analysisMethod.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 11: // Camera Horizontal Angle
+          details +=
+            `<tr>
+              <td>Camera horizontal angle:</td>
+              <td>`+data.analysisMethod.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 12: // Camera Vertical Angle
+          details +=
+            `<tr>
+              <td>Camera vertical angle:</td>
+              <td>`+data.analysisMethod.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 13: // Camera Shot Type
+          details +=
+            `<tr>
+              <td>Camera shot type:</td>
+              <td>`+data.analysisMethod.cameraShotType.cameraShotTypeTranslations[0].type+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 14: // Camera Distance
+          details +=
+            `<tr>
+              <td>Camera distance:</td>
+              <td>`+data.analysisMethod.cameraDistance.cameraDistanceTranslations[0].name+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 15: // Concept Camera Movement and Handling
+
+        break;
+        case 16: // Camera Movement
+
+        break;
+        case 17: // Camera Handling
+          details +=
+            `<tr>
+              <td>Camera handling:</td>
+              <td>`+data.analysisMethod.cameraHandling.cameraHandlingTranslations[0].type+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 18: // Zelizer Beese Voice of the Visual
+          details +=
+            `<tr>
+              <td>Voice of the Visual (Zelizer & Beese):</td>
+              <td>`+data.analysisMethod.zelizerBeeseVoiceOfTheVisual.zelizerBeeseVoiceOfTheVisualTranslations[0].type+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 19: // Barthes Rhetoric of the Image
+
+        break;
+        case 20: //* Sound Effect Descriptive
+          details +=
+            `<tr>
+              <td>Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ1+`</td>
+            </tr>
+            <tr>
+              <td>Ist das Geräusch realistisch oder künstlich erzeugt?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ2+`</td>
+            </tr>
+            <tr>
+              <td>Von wo klingt das Geräusch?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ3+`</td>
+            </tr>
+            <tr>
+              <td>Bewegt sich das Geräusch oder ist es statisch?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ4+`</td>
+            </tr>
+            <tr>
+              <td>Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ5+`</td>
+            </tr>
+            <tr>
+              <td>Wodurch ist das Auftreten des Geräusches motiviert?</td>
+              <td>`+data.analysisMethod.soundEffectDescriptive.answerQ6+`</td>
+            </tr>
+            <tr>
+              <td>Remark:</td>
+              <td>`+data.remark+`</td>
+            </tr>`;
+        break;
+        case 21: // Analysis Ambient Sound
+          
+        break;
+        case 22: // Analysis Music
+
+        break;
+        case 23: // Analysis Speech
+
+        break;
+        case 24: // Analysis Voice
+
+        break;
+        case 25: //? Lighting type
+
         break;
       }
       details += `</table>`;
@@ -360,9 +873,18 @@
 						// 	break;
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-						let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([7].indexOf(analysisMethodType.id) > -1) { //* TODO allow adding only for existing methods
-              nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>`;
+            let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
+            if ([1,7,9,10,11,12,13,14,17,18].indexOf(analysisMethodType.id) > -1) { //* TODO allow adding only for existing methods
+              var i = 0;
+              var exists = false;
+              for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {
+                if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[i].analysisMethod.analysisMethodType.id == analysisMethodType.id) {
+                  exists = true;
+                }
+              }
+              if (!exists) { //* allow only one analysis of a type for the moment
+                nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis method"></i></span>`;
+              }
             }
 						nameDisplay += `</p>`;
             
@@ -464,7 +986,7 @@
 							// }
 							// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name+`
 							let nameDisplay = `<p>` + `  ` + analysis.analysisMethod.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-							<span class="remove-analysis badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>
+							<span class="remove-analysis badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis method"></i></span>
 							</p>`;
 							return nameDisplay;
 						}

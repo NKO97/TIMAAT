@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -28,10 +29,11 @@ public class CameraShotType implements Serializable {
 	@JsonIgnore // CameraShotType is accessed through AnalysisMethod --> avoid reference cycle
 	private AnalysisMethod analysisMethod;
 
-	// //bi-directional many-to-one association to CameraDistance
-	// @ManyToOne
-	// @JoinColumn(name="camera_distance_analysis_method_id")
-	// private CameraDistance cameraDistance;
+	//bi-directional many-to-one association to CameraDistance
+	@ManyToOne
+	@JoinColumn(name="camera_distance_analysis_method_id")
+	@JsonBackReference(value="CameraDistance-CameraShotType")
+	private CameraDistance cameraDistance;
 
 	//bi-directional many-to-one association to CameraShotTypeTranslation
 	@OneToMany(mappedBy="cameraShotType")
@@ -60,13 +62,13 @@ public class CameraShotType implements Serializable {
 		this.analysisMethod = analysisMethod;
 	}
 
-	// public CameraDistance getCameraDistance() {
-	// 	return this.cameraDistance;
-	// }
+	public CameraDistance getCameraDistance() {
+		return this.cameraDistance;
+	}
 
-	// public void setCameraDistance(CameraDistance cameraDistance) {
-	// 	this.cameraDistance = cameraDistance;
-	// }
+	public void setCameraDistance(CameraDistance cameraDistance) {
+		this.cameraDistance = cameraDistance;
+	}
 
 	public List<CameraShotTypeTranslation> getCameraShotTypeTranslations() {
 		return this.cameraShotTypeTranslations;

@@ -115,11 +115,14 @@ var mediumFormTitlesValidator = $('#timaat-mediadatasets-medium-titles-form').va
     },
   },
   messages: {
-    displayTitle: {
+    title: {
       required: "Enter a title (min length: 3)",
       minlength: "Title too short: min length is 3",
       maxlength: "Title is too long: max length is 200"
     },
+    titleLanguageId: {
+      required: "Please select a language."
+    }
   },
   submitHandler: function(mediumFormTitles) {
     mediumFormTitles.submit();
@@ -134,6 +137,14 @@ var mediumFormLanguageTracksValidator = $('#timaat-mediadatasets-medium-language
     languageTrackLanguageId: {
       required: true,
     },
+  },
+  messages: {
+    languageTrackTypeId: {
+      required: 'Please select a track.'
+    },
+    languageTrackLanguageId: {
+      required: 'Please select a language.'
+    }
   },
   submitHandler: function(mediumFormLanguageTracks) {
     mediumFormLanguageTracks.submit();
@@ -388,7 +399,7 @@ var languageFormMetadataValidator = $('#timaat-languagelists-metadata-form').val
       minlength: "Name too short: min length is 3",
       maxlength: "Name is too long: max length is 200"
     },
-    name: {
+    code: {
       required: "Enter the language code (length: 2)",
       minlength: "Code too short: min length is 2",
       maxlength: "Code is too long: max length is 10"
@@ -396,6 +407,28 @@ var languageFormMetadataValidator = $('#timaat-languagelists-metadata-form').val
   },
   submitHandler: function(languageFormMetadata) {
     languageFormMetadata.submit();
+  },
+});
+var analysisMethodModal = $('#timaat-videoplayer-analysis-add');
+var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validate({
+  rules: {
+    analysisMethodId: {
+      required: true,
+    },
+    question: {
+      required: true,
+    }
+  },
+  messages: {
+    analysisMethodId: {
+      required: "Please select an option.",
+    },
+    question: {
+      required: "Please answer the question.",
+    }
+  },
+  submitHandler: function(analysisMethodModal) {
+    analysisMethodModal.submit();
   },
 });
 

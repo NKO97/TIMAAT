@@ -56,25 +56,25 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private BarthesRhetoricOfTheImage barthesRhetoricOfTheImage;
 
-	// //bi-directional one-to-one association to CameraAxisOfAction
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraAxisOfAction cameraAxisOfAction;
+	//bi-directional one-to-one association to CameraAxisOfAction
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraAxisOfAction cameraAxisOfAction;
 
-	// //bi-directional one-to-one association to CameraDistance
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraDistance cameraDistance;
+	//bi-directional one-to-one association to CameraDistance
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraDistance cameraDistance;
 
-	// //bi-directional one-to-one association to CameraElevation
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraElevation cameraElevation;
+	//bi-directional one-to-one association to CameraElevation
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraElevation cameraElevation;
 
-	// //bi-directional one-to-one association to CameraHandling
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraHandling cameraHandling;
+	//bi-directional one-to-one association to CameraHandling
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraHandling cameraHandling;
 
-	// //bi-directional one-to-one association to CameraHorizontalAngle
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraHorizontalAngle cameraHorizontalAngle;
+	//bi-directional one-to-one association to CameraHorizontalAngle
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraHorizontalAngle cameraHorizontalAngle;
 
 	// //bi-directional one-to-one association to CameraMovement
 	// @OneToOne(mappedBy="analysisMethod")
@@ -112,9 +112,9 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private LotmanRennerSpatialSemantics lotmanRennerSpatialSemantic;
 
-	// //bi-directional one-to-one association to MartinezScheffelUnreliableNarration
-	// @OneToOne(mappedBy="analysisMethod")
-	// private MartinezScheffelUnreliableNarration martinezScheffelUnreliableNarration;
+	//bi-directional one-to-one association to MartinezScheffelUnreliableNarration
+	@OneToOne(mappedBy="analysisMethod")
+	private MartinezScheffelUnreliableNarration martinezScheffelUnreliableNarration;
 
 	//bi-directional one-to-one association to SoundEffectDescriptive
 	@OneToOne(mappedBy="analysisMethod")
@@ -128,9 +128,9 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private VanSijllCinematicStorytelling vanSijllCinematicStorytelling;
 
-	// //bi-directional one-to-one association to ZelizerBeeseVoiceOfTheVisual
-	// @OneToOne(mappedBy="analysisMethod")
-	// private ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual;
+	//bi-directional one-to-one association to ZelizerBeeseVoiceOfTheVisual
+	@OneToOne(mappedBy="analysisMethod")
+	private ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual;
 
 	public AnalysisMethod() {
 	}
@@ -221,45 +221,45 @@ public class AnalysisMethod implements Serializable {
 	// 	this.barthesRhetoricOfTheImage = barthesRhetoricOfTheImage;
 	// }
 
-	// public CameraAxisOfAction getCameraAxisOfAction() {
-	// 	return this.cameraAxisOfAction;
-	// }
+	public CameraAxisOfAction getCameraAxisOfAction() {
+		return this.cameraAxisOfAction;
+	}
 
-	// public void setCameraAxisOfAction(CameraAxisOfAction cameraAxisOfAction) {
-	// 	this.cameraAxisOfAction = cameraAxisOfAction;
-	// }
+	public void setCameraAxisOfAction(CameraAxisOfAction cameraAxisOfAction) {
+		this.cameraAxisOfAction = cameraAxisOfAction;
+	}
 
-	// public CameraDistance getCameraDistance() {
-	// 	return this.cameraDistance;
-	// }
+	public CameraDistance getCameraDistance() {
+		return this.cameraDistance;
+	}
 
-	// public void setCameraDistance(CameraDistance cameraDistance) {
-	// 	this.cameraDistance = cameraDistance;
-	// }
+	public void setCameraDistance(CameraDistance cameraDistance) {
+		this.cameraDistance = cameraDistance;
+	}
 
-	// public CameraElevation getCameraElevation() {
-	// 	return this.cameraElevation;
-	// }
+	public CameraElevation getCameraElevation() {
+		return this.cameraElevation;
+	}
 
-	// public void setCameraElevation(CameraElevation cameraElevation) {
-	// 	this.cameraElevation = cameraElevation;
-	// }
+	public void setCameraElevation(CameraElevation cameraElevation) {
+		this.cameraElevation = cameraElevation;
+	}
 
-	// public CameraHandling getCameraHandling() {
-	// 	return this.cameraHandling;
-	// }
+	public CameraHandling getCameraHandling() {
+		return this.cameraHandling;
+	}
 
-	// public void setCameraHandling(CameraHandling cameraHandling) {
-	// 	this.cameraHandling = cameraHandling;
-	// }
+	public void setCameraHandling(CameraHandling cameraHandling) {
+		this.cameraHandling = cameraHandling;
+	}
 
-	// public CameraHorizontalAngle getCameraHorizontalAngle() {
-	// 	return this.cameraHorizontalAngle;
-	// }
+	public CameraHorizontalAngle getCameraHorizontalAngle() {
+		return this.cameraHorizontalAngle;
+	}
 
-	// public void setCameraHorizontalAngle(CameraHorizontalAngle cameraHorizontalAngle) {
-	// 	this.cameraHorizontalAngle = cameraHorizontalAngle;
-	// }
+	public void setCameraHorizontalAngle(CameraHorizontalAngle cameraHorizontalAngle) {
+		this.cameraHorizontalAngle = cameraHorizontalAngle;
+	}
 
 	// public CameraMovement getCameraMovement() {
 	// 	return this.cameraMovement;
@@ -333,13 +333,13 @@ public class AnalysisMethod implements Serializable {
 	// 	this.lotmanRennerSpatialSemantic = lotmanRennerSpatialSemantic;
 	// }
 
-	// public MartinezScheffelUnreliableNarration getMartinezScheffelUnreliableNarration() {
-	// 	return this.martinezScheffelUnreliableNarration;
-	// }
+	public MartinezScheffelUnreliableNarration getMartinezScheffelUnreliableNarration() {
+		return this.martinezScheffelUnreliableNarration;
+	}
 
-	// public void setMartinezScheffelUnreliableNarration(MartinezScheffelUnreliableNarration martinezScheffelUnreliableNarration) {
-	// 	this.martinezScheffelUnreliableNarration = martinezScheffelUnreliableNarration;
-	// }
+	public void setMartinezScheffelUnreliableNarration(MartinezScheffelUnreliableNarration martinezScheffelUnreliableNarration) {
+		this.martinezScheffelUnreliableNarration = martinezScheffelUnreliableNarration;
+	}
 
 	public SoundEffectDescriptive getSoundEffectDescriptive() {
 		return this.soundEffectDescriptive;
@@ -365,12 +365,12 @@ public class AnalysisMethod implements Serializable {
 	// 	this.vanSijllCinematicStorytelling = vanSijllCinematicStorytelling;
 	// }
 
-	// public ZelizerBeeseVoiceOfTheVisual getZelizerBeeseVoiceOfTheVisual() {
-	// 	return this.zelizerBeeseVoiceOfTheVisual;
-	// }
+	public ZelizerBeeseVoiceOfTheVisual getZelizerBeeseVoiceOfTheVisual() {
+		return this.zelizerBeeseVoiceOfTheVisual;
+	}
 
-	// public void setZelizerBeeseVoiceOfTheVisual(ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual) {
-	// 	this.zelizerBeeseVoiceOfTheVisual = zelizerBeeseVoiceOfTheVisual;
-	// }
+	public void setZelizerBeeseVoiceOfTheVisual(ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual) {
+		this.zelizerBeeseVoiceOfTheVisual = zelizerBeeseVoiceOfTheVisual;
+	}
 
 }

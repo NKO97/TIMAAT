@@ -34,6 +34,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+      	// console.log("TCL: addStaticAnalysisMethodToAnalysis -> data", data);
 				resolve(data);
 			}).fail(function(e) {
 				console.log( "error: ", e.responseText);
@@ -64,7 +65,7 @@
 		});
 	},
 
-	async createDynamicAnalysis(analysisModel) {
+	async createDynamicAnalysis(analysisModel, analysisMethodTypeId, analysisMethodVariantModel) {
 	  console.log("TCL: addStaticAnalysisMethodToAnalysis -> analysisModel", analysisModel);
 		return new Promise(resolve => {
 			$.ajax({

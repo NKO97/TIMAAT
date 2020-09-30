@@ -39,6 +39,16 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioCodecInformation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfAction</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDistance</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDistanceTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraElevation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraElevationTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHandling</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHandlingTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngle</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngleTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraShotType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraShotTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraVerticalAngle</class>
@@ -75,6 +85,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MartinezScheffelUnreliableNarration</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MartinezScheffelUnreliableNarrationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollection</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAlbum</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList</class>
@@ -151,6 +163,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisual</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisualTranslation</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

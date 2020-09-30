@@ -414,8 +414,8 @@
 			this.ui.dataTableActors.clear();
 			this.ui.dataTableActors.ajax.reload();
 			console.log("TCL: reset");
-			TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.clear();
-			TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
+			// TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.clear();
+			// TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 		}
 		
 		switchPosition() {
