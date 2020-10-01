@@ -874,7 +874,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18].indexOf(analysisMethodType.id) > -1) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,18].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var exists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {
