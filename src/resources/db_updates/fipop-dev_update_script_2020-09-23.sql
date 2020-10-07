@@ -58,12 +58,12 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`analysis` (
   CONSTRAINT `fk_analysis_annotation1`
     FOREIGN KEY (`annotation_id`)
     REFERENCES `FIPOP`.`annotation` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_analysis_analysis_method1`
     FOREIGN KEY (`analysis_method_id`)
     REFERENCES `FIPOP`.`analysis_method` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 CREATE INDEX `fk_analysis_annotation1_idx` ON `FIPOP`.`analysis` (`annotation_id` ASC);
@@ -71,7 +71,7 @@ CREATE INDEX `fk_analysis_analysis_method1_idx` ON `FIPOP`.`analysis` (`analysis
 
 ALTER TABLE `FIPOP`.`analysis_ambient_sound` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`analysis_ambient_sound` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`analysis_ambient_sound` ADD CONSTRAINT `fk_analysis_ambient_sound_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`analysis_ambient_sound` ADD CONSTRAINT `fk_analysis_ambient_sound_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_analysis_ambient_sound_analysis_method1_idx` ON `FIPOP`.`analysis_ambient_sound` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`analysis_ambient_sound_has_ambience` CHANGE `analysis_ambient_sound_id` `analysis_ambient_sound_analysis_method_id` INT NOT NULL;
@@ -98,7 +98,7 @@ DROP TABLE `FIPOP`.`analysis_content`;
 -- Table `FIPOP`.`analysis_method`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`analysis_method` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `analysis_method_type_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_analysis_method_analysis_method_type1`
@@ -163,7 +163,7 @@ DROP TABLE `FIPOP`.`analysis_image`;
 ALTER TABLE `FIPOP`.`analysis_music` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`analysis_music` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
 ALTER TABLE `FIPOP`.`analysis_music` DROP `analysis_content_audio_id`;
-ALTER TABLE `FIPOP`.`analysis_music` ADD CONSTRAINT `fk_analysis_music_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`analysis_music` ADD CONSTRAINT `fk_analysis_music_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_analysis_music_analysis_method1_idx` ON `FIPOP`.`analysis_music` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`analysis_music_has_genre` CHANGE `analysis_music_id` `analysis_music_analysis_method_id` INT NOT NULL;
@@ -196,7 +196,7 @@ CREATE INDEX `fk_analysis_music_has_lineup_member_analysis_music1_idx` ON `FIPOP
 ALTER TABLE `FIPOP`.`analysis_speech` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`analysis_speech` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
 ALTER TABLE `FIPOP`.`analysis_speech` DROP `analysis_content_audio_id`;
-ALTER TABLE `FIPOP`.`analysis_speech` ADD CONSTRAINT `fk_analysis_speech_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`analysis_speech` ADD CONSTRAINT `fk_analysis_speech_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_analysis_speech_analysis_method1_idx` ON `FIPOP`.`analysis_speech` (`analysis_method_id` ASC);
 
 DROP TABLE `FIPOP`.`analysis_text`;
@@ -206,7 +206,7 @@ DROP TABLE `FIPOP`.`analysis_visual_effects`;
 ALTER TABLE `FIPOP`.`analysis_voice` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`analysis_voice` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
 ALTER TABLE `FIPOP`.`analysis_voice` DROP `analysis_content_audio_id`;
-ALTER TABLE `FIPOP`.`analysis_voice` ADD CONSTRAINT `fk_analysis_voice_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`analysis_voice` ADD CONSTRAINT `fk_analysis_voice_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_analysis_voice_analysis_method1_idx` ON `FIPOP`.`analysis_voice` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`annotation` DROP INDEX `fk_annotation_analysis_content_visual1_idx`;
@@ -218,7 +218,7 @@ ALTER TABLE `FIPOP`.`annotation` DROP `analysis_content_id`;
 
 ALTER TABLE `FIPOP`.`barthes_rhetoric_of_the_image` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`barthes_rhetoric_of_the_image` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`barthes_rhetoric_of_the_image` ADD CONSTRAINT `fk_barthes_rhetoric_of_the_image_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`barthes_rhetoric_of_the_image` ADD CONSTRAINT `fk_barthes_rhetoric_of_the_image_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_barthes_rhetoric_of_the_image_analysis_method1_idx` ON `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`camera_axis_of_action` CHANGE `id` `analysis_method_id` INT NOT NULL;
@@ -290,7 +290,7 @@ ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` DROP PRIMARY KEY, 
 
 ALTER TABLE `FIPOP`.`camera_movement` ADD CONSTRAINT `fk_camera_movement_concept_camera_position_and_perspective1` FOREIGN KEY (`start_concept_camera_position_and_perspective_analysis_method_id`) REFERENCES `FIPOP`.`concept_camera_position_and_perspective` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`camera_movement` ADD CONSTRAINT `fk_camera_movement_concept_camera_position_and_perspective2` FOREIGN KEY (`end_concept_camera_position_and_perspective_analysis_method_id`) REFERENCES `FIPOP`.`concept_camera_position_and_perspective` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE `FIPOP`.`camera_movement` ADD CONSTRAINT `fk_camera_movement_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`camera_movement` ADD CONSTRAINT `fk_camera_movement_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`camera_movement` DROP INDEX `fk_camera_movement_concept_camera_position_and_perspective1_idx`;
 ALTER TABLE `FIPOP`.`camera_movement` DROP INDEX `fk_camera_movement_concept_camera_position_and_perspective2_idx`;
 ALTER TABLE `FIPOP`.`camera_movement` DROP INDEX `fk_camera_movement_camera_movement_characteristic1_idx`;
@@ -301,7 +301,7 @@ CREATE INDEX `fk_camera_movement_analysis_method1_idx` ON `FIPOP`.`camera_moveme
 
 ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` ADD CONSTRAINT `fk_concept_camera_movement_and_handling_camera_movement1` FOREIGN KEY (`camera_movement_analysis_method_id`) REFERENCES `FIPOP`.`camera_movement` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` ADD CONSTRAINT `fk_concept_camera_movement_and_handling_camera_handling1` FOREIGN KEY (`camera_handling_analysis_method_id`) REFERENCES `FIPOP`.`camera_handling` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` ADD CONSTRAINT `fk_concept_camera_movement_and_handling_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` ADD CONSTRAINT `fk_concept_camera_movement_and_handling_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` DROP INDEX `fk_concept_camera_movement_and_handling_camera_mo1_idx`;
 ALTER TABLE `FIPOP`.`concept_camera_movement_and_handling` DROP INDEX `fk_concept_camera_movement_and_handling_camera_ha1_idx`;
 CREATE INDEX `fk_concept_camera_movement_and_handling_analysis_method1_idx` ON `FIPOP`.`concept_camera_movement_and_handling` (`analysis_method_id` ASC);
@@ -337,9 +337,8 @@ ALTER TABLE `FIPOP`.`camera_vertical_angle_translation` ADD CONSTRAINT `fk_camer
 ALTER TABLE `FIPOP`.`camera_vertical_angle_translation` DROP INDEX `fk_camera_vertical_angle_translation_camera_vertical_angle1_idx`;
 CREATE INDEX `fk_camera_vertical_angle_translation_camera_vertical_angle1_idx` ON `FIPOP`.`camera_vertical_angle_translation` (`camera_vertical_angle_analysis_method_id` ASC);
 
-ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_camera_distance1` FOREIGN KEY (`camera_distance_analysis_method_id`) REFERENCES `FIPOP`.`camera_distance` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
 ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_camera_shot_type1` FOREIGN KEY (`camera_shot_type_analysis_method_id`) REFERENCES `FIPOP`.`camera_shot_type` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_camera_vertical_an1` FOREIGN KEY (`camera_vertical_angle_analysis_method_id`) REFERENCES `FIPOP`.`camera_vertical_angle` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`concept_camera_position_and_perspective` ADD CONSTRAINT `fk_concept_camera_position_and_perspective_camera_horizontal1` FOREIGN KEY (`camera_horizontal_angle_analysis_method_id`) REFERENCES `FIPOP`.`camera_horizontal_angle` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -365,66 +364,70 @@ CREATE INDEX `fk_concept_camera_position_and_perspective_camera_axis_of_a_idx` O
 CREATE TABLE IF NOT EXISTS `FIPOP`.`color_temperature` (
   `analysis_method_id` INT NOT NULL,
   PRIMARY KEY (`analysis_method_id`),
-  CONSTRAINT `fk_camera_elevation_analysis_method10`
+  CONSTRAINT `fk_color_temperature_analysis_method1`
     FOREIGN KEY (`analysis_method_id`)
     REFERENCES `FIPOP`.`analysis_method` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-CREATE INDEX `fk_camera_elevation_analysis_method1_idx` ON `FIPOP`.`color_temperature` (`analysis_method_id` ASC);
+
+CREATE INDEX `fk_color_temperature_analysis_method1_idx` ON `FIPOP`.`color_temperature` (`analysis_method_id` ASC);
+
 
 -- -----------------------------------------------------
 -- Table `FIPOP`.`color_temperature_translation`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`color_temperature_translation` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `language_id` INT NOT NULL,
   `color_temperature_analysis_method_id` INT NOT NULL,
+  `language_id` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_color_temperature_translation_color_temperature1`
-    FOREIGN KEY (`color_temperature_analysis_method_id`)
-    REFERENCES `FIPOP`.`color_temperature` (`analysis_method_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_color_temperature_translation_language1`
     FOREIGN KEY (`language_id`)
     REFERENCES `FIPOP`.`language` (`id`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_color_temperature_translation_color_temperature1`
+    FOREIGN KEY (`color_temperature_analysis_method_id`)
+    REFERENCES `FIPOP`.`color_temperature` (`analysis_method_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-CREATE INDEX `fk_color_temperature_translation_color_temperature1_idx` ON `FIPOP`.`color_temperature_translation` (`color_temperature_analysis_method_id` ASC);
+
 CREATE INDEX `fk_color_temperature_translation_language1_idx` ON `FIPOP`.`color_temperature_translation` (`language_id` ASC);
 
+CREATE INDEX `fk_color_temperature_translation_color_temperature1_idx` ON `FIPOP`.`color_temperature_translation` (`color_temperature_analysis_method_id` ASC);
+
 ALTER TABLE `FIPOP`.`connoted_image` CHANGE `barthes_rhetoric_of_the_image_id` `barthes_rhetoric_of_the_image_analysis_method_id` INT NOT NULL;
-ALTER TABLE `FIPOP`.`connoted_image` ADD CONSTRAINT `fk_connoted_image_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`connoted_image` ADD CONSTRAINT `fk_connoted_image_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`connoted_image` DROP INDEX `fk_connoted_image_barthes_rhetoric_of_the_image1_idx`;
 CREATE INDEX `fk_connoted_image_barthes_rhetoric_of_the_image1_idx` ON `FIPOP`.`connoted_image` (`barthes_rhetoric_of_the_image_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`denoted_image` CHANGE `barthes_rhetoric_of_the_image_id` `barthes_rhetoric_of_the_image_analysis_method_id` INT NOT NULL;
-ALTER TABLE `FIPOP`.`denoted_image` ADD CONSTRAINT `fk_denoted_image_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`denoted_image` ADD CONSTRAINT `fk_denoted_image_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`denoted_image` DROP INDEX `fk_denoted_image_barthes_rhetoric_of_the_image1_idx`;
 CREATE INDEX `fk_denoted_image_barthes_rhetoric_of_the_image1_idx` ON `FIPOP`.`denoted_image` (`barthes_rhetoric_of_the_image_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`genette_narrative_discourse` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`genette_narrative_discourse` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`genette_narrative_discourse` ADD CONSTRAINT `fk_genette_narrative_discourse_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`genette_narrative_discourse` ADD CONSTRAINT `fk_genette_narrative_discourse_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_genette_narrative_discourse_analysis_method1_idx` ON `FIPOP`.`genette_narrative_discourse` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`greimas_actantial_model` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`greimas_actantial_model` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`greimas_actantial_model` ADD CONSTRAINT `fk_greimas_actantial_model_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`greimas_actantial_model` ADD CONSTRAINT `fk_greimas_actantial_model_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_greimas_actantial_model_analysis_method1_idx` ON `FIPOP`.`greimas_actantial_model` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_actor` CHANGE `greimas_actantial_model_id` `greimas_actantial_model_analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_actor` DROP PRIMARY KEY, ADD PRIMARY KEY (`greimas_actantial_model_analysis_method_id`, `actor_id`, `actantial_model_facet_type_id`);
-ALTER TABLE `FIPOP`.`greimas_actantial_model_has_actor` ADD CONSTRAINT `fk_greimas_actantial_model_has_actor_greimas_actantial_model1` FOREIGN KEY (`greimas_actantial_model_analysis_method_id`) REFERENCES `FIPOP`.`greimas_actantial_model` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`greimas_actantial_model_has_actor` ADD CONSTRAINT `fk_greimas_actantial_model_has_actor_greimas_actantial_model1` FOREIGN KEY (`greimas_actantial_model_analysis_method_id`) REFERENCES `FIPOP`.`greimas_actantial_model` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_actor` DROP INDEX `fk_greimas_actantial_model_has_actor_greimas_actantial_mod1_idx`;
 CREATE INDEX `fk_greimas_actantial_model_has_actor_greimas_actantial_mod1_idx` ON `FIPOP`.`greimas_actantial_model_has_actor` (`greimas_actantial_model_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` CHANGE `greimas_actantial_model_id` `greimas_actantial_model_analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` DROP PRIMARY KEY, ADD PRIMARY KEY (`greimas_actantial_model_analysis_method_id`, `actantial_model_facet_type_id`);
-ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` ADD CONSTRAINT `fk_greimas_actantial_model_has_concept_greimas_actantial_model1` FOREIGN KEY (`greimas_actantial_model_analysis_method_id`) REFERENCES `FIPOP`.`greimas_actantial_model` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` ADD CONSTRAINT `fk_greimas_actantial_model_has_concept_greimas_actantial_model1` FOREIGN KEY (`greimas_actantial_model_analysis_method_id`) REFERENCES `FIPOP`.`greimas_actantial_model` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` DROP INDEX `fk_greimas_actantial_model_has_concept_concept1_idx`;
 ALTER TABLE `FIPOP`.`greimas_actantial_model_has_concept` DROP INDEX `fk_greimas_actantial_model_has_concept_greimas_actantial_m1_idx`;
 CREATE INDEX `fk_greimas_actantial_model_has_concept_greimas_actantial_m1_idx` ON `FIPOP`.`greimas_actantial_model_has_concept` (`greimas_actantial_model_analysis_method_id` ASC);
@@ -440,18 +443,18 @@ ALTER TABLE `FIPOP`.`lexia` DROP INDEX `fk_lexia_barthes_rhetoric_of_the_image1_
 CREATE INDEX `fk_lexia_barthes_rhetoric_of_the_image1_idx` ON `FIPOP`.`lexia` (`barthes_rhetoric_of_the_image_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`linguistic_message` CHANGE `barthes_rhetoric_of_the_image_id` `barthes_rhetoric_of_the_image_analysis_method_id` INT NOT NULL;
-ALTER TABLE `FIPOP`.`linguistic_message` ADD CONSTRAINT `fk_linguistic_message_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`linguistic_message` ADD CONSTRAINT `fk_linguistic_message_barthes_rhetoric_of_the_image1` FOREIGN KEY (`barthes_rhetoric_of_the_image_analysis_method_id`) REFERENCES `FIPOP`.`barthes_rhetoric_of_the_image` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`linguistic_message` DROP INDEX `fk_linguistic_message_barthes_rhetoric_of_the_image1_idx`;
 CREATE INDEX `fk_linguistic_message_barthes_rhetoric_of_the_image1_idx` ON `FIPOP`.`linguistic_message` (`barthes_rhetoric_of_the_image_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`lotman_renner_spatial_semantics` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`lotman_renner_spatial_semantics` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`lotman_renner_spatial_semantics` ADD CONSTRAINT `fk_lotman_renner_spatial_semantics_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`lotman_renner_spatial_semantics` ADD CONSTRAINT `fk_lotman_renner_spatial_semantics_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_lotman_renner_spatial_semantics_analysis_method1_idx` ON `FIPOP`.`lotman_renner_spatial_semantics` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`martinez_scheffel_unreliable_narration` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`martinez_scheffel_unreliable_narration` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`martinez_scheffel_unreliable_narration` ADD CONSTRAINT `fk_martinez_scheffel_unreliable_narration_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`martinez_scheffel_unreliable_narration` ADD CONSTRAINT `fk_martinez_scheffel_unreliable_narration_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_martinez_scheffel_unreliable_narration_analysis_method1_idx` ON `FIPOP`.`martinez_scheffel_unreliable_narration` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`martinez_scheffel_unreliable_narration_translation` CHANGE `martinez_scheffel_unreliable_narration_id` `martinez_scheffel_unreliable_narration_analysis_method_id` INT NOT NULL;
@@ -485,31 +488,31 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`sound_effect_descriptive` (
   CONSTRAINT `fk_sound_effect_descriptive_analysis_method1`
     FOREIGN KEY (`analysis_method_id`)
     REFERENCES `FIPOP`.`analysis_method` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 CREATE INDEX `fk_sound_effect_descriptive_analysis_method1_idx` ON `FIPOP`.`sound_effect_descriptive` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`spatial_semantics_type_actor_person` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `FIPOP`.`spatial_semantics_type_actor_person` CHANGE `lotman_renner_spatial_semantics_id` `lotman_renner_spatial_semantics_analysis_method_id` INT NOT NULL;
-ALTER TABLE `FIPOP`.`spatial_semantics_type_actor_person` ADD CONSTRAINT `fk_spatial_semantics_type_actor_person_lotman_renner_spatial_s1` FOREIGN KEY (`lotman_renner_spatial_semantics_analysis_method_id`) REFERENCES `FIPOP`.`lotman_renner_spatial_semantics` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`spatial_semantics_type_actor_person` ADD CONSTRAINT `fk_spatial_semantics_type_actor_person_lotman_renner_spatial_s1` FOREIGN KEY (`lotman_renner_spatial_semantics_analysis_method_id`) REFERENCES `FIPOP`.`lotman_renner_spatial_semantics` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`spatial_semantics_type_actor_person` DROP INDEX `fk_spatial_semantics_type_actor_person_lotman_renner_spatia1_idx`;
 CREATE INDEX `fk_spatial_semantics_type_actor_person_lotman_renner_spatia_idx` ON `FIPOP`.`spatial_semantics_type_actor_person` (`lotman_renner_spatial_semantics_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`spatial_semantics_type_space` CHANGE `id` `id` INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `FIPOP`.`spatial_semantics_type_space` CHANGE `lotman_renner_spatial_semantics_id` `lotman_renner_spatial_semantics_analysis_method_id` INT NOT NULL;
-ALTER TABLE `FIPOP`.`spatial_semantics_type_space` ADD CONSTRAINT `fk_spatial_semantics_type_space_lotman_renner_spatial_semantics1` FOREIGN KEY (`lotman_renner_spatial_semantics_analysis_method_id`) REFERENCES `FIPOP`.`lotman_renner_spatial_semantics` (`analysis_method_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`spatial_semantics_type_space` ADD CONSTRAINT `fk_spatial_semantics_type_space_lotman_renner_spatial_semantics1` FOREIGN KEY (`lotman_renner_spatial_semantics_analysis_method_id`) REFERENCES `FIPOP`.`lotman_renner_spatial_semantics` (`analysis_method_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`spatial_semantics_type_space` DROP INDEX `fk_spatial_semantics_type_space_lotman_renner_spatial_sema1_idx`;
 CREATE INDEX `fk_spatial_semantics_type_space_lotman_renner_spatial_seman_idx` ON `FIPOP`.`spatial_semantics_type_space` (`lotman_renner_spatial_semantics_analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`stanzel_narrative_situations` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`stanzel_narrative_situations` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`stanzel_narrative_situations` ADD CONSTRAINT `fk_stanzel_narrative_situations_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`stanzel_narrative_situations` ADD CONSTRAINT `fk_stanzel_narrative_situations_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_stanzel_narrative_situations_analysis_method1_idx` ON `FIPOP`.`stanzel_narrative_situations` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`van_sijll_cinematic_storytelling` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`van_sijll_cinematic_storytelling` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`van_sijll_cinematic_storytelling` ADD CONSTRAINT `fk_van_sijll_cinematic_storytelling_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`van_sijll_cinematic_storytelling` ADD CONSTRAINT `fk_van_sijll_cinematic_storytelling_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_van_sijll_cinematic_storytelling_analysis_method1_idx` ON `FIPOP`.`van_sijll_cinematic_storytelling` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`van_sijll_cinematic_storytelling_translation` CHANGE `van_sijll_cinematic_storytelling_id` `van_sijll_cinematic_storytelling_analysis_method_id` INT NOT NULL;
@@ -519,7 +522,7 @@ CREATE INDEX `fk_van_sijll_cinematic_storytelling_translation_van_sijll_c_idx` O
 
 ALTER TABLE `FIPOP`.`zelizer_beese_voice_of_the_visual` CHANGE `id` `analysis_method_id` INT NOT NULL;
 ALTER TABLE `FIPOP`.`zelizer_beese_voice_of_the_visual` DROP PRIMARY KEY, ADD PRIMARY KEY (`analysis_method_id`);
-ALTER TABLE `FIPOP`.`zelizer_beese_voice_of_the_visual` ADD CONSTRAINT `fk_zelizer_beese_voice_of_the_visual_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`zelizer_beese_voice_of_the_visual` ADD CONSTRAINT `fk_zelizer_beese_voice_of_the_visual_analysis_method1` FOREIGN KEY (`analysis_method_id`) REFERENCES `FIPOP`.`analysis_method` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 CREATE INDEX `fk_zelizer_beese_voice_of_the_visual_analysis_method1_idx` ON `FIPOP`.`zelizer_beese_voice_of_the_visual` (`analysis_method_id` ASC);
 
 ALTER TABLE `FIPOP`.`zelizer_beese_voice_of_the_visual_translation` CHANGE `zelizer_beese_voice_of_the_visual_id` `zelizer_beese_voice_of_the_visual_analysis_method_id` INT NOT NULL;
