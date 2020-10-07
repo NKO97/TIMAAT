@@ -35,8 +35,25 @@
         let remark = $('#analysis-remark').val();
         let analysisModel = {
           id: 0,
-          annotationId: annotationId,
-          analysisMethodId: 0,
+          annotation: {
+            id: annotationId
+          },
+          analysisMethod: {
+            id: 0,
+            analysisMethodType: {
+              id: analysisMethodTypeId,
+            },
+            cameraAxisOfAction: null,
+            cameraDistance: null,
+            cameraElevation: null,
+            cameraHandling: null,
+            cameraHorizontalAngle: null,
+            cameraShotType: null,
+            cameraVerticalAngle: null,
+            colorTemperature: null,
+            soundEffectDescriptive: null,
+            zelizerBeeseVoiceOfTheVisual: null
+          },
           preproduction: "",
           remark: remark
         }; 
@@ -47,8 +64,8 @@
         switch(analysisMethodTypeId) {
           case 1: // Martinez Scheffel Unreliable Narration
             analysisMethodId = Number($('#martinez-scheffel-unreliable-narration-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 2: // Greimas Actantial Model
 
@@ -67,41 +84,41 @@
           break;
           case 7: // Color Temperature
             analysisMethodId = Number($('#color-temperature-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 8: // Concept Camera Movement and Direction
 
           break;
           case 9: // Camera Elevation
             analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
             case 10: // Camera Axis of Action
             analysisMethodId = Number($('#camera-axis-of-action-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 11: // Camera Horizontal Angle
             analysisMethodId = Number($('#camera-horizontal-angle-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 12: // Camera Vertical Angle
             analysisMethodId = Number($('#camera-vertical-angle-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 13: // Camera Shot Type
             analysisMethodId = Number($('#camera-shot-type-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 14: // Camera Distance
             analysisMethodId = Number($('#camera-distance-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 15: // Concept Camera Movement and Handling
 
@@ -111,20 +128,20 @@
           break;
           case 17: // Camera Handling
             analysisMethodId = Number($('#camera-handling-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 18: // Zelizer Beese Voice of the Visual
             analysisMethodId = Number($('#zelizer-beese-voice-of-the-visual-select-dropdown').val());
-            analysisModel.analysisMethodId = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addStaticAnalysisMethodToAnalysis(analysisModel);
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 19: // Barthes Rhetoric of the Image
 
           break;
           case 20: // Sound Effect Descriptive
             analysisMethodVariantModel = {
-              id: 0,
+              analysisMethodId: 0,
               answerQ1: $('#sound-effect-descriptive-answer-q1').val(),
               answerQ2: $('#sound-effect-descriptive-answer-q2').val(),
               answerQ3: $('#sound-effect-descriptive-answer-q3').val(),
@@ -132,7 +149,12 @@
               answerQ5: $('#sound-effect-descriptive-answer-q5').val(),
               answerQ6: $('#sound-effect-descriptive-answer-q6').val()
             };
-            analysis = await TIMAAT.AnalysisService.createDynamicAnalysis(analysisModel, analysisMethodTypeId, analysisMethodVariantModel);
+            // analysisModel.analysisMethod.soundEffectDescriptive = analysisMethodVariantModel;
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            console.log("TCL: analysis", analysis);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysisMethodVariantModel = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "soundEffectDescriptive");
+            analysis.analysisMethod.soundEffectDescriptive = analysisMethodVariantModel;
           break;
           case 21: // Analysis Ambient Sound
             
@@ -160,16 +182,14 @@
       $('#timaat-analysis-delete-submit').on('click', async function(event) {
         event.preventDefault();
         var modal = $('#timaat-videoplayer-analysis-delete');
-        // var analysisMethodTypeId = modal.data('analysisMethodTypeId'); 
         var analysisId = modal.data('analysisId');
+        var analysisMethodId = modal.data('analysisMethodId');
         var isStatic = modal.data('isStatic');
         if (isStatic) {
           // console.log("TCL: isStatic", isStatic);
           await TIMAAT.AnalysisService.removeStaticAnalysis(analysisId);
         } else {
-          // delete analysis
-          // delete analysismethod
-          // delete analysismethod variant data
+          await TIMAAT.AnalysisService.removeDynamicAnalysis(analysisMethodId);
         }
         modal.modal('hide');
         var i = 0;
@@ -272,7 +292,7 @@
       };
       var remarkHtml = `<div class="form-group">
                           <label for="analysis-remark">Remark</label>
-                          <div class="col-md-9">
+                          <div class="col-md-11">
                             <textarea class="form-control form-control-sm"
                                       id="analysis-remark"
                                       aria-label="Remark"
@@ -287,7 +307,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="martinez-scheffel-unreliable-narration-select-dropdown">Unreliable Narration</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="martinez-scheffel-unreliable-narration-select-dropdown"
@@ -323,7 +343,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="color-temperature-select-dropdown">Color temperature</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="color-temperature-select-dropdown"
@@ -347,7 +367,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="camera-elevation-select-dropdown">Camera elevation</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-elevation-select-dropdown"
@@ -368,7 +388,7 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
               <label for="camera-axis-of-action-select-dropdown">Camera axis of action</label>
-              <div class="col-md-9">
+              <div class="col-md-11">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
                         id="camera-axis-of-action-select-dropdown"
@@ -389,7 +409,7 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
             <label for="camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
-              <div class="col-md-9">
+              <div class="col-md-11">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
                         id="camera-horizontal-angle-select-dropdown"
@@ -410,7 +430,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-vertical-angle-select-dropdown">Camera vertical angle</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-vertical-angle-select-dropdown"
@@ -431,7 +451,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-shot-type-select-dropdown">Camera shot type</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-shot-type-select-dropdown"
@@ -452,7 +472,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="camera-distance-select-dropdown">Camera distance</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-distance-select-dropdown"
@@ -479,7 +499,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-handling-select-dropdown">Camera handling</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-handling-select-dropdown"
@@ -500,7 +520,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="zelizer-beese-voice-of-the-visual-select-dropdown"
@@ -524,7 +544,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q1">1.) Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q1"
                             aria-label="Question 1"
@@ -534,7 +554,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q2">2.) Ist das Geräusch realistisch oder künstlich erzeugt?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q2"
                             aria-label="Question 2"
@@ -544,7 +564,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q3">3.) Von wo klingt das Geräusch?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q3"
                             aria-label="Question 3"
@@ -554,7 +574,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q4">4.) Bewegt sich das Geräusch oder ist es statisch?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q4"
                             aria-label="Question 4"
@@ -564,7 +584,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q5">5.) Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q5"
                             aria-label="Question 5"
@@ -574,7 +594,7 @@
               </div>
               <div class="form-group">
                 <label ="sound-effect-descriptive-answer-q6">6.) Wodurch ist das Auftreten des Geräusches motiviert (z.B. aus der Erzählung heraus, künstlerisch motiviert, es soll die Szene verfremden, es soll die Szene realistischer machen)?</label>
-                <div class="col-md-9">
+                <div class="col-md-11">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q6"
                             aria-label="Question 6"
@@ -610,6 +630,7 @@
       let modal = $('#timaat-videoplayer-analysis-delete');
       modal.data('analysisId', analysis.id);
       modal.data('isStatic', analysis.analysisMethod.analysisMethodType.isStatic);
+      modal.data('analysisMethodId', analysis.analysisMethod.id);
       modal.modal('show');
     },
 
@@ -874,7 +895,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,18,20].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var exists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

@@ -21,20 +21,20 @@
 
 	TIMAAT.AnalysisService = {
 
-	async addStaticAnalysisMethodToAnalysis(analysisModel) {
-	  console.log("TCL: addStaticAnalysisMethodToAnalysis -> analysisModel", analysisModel);
+	async addAnalysisMethodToAnalysis(model) {
+	  console.log("TCL: addAnalysisMethodToAnalysis -> model", model);
 		return new Promise(resolve => {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisModel.annotationId+"/"+analysisModel.analysisMethodId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+model.annotation.id+"/"+model.analysisMethod.id,
 				type:"POST",
-				data: JSON.stringify(analysisModel),
+				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-      	// console.log("TCL: addStaticAnalysisMethodToAnalysis -> data", data);
+      	// console.log("TCL: addAnalysisMethodToAnalysis -> data", data);
 				resolve(data);
 			}).fail(function(e) {
 				console.log( "error: ", e.responseText);
@@ -65,19 +65,20 @@
 		});
 	},
 
-	async createDynamicAnalysis(analysisModel, analysisMethodTypeId, analysisMethodVariantModel) {
-	  console.log("TCL: addStaticAnalysisMethodToAnalysis -> analysisModel", analysisModel);
+	async createAnalysisMethodVariant(model, variantType) {
+  	console.log("TCL: createAnalysisMethodVariant -> model, variantType", model, variantType);
 		return new Promise(resolve => {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisModel.annotationId+"/0",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+variantType+"/"+model.analysisMethodId,
 				type:"POST",
-				data: JSON.stringify(analysisModel),
+				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+      	// console.log("TCL: createAnalysisMethodVariant -> data", data);
 				resolve(data);
 			}).fail(function(e) {
 				console.log( "error: ", e.responseText);
@@ -88,7 +89,25 @@
 	},
 
 	// removes analysis and corresponding analysis method and method variant data as it is unique to this analysis
-	async removeDynamicAnalysis(analysis) {
+	async removeDynamicAnalysis(analysisMethodId) {
+		console.log("TCL: removeDynamicAnalysis -> analysisMethodId", analysisMethodId);
+		return new Promise(resolve => {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/analysisAndMethod/"+analysisMethodId,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	// console.log("TCL: createAnalysisMethodVariant -> data", data);
+				resolve(data);
+			}).fail(function(e) {
+				console.log( "error: ", e.responseText);
+			});
+		}).catch((error) => {
+			console.log( "error: ", error );
+		});
 
 	},
 

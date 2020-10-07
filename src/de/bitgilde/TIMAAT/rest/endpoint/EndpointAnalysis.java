@@ -35,6 +35,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.SoundEffectDescriptive;
 import de.bitgilde.TIMAAT.rest.Secured;
 
 @Service
@@ -250,15 +251,15 @@ public class EndpointAnalysis {
 																 String jsonData) {
 		System.out.println("AnalysisServiceEndpoint: createAnalysis: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
-		Analysis newAnalysis = null;  
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();  	
+		Analysis newAnalysis = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
+		
 		// parse JSON data
 		if (annotation == null) return Response.status(Status.NOT_FOUND).build();
-		if (analysisMethod == null) return Response.status(Status.NOT_FOUND).build();
 		try {
 			newAnalysis = mapper.readValue(jsonData, Analysis.class);
 		} catch (IOException e) {
@@ -270,8 +271,17 @@ public class EndpointAnalysis {
 			System.out.println("AnalysisServiceEndpoint: createAnalysis - newAnalysis == null");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+
 		// sanitize object data
 		newAnalysis.setId(0);
+		if (analysisMethodId > 0) { // assign pre-existing analysis method
+			analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
+		} else if (analysisMethodId == 0) { // create new analysis method
+			analysisMethod = new AnalysisMethod();
+			AnalysisMethodType analysisMethodType = entityManager.find(AnalysisMethodType.class, newAnalysis.getAnalysisMethod().getAnalysisMethodType().getId());
+			analysisMethod.setId(0);
+			analysisMethod.setAnalysisMethodType(analysisMethodType);
+		} 
 		newAnalysis.setAnnotation(annotation);
 		newAnalysis.setAnalysisMethod(analysisMethod);
 		annotation.addAnalysis(newAnalysis);
@@ -292,6 +302,7 @@ public class EndpointAnalysis {
 		// persist analysis
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		entityManager.persist(analysisMethod);
 		entityManager.persist(newAnalysis);
 		entityManager.flush();
 		entityTransaction.commit();
@@ -332,6 +343,92 @@ public class EndpointAnalysis {
 		return Response.ok().build();
 	}
 
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("analysisAndMethod/{analysisMethodId}")
+	@Secured
+	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId) {   
+		System.out.println("AnalysisServiceEndpoint: deleteAnalysisAndMethod"); 	
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
+		if ( analysisMethod == null ) return Response.status(Status.NOT_FOUND).build();
+		Analysis analysis = analysisMethod.getAnalysis().get(0); //* dynamically created analysis methods will only exist in one analysis
+		Annotation annotation = analysis.getAnnotation();
+		if ( annotation.getAnalysis().contains(analysis) == false) return Response.ok().entity(false).build();
+
+		// annotation.getAnalysis().remove(analysisMethodId);
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(analysisMethod);
+		entityTransaction.commit();
+		entityManager.refresh(annotation);
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 														UserLogManager.LogEvents.ANALYSISDELETED);
+		System.out.println("AnalysisServiceEndpoint: deleteAnalysisAndMethod - delete complete");
+		return Response.ok().build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("soundEffectDescriptive/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodSoundEffectDescriptive(@PathParam("analysisMethodId") int analysisMethodId, 
+																														 String jsonData) {
+		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		SoundEffectDescriptive soundEffectDescriptive = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			soundEffectDescriptive = mapper.readValue(jsonData, SoundEffectDescriptive.class);
+		} catch (IOException e) {
+			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( soundEffectDescriptive == null ) {
+			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: newAudio == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+
+		// update log metadata
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newAnalysis.setCreatedAt(creationDate);
+		// newAnalysis.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// 	return Response.serverError().build();
+		// }
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(soundEffectDescriptive);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(soundEffectDescriptive);
+		entityManager.refresh(soundEffectDescriptive.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive - done");
+		return Response.ok().entity(soundEffectDescriptive).build();
+	}
+	
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
     for(Object o: c)
