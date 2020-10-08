@@ -43,6 +43,7 @@
             analysisMethodType: {
               id: analysisMethodTypeId,
             },
+            analysisSpeech: null,
             cameraAxisOfAction: null,
             cameraDistance: null,
             cameraElevation: null,
@@ -59,6 +60,8 @@
         }; 
         var analysisMethodId;
         var analysisMethodVariantModel = {};
+        var audioPostProductionModel = {};
+        var audioPostProductionTranslationModel = {};
         var analysis;
 
         switch(analysisMethodTypeId) {
@@ -95,7 +98,7 @@
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
-            case 10: // Camera Axis of Action
+          case 10: // Camera Axis of Action
             analysisMethodId = Number($('#camera-axis-of-action-select-dropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
@@ -149,7 +152,6 @@
               answerQ5: $('#sound-effect-descriptive-answer-q5').val(),
               answerQ6: $('#sound-effect-descriptive-answer-q6').val()
             };
-            // analysisModel.analysisMethod.soundEffectDescriptive = analysisMethodVariantModel;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             console.log("TCL: analysis", analysis);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
@@ -163,7 +165,46 @@
 
           break;
           case 23: // Analysis Speech
-
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              audioPostProduction: {
+                id: 0,
+                audioPostProductionTranslations: {
+                  id: 0
+                },
+              },
+              // categorySet: { id: 0 },
+              accent: $('#analysis-speech-accent').val(),
+              intonation: $('#analysis-speech-intonation').val(),
+              volume: $('#analysis-speech-volume').val(),
+              tempo: $('#analysis-speech-tempo').val(),
+              pauses: $('#analysis-speech-pauses').val(),
+              timbre: $('#analysis-speech-timbre').val(),
+            };
+            audioPostProductionTranslationModel = {
+              id: 0,
+              audioPostProduction: {
+                id: 0
+              },
+              language: {
+                id: 1 // TODO
+              },
+              overdubbing: $('#audio-post-production-overdubbing').val(),
+              reverb: $('#audio-post-production-reverb').val(),
+              delay: $('#audio-post-production-delay').val(),
+              panning: $('#audio-post-production-panning').val(),
+              bass: $('#audio-post-production-bass').val(),
+              treble: $('#audio-post-production-treble').val(),
+            };
+            audioPostProductionModel = await TIMAAT.AnalysisService.createAudioPostProduction();
+            audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
+            audioPostProductionTranslationModel = await TIMAAT.AnalysisService.createAudioPostProductionTranslation(audioPostProductionTranslationModel);
+            audioPostProductionModel.audioPostProductionTranslations[0] = audioPostProductionTranslationModel;
+            analysisMethodVariantModel.audioPostProduction = audioPostProductionModel;
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysisMethodVariantModel = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisSpeech");
+            analysis.analysisMethod.analysisSpeech = analysisMethodVariantModel;
           break;
           case 24: // Analysis Voice
 
@@ -184,12 +225,17 @@
         var modal = $('#timaat-videoplayer-analysis-delete');
         var analysisId = modal.data('analysisId');
         var analysisMethodId = modal.data('analysisMethodId');
+        var audioPostProductionId = modal.data('audioPostProductionId');
         var isStatic = modal.data('isStatic');
         if (isStatic) {
           // console.log("TCL: isStatic", isStatic);
-          await TIMAAT.AnalysisService.removeStaticAnalysis(analysisId);
+          await TIMAAT.AnalysisService.deleteStaticAnalysis(analysisId);
         } else {
-          await TIMAAT.AnalysisService.removeDynamicAnalysis(analysisMethodId);
+          await TIMAAT.AnalysisService.deleteDynamicAnalysis(analysisMethodId);
+          // if analysisMethod was linked to audio post production, delete audio post production
+          if (audioPostProductionId != null) {
+            await TIMAAT.AnalysisService.deleteAudioPostProduction(audioPostProductionId);
+          }
         }
         modal.modal('hide');
         var i = 0;
@@ -290,16 +336,80 @@
           cache: true
         },
       };
-      var remarkHtml = `<div class="form-group">
-                          <label for="analysis-remark">Remark</label>
-                          <div class="col-md-11">
-                            <textarea class="form-control form-control-sm"
-                                      id="analysis-remark"
-                                      aria-label="Remark"
-                                      placeholder="Remark"></textarea>
-                          </div>
-                        </div>`;
-
+      var audioPostProductionHtml = `<hr>
+      <h5 class="modal-title">Post Production Information</h5>
+      <div class="form-group">
+        <label for="audio-post-production-overdubbing">Overdubbing</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-overdubbing"
+                    aria-label="Overdubbing"
+                    name="overdubbing"
+                    placeholder="Enter description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="audio-post-production-reverb">Reverb</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-reverb"
+                    aria-label="Reverb"
+                    name="reverb"
+                    placeholder="Enter description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="audio-post-production-delay">Delay</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-delay"
+                    aria-label="Delay"
+                    name="delay"
+                    placeholder="Enter description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="audio-post-production-panning">Panning</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-panning"
+                    aria-label="Panning"
+                    name="panning"
+                    placeholder="Enter description"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="audio-post-production-bass">Bass</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-bass"
+                    aria-label="Bass"
+                    name="bass"
+                    placeholder="Enter description"></textarea>
+          </div>
+      </div>
+      <div class="form-group">
+        <label ="audio-post-production-treble">Treble</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="audio-post-production-treble"
+                    aria-label="Treble"
+                    name="treble"
+                    placeholder="Enter description"></textarea>
+        </div>
+      </div>`;
+      var remarkHtml = `<hr>
+      <h5 class="modal-title">Remark</h5>
+      <div class="form-group">
+        <label class="sr-only" for="analysis-remark">Remark</label>
+        <div class="col-md-11">
+          <textarea class="form-control form-control-sm"
+                    id="analysis-remark"
+                    aria-label="Remark"
+                    placeholder="Remark"></textarea>
+        </div>
+      </div>`;
+    
       switch (analysisMethodType.id) {
         case 1: // Martinez Scheffel Unreliable Narration
           $('#analysisAddLabel').text('Choose unreliable Narration (Martinez & Scheffel)');
@@ -612,7 +722,73 @@
 
         break;
         case 23: // Analysis Speech
-
+        $('#analysisAddLabel').text('Describe speech');
+        modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <h5 class="modal-title">Analysis Speech</h5>
+            <div class="form-group">
+              <label for="analysis-speech-accent">Accent</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-accent"
+                          aria-label="Accent"
+                          name="accent"
+                          placeholder="Enter description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-speech-intonation">Intonation</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-intonation"
+                          aria-label="Intonation"
+                          name="intonation"
+                          placeholder="Enter description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-speech-volume">Volume</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-volume"
+                          aria-label="Volume"
+                          name="volume"
+                          placeholder="Enter description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-speech-tempo">Tempo</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-tempo"
+                          aria-label="Tempo"
+                          name="tempo"
+                          placeholder="Enter description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-speech-pauses">Pauses</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-pauses"
+                          aria-label="Pauses"
+                          name="pauses"
+                          placeholder="Enter description"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+              <label ="analysis-speech-timbre">Timbre</label>
+              <div class="col-md-11">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-speech-timbre"
+                          aria-label="Timbre"
+                          name="timbre"
+                          placeholder="Enter description"></textarea>
+              </div>
+            </div>`+
+            audioPostProductionHtml +
+            remarkHtml +
+          `</form>`);
         break;
         case 24: // Analysis Voice
 
@@ -631,23 +807,34 @@
       modal.data('analysisId', analysis.id);
       modal.data('isStatic', analysis.analysisMethod.analysisMethodType.isStatic);
       modal.data('analysisMethodId', analysis.analysisMethod.id);
+      switch (analysis.analysisMethod.analysisMethodType.id) {
+        case 23: // analysis speech
+          modal.data('audioPostProductionId', analysis.analysisMethod.analysisSpeech.audioPostProduction.id);
+        break;
+        default:
+          modal.data('audioPostProductionId', null);
+        break;
+      }
       modal.modal('show');
     },
 
     displayAnalysisDetails: function( data ) {
       console.log("TCL: displayAnalysisDetails -> data", data);
       var details = 
-        `<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">`;
+        `<div>
+          <table>
+            <thead class="thead-dark">
+              <tr>
+                <th>Analysis Data</th>
+                <th />
+              </tr>
+            </thead>`;
       switch (data.analysisMethod.analysisMethodType.id) {
         case 1: // Martinez Scheffel Unreliable Narration
           details +=
             `<tr>
               <td>Unreliable Narration (Martinez & Scheffel):</td>
               <td>`+data.analysisMethod.martinezScheffelUnreliableNarration.martinezScheffelUnreliableNarrationTranslations[0].type+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 2: // Greimas Actantial Model
@@ -670,10 +857,6 @@
             `<tr>
               <td>Color temperature:</td>
               <td>`+data.analysisMethod.colorTemperature.colorTemperatureTranslations[0].name+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 8: // Concept Camera Movement and Direction
@@ -684,10 +867,6 @@
             `<tr>
               <td>Camera elevation:</td>
               <td>`+data.analysisMethod.cameraElevation.cameraElevationTranslations[0].name+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 10: // Camera Axis of Action
@@ -695,10 +874,6 @@
             `<tr>
               <td>Camera axis of action:</td>
               <td>`+data.analysisMethod.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 11: // Camera Horizontal Angle
@@ -706,10 +881,6 @@
             `<tr>
               <td>Camera horizontal angle:</td>
               <td>`+data.analysisMethod.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 12: // Camera Vertical Angle
@@ -728,10 +899,6 @@
             `<tr>
               <td>Camera shot type:</td>
               <td>`+data.analysisMethod.cameraShotType.cameraShotTypeTranslations[0].type+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 14: // Camera Distance
@@ -739,10 +906,6 @@
             `<tr>
               <td>Camera distance:</td>
               <td>`+data.analysisMethod.cameraDistance.cameraDistanceTranslations[0].name+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 15: // Concept Camera Movement and Handling
@@ -756,10 +919,6 @@
             `<tr>
               <td>Camera handling:</td>
               <td>`+data.analysisMethod.cameraHandling.cameraHandlingTranslations[0].type+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 18: // Zelizer Beese Voice of the Visual
@@ -767,16 +926,12 @@
             `<tr>
               <td>Voice of the Visual (Zelizer & Beese):</td>
               <td>`+data.analysisMethod.zelizerBeeseVoiceOfTheVisual.zelizerBeeseVoiceOfTheVisualTranslations[0].type+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 19: // Barthes Rhetoric of the Image
 
         break;
-        case 20: //* Sound Effect Descriptive
+        case 20: // Sound Effect Descriptive
           details +=
             `<tr>
               <td>Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</td>
@@ -801,10 +956,6 @@
             <tr>
               <td>Wodurch ist das Auftreten des Geräusches motiviert?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ6+`</td>
-            </tr>
-            <tr>
-              <td>Remark:</td>
-              <td>`+data.remark+`</td>
             </tr>`;
         break;
         case 21: // Analysis Ambient Sound
@@ -814,7 +965,65 @@
 
         break;
         case 23: // Analysis Speech
-
+        details +=
+            `<tr>
+              <td>Accent</td>
+              <td>`+data.analysisMethod.analysisSpeech.accent+`</td>
+            </tr>
+            <tr>
+              <td>Intonation</td>
+              <td>`+data.analysisMethod.analysisSpeech.intonation+`</td>
+            </tr>
+            <tr>
+              <td>Volume</td>
+              <td>`+data.analysisMethod.analysisSpeech.volume+`</td>
+            </tr>
+            <tr>
+              <td>Speech tempo</td>
+              <td>`+data.analysisMethod.analysisSpeech.tempo+`</td>
+            </tr>
+            <tr>
+              <td>Pauses</td>
+              <td>`+data.analysisMethod.analysisSpeech.pauses+`</td>
+            </tr>
+            <tr>
+              <td>Timbre</td>
+              <td>`+data.analysisMethod.analysisSpeech.timbre+`</td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead class="thead-dark">
+              <tr>
+                <th>Post Production</th>
+                <th />
+              </tr>
+            </thead>
+            <tr>
+              <td>Overdubbing</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].overdubbing+`</td>
+            </tr>
+            <tr>
+              <td>Reverb</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].reverb+`</td>
+            </tr>
+            <tr>
+              <td>Delay</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].delay+`</td>
+            </tr>
+            <tr>
+              <td>Panning</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].panning+`</td>
+            </tr>
+            <tr>
+              <td>Bass</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].bass+`</td>
+            </tr>
+            <tr>
+              <td>Treble</td>
+              <td>`+data.analysisMethod.analysisSpeech.audioPostProduction.audioPostProductionTranslations[0].treble+`</td>
+            </tr>`;
         break;
         case 24: // Analysis Voice
 
@@ -823,7 +1032,21 @@
 
         break;
       }
-      details += `</table>`;
+      details += `
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead class="thead-dark">
+              <tr>
+                <th>Remark</th>
+              </tr>
+            </thead>
+            <tr>
+              <td>`+data.remark+`</td>
+            </tr>
+          </table>
+        </div>`;
       return details;
     },
 
@@ -895,7 +1118,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18,20].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,18,20,23].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var exists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

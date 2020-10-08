@@ -50,6 +50,11 @@ body.timaat-login-modal-open #wrapper {
     filter: blur(50px);
 }
 
+.modal-body {
+	max-height: 80vh;
+	overflow-y: auto;
+}
+
 p {
 	margin-top: 0px;
 	margin-bottom: 0px;

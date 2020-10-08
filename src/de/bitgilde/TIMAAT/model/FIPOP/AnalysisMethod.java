@@ -44,9 +44,9 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private AnalysisMusic analysisMusic;
 
-	// //bi-directional one-to-one association to AnalysisSpeech
-	// @OneToOne(mappedBy="analysisMethod")
-	// private AnalysisSpeech analysisSpeech;
+	//bi-directional one-to-one association to AnalysisSpeech
+	@OneToOne(mappedBy="analysisMethod")
+	private AnalysisSpeech analysisSpeech;
 
 	// //bi-directional one-to-one association to AnalysisVoice
 	// @OneToOne(mappedBy="analysisMethod")
@@ -197,13 +197,13 @@ public class AnalysisMethod implements Serializable {
 	// 	this.analysisMusic = analysisMusic;
 	// }
 
-	// public AnalysisSpeech getAnalysisSpeech() {
-	// 	return this.analysisSpeech;
-	// }
+	public AnalysisSpeech getAnalysisSpeech() {
+		return this.analysisSpeech;
+	}
 
-	// public void setAnalysisSpeech(AnalysisSpeech analysisSpeech) {
-	// 	this.analysisSpeech = analysisSpeech;
-	// }
+	public void setAnalysisSpeech(AnalysisSpeech analysisSpeech) {
+		this.analysisSpeech = analysisSpeech;
+	}
 
 	// public AnalysisVoice getAnalysisVoice() {
 	// 	return this.analysisVoice;

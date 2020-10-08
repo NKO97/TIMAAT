@@ -45,8 +45,8 @@
 	},
 
 	// removes analysis with link to reusable analysis method
-	async removeStaticAnalysis(analysisId) {
-	  console.log("TCL: removeStaticAnalysis -> analysisId", analysisId);
+	async deleteStaticAnalysis(analysisId) {
+	  console.log("TCL: deleteStaticAnalysis -> analysisId", analysisId);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisId,
@@ -89,8 +89,8 @@
 	},
 
 	// removes analysis and corresponding analysis method and method variant data as it is unique to this analysis
-	async removeDynamicAnalysis(analysisMethodId) {
-		console.log("TCL: removeDynamicAnalysis -> analysisMethodId", analysisMethodId);
+	async deleteDynamicAnalysis(analysisMethodId) {
+		console.log("TCL: deleteDynamicAnalysis -> analysisMethodId", analysisMethodId);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/analysisAndMethod/"+analysisMethodId,
@@ -108,7 +108,72 @@
 		}).catch((error) => {
 			console.log( "error: ", error );
 		});
+	},
 
+	async createAudioPostProduction() {
+  	console.log("TCL: createAudioPostProduction");
+		return new Promise(resolve => {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/0",
+				type:"POST",
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	// console.log("TCL: createAudioPostProduction -> data", data);
+				resolve(data);
+			}).fail(function(e) {
+				console.log( "error: ", e.responseText);
+			});
+		}).catch((error) => {
+			console.log( "error: ", error );
+		});
+	},
+
+	async deleteAudioPostProduction(id) {
+		console.log("TCL: deleteAudioPostProduction -> id", id);
+		return new Promise(resolve => {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/"+id,
+				type:"DELETE",
+				contentType:"application/json; charset=utf-8",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	// console.log("TCL: deleteAudioPostProduction -> data", data);
+				resolve(data);
+			}).fail(function(e) {
+				console.log( "error: ", e.responseText);
+			});
+		}).catch((error) => {
+			console.log( "error: ", error );
+		});
+	},
+
+	async createAudioPostProductionTranslation(model) {
+  	console.log("TCL: createAudioPostProductionTranslation -> model", model);
+		return new Promise(resolve => {
+			$.ajax({
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/"+model.audioPostProduction.id+"/translation",
+				type:"POST",
+				data: JSON.stringify(model),
+				contentType:"application/json; charset=utf-8",
+				dataType:"json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				},
+			}).done(function(data) {
+      	// console.log("TCL: createAudioPostProductionTranslation -> data", data);
+				resolve(data);
+			}).fail(function(e) {
+				console.log( "error: ", e.responseText);
+			});
+		}).catch((error) => {
+			console.log( "error: ", error );
+		});
 	},
 
   }

@@ -35,9 +35,12 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSpeech</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioCodecInformation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfAction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation</class>

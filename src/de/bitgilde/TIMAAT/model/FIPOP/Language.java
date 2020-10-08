@@ -93,10 +93,10 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<AudienceTranslation> audienceTranslations;
 
-	// //bi-directional many-to-one association to AudioPostProductionTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<AudioPostProductionTranslation> audioPostProductionTranslations;
+	//bi-directional many-to-one association to AudioPostProductionTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<AudioPostProductionTranslation> audioPostProductionTranslations;
 
 	// //bi-directional many-to-one association to CameraAxisOfActionTranslation
 	// @OneToMany(mappedBy="language")
@@ -819,27 +819,27 @@ public class Language implements Serializable {
 	// 	return audienceTranslation;
 	// }
 
-	// public List<AudioPostProductionTranslation> getAudioPostProductionTranslations() {
-	// 	return this.audioPostProductionTranslations;
-	// }
+	public List<AudioPostProductionTranslation> getAudioPostProductionTranslations() {
+		return this.audioPostProductionTranslations;
+	}
 
-	// public void setAudioPostProductionTranslations(List<AudioPostProductionTranslation> audioPostProductionTranslations) {
-	// 	this.audioPostProductionTranslations = audioPostProductionTranslations;
-	// }
+	public void setAudioPostProductionTranslations(List<AudioPostProductionTranslation> audioPostProductionTranslations) {
+		this.audioPostProductionTranslations = audioPostProductionTranslations;
+	}
 
-	// public AudioPostProductionTranslation addAudioPostProductionTranslation(AudioPostProductionTranslation audioPostProductionTranslation) {
-	// 	getAudioPostProductionTranslations().add(audioPostProductionTranslation);
-	// 	audioPostProductionTranslation.setLanguage(this);
+	public AudioPostProductionTranslation addAudioPostProductionTranslation(AudioPostProductionTranslation audioPostProductionTranslation) {
+		getAudioPostProductionTranslations().add(audioPostProductionTranslation);
+		audioPostProductionTranslation.setLanguage(this);
 
-	// 	return audioPostProductionTranslation;
-	// }
+		return audioPostProductionTranslation;
+	}
 
-	// public AudioPostProductionTranslation removeAudioPostProductionTranslation(AudioPostProductionTranslation audioPostProductionTranslation) {
-	// 	getAudioPostProductionTranslations().remove(audioPostProductionTranslation);
-	// 	audioPostProductionTranslation.setLanguage(null);
+	public AudioPostProductionTranslation removeAudioPostProductionTranslation(AudioPostProductionTranslation audioPostProductionTranslation) {
+		getAudioPostProductionTranslations().remove(audioPostProductionTranslation);
+		audioPostProductionTranslation.setLanguage(null);
 
-	// 	return audioPostProductionTranslation;
-	// }
+		return audioPostProductionTranslation;
+	}
 
 	// public List<CameraAxisOfActionTranslation> getCameraAxisOfActionTranslations() {
 	// 	return this.cameraAxisOfActionTranslations;

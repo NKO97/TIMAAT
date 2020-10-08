@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,7 +35,11 @@ import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSpeech;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
+import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.SoundEffectDescriptive;
 import de.bitgilde.TIMAAT.rest.Secured;
 
@@ -372,6 +377,183 @@ public class EndpointAnalysis {
 		return Response.ok().build();
 	}
 
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}")
+	@Secured
+	public Response createAudioPostProduction(@PathParam("id") int id) {
+		System.out.println("AnalysisServiceEndpoint: createAudioPostProduction: ");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		AudioPostProduction audioPostProduction = new AudioPostProduction();
+
+		// sanitize object data
+		audioPostProduction.setId(0);
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(audioPostProduction);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(audioPostProduction);
+		// entityManager.refresh(audioPostProduction.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("AnalysisServiceEndpoint: createAudioPostProduction - done");
+		return Response.ok().entity(audioPostProduction).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}")
+	@Secured
+	public Response deleteAudioPostProduction(@PathParam("id") int id) {
+		System.out.println("AnalysisServiceEndpoint: deleteAudioPostProduction");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
+
+		if ( audioPostProduction == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(audioPostProduction);
+		//* ON DELETE CASCADE deletes connected audio_post_production_translation entries
+		entityTransaction.commit();
+		
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext
+		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
+		System.out.println("AnalysisServiceEndpoint: deleteAudioPostProduction - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}/translation")
+	@Secured
+	public Response createAudioPostProductionTranslation(@PathParam("id") int id, 
+																											 String jsonData) {
+		System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		AudioPostProductionTranslation audioPostProductionTranslation = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			audioPostProductionTranslation = mapper.readValue(jsonData, AudioPostProductionTranslation.class);
+		} catch (IOException e) {
+			System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( audioPostProductionTranslation == null ) {
+			System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: newAudio == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+		audioPostProductionTranslation.setId(0);
+		Language language = entityManager.find(Language.class, audioPostProductionTranslation.getLanguage().getId());
+		audioPostProductionTranslation.setLanguage(language);
+		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
+		audioPostProductionTranslation.setAudioPostProduction(audioPostProduction);
+
+		// update log metadata
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newAnalysis.setCreatedAt(creationDate);
+		// newAnalysis.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// 	return Response.serverError().build();
+		// }
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(language);
+		entityManager.persist(audioPostProductionTranslation);
+		entityManager.flush();
+		audioPostProductionTranslation.setLanguage(language);
+		audioPostProductionTranslation.setAudioPostProduction(audioPostProduction);
+		entityTransaction.commit();
+		entityManager.refresh(audioPostProductionTranslation);
+		entityManager.refresh(language);
+		entityManager.refresh(audioPostProduction);
+		// entityManager.refresh(audioPostProduction.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation - done");
+		return Response.ok().entity(audioPostProductionTranslation).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("analysisSpeech/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodAnalysisSpeech(@PathParam("analysisMethodId") int analysisMethodId, 
+																										 String jsonData) {
+		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		AnalysisSpeech analysisSpeech = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			analysisSpeech = mapper.readValue(jsonData, AnalysisSpeech.class);
+		} catch (IOException e) {
+			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( analysisSpeech == null ) {
+			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: newAudio == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+
+		// update log metadata
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newAnalysis.setCreatedAt(creationDate);
+		// newAnalysis.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// 	return Response.serverError().build();
+		// }
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(analysisSpeech);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(analysisSpeech);
+		entityManager.refresh(analysisSpeech.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech - done");
+		return Response.ok().entity(analysisSpeech).build();
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
