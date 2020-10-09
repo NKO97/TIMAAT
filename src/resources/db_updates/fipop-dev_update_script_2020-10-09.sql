@@ -1,0 +1,2 @@
+ALTER TABLE `FIPOP`.`musical_notation` DROP FOREIGN KEY `fk_musical_notation_medium1`;
+ALTER TABLE `FIPOP`.`musical_notation` ADD CONSTRAINT `fk_musical_notation_medium1` FOREIGN KEY (`medium_id`) REFERENCES `FIPOP`.`medium` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
