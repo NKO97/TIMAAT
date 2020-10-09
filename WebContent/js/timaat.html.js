@@ -417,7 +417,43 @@ var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validat
     },
     question: {
       required: true,
-    }
+    },
+    accent: {
+      maxlength: 255,
+    },
+    intonation: {
+      maxlength: 255,
+    },
+    volume: {
+      maxlength: 255,
+    },
+    tempo: {
+      maxlength: 255,
+    },
+    pauses: {
+      maxlength: 255,
+    },
+    timbre: {
+      maxlength: 255,
+    },
+    overdubbing: {
+      maxlength: 255,
+    },
+    reverb: {
+      maxlength: 255,
+    },
+    delay: {
+      maxlength: 255,
+    },
+    panning: {
+      maxlength: 255,
+    },
+    bass: {
+      maxlength: 255,
+    },
+    treble: {
+      maxlength: 255,
+    },
   },
   messages: {
     analysisMethodId: {
@@ -425,7 +461,43 @@ var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validat
     },
     question: {
       required: "Please answer the question.",
-    }
+    },
+    accent: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    intonation: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    volume: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    tempo: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    pauses: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    timbre: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    overdubbing: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    reverb: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    delay: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    panning: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    bass: {
+      maxlength: "Text is too long: max length is 255",
+    },
+    treble: {
+      maxlength: "Text is too long: max length is 255",
+    },
   },
   submitHandler: function(analysisMethodModal) {
     analysisMethodModal.submit();

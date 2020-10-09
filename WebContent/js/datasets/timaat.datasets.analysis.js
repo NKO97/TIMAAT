@@ -343,6 +343,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-overdubbing"
+                    maxlength="255"
                     aria-label="Overdubbing"
                     name="overdubbing"
                     placeholder="Enter description"></textarea>
@@ -353,6 +354,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-reverb"
+                    maxlength="255"
                     aria-label="Reverb"
                     name="reverb"
                     placeholder="Enter description"></textarea>
@@ -363,6 +365,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-delay"
+                    maxlength="255"
                     aria-label="Delay"
                     name="delay"
                     placeholder="Enter description"></textarea>
@@ -373,6 +376,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-panning"
+                    maxlength="255"
                     aria-label="Panning"
                     name="panning"
                     placeholder="Enter description"></textarea>
@@ -383,6 +387,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-bass"
+                    maxlength="255"
                     aria-label="Bass"
                     name="bass"
                     placeholder="Enter description"></textarea>
@@ -393,6 +398,7 @@
         <div class="col-md-11">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-treble"
+                    maxlength="255"
                     aria-label="Treble"
                     name="treble"
                     placeholder="Enter description"></textarea>
@@ -731,6 +737,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-accent"
+                          maxlength="255"
                           aria-label="Accent"
                           name="accent"
                           placeholder="Enter description"></textarea>
@@ -741,6 +748,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-intonation"
+                          maxlength="255"
                           aria-label="Intonation"
                           name="intonation"
                           placeholder="Enter description"></textarea>
@@ -751,6 +759,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-volume"
+                          maxlength="255"
                           aria-label="Volume"
                           name="volume"
                           placeholder="Enter description"></textarea>
@@ -761,6 +770,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-tempo"
+                          maxlength="255"
                           aria-label="Tempo"
                           name="tempo"
                           placeholder="Enter description"></textarea>
@@ -771,6 +781,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-pauses"
+                          maxlength="255"
                           aria-label="Pauses"
                           name="pauses"
                           placeholder="Enter description"></textarea>
@@ -781,6 +792,7 @@
               <div class="col-md-11">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-timbre"
+                          maxlength="255"
                           aria-label="Timbre"
                           name="timbre"
                           placeholder="Enter description"></textarea>
