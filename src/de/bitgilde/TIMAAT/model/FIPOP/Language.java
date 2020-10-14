@@ -243,6 +243,11 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<JinsTranslation> jinsTranslations;
 
+	//bi-directional many-to-one association to JinsTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightingTranslation> LightingTranslations;
+
 	// //bi-directional many-to-one association to LevelOfConcreteActionTranslation
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore

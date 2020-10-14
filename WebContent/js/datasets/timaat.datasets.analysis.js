@@ -272,8 +272,10 @@
           case 24: // Analysis Voice
 
           break;
-          case 25: //? Lighting type
-
+          case 25: // Lighting type
+            analysisMethodId = Number($('#lighting-select-dropdown').val());
+            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
         }
         modal.modal('hide');
@@ -1104,8 +1106,26 @@
         case 24: // Analysis Voice
 
         break;
-        case 25: //? Lighting type
-
+        case 25: // Lighting type
+          $('#analysisAddLabel').text('Choose lighting');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+              <label for="lighting-select-dropdown">Lighting</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="lighting-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select lighting"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#lighting-select-dropdown').select2(select2Options);
         break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
@@ -1457,8 +1477,12 @@
         case 24: // Analysis Voice
 
         break;
-        case 25: //? Lighting type
-
+        case 25: // Lighting type
+          details +=
+          `<tr>
+            <td>Camera handling:</td>
+            <td>`+data.analysisMethod.lighting.lightingTranslations[0].name+`</td>
+          </tr>`;
         break;
       }
       // add analysis table fields
@@ -1548,7 +1572,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18,20,22,23].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,18,20,22,23,25].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var exists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

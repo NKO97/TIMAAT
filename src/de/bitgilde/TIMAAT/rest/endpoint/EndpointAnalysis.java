@@ -254,8 +254,10 @@ public class EndpointAnalysis {
 			case 24: // Analysis Voice
 
 			break;
-			case 25: //? Lighting type
-
+			case 25: // Lighting type
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLighting().getLightingTranslations().get(0).getName()));
+				}
 			break;
 		}
 

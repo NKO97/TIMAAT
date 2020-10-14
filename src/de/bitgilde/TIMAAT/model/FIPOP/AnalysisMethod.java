@@ -108,6 +108,10 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private GreimasActantialModel greimasActantialModel;
 
+	//bi-directional one-to-one association to ColorTemperature
+	@OneToOne(mappedBy="analysisMethod")
+	private Lighting lighting;
+
 	// //bi-directional one-to-one association to LotmanRennerSpatialSemantics
 	// @OneToOne(mappedBy="analysisMethod")
 	// private LotmanRennerSpatialSemantics lotmanRennerSpatialSemantic;
@@ -324,6 +328,14 @@ public class AnalysisMethod implements Serializable {
 	// public void setGreimasActantialModel(GreimasActantialModel greimasActantialModel) {
 	// 	this.greimasActantialModel = greimasActantialModel;
 	// }
+
+	public Lighting getLighting() {
+		return this.lighting;
+	}
+
+	public void setLighting(Lighting lighting) {
+		this.lighting = lighting;
+	}
 
 	// public LotmanRennerSpatialSemantics getLotmanRennerSpatialSemantic() {
 	// 	return this.lotmanRennerSpatialSemantic;

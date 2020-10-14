@@ -101,6 +101,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Jins</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Lighting</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LineupMember</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation</class>
