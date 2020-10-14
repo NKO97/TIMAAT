@@ -487,7 +487,8 @@ public class MediaCollectionEndpoint {
 		}
 		if ( updatedCollection == null ) return Response.notModified().build();
 		    	
-    // update medium collection data
+		// update medium collection data
+		if ( updatedCollection.getIsSystemic() != null) collection.setIsSystemic(updatedCollection.getIsSystemic());
 		if ( updatedCollection.getTitle() != null ) collection.setTitle(updatedCollection.getTitle());
 		if ( updatedCollection.getRemark() != null ) collection.setRemark(updatedCollection.getRemark());
 

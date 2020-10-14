@@ -111,14 +111,14 @@
 			});
 		},
 
-		async updateMediaCollection(collection) {
-			console.log("TCL: updateMediaCollection -> collection", collection);
-			// var col = {
-			// 		id: collection.id,
-			// 		isSystemic: 0,
-			// 		title: collection.title,
-			// 		note: collection.note,
-			// };
+		async updateMediaCollection(collectionFull) {
+			console.log("TCL: updateMediaCollection -> collection", collectionFull);
+			var collection = {
+					id: collectionFull.id,
+					isSystemic: collectionFull.isSystemic,
+					title: collectionFull.title,
+					note: collectionFull.note,
+			};
 			delete collection.ui;
 			return new Promise(resolve => {
 				$.ajax({
