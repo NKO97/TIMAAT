@@ -89,7 +89,7 @@ public class Event implements Serializable {
 	private List<EventType> eventTypes;
 
 	//bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="events", cascade=CascadeType.PERSIST)
+	@ManyToMany(mappedBy="events", cascade = CascadeType.PERSIST)
 	private List<Tag> tags;
 
 	//bi-directional many-to-one association to EventRelatesToEvent

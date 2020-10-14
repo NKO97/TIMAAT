@@ -34,7 +34,7 @@ public class RoleGroup implements Serializable {
 	private List<Role> roles;
 
 	//bi-directional many-to-one association to RoleGroupTranslation
-	@OneToMany(mappedBy="roleGroup", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="roleGroup", cascade = CascadeType.PERSIST)
 	private List<RoleGroupTranslation> roleGroupTranslations;
 
 	// tables cannot contain identifier id alone, or a query exception is thrown

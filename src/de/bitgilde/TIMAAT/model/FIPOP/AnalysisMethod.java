@@ -40,9 +40,9 @@ public class AnalysisMethod implements Serializable {
 	// @ManyToMany(mappedBy="analysisMethods")
 	// private List<ReligiousReference> religiousReferences;
 
-	// //bi-directional one-to-one association to AnalysisMusic
-	// @OneToOne(mappedBy="analysisMethod")
-	// private AnalysisMusic analysisMusic;
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private AnalysisMusic analysisMusic;
 
 	//bi-directional one-to-one association to AnalysisSpeech
 	@OneToOne(mappedBy="analysisMethod")
@@ -189,13 +189,13 @@ public class AnalysisMethod implements Serializable {
 	// 	this.religiousReferences = religiousReferences;
 	// }
 
-	// public AnalysisMusic getAnalysisMusic() {
-	// 	return this.analysisMusic;
-	// }
+	public AnalysisMusic getAnalysisMusic() {
+		return this.analysisMusic;
+	}
 
-	// public void setAnalysisMusic(AnalysisMusic analysisMusic) {
-	// 	this.analysisMusic = analysisMusic;
-	// }
+	public void setAnalysisMusic(AnalysisMusic analysisMusic) {
+		this.analysisMusic = analysisMusic;
+	}
 
 	public AnalysisSpeech getAnalysisSpeech() {
 		return this.analysisSpeech;

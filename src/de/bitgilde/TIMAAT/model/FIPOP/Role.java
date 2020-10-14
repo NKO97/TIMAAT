@@ -46,7 +46,7 @@ public class Role implements Serializable {
 	private List<RoleGroup> roleGroups;
 
 	//bi-directional many-to-one association to RoleTranslation
-	@OneToMany(mappedBy="role", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="role", cascade = CascadeType.PERSIST)
 	private List<RoleTranslation> roleTranslations;
 
 	//bi-directional many-to-one association to MembershipDetail

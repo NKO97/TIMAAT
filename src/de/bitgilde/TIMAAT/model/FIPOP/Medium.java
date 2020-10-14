@@ -94,12 +94,12 @@ public class Medium implements Serializable {
 	private Reference reference;
 
 	//bi-directional many-to-one association to Title
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="display_title_title_id")
 	private Title title1;
 
 	//bi-directional many-to-one association to Title
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="original_title_title_id")
 	private Title title2;
 
@@ -221,9 +221,10 @@ public class Medium implements Serializable {
 	@OneToOne(mappedBy="medium")
 	private MediumText mediumText;
 
-	//bi-directional many-to-one association to MusicalNotation
-	// @OneToMany(mappedBy="medium")
-	// private List<MusicalNotation> musicalNotations;
+	// bi-directional many-to-one association to MusicalNotation
+	@OneToMany(mappedBy="medium")
+	@JsonIgnore
+	private List<MusicalNotation> musicalNotations;
 
 	//bi-directional many-to-many association to SiocItem
 	// @ManyToMany(mappedBy="mediums")
@@ -613,28 +614,27 @@ public class Medium implements Serializable {
 		this.mediumText = mediumText;
 	}
 
-	
-	// public List<MusicalNotation> getMusicalNotations() {
-	// 	return this.musicalNotations;
-	// }
+	public List<MusicalNotation> getMusicalNotations() {
+		return this.musicalNotations;
+	}
 
-	// public void setMusicalNotations(List<MusicalNotation> musicalNotations) {
-	// 	this.musicalNotations = musicalNotations;
-	// }
+	public void setMusicalNotations(List<MusicalNotation> musicalNotations) {
+		this.musicalNotations = musicalNotations;
+	}
 
-	// public MusicalNotation addMusicalNotation(MusicalNotation musicalNotation) {
-	// 	getMusicalNotations().add(musicalNotation);
-	// 	musicalNotation.setMedium(this);
+	public MusicalNotation addMusicalNotation(MusicalNotation musicalNotation) {
+		getMusicalNotations().add(musicalNotation);
+		musicalNotation.setMedium(this);
 
-	// 	return musicalNotation;
-	// }
+		return musicalNotation;
+	}
 
-	// public MusicalNotation removeMusicalNotation(MusicalNotation musicalNotation) {
-	// 	getMusicalNotations().remove(musicalNotation);
-	// 	musicalNotation.setMedium(null);
+	public MusicalNotation removeMusicalNotation(MusicalNotation musicalNotation) {
+		getMusicalNotations().remove(musicalNotation);
+		musicalNotation.setMedium(null);
 
-	// 	return musicalNotation;
-	// }
+		return musicalNotation;
+	}
 
 	// public List<SiocItem> getSiocItems() {
 	// 	return this.siocItems;

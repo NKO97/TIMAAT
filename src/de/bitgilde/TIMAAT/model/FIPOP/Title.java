@@ -34,7 +34,7 @@ public class Title implements Serializable {
 
 		
 	//bi-directional many-to-one association to Language
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	// @JsonBackReference(value = "Language-Title")
 	private Language language;
 

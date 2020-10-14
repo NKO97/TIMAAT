@@ -52,7 +52,7 @@ public class CategorySet implements Serializable {
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
-	@OneToMany(mappedBy="categorySet", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="categorySet", cascade = CascadeType.PERSIST)
 	@JsonManagedReference(value = "CategorySet-CategorySetHasCategory")
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 

@@ -44,27 +44,27 @@ public class Actor implements Serializable {
 	private Timestamp lastEditedAt;
 
 	//bi-directional many-to-one association to Name
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="birth_name_actor_name_id")
 	private ActorName birthName;
 
 	//bi-directional many-to-one association to Name
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="display_name_actor_name_id")
 	private ActorName displayName;
 
 	//bi-directional many-to-one association to Address
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="primary_address_id")
 	private Address primaryAddress;
 
 	//bi-directional many-to-one association to EmailAddress
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="primary_email_address_id")
 	private EmailAddress actorHasEmailAddress;
 
 	//bi-directional many-to-one association to PhoneNumber
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="primary_phone_number_id")
 	private PhoneNumber actorHasPhoneNumber;
 	

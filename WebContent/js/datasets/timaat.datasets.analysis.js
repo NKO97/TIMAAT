@@ -43,6 +43,7 @@
             analysisMethodType: {
               id: analysisMethodTypeId,
             },
+            analysisMusic: null,
             analysisSpeech: null,
             cameraAxisOfAction: null,
             cameraDistance: null,
@@ -162,7 +163,69 @@
             
           break;
           case 22: // Analysis Music
-
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              audioPostProduction: {
+                id: 0,
+                audioPostProductionTranslations: {
+                  id: 0
+                },
+              },
+              harmony: $('#analysis-music-harmony').val(),
+              isPause: $('#analysis-music-isPause').prop('checked'),
+              melody: $('#analysis-music-melody').val(),
+              tempo: $('#analysis-music-tempo').val(),
+              articulation: null,
+              dynamicMarking: null,
+              changeInDynamics: null,
+              changeInTempo: null,
+              tempoMarking: null,
+              musicalKey: null,
+              rhythm: null,
+              timbre: null,
+              jins: null,
+              maqam: null,
+              songStructure: null,
+              lineupMembers: null,
+              musicalNotations: null,
+            };            
+            (Number($('#analysis-music-articulation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysis-music-articulation-select-dropdown').val()) },
+            (Number($('#analysis-music-dynamicMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysis-music-dynamicMarking-select-dropdown').val())},
+            (Number($('#analysis-music-changeInDynamics-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysis-music-changeInDynamics-select-dropdown').val())},
+            (Number($('#analysis-music-changeInTempo-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInTempo = { id: Number($('#analysis-music-changeInTempo-select-dropdown').val())},
+            (Number($('#analysis-music-tempoMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.tempoMarking = { id: Number($('#analysis-music-tempoMarking-select-dropdown').val())},
+            (Number($('#analysis-music-musicalKey-select-dropdown').val()) == 0 ) ? null : analysisMethodVariantModel.musicalKey = { id: Number($('#analysis-music-musicalKey-select-dropdown').val())},
+            (Number($('#analysis-music-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.rhythm = { id: Number($('#analysis-music-rhythm-select-dropdown').val())},
+            (Number($('#analysis-music-timbre-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.timbre = { id: Number($('#analysis-music-timbre-select-dropdown').val())},
+            (Number($('#analysis-music-jins-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.jins = { id: Number($('#analysis-music-jins-select-dropdown').val())},
+            (Number($('#analysis-music-maqam-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.maqam = { id: Number($('#analysis-music-maqam-select-dropdown').val())},
+            (Number($('#analysis-music-songStructure-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.songStructure = { id: Number($('#analysis-music-songStructure-select-dropdown').val())},
+            (Number($('#analysis-music-lineupMembers-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lineupMembers = [{ id: Number($('#analysis-music-lineupMembers-select-dropdown').val())}],
+            (Number($('#analysis-music-musicalNotations-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.musicalNotations = [{ id: Number($('#analysis-music-musicalNotations-select-dropdown').val())}],
+            audioPostProductionTranslationModel = {
+              id: 0,
+              audioPostProduction: {
+                id: 0
+              },
+              language: {
+                id: 1 // TODO
+              },
+              overdubbing: $('#audio-post-production-overdubbing').val(),
+              reverb: $('#audio-post-production-reverb').val(),
+              delay: $('#audio-post-production-delay').val(),
+              panning: $('#audio-post-production-panning').val(),
+              bass: $('#audio-post-production-bass').val(),
+              treble: $('#audio-post-production-treble').val(),
+            };
+            audioPostProductionModel = await TIMAAT.AnalysisService.createAudioPostProduction();
+            audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
+            audioPostProductionTranslationModel = await TIMAAT.AnalysisService.createAudioPostProductionTranslation(audioPostProductionTranslationModel);
+            audioPostProductionModel.audioPostProductionTranslations[0] = audioPostProductionTranslationModel;
+            analysisMethodVariantModel.audioPostProduction = audioPostProductionModel;
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysisMethodVariantModel = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisMusic");
+            analysis.analysisMethod.analysisMusic = analysisMethodVariantModel;
           break;
           case 23: // Analysis Speech
             analysisMethodVariantModel = {
@@ -340,7 +403,7 @@
       <h5 class="modal-title">Post Production Information</h5>
       <div class="form-group">
         <label for="audio-post-production-overdubbing">Overdubbing</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-overdubbing"
                     maxlength="255"
@@ -351,7 +414,7 @@
       </div>
       <div class="form-group">
         <label for="audio-post-production-reverb">Reverb</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-reverb"
                     maxlength="255"
@@ -362,7 +425,7 @@
       </div>
       <div class="form-group">
         <label for="audio-post-production-delay">Delay</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-delay"
                     maxlength="255"
@@ -373,7 +436,7 @@
       </div>
       <div class="form-group">
         <label for="audio-post-production-panning">Panning</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-panning"
                     maxlength="255"
@@ -384,7 +447,7 @@
       </div>
       <div class="form-group">
         <label for="audio-post-production-bass">Bass</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-bass"
                     maxlength="255"
@@ -395,7 +458,7 @@
       </div>
       <div class="form-group">
         <label ="audio-post-production-treble">Treble</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-treble"
                     maxlength="255"
@@ -408,7 +471,7 @@
       <h5 class="modal-title">Remark</h5>
       <div class="form-group">
         <label class="sr-only" for="analysis-remark">Remark</label>
-        <div class="col-md-11">
+        <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="analysis-remark"
                     aria-label="Remark"
@@ -423,7 +486,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="martinez-scheffel-unreliable-narration-select-dropdown">Unreliable Narration</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="martinez-scheffel-unreliable-narration-select-dropdown"
@@ -459,7 +522,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="color-temperature-select-dropdown">Color temperature</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="color-temperature-select-dropdown"
@@ -483,7 +546,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="camera-elevation-select-dropdown">Camera elevation</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-elevation-select-dropdown"
@@ -504,7 +567,7 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
               <label for="camera-axis-of-action-select-dropdown">Camera axis of action</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
                         id="camera-axis-of-action-select-dropdown"
@@ -525,7 +588,7 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
             <label for="camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
                         id="camera-horizontal-angle-select-dropdown"
@@ -546,7 +609,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-vertical-angle-select-dropdown">Camera vertical angle</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-vertical-angle-select-dropdown"
@@ -567,7 +630,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-shot-type-select-dropdown">Camera shot type</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-shot-type-select-dropdown"
@@ -588,7 +651,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="camera-distance-select-dropdown">Camera distance</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-distance-select-dropdown"
@@ -615,7 +678,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
               <label for="camera-handling-select-dropdown">Camera handling</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="camera-handling-select-dropdown"
@@ -636,7 +699,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
                           id="zelizer-beese-voice-of-the-visual-select-dropdown"
@@ -660,7 +723,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q1">1.) Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q1"
                             aria-label="Question 1"
@@ -670,7 +733,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q2">2.) Ist das Geräusch realistisch oder künstlich erzeugt?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q2"
                             aria-label="Question 2"
@@ -680,7 +743,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q3">3.) Von wo klingt das Geräusch?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q3"
                             aria-label="Question 3"
@@ -690,7 +753,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q4">4.) Bewegt sich das Geräusch oder ist es statisch?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q4"
                             aria-label="Question 4"
@@ -700,7 +763,7 @@
               </div>
               <div class="form-group">
                 <label for="sound-effect-descriptive-answer-q5">5.) Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q5"
                             aria-label="Question 5"
@@ -710,7 +773,7 @@
               </div>
               <div class="form-group">
                 <label ="sound-effect-descriptive-answer-q6">6.) Wodurch ist das Auftreten des Geräusches motiviert (z.B. aus der Erzählung heraus, künstlerisch motiviert, es soll die Szene verfremden, es soll die Szene realistischer machen)?</label>
-                <div class="col-md-11">
+                <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q6"
                             aria-label="Question 6"
@@ -725,7 +788,243 @@
           
         break;
         case 22: // Analysis Music
-
+          $('#analysisAddLabel').text('Describe music');
+          modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <h5 class="modal-title">Analysis Music</h5>
+            <div class="form-group">
+              <label for="analysis-music-harmony">Harmony</label>
+              <div class="col-md-12">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-music-harmony"
+                          aria-label="Harmony"
+                          name="harmony"
+                          placeholder="Enter harmony description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Pause</label>
+              <div class="col-md-12">
+                <div class="form-check">
+                  <input class="form-check-input"
+                         id="analysis-music-isPause"
+                         type="checkbox"
+                         name="isPause"
+                         data-role="isPause"
+                         placeholder="Is Pause">
+                <label for="analysis-music-isPause">Is a Pause</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-melody">Melody</label>
+              <div class="col-md-12">
+                <textarea class="form-control form-control-sm"
+                          id="analysis-music-melody"
+                          aria-label="Melody"
+                          name="melody"
+                          placeholder="Enter melody description"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-articulation-select-dropdown">Articulation [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-articulation-select-dropdown"
+                        name="articulation"
+                        data-role="articulation"
+                        data-placeholder="Select articulation">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-dynamicMarking-select-dropdown">Dynamic Marking</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-dynamicMarking-select-dropdown"
+                        name="dynamicMarking"
+                        data-role="dynamicMarking"
+                        data-placeholder="Select dynamic marking">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-changeInDynamics-select-dropdown">Change in Dynamics</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-changeInDynamics-select-dropdown"
+                        name="changeInDynamics"
+                        data-role="changeInDynamics"
+                        data-placeholder="Select change in dynamics">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-tempo">Tempo</label>
+              <div class="col-md-12">
+                <input class="form-control form-control-md analysis-music-tempo"
+                        style="width:100%;"
+                        id="analysis-music-tempo"
+                        name="tempo"
+                        data-role="tempo"
+                        data-placeholder="Select tempo"
+                        aria-describedby="Tempo"
+                        max-length="4"
+                        rows="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-changeInTempo-select-dropdown">Change in Tempo</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-changeInTempo-select-dropdown"
+                        name="changeInTempo"
+                        data-role="changeInTempo"
+                        data-placeholder="Select change in tempo">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-tempoMarking-select-dropdown">Tempo Marking</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-tempoMarking-select-dropdown"
+                        name="tempoMarking"
+                        data-role="tempoMarking"
+                        data-placeholder="Select tempo marking">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-musicalKey-select-dropdown">Musical Key</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-musicalKey-select-dropdown"
+                        name="musicalKey"
+                        data-role="musicalKey"
+                        data-placeholder="Select musical key">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-rhythm-select-dropdown">Rhythm [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-rhythm-select-dropdown"
+                        name="rhythm"
+                        data-role="rhythm"
+                        data-placeholder="Select rhythm">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-timbre-select-dropdown">Timbre [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-timbre-select-dropdown"
+                        name="timbre"
+                        data-role="timbre"
+                        data-placeholder="Select timbre">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-jins-select-dropdown">Jins</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-jins-select-dropdown"
+                        name="jins"
+                        data-role="jins"
+                        data-placeholder="Select jins">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-maqam-select-dropdown">Maqam</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-maqam-select-dropdown"
+                        name="maqam"
+                        data-role="maqam"
+                        data-placeholder="Select maqam">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-songStructure-select-dropdown">Song Structure [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-songStructure-select-dropdown"
+                        name="songStructure"
+                        data-role="songStructure"
+                        data-placeholder="Select songStructure">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-lineupMembers-select-dropdown">Lineup Members [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-lineupMembers-select-dropdown"
+                        name="lineupMembers"
+                        data-role="lineupMembers"
+                        data-placeholder="Select lineup members">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="analysis-music-musicalNotations-select-dropdown">Musical Notation [WIP]</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="analysis-music-musicalNotations-select-dropdown"
+                        name="musicalNotation"
+                        data-role="musicalNotation"
+                        data-placeholder="Select musical notation">
+                </select>
+              </div>
+            </div>`+
+            audioPostProductionHtml +
+            remarkHtml +
+          `</form>`);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/articulation/selectList/';
+          $('#analysis-music-articulation-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/dynamicMarking/selectList/';
+          $('#analysis-music-dynamicMarking-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/changeInDynamics/selectList/';
+          $('#analysis-music-changeInDynamics-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/changeInTempo/selectList/';
+          $('#analysis-music-changeInTempo-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/tempoMarking/selectList/';
+          $('#analysis-music-tempoMarking-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/musicalKey/selectList/';
+          $('#analysis-music-musicalKey-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/rhythm/selectList/';
+          $('#analysis-music-rhythm-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/timbre/selectList/';
+          $('#analysis-music-timbre-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/jins/selectList/';
+          $('#analysis-music-jins-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/maqam/selectList/';
+          $('#analysis-music-maqam-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/songStructure/selectList/';
+          $('#analysis-music-songStructure-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lineupMembers/selectList/';
+          $('#analysis-music-lineupMembers-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/musicalNotations/selectList/';
+          $('#analysis-music-musicalNotations-select-dropdown').select2(select2Options);          
         break;
         case 23: // Analysis Speech
         $('#analysisAddLabel').text('Describe speech');
@@ -734,7 +1033,7 @@
             <h5 class="modal-title">Analysis Speech</h5>
             <div class="form-group">
               <label for="analysis-speech-accent">Accent</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-accent"
                           maxlength="255"
@@ -745,7 +1044,7 @@
             </div>
             <div class="form-group">
               <label for="analysis-speech-intonation">Intonation</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-intonation"
                           maxlength="255"
@@ -756,7 +1055,7 @@
             </div>
             <div class="form-group">
               <label for="analysis-speech-volume">Volume</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-volume"
                           maxlength="255"
@@ -767,7 +1066,7 @@
             </div>
             <div class="form-group">
               <label for="analysis-speech-tempo">Tempo</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-tempo"
                           maxlength="255"
@@ -778,7 +1077,7 @@
             </div>
             <div class="form-group">
               <label for="analysis-speech-pauses">Pauses</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-pauses"
                           maxlength="255"
@@ -789,7 +1088,7 @@
             </div>
             <div class="form-group">
               <label ="analysis-speech-timbre">Timbre</label>
-              <div class="col-md-11">
+              <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="analysis-speech-timbre"
                           maxlength="255"
@@ -974,7 +1273,125 @@
           
         break;
         case 22: // Analysis Music
-
+          let articulation = (data.analysisMethod.analysisMusic.articulation == null) ? '' : data.analysisMethod.analysisMusic.articulation.articulationTranslations[0].type;
+          let dynamicMarking = (data.analysisMethod.analysisMusic.dynamicMarking == null) ? '' : data.analysisMethod.analysisMusic.dynamicMarking.dynamicMarkingTranslations[0].type;
+          let changeInDynamics = (data.analysisMethod.analysisMusic.changeInDynamics == null ) ? '' : data.analysisMethod.analysisMusic.changeInDynamics.changeInDynamicsTranslations[0].type;
+          let changeInTempo = (data.analysisMethod.analysisMusic.changeInTempo == null) ? '' : data.analysisMethod.analysisMusic.changeInTempo.changeInTempoTranslations[0].type;
+          let tempoMarking = (data.analysisMethod.analysisMusic.tempoMarking == null) ? '' : data.analysisMethod.analysisMusic.tempoMarking.tempoMarkingTranslations[0].type;
+          let musicalKey = (data.analysisMethod.analysisMusic.musicalKey == null) ? '' : data.analysisMethod.analysisMusic.musicalKey.musicalKeyTranslations[0].type;
+          let rhythm = (data.analysisMethod.analysisMusic.rhythm == null) ? '' : data.analysisMethod.analysisMusic.rhythm.type;
+          let timbre = (data.analysisMethod.analysisMusic.timbre == null) ? '' : data.analysisMethod.analysisMusic.timbre.id;
+          let jins = (data.analysisMethod.analysisMusic.jins == null) ? '' : data.analysisMethod.analysisMusic.jins.jinsTranslations[0].type;
+          let maqamType = (data.analysisMethod.analysisMusic.maqam == null) ? '' : data.analysisMethod.analysisMusic.maqam.maqamType.maqamTypeTranslations[0].type;
+          let maqamSubtype = (data.analysisMethod.analysisMusic.maqam == null) ? '' : data.analysisMethod.analysisMusic.maqam.maqamSubtype.maqamSubtypeTranslations[0].subtype;
+          let songStructure = (data.analysisMethod.analysisMusic.songStructure == null) ? '' : data.analysisMethod.analysisMusic.songStructure;
+          let lineupMembers = (data.analysisMethod.analysisMusic.lineupMembers == null) ? '' : data.analysisMethod.analysisMusic.lineupMembers;
+          let musicalNotations = (data.analysisMethod.analysisMusic.musicalNotations == null) ? '' : data.analysisMethod.analysisMusic.musicalNotations;
+          details +=
+          `<tr>
+            <td>Harmony</td>
+            <td>`+data.analysisMethod.analysisMusic.harmony+`</td>
+          </tr>
+          <tr>
+            <td>Is a Pause</td>
+            <td>`+data.analysisMethod.analysisMusic.isPause+`</td>
+          </tr>
+          <tr>
+            <td>Melody</td>
+            <td>`+data.analysisMethod.analysisMusic.melody+`</td>
+          </tr>
+          <tr>
+            <td>Articulation</td>
+            <td>`+articulation+`</td>
+          </tr>
+          <tr>
+            <td>Dynamic Marking</td>
+            <td>`+dynamicMarking+`</td>
+          </tr>
+          <tr>
+            <td>Change in Dynamics</td>
+            <td>`+changeInDynamics+`</td>
+          </tr>
+          <tr>
+            <td>Music Tempo</td>
+            <td>`+data.analysisMethod.analysisMusic.tempo+`</td>
+          </tr>
+          <tr>
+            <td>Change in Tempo</td>
+            <td>`+changeInTempo+`</td>
+          </tr>
+          <tr>
+            <td>Tempo Marking</td>
+            <td>`+tempoMarking+`</td>
+          </tr>
+          <tr>
+            <td>Musical Key</td>
+            <td>`+musicalKey+`</td>
+          </tr>
+          <tr>
+            <td>Rhythm</td>
+            <td>`+rhythm+`</td>
+          </tr>
+          <tr>
+            <td>Timbre [WIP]</td>
+            <td>`+timbre+`</td>
+          </tr>
+          <tr>
+            <td>Jins</td>
+            <td>`+jins+`</td>
+          </tr>
+          <tr>
+            <td>Maqam</td>
+            <td><div>`+maqamType+`</div>
+                <div>`+maqamSubtype+`</div>
+            </td>
+          </tr>
+          <tr>
+            <td>Song Structure [WIP]</td>
+            <td>`+songStructure+`</td>
+          </tr>
+          <tr>
+            <td>Lineup Members [WIP]</td>
+            <td>`+lineupMembers+`</td>
+          </tr>
+          <tr>
+            <td>Musical Notation [WIP]</td>
+            <td>`+musicalNotations+`</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <thead class="thead-dark">
+            <tr>
+              <th>Post Production</th>
+              <th />
+            </tr>
+          </thead>
+          <tr>
+            <td>Overdubbing</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].overdubbing+`</td>
+          </tr>
+          <tr>
+            <td>Reverb</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].reverb+`</td>
+          </tr>
+          <tr>
+            <td>Delay</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].delay+`</td>
+          </tr>
+          <tr>
+            <td>Panning</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].panning+`</td>
+          </tr>
+          <tr>
+            <td>Bass</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].bass+`</td>
+          </tr>
+          <tr>
+            <td>Treble</td>
+            <td>`+data.analysisMethod.analysisMusic.audioPostProduction.audioPostProductionTranslations[0].treble+`</td>
+          </tr>`;
         break;
         case 23: // Analysis Speech
         details +=
@@ -1044,6 +1461,7 @@
 
         break;
       }
+      // add analysis table fields
       details += `
           </table>
         </div>
@@ -1130,7 +1548,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18,20,23].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,18,20,22,23].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var exists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

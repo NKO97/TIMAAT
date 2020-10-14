@@ -40,7 +40,7 @@ public class Source implements Serializable {
 	private String url;
 
 	//bi-directional many-to-one association to Medium
-	// @ManyToOne(cascade=CascadeType.PERSIST)
+	// @ManyToOne(cascade = CascadeType.PERSIST)
 	@ManyToOne
 	@JsonIgnore
 	// @JsonBackReference(value = "Medium-Source")

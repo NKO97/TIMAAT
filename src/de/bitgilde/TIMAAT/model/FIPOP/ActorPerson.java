@@ -49,17 +49,17 @@ public class ActorPerson implements Serializable {
 	private Actor actor;
 
 	//bi-directional many-to-one association to Location
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="place_of_birth_city_location_id")
 	private City placeOfBirthCityLocation;
 
 	//bi-directional many-to-one association to Location
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="place_of_death_city_location_id")
 	private City placeOfDeathCityLocation;
 
 	//bi-directional many-to-one association to Sex
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="sex_id")
 	private Sex sex;
 

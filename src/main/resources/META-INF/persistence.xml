@@ -33,11 +33,15 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMusic</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSpeech</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisVoice</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Articulation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioCodecInformation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation</class>
@@ -60,6 +64,10 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySet</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategoryPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamics</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempo</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Citizenship</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.City</class>
@@ -67,6 +75,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ColorTemperatureTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Country</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarking</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddressTypeTranslation</class>
@@ -82,12 +92,25 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageGallery</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Instrument</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentSubtype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentSubtypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Iri</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Jins</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LineupMember</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Maqam</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MaqamType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MaqamTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MaqamSubtype</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MaqamSubtypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MartinezScheffelUnreliableNarration</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MartinezScheffelUnreliableNarrationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollection</class>
@@ -128,6 +151,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImagePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKey</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
@@ -139,6 +165,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceDataFieldRequirementPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ReferenceEntryType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Rhythm</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Role</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.RoleGroup</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.RoleGroupTranslation</class>
@@ -148,14 +175,20 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Sex</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SexTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.SongStructure</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.SongStructureElement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.SongStructureElementTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SoundEffectDescriptive</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Source</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Street</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SvgShapeTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Tag</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarking</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Territory</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TerritoryTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Timbre</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySet</class>
@@ -166,6 +199,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Uuid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Voice</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisual</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisualTranslation</class>
 		<properties>
