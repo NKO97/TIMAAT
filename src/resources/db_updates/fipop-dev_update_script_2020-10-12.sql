@@ -196,15 +196,15 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (1, 1, 1, 'Maqam ‘Ajam Family (Ausgangs-Jins: Jins ‘Ajam)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (2, 2, 1, 'Maqam Bayati Family (Ausgangs-Jins: Jins Bayati)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (3, 3, 1, 'Maqam Hijaz Family (Ausgangs-Jins: Jins Hijaz)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (4, 4, 1, 'Maqam Kurd Family (Ausgangs-Jins: Jins Kurd)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (5, 5, 1, 'Maqam Nahawand Family (Ausgangs-Jins: Jins Nahawand)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (6, 6, 1, 'Maqam Nikriz Family (Ausgangs-Jins: Jins Nikriz)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (7, 7, 1, 'Maqam Rast Family (Ausgangs-Jins: Jins Rast)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (8, 8, 1, 'Maqam Sikah Family (Ausgangs-Jins: Jins Sikah)');
-INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `language_id`, `maqam_type_id`, `type`) VALUES (9, 9, 1, 'No maqam family');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (1, 1, 1, 'Maqam ‘Ajam Family (Ausgangs-Jins: Jins ‘Ajam)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (2, 2, 1, 'Maqam Bayati Family (Ausgangs-Jins: Jins Bayati)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (3, 3, 1, 'Maqam Hijaz Family (Ausgangs-Jins: Jins Hijaz)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (4, 4, 1, 'Maqam Kurd Family (Ausgangs-Jins: Jins Kurd)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (5, 5, 1, 'Maqam Nahawand Family (Ausgangs-Jins: Jins Nahawand)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (6, 6, 1, 'Maqam Nikriz Family (Ausgangs-Jins: Jins Nikriz)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (7, 7, 1, 'Maqam Rast Family (Ausgangs-Jins: Jins Rast)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (8, 8, 1, 'Maqam Sikah Family (Ausgangs-Jins: Jins Sikah)');
+INSERT INTO `FIPOP`.`maqam_type_translation` (`id`, `maqam_type_id`, `language_id`, `type`) VALUES (9, 9, 1, 'No maqam family');
 COMMIT;
 
 
