@@ -1,3 +1,5 @@
+ALTER TABLE `FIPOP`.`analysis_method` AUTO_INCREMENT=1000;
+
 ALTER TABLE `FIPOP`.`actor_has_medium_image` DROP FOREIGN KEY `fk_actor_has_medium_image_actor1`;
 ALTER TABLE `FIPOP`.`actor_has_medium_image` ADD CONSTRAINT `fk_actor_has_medium_image_actor1` FOREIGN KEY (`actor_id`) REFERENCES `FIPOP`.`actor` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `FIPOP`.`actor_has_medium_image` DROP FOREIGN KEY `fk_actor_has_medium_image_medium_image1`;
