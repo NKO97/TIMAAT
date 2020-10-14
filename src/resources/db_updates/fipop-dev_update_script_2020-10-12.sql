@@ -92,6 +92,22 @@ INSERT INTO `FIPOP`.`jins_translation` (`id`, `jins_id`, `language_id`, `type`) 
 COMMIT;
 
 -- -----------------------------------------------------
+-- Table `FIPOP`.`maqam_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam_type` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`maqam_subtype`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam_subtype` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `FIPOP`.`maqam`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam` (
@@ -112,14 +128,6 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam` (
 ENGINE = InnoDB;
 CREATE INDEX `fk_maqam_maqam_type1_idx` ON `FIPOP`.`maqam` (`maqam_type_id` ASC);
 CREATE INDEX `fk_maqam_maqam_subtype1_idx` ON `FIPOP`.`maqam` (`maqam_subtype_id` ASC);
-
--- -----------------------------------------------------
--- Table `FIPOP`.`maqam_subtype`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam_subtype` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `FIPOP`.`maqam_subtype_translation`
@@ -143,14 +151,6 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam_subtype_translation` (
 ENGINE = InnoDB;
 CREATE INDEX `fk_maqam_subtype_translation_maqam_subtype1_idx` ON `FIPOP`.`maqam_subtype_translation` (`maqam_subtype_id` ASC);
 CREATE INDEX `fk_maqam_subtype_translation_language1_idx` ON `FIPOP`.`maqam_subtype_translation` (`language_id` ASC);
-
--- -----------------------------------------------------
--- Table `FIPOP`.`maqam_type`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `FIPOP`.`maqam_type` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `FIPOP`.`maqam_type_translation`
