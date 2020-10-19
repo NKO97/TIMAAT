@@ -26,6 +26,15 @@
         <version>3.2.1</version>
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
+          <webResources>
+            <resource>
+              <directory>src/resources</directory>
+              <targetPath>WEB-INF/classes/resources</targetPath>
+              <includes>
+                <include>**/*.template</include>
+              </includes>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
     </plugins>
