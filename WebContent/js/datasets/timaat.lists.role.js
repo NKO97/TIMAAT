@@ -60,11 +60,9 @@
         var type = $('#timaat-rolelists-metadata-form').attr('data-type');
 				// the original role or role group model (in case of editing an existing role or role group)
 				var roleOrRoleGroup = $('#timaat-rolelists-metadata-form').data(type);				
-        // console.log("TCL: roleOrRoleGroup", roleOrRoleGroup);
 
 				// create/edit role or role group window submitted data
 				var formDataRaw = $('#timaat-rolelists-metadata-form').serializeArray();
-        // console.log("TCL: formDataRaw", formDataRaw);
         var formDataObject = {};
         $(formDataRaw).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -74,10 +72,8 @@
         } else if (type == 'rolegroup') {
           delete formDataObject.roleId;
         }
-        // console.log("TCL: formDataObject", formDataObject);
         var formSelectData = formDataRaw;
         formSelectData.splice(0,1); // remove entries not part of multi select data
-        // console.log("TCL: formSelectData", formSelectData);
         // TODO split id lists properly
         // create proper id list
         var i = 0;
@@ -85,24 +81,18 @@
         var roleActorIdList = [];
         for (; i < formSelectData.length; i++) {
           if (formSelectData[i].name == 'roleId' || formSelectData[i].name == 'roleGroupId' )
-            roleOrRoleGroupIdList.push( {id: formSelectData[i].value})
+            roleOrRoleGroupIdList.push( {id: formSelectData[i].value} );
           if (formSelectData[i].name == 'actorId' )
-            roleActorIdList.push( {id: formSelectData[i].value})
+            roleActorIdList.push( {id: formSelectData[i].value} );
         }
-        // console.log("TCL: roleOrRoleGroupIdList", roleOrRoleGroupIdList);
-        // console.log("TCL: roleActorIdList", roleActorIdList);
-
 				if (roleOrRoleGroup) { // update role or role group
           roleOrRoleGroup = await TIMAAT.RoleLists.updateRoleOrRoleGroupModelData(type, roleOrRoleGroup, formDataObject);
-          // console.log("TCL: roleOrRoleGroup", roleOrRoleGroup);
           let roleOrRoleGroupData = roleOrRoleGroup.model;
           delete roleOrRoleGroupData.ui;
           await TIMAAT.RoleLists.updateRoleOrRoleGroup(type, roleOrRoleGroupData, roleOrRoleGroupIdList, roleActorIdList);
-					// roleOrRoleGroup.updateUI();
         } 
         else { // create new role or role group
 					var roleOrRoleGroupModel = await TIMAAT.RoleLists.createRoleOrRoleGroupModel(type, formDataObject);
-          // console.log("TCL: roleOrRoleGroupModel", roleOrRoleGroupModel);
           var newRoleOrRoleGroup = await TIMAAT.RoleLists.createRoleOrRoleGroup(type, roleOrRoleGroupModel, roleOrRoleGroupIdList);
           if (type == 'role') {
             roleOrRoleGroup = new TIMAAT.Role(newRoleOrRoleGroup);
@@ -920,7 +910,6 @@
               break;
             }
           }
-
           // create new entries
           var idsToCreate = [];
           i = 0;

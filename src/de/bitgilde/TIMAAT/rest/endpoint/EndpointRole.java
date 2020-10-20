@@ -466,8 +466,8 @@ public class EndpointRole {
 		System.out.println("RoleServiceEndpoint: update translation - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.ROLEEDITED);
 		System.out.println("RoleServiceEndpoint: update translation - update complete");	
 		return Response.ok().entity(roleTranslation).build();
 	}
@@ -498,8 +498,8 @@ public class EndpointRole {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.ROLEGROUPCREATED);
 		System.out.println("RoleServiceEndpoint: createRoleGroup - done");
 		return Response.ok().entity(roleGroup).build();
 	}
@@ -553,8 +553,8 @@ public class EndpointRole {
 		System.out.println("RoleServiceEndpoint: updateRoleGroup - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ROLEGROUPEDITED);
 		System.out.println("RoleServiceEndpoint: updateRoleGroup - update complete");
 	
 		return Response.ok().entity(roleGroup).build();

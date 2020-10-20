@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -686,7 +685,6 @@ public class MediumServiceEndpoint {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
-
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
 	@Path("video/offline/{id}.html")
@@ -969,6 +967,20 @@ public class MediumServiceEndpoint {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("{mediumId}/hasTagList")
+	public Response getTagList(@PathParam("mediumId") Integer mediumId)
+	{
+		// System.out.println("MediumServiceEndpoint: getTagList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		entityManager.refresh(medium);
+		return Response.ok().entity(medium.getTags()).build();
+	}
+
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("{id}/titles/list")
 	public Response getTitlesList(@PathParam("id") int id) {
 		// // System.out.println("MediumServiceEndpoint: getTitlesList");
@@ -1102,7 +1114,7 @@ public class MediumServiceEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateMedium(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - jsonData"+ jsonData);
+		System.out.println("MediumServiceEndpoint: update medium - jsonData"+ jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		Medium updatedMedium = null;    	
@@ -1114,7 +1126,7 @@ public class MediumServiceEndpoint {
 		try {
 			updatedMedium = mapper.readValue(jsonData, Medium.class);
 		} catch (IOException e) {
-			System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - IOException");
+			System.out.println("MediumServiceEndpoint: update medium - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedMedium == null ) return Response.notModified().build();	
@@ -1126,6 +1138,8 @@ public class MediumServiceEndpoint {
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
 		if ( updatedMedium.getDisplayTitle() != null ) medium.setDisplayTitle(updatedMedium.getDisplayTitle());
 		medium.setOriginalTitle(updatedMedium.getOriginalTitle()); // originalTitle can be set to null
+		List<Tag> oldTags = medium.getTags();
+		medium.setTags(updatedMedium.getTags());
 
 		// update log metadata
 		medium.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -1144,6 +1158,12 @@ public class MediumServiceEndpoint {
 		entityManager.persist(medium);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
+		for (Tag tag : medium.getTags()) {
+			entityManager.refresh(tag);
+		}
+		for (Tag tag : oldTags) {
+			entityManager.refresh(tag);
+		}
 		System.out.println("after");
 		System.out.println(medium.getCreatedAt());
 		System.out.println(medium.getLastEditedAt());
@@ -1159,7 +1179,7 @@ public class MediumServiceEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.MEDIUMEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE MEDIUM - update complete");
+		System.out.println("MediumServiceEndpoint: update medium - update complete");
 		return Response.ok().entity(medium).build();
 	}
 
@@ -1242,7 +1262,7 @@ public class MediumServiceEndpoint {
 	@Secured
 	public Response updateAudio(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("MediumServiceEndpoint: UPDATE AUDIO - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update audio - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAudio updatedAudio = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1258,7 +1278,7 @@ public class MediumServiceEndpoint {
 		if ( updatedAudio == null ) return Response.notModified().build();    	
 		
 		// update audio
-		// System.out.println("MediumServiceEndpoint: UPDATE AUDIO - audio.id:"+audio.getMediumId());
+		// System.out.println("MediumServiceEndpoint: update audio - audio.id:"+audio.getMediumId());
 		if ( updatedAudio.getLength() > 0) audio.setLength(updatedAudio.getLength());
 		if ( updatedAudio.getAudioCodecInformation() != null ) audio.setAudioCodecInformation(updatedAudio.getAudioCodecInformation());
 		
@@ -1279,7 +1299,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.AUDIOEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE AUDIO - update complete");	
+		System.out.println("MediumServiceEndpoint: update audio - update complete");	
 		return Response.ok().entity(audio).build();
 	}
 
@@ -1354,7 +1374,7 @@ public class MediumServiceEndpoint {
 	@Path("document/{id}")
 	@Secured
 	public Response updateDocument(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE DOCUMENT - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update document - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumDocument updatedDocument = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1368,7 +1388,7 @@ public class MediumServiceEndpoint {
 		}
 		if ( updatedDocument == null ) return Response.notModified().build();    	
 		// update document
-		// System.out.println("MediumServiceEndpoint: UPDATE DOCUMENT - document.id:"+document.getMediumId());	
+		// System.out.println("MediumServiceEndpoint: update document - document.id:"+document.getMediumId());	
 		// no data to update at the moment
 		// update log metadata
 		document.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -1387,7 +1407,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.DOCUMENTEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE DOCUMENT - update complete");	
+		System.out.println("MediumServiceEndpoint: update document - update complete");	
 		return Response.ok().entity(document).build();
 	}
 
@@ -1461,7 +1481,7 @@ public class MediumServiceEndpoint {
 	@Path("image/{id}")
 	@Secured
 	public Response updateImage(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE IMAGE - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update image - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumImage updatedImage = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1476,7 +1496,7 @@ public class MediumServiceEndpoint {
 		if ( updatedImage == null ) return Response.notModified().build();
 
 		// update image
-		// System.out.println("MediumServiceEndpoint: UPDATE IMAGE - image.id:"+image.getMediumId());
+		// System.out.println("MediumServiceEndpoint: update image - image.id:"+image.getMediumId());
 		if ( updatedImage.getWidth() > 0 ) image.setWidth(updatedImage.getWidth());
 		if ( updatedImage.getHeight() > 0 ) image.setHeight(updatedImage.getHeight());
 		if ( updatedImage.getBitDepth() != null ) image.setBitDepth(updatedImage.getBitDepth());
@@ -1497,7 +1517,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.IMAGEEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE IMAGE - update complete");	
+		System.out.println("MediumServiceEndpoint: update image - update complete");	
 		return Response.ok().entity(image).build();
 	}
 
@@ -1571,7 +1591,7 @@ public class MediumServiceEndpoint {
 	@Path("software/{id}")
 	@Secured
 	public Response updateSoftware(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE SOFTWARE - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update software - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumSoftware updatedSoftware = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1586,7 +1606,7 @@ public class MediumServiceEndpoint {
 		if ( updatedSoftware == null ) return Response.notModified().build();  
 
 		// update software
-		// System.out.println("MediumServiceEndpoint: UPDATE SOFTWARE - software.id:"+software.getMediumId());	
+		// System.out.println("MediumServiceEndpoint: update software - software.id:"+software.getMediumId());	
 		if ( updatedSoftware.getVersion() != null ) software.setVersion(updatedSoftware.getVersion());
 
 		// update log metadata
@@ -1606,7 +1626,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.SOFTWAREEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE SOFTWARE - update complete");	
+		System.out.println("MediumServiceEndpoint: update software - update complete");	
 		return Response.ok().entity(software).build();
 	}
 
@@ -1681,7 +1701,7 @@ public class MediumServiceEndpoint {
 	@Path("text/{id}")
 	@Secured
 	public Response updateText(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE TEXT - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update text - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumText updatedText = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1696,7 +1716,7 @@ public class MediumServiceEndpoint {
 		if ( updatedText == null ) return Response.notModified().build();    	
 
 		// update text
-		// System.out.println("MediumServiceEndpoint: UPDATE TEXT - text.id:"+text.getMediumId());	
+		// System.out.println("MediumServiceEndpoint: update text - text.id:"+text.getMediumId());	
 		if ( updatedText.getContent() != null ) text.setContent(updatedText.getContent());
 
 		// update log metadata
@@ -1716,7 +1736,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.TEXTEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE TEXT - update complete");	
+		System.out.println("MediumServiceEndpoint: update text - update complete");	
 		return Response.ok().entity(text).build();
 	}
 
@@ -1799,7 +1819,7 @@ public class MediumServiceEndpoint {
 	@Secured
 	public Response updateVideo(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("MediumServiceEndpoint: UPDATE VIDEO - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update video - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumVideo updatedVideo = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1810,7 +1830,7 @@ public class MediumServiceEndpoint {
 		try {
 			updatedVideo = mapper.readValue(jsonData, MediumVideo.class);
 		} catch (IOException e) {
-			System.out.println("MediumServiceEndpoint: UPDATE VIDEO - IOException: " + e.getMessage());
+			System.out.println("MediumServiceEndpoint: update video - IOException: " + e.getMessage());
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedVideo == null ) return Response.notModified().build();
@@ -1844,7 +1864,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.VIDEOEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE VIDEO - update complete");
+		System.out.println("MediumServiceEndpoint: update video - update complete");
 		
 		// TODO necessary?
 		// video.getMedium().getFileStatus("video");
@@ -1930,7 +1950,7 @@ public class MediumServiceEndpoint {
 	@Path("videogame/{id}")
 	@Secured
 	public Response updateVideogame(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumServiceEndpoint: UPDATE VIDEOGAME - jsonData: " + jsonData);
+		System.out.println("MediumServiceEndpoint: update videogame - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumVideogame updatedVideogame = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1945,7 +1965,7 @@ public class MediumServiceEndpoint {
 		if ( updatedVideogame == null ) return Response.notModified().build();
 
 		// update videogame
-		// System.out.println("MediumServiceEndpoint: UPDATE VIDEOGAME - videogame.id:"+videogame.getMediumId());	
+		// System.out.println("MediumServiceEndpoint: update videogame - videogame.id:"+videogame.getMediumId());	
 		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode()); 
 
 		// update log metadata
@@ -1965,7 +1985,7 @@ public class MediumServiceEndpoint {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 																						UserLogManager.LogEvents.VIDEOGAMEEDITED);
-		System.out.println("MediumServiceEndpoint: UPDATE VIDEOGAME - update complete");	
+		System.out.println("MediumServiceEndpoint: update videogame - update complete");	
 		return Response.ok().entity(videogame).build();
 	}
 
@@ -3108,45 +3128,21 @@ public class MediumServiceEndpoint {
     	return Response.ok(m.getMediumAnalysisLists()).build();    	
 	}
 	
-	@SuppressWarnings("unchecked")
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
+	@Path("{mediumId}/tag/{tagId}")
 	@Secured
-	public Response addTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+	public Response addExistingTag(@PathParam("mediumId") int mediumId,
+																 @PathParam("tagId") int tagId) {
 		
     	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Medium medium = entityManager.find(Medium.class, id);
-    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
-
-    	// check if tag exists    	
-    	Tag tag = null;
-    	List<Tag> tags = null;
-    	try {
-        	tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE t.name=:name")
-        			.setParameter("name", tagName)
-        			.getResultList();
-    	} catch(Exception e) {};
-    	
-    	// find tag case sensitive
-    	for ( Tag listTag : tags )
-    		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;
-    	
-    	// create tag if it doesn't exist yet
-    	if ( tag == null ) {
-    		tag = new Tag();
-    		tag.setName(tagName);
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		entityManager.persist(tag);
-    		entityTransaction.commit();
-    		entityManager.refresh(tag);
-    	}
-    	
-    	// check if Annotation already has tag
-    	if ( !medium.getTags().contains(tag) ) {
-        	// attach tag to annotation and vice versa    	
+    	Medium medium = entityManager.find(Medium.class, mediumId);
+			if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+			if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+			
+        // attach tag to annotation and vice versa    	
     		EntityTransaction entityTransaction = entityManager.getTransaction();
     		entityTransaction.begin();
     		medium.getTags().add(tag);
@@ -3157,28 +3153,23 @@ public class MediumServiceEndpoint {
     		entityManager.persist(tag);
     		entityTransaction.commit();
     		entityManager.refresh(medium);
-    	}
  	
 		return Response.ok().entity(tag).build();
 	}
-	
+
 	@DELETE
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{id}/tag/{name}")
+	@Path("{mediumId}/tag/{tagId}")
 	@Secured
-	public Response removeTag(@PathParam("id") int id, @PathParam("name") String tagName) {
+	public Response removeTag(@PathParam("mediumId") int mediumId,
+														@PathParam("tagId") int tagId) {
 		
-    	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Medium medium = entityManager.find(Medium.class, id);
-    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+    	Medium medium = entityManager.find(Medium.class, mediumId);
+			if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+    	if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
     	
-    	// check if Annotation already has tag
-    	Tag tag = null;
-    	for ( Tag mediumtag:medium.getTags() ) {
-    		if ( mediumtag.getName().compareTo(tagName) == 0 ) tag = mediumtag;
-    	}
-    	if ( tag != null ) {
         	// attach tag to annotation and vice versa    	
     		EntityTransaction entityTransaction = entityManager.getTransaction();
     		entityTransaction.begin();
@@ -3190,7 +3181,6 @@ public class MediumServiceEndpoint {
     		entityManager.persist(tag);
     		entityTransaction.commit();
     		entityManager.refresh(medium);
-    	}
  	
 		return Response.ok().build();
 	}

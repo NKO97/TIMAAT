@@ -192,6 +192,30 @@
 			});		
 		},
 
+		async getTagList(mediumId) {
+      console.log("TCL: getTagList -> for mediumId", mediumId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasTagList/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getTagList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		async createMedium(mediumModel) {
 			// console.log("TCL: async createMedium -> mediumModel", mediumModel);
 			var newMediumModel = {
@@ -371,6 +395,29 @@
 			});
 		},
 
+		async addTag(mediumId, tagId) {
+			// console.log("TCL: addTag -> mediumId, tagId", mediumId, tagId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/tag/"+tagId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+		});		
+		},
+
 		async createSource(source) {
 			// console.log("TCL: async createSource -> source", source);
 			return new Promise(resolve => {
@@ -395,7 +442,7 @@
 		},
 
 		async updateMedium(mediumModel) {
-			// console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
+			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = {};
 			tempMediumModel.releaseDate = mediumModel.releaseDate;
 			tempMediumModel.remark = mediumModel.remark;
@@ -403,6 +450,7 @@
 			tempMediumModel.displayTitle = mediumModel.displayTitle;
 			tempMediumModel.originalTitle = mediumModel.originalTitle;
 			tempMediumModel.titles = mediumModel.titles;
+			tempMediumModel.tags = mediumModel.tags;
       // console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
@@ -586,6 +634,31 @@
 			});
 		},
 
+		async addMediumHasTags(mediumModel) {
+      console.log("TCL: updateMediumHasTags -> mediumModel", mediumModel);
+			delete mediumModel.ui;
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id+"/hasTags",
+					type:"PATCH",
+					data: JSON.stringify(mediumModel.tags),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: async updateMedium -> returning data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});
+		},
+
 		async removeMedium(medium) {
 			// console.log("TCL: removeMedium -> medium", medium);
 			return new Promise(resolve => {
@@ -688,6 +761,29 @@
 				console.log("error: ", error);
 			});
 		},
+
+		async removeTag(mediumId, tagId) {
+			// console.log("TCL: removeTag -> mediumId, tagName", mediumId, tagName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/tag/"+tagId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 
 	}	
 }, window));

@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -22,6 +25,7 @@ public class Tag implements Serializable {
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="event_has_tag"
 		, joinColumns={
@@ -61,6 +65,7 @@ public class Tag implements Serializable {
 
 	//bi-directional many-to-many association to MediumAnalysisList
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="medium_analysis_list_has_tag"
 		, joinColumns={
@@ -73,16 +78,8 @@ public class Tag implements Serializable {
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional many-to-many association to Medium
-	@ManyToMany
-	@JoinTable(
-		name="medium_has_tag"
-		, joinColumns={
-			@JoinColumn(name="tag_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="medium_id")
-			}
-		)
+	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to WorkAnalysisList

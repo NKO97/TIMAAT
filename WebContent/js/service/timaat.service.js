@@ -547,7 +547,6 @@
 			else if ( set.constructor === TIMAAT.Location ) serviceEndpoint = "location";
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
 			else if ( set.constructor === TIMAAT.Event ) serviceEndpoint = "event";
-
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/"+set.model.id+"/tag/"+tagname,
 				type:"POST",
@@ -564,6 +563,29 @@
 				console.log( "error", e );
 				console.log( e.responseText );
 			});			
+		},
+
+		async createTag(tagName) {
+			// console.log("TCL: createTag -> tagName", tagName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/"+tagName,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+		});		
 		},
 
 		removeTag(set, tagname, callback) {
@@ -626,44 +648,6 @@
 			}).done(function(data) {
 				TIMAAT.Service.updateCategorySets(catname);
 				callback(catname);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});			
-		},
-
-		addMediumTag(medium, tagname, callback) {
-			// console.log("TCL: addMediumTag -> medium, tagname, callback", medium, tagname, callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
-				type:"POST",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				TIMAAT.Service.updateCategorySets(tagname);
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});			
-		},
-
-		removeMediumTag(medium, tagname, callback) {
-			// console.log("TCL: removeMediumTag -> medium, tagname, callback", medium, tagname, callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.id+"/tag/"+tagname,
-				type:"DELETE",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				TIMAAT.Service.updateCategorySets(tagname);
-				callback(tagname);
 			})
 			.fail(function(e) {
 				console.log( "error", e );

@@ -184,7 +184,16 @@ public class Medium implements Serializable {
 	// private List<RatingCategory> ratingCategories;
 
 	//bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="mediums")
+	@ManyToMany
+	@JoinTable(
+		name="medium_has_tag"
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="medium_id")
+			}
+		)
 	private List<Tag> tags;
 
 	//bi-directional many-to-many association to TargetAudience

@@ -110,8 +110,9 @@ public class TIMAATApp extends Application {
         resources.add(de.bitgilde.TIMAAT.rest.UserAccountEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.UserLogEndpoint.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointAnalysis.class);
-        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointRole.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointLanguage.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointRole.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointTag.class);
     }
 
 }
