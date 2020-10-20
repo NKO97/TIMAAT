@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -34,6 +34,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
+import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -43,7 +44,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 
 @Service
 @Path("/analysislist")
-public class AnalysislistEndpoint {
+public class EndpointAnalysisList {
 
 	@Context
 	private UriInfo uriInfo;

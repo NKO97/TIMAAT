@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
@@ -15,6 +15,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.Secured;
 
 /**
 *
@@ -23,7 +24,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 
 @Service
 @Path("/user")
-public class UserAccountEndpoint {
+public class EndpointUserAccount {
 	
 	@Context ContainerRequestContext crc;
 	

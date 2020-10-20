@@ -90,29 +90,29 @@ public class TIMAATApp extends Application {
     }
 
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter.class);
-        resources.add(de.bitgilde.TIMAAT.publication.PublicationAuthenticationFilter.class);
-        resources.add(de.bitgilde.TIMAAT.publication.PublicationServlet.class);
-        resources.add(de.bitgilde.TIMAAT.rest.filter.CORSFilter.class);
-        resources.add(de.bitgilde.TIMAAT.rest.filter.RangeResponseFilter.class);
-        resources.add(MultiPartFeature.class);
-        resources.add(de.bitgilde.TIMAAT.rest.ActorEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.AnalysislistEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.AnnotationEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.AuthenticationEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.MediaCollectionEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.MediumServiceEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.CategorySetEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.EventEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.PublicationEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.LocationEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.TIMAATRest.class);
-        resources.add(de.bitgilde.TIMAAT.rest.UserAccountEndpoint.class);
-        resources.add(de.bitgilde.TIMAAT.rest.UserLogEndpoint.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointActor.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointAnalysis.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointAnalysisList.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointAnnotation.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointAuthentication.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointCategorySet.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointEvent.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointLanguage.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointLocation.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointMediumCollection.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointPublication.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointRole.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointTag.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointUserAccount.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointUserLog.class);
+        resources.add(de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter.class);
+        resources.add(de.bitgilde.TIMAAT.rest.filter.CORSFilter.class);
+        resources.add(de.bitgilde.TIMAAT.rest.filter.RangeResponseFilter.class);
+        resources.add(de.bitgilde.TIMAAT.publication.PublicationAuthenticationFilter.class);
+        resources.add(de.bitgilde.TIMAAT.publication.PublicationServlet.class);
+        resources.add(MultiPartFeature.class);
+        resources.add(de.bitgilde.TIMAAT.rest.TIMAATRest.class);
     }
 
 }

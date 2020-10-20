@@ -82,7 +82,7 @@ public class EndpointAnalysis {
 			@QueryParam("search") String search,
 			@QueryParam("exclude_annotation") Integer annotationID)
 	{
-		// System.out.println("AnalysisServiceEndpoint: getAnalysisList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
+		// System.out.println("EndpointAnalysis: getAnalysisList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -138,7 +138,7 @@ public class EndpointAnalysis {
 																							// @QueryParam("orderby") String orderby,
 																							// @QueryParam("search") String search)
 	{
-		// System.out.println("ActorServiceEndpoint: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+		// System.out.println("EndpointAnalysis: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "a.id";
 		// if ( orderby != null ) {
@@ -274,7 +274,7 @@ public class EndpointAnalysis {
 																										 @QueryParam("length") Integer length,
 																										 @QueryParam("language") String languageCode)
 	{
-		System.out.println("AnalysisServiceEndpoint: getAnalysisMethodElementSelectList: methodTypeId: "+methodTypeId+" element: "+element+" start: "+start+" length: "+length+" language: "+languageCode);
+		System.out.println("EndpointAnalysis: getAnalysisMethodElementSelectList: methodTypeId: "+methodTypeId+" element: "+element+" start: "+start+" length: "+length+" language: "+languageCode);
 
 		// String column = "a.id";
 		// if ( orderby != null ) {
@@ -515,7 +515,7 @@ public class EndpointAnalysis {
 	public Response createAnalysis(@PathParam("annotationId") int annotationId,
 																 @PathParam("analysisMethodId") int analysisMethodId, 
 																 String jsonData) {
-		System.out.println("AnalysisServiceEndpoint: createAnalysis: " + jsonData);
+		System.out.println("EndpointAnalysis: createAnalysis: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -529,12 +529,12 @@ public class EndpointAnalysis {
 		try {
 			newAnalysis = mapper.readValue(jsonData, Analysis.class);
 		} catch (IOException e) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysis - IOException");
+			System.out.println("EndpointAnalysis: createAnalysis - IOException");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newAnalysis == null ) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysis - newAnalysis == null");
+			System.out.println("EndpointAnalysis: createAnalysis - newAnalysis == null");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -577,7 +577,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAnalysis - done");
+		System.out.println("EndpointAnalysis: createAnalysis - done");
 		return Response.ok().entity(newAnalysis).build();
 	}
 	
@@ -586,7 +586,7 @@ public class EndpointAnalysis {
 	@Path("{analysisId}")
 	@Secured
 	public Response deleteAnalysis(@PathParam("analysisId") int analysisId) {   
-		System.out.println("AnalysisServiceEndpoint: deleteAnalysis"); 	
+		System.out.println("EndpointAnalysis: deleteAnalysis"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Analysis analysis = entityManager.find(Analysis.class, analysisId);
@@ -605,7 +605,7 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
-		System.out.println("AnalysisServiceEndpoint: deleteAnalysis - delete complete");
+		System.out.println("EndpointAnalysis: deleteAnalysis - delete complete");
 		return Response.ok().build();
 	}
 
@@ -614,7 +614,7 @@ public class EndpointAnalysis {
 	@Path("analysisAndMethod/{analysisMethodId}")
 	@Secured
 	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId) {   
-		System.out.println("AnalysisServiceEndpoint: deleteAnalysisAndMethod"); 	
+		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
@@ -634,7 +634,7 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
-		System.out.println("AnalysisServiceEndpoint: deleteAnalysisAndMethod - delete complete");
+		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod - delete complete");
 		return Response.ok().build();
 	}
 
@@ -644,7 +644,7 @@ public class EndpointAnalysis {
 	@Path("audioPostProduction/{id}")
 	@Secured
 	public Response createAudioPostProduction(@PathParam("id") int id) {
-		System.out.println("AnalysisServiceEndpoint: createAudioPostProduction: ");
+		System.out.println("EndpointAnalysis: createAudioPostProduction: ");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// parse JSON data
@@ -664,7 +664,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAudioPostProduction - done");
+		System.out.println("EndpointAnalysis: createAudioPostProduction - done");
 		return Response.ok().entity(audioPostProduction).build();
 	}
 
@@ -673,7 +673,7 @@ public class EndpointAnalysis {
 	@Path("audioPostProduction/{id}")
 	@Secured
 	public Response deleteAudioPostProduction(@PathParam("id") int id) {
-		System.out.println("AnalysisServiceEndpoint: deleteAudioPostProduction");
+		System.out.println("EndpointAnalysis: deleteAudioPostProduction");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
 
@@ -689,7 +689,7 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
-		System.out.println("AnalysisServiceEndpoint: deleteAudioPostProduction - delete complete");	
+		System.out.println("EndpointAnalysis: deleteAudioPostProduction - delete complete");	
 		return Response.ok().build();
 	}
 
@@ -700,7 +700,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAudioPostProductionTranslation(@PathParam("id") int id, 
 																											 String jsonData) {
-		System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: " + jsonData);
+		System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AudioPostProductionTranslation audioPostProductionTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -709,12 +709,12 @@ public class EndpointAnalysis {
 		try {
 			audioPostProductionTranslation = mapper.readValue(jsonData, AudioPostProductionTranslation.class);
 		} catch (IOException e) {
-			System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: IOException e !");
+			System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( audioPostProductionTranslation == null ) {
-			System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation: newAudio == null !");
+			System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -754,7 +754,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAudioPostProductionTranslation - done");
+		System.out.println("EndpointAnalysis: createAudioPostProductionTranslation - done");
 		return Response.ok().entity(audioPostProductionTranslation).build();
 	}
 
@@ -765,7 +765,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodAnalysisMusic(@PathParam("analysisMethodId") int analysisMethodId, 
 																										String jsonData) {
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisMusic: " + jsonData);
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -775,12 +775,12 @@ public class EndpointAnalysis {
 		try {
 			analysisMusic = mapper.readValue(jsonData, AnalysisMusic.class);
 		} catch (IOException e) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisMusic: IOException e !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( analysisMusic == null ) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisMusic: newAudio == null !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -814,7 +814,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisMusic - done");
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic - done");
 		return Response.ok().entity(analysisMusic).build();
 	}
 	
@@ -825,7 +825,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodAnalysisSpeech(@PathParam("analysisMethodId") int analysisMethodId, 
 																										 String jsonData) {
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: " + jsonData);
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -836,12 +836,12 @@ public class EndpointAnalysis {
 		try {
 			analysisSpeech = mapper.readValue(jsonData, AnalysisSpeech.class);
 		} catch (IOException e) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: IOException e !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( analysisSpeech == null ) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech: newAudio == null !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -871,7 +871,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodAnalysisSpeech - done");
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech - done");
 		return Response.ok().entity(analysisSpeech).build();
 	}
 	
@@ -882,7 +882,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodSoundEffectDescriptive(@PathParam("analysisMethodId") int analysisMethodId, 
 																														 String jsonData) {
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
+		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -893,12 +893,12 @@ public class EndpointAnalysis {
 		try {
 			soundEffectDescriptive = mapper.readValue(jsonData, SoundEffectDescriptive.class);
 		} catch (IOException e) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: IOException e !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( soundEffectDescriptive == null ) {
-			System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive: newAudio == null !");
+			System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -928,7 +928,7 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("AnalysisServiceEndpoint: createAnalysisMethodSoundEffectDescriptive - done");
+		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive - done");
 		return Response.ok().entity(soundEffectDescriptive).build();
 	}
 	

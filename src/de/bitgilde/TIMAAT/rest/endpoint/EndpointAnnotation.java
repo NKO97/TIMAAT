@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -44,6 +44,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
+import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -53,7 +54,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 
 @Service
 @Path("/annotation")
-public class AnnotationEndpoint {
+public class EndpointAnnotation {
 	
 	@Context ContainerRequestContext crc;
 
@@ -137,7 +138,7 @@ public class AnnotationEndpoint {
 			@QueryParam("search") String search, // not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
-		System.out.println("AnnotationEndpoint: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		System.out.println("EndpointAnnotation: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -188,7 +189,7 @@ public class AnnotationEndpoint {
 			@QueryParam("search") String search, // not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
-		System.out.println("AnnotationEndpoint: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -355,7 +356,7 @@ public class AnnotationEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateAnnotation(@PathParam("id") int id, String jsonData) {
-		System.out.println("AnnotationServiceEndpoint: updateAnnotation: " + jsonData);
+		System.out.println("EndpointAnnotation: updateAnnotation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation updatedAnno = null;
 		
@@ -372,7 +373,7 @@ public class AnnotationEndpoint {
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
 					
-		System.out.println("AnnotationServiceEndpoint: updateAnnotation: update annotation data");
+		System.out.println("EndpointAnnotation: updateAnnotation: update annotation data");
     	// update annotation
 		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
 		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
@@ -392,7 +393,7 @@ public class AnnotationEndpoint {
 				 && (updatedAnno.getSelectorSvgs().size() > 0) 
 				 && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null ) annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
 
-		System.out.println("AnnotationServiceEndpoint: updateAnnotation: update log metadata");
+		System.out.println("EndpointAnnotation: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
@@ -401,7 +402,7 @@ public class AnnotationEndpoint {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
  
-		System.out.println("AnnotationServiceEndpoint: updateAnnotation: persist data");
+		System.out.println("EndpointAnnotation: updateAnnotation: persist data");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(annotation);

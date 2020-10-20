@@ -48,7 +48,7 @@ public class EndpointTag {
 														 @QueryParam("dir") String direction,
 														 @QueryParam("search") String search)
 	{
-		// System.out.println("RoleServiceEndpoint: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("EndpointTag: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
 		// sanitize user input
@@ -95,8 +95,8 @@ public class EndpointTag {
 																	 @QueryParam("page") Integer page,
 																	 @QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all tags
-		// System.out.println("TagServiceEndpoint: getTagSelectList");
-		// System.out.println("TagServiceEndpoint: getTagSelectList - search string: "+ search);
+		// System.out.println("EndpointTag: getTagSelectList");
+		// System.out.println("EndpointTag: getTagSelectList - search string: "+ search);
 
 		class SelectElement{ 
 			public int id; 
@@ -108,12 +108,12 @@ public class EndpointTag {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			// System.out.println("TagServiceEndpoint: getTagSelectList - with search string");
+			// System.out.println("EndpointTag: getTagSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT t FROM Tag t WHERE lower(t.name) LIKE lower(concat('%', :name,'%')) ORDER BY t.name ASC");
 				query.setParameter("name", search);
 		} else {
-			// System.out.println("TagServiceEndpoint: getTagSelectList - no search string");
+			// System.out.println("EndpointTag: getTagSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT t FROM Tag t ORDER BY t.name ASC");
 		}

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import de.bitgilde.TIMAAT.rest.MediumServiceEndpoint;
+import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -740,10 +740,10 @@ public class Medium implements Serializable {
 	@PostLoad
 	public void setFileStatusAndViewTokenAfterLoad() {
 		if (this.fileStatus == null) {
-			this.fileStatus = MediumServiceEndpoint.mediumFileStatus(this.id, this.getMediaType().getMediaTypeTranslations().get(0).getType());
+			this.fileStatus = EndpointMedium.mediumFileStatus(this.id, this.getMediaType().getMediaTypeTranslations().get(0).getType());
 		}
 		if (this.viewToken == null) {
-			this.viewToken = MediumServiceEndpoint.issueFileToken(this.id);
+			this.viewToken = EndpointMedium.issueFileToken(this.id);
 		}
 	}
 

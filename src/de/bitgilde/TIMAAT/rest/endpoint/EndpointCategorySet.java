@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -48,7 +48,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 
 @Service
 @Path("/category")
-public class CategorySetEndpoint {
+public class EndpointCategorySet {
 	@Context
 	private UriInfo uriInfo;
 	@Context
@@ -70,7 +70,7 @@ public class CategorySetEndpoint {
 																	@QueryParam("dir") String direction,
 																	@QueryParam("search") String search)
 	{
-		// System.out.println("CategoryServiceEndpoint: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("EndpointCategorySet: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
 		// sanitize user input
@@ -121,7 +121,7 @@ public class CategorySetEndpoint {
 																	 	 @QueryParam("dir") String direction,
 																	 	 @QueryParam("search") String search)
 	{
-		// System.out.println("CategoryServiceEndpoint: getCategorySetList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("EndpointCategorySet: getCategorySetList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -165,7 +165,7 @@ public class CategorySetEndpoint {
 	@Secured
 	@Path("set/{id}")
 	public Response getCategorySet(@PathParam("id") Integer id) {
-		// System.out.println("CategoryServiceEndpoint: getCategorySet with id "+ id);
+		// System.out.println("EndpointCategorySet: getCategorySet with id "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, id);
 
@@ -178,7 +178,7 @@ public class CategorySetEndpoint {
 	@Path("{category_id}/set/{categoryset_id}")
 	public Response getCategoryHasCategorySet(@PathParam("category_id") Integer categoryId,
 																						@PathParam("categoryset_id") Integer categorySetId) {
-		// System.out.println("CategoryServiceEndpoint: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
+		// System.out.println("EndpointCategorySet: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Category category = entityManager.find(Category.class, categoryId);
@@ -197,7 +197,7 @@ public class CategorySetEndpoint {
 																				@QueryParam("page") Integer page,
 																				@QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all categories
-		// System.out.println("CategoryServiceEndpoint: getCategorySelectList - search string: "+ search);
+		// System.out.println("EndpointCategorySet: getCategorySelectList - search string: "+ search);
 
 		class SelectElement{ 
 			public int id; 
@@ -209,12 +209,12 @@ public class CategorySetEndpoint {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("CategoryServiceEndpoint: getCategorySelectList - with search string");
+			System.out.println("EndpointCategorySet: getCategorySelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("CategoryServiceEndpoint: getCategorySelectList - no search string");
+			System.out.println("EndpointCategorySet: getCategorySelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT c FROM Category c ORDER BY c.name ASC");
 		}
@@ -235,7 +235,7 @@ public class CategorySetEndpoint {
 																					 @QueryParam("page") Integer page,
 																					 @QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all categorysets
-		// System.out.println("CategoryServiceEndpoint: getCategorySetSelectList - search string: "+ search);
+		// System.out.println("EndpointCategorySet: getCategorySetSelectList - search string: "+ search);
 		
 		class SelectElement{ 
 			public int id; 
@@ -244,16 +244,16 @@ public class CategorySetEndpoint {
 				this.id = id; this.text = text;
 			};
 		}
-		// System.out.println("CategoryServiceEndpoint: getCategorySetSelectListForId - create query");
+		// System.out.println("EndpointCategorySet: getCategorySetSelectListForId - create query");
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("CategoryServiceEndpoint: getCategorySetSelectList - with search string");
+			System.out.println("EndpointCategorySet: getCategorySetSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT cs FROM CategorySet cs WHERE lower(cs.name) LIKE lower(concat('%', :name,'%')) ORDER BY cs.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("CategoryServiceEndpoint: getCategorySetSelectList - no search string");
+			System.out.println("EndpointCategorySet: getCategorySetSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT cs FROM CategorySet cs ORDER BY cs.name ASC");
 		}
@@ -277,7 +277,7 @@ public class CategorySetEndpoint {
 	@Path("set/{categoryset_id}/haslist")
 	public Response getCategorySetHasCategoryList(@PathParam("categoryset_id") Integer categorySetId)
 	{
-		// System.out.println("CategoryServiceEndpoint: getCategorySetHasCategoryList - ID: "+ categorySetId);
+		// System.out.println("EndpointCategorySet: getCategorySetHasCategoryList - ID: "+ categorySetId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		Set<CategorySetHasCategory> categorySetHasCategoryList = categorySet.getCategorySetHasCategories(); // TODO List<Category> ?
@@ -295,7 +295,7 @@ public class CategorySetEndpoint {
 	@Path("{category_id}/haslist")
 	public Response getCategoryHasCategorySetList(@PathParam("category_id") Integer categoryId)
 	{
-		System.out.println("CategoryServiceEndpoint: getCategoryHasCategorySetList - ID: "+ categoryId);
+		System.out.println("EndpointCategorySet: getCategoryHasCategorySetList - ID: "+ categoryId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Category category = entityManager.find(Category.class, categoryId);
 		Set<CategorySetHasCategory> categorySetHasCategoryList = category.getCategorySetHasCategories();
@@ -314,7 +314,7 @@ public class CategorySetEndpoint {
 	@Secured
 	public Response createCategory(@PathParam("id") int id,
 																 String jsonData) {
-		System.out.println("CategoryServiceEndpoint: createCategory: jsonData: "+ jsonData);
+		System.out.println("EndpointCategorySet: createCategory: jsonData: "+ jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		Category newCategory = null;
@@ -324,13 +324,13 @@ public class CategorySetEndpoint {
 		try {
 			newCategory = mapper.readValue(jsonData, Category.class);
 		} catch (IOException e) {
-			System.out.println("CategoryServiceEndpoint: createCategory: IOException");
+			System.out.println("EndpointCategorySet: createCategory: IOException");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		newCategory.setId(0);
 
-		System.out.println("CategoryServiceEndpoint: createCategory - persist category");
+		System.out.println("EndpointCategorySet: createCategory - persist category");
 		// persist category
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -343,7 +343,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYCREATED);
-		System.out.println("CategoryServiceEndpoint: createCategory - done");
+		System.out.println("EndpointCategorySet: createCategory - done");
 		return Response.ok().entity(newCategory).build();
 	}
 
@@ -354,7 +354,7 @@ public class CategorySetEndpoint {
 	@Secured
 	public Response updateCategory(@PathParam("id") int id,
 																 String jsonData) {
-		System.out.println("CategoryServiceEndpoint: updateCategory - jsonData: "+ jsonData);
+		System.out.println("EndpointCategorySet: updateCategory - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Category updatedCategory = null;    	
@@ -367,7 +367,7 @@ public class CategorySetEndpoint {
 		try {
 			updatedCategory = mapper.readValue(jsonData, Category.class);
 		} catch (IOException e) {
-			System.out.println("CategoryServiceEndpoint: updateCategory: IOException e!");
+			System.out.println("EndpointCategorySet: updateCategory: IOException e!");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -386,12 +386,12 @@ public class CategorySetEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(category);
 
-		System.out.println("CategoryServiceEndpoint: updateCategory - only logging remains");	
+		System.out.println("EndpointCategorySet: updateCategory - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYEDITED);
-		System.out.println("CategoryServiceEndpoint: updateCategory - update complete");
+		System.out.println("EndpointCategorySet: updateCategory - update complete");
 	
 		return Response.ok().entity(category).build();
 	}	
@@ -401,7 +401,7 @@ public class CategorySetEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteCategory(@PathParam("id") int id) {
-		System.out.println("CategoryServiceEndpoint: deleteCategory");
+		System.out.println("EndpointCategorySet: deleteCategory");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Category category = entityManager.find(Category.class, id);
 
@@ -423,7 +423,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYDELETED);
-		System.out.println("CategoryServiceEndpoint: deleteCategory - delete complete");	
+		System.out.println("EndpointCategorySet: deleteCategory - delete complete");	
 		return Response.ok().build();
 	}
 
@@ -434,7 +434,7 @@ public class CategorySetEndpoint {
 	@Secured
 	public Response createCategorySet(@PathParam("id") int id,
 																		String jsonData) {
-		System.out.println("CategoryServiceEndpoint: createCategorySet - jsonData: "+jsonData);
+		System.out.println("EndpointCategorySet: createCategorySet - jsonData: "+jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -445,7 +445,7 @@ public class CategorySetEndpoint {
 		try {
 			newCategorySet = mapper.readValue(jsonData, CategorySet.class);
 		} catch (IOException e) {
-			System.out.println("CategoryServiceEndpoint: createCategorySet: IOException");
+			System.out.println("EndpointCategorySet: createCategorySet: IOException");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -465,7 +465,7 @@ public class CategorySetEndpoint {
 			return Response.serverError().build();
 		}
 
-		// System.out.println("CategoryServiceEndpoint: createCategorySet - persist categorySet");
+		// System.out.println("EndpointCategorySet: createCategorySet - persist categorySet");
 
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -479,7 +479,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETCREATED);
-		System.out.println("CategoryServiceEndpoint: createCategorySet - done");
+		System.out.println("EndpointCategorySet: createCategorySet - done");
 		return Response.ok().entity(newCategorySet).build();
 	}
 
@@ -490,7 +490,7 @@ public class CategorySetEndpoint {
 	@Secured
 	public Response updateCategorySet(@PathParam("id") int id,
 																		String jsonData) {
-		System.out.println("CategoryServiceEndpoint: updateCategorySet - jsonData: "+ jsonData);
+		System.out.println("EndpointCategorySet: updateCategorySet - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		CategorySet updatedCategorySet = null;    	
@@ -503,7 +503,7 @@ public class CategorySetEndpoint {
 		try {
 			updatedCategorySet = mapper.readValue(jsonData, CategorySet.class);
 		} catch (IOException e) {
-			System.out.println("CategoryServiceEndpoint: updateCategorySet: IOException e!");
+			System.out.println("EndpointCategorySet: updateCategorySet: IOException e!");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -532,12 +532,12 @@ public class CategorySetEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(categorySet);
 
-		System.out.println("CategoryServiceEndpoint: updateCategorySet - only logging remains");	
+		System.out.println("EndpointCategorySet: updateCategorySet - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETEDITED);
-		System.out.println("CategoryServiceEndpoint: updateCategorySet - update complete");
+		System.out.println("EndpointCategorySet: updateCategorySet - update complete");
 	
 		return Response.ok().entity(categorySet).build();
 	}	
@@ -547,7 +547,7 @@ public class CategorySetEndpoint {
 	@Path("set/{id}")
 	@Secured
 	public Response deleteCategorySet(@PathParam("id") int id) {
-		System.out.println("CategoryServiceEndpoint: deleteCategorySet");
+		System.out.println("EndpointCategorySet: deleteCategorySet");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, id);
 
@@ -569,7 +569,7 @@ public class CategorySetEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETDELETED);
-		System.out.println("CategoryServiceEndpoint: deleteCategorySet - delete complete");	
+		System.out.println("EndpointCategorySet: deleteCategorySet - delete complete");	
 		return Response.ok().build();
 	}
 
@@ -579,13 +579,13 @@ public class CategorySetEndpoint {
 	@Path("set/isduplicate")
 	@Secured
 	public Response categorySetCheckForDuplicate(String name) {
-		System.out.println("CategoryServiceEndpoint: categorySetDuplicateCheck - name: "+name);
+		System.out.println("EndpointCategorySet: categorySetDuplicateCheck - name: "+name);
 
 		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(cs) FROM CategorySet cs WHERE cs.name = "+name);
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
-		System.out.println("CategoryServiceEndpoint: categorySetDuplicateCheck - done");
+		System.out.println("EndpointCategorySet: categorySetDuplicateCheck - done");
 		return Response.ok().entity(duplicate).build();
 	}
 
@@ -597,7 +597,7 @@ public class CategorySetEndpoint {
 	public Response createCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
 																							 @PathParam("category_id") int categoryId,
 																							 String jsonData) {
-		System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - jsonData: "+jsonData);
+		System.out.println("EndpointCategorySet: createCategorySetHasCategory - jsonData: "+jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
@@ -607,7 +607,7 @@ public class CategorySetEndpoint {
 		// CategorySetHasCategory cshc = entityManager.find(CategorySetHasCategory.class, cshcKey.getId());
 		CategorySetHasCategory cshc = new CategorySetHasCategory(categorySet, category);
 
-		System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - persist categorySetHasCategory");
+		System.out.println("EndpointCategorySet: createCategorySetHasCategory - persist categorySetHasCategory");
 		// Create CategorySetHasCategory entry
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -629,7 +629,7 @@ public class CategorySetEndpoint {
 
 
 		// TODO once tree hierarchy for categorysets is implemented
-		// System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - prepare categorySetHasCategory content");
+		// System.out.println("EndpointCategorySet: createCategorySetHasCategory - prepare categorySetHasCategory content");
 		// // Fill CategorySetHasCategory entry with additional data
 		// ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -647,7 +647,7 @@ public class CategorySetEndpoint {
 		// cshc.setCategorySetHasCategory(categorySetHasCategory.getCategorySetHasCategory());
 
 		// TODO persist data once data is updated
-		// System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - persist categorySetHasCategory data");
+		// System.out.println("EndpointCategorySet: createCategorySetHasCategory - persist categorySetHasCategory data");
 		// entityTransaction.begin();
 		// entityManager.merge(cshc);
 		// entityManager.persist(cshc);
@@ -655,7 +655,7 @@ public class CategorySetEndpoint {
 		// entityManager.refresh(cshc);
 
 
-		System.out.println("CategoryServiceEndpoint: createCategorySetHasCategory - done");
+		System.out.println("EndpointCategorySet: createCategorySetHasCategory - done");
 		return Response.ok().entity(cshc).build();
 	}
 
@@ -667,7 +667,7 @@ public class CategorySetEndpoint {
 	public Response updateCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
 																							 @PathParam("category_id") int categoryId,
 																							 String jsonData) {
-		System.out.println("CategoryServiceEndpoint: updateCategorySetHasCategory - jsonData: "+ jsonData);
+		System.out.println("EndpointCategorySet: updateCategorySetHasCategory - jsonData: "+ jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
@@ -693,7 +693,7 @@ public class CategorySetEndpoint {
 		// cshc.setCategorySetHasCategory(updatedCategorySetHasCategory.getCategorySetHasCategory());
 
 		// TODO persist data once data is updated
-		System.out.println("CategoryServiceEndpoint: updateCategorySetHasCategory - persist categories");
+		System.out.println("EndpointCategorySet: updateCategorySetHasCategory - persist categories");
 		// persist categorySetHasCategory
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -702,7 +702,7 @@ public class CategorySetEndpoint {
 		entityTransaction.commit();
 		entityManager.refresh(cshc);
 
-		System.out.println("CategoryServiceEndpoint: updateCategorySetHasCategory - update complete");
+		System.out.println("EndpointCategorySet: updateCategorySetHasCategory - update complete");
 	
 		return Response.ok().entity(cshc).build();
 	}	
@@ -713,7 +713,7 @@ public class CategorySetEndpoint {
 	@Secured
 	public Response deleteCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
 																							 @PathParam("category_id") int categoryId) {
-		System.out.println("CategoryServiceEndpoint: deleteCategorySetHasCategory");
+		System.out.println("EndpointCategorySet: deleteCategorySetHasCategory");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		Category category = entityManager.find(Category.class, categoryId);
@@ -721,7 +721,7 @@ public class CategorySetEndpoint {
 		CategorySetHasCategory cshcKey = new CategorySetHasCategory(categorySet, category);
 		CategorySetHasCategory cshc = entityManager.find(CategorySetHasCategory.class, cshcKey.getId());
 
-		System.out.println("CategoryServiceEndpoint: deleteCategorySetHasCategory - persist");	
+		System.out.println("EndpointCategorySet: deleteCategorySetHasCategory - persist");	
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -732,7 +732,7 @@ public class CategorySetEndpoint {
 		entityManager.refresh(category);
 		entityManager.refresh(categorySet);
 
-		System.out.println("CategoryServiceEndpoint: deleteCategorySetHasCategory - delete complete");	
+		System.out.println("EndpointCategorySet: deleteCategorySetHasCategory - delete complete");	
 		return Response.ok().build();
 	}
 
@@ -759,7 +759,7 @@ public class CategorySetEndpoint {
 	// @Secured
 	// @Path("categoryset/all")
 	// public Response getAllCategorySets() {
-	// 	// System.out.println("CategorySetEndpoint: getAllCategorySets");
+	// 	// System.out.println("EndpointCategorySet: getAllCategorySets");
 	// 	List<CategorySetHasCategory> categorySetHasCategories = null;
 	// 	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 	// 	try {
@@ -837,7 +837,7 @@ public class CategorySetEndpoint {
 // 	@Secured
 // 	@Path("set/all")
 // 	public Response getAllCategorySets() {
-// 		// System.out.println("CategorySetEndpoint: getAllCategorySets");
+// 		// System.out.println("EndpointCategorySet: getAllCategorySets");
 // 		List<CategorySet> categorySets = null;
 // 		// List<CategorySetHasCategory> categorySetHasCategories = null;
 // 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();

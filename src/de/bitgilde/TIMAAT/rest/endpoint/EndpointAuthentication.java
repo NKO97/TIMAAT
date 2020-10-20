@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -24,6 +24,7 @@ import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
+import de.bitgilde.TIMAAT.rest.UserCredentials;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.mkammerer.argon2.Argon2Advanced;
@@ -39,7 +40,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 @Path("/authenticate")
-public class AuthenticationEndpoint {
+public class EndpointAuthentication {
 	
 	@Context
 	private UriInfo uriInfo;

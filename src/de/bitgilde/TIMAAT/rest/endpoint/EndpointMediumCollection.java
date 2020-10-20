@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
+import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -50,7 +51,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 
 @Service
 @Path("/mediaCollection")
-public class MediaCollectionEndpoint {
+public class EndpointMediumCollection {
 	@Context
 	private UriInfo uriInfo;
 	@Context
@@ -68,7 +69,7 @@ public class MediaCollectionEndpoint {
 																			@QueryParam("orderby") String orderby,
 																			@QueryParam("dir") String direction,
 																			@QueryParam("search") String search ) {
-		System.out.println("MediumCollectionServiceEndpoint: getAllMediaCollections: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("EndpointMediumCollection: getAllMediaCollections: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -120,7 +121,7 @@ public class MediaCollectionEndpoint {
 																					@QueryParam("orderby") String orderby,
 																					@QueryParam("dir") String direction,
 																					@QueryParam("search") String search ) {
-		System.out.println("TCL: MediumCollectionServiceEndpoint: getMediaCollectionItems: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("TCL: EndpointMediumCollection: getMediaCollectionItems: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -181,7 +182,7 @@ public class MediaCollectionEndpoint {
 																									 @QueryParam("orderby") String orderby,
 																									 @QueryParam("dir") String direction,
 																									 @QueryParam("search") String search ) {
-		System.out.println("TCL: MediumCollectionServiceEndpoint: getMediaCollectionItemsNotInList: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		System.out.println("TCL: EndpointMediumCollection: getMediaCollectionItemsNotInList: id: "+id+" draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -368,7 +369,7 @@ public class MediaCollectionEndpoint {
 	@Path("{mediumCollectionId}/hasTagList")
 	public Response getTagList(@PathParam("mediumCollectionId") Integer mediumCollectionId)
 	{
-		// System.out.println("MediumCollectionServiceEndpoint: getTagList");
+		// System.out.println("EndpointMediumCollection: getTagList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
 		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
@@ -382,7 +383,7 @@ public class MediaCollectionEndpoint {
 	@Secured
 	// @Path("/")
 	public Response createMediaCollectionOld(String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: createMediaCollection OLD : " + jsonData);
+		System.out.println("EndpointMediumCollection: createMediaCollection OLD : " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		MediaCollection newCol = null;    	
@@ -433,7 +434,7 @@ public class MediaCollectionEndpoint {
 	@Secured
 	@Path("/{id}")
 	public Response createMediaCollection(String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: createMediaCollection: " + jsonData);
+		System.out.println("EndpointMediumCollection: createMediaCollection: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		MediaCollection newCol = null;    	
@@ -483,7 +484,7 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response updateMediaCollection(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: updateMediaCollection: " + jsonData);
+		System.out.println("EndpointMediumCollection: updateMediaCollection: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -536,7 +537,7 @@ public class MediaCollectionEndpoint {
 	@Path("{id}")
 	@Secured
 	public Response deleteMediaCollection(@PathParam("id") int id) {
-		System.out.println("MediumCollectionServiceEndpoint: deleteMediaCollection");
+		System.out.println("EndpointMediumCollection: deleteMediaCollection");
     	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = entityManager.find(MediaCollection.class, id);
@@ -551,7 +552,7 @@ public class MediaCollectionEndpoint {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 															 UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
-		System.out.println("MediumCollectionServiceEndpoint: deleteMediumCollection - delete complete");	
+		System.out.println("EndpointMediumCollection: deleteMediumCollection - delete complete");	
 		return Response.ok().build();
 	}
 	
@@ -561,7 +562,7 @@ public class MediaCollectionEndpoint {
 	@Path("Album/{id}")
 	@Secured
 	public Response createAlbum(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: createAlbum jsonData: "+jsonData);
+		System.out.println("EndpointMediumCollection: createAlbum jsonData: "+jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		MediaCollectionAlbum newAlbum = null;
@@ -571,12 +572,12 @@ public class MediaCollectionEndpoint {
 		try {
 			newAlbum = mapper.readValue(jsonData, MediaCollectionAlbum.class);
 		} catch (IOException e) {
-			System.out.println("MediumCollectionServiceEndpoint: createAlbum: IOException e !");
+			System.out.println("EndpointMediumCollection: createAlbum: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newAlbum == null ) {
-			System.out.println("MediumCollectionServiceEndpoint: createAlbum: newAlbum == null !");
+			System.out.println("EndpointMediumCollection: createAlbum: newAlbum == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
@@ -595,7 +596,7 @@ public class MediaCollectionEndpoint {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAlbum.getMediaCollection().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ALBUMCREATED);
-		System.out.println("MediumCollectionServiceEndpoint: album created with id "+newAlbum.getMediaCollectionId());
+		System.out.println("EndpointMediumCollection: album created with id "+newAlbum.getMediaCollectionId());
 		return Response.ok().entity(newAlbum).build();
 	}
 
@@ -605,7 +606,7 @@ public class MediaCollectionEndpoint {
 	@Path("Album/{id}")
 	@Secured
 	public Response updateAlbum(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: updateAlbum - jsonData: " + jsonData);
+		System.out.println("EndpointMediumCollection: updateAlbum - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		MediaCollectionAlbum updatedAlbum = null;    	
@@ -622,7 +623,7 @@ public class MediaCollectionEndpoint {
 		if ( updatedAlbum == null ) return Response.notModified().build();    	
 		
 		// update album
-		// System.out.println("MediumCollectionServiceEndpoint: updateAlbum - album.id:"+album.getMediaCollectionId());
+		// System.out.println("EndpointMediumCollection: updateAlbum - album.id:"+album.getMediaCollectionId());
 		if ( updatedAlbum.getTracks() > 0) album.setTracks(updatedAlbum.getTracks());
 		
 		// update log metadata
@@ -642,7 +643,7 @@ public class MediaCollectionEndpoint {
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 																				UserLogManager.LogEvents.ALBUMEDITED);
-		System.out.println("MediumCollectionServiceEndpoint: updateAlbum - update complete");	
+		System.out.println("EndpointMediumCollection: updateAlbum - update complete");	
 		return Response.ok().entity(album).build();
 	}
 
@@ -651,7 +652,7 @@ public class MediaCollectionEndpoint {
 	@Path("Album/{id}")
 	@Secured
 	public Response deleteAlbum(@PathParam("id") int id) {  
-		System.out.println("MediumCollectionServiceEndpoint: deleteAlbum with id: "+ id);
+		System.out.println("EndpointMediumCollection: deleteAlbum with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
 		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
@@ -666,7 +667,7 @@ public class MediaCollectionEndpoint {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 														UserLogManager.LogEvents.ALBUMDELETED);
-		System.out.println("MediumCollectionServiceEndpoint: deleteAlbum - album deleted");  
+		System.out.println("EndpointMediumCollection: deleteAlbum - album deleted");  
 		return Response.ok().build();
 	}
 
@@ -676,7 +677,7 @@ public class MediaCollectionEndpoint {
 	@Path("Series/{id}")
 	@Secured
 	public Response createSeries(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: createSeries jsonData: "+jsonData);
+		System.out.println("EndpointMediumCollection: createSeries jsonData: "+jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		MediaCollectionSeries newSeries = null;
@@ -686,12 +687,12 @@ public class MediaCollectionEndpoint {
 		try {
 			newSeries = mapper.readValue(jsonData, MediaCollectionSeries.class);
 		} catch (IOException e) {
-			System.out.println("MediumCollectionServiceEndpoint: createSeries: IOException e !");
+			System.out.println("EndpointMediumCollection: createSeries: IOException e !");
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newSeries == null ) {
-			System.out.println("MediumCollectionServiceEndpoint: createSeries: newSeries == null !");
+			System.out.println("EndpointMediumCollection: createSeries: newSeries == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		// sanitize object data
@@ -710,7 +711,7 @@ public class MediaCollectionEndpoint {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newSeries.getMediaCollection().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.SERIESCREATED);
-		System.out.println("MediumCollectionServiceEndpoint: series created with id "+newSeries.getMediaCollectionId());
+		System.out.println("EndpointMediumCollection: series created with id "+newSeries.getMediaCollectionId());
 		return Response.ok().entity(newSeries).build();
 	}
 
@@ -720,7 +721,7 @@ public class MediaCollectionEndpoint {
 	@Path("Series/{id}")
 	@Secured
 	public Response updateSeries(@PathParam("id") int id, String jsonData) {
-		System.out.println("MediumCollectionServiceEndpoint: updateSeries - jsonData: " + jsonData);
+		System.out.println("EndpointMediumCollection: updateSeries - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		MediaCollectionSeries updatedSeries = null;    	
@@ -737,7 +738,7 @@ public class MediaCollectionEndpoint {
 		if ( updatedSeries == null ) return Response.notModified().build();    	
 		
 		// update series
-		// System.out.println("MediumCollectionServiceEndpoint: updateSeries - series.id:"+series.getMediaCollectionId());
+		// System.out.println("EndpointMediumCollection: updateSeries - series.id:"+series.getMediaCollectionId());
 		if ( updatedSeries.getSeasons() > 0) series.setSeasons(updatedSeries.getSeasons());
 		if ( updatedSeries.getStarted() != null) series.setStarted(updatedSeries.getStarted());
 		if ( updatedSeries.getEnded() != null) series.setEnded(updatedSeries.getEnded());
@@ -759,7 +760,7 @@ public class MediaCollectionEndpoint {
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 																				UserLogManager.LogEvents.SERIESEDITED);
-		System.out.println("MediumCollectionServiceEndpoint: updateSeries - update complete");	
+		System.out.println("EndpointMediumCollection: updateSeries - update complete");	
 		return Response.ok().entity(series).build();
 	}
 
@@ -768,7 +769,7 @@ public class MediaCollectionEndpoint {
 	@Path("Series/{id}")
 	@Secured
 	public Response deleteSeries(@PathParam("id") int id) {  
-		System.out.println("MediumCollectionServiceEndpoint: deleteSeries with id: "+ id);
+		System.out.println("EndpointMediumCollection: deleteSeries with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
 		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
@@ -783,7 +784,7 @@ public class MediaCollectionEndpoint {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 														UserLogManager.LogEvents.SERIESDELETED);
-		System.out.println("MediumCollectionServiceEndpoint: deleteSeries - series deleted");  
+		System.out.println("EndpointMediumCollection: deleteSeries - series deleted");  
 		return Response.ok().build();
 	}
 
@@ -792,7 +793,7 @@ public class MediaCollectionEndpoint {
 	@Path("{id}/medium/{mediumId}")
 	@Secured
 	public Response addMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
-		System.out.println("TCL: MediaCollectionEndpoint -> addMediaCollectionItem");
+		System.out.println("TCL: EndpointMediumCollection -> addMediaCollectionItem");
     	
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	MediaCollection col = em.find(MediaCollection.class, id);
@@ -838,7 +839,7 @@ public class MediaCollectionEndpoint {
 	@Path("{id}/medium/{mediumId}")
 	@Secured
 	public Response deleteMediaCollectionItem(@PathParam("id") int id, @PathParam("mediumId") int mediumId) {
-		System.out.println("TCL: MediaCollectionEndpoint -> deleteMediaCollectionItem");
+		System.out.println("TCL: EndpointMediumCollection -> deleteMediaCollectionItem");
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		MediaCollection col = em.find(MediaCollection.class, id);
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();

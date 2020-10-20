@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest;
+package de.bitgilde.TIMAAT.rest.endpoint;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -23,6 +23,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.Secured;
 
 /**
 *
@@ -31,7 +32,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 
 @Service
 @Path("/publication")
-public class PublicationEndpoint {
+public class EndpointPublication {
 
 	@Context
 	private UriInfo uriInfo;

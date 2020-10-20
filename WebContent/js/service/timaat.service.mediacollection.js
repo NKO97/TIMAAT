@@ -64,7 +64,7 @@
 		},
 
 		createMediaCollection(title, comment, callback) {
-      console.log("TCL: createMediaCollection -> title, comment, callback", title, comment);
+      console.log("TCL: createMediaCollection (old) -> title, comment, callback", title, comment);
 			var model = {
 					id: 0,
 					isSystemic: 0,
