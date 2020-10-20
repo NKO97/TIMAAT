@@ -47,9 +47,18 @@ public class MediaCollection implements Serializable {
 	@OneToMany(mappedBy="mediaCollection")
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 
-	//bi-directional many-to-one association to MediaCollectionHasTag
-	@OneToMany(mappedBy="mediaCollection")
-	private List<MediaCollectionHasTag> mediaCollectionHasTags;
+	//bi-directional many-to-many association to Tag
+	@OneToMany
+	@JoinTable(
+		name="media_collection_has_tag"
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="media_collection_id")
+			}
+		)
+	private List<Tag> tags;
 
 	/*
 	//bi-directional many-to-one association to MediaCollectionHasWork
@@ -156,26 +165,12 @@ public class MediaCollection implements Serializable {
 		return mediaCollectionHasMedium;
 	}
 
-	public List<MediaCollectionHasTag> getMediaCollectionHasTags() {
-		return this.mediaCollectionHasTags;
+	public List<Tag> getTags() {
+		return this.tags;
 	}
 
-	public void setMediaCollectionHasTags(List<MediaCollectionHasTag> mediaCollectionHasTags) {
-		this.mediaCollectionHasTags = mediaCollectionHasTags;
-	}
-
-	public MediaCollectionHasTag addMediaCollectionHasTag(MediaCollectionHasTag mediaCollectionHasTag) {
-		getMediaCollectionHasTags().add(mediaCollectionHasTag);
-		mediaCollectionHasTag.setMediaCollection(this);
-
-		return mediaCollectionHasTag;
-	}
-
-	public MediaCollectionHasTag removeMediaCollectionHasTag(MediaCollectionHasTag mediaCollectionHasTag) {
-		getMediaCollectionHasTags().remove(mediaCollectionHasTag);
-		mediaCollectionHasTag.setMediaCollection(null);
-
-		return mediaCollectionHasTag;
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 
 	/*

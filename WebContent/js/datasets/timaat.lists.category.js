@@ -817,6 +817,7 @@
           await TIMAAT.CategoryService.getCategoryOrCategorySetList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
             if (data.length > 0) {
+              data.sort((a, b) => (a.name > b.name)? 1 : -1);
               // create the options and append to Select2
               var i = 0;
               for (; i < data.length; i++) {
@@ -872,6 +873,7 @@
           await TIMAAT.CategoryService.getCategoryOrCategorySetList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
             if (data.length > 0) {
+              data.sort((a, b) => (a.name > b.name)? 1 : -1);
               // create the options and append to Select2
               var i = 0;
               for (; i < data.length; i++) {

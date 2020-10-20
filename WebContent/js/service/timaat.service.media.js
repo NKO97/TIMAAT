@@ -634,31 +634,6 @@
 			});
 		},
 
-		async addMediumHasTags(mediumModel) {
-      console.log("TCL: updateMediumHasTags -> mediumModel", mediumModel);
-			delete mediumModel.ui;
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id+"/hasTags",
-					type:"PATCH",
-					data: JSON.stringify(mediumModel.tags),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-					// console.log("TCL: async updateMedium -> returning data", data);
-					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
-				});
-			}).catch((error) => {
-				console.log( "error: ", error );
-			});
-		},
-
 		async removeMedium(medium) {
 			// console.log("TCL: removeMedium -> medium", medium);
 			return new Promise(resolve => {

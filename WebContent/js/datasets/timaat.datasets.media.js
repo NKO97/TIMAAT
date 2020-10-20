@@ -388,6 +388,7 @@
 					console.log("TCL: then: data", data);
 					var tagSelect = $('#medium-tags-multi-select-dropdown');
 					if (data.length > 0) {
+						data.sort((a, b) => (a.name > b.name)? 1 : -1);
 						// create the options and append to Select2
 						var i = 0;
 						for (; i < data.length; i++) {
@@ -2777,6 +2778,7 @@
 				await TIMAAT.MediaService.getActorHasRoleList(medium.model.id, actorIdList[i]).then(function (data) {
 					console.log("TCL: then: data", data);
 					if (data.length > 0) {
+						data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
 						// create the options and append to Select2
 						var j = 0;
 						for (; j < data.length; j++) {
@@ -4878,7 +4880,7 @@
 		},
 
 		clearLastMediumSelection: function (type) {
-    	console.log("TCL: clearLastMediumSelection");
+    	console.log("TCL: clearLastMediumSelection type", type);
 			let i = 0;
 			switch (type) {
 				case 'medium':

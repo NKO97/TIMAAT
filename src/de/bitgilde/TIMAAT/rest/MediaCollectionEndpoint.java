@@ -36,10 +36,10 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAlbum;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
-import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
@@ -362,6 +362,20 @@ public class MediaCollectionEndpoint {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{mediumCollectionId}/hasTagList")
+	public Response getTagList(@PathParam("mediumCollectionId") Integer mediumCollectionId)
+	{
+		// System.out.println("MediumCollectionServiceEndpoint: getTagList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
+		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
+		entityManager.refresh(mediumCollection);
+		return Response.ok().entity(mediumCollection.getTags()).build();
+	}
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -387,7 +401,7 @@ public class MediaCollectionEndpoint {
 		newCol.setMediaCollectionAlbum(null);
 		newCol.setMediaCollectionAnalysisLists(new ArrayList<MediaCollectionAnalysisList>());
 		newCol.setMediaCollectionHasMediums(new ArrayList<MediaCollectionHasMedium>());
-		newCol.setMediaCollectionHasTags(new ArrayList<MediaCollectionHasTag>());
+		newCol.setTags(null);
 		newCol.setMediaCollectionSeries(null);
 		newCol.setMediaCollectionType(em.find(MediaCollectionType.class, 2)); // TODO refactor
 		// update log metadata
@@ -437,7 +451,7 @@ public class MediaCollectionEndpoint {
 		// newCol.setMediaCollectionAlbum(null);
 		newCol.setMediaCollectionAnalysisLists(new ArrayList<MediaCollectionAnalysisList>());
 		newCol.setMediaCollectionHasMediums(new ArrayList<MediaCollectionHasMedium>());
-		newCol.setMediaCollectionHasTags(new ArrayList<MediaCollectionHasTag>());
+		newCol.setTags(null);
 		// newCol.setMediaCollectionSeries(null);
 		// newCol.setMediaCollectionType(entityManager.find(MediaCollectionType.class, 2)); // TODO refactor
 		// update log metadata
@@ -491,6 +505,8 @@ public class MediaCollectionEndpoint {
 		if ( updatedCollection.getIsSystemic() != null) collection.setIsSystemic(updatedCollection.getIsSystemic());
 		if ( updatedCollection.getTitle() != null ) collection.setTitle(updatedCollection.getTitle());
 		if ( updatedCollection.getRemark() != null ) collection.setRemark(updatedCollection.getRemark());
+		List<Tag> oldTags = collection.getTags();
+		collection.setTags(updatedCollection.getTags());
 
 		// TODO update log metadata in general log
 		
@@ -500,6 +516,12 @@ public class MediaCollectionEndpoint {
 		entityManager.persist(collection);
 		entityTransaction.commit();
 		entityManager.refresh(collection);
+		for (Tag tag : collection.getTags()) {
+			entityManager.refresh(tag);
+		}
+		for (Tag tag : oldTags) {
+			entityManager.refresh(tag);
+		}
 
 		// add log entry
 		UserLogManager.getLogger()
@@ -841,6 +863,63 @@ public class MediaCollectionEndpoint {
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
 
 		return Response.ok().entity(true).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{mediumCollectionId}/tag/{tagId}")
+	@Secured
+	public Response addExistingTag(@PathParam("mediumCollectionId") int mediumCollectionId,
+																 @PathParam("tagId") int tagId) {
+		
+    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
+			if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+			if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+			
+        // attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		mediumCollection.getTags().add(tag);
+    		tag.getMediaCollections().add(mediumCollection);
+    		entityManager.merge(tag);
+    		entityManager.merge(mediumCollection);
+    		entityManager.persist(mediumCollection);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(mediumCollection);
+ 	
+		return Response.ok().entity(tag).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{mediumCollectionId}/tag/{tagId}")
+	@Secured
+	public Response removeTag(@PathParam("mediumCollectionId") int mediumCollectionId,
+														@PathParam("tagId") int tagId) {
+		
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
+			if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+    	if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		mediumCollection.getTags().remove(tag);
+    		tag.getMediaCollections().remove(mediumCollection);
+    		entityManager.merge(tag);
+    		entityManager.merge(mediumCollection);
+    		entityManager.persist(mediumCollection);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(mediumCollection);
+ 	
+		return Response.ok().build();
 	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {

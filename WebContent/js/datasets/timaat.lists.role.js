@@ -564,6 +564,7 @@
             var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
             // console.log("TCL: roleGroupSelect", roleGroupSelect);
             if (data.length > 0) {
+              data.sort((a, b) => (a.roleGroupTranslations[0].name > b.roleGroupTranslations[0].name)? 1 : -1);
               // create the options and append to Select2
               var i = 0;
               for (; i < data.length; i++) {
@@ -617,6 +618,7 @@
             // console.log("TCL: actorSelect", actorSelect);
             console.log("TCL: then: data", data);
             if (data.length > 0) {
+              data.sort((a, b) => (a.displayName.name > b.displayName.name)? 1 : -1);
               var i = 0;
               for (; i < data.length; i++) {
                 var option = new Option(data[i].displayName.name, data[i].id, true, true);
@@ -671,6 +673,7 @@
           await TIMAAT.RoleService.getRoleGroupHasRoleList(type, data.model.id).then(function (data) {
             console.log("TCL: then: data", data);
             if (data.length > 0) {
+              data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
               // create the options and append to Select2
               var i = 0;
               for (; i < data.length; i++) {

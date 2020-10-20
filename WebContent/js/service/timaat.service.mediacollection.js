@@ -39,6 +39,30 @@
 			});
 		},
 
+		async getTagList(mediumCollectionId) {
+      console.log("TCL: getTagList -> for mediumCollectionId", mediumCollectionId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/hasTagList/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getTagList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		createMediaCollection(title, comment, callback) {
       console.log("TCL: createMediaCollection -> title, comment, callback", title, comment);
 			var model = {
@@ -111,20 +135,67 @@
 			});
 		},
 
-		async updateMediaCollection(collectionFull) {
-			console.log("TCL: updateMediaCollection -> collection", collectionFull);
-			var collection = {
-					id: collectionFull.id,
-					isSystemic: collectionFull.isSystemic,
-					title: collectionFull.title,
-					note: collectionFull.note,
-			};
-			delete collection.ui;
+		async addCollectionItem(collectionId, mediumId) {
+			console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+        	console.log("TCL: addCollectionItem -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log("error: ", error);
+			});
+		},
+
+		async addTag(mediumCollectionId, tagId) {
+			// console.log("TCL: addTag -> mediumCollectionId, tagId", mediumCollectionId, tagId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/tag/"+tagId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+		});		
+		},
+
+		async updateMediaCollection(collectionModel) {
+			console.log("TCL: updateMediaCollection -> collection", collectionModel);
+			var tempCollection = {
+					id: collectionModel.id,
+					isSystemic: collectionModel.isSystemic,
+					title: collectionModel.title,
+					note: collectionModel.note,
+					tags: collectionModel.tags
+			};
+			delete tempCollection.ui;
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionModel.id,
 					type:"PATCH",
-					data: JSON.stringify(collection),
+					data: JSON.stringify(tempCollection),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -188,29 +259,6 @@
 			});
 		},
 
-		async addCollectionItem(collectionId, mediumId) {
-			console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
-					type:"POST",
-					contentType:"application/json; charset=utf-8",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-        	console.log("TCL: addCollectionItem -> data", data);
-					resolve(data);
-				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
-				});
-			}).catch((error) => {
-				console.log("error: ", error);
-			});
-		},
-
 		async removeCollectionItem(collectionId, mediumId) {
       console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
@@ -223,7 +271,6 @@
 					},
 				}).done(function(data) {
         	console.log("TCL: removeCollectionItem -> data", data);
-					console.log("TCL: removed medium from collection");
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error", e );
@@ -232,6 +279,28 @@
 			}).catch((error) => {
 				console.log("error: ", error);
 			});
+		},
+
+		async removeTag(mediumCollectionId, tagId) {
+			// console.log("TCL: removeTag -> mediumCollectionId, tagName", mediumCollectionId, tagName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/tag/"+tagId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
 		},
 
 	}

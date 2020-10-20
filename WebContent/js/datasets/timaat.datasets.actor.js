@@ -3191,6 +3191,7 @@
 				await TIMAAT.ActorService.getActorHasImageList(actorTypeData.model.id).then(async function(data) {
 					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
+						data.sort((a, b) => (a.displayTitle.name > b.displayTitle.name)? 1 : -1);
 						// create the options and append to Select2
 						var i = 0;
 						for (; i < data.length; i++) {
@@ -3991,6 +3992,7 @@
 			await TIMAAT.ActorService.getActorHasRoleList(actor.model.id).then(function(data) {
 				console.log("TCL: then: data", data);
 				if (data.length > 0) {
+					data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
 					// create the options and append to Select2
 					var i = 0;
 					for (; i < data.length; i++) {
@@ -4093,6 +4095,7 @@
 				await TIMAAT.ActorService.getActorRoleInMediumList(actor.model.id, 5).then(function(data) { // TODO 5 = Producer
 					console.log("TCL: then: data", data);
 					if (data.length > 0) {
+						data.sort((a, b) => (a.displayTitle.name > b.displayTitle.name)? 1 : -1);
 						// create the options and append to Select2
 						var i = 0;
 						for (; i < data.length; i++) {

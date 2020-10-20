@@ -82,6 +82,11 @@ public class Tag implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
+	//bi-directional many-to-many association to Medium
+	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
+	private List<MediaCollection> mediaCollections;
+
 	//bi-directional many-to-many association to WorkAnalysisList
 	// @ManyToMany(mappedBy="tags")
 	// private List<WorkAnalysisList> workAnalysisLists;
@@ -147,6 +152,14 @@ public class Tag implements Serializable {
 
 	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
+	}
+
+	public List<MediaCollection> getMediaCollections() {
+		return this.mediaCollections;
+	}
+
+	public void setMediaCollections(List<MediaCollection> mediaCollections) {
+		this.mediaCollections = mediaCollections;
 	}
 
 	// public List<WorkAnalysisList> getWorkAnalysisLists() {

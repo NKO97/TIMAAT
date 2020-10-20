@@ -123,8 +123,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisListTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMediumPK</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTag</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasTagPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionTypeTranslation</class>
