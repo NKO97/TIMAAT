@@ -77,6 +77,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.model.FIPOP.Street;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -653,6 +654,19 @@ public class ActorEndpoint {
 		return Response.ok().entity(imageList).build();
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{actorId}/hasTagList")
+	public Response getTagList(@PathParam("actorId") Integer actorId)
+	{
+		// System.out.println("ActorServiceEndpoint: getTagList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Actor actor = entityManager.find(Actor.class, actorId);
+		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+		entityManager.refresh(actor);
+		return Response.ok().entity(actor.getTags()).build();
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -771,6 +785,8 @@ public class ActorEndpoint {
 		actor.setPrimaryPhoneNumber(updatedActor.getPrimaryPhoneNumber());
 		actor.setRoles(updatedActor.getRoles());
 		actor.setProfileImages(updatedActor.getProfileImages());
+		List<Tag> oldTags = actor.getTags();
+		actor.setTags(updatedActor.getTags());
 
 		// update log metadata
 		actor.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -779,7 +795,6 @@ public class ActorEndpoint {
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
-
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -792,6 +807,12 @@ public class ActorEndpoint {
 		}
 		for (Role role : oldRoles) {
 			entityManager.refresh(role);
+		}
+		for (Tag tag : actor.getTags()) {
+			entityManager.refresh(tag);
+		}
+		for (Tag tag : oldTags) {
+			entityManager.refresh(tag);
 		}
 
 		// add log entry
@@ -2707,7 +2728,62 @@ public class ActorEndpoint {
 		return Response.ok().entity(profileImage).build();
 	}
 
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{actorId}/tag/{tagId}")
+	@Secured
+	public Response addExistingTag(@PathParam("actorId") int actorId,
+																 @PathParam("tagId") int tagId) {
+		
+    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Actor actor = entityManager.find(Actor.class, actorId);
+			if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+			if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+			
+        // attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		actor.getTags().add(tag);
+    		tag.getActors().add(actor);
+    		entityManager.merge(tag);
+    		entityManager.merge(actor);
+    		entityManager.persist(actor);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(actor);
+ 	
+		return Response.ok().entity(tag).build();
+	}
 
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{actorId}/tag/{tagId}")
+	@Secured
+	public Response removeTag(@PathParam("actorId") int actorId,
+														@PathParam("tagId") int tagId) {
+		
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Actor actor = entityManager.find(Actor.class, actorId);
+			if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+    	if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		actor.getTags().remove(tag);
+    		tag.getActors().remove(actor);
+    		entityManager.merge(tag);
+    		entityManager.merge(actor);
+    		entityManager.persist(actor);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(actor);
+ 	
+		return Response.ok().build();
+	}
 
 	// @SuppressWarnings("unchecked")
 	// @POST

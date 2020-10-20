@@ -149,6 +149,19 @@ public class Actor implements Serializable {
 	// @OneToMany(mappedBy="actor")
 	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
 
+	//bi-directional many-to-many association to Tag
+	@ManyToMany
+	@JoinTable(
+		name="actor_has_tag"
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="actor_id")
+			}
+		)
+	private List<Tag> tags;
+
 	public Actor() {
 	}
 
@@ -542,5 +555,13 @@ public class Actor implements Serializable {
 
 	// 	return spatialSemanticsTypeActorPerson;
 	// }
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
 }

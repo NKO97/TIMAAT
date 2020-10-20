@@ -123,6 +123,30 @@
 			});		
 		},
 
+		async getTagList(actorId) {
+      console.log("TCL: getTagList -> for actorId", actorId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/hasTagList/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getTagList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		listActorSubtype(actorSubtype, callback) {
 			// console.log("TCL: listActorSubtype", actorSubtype);
 			jQuery.ajax({
@@ -757,6 +781,29 @@
 			});
 		},
 
+		async addTag(actorId, tagId) {
+			// console.log("TCL: addTag -> actorId, tagId", actorId, tagId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/tag/"+tagId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+		});		
+		},
+
 		async updateActor(actorModel) {
 			console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
 			delete actorModel.ui;
@@ -1257,6 +1304,27 @@
 			});
 		},
 
+		async removeTag(actorId, tagId) {
+			// console.log("TCL: removeTag -> actorId, tagName", actorId, tagName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/tag/"+tagId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
 
 	}	
 }, window));

@@ -23,6 +23,11 @@ public class Tag implements Serializable {
 
 	private String name;
 
+	//bi-directional many-to-many association to Actor
+	@ManyToMany(mappedBy="tags")
+	@JsonIgnore
+	private List<Actor> actors;
+
 	//bi-directional many-to-many association to Event
 	@ManyToMany
 	@JsonIgnore
@@ -112,6 +117,14 @@ public class Tag implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
 	}
 
 	public List<Event> getEvents() {

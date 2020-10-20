@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
@@ -41,7 +42,7 @@ public class PublicationEndpoint {
 
 	
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
 	public Response getPublication(@PathParam("id") int id) {
@@ -67,7 +68,7 @@ public class PublicationEndpoint {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("medium/{mediumId}")
 	public Response getPublicationByMedium(@PathParam("mediumId") int mediumId) {
@@ -93,7 +94,7 @@ public class PublicationEndpoint {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("collection/{colId}")
 	public Response getPublicationByCollection(@PathParam("colId") int colId) {
@@ -119,7 +120,7 @@ public class PublicationEndpoint {
 	}
 	
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("medium/{mediumId}")
 	public Response updatePublicationByMedium(@PathParam("mediumId") int mediumId, Publication publication) {
@@ -165,7 +166,7 @@ public class PublicationEndpoint {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("collection/{colId}")
 	public Response updatePublicationByCollection(@PathParam("colId") int colId, Publication publication) {
@@ -212,7 +213,7 @@ public class PublicationEndpoint {
 	
 	
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("medium/{mediumId}")
 	public Response deletePublicationByMedium(@PathParam("mediumId") int mediumId) {
@@ -240,7 +241,7 @@ public class PublicationEndpoint {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("collection/{colId}")
 	public Response deletePublicationByCollection(@PathParam("colId") int colId) {

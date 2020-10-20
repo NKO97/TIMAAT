@@ -59,7 +59,7 @@ public class MediaCollectionEndpoint {
 	ServletContext servletContext;
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
 	public Response getMediaCollections(@QueryParam("draw") Integer draw,
@@ -110,7 +110,7 @@ public class MediaCollectionEndpoint {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/list")
 	public Response getMediaCollectionItems(@PathParam("id") Integer id,
@@ -171,7 +171,7 @@ public class MediaCollectionEndpoint {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/notInList")
 	public Response getMediaCollectionItemsNotInList(@PathParam("id") Integer id,
