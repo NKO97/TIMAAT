@@ -139,6 +139,14 @@ body {
 	text-align: left;
 }
 
+.leaflet-tooltip {
+	min-width: 256px;
+	max-width: 256px;
+	overflow: auto;
+	white-space: normal;
+	text-align: justify;
+}
+
 .timaat-annotation-wrapper, .timaat-metadata-wrapper {
 	position: absolute;
 	min-width: 250px;

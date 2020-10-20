@@ -268,10 +268,10 @@
 			    content : `<button id="timaat-videoplayer-annotation-quickadd-button" title="Annotation schnell anlegen" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button" class="btn btn-light">
 			    				<i class="fas fa-bookmark"></i>
 			    			</button>
-			    			<button id="timaat-videoplayer-annotation-add-button" title="Neue Annotation anlegen" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="btn btn-light">
+			    			<button id="timaat-videoplayer-annotation-add-button" title="Neue Annotation anlegen" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="ml-0 btn btn-light">
 			    				<i class="fa fa-plus"></i>
 			    			</button>
-			    			<button id="timaat-videoplayer-annotation-remove-button" title="Annotation löschen" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="btn btn-light">
+			    			<button id="timaat-videoplayer-annotation-remove-button" title="Annotation löschen" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="ml-0 btn btn-light">
 			    				<i class="fa fa-trash-alt"></i>
 			    			</button>`,
 			    classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
@@ -308,13 +308,13 @@
 			    content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createRectangle()" class="rectangle btn btn-sm btn-light">
 			    				<i class="fas fa-vector-square"></i>
 			    			</button>
-			    			<button data-type="polygon" type="button" title="Polygon-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createPolygon()" class="polygon btn btn-sm btn-light">
+			    			<button data-type="polygon" type="button" title="Polygon-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createPolygon()" class="polygon ml-0 btn btn-sm btn-light">
 			    				<i class="fas fa-draw-polygon"></i>
 			    			</button>
-			   				<button data-type="line" type="button" title="Linien-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createLine()" class="line btn btn-sm btn-light">
+			   				<button data-type="line" type="button" title="Linien-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createLine()" class="line ml-0 btn btn-sm btn-light">
 			   					<i class="fas fa-slash"></i>
 			   				</button>
-			   				<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createCircle()" class="circle btn btn-sm btn-light">
+			   				<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createCircle()" class="circle ml-0 btn btn-sm btn-light">
 		    					<i class="far fa-circle"></i>
 		    				</button>`,
 			    classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
