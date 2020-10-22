@@ -890,7 +890,8 @@
 			$('#timaat-mediadatasets-metadata-form').data('medium', medium);
 			$('#timaat-mediadatasets-media-tabs').show();
 			if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-				$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
+				$('.nav-tabs .datasheet-tab').hide();
+				$('.nav-tabs .video-data-tab').tab('show');
 				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', medium);
 			} else if ( TIMAAT.MediaDatasets.subNavTab == 'mediumPreview') {
 				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
@@ -1073,7 +1074,7 @@
 			console.log("TCL: updateAnalysislist: function(analysislist)");
 			console.log("TCL: analysislist", analysislist);
 			// sync to server
-			TIMAAT.Service.updateAnalysislist(analysislist);
+			TIMAAT.AnalysisListService.updateAnalysisList(analysislist);
 			console.log(analysislist);
 			// TODO update UI list view
 			TIMAAT.VideoPlayer.curList.ui.html(TIMAAT.Util.getDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title'));
@@ -1502,7 +1503,7 @@
 			console.log("TCL: _analysislistRemoved: function(analysislist)");
 			console.log("TCL: analysislist", analysislist);
 			// sync to server
-			TIMAAT.Service.removeAnalysislist(analysislist);
+			TIMAAT.AnalysisListService.removeAnalysisList(analysislist);
 
 			// remove from model lists
 			var index = TIMAAT.VideoPlayer.model.lists.indexOf(analysislist);

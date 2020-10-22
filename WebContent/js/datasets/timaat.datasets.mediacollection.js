@@ -211,8 +211,8 @@
 												multiple="multiple">
 								</select>
 							</div>
-						</div>`+
-					`</form>`);
+						</div>
+					</form>`);
         $('#mediumcollection-tags-multi-select-dropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
@@ -275,7 +275,6 @@
 				if (!$('#mediumCollectionTagsModalForm').valid()) 
 					return false;
 				var mediumCollection = modal.data('mediumCollection');
-        // console.log("TCL: mmediumCollectionedium", mmediumCollectionedium);
 				var formDataRaw = $('#mediumCollectionTagsModalForm').serializeArray();
         console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
@@ -283,7 +282,7 @@
 				var newTagList = [];
 				for (; i < formDataRaw.length; i++) {
 					if (isNaN(Number(formDataRaw[i].value))) {
-						newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added the system first
+						newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added to the system first
 					} else {
 						tagIdList.push( {id: formDataRaw[i].value} );
 					}
@@ -812,7 +811,7 @@
 						// setup medium in player
 						TIMAAT.VideoPlayer.setupVideo(medium);
 						// load medium annotations from server
-						TIMAAT.Service.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+						TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {

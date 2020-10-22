@@ -173,7 +173,7 @@
 			// 	// setup video in player
 			// 	TIMAAT.VideoPlayer.setupVideo(medium.model);
 			// 	// load video annotations from server
-			// 	TIMAAT.Service.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+			// 	TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 			// });
 
 		}

@@ -443,7 +443,7 @@
 				var newTagList = [];
 				for (; i < formDataRaw.length; i++) {
 					if (isNaN(Number(formDataRaw[i].value))) {
-						newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added the system first
+						newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added to the system first
 					} else {
 						tagIdList.push( {id: formDataRaw[i].value} );
 					}
@@ -5025,7 +5025,6 @@
 			}
 			return actorModel;
 		},
-
 
 		_actorRemoved: async function(actor) {
 			console.log("TCL: actor", actor);

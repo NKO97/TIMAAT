@@ -33,6 +33,7 @@
 			TIMAAT.RoleLists.init();
 			TIMAAT.CategoryLists.init();
 			TIMAAT.LanguageLists.init();
+			TIMAAT.TagLists.init();
 		},
 
 		load: async function() {
@@ -46,6 +47,7 @@
 			TIMAAT.RoleLists.load();
 			TIMAAT.LanguageLists.load();
 			TIMAAT.CategoryLists.load();
+			TIMAAT.TagLists.load();
 		},
 
 	}

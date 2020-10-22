@@ -40,10 +40,12 @@ requirejs.config({
 		"TIMAAT-roleLists"              : 'datasets/timaat.lists.role',
 		"TIMAAT-categoryLists"          : 'datasets/timaat.lists.category',
 		"TIMAAT-languageLists"          : 'datasets/timaat.lists.language',
+		"TIMAAT-tagLists"               : 'datasets/timaat.lists.tag',
 		"TIMAAT-service"                : 'service/timaat.service',
 		"TIMAAT-categoryService"        : 'service/timaat.service.category',
 		"TIMAAT-actorService"           : 'service/timaat.service.actor',
 		"TIMAAT-analysisService"        : 'service/timaat.service.analysis',
+		"TIMAAT-analysisListService"    : 'service/timaat.service.analysislist',
 		"TIMAAT-roleService"            : 'service/timaat.service.role',
 		"TIMAAT-languageService"        : 'service/timaat.service.language',
 		"TIMAAT-locationService"        : 'service/timaat.service.location',
@@ -148,6 +150,7 @@ require(['domReady',
 			'TIMAAT-addressType',
 			'TIMAAT-emailAddressType', 
 			'TIMAAT-analysisDatasets',
+			'TIMAAT-analysisListService',
 			'TIMAAT-analysisService',
 			'TIMAAT-category',
 			'TIMAAT-categorySet',
@@ -179,7 +182,8 @@ require(['domReady',
 			'TIMAAT-roleGroup',
 			'TIMAAT-roleLists',
 			'TIMAAT-roleService',
-		  
+			'TIMAAT-tagLists',
+			
 		  ], function (moment) {
 		  console.log("TIMAAT::Setup");
 		  window.moment = moment;		  

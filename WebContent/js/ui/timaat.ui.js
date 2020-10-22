@@ -135,7 +135,7 @@
 			$('#timaat-component-'+component).show();
 			if (component == 'videoplayer' && TIMAAT.VideoPlayer.selectedVideo) {
 				TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
-				TIMAAT.Service.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 			}
 			if (component == 'media') {
 				$('#previewTab').removeClass('annotationView');

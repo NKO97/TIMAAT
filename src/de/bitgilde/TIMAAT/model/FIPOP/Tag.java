@@ -69,26 +69,17 @@ public class Tag implements Serializable {
 	// private List<MediaCollection> mediaCollections;
 
 	//bi-directional many-to-many association to MediumAnalysisList
-	@ManyToMany
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
-	@JoinTable(
-		name="medium_analysis_list_has_tag"
-		, joinColumns={
-			@JoinColumn(name="tag_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="medium_analysis_list_id")
-			}
-		)
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional many-to-many association to Medium
-	@ManyToMany(mappedBy="tags")
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Medium
-	@ManyToMany(mappedBy="tags")
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
 	private List<MediaCollection> mediaCollections;
 

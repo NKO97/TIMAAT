@@ -425,7 +425,7 @@
 						// setup video in player
 						TIMAAT.VideoPlayer.setupVideo(video);
 						// load video annotations from server
-						TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+						TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 						// TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 					});
 
@@ -1032,7 +1032,7 @@
 				// setup video in player
 				TIMAAT.VideoPlayer.setupVideo(video);
 				// load video annotations from server
-				TIMAAT.Service.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 				// TIMAAT.VideoPlayer.setupAnalysisLists(video.medium.mediumAnalysisLists);
 			});
 

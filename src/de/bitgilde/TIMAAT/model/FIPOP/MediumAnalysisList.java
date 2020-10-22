@@ -48,13 +48,13 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
-    @JsonManagedReference(value = "MediumAnalysisList-AnalysisSegment")
+  @JsonManagedReference(value = "MediumAnalysisList-AnalysisSegment")
 	@CascadeOnDelete
 	private List<AnalysisSegment> analysisSegments;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList", cascade={CascadeType.ALL})
-    @JsonManagedReference(value = "MediumAnalysisList-Annotation")
+  @JsonManagedReference(value = "MediumAnalysisList-Annotation")
 	@CascadeOnDelete
 	private List<Annotation> annotations;
 
@@ -65,7 +65,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
-    @JsonBackReference(value = "Medium-MediumAnalysisList")
+  @JsonBackReference(value = "Medium-MediumAnalysisList")
 	private Medium medium;
 
 	//bi-directional many-to-one association to UserAccount
@@ -88,7 +88,16 @@ public class MediumAnalysisList implements Serializable {
 	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="mediumAnalysisLists")
+	@ManyToMany
+	@JoinTable(
+		name="medium_analysis_list_has_tag"
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="medium_analysis_list_id")
+			}
+		)
 	private List<Tag> tags;
 
 	//bi-directional many-to-one association to MediumAnalysisListTranslation

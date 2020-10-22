@@ -240,108 +240,6 @@
 			
 		},
 
-		getAnalysisLists(videoID, callback) {
-			console.log("TCL: getAnalysisLists -> getAnalysisLists(videoID, callback) ");
-			console.log("TCL: getAnalysisLists -> videoID", videoID);
-      // console.log("TCL: getAnalysisLists -> callback", callback);
-      // console.log("TCL: getAnalysisLists -> videoID, callback", videoID, callback);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+videoID+"/analysislists",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-			});
-			
-		},
-
-		createAnalysislist(title, comment, mediumID, callback) {
-			// console.log("TCL: createAnalysislist -> createAnalysislist(title, comment, mediumID, callback)");
-			// console.log("TCL: createAnalysislist -> title", title);
-			// console.log("TCL: createAnalysislist -> comment", comment);
-			// console.log("TCL: createAnalysislist -> mediumID", mediumID);
-			var model = {
-					"id": 0,
-					"analysisSegments": [],
-					"annotations": [],
-					"mediumAnalysisListTranslations": [{
-						"id": 0,
-						"text": comment,
-						"title": title,						
-					}],	
-					"mediumID": mediumID
-			};
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/medium/"+mediumID,
-				type:"POST",
-				data: JSON.stringify(model),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				callback(data);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});			
-		},
-
-		updateAnalysislist(analysislist) {
-			// console.log("TCL: updateAnalysislist -> analysislist", analysislist);
-			var list = {
-					id: analysislist.id,
-					mediumAnalysisListTranslations: analysislist.mediumAnalysisListTranslations,
-					mediumID: analysislist.mediumID
-			};
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
-				type:"PATCH",
-				data: JSON.stringify(list),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// TODO refactor
-				analysislist.id = data.id;
-				TIMAAT.Util.setDefTranslation(analysislist, 'mediumAnalysisListTranslations', 'title', data.title);
-				TIMAAT.Util.setDefTranslation(analysislist, 'mediumAnalysisListTranslations', 'text', data.text);
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
-		removeAnalysislist(analysislist) {
-			// console.log("TCL: removeAnalysislist -> analysislist", analysislist);
-			var list = analysislist;
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
-			});
-		},
-
 		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
 			// console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
@@ -655,8 +553,8 @@
 			});			
 		},
 
-		updateCategorySets(categoryname) {
-			// console.log("TCL: updateCategorySets -> categoryname", categoryname);
+		updateCategorySets(categoryName) {
+			// console.log("TCL: updateCategorySets -> categoryName", categoryName);
 			// TODO implement for updating unassigned categories
 		},
 

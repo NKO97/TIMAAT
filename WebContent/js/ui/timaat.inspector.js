@@ -261,7 +261,7 @@
 						TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
 						inspector.close();
 					} else {
-						TIMAAT.Service.createAnalysislist(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
+						TIMAAT.AnalysisListService.createAnalysisList(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
 					}
 				}
 				// analysis segments
@@ -401,8 +401,6 @@
 					inspector.updateItem();
 				}
 			});
-			
-
 		}
 		
 		get isOpen() {
@@ -431,6 +429,7 @@
 		}		
 
 		setItem(item, type=null) {
+      console.log("TCL: Inspector -> setItem -> item, type", item, type);
 			this.state.item = item;
 			this.state.type = type;
 			
@@ -467,7 +466,7 @@
 					// animation panel
 					this.enablePanel('timaat-inspector-animation');
 					if ( item != null ) {
-						this.enablePanel('timaat-inspector-tags');
+						// this.enablePanel('timaat-inspector-tags');
 						this.enablePanel('timaat-inspector-actors');
 						this.enablePanel('timaat-inspector-events');
 						this.enablePanel('timaat-inspector-locations');
@@ -542,7 +541,94 @@
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment);				
+					$("#timaat-inspector-meta-comment").val(comment);
+					if ( item != null ) {
+						// $('#timaat-inspector-tags-pane').html(`
+						// 	<div>
+						// 		<form role="form" id="mediumAnalysisListTagsForm">
+						// 			<div class="form-group">
+						// 				<label for="mediumAnalysisList-tags-multi-select-dropdown">Medium analysislist tags</label>
+						// 				<div class="col-md-12">
+						// 					<select class="form-control form-control-md multi-select-dropdown"
+						// 									style="width:100%;"
+						// 									id="mediumAnalysisList-tags-multi-select-dropdown"
+						// 									name="tagId"
+						// 									data-role="tagId"
+						// 									data-placeholder="Select medium analysislist tags"
+						// 									multiple="multiple">
+						// 					</select>
+						// 				</div>
+						// 			</div>
+						// 			<div class="mediumAnalysisList-tag-form-submit">
+						// 				<button type="submit" class="btn btn-outline-primary" id="timaat-mediumAnalysisList-tag-form-submit" name="submit">Save</button>
+						// 				<button type="button" class="btn btn-outline-secondary" id="timaat-mediumAnalysisList-tag-form-dismiss" name="dismiss">Cancel</button>
+						// 			</div>
+						// 		</form>
+						// 	</div>
+						// 	`);
+						// $('#mediumAnalysisList-tags-multi-select-dropdown').val(null).trigger('change');
+						// $('#mediumAnalysisList-tags-multi-select-dropdown').val('');
+						$('#mediumAnalysisList-tags-multi-select-dropdown').val(null).trigger('change');
+						if ($('#mediumAnalysisList-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#mediumAnalysisList-tags-multi-select-dropdown').select2('destroy');
+						}
+						$('#mediumAnalysisList-tags-multi-select-dropdown').find('option').remove();
+						this.enablePanel('timaat-inspector-tags');
+						$('#mediumAnalysisList-tags-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							tags: true,
+							tokenSeparators: [',', ' '],
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/tag/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getTagList(item.id).then(function(data) {
+							console.log("TCL: then: data", data);
+							var tagSelect = $('#mediumAnalysisList-tags-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									tagSelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								tagSelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
+
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
 				// analysis segments
@@ -672,8 +758,6 @@
 		close() {
 			return this._inspector.close();
 		}
-		
-		
 
 		_setInspectorStroke(stroke) {
 			if ( stroke > 0 ) {
