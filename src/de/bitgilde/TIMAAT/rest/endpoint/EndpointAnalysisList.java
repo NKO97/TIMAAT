@@ -129,6 +129,7 @@ public class EndpointAnalysisList {
 	@Path("{id}")
 	@Secured
 	public Response updateAnalysisList(@PathParam("id") int id, String jsonData) {
+		System.out.println("EndpointMediumAnalysisList: updateAnalysisList "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList updatedList = null;
 

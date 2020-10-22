@@ -141,16 +141,20 @@
 
 		async updateMediumAnalysisList(analysisList) {
 			console.log("TCL: updateAnalysislist -> analysisList", analysisList);
-			var list = {
-					id: analysisList.id,
-					mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
-					mediumID: analysisList.mediumID
-			};
+			// var list = {
+			// 		id: analysisList.id,
+			// 		mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
+			// 		mediumID: analysisList.mediumId,
+			// 		tags: analysisList.tags
+			// };
+			delete analysisList.ui;
+			delete analysisList.analysisSegments;
+			delete analysisList.segments;
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+analysisList.id,
 					type:"PATCH",
-					data: JSON.stringify(list),
+					data: JSON.stringify(analysisList),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {

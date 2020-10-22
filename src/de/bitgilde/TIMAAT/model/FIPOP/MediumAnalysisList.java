@@ -25,7 +25,7 @@ import java.util.List;
 @NamedQuery(name="MediumAnalysisList.findAll", query="SELECT m FROM MediumAnalysisList m")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
 property  = "id", 
-scope     = Integer.class)
+scope     = MediumAnalysisList.class)
 public class MediumAnalysisList implements Serializable {
 	private static final long serialVersionUID = 1L;
 
