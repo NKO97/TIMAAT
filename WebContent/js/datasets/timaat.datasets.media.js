@@ -34,6 +34,7 @@
 		subNavTab: 'datasheet',
 		lastForm: null,
 		selectedMediumId: null,
+		container: 'media',
 
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
@@ -331,9 +332,8 @@
 
 			// tag button handler
 			$('.datasheet-form-tag-button').on('click', async function(event) {
-				console.log("TCL: open tag modal");
-				// event.stopPropagation();
-				// TIMAAT.UI.hidePopups();
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediadatasets-medium-tags');
 				modal.data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
 				var medium = modal.data('medium');
@@ -351,8 +351,8 @@
 												multiple="multiple">
 								</select>
 							</div>
-						</div>`+
-					`</form>`);
+						</div>
+					</form>`);
         $('#medium-tags-multi-select-dropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
@@ -405,7 +405,7 @@
 						});
 					}
 				});
-				$('#timaat-mediadatasets-medium-tags').modal('show');
+				modal.modal('show');
 			});
 
 			// submit tag modal button functionality
@@ -2057,6 +2057,10 @@
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 					}
 				}
+				if (TIMAAT.MediaDatasets.container == 'videoplayer') {
+					$('.datasheet-form-annotate-button').hide();
+					$('.datasheet-form-annotate-button').prop('disabled', true);
+				}
 				$('.mediadatasheet-form-delete-button').prop('disabled', false);
 				$('.mediadatasheet-form-delete-button :input').prop('disabled', false);
 				$('.mediadatasheet-form-delete-button').show();
@@ -2374,6 +2378,10 @@
 						$('.datasheet-form-annotate-button').prop('disabled', true);
 					}
 				}
+				if (TIMAAT.MediaDatasets.container == 'videoplayer') {
+					$('.datasheet-form-annotate-button').hide();
+					$('.datasheet-form-annotate-button').prop('disabled', true);
+				}
 				$('#timaat-mediadatasets-medium-titles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-titles-form-dismiss').hide();
 				$('[data-role="new-title-fields"').hide();
@@ -2556,6 +2564,10 @@
 						$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 					}
+				}
+				if (TIMAAT.MediaDatasets.container == 'videoplayer') {
+					$('.datasheet-form-annotate-button').hide();
+					$('.datasheet-form-annotate-button').prop('disabled', true);
 				}
 				$('#timaat-mediadatasets-medium-languagetracks-form-done').hide();
 				$('[data-role="new-languagetrack-fields"').hide();
@@ -2817,6 +2829,10 @@
 						$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 					}
+				}
+				if (TIMAAT.MediaDatasets.container == 'videoplayer') {
+					$('.datasheet-form-annotate-button').hide();
+					$('.datasheet-form-annotate-button').prop('disabled', true);
 				}
 				$('#timaat-mediadatasets-medium-actorwithroles-form-submit').hide();
 				$('#timaat-mediadatasets-medium-actorwithroles-form-dismiss').hide();
@@ -3671,6 +3687,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -3850,6 +3868,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4002,6 +4022,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4153,6 +4175,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4304,6 +4328,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4455,6 +4481,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4604,6 +4632,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();
@@ -4758,6 +4788,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.media-nav-tabs').show();

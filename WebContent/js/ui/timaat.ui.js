@@ -140,6 +140,8 @@
 			if (component == 'media') {
 				$('#previewTab').removeClass('annotationView');
 				$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+				$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+				TIMAAT.MediaDatasets.container = 'media';
 			}
 			$('.timaat-sidebar-tab-'+component).addClass('bg-info');
 			$('.timaat-sidebar-tab-'+component+' a').addClass('selected');

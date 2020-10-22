@@ -1017,6 +1017,8 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						$('#timaat-mediadatasets-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+						TIMAAT.MediaDatasets.container = 'media';
 						$('#previewTab').removeClass('annotationView');
 						$('.form').hide();
 						$('.mediacollection-items-datatable').hide();
