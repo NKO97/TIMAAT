@@ -62,7 +62,7 @@
 			if ( this.time == 0 ) this.ui.head.addClass('first');
 
 			// add events
-			this.ui.head.click(this, function(ev) {
+			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime + ev.data.time);
 			});

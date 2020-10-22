@@ -51,7 +51,7 @@
 		
 		init: function() {		
 			// setup video chooser list and UI events
-			$('#timaat-videochooser-collectionlibrary').click(function(ev) {
+			$('#timaat-videochooser-collectionlibrary').on('click', function(ev) {
 				TIMAAT.VideoChooser.setMedia();
 //				TIMAAT.VideoChooser.setVideoList(TIMAAT.MediaDatasets.videos.model);
 				TIMAAT.VideoChooser.setCollection(null);
@@ -73,14 +73,14 @@
 				$("#timaat-mediacollection-meta-comment").val(comment);				
 			});
 
-			$('#timaat-mediacollection-delete-submit').click(function(ev) {
+			$('#timaat-mediacollection-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-videochooser-mediacollection-delete');
 				var col = modal.data('mediacollection');
 				if (col) TIMAAT.VideoChooser._mediacollectionRemoved(col);
 				modal.modal('hide');
 			});
 
-			$('#timaat-mediacollection-meta-submit').click(function(ev) {
+			$('#timaat-mediacollection-meta-submit').on('click', function(ev) {
 				var modal = $('#timaat-videochooser-mediacollection-meta');
 				var col = modal.data('mediacollection');
 				var title = $("#timaat-mediacollection-meta-title").val();
@@ -118,13 +118,13 @@
 					$('#timaat-videochooser-list-target').hide();
 			});
 			
-			$('#timaat-videochooser-list-action-submit').click(function() {
+			$('#timaat-videochooser-list-action-submit').on('click', function() {
 				TIMAAT.VideoChooser.dt.$('input:checked').each(function(index, item) {
 					var medium = $(item).parents('tr').data('medium');
 				});				
 			});
 			
-			$('#timaat-videochooser-list-action-submit').click(function() {
+			$('#timaat-videochooser-list-action-submit').on('click', function() {
 				var action = $('#timaat-videochooser-list-action').val();
 				if ( action == 'add' ) {
 					var target = $('#timaat-videochooser-list-target-collection option:selected').data('collection');
@@ -887,8 +887,8 @@
 			colelement.appendTo('#timaat-videochooser-collectionlist');
 			
 			// collection events
-			colelement.click(function(ev) { TIMAAT.VideoChooser.setCollection(collection); });
-			colelement.dblclick(function(ev) {
+			colelement.on('click', function(ev) { TIMAAT.VideoChooser.setCollection(collection); });
+			colelement.on('dblclick', function(ev) {
 				$('#timaat-videochooser-mediacollection-meta').data('mediacollection', collection);
 				$('#timaat-videochooser-mediacollection-meta').modal('show');
 			});

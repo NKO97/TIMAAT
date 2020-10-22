@@ -155,23 +155,23 @@
 	// 				// attach category editor
 	// 				// console.log("TCL: CategorySet -> constructor -> categorySet.updateUI()");
 	// 				this.listView.find('.timaat-categoryset-list-categories').on('hidden.bs.popover', function () { categorySet.updateUI(); });
-	// 				this.listView.find('.timaat-categoryset-list-categories').dblclick(function(ev) {ev.stopPropagation();});
+	// 				this.listView.find('.timaat-categoryset-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
 	// 				// // attach user log info
-	// 				// this.listView.find('.timaat-user-log').click(function(ev) {
+	// 				// this.listView.find('.timaat-user-log').on('click', function(ev) {
 	// 				// 	ev.preventDefault();
 	// 				// 	ev.stopPropagation();
 	// 				// });
 					
 	// 				// attach event handlers
 	// 				var _set = this;
-	// 				$(this.listView).click(this, function(ev) {
+	// 				$(this.listView).on('click', this, function(ev) {
 	// 					ev.stopPropagation();
 	// 					// show category editor - trigger popup
 	// 					TIMAAT.UI.hidePopups();
 	// 					TIMAAT.CategoryLists.loadCategories(_set);
 	// 				});
-	// 				$(this.listView).dblclick(this, function(ev) {
+	// 				$(this.listView).on('dblclick', this, function(ev) {
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
 	// 					// show metadata editor
@@ -180,7 +180,7 @@
 	// 				});
 					
 	// 				// remove handler
-	// 				this.listView.find('.timaat-categoryset-remove').click(this, function(ev) {
+	// 				this.listView.find('.timaat-categoryset-remove').on('click', this, function(ev) {
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
 	// 					$('#timaat-categorylists-categoryset-delete').data('categoryset', categorySet);

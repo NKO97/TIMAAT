@@ -555,7 +555,7 @@
 		    
 			// setup video controls UI events
 			// TODO refactor
-			$('.playbutton').click(function(ev) {
+			$('.playbutton').on('click', function(ev) {
 				ev.preventDefault();
 				$(this).toggleClass('active');
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
@@ -598,7 +598,7 @@
 					$('#timaat-volumeicon').find('.mute').show();
 				}
 			});			
-			$('#timaat-volumeicon').click(function() {
+			$('#timaat-volumeicon').on('click', function() {
 				if ( !TIMAAT.VideoPlayer.video ) return;
 				if ( TIMAAT.VideoPlayer.video.volume > 0 ) {
 					TIMAAT.VideoPlayer.volume = TIMAAT.VideoPlayer.video.volume;
@@ -609,7 +609,7 @@
 				$('#timaat-volume-slider').change();
 			});
 			
-			$('#timaat-videoplayer-video-speed').click(function() {
+			$('#timaat-videoplayer-video-speed').on('click', function() {
 				if ( !TIMAAT.VideoPlayer.video ) return;
 				var playbackSpeeds = [1,2,0.5,0.25]; // TODO move to config
 
@@ -636,7 +636,7 @@
 			$('#timaat-video-seek-bar').on('input', function(ev) {
 			  this.style.background="linear-gradient(to right, #ed1e24 0%,#ed1e24 "+this.value+"%,#939393 "+this.value+"%,#939393 100%)";
 			});			
-			$('#timaat-video-seek-bar').click(function(ev) {
+			$('#timaat-video-seek-bar').on('click', function(ev) {
 				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});			
@@ -696,21 +696,21 @@
 				if ( list ) TIMAAT.VideoPlayer.setupAnnotations(list);
 			});
 
-			$('#timaat-annotation-delete-submit').click(function(ev) {
+			$('#timaat-annotation-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-videoplayer-annotation-delete');
 				var anno = modal.data('annotation');
 				if (anno) TIMAAT.VideoPlayer._annotationRemoved(anno);
 				modal.modal('hide');
 			});
 
-			$('#timaat-analysislist-delete-submit').click(function(ev) {
+			$('#timaat-analysislist-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-videoplayer-analysislist-delete');
 				var list = modal.data('analysislist');
 				if (list) TIMAAT.VideoPlayer._analysislistRemoved(list);
 				modal.modal('hide');
 			});
 			
-			$('#timaat-segment-delete-commit-submit').click(function(ev) {
+			$('#timaat-segment-delete-commit-submit').on('click', function(ev) {
 				var modal = $('#timaat-videoplayer-segment-delete');
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissegment' ) return;
 				var segment = TIMAAT.VideoPlayer.inspector.state.item;

@@ -114,7 +114,7 @@
 			  TIMAAT.VideoPlayer.markerList.push(this);
 			    
 			  // add events
-			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').click(this, function(ev) {
+			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				  TIMAAT.VideoPlayer.pause();
 				  TIMAAT.VideoPlayer.jumpTo(ev.data.from);
 				  TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);

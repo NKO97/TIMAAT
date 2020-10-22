@@ -331,8 +331,9 @@
 
 			// tag button handler
 			$('.datasheet-form-tag-button').on('click', async function(event) {
-				event.stopPropagation();
-				TIMAAT.UI.hidePopups();
+				console.log("TCL: open tag modal");
+				// event.stopPropagation();
+				// TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediadatasets-medium-tags');
 				modal.data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
 				var medium = modal.data('medium');
@@ -1104,7 +1105,7 @@
 
 		initLanguageTracks: function() {
 			// languagetrack tab click handling
-			$('#media-tab-medium-languagetracks-form').click(function(event) {
+			$('#media-tab-medium-languagetracks-form').on('click', function(event) {
 				$('.nav-tabs a[href="#mediumLanguageTracks"]').tab('show');
 				$('.form').hide();
 				TIMAAT.MediaDatasets.subNavTab = 'mediumLanguageTracks';

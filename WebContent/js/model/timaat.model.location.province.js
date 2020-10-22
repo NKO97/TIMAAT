@@ -75,20 +75,20 @@
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').click(function(ev) {
+			this.listView.find('.timaat-user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
 
 			// attach province handlers
-			$(this.listView).click(this, function(ev) {
+			$(this.listView).on('click', this, function(ev) {
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();				
 				// province.listView.find('.timaat-province-list-tags').popover('show');
 			});
 
-			$(this.listView).dblclick(this, function(ev) {
+			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
@@ -97,7 +97,7 @@
 			});
 
 			// remove handler
-			this.listView.find('.timaat-province-remove').click(this, function(ev) {
+			this.listView.find('.timaat-province-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				$('#timaat-locationdatasets-province-delete').data('province', province);

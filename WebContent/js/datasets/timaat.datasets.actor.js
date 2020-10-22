@@ -210,12 +210,12 @@
 			
 			// actor form handlers
 			// carousel button handler
-			$('a[data-slide="prev"]').click(function() {
+			$('a[data-slide="prev"]').on('click', function() {
 				$('#dynamic-profile-image-fields').carousel('prev');
 			});
 			
 			// carousel button handler
-			$('a[data-slide="next"]').click(function() {
+			$('a[data-slide="next"]').on('click', function() {
 				$('#dynamic-profile-image-fields').carousel('next');
 			});
 

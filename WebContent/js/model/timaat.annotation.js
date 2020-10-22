@@ -126,14 +126,14 @@
 
 				var empty = $('<a class="dropdown-item">(kein Categoryset)</a>');
 				tschooser.find('.dropdown-menu').append(empty);
-				empty.click(function() {					
+				empty.on('click', function() {					
 					TIMAAT.VideoPlayer.setCategoryset(null);
 					dropdown.find('button').text("Categoryset: keins");
 				});
 				$(TIMAAT.Settings.categorysets).each(function(index, categoryset) {
 					var item = $('<a class="dropdown-item">'+categoryset.model.name+'</a>');
 					tschooser.find('.dropdown-menu').append(item);
-					item.click(function() {
+					item.on('click', function() {
 						TIMAAT.VideoPlayer.setCategoryset(categoryset);
 						dropdown.find('button').text("Categoryset: "+categoryset.model.name);				
 					});
@@ -180,10 +180,10 @@
 			this.listView.find('.timaat-annotation-list-categories').on('hidden.bs.popover', function () { anno.updateUI(); });
 			console.log("TCL: Annotation -> constructor -> anno.updateUI()");
 */
-			this.listView.find('.timaat-annotation-list-categories').dblclick(function(ev) {ev.stopPropagation();});
+			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').click(function(ev) {
+			this.listView.find('.timaat-user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -196,14 +196,14 @@
 			};
 
 			// attach event handlers
-			$(this.listView).click(this, function(ev) {
+			$(this.listView).on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				else TIMAAT.VideoPlayer.selectAnnotation(null);
 //						TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.pause();
 			});
-			$(this.listView).dblclick(this, function(ev) {
+			$(this.listView).on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.pause();

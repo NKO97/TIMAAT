@@ -223,7 +223,7 @@
 			});
 
 			// attach listeners
-			$('#timaat-inspector-meta-submit').click(function(ev) {
+			$('#timaat-inspector-meta-submit').on('click', function(ev) {
 				if ( !inspector.state.type ) return;
 				// annotations
 				if ( inspector.state.type == 'annotation' ) {
@@ -362,7 +362,7 @@
 				}
 			});
 			
-			$('#timaat-inspector-meta-setstart').click(function() {
+			$('#timaat-inspector-meta-setstart').on('click', function() {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 				var duration = endTime-startTime;
@@ -373,7 +373,7 @@
 				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
-			$('#timaat-inspector-meta-setend').click(function() {
+			$('#timaat-inspector-meta-setend').on('click', function() {
 				var endTime = TIMAAT.VideoPlayer.video.currentTime;
 				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');

@@ -84,26 +84,26 @@
 
 					var segment = this; // save annotation for events
 					// attach event handlers
-					this.listView.click(this, function(ev) {
+					this.listView.on('click', this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 					});
-					this.timelineView.click(this, function(ev) {
+					this.timelineView.on('click', this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 					});
-					this.listView.dblclick(this, function(ev) {
+					this.listView.on('dblclick', this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);
 						TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');			
 						TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					});
-					this.timelineView.dblclick(this, function(ev) {
+					this.timelineView.on('dblclick', this, function(ev) {
 						TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAAT.VideoPlayer.pause();
 						TIMAAT.VideoPlayer.selectAnnotation(null);

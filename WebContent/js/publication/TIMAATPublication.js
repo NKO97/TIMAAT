@@ -58,25 +58,25 @@ class AnalysisSegment {
 
 					var segment = this; // save annotation for events
 					// attach event handlers
-					this.listView.click(this, function(ev) {
+					this.listView.on('click', this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
-					this.timelineView.click(this, function(ev) {
+					this.timelineView.on('click', this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
-					this.listView.dblclick(this, function(ev) {
+					this.listView.on('dblclick', this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
-					this.timelineView.dblclick(this, function(ev) {
+					this.timelineView.on('dblclick', this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
@@ -136,7 +136,7 @@ class Marker {
 			  TIMAATPub.markerList.push(this);
 			    
 			  // add events
-			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').click(this, function(ev) {
+			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				  TIMAATPub.pause();
 				  TIMAATPub.jumpTo(ev.data.from);
 				  TIMAATPub.selectAnnotation(ev.data.parent);
@@ -291,7 +291,7 @@ class Keyframe {
 			if ( this.time == 0 ) this.ui.head.addClass('first');
 
 			// add events
-			this.ui.head.click(this, function(ev) {
+			this.ui.head.on('click', this, function(ev) {
 				TIMAATPub.pause();
 				TIMAATPub.jumpTo(ev.data.parent.startTime + ev.data.time);
 			});
@@ -512,7 +512,7 @@ class Annotation {
 			TIMAATPub.pause();
 			if ( TIMAATPub.curAnnotation != ev.data ) TIMAATPub.selectAnnotation(ev.data);
 		});
-			this.listView.find('.timaat-annotation-list-categories').dblclick(function(ev) {ev.stopPropagation();});
+			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
 			// convert SVG data
 			this.polygonCount = this.svg.model.keyframes[0].shapes.length;
@@ -524,13 +524,13 @@ class Annotation {
 			
 
 			// attach event handlers
-			$(this.listView).click(this, function(ev) {
+			$(this.listView).on('click', this, function(ev) {
 				TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
 				if ( TIMAATPub.curAnnotation != ev.data ) TIMAATPub.selectAnnotation(ev.data);
 				else TIMAATPub.selectAnnotation(null);
 				TIMAATPub.pause();
 			});
-			$(this.listView).dblclick(this, function(ev) {
+			$(this.listView).on('dblclick', this, function(ev) {
 				TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
 				TIMAATPub.selectAnnotation(ev.data);
 				TIMAATPub.pause();
@@ -929,7 +929,7 @@ class TIMAATPublication {
 		this.setupUI();
 		
 		// setup events
-		$('.timaat-ui-mode').click(function() {
+		$('.timaat-ui-mode').on('click', function() {
 			
 		})
 
@@ -1457,7 +1457,7 @@ class TIMAATPublication {
 				Math.min(TIMAATPub.ui.video.duration, (Math.round(TIMAATPub.ui.video.currentTime/frameTime)*frameTime) + frameTime)
 			);
 		});
-		$('.video-speed').click(function() {
+		$('.video-speed').on('click', function() {
 			var playbackSpeeds = [1,2,0.5,0.25]; // TODO move to config
 
 			var speed = playbackSpeeds.indexOf(TIMAATPub.ui.video.playbackRate);

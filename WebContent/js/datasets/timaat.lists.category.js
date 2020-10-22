@@ -186,7 +186,7 @@
       });
 
 			// // console.log("TCL: CategoryLists: init: function()");
-			// $('#timaat-categorylists-categorylibrary').click(function(ev) { TIMAAT.CategoryLists.loadCategories(null) });
+			// $('#timaat-categorylists-categorylibrary').on('click', function(ev) { TIMAAT.CategoryLists.loadCategories(null) });
 
 			// // attach category editor
 			// $('#timaat-mediadatasets-medium-categories').popover({
@@ -237,7 +237,7 @@
 			// });			
 			
 			// // delete category functionality
-			// $('#timaat-category-delete-submit').click(function(ev) {
+			// $('#timaat-category-delete-submit').on('click', function(ev) {
 			// 	var modal = $('#timaat-categorylists-category-delete');
 			// 	var category = modal.data('category');
 			// 	if (category) TIMAAT.CategoryLists._categoryDeleted(category);
@@ -288,7 +288,7 @@
       });
 
 			// // delete categoryset functionality
-			// $('#timaat-categoryset-delete-submit').click(function(ev) {
+			// $('#timaat-categoryset-delete-submit').on('click', function(ev) {
 			// 	var modal = $('#timaat-categorylists-categoryset-delete');
 			// 	var categorySet = modal.data('categoryset');
 			// 	if (categorySet) TIMAAT.CategoryLists._categorySetRemoved(categorySet);
@@ -310,7 +310,7 @@
 			// 	$("#timaat-categoryset-meta-title").val(title).trigger('input');				
 			// });
 
-			// $('#timaat-categoryset-meta-submit').click(function(ev) {
+			// $('#timaat-categoryset-meta-submit').on('click', function(ev) {
 			// 	var modal = $('#timaat-categorylists-categoryset-meta');
 			// 	var categorySet = modal.data('categoryset');
 			// 	var title = $("#timaat-categoryset-meta-title").val();				
@@ -427,7 +427,7 @@
 			// })
 			// // events
 			// .on( 'draw', function () {
-			// 	$('#timaat-category-list button').off('click').click(function(ev) {
+			// 	$('#timaat-category-list button').off('click').on('click', function(ev) {
 			// 		var action = $(this).data('action');
 			// 		var id = $(this).data('id');
 			// 		var catname = TIMAAT.CategoryLists.categories.dt.row("#"+id).data().name;

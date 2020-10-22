@@ -106,22 +106,22 @@
 					    });
 					});
 					this.listView.find('.timaat-event-list-tags').on('hidden.bs.popover', function () { event.updateUI(); });
-					this.listView.find('.timaat-event-list-tags').dblclick(function(ev) {ev.stopPropagation();});
+					this.listView.find('.timaat-event-list-tags').on('dblclick', function(ev) {ev.stopPropagation();});
 
 					// attach user log info
-					this.listView.find('.timaat-user-log').click(function(ev) {
+					this.listView.find('.timaat-user-log').on('click', function(ev) {
 						ev.preventDefault();
 						ev.stopPropagation();
 					});
 
 					// attach event handlers
-					$(this.listView).click(this, function(ev) {
+					$(this.listView).on('click', this, function(ev) {
 						ev.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();				
 						event.listView.find('.timaat-event-list-tags').popover('show');
 					});
-					$(this.listView).dblclick(this, function(ev) {
+					$(this.listView).on('dblclick', this, function(ev) {
 						ev.stopPropagation();
 						TIMAAT.UI.hidePopups();				
 						// show metadata editor
@@ -129,7 +129,7 @@
 						$('#timaat-eventdatasets-event-meta').modal('show');			
 					});			
 					// remove handler
-					this.listView.find('.timaat-event-remove').click(this, function(ev) {
+					this.listView.find('.timaat-event-remove').on('click', this, function(ev) {
 						ev.stopPropagation();
 						TIMAAT.UI.hidePopups();				
 						$('#timaat-eventdatasets-event-delete').data('event', event);

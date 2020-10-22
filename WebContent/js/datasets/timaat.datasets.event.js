@@ -80,7 +80,7 @@
 			$('#timaat-event-tags').on('hidden.bs.popover', function () { 
 			});
 			// delete event functionality
-			$('#timaat-event-delete-submit').click(function(ev) {
+			$('#timaat-event-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-eventdatasets-event-delete');
 				var event = modal.data('event');
 				if (event) TIMAAT.EventDatasets._eventRemoved(event);
@@ -127,7 +127,7 @@
 				$("#timaat-event-meta-description").val(description);
 			});
 			// Submit event data
-			$('#timaat-event-meta-submit').click(function(ev) {
+			$('#timaat-event-meta-submit').on('click', function(ev) {
 				var modal = $('#timaat-eventdatasets-event-meta');
 				var event = modal.data('event');
 				var name = $("#timaat-event-meta-name").val();

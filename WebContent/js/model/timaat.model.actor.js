@@ -146,7 +146,7 @@
 			// });
 			// console.log("TCL: Actor -> constructor -> actor.updateUI()");
 			// this.listView.find('.timaat-actordatasets-actor-list-tags').on('hidden.bs.popover', function () { actor.updateUI(); });
-			// this.listView.find('.timaat-actordatasets-actor-list-tags').dblclick(function(ev) {ev.stopPropagation();});
+			// this.listView.find('.timaat-actordatasets-actor-list-tags').on('dblclick', function(ev) {ev.stopPropagation();});
 
 			// attach actor handlers
 			// $(this.listView).on('click', this, function(ev) {

@@ -40,7 +40,7 @@
 		
 		initLocationTypes: function() {
 			// delete locationType functionality
-			$('#timaat-locationtype-delete-submit').click(function(ev) {
+			$('#timaat-locationtype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-locationtype-delete');
 				var locationType = modal.data('locationType');
 				if (locationType) TIMAAT.LocationDatasets._locationTypeRemoved(locationType);
@@ -62,7 +62,7 @@
 				$("#timaat-locationtype-meta-name").val(type).trigger('input');
 			});
 			// Submit locationType data
-			$('#timaat-locationtype-meta-submit').click(function(ev) {
+			$('#timaat-locationtype-meta-submit').on('click', function(ev) {
 				// Create/Edit locationType window submitted data validation;
 				var modal = $('#timaat-locationdatasets-locationtype-meta');
 				var locationType = modal.data('locationType');
@@ -102,7 +102,7 @@
 		initLocations: function() {
 			// console.log("TCL: LocationDatasets: initLocations: function()");		
 			// delete location functionality
-			$('#timaat-location-delete-submit').click(function(ev) {
+			$('#timaat-location-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-location-delete');
 				var location = modal.data('location');
 				if (location) TIMAAT.LocationDatasets._locationRemoved(location);
@@ -128,7 +128,7 @@
 			});
 
 			// Submit location data
-			$('#timaat-location-meta-submit').click(function(ev) {
+			$('#timaat-location-meta-submit').on('click', function(ev) {
 				// Create/Edit location window submitted data validation
 				var modal = $('#timaat-locationdatasets-location-meta');
 				var location = modal.data('location');
@@ -176,7 +176,7 @@
 		initCountries: function() {
 			// console.log("TCL: LocationDatasets: initCountries: function()");		
 			// delete country functionality
-			$('#timaat-country-delete-submit').click(function(ev) {
+			$('#timaat-country-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-country-delete');
 				var country = modal.data('country');
 				if (country) TIMAAT.LocationDatasets._locationSubtypeRemoved("country", country);
@@ -216,7 +216,7 @@
 			});
 
 			// Submit country data
-			$('#timaat-country-meta-submit').click(function(ev) {
+			$('#timaat-country-meta-submit').on('click', function(ev) {
 				// Create/Edit country window submitted data validation
 				var modal = $('#timaat-locationdatasets-country-meta');
 				var country = modal.data('country');
@@ -281,7 +281,7 @@
 		initProvinces: function() {
 			// console.log("TCL: LocationDatasets: initProvinces: function()");		
 			// delete province functionality
-			$('#timaat-province-delete-submit').click(function(ev) {
+			$('#timaat-province-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-province-delete');
 				var province = modal.data('province');
 				if (province) TIMAAT.LocationDatasets._locationSubtypeRemoved("province", province);
@@ -311,7 +311,7 @@
 			});
 
 			// Submit province data
-			$('#timaat-province-meta-submit').click(function(ev) {
+			$('#timaat-province-meta-submit').on('click', function(ev) {
 				// Create/Edit province window submitted data validation
 				var modal = $('#timaat-locationdatasets-province-meta');
 				var province = modal.data('province');
@@ -361,7 +361,7 @@
 		initCounties: function() {
 			// console.log("TCL: LocationDatasets: initCounties: function()");		
 			// delete county functionality
-			$('#timaat-county-delete-submit').click(function(ev) {
+			$('#timaat-county-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-county-delete');
 				var county = modal.data('county');
 				if (county) TIMAAT.LocationDatasets._locationSubtypeRemoved("county", county);
@@ -391,7 +391,7 @@
 			});
 
 			// Submit county data
-			$('#timaat-county-meta-submit').click(function(ev) {
+			$('#timaat-county-meta-submit').on('click', function(ev) {
 				// Create/Edit county window submitted data validation
 				var modal = $('#timaat-locationdatasets-county-meta');
 				var county = modal.data('county');
@@ -441,7 +441,7 @@
 		initCities: function() {
 			// console.log("TCL: LocationDatasets: initCities: function()");		
 			// delete city functionality
-			$('#timaat-city-delete-submit').click(function(ev) {
+			$('#timaat-city-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-city-delete');
 				var city = modal.data('city');
 				if (city) TIMAAT.LocationDatasets._locationSubtypeRemoved("city", city);
@@ -471,7 +471,7 @@
 			});
 
 			// Submit city data
-			$('#timaat-city-meta-submit').click(function(ev) {
+			$('#timaat-city-meta-submit').on('click', function(ev) {
 				// Create/Edit city window submitted data validation
 				var modal = $('#timaat-locationdatasets-city-meta');
 				var city = modal.data('city');
@@ -521,7 +521,7 @@
 		initStreets: function() {
 			// console.log("TCL: LocationDatasets: initStreets: function()");		
 			// delete street functionality
-			$('#timaat-street-delete-submit').click(function(ev) {
+			$('#timaat-street-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-locationdatasets-street-delete');
 				var street = modal.data('street');
 				if (street) TIMAAT.LocationDatasets._locationSubtypeRemoved("street", street);
@@ -551,7 +551,7 @@
 			});
 
 			// Submit street data
-			$('#timaat-street-meta-submit').click(function(ev) {
+			$('#timaat-street-meta-submit').on('click', function(ev) {
 				// Create/Edit street window submitted data validation
 				var modal = $('#timaat-locationdatasets-street-meta');
 				var street = modal.data('street');
