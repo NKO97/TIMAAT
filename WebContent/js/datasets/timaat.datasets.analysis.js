@@ -1574,13 +1574,14 @@
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
             if ([1,7,9,10,11,12,13,14,17,18,20,22,23,25].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
-              var exists = false;
+              var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {
-                if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[i].analysisMethod.analysisMethodType.id == analysisMethodType.id) {
-                  exists = true;
+                if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[i].analysisMethod.analysisMethodType.id == analysisMethodType.id && analysisMethodType.isStatic) {
+                  methodIsStaticAndExists = true;
+                  break;
                 }
               }
-              if (!exists) { //* allow only one analysis of a type for the moment
+              if (!methodIsStaticAndExists) { //* static analyses may only be assigned once, others can occur multiple times
                 nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis method"></i></span>`;
               }
             }
