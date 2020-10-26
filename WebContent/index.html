@@ -755,7 +755,28 @@
                   </div>
                 </h1>
                 <div id="timaat-inspector-tags-pane" class="timaat-inspector-pane">
-                  <div>
+                  <div class="tagPanel" id="annotationTagPanel">
+                    <form role="form" id="annotationTagsForm">
+                      <div class="form-group">
+                        <label for="annotation-tags-multi-select-dropdown">Annotation tags</label>
+                        <div class="col-md-12">
+                          <select class="form-control form-control-md multi-select-dropdown"
+                                  style="width:100%;"
+                                  id="annotation-tags-multi-select-dropdown"
+                                  name="tagId"
+                                  data-role="tagId"
+                                  data-placeholder="Select annotation tags"
+                                  multiple="multiple">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="annotation-tag-form-submit">
+                        <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-tag-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-tag-form-dismiss" name="dismiss">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="tagPanel" id="mediumAnalysisListTagPanel">
                     <form role="form" id="mediumAnalysisListTagsForm">
                       <div class="form-group">
                         <label for="mediumAnalysisList-tags-multi-select-dropdown">Medium analysislist tags</label>

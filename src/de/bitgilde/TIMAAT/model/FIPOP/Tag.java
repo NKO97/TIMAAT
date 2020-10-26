@@ -24,22 +24,18 @@ public class Tag implements Serializable {
 	private String name;
 
 	//bi-directional many-to-many association to Actor
-	@ManyToMany(mappedBy="tags")
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
 	private List<Actor> actors;
 
-	//bi-directional many-to-many association to Event
-	@ManyToMany
+	//bi-directional many-to-many association to Annotation
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
-	@JoinTable(
-		name="event_has_tag"
-		, joinColumns={
-			@JoinColumn(name="tag_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="event_id")
-			}
-		)
+	private List<Annotation> annotations;
+
+	//bi-directional many-to-many association to Event
+	@ManyToMany(mappedBy = "tags")
+	@JsonIgnore
 	private List<Event> events;
 
 	//bi-directional many-to-many association to MediaCollectionAnalysisList
@@ -55,19 +51,10 @@ public class Tag implements Serializable {
 	// 	)
 	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists;
 
-	//bi-directional many-to-many association to MediaCollection
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="media_collection_has_tag"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="tag_id")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="media_collection_id")
-	// 		}
-	// 	)
-	// private List<MediaCollection> mediaCollections;
-
+		//bi-directional many-to-many association to Medium
+		@ManyToMany(mappedBy = "tags")
+		@JsonIgnore
+		private List<MediaCollection> mediaCollections;
 	//bi-directional many-to-many association to MediumAnalysisList
 	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
@@ -78,10 +65,6 @@ public class Tag implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
-	//bi-directional many-to-many association to Medium
-	@ManyToMany(mappedBy = "tags")
-	@JsonIgnore
-	private List<MediaCollection> mediaCollections;
 
 	//bi-directional many-to-many association to WorkAnalysisList
 	// @ManyToMany(mappedBy="tags")
@@ -118,6 +101,14 @@ public class Tag implements Serializable {
 		this.actors = actors;
 	}
 
+	public List<Annotation> getAnnotations() {
+		return this.annotations;
+	}
+
+	public void setAnnotations(List<Annotation> annotations) {
+		this.annotations = annotations;
+	}
+
 	public List<Event> getEvents() {
 		return this.events;
 	}
@@ -142,6 +133,14 @@ public class Tag implements Serializable {
 	// 	this.mediaCollections = mediaCollections;
 	// }
 
+	public List<MediaCollection> getMediaCollections() {
+		return this.mediaCollections;
+	}
+
+	public void setMediaCollections(List<MediaCollection> mediaCollections) {
+		this.mediaCollections = mediaCollections;
+	}
+
 	public List<MediumAnalysisList> getMediumAnalysisLists() {
 		return this.mediumAnalysisLists;
 	}
@@ -156,14 +155,6 @@ public class Tag implements Serializable {
 
 	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
-	}
-
-	public List<MediaCollection> getMediaCollections() {
-		return this.mediaCollections;
-	}
-
-	public void setMediaCollections(List<MediaCollection> mediaCollections) {
-		this.mediaCollections = mediaCollections;
 	}
 
 	// public List<WorkAnalysisList> getWorkAnalysisLists() {

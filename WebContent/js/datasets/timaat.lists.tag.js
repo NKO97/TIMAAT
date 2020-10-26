@@ -231,6 +231,98 @@
 				});
 			});
 
+      // inspector event handler
+      $('#timaat-annotation-tag-form-submit').on('click', async function(event) {
+        event.preventDefault();
+        console.log("TCL: Submit Tags for analysis list");
+        // var modal = $('#timaat-annotationdatasets-annotation-tags');
+        if (!$('#annotationTagsForm').valid()) 
+          return false;
+        var annotation = TIMAAT.VideoPlayer.curAnnotation;
+        console.log("TCL: Inspector -> constructor -> annotation", annotation);
+        var formDataRaw = $('#annotationTagsForm').serializeArray();
+        console.log("TCL: formDataRaw", formDataRaw);
+        var i = 0;
+        var tagIdList = [];
+        var newTagList = [];
+        for (; i < formDataRaw.length; i++) {
+          if (isNaN(Number(formDataRaw[i].value))) {
+            newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added to the system first
+          } else {
+            tagIdList.push( {id: formDataRaw[i].value} );
+          }
+        }
+        console.log("TCL: tagIdList", tagIdList);
+        annotation.model = await TIMAAT.TagLists.updateAnnotationHasTagsList(annotation.model, tagIdList);
+        if (newTagList.length > 0) {
+          var updatedAnnotationModel = await TIMAAT.TagLists.createNewTagsAndAddToAnnotation(annotation.model, newTagList);
+          console.log("TCL: updatedAnnotationModel", updatedAnnotationModel);
+          annotation.model.tags = updatedAnnotationModel.tags;
+        }
+        // $('#timaat-mediadatasets-metadata-form').data('annotation', annotation);
+      });
+
+      // inspector event handler
+      $('#timaat-annotation-tag-form-dismiss').on('click', function(event) {
+        // event.preventDefault();
+        $('#annotation-tags-multi-select-dropdown').val(null).trigger('change');
+        $('#annotation-tags-multi-select-dropdown').select2('destroy');
+        $('#annotation-tags-multi-select-dropdown').find('option').remove();
+        
+        $('#annotation-tags-multi-select-dropdown').select2({
+          closeOnSelect: false,
+          scrollAfterSelect: true,
+          allowClear: true,
+          tags: true,
+          tokenSeparators: [',', ' '],
+          ajax: {
+            url: 'api/tag/selectList/',
+            type: 'GET',
+            dataType: 'json',
+            delay: 250,
+            headers: {
+              "Authorization": "Bearer "+TIMAAT.Service.token,
+              "Content-Type": "application/json",
+            },
+            // additional parameters
+            data: function(params) {
+              return {
+                search: params.term,
+                page: params.page
+              };          
+            },
+            processResults: function(data, params) {
+              params.page = params.page || 1;
+              return {
+                results: data
+              };
+            },
+            cache: true
+          },
+          minimumInputLength: 0,
+        });
+        TIMAAT.AnnotationService.getTagList(TIMAAT.VideoPlayer.curAnnotation.id).then(function(data) {
+          console.log("TCL: then: data", data);
+          var tagSelect = $('#annotation-tags-multi-select-dropdown');
+          if (data.length > 0) {
+            data.sort((a, b) => (a.name > b.name)? 1 : -1);
+            // create the options and append to Select2
+            var i = 0;
+            for (; i < data.length; i++) {
+              var option = new Option(data[i].name, data[i].id, true, true);
+              tagSelect.append(option).trigger('change');
+            }
+            // manually trigger the 'select2:select' event
+            tagSelect.trigger({
+              type: 'select2:select',
+              params: {
+                data: data
+              }
+            });
+          }
+        });
+      });
+      
     },
 
 		load: function() {
@@ -562,6 +654,92 @@
 				mediumAnalysisListModel.tags.push(newTagList[i]);
 			}
 			return mediumAnalysisListModel;
+    },
+    
+    updateAnnotationHasTagsList: async function(annotationModel, tagIdList) {
+    	console.log("TCL: annotationModel, tagIdList", annotationModel, tagIdList);
+			try {
+				var existingAnnotationHasTagsEntries = await TIMAAT.AnnotationService.getTagList(annotationModel.id);
+        console.log("TCL: existingAnnotationHasTagsEntries", existingAnnotationHasTagsEntries);
+        if (tagIdList == null) { //* all entries will be deleted
+          console.log("TCL: delete all tags");
+					annotationModel.tags = [];
+					await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
+        } else if (existingAnnotationHasTagsEntries.length == 0) { //* all entries will be added
+          console.log("TCL: add all tags");
+					annotationModel.tags = tagIdList;
+					await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
+        } else { //* delete removed entries
+          console.log("TCL: add/delete tags");
+					var entriesToDelete = [];
+					var i = 0;
+					for (; i < existingAnnotationHasTagsEntries.length; i++) {
+						var deleteId = true;
+						var j = 0;
+						for (; j < tagIdList.length; j++) {
+							if (existingAnnotationHasTagsEntries[i].id == tagIdList[j].id) {
+								deleteId = false;
+								break; // no need to check further if match was found
+							}
+						}
+						if (deleteId) { // id is in existingAnnotationHasTagEntries but not in tagIdList
+              console.log("TCL: deleteId", deleteId);
+							entriesToDelete.push(existingAnnotationHasTagsEntries[i]);
+							existingAnnotationHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+							i--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					if (entriesToDelete.length > 0) { // anything to delete?
+						var i = 0;
+						for (; i < entriesToDelete.length; i++) {
+							var index = annotationModel.tags.findIndex(({id}) => id === entriesToDelete[i].id);
+							annotationModel.tags.splice(index,1);
+							await TIMAAT.AnnotationService.removeTag(annotationModel.id, entriesToDelete[i].id);
+						}
+					}
+					//* add existing tags
+					var idsToCreate = [];
+          i = 0;
+          for (; i < tagIdList.length; i++) {
+            var idExists = false;
+            var item = { id: 0 };
+            var j = 0;
+            for (; j < existingAnnotationHasTagsEntries.length; j++) {
+              if (tagIdList[i].id == existingAnnotationHasTagsEntries[j].id) {
+                idExists = true;
+                break; // no need to check further if match was found
+              }
+            }
+            if (!idExists) {
+              item.id = tagIdList[i].id;
+              idsToCreate.push(item);
+            }
+          }
+          // console.log("TCL: idsToCreate", idsToCreate);
+          if (idsToCreate.length > 0) { // anything to add?
+            console.log("TCL: idsToCreate", idsToCreate);
+						var i = 0;
+						for (; i < idsToCreate.length; i++) {
+							annotationModel.tags.push(idsToCreate[i]);
+							await TIMAAT.AnnotationService.addTag(annotationModel.id, idsToCreate[i].id);
+						}
+          }
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
+			return annotationModel;
+		},
+
+		createNewTagsAndAddToAnnotation: async function (annotationModel, newTagList) {
+      console.log("TCL: Inspector -> createNewTagsAndAddToAnnotation -> annotationModel, newTagList", annotationModel, newTagList);
+			var i = 0;
+			for (; i < newTagList.length; i++) {
+				newTagList[i] = await TIMAAT.Service.createTag(newTagList[i].name);
+				await TIMAAT.AnnotationService.addTag(annotationModel.id, newTagList[i].id);
+				annotationModel.tags.push(newTagList[i]);
+			}
+			return annotationModel;
 		},
 
     _tagRemoved: async function(tag) {

@@ -1105,7 +1105,7 @@
 			if ( !TIMAAT.VideoPlayer.curList ) return;
 			TIMAAT.VideoPlayer.pause();
 			let layerVisual = (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
-			TIMAAT.Service.createAnnotation(
+			TIMAAT.AnnotationService.createAnnotation(
 					"Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime), 
 					"Lesezeichen, noch zu bearbeiten",
 					TIMAAT.VideoPlayer.video.currentTime*1000.0,
@@ -1128,7 +1128,7 @@
 			console.log("TCL: updateAnnotation: function(annotation)");
 			console.log("TCL: annotation", annotation);
 			// sync to server
-			TIMAAT.Service.updateAnnotation(annotation);
+			TIMAAT.AnnotationService.updateAnnotation(annotation.model);
 			// update UI list view
 			annotation.updateUI();
 			console.log("TCL: annotation.updateUI()");
@@ -1144,7 +1144,7 @@
 			this.annotationList.forEach(function(annotation) {
 				if ( annotation.isSelected() && annotation.hasChanges() ) {
 					annotation.saveChanges();
-					TIMAAT.Service.updateAnnotation(annotation);
+					TIMAAT.AnnotationService.updateAnnotation(annotation.model);
 					// update UI
 					annotation.updateUI();
 					console.log("TCL: annotation.updateUI()");
@@ -1551,7 +1551,7 @@
 			console.log("TCL: _annotationRemoved: function(annotation)");
 			console.log("TCL: annotation", annotation);
 			// sync to server
-			TIMAAT.Service.removeAnnotation(annotation);
+			TIMAAT.AnnotationService.removeAnnotation(annotation);
 			var index = TIMAAT.VideoPlayer.annotationList.indexOf(annotation);
 			if (index > -1) TIMAAT.VideoPlayer.annotationList.splice(index, 1);
 			// remove from model list

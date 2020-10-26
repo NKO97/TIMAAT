@@ -108,7 +108,6 @@ public class Annotation implements Serializable {
 			@JoinColumn(name="actor_id")
 			}
 		)
-	@JsonIgnore
 	private List<Actor> actors;
 
 	//bi-directional many-to-many association to Annotation
@@ -186,6 +185,19 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to SpatialSemanticsTypeSpace
 	// @OneToMany(mappedBy="annotation")
 	// private List<SpatialSemanticsTypeSpace> spatialSemanticsTypeSpaces;
+
+	//bi-directional many-to-many association to Tag
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_tag"
+		, joinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		)
+	private List<Tag> tags;
 
 	public Annotation() {
 	}
@@ -553,5 +565,13 @@ public class Annotation implements Serializable {
 
 	// 	return spatialSemanticsTypeSpace;
 	// }
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 
 }

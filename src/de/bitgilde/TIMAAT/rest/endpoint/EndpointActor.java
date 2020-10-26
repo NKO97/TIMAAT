@@ -818,8 +818,8 @@ public class EndpointActor {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTOREDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ACTOREDITED);
 		System.out.println("EndpointActor: updateActor - update complete");	
 		return Response.ok().entity(actor).build();
 	}

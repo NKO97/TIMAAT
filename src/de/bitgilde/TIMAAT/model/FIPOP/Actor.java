@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -127,6 +128,7 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-many association to Annotation
 	@ManyToMany(mappedBy="actors")
+	@JsonIgnore
 	private List<Annotation> annotations;
 
 	//bi-directional one-to-one association to Collective

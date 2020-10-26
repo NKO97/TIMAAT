@@ -41,6 +41,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
@@ -56,7 +57,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 @Path("/annotation")
 public class EndpointAnnotation {
 	
-	@Context ContainerRequestContext crc;
+	@Context ContainerRequestContext containerRequestContext;
 
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -225,6 +226,20 @@ public class EndpointAnnotation {
 		}
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{annotationId}/hasTagList")
+	public Response getTagList(@PathParam("annotationId") Integer annotationId)
+	{
+		// System.out.println("EndpointAnnotation: getTagList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Annotation annotation = entityManager.find(Annotation.class, annotationId);
+		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
+		entityManager.refresh(annotation);
+		return Response.ok().entity(annotation.getTags()).build();
+	}
+
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -309,9 +324,9 @@ public class EndpointAnnotation {
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newAnno.setCreatedAt(creationDate);
 		newAnno.setLastEditedAt(creationDate);
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
-			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -345,7 +360,7 @@ public class EndpointAnnotation {
 		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "add-annotation", malList.get(0).getId(), newAnno);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "add-annotation", malList.get(0).getId(), newAnno);
 
 		return Response.ok().entity(newAnno).build();
 	}
@@ -384,20 +399,20 @@ public class EndpointAnnotation {
 		annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
 		annotation.setLayerVisual(updatedAnno.getLayerVisual());
 
-		if ( updatedAnno.getSelectorSvgs() != null 
-			 && (updatedAnno.getSelectorSvgs().size() > 0) 
-			 && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null ) annotation.getSelectorSvgs().get(0).setColorRgba(updatedAnno.getSelectorSvgs().get(0).getColorRgba());
-		if ( updatedAnno.getSelectorSvgs() != null 
-				 && (updatedAnno.getSelectorSvgs().size() > 0)) annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
-		if ( updatedAnno.getSelectorSvgs() != null 
-				 && (updatedAnno.getSelectorSvgs().size() > 0) 
-				 && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null ) annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null )
+			 annotation.getSelectorSvgs().get(0).setColorRgba(updatedAnno.getSelectorSvgs().get(0).getColorRgba());
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0)) 
+			annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null )
+			annotation.getSelectorSvgs().get(0).setSvgData(updatedAnno.getSelectorSvgs().get(0).getSvgData());
+		List<Tag> oldTags = annotation.getTags();
+		annotation.setTags(updatedAnno.getTags());
 
 		System.out.println("EndpointAnnotation: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"))));
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
@@ -409,13 +424,21 @@ public class EndpointAnnotation {
 		entityManager.persist(annotation);
 		entityTransaction.commit();
 		entityManager.refresh(annotation);
-		
+		for (Tag tag : annotation.getTags()) {
+			entityManager.refresh(tag);
+		}
+		for (Tag tag : oldTags) {
+			entityManager.refresh(tag);
+		}
+
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(annotation.getLastEditedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONEDITED);
+		UserLogManager.getLogger()
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ANNOTATIONEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-annotation", annotation.getMediumAnalysisList().getId(), annotation);
-
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-annotation", annotation.getMediumAnalysisList().getId(), annotation);
+		System.out.println("EndpointAnnotation: updateAnnotation - update complete");	
 		return Response.ok().entity(annotation).build();
 	}
 
@@ -441,10 +464,10 @@ public class EndpointAnnotation {
 		entityManager.refresh(mal);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-annotation", mal.getId(), annotation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-annotation", mal.getId(), annotation);
 
 		return Response.ok().build();
 	}
@@ -534,4 +557,61 @@ public class EndpointAnnotation {
 		return Response.ok().build();
 	}
 	
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{annotationId}/tag/{tagId}")
+	@Secured
+	public Response addExistingTag(@PathParam("annotationId") int annotationId,
+																 @PathParam("tagId") int tagId) {
+		
+    	
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, annotationId);
+			if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+			if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+			
+        // attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		annotation.getTags().add(tag);
+    		tag.getAnnotations().add(annotation);
+    		entityManager.merge(tag);
+    		entityManager.merge(annotation);
+    		entityManager.persist(annotation);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(annotation);
+ 	
+		return Response.ok().entity(tag).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{annotationId}/tag/{tagId}")
+	@Secured
+	public Response removeTag(@PathParam("annotationId") int annotationId,
+														@PathParam("tagId") int tagId) {
+		
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	Annotation annotation = entityManager.find(Annotation.class, annotationId);
+			if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
+			Tag tag = entityManager.find(Tag.class, tagId);
+    	if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+        	// attach tag to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		annotation.getTags().remove(tag);
+    		tag.getAnnotations().remove(annotation);
+    		entityManager.merge(tag);
+    		entityManager.merge(annotation);
+    		entityManager.persist(annotation);
+    		entityManager.persist(tag);
+    		entityTransaction.commit();
+    		entityManager.refresh(annotation);
+ 	
+		return Response.ok().build();
+	}
+
 }
