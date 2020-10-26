@@ -725,7 +725,9 @@ public class EndpointActor {
 		// TODO check if anything additional has to be done for adding profile image m-n relations
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newActor.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORCREATED);
+		UserLogManager.getLogger()
+									.addLogEntry(newActor.getCreatedByUserAccount().getId(), 
+															 UserLogManager.LogEvents.ACTORCREATED);
 		System.out.println("EndpointActor: createActor - done");
 		return Response.ok().entity(newActor).build();
 	}
@@ -832,14 +834,13 @@ public class EndpointActor {
 		System.out.println("EndpointActor: deleteActor"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
-
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();	
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		// entityManager.remove(actor.getDisplayName());
 		entityManager.remove(actor);
 		entityTransaction.commit();
+
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
@@ -1117,7 +1118,6 @@ public class EndpointActor {
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 																				UserLogManager.LogEvents.PERSONDELETED);
 		return Response.ok().build();
-
 	}
 
 	@POST

@@ -473,55 +473,6 @@
 				}
 			});
 			
-			// // attach tag editor
-			// $('#timaat-actordatasets-actor-tags').popover({
-			// 	placement: 'right',
-			// 	title: 'Actor Tags bearbeiten (datasets init function)',
-			// 	trigger: 'click',
-			// 	html: true,
-			// 	content: `<div class="input-group">
-			// 							<input class="form-control timaat-tag-input" type="text" value="">
-			// 						</div>`,
-			// 	container: 'body',
-			// 	boundary: 'viewport',				
-			// });
-
-			// $('#timaat-actordatasets-actor-tags').on('inserted.bs.popover', function () {
-			// 	var tags = "";
-			// 	if ( actor == null ) {
-			// 		$('.timaat-tag-input').html('Kein Actor geladen');
-			// 		return;
-			// 	} else {
-			// 		$('.timaat-tag-input').html('');					
-			// 	}
-			// 	actor.tags.forEach(function(item) { tags += ','+item.name });
-			// 	tags = tags.substring(1);
-			// 	$('.timaat-tag-input').val(tags);
-			//     $('.timaat-tag-input').tagsInput({
-			//     	placeholder: 'Actor Tag hinzufügen (datasets init function)',
-			//     	onAddTag: function(taginput,tag) {
-			//     		TIMAAT.ActorService.addActorTag(actor, tag, function(newtag) {
-			//     			TIMAAT.VideoPlayer.model.video.tags.push(newtag);
-			//     		});
-			//     	},
-			//     	onRemoveTag: function(taginput,tag) {
-			//     		TIMAAT.ActorService.removeActorTag(actor, tag, function(tagname) {
-			//     			// find tag in model
-			//     			var found = -1;
-			//     			TIMAAT.VideoPlayer.model.video.tags.forEach(function(item, index) {
-			//     				if ( item.name == tagname ) found = index;
-			//     			});
-			//     			if (found > -1) TIMAAT.VideoPlayer.model.video.splice(found, 1);
-			//     		});
-			//     	},
-			//     	onChange: function() {
-			//     		if ( this.length == 1) $('#'+this[0].id+'_tag').focus();
-			//     	}
-			//     });
-			// });
-
-			// $('#timaat-actordatasets-actor-tags').on('hidden.bs.popover', function () { 
-			// });
 		},
 
 		initPersons: function() {

@@ -274,7 +274,7 @@ public class EndpointCategorySet {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("set/{categoryset_id}/haslist")
+	@Path("set/{categoryset_id}/hasList")
 	public Response getCategorySetHasCategoryList(@PathParam("categoryset_id") Integer categorySetId)
 	{
 		// System.out.println("EndpointCategorySet: getCategorySetHasCategoryList - ID: "+ categorySetId);
@@ -292,7 +292,7 @@ public class EndpointCategorySet {
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{category_id}/haslist")
+	@Path("{category_id}/hasList")
 	public Response getCategoryHasCategorySetList(@PathParam("category_id") Integer categoryId)
 	{
 		System.out.println("EndpointCategorySet: getCategoryHasCategorySetList - ID: "+ categoryId);

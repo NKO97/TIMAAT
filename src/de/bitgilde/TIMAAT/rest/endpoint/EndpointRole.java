@@ -265,7 +265,7 @@ public class EndpointRole {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("group/{role_group_id}/haslist")
+	@Path("group/{role_group_id}/hasList")
 	public Response getRoleGroupHasRoleList(@PathParam("role_group_id") Integer roleGroupId)
 	{
 		System.out.println("EndpointRole: getRoleGroupHasRoleList - ID: "+ roleGroupId);
@@ -279,7 +279,7 @@ public class EndpointRole {
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{role_id}/haslist")
+	@Path("{role_id}/hasList")
 	public Response getRoleHasRoleGroupList(@PathParam("role_id") Integer roleId)
 	{
 		System.out.println("EndpointRole: getRoleHasRoleGroupList - ID: "+ roleId);

@@ -50,6 +50,17 @@
 			TIMAAT.TagLists.load();
 		},
 
+		loadDataTables: function() {
+			TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
+			TIMAAT.MediaDatasets.loadMediaDataTables();
+			TIMAAT.ActorDatasets.loadActorDataTables();
+			TIMAAT.AnalysisDatasets.loadAnalysisDataTables();
+			TIMAAT.EventDatasets.loadEventDataTables();
+			TIMAAT.RoleLists.loadRolesDataTables();
+			TIMAAT.LanguageLists.loadLanguagesDataTables();
+			TIMAAT.CategoryLists.loadCategoriesDataTables();
+		},
+
 	}
 	
 }, window));

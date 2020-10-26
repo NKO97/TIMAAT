@@ -63,16 +63,6 @@
 
 			this.updateUI();  
 
-			// this.listView.find('.timaat-actordatasets-actor-list-tags').popover({
-			// 	placement: 'right',
-			// 	title: 'Tags bearbeiten',
-			// 	trigger: 'manual',
-			// 	html: true,
-			// 	content: '<div class="input-group"><input class="form-control timaat-tag-input" type="text" value=""></div>',
-			// 	container: 'body',
-			// 	boundary: 'viewport',				
-			// });
-
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -112,64 +102,12 @@
 				ev.stopPropagation();
 			});
 
-			// attach tag editor
-			// this.listView.find('.timaat-actordatasets-actor-list-tags').on('inserted.bs.popover', function () {
-			// 	var tags = "";
-			// 	actor.model.tags.forEach(function(item) { tags += ','+item.name });
-			// 	tags = tags.substring(1);
-			// 	$('.timaat-tag-input').val(tags);
-			// 		$('.timaat-tag-input').tagsInput({
-			// 			placeholder: 'Tag hinzufügen',
-			// 			onAddTag: function(taginput,tag) {
-			// 				TIMAAT.Service.addTag(actor, tag, function(newtag) { // TODO addTag?
-			// 					actor.model.tags.push(newtag);
-			// 					// console.log("TCL: Actor -> constructor -> actor.updateUI() - onAddTag");
-			// 					actor.updateUI();                
-			// 				});
-			// 			},
-			// 			onRemoveTag: function(taginput,tag) {
-			// 				TIMAAT.Service.removeTag(actor, tag, function(tagname) { // TODO removeTag?
-			// 					// find tag in model
-			// 					var found = -1;
-			// 					actor.model.tags.forEach(function(item, index) {
-			// 						if ( item.name == tagname ) found = index;
-			// 					});
-			// 				if (found > -1) actor.model.tags.splice(found, 1);
-			// 					console.log("TCL: Actor -> constructor -> actor.updateUI() - onRemoveTag");
-			// 					actor.updateUI();                
-			// 				});
-			// 			},
-			// 			onChange: function() {
-			// 				if ( this.length == 1) $('#'+this[0].id+'_tag').focus();
-			// 			}
-			// 		});
-			// });
-			// console.log("TCL: Actor -> constructor -> actor.updateUI()");
-			// this.listView.find('.timaat-actordatasets-actor-list-tags').on('hidden.bs.popover', function () { actor.updateUI(); });
-			// this.listView.find('.timaat-actordatasets-actor-list-tags').on('dblclick', function(ev) {ev.stopPropagation();});
-
-			// attach actor handlers
-			// $(this.listView).on('click', this, function(ev) {
-			// 	// console.log("TCL: Actor -> constructor -> open actor datasheet");
-			// 	ev.stopPropagation();
-			// 	// show tag editor - trigger popup
-			// 	TIMAAT.UI.hidePopups();
-			// 	$('.form').hide();
-			// 	$('.actors-nav-tabs').show();
-			// 	$('.actors-data-tabs').hide();
-			// 	$('.nav-tabs a[href="#actorDatasheet"]').tab("show");
-			// 	$('#timaat-actordatasets-metadata-form').data('actor', actor);
-			// 	TIMAAT.ActorDatasets.actorFormDatasheet("show", type, actor);
-			// 	// actor.listView.find('.timaat-actordatasets-actor-list-tags').popover('show');
-			// });
-
 		}
 
 		updateUI() {
 			// console.log("TCL: Actor -> updateUI -> updateUI()");
 			// title
 			// console.log("TCL: Actor -> updateUI -> this", this);
-			var type = $('#timaat-actordatasets-metadata-form').data('actorType');
 			// var name = this.model.displayName.name;
 			var name = this.model.displayName.name;
 			var type = this.model.actorType.actorTypeTranslations[0].type;

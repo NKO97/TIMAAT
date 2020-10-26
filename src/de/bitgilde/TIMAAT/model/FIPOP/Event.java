@@ -132,11 +132,11 @@ public class Event implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getBeginsAtDate() {
+	public Timestamp getBeganAt() {
 		return this.beganAt;
 	}
 
-	public void setBeginsAtDate(Timestamp beganAt) {
+	public void setBeganAt(Timestamp beganAt) {
 		this.beganAt = beganAt;
 	}
 
@@ -148,11 +148,11 @@ public class Event implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getEndsAtDate() {
+	public Timestamp getEndedAt() {
 		return this.endedAt;
 	}
 
-	public void setEndsAtDate(Timestamp endedAt) {
+	public void setEndedAt(Timestamp endedAt) {
 		this.endedAt = endedAt;
 	}
 

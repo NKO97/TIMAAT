@@ -339,6 +339,32 @@ var actorFormMemberOfCollectivesValidator = $('#timaat-actordatasets-actor-membe
     actorFormMemberOfCollectives.submit();
   },
 });
+var eventFormMetadata = $('#timaat-eventdatasets-metadata-form');
+var eventFormMetadataValidator = $('#timaat-eventdatasets-metadata-form').validate({
+  rules: {
+    name: {
+      required: true,
+      minlength: 3,
+      maxlength: 255
+    },
+    description: {
+      maxlength: 4096,
+    }     
+  },
+  messages: {
+    name: {
+      required: "Enter a name (min length: 3)",
+      minlength: "Name too short: min length is 3",
+      maxlength: "Name is too long: max length is 255"
+    },
+    description: {
+      maxlength: "Text is too long: max length is 4096"
+    }
+  },
+  submitHandler: function(eventFormMetadata) {
+    eventFormMetadata.submit();
+  },
+});
 var roleOrRoleGroupFormMetadata = $('#timaat-rolelists-metadata-form');
 var roleOrRoleGroupFormMetadataValidator = $('#timaat-rolelists-metadata-form').validate({
   rules: {

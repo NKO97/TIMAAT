@@ -88,7 +88,7 @@
 			var path = ( type == 'role') ? '' : '/group';
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+id+"/haslist/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role"+path+"/"+id+"/hasList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",

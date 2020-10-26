@@ -259,7 +259,6 @@
 			.toast('show');
 		},
 		
-		
 		setWaiting: function(waiting) {
 			// console.log("TCL: setWaiting: function(waiting)");
 			// console.log("TCL: waiting", waiting);
@@ -304,13 +303,7 @@
 						$('#timaat-login-modal').modal('hide');
 						$('#timaat-user-info').html(e.accountName);							
 						TIMAAT.VideoChooser.loadCollections();
-						TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
-						TIMAAT.MediaDatasets.loadMediaDataTables();
-						TIMAAT.ActorDatasets.loadActorDataTables();
-						TIMAAT.AnalysisDatasets.loadAnalysisDataTables();
-						TIMAAT.RoleLists.loadRolesDataTables();
-						TIMAAT.LanguageLists.loadLanguagesDataTables();
-						TIMAAT.CategoryLists.loadCategoriesDataTables();
+						TIMAAT.Datasets.loadDataTables();
 						TIMAAT.Datasets.load();
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
