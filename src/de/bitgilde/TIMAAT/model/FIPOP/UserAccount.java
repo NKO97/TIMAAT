@@ -46,21 +46,28 @@ public class UserAccount implements Serializable {
 	@Column(name="user_settings_web_interface")
 	private String userSettingsWebInterface;
 
+	//bi-directional many-to-one association to Actor
+	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
+	private List<Actor> actors1;
+
+	//bi-directional many-to-one association to Actor
+	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
+	private List<Actor> actors2;
+
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Annotation1")
 	private List<Annotation> annotations1;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Annotation2")
 	private List<Annotation> annotations2;
 
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Publication")
 	private List<Publication> publications;
 
 	//bi-directional many-to-one association to AnnotationTextualBody
@@ -86,25 +93,21 @@ public class UserAccount implements Serializable {
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Event")
 	private List<Event> events1;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Event2")
 	private List<Event> events2;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Location")
 	private List<Location> locations1;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-Location2")
 	private List<Location> locations2;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
@@ -119,26 +122,22 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
-	// @JsonManagedReference(value = "UserAccount-Medium")
 	@JsonIgnore
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	// @JsonManagedReference(value = "UserAccount-Medium2")
 	@JsonIgnore
 	private List<Medium> mediums2;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-MediumAnalysisList")
 	private List<MediumAnalysisList> mediumAnalysisLists1;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
 	@JsonIgnore
-	// @JsonManagedReference(value = "UserAccount-MediumAnalysisList2")
 	private List<MediumAnalysisList> mediumAnalysisLists2;
 
 	//bi-directional many-to-one association to UserAccessToken
@@ -260,6 +259,50 @@ public class UserAccount implements Serializable {
 
 	public void setUserSettingsWebInterface(String userSettingsWebInterface) {
 		this.userSettingsWebInterface = userSettingsWebInterface;
+	}
+
+	public List<Actor> getActors1() {
+		return this.actors1;
+	}
+
+	public void setActors1(List<Actor> actors1) {
+		this.actors1 = actors1;
+	}
+
+	public Actor addActors1(Actor actors1) {
+		getActors1().add(actors1);
+		actors1.setCreatedByUserAccount(this);
+
+		return actors1;
+	}
+
+	public Actor removeActors1(Actor actors1) {
+		getActors1().remove(actors1);
+		actors1.setCreatedByUserAccount(null);
+
+		return actors1;
+	}
+
+	public List<Actor> getActors2() {
+		return this.actors2;
+	}
+
+	public void setActors2(List<Actor> actors2) {
+		this.actors2 = actors2;
+	}
+
+	public Actor addActors2(Actor actors2) {
+		getActors2().add(actors2);
+		actors2.setLastEditedByUserAccount(this);
+
+		return actors2;
+	}
+
+	public Actor removeActors2(Actor actors2) {
+		getActors2().remove(actors2);
+		actors2.setLastEditedByUserAccount(null);
+
+		return actors2;
 	}
 
 	public List<Annotation> getAnnotations1() {

@@ -32,7 +32,6 @@ public class Publication implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="owner_user_account_id")
 	@JsonIgnore
-//	@JsonBackReference(value = "UserAccount-Publication")
 	private UserAccount owner;
 	@Transient
 	private Integer ownerId;

@@ -101,10 +101,10 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+anno.model.createdByUserAccountId+'">[ID '+anno.model.createdByUserAccountId+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
-						 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountId+'">[ID '+anno.model.lastEditedByUserAccountId+']</span></b><br>\
-						 '+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
+					`<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountID+'">[ID '+anno.model.createdByUserAccountID+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
+					<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountID+'">[ID '+anno.model.lastEditedByUserAccountID+']</span></b><br>\
+						'+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 			});

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
@@ -34,9 +35,13 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
 	// @JsonBackReference(value = "UserAccount-Medium")
 	private UserAccount createdByUserAccount;
+	@Transient
+	@JsonProperty("createdByUserAccountID")
+	private int createdByUserAccountID;
 
 	@Column(name="file_hash")
 	private String fileHash;
@@ -68,9 +73,13 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
 	// @JsonBackReference(value = "UserAccount-Medium2")
 	private UserAccount lastEditedByUserAccount;
+	@Transient
+	@JsonProperty("lastEditedByUserAccountID")
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
 	@OneToMany(mappedBy="medium")
@@ -288,6 +297,11 @@ public class Medium implements Serializable {
 	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
 		this.createdByUserAccount = createdByUserAccount;
 	}
+
+	public int getCreatedByUserAccountID() {
+		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
+		return 0;
+	}
 	
 	public String getFileHash() {
 		return this.fileHash;
@@ -319,6 +333,11 @@ public class Medium implements Serializable {
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public int getLastEditedByUserAccountID() {
+		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
+		return 0;
 	}
 
 	public Date getReleaseDate() {

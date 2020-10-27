@@ -6,6 +6,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -49,15 +50,21 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Event")
 	private UserAccount createdByUserAccount;
+	@Transient
+	@JsonProperty("createdByUserAccountID")
+	private int createdByUserAccountID;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Event2")
 	private UserAccount lastEditedByUserAccount;
+	@Transient
+	@JsonProperty("lastEditedByUserAccountID")
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-many association to ActorHasRole
 	@ManyToMany
@@ -181,12 +188,22 @@ public class Event implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
+	public int getCreatedByUserAccountID() {
+		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
+		return 0;
+	}
+
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public int getLastEditedByUserAccountID() {
+		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
+		return 0;
 	}
 
 	public List<ActorHasRole> getActorHasRoles() {

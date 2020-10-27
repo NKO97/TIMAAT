@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -45,11 +46,18 @@ public class CategorySet implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
 	private UserAccount createdByUserAccount;
+	@Transient
+	@JsonProperty("createdByUserAccountID")
+	private int createdByUserAccountID;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
 	private UserAccount lastEditedByUserAccount;
+	@Transient
+	@JsonProperty("lastEditedByUserAccountID")
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="categorySet", cascade = CascadeType.PERSIST)
@@ -150,12 +158,22 @@ public class CategorySet implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
+	public int getCreatedByUserAccountID() {
+		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
+		return 0;
+	}
+
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public int getLastEditedByUserAccountID() {
+		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
+		return 0;
 	}
 
 	public Set<CategorySetHasCategory> getCategorySetHasCategories() {

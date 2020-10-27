@@ -83,15 +83,21 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Annotation1")
 	private UserAccount createdByUserAccount;
+	@Transient
+	@JsonProperty("createdByUserAccountID")
+	private int createdByUserAccountID;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "UserAccount-Annotation2")
 	private UserAccount lastEditedByUserAccount;
+	@Transient
+	@JsonProperty("lastEditedByUserAccountID")
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
@@ -311,14 +317,6 @@ public class Annotation implements Serializable {
 	public void setMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
 		this.mediumAnalysisList = mediumAnalysisList;
 	}
-	
-	@Transient
-	public int getCreatedByUserAccountId() {
-		return this.createdByUserAccount.getId();
-	}
-	public void setCreatedByUserAccountId(int id) {
-		// do nothing
-	}
 
 	public UserAccount getCreatedByUserAccount() {
 		return this.createdByUserAccount;
@@ -328,13 +326,14 @@ public class Annotation implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
-	@Transient
-	public int getLastEditedByUserAccountId() {
-		return this.lastEditedByUserAccount.getId();
+	public int getCreatedByUserAccountID() {
+		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
+		return 0;
 	}
-	public void setLastEditedByUserAccountId(int id) {
-		// do nothing
-	}
+
+	// public void setCreatedByUserAccountId(int id) {
+	// 	// do nothing
+	// }
 
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
@@ -343,6 +342,15 @@ public class Annotation implements Serializable {
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
+
+	public int getLastEditedByUserAccountID() {
+		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
+		return 0;
+	}
+
+	// public void setLastEditedByUserAccountId(int id) {
+	// 	// do nothing
+	// }
 
 	public Uuid getUuid() {
 		return this.uuid;

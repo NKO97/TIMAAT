@@ -77,7 +77,6 @@ public class MediumAnalysisList implements Serializable {
 	@JsonProperty("createdByUserAccountID")
 	private int createdByUserAccountID;
 	
-
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JsonIgnore

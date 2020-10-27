@@ -25,13 +25,13 @@ public class MediaCollectionAnalysisList implements Serializable {
 	private Timestamp createdAt;
 
 	@Column(name="created_by_user_account_id", nullable=false)
-	private int createdByUserAccountId;
+	private int createdByUserAccountID;
 
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
 	@Column(name="last_edited_by_user_account_id")
-	private int lastEditedByUserAccountId;
+	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
@@ -66,11 +66,11 @@ public class MediaCollectionAnalysisList implements Serializable {
 	}
 
 	public int getCreatedByUserAccountId() {
-		return this.createdByUserAccountId;
+		return this.createdByUserAccountID;
 	}
 
-	public void setCreatedByUserAccountId(int createdByUserAccountId) {
-		this.createdByUserAccountId = createdByUserAccountId;
+	public void setCreatedByUserAccountId(int createdByUserAccountID) {
+		this.createdByUserAccountID = createdByUserAccountID;
 	}
 
 	public Timestamp getLastEditedAt() {
@@ -82,11 +82,11 @@ public class MediaCollectionAnalysisList implements Serializable {
 	}
 
 	public int getLastEditedByUserAccountId() {
-		return this.lastEditedByUserAccountId;
+		return this.lastEditedByUserAccountID;
 	}
 
-	public void setLastEditedByUserAccountId(int lastEditedByUserAccountId) {
-		this.lastEditedByUserAccountId = lastEditedByUserAccountId;
+	public void setLastEditedByUserAccountId(int lastEditedByUserAccountID) {
+		this.lastEditedByUserAccountID = lastEditedByUserAccountID;
 	}
 
 	public MediaCollection getMediaCollection() {
