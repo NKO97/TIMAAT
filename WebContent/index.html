@@ -620,7 +620,7 @@
                 <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
                 <li><a title="Kategorien und Tags verknüpfen" href="#timaat-inspector-tags" role="tab"><i class="fas fa-tags"></i></a></li>
                 <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-                <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="far fa-calendar-alt"></i></a></li>
+                <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
                 <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
                 <li><a title="Analysen verknüpfen (nur bei Annotationen)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
               </ul>
@@ -840,7 +840,33 @@
                     <i class="fa fa-caret-right"></i>
                   </div>
                 </h1>
-                <div id="timaat-inspector-events-pane" class="timaat-inspector-pane"> Events werden von FIPOP noch nicht unterstützt.
+                <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
+                  <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-annotation-wrapper">
+                    <i class="collapse-icon fas fa-fw"></i> Verknüpfte Events
+                  </button>
+                  <div class="events-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                    <table class="events-annotation table table-striped table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>Titel</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                   <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-available-wrapper">
+                    <i class="collapse-icon fas fa-fw"></i> Event hinzufügen
+                  </button>
+                  <div class="events-available-wrapper p-2 border border-light bg-light collapse">
+                    <table class="events-available table table-striped table-bordered table-hover">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th>Titel</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
@@ -905,13 +931,13 @@
                         <i title="Annotationsliste" class="fas fa-fw fa-list-alt"></i>
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysislist()" id="timaat-analysislist-edit">Analyse bearbeiten...</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysisList()" id="timaat-analysislist-edit">Analyse bearbeiten...</a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-edit">
                           <i class="fas fa-indent"></i> Neues Segment
                         </a>
                         <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysislist()" id="timaat-analysislist-add">Neue Analyse erstellen</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysislist()" id="timaat-analysislist-delete">Analyse löschen</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Neue Analyse erstellen</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysisList()" id="timaat-analysislist-delete">Analyse löschen</a>
                         <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.managePublication()" id="timaat-medium-publication">
                           <i class="fas fa-chalkboard"></i> Publikationseinstellungen...

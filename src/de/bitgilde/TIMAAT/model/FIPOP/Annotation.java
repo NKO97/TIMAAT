@@ -138,8 +138,16 @@ public class Annotation implements Serializable {
 	private List<Category> categories;
 
 	//bi-directional many-to-many association to Event
-	@ManyToMany(mappedBy="annotations")
-	@JsonIgnore
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_event"
+		, inverseJoinColumns={
+			@JoinColumn(name="event_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		)
 	private List<Event> events;
 
 	//bi-directional many-to-many association to IconclassCategory

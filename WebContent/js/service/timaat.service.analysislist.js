@@ -32,8 +32,8 @@
 		},
 
 		getAnalysisLists(videoId, callback) {
-			console.log("TCL: getAnalysisLists -> getAnalysisLists(videoId, callback) ");
-			console.log("TCL: getAnalysisLists -> videoId", videoId);
+			// console.log("TCL: getAnalysisLists -> getAnalysisLists(videoId, callback) ");
+			// console.log("TCL: getAnalysisLists -> videoId", videoId);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+videoId+"/analysislists",
 				type:"GET",
@@ -52,7 +52,7 @@
 		},
 
 		async getTagList(mediumAnalysisListId) {
-      console.log("TCL: getTagList -> for mediumAnalysisListId", mediumAnalysisListId);
+      // console.log("TCL: getTagList -> for mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/hasTagList/",
@@ -63,7 +63,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getTagList -> data", data);
+					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -112,7 +112,7 @@
 		},
 
 		updateAnalysisList(analysisList) {
-			console.log("TCL: updateAnalysislist -> analysisList", analysisList);
+			console.log("TCL: updateAnalysisList -> analysisList", analysisList);
 			var list = {
 					id: analysisList.id,
 					mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
@@ -140,7 +140,7 @@
 		},
 
 		async updateMediumAnalysisList(analysisList) {
-			console.log("TCL: updateAnalysislist -> analysisList", analysisList);
+			console.log("TCL: updateAnalysisList -> analysisList", analysisList);
 			// var list = {
 			// 		id: analysisList.id,
 			// 		mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,

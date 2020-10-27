@@ -99,6 +99,7 @@
 					"dataSrc": function(data) { return data.data; }
 				},
 				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: Inspector -> constructor -> data", data);
 					let actorElement = $(row);
 					let actor = data;
 					actorElement.data('actor', actor);
@@ -222,6 +223,150 @@
 				language: this.ui.actorLang,
 			});
 
+			// events panel
+			this.ui.eventLang = {
+				"decimal"          : ",",
+				"thousands"        : ".",
+				"search"           : "",
+				"searchPlaceholder": "Suche Events",
+				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
+				"lengthMenu"       : "Zeige _MENU_ Einträge",
+				"zeroRecords"      : "Keine Events gefunden.",
+				"info"             : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
+				"infoEmpty"        : "Keine Events gefunden.",
+				"infoFiltered"     : '&mdash; <i class="fas fa-search"></i> _TOTAL_',
+				"paginate"         : {
+					"first"   : "<<",
+					"previous": "<",
+					"next"    : ">",
+					"last"    : ">>"
+				}
+			};
+			
+			this.ui.dataTableEvents = $('#timaat-inspector-events-pane .events-available').DataTable({
+				lengthChange	: false,
+				dom				: 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				pageLength		: 3,
+				deferLoading	: 0,
+				pagingType		: 'full',
+				order			: [[ 0, 'asc' ]],
+				processing		: true,
+				serverSide		: true,
+				ajax			: {
+					"url"        : "api/event/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						if ( inspector.state.item && inspector.state.type == 'annotation' )
+							serverData.exclude_annotation = inspector.state.item.model.id;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) { return data.data; }
+				},
+				"createdRow": function(row, data, dataIndex) {
+        	// console.log("TCL: Inspector -> constructor -> data", data);
+					let eventElement = $(row);
+					let event = data;
+					eventElement.data('event', event);
+
+					eventElement.find('.add-event').on('click', event, function(ev) {
+						ev.stopPropagation();
+						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
+						$(this).remove();
+						TIMAAT.AnnotationService.addAnnotationEvent(TIMAAT.VideoPlayer.curAnnotation.model.id, event.id)
+						.then((result)=>{
+							inspector.ui.dataTableEvents.ajax.reload();
+							inspector.ui.dataTableAnnoEvents.ajax.reload();
+						}).catch((error)=>{
+							console.log("ERROR:", error);
+						});
+					});
+				},
+				"columns": [{
+					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, event, meta) {
+						// console.log("TCL: event", event);
+						let nameDisplay = `<p>` + event.eventTranslations[0].name +
+								`<span class="add-event badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>` +
+							`</p>`;
+						return nameDisplay;
+					}
+				}],
+				language: this.ui.eventLang,
+			});
+			// $(this.ui.dataTableEvents.table().container()).find('.table-title').text('Verfügbare Events');
+			
+			this.ui.dataTableAnnoEvents = $('#timaat-inspector-events-pane .events-annotation').DataTable({
+				lengthChange	: false,
+				pageLength		: 10,
+				dom				: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				searching		: false,
+				deferLoading	: 0,
+				order			: [[ 0, 'asc' ]],
+				processing		: true,
+				serverSide		: true,
+				ajax			: {
+					"url"        : "api/annotation/0/events",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+							as_datatable: true,
+						}
+						// if ( data.search && data.search.value && data.search.value.length > 0 ) serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token); },
+					"dataSrc": function(data) { return data.data; }
+				},
+				"createdRow": function(row, data, dataIndex) {
+					let eventElement = $(row);
+					let event = data;
+					eventElement.data('event', event);
+
+					eventElement.find('.remove-event').on('click', event, function(ev) {
+						ev.stopPropagation();
+						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
+						$(this).remove();
+						TIMAAT.AnnotationService.removeAnnotationEvent(TIMAAT.VideoPlayer.curAnnotation.model.id, event.id)
+						.then((result)=>{
+							inspector.ui.dataTableEvents.ajax.reload();
+							inspector.ui.dataTableAnnoEvents.ajax.reload();
+						}).catch((error)=>{
+							console.log("ERROR:", error);
+						});
+					});
+				},
+				"columns": [{
+					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, event, meta) {
+						// console.log("TCL: event", event);
+						let nameDisplay = `<p>` + event.eventTranslations[0].name +
+							`<span class="remove-event badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>` +
+						`</p>`;
+						return nameDisplay;
+					}
+				}],
+				language: this.ui.eventLang,
+			});
+
 			// attach listeners
 			$('#timaat-inspector-meta-submit').on('click', function(ev) {
 				if ( !inspector.state.type ) return;
@@ -258,7 +403,7 @@
 					if (list) {
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'text', comment);
-						TIMAAT.VideoPlayer.updateAnalysislist(TIMAAT.VideoPlayer.curList);
+						TIMAAT.VideoPlayer.updateAnalysisList(TIMAAT.VideoPlayer.curList);
 						inspector.close();
 					} else {
 						TIMAAT.AnalysisListService.createAnalysisList(title, comment, TIMAAT.VideoPlayer.model.video.id, TIMAAT.VideoPlayer._analysislistAdded);
@@ -411,6 +556,8 @@
 			this.setItem(null);
 			this.ui.dataTableActors.clear();
 			this.ui.dataTableActors.ajax.reload();
+			this.ui.dataTableEvents.clear();
+			this.ui.dataTableEvents.ajax.reload();
 			// console.log("TCL: reset");
 			// TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.clear();
 			// TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
@@ -454,6 +601,9 @@
 
 			// analysis panel default UI setting
 			TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/0/analysis');
+
+			// events panel default UI setting
+			this.ui.dataTableAnnoEvents.ajax.url('api/annotation/0/events');
 
 			if ( !type ) {
 				if ( this.isOpen ) this.open('timaat-inspector-metadata');
@@ -512,12 +662,18 @@
 					else this.updateItem();
 					
 					if ( item ) {
-            console.log("TCL: Inspector -> setItem -> item", item);
+            // console.log("TCL: Inspector -> setItem -> item", item);
 						// actors panel
 						this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
 						this.ui.dataTableAnnoActors.ajax.reload();
 						this.ui.dataTableActors.ajax.reload();
 
+						// events panel
+						this.ui.dataTableAnnoEvents.ajax.url('api/annotation/'+item.model.id+'/events');
+						this.ui.dataTableAnnoEvents.ajax.reload();
+						this.ui.dataTableEvents.ajax.reload();
+
+						// analysis panel
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/'+item.model.id+'/analysis');
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
@@ -565,7 +721,7 @@
 							minimumInputLength: 0,
 						});
 						TIMAAT.AnnotationService.getTagList(item.model.id).then(function(data) {
-							console.log("TCL: then: data", data);
+							// console.log("TCL: then: data", data);
 							var tagSelect = $('#annotation-tags-multi-select-dropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -648,7 +804,7 @@
 							minimumInputLength: 0,
 						});
 						TIMAAT.AnalysisListService.getTagList(item.id).then(function(data) {
-							console.log("TCL: then: data", data);
+							// console.log("TCL: then: data", data);
 							var tagSelect = $('#mediumAnalysisList-tags-multi-select-dropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);

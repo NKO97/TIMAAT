@@ -35,6 +35,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.EventTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -77,6 +78,7 @@ public class EndpointEvent {
 															@QueryParam("orderby") String orderby,
 															@QueryParam("dir") String direction,
 															@QueryParam("search") String search,
+															@QueryParam("exclude_annotation") Integer annotationID,
 															@QueryParam("language") String languageCode)
 	{
 		// System.out.println("EndpointEvent: getEventList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
@@ -88,38 +90,69 @@ public class EndpointEvent {
 		
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+
 		String column = "e.id";
 		if ( orderby != null) {
 			if (orderby.equalsIgnoreCase("name")) column = "et.name";
 		}
 
+		// define default query strings
+		String eventQuery = "SELECT e FROM Event e, EventTranslation et WHERE et.event.id = e.id ORDER BY ";
+		String eventCountQuery = "SELECT COUNT(e) FROM Event e";
+
+		// exclude events from annotation if specified
+		if ( annotationID != null ) {
+			Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, annotationID);
+			if ( anno != null && anno.getEvents().size() > 0 ) {
+				eventQuery = "SELECT e FROM Event e, EventTranslation et, Annotation anno WHERE et.event.id = e.id AND et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND anno.id="+annotationID+" AND e NOT MEMBER OF anno.events ORDER BY ";
+				eventCountQuery = "SELECT COUNT(e) FROM Event e, Annotation anno WHERE anno.id="+annotationID+" AND e NOT MEMBER OF anno.events";
+			}
+		}
+
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(e) FROM Event e");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery(eventCountQuery);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 
 		// search
 		Query query;
+		String sql;
+		List<Event> eventList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
-			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(e) FROM Event e WHERE lower("+languageQuery+") LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("name", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT e FROM Event e, EventTranslation et WHERE e.id = et.event.id AND lower("+languageQuery+") LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
-		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				// "SELECT e FROM Event e ORDER BY "+column+" "+direction);
-				"SELECT e FROM Event e, EventTranslation et WHERE e.id = et.event.id ORDER BY "+column+" "+direction);
-		}	
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
+			// find all matching names
+			sql = "SELECT et FROM EventTranslation et WHERE lower("+languageQuery+") LIKE lower(concat('%', :search, '%'))";
+			query = entityManager.createQuery(sql)
+													.setParameter("search", search);
+			// find all media belonging to those titles
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<EventTranslation> eventTranslationList = castList(EventTranslation.class, query.getResultList());
+			for (EventTranslation eventTranslation : eventTranslationList) {
+				if (annotationID != null) {
+					Boolean annoConnected = false;
+					for (Annotation annotation : eventTranslation.getEvent().getAnnotations()) {
+						if (annotation.getId() == annotationID) {
+							annoConnected = true;
+						}
+					}
+					if (!annoConnected && !(eventList.contains(eventTranslation.getEvent()))) {
+						eventList.add(eventTranslation.getEvent());
+					}
+				}
+				else if (!(eventList.contains(eventTranslation.getEvent()))) {
+					eventList.add(eventTranslation.getEvent());
+				}
+			}
+			recordsFiltered = eventList.size();
 
-		List<Event> eventList = castList(Event.class, query.getResultList());
-		
+		} else {
+			query = entityManager.createQuery(eventQuery + column + " " + direction);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			eventList = castList(Event.class, query.getResultList());
+		}	
+
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, eventList)).build();
   }
 
@@ -161,15 +194,17 @@ public class EndpointEvent {
 																		 @QueryParam("length") Integer length,
 																		 @QueryParam("orderby") String orderby,
 																		 @QueryParam("search") String search,
+																		 @QueryParam("page") Integer page,
+																		 @QueryParam("per_page") Integer per_page,
 																		 @QueryParam("language") String languageCode)
 	{
 		// System.out.println("EndpointEvent: getEventList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 
-		String column = "e.id";
+		// String column = "e.id";
 		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "e.displayName.name"; // TODO change displayName access in DB-Schema 
+		// 	if (orderby.equalsIgnoreCase("name")) column = "et.name"; // TODO change access in DB-Schema 
 		// }
 
 		class SelectElement{ 
@@ -179,17 +214,16 @@ public class EndpointEvent {
 				this.id = id; this.text = text;
 			};
 		}
+
+		String eventSearchQuery = "SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(et.name) LIKE lower(concat('%', :name,'%')) ORDER BY et.name ASC";
+		String eventQuery = "SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY et.name ASC";
 		
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("EndpointEvent: getEventSelectList - with search string");
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(et.name) LIKE lower(concat('%', :name,'%')) ORDER BY et.name ASC");
+			query = TIMAATApp.emf.createEntityManager().createQuery(eventSearchQuery);
 				query.setParameter("name", search);
 		} else {
-			System.out.println("EndpointEvent: getEventSelectList - no search string");
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY et.name ASC");
+			query = TIMAATApp.emf.createEntityManager().createQuery(eventQuery);
 		}
 		// if ( start != null && start > 0 ) query.setFirstResult(start);
 		// if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -198,7 +232,7 @@ public class EndpointEvent {
 		List<EventTranslation> eventTranslationList = castList(EventTranslation.class, query.getResultList());
 		for (EventTranslation eventTranslation : eventTranslationList) {
 			eventSelectList.add(new SelectElement(eventTranslation.getEvent().getId(),
-																					 eventTranslation.getName()));
+																					  eventTranslation.getName()));
 		}
 		return Response.ok().entity(eventSelectList).build();
 
@@ -227,7 +261,7 @@ public class EndpointEvent {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		List<SelectElement> eventSelectList = new ArrayList<>();
-			eventSelectList.add(new SelectElement(id, event.getEventTranslations().get(0).getName()));
+		eventSelectList.add(new SelectElement(id, event.getEventTranslations().get(0).getName()));
 
 		return Response.ok().entity(eventSelectList).build();
 

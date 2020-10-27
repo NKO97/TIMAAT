@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Timestamp;
@@ -37,16 +38,8 @@ public class Event implements Serializable {
 	private Timestamp lastEditedAt;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany
-	@JoinTable(
-		name="annotation_has_event"
-		, joinColumns={
-			@JoinColumn(name="event_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="annotation_id")
-			}
-		)
+	@ManyToMany(mappedBy = "events")
+	@JsonIgnore
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to Location

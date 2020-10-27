@@ -36,6 +36,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
@@ -80,10 +81,13 @@ public class EndpointAnnotation {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		Annotation anno = em.find(Annotation.class, id);
 		Actor actor = em.find(Actor.class, actorID);
+
 		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
 		if ( anno.getActors().contains(actor) ) return Response.ok().entity(false).build();
+
 		anno.getActors().add(actor);
 		actor.getAnnotations().add(anno);
+
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
 		em.merge(anno);
@@ -108,10 +112,13 @@ public class EndpointAnnotation {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		Annotation anno = em.find(Annotation.class, id);
 		Actor actor = em.find(Actor.class, actorID);
+
 		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
 		if ( anno.getActors().contains(actor) == false ) return Response.ok().entity(false).build();
+
 		anno.getActors().remove(actor);
 		actor.getAnnotations().remove(anno);
+
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
 		em.merge(anno);
@@ -121,6 +128,65 @@ public class EndpointAnnotation {
 		entityTransaction.commit();
 		em.refresh(anno);
 		em.refresh(actor);
+		
+		return Response.ok().entity(true).build();
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/events/{eventId}")
+	public Response addEvent(@PathParam("id") int id, @PathParam("eventId") int eventId) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Annotation anno = em.find(Annotation.class, id);
+		Event event = em.find(Event.class, eventId);
+
+		if ( anno == null || event == null ) return Response.ok().entity(false).build();
+		if ( anno.getEvents().contains(event) ) return Response.ok().entity(false).build();
+
+		anno.getEvents().add(event);
+		event.getAnnotations().add(anno);
+
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.merge(anno);
+		em.persist(anno);
+		em.merge(event);
+		em.persist(event);
+		entityTransaction.commit();
+		em.refresh(anno);
+		em.refresh(event);
+		
+		// TODO log entry annotation modified
+		// TODO ? should this send notification event as well ?
+		
+		return Response.ok().entity(true).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/events/{eventId}")
+	public Response removeEvent(@PathParam("id") int id, @PathParam("eventId") int eventId) {
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		Annotation anno = em.find(Annotation.class, id);
+		Event event = em.find(Event.class, eventId);
+
+		if ( anno == null || event == null ) return Response.ok().entity(false).build();
+		if ( anno.getEvents().contains(event) == false ) return Response.ok().entity(false).build();
+
+		anno.getEvents().remove(event);
+		event.getAnnotations().remove(anno);
+
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.merge(anno);
+		em.persist(anno);
+		em.merge(event);
+		em.persist(event);
+		entityTransaction.commit();
+		em.refresh(anno);
+		em.refresh(event);
 		
 		return Response.ok().entity(true).build();
 	}
@@ -222,6 +288,57 @@ public class EndpointAnnotation {
 					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis.subList(start, start+length))).build();
 				} else 
 					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis)).build();
+			}
+		}
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/events")
+	public Response getAnnotationEvents(
+			@PathParam("id") int id,
+			@QueryParam("draw") Integer draw,
+			@QueryParam("start") Integer start,
+			@QueryParam("length") Integer length,
+			@QueryParam("orderby") String orderby,
+			@QueryParam("dir") String direction,
+			@QueryParam("search") String search, // not supported
+			@QueryParam("as_datatable") String asDatatable
+	)	{
+		System.out.println("EndpointAnnotation: getAnnotationEvent: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// sanitize user input
+		if ( draw == null ) draw = 0;
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "e.id";
+		if ( orderby != null ) {
+			if (orderby.equalsIgnoreCase("name")) column = "et.name";
+		}
+
+		// retrieve annotation
+		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
+		if ( asDatatable == null ) {
+			if ( anno != null ) return Response.ok().entity(anno.getEvents()).build();
+			else return Response.status(Status.NOT_FOUND).build();
+		} else {
+			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Event>())).build();
+			else {
+				List<Event> events = anno.getEvents();
+				if ( events.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, events)).build();
+				if ( direction.compareTo("ASC") == 0 ) 
+					Collections.sort(events, (Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().compareTo( a2.getEventTranslations().get(0).getName() ));
+				else
+					Collections.sort(events, ((Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().compareTo( a2.getEventTranslations().get(0).getName() )).reversed());
+				
+				if ( start != null ) {
+					if ( start < 0 ) start = 0;
+					if ( start > events.size()-1 ) start = events.size()-1;
+					if ( length == null ) length = 1;
+					if ( length < 1 ) length = 1;
+					if ( (start+length) > events.size() ) length = events.size()-start;
+					return Response.ok().entity(new DatatableInfo(draw, events.size(), events.size(), events.subList(start, start+length))).build();
+				} else 
+					return Response.ok().entity(new DatatableInfo(draw, events.size(), events.size(), events)).build();
 			}
 		}
 	}

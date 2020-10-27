@@ -165,11 +165,11 @@ public class EndpointActor {
 							annoConnected = true;
 						}
 					}
-					if (!annoConnected && !(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+					if (!annoConnected && !(actorList.contains(actorName.getActor()))) {
 						actorList.add(actorName.getActor());
 					}
 				}
-				else if (!(actorList.contains(actorName.getActor()))) { // TODO actor.getActorType().. may be more efficient
+				else if (!(actorList.contains(actorName.getActor()))) {
 					actorList.add(actorName.getActor());
 				}
 			}
@@ -184,11 +184,10 @@ public class EndpointActor {
 			// 	actorSearchQuery+column+" "+direction);
 			// query.setParameter("name", search);
 		} else {
-			query = entityManager.createQuery(
-				actorQuery+column+" "+direction);
-				if ( start != null && start > 0 ) query.setFirstResult(start);
-				if ( length != null && length > 0 ) query.setMaxResults(length);
-				actorList = castList(Actor.class, query.getResultList());
+			query = entityManager.createQuery(actorQuery + column + " " + direction);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			actorList = castList(Actor.class, query.getResultList());
 		}
 
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
@@ -271,7 +270,7 @@ public class EndpointActor {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
 		List<SelectElement> actorSelectList = new ArrayList<>();
-			actorSelectList.add(new SelectElement(id, actor.getDisplayName().getName()));
+		actorSelectList.add(new SelectElement(id, actor.getDisplayName().getName()));
 
 		return Response.ok().entity(actorSelectList).build();
 

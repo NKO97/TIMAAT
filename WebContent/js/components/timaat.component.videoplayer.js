@@ -974,16 +974,16 @@
 			$('#timaat-analysislist-chooser').prop('disabled', false);
 			$('#timaat-analysislist-chooser').removeAttr('disabled');
 			$('#timaat-analysislist-add').removeClass("timaat-item-disabled");
-			$('#timaat-analysislist-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysislist()');			
+			$('#timaat-analysislist-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisList()');			
 			if ( lists.length > 0 ) {
 				TIMAAT.VideoPlayer.setupAnnotations(lists[0]);
 				$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
-				$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysislist()');
+				$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysisList()');
 				$('#timaat-analysissegment-edit').removeClass("timaat-item-disabled");
 				$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 				$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
-				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
+				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysisList()');
 				$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
 				$('#timaat-medium-offlinepublication').attr('onclick','TIMAAT.VideoPlayer.offLinePublication()');
 				$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
@@ -1067,15 +1067,15 @@
 			$('#timaat-user-log-analysislist').popover('show');
 		},
 		
-		addAnalysislist: function() {
-			console.log("TCL: addAnalysislist: function()");
+		addAnalysisList: function() {
+			console.log("TCL: addAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null, 'analysislist');			
 		},
 		
-		updateAnalysislist: function(analysislist) {
-			console.log("TCL: updateAnalysislist: function(analysislist)");
+		updateAnalysisList: function(analysislist) {
+			console.log("TCL: updateAnalysisList: function(analysislist)");
 			console.log("TCL: analysislist", analysislist);
 			// sync to server
 			TIMAAT.AnalysisListService.updateAnalysisList(analysislist);
@@ -1084,16 +1084,16 @@
 			TIMAAT.VideoPlayer.curList.ui.html(TIMAAT.Util.getDefTranslation(TIMAAT.VideoPlayer.curList, 'mediumAnalysisListTranslations', 'title'));
 		},
 
-		editAnalysislist: function() {
-			console.log("TCL: editAnalysislist: function()");
+		editAnalysisList: function() {
+			console.log("TCL: editAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curList, 'analysislist');
 			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 		},
 		
-		removeAnalysislist: function() {
-			console.log("TCL: removeAnalysislist: function()");
+		removeAnalysisList: function() {
+			console.log("TCL: removeAnalysisList: function()");
 			if ( !TIMAAT.VideoPlayer.curList ) return;
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-analysislist-delete').data('analysislist', TIMAAT.VideoPlayer.curList);
@@ -1492,11 +1492,11 @@
 
 			$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
-			$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysislist()');
+			$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysisList()');
 			$('#timaat-analysissegment-edit').removeClass("timaat-item-disabled");
 			$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 			$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
-			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysislist()');
+			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysisList()');
 			$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
 			$('#timaat-medium-offlinepublication').attr('onclick','TIMAAT.VideoPlayer.offLinePublication()');
 			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
