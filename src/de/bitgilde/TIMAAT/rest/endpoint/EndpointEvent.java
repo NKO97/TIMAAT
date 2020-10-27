@@ -121,27 +121,27 @@ public class EndpointEvent {
 		List<Event> eventList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT et FROM EventTranslation et WHERE lower("+languageQuery+") LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT e FROM Event e WHERE lower("+languageQuery+") LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
-													.setParameter("search", search);
+													 .setParameter("search", search);
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<EventTranslation> eventTranslationList = castList(EventTranslation.class, query.getResultList());
-			for (EventTranslation eventTranslation : eventTranslationList) {
+			eventList = castList(Event.class, query.getResultList());
+			for (Event event : eventList) {
 				if (annotationID != null) {
 					Boolean annoConnected = false;
-					for (Annotation annotation : eventTranslation.getEvent().getAnnotations()) {
+					for (Annotation annotation : event.getAnnotations()) {
 						if (annotation.getId() == annotationID) {
 							annoConnected = true;
 						}
 					}
-					if (!annoConnected && !(eventList.contains(eventTranslation.getEvent()))) {
-						eventList.add(eventTranslation.getEvent());
+					if (!annoConnected && !(eventList.contains(event))) {
+						eventList.add(event);
 					}
 				}
-				else if (!(eventList.contains(eventTranslation.getEvent()))) {
-					eventList.add(eventTranslation.getEvent());
+				else if (!(eventList.contains(event))) {
+					eventList.add(event);
 				}
 			}
 			recordsFiltered = eventList.size();

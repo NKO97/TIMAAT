@@ -200,15 +200,16 @@
 			});
 		},
 
-		async updateEventTranslation(event) {
+		async updateEventTranslation(eventModel) {
 			// console.log("TCL: EventService async updateEventTranslation -> event", event);
 			var updatedEventTranslation = {
-				id: event.model.eventTranslations[0].id, // TODO get the correct translation_id
-				name: event.model.eventTranslations[0].name,
+				id: eventModel.eventTranslations[0].id, // TODO get the correct translation_id
+				name: eventModel.eventTranslations[0].name,
+				description: eventModel.eventTranslations[0].description
 			};
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+event.model.id+"/translation/"+updatedEventTranslation.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+eventModel.id+"/translation/"+updatedEventTranslation.id,
 					type:"PATCH",
 					data: JSON.stringify(updatedEventTranslation),
 					contentType:"application/json; charset=utf-8",

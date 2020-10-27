@@ -422,6 +422,8 @@
 					// update data that is part of event (includes updating last edited by/at)
 					var tempEventModel = await TIMAAT.EventService.updateEvent(event.model);
 					// event.model.displayName = tempDisplayName;
+					var tempEventTranslationModel = await TIMAAT.EventService.updateEventTranslation(event.model);
+
 					console.log("TCL: tempEventModel", tempEventModel);
 				} catch(error) {
 					console.log( "error: ", error);
