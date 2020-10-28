@@ -58,7 +58,7 @@ public class Medium implements Serializable {
 	private String remark;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany
+	@ManyToMany(mappedBy = "mediums")
 	@JsonIgnore
 	private List<Annotation> annotations;
 

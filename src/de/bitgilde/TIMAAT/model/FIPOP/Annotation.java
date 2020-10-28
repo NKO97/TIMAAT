@@ -166,7 +166,7 @@ public class Annotation implements Serializable {
 	private List<Location> locations;
 
 	//bi-directional many-to-many association to Medium
-	@ManyToMany(mappedBy="annotations")
+	@ManyToMany
 	@JoinTable(
 		name="annotation_has_medium"
 		, inverseJoinColumns={
