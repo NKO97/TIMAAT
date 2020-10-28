@@ -36,7 +36,6 @@ public class Actor implements Serializable {
 
 	@JoinColumn(name="created_by_user_account_id")
 	@JsonIgnore
-	// @JsonBackReference(value = "UserAccount-Actor1")
 	private UserAccount createdByUserAccount;
 	@Transient
 	@JsonProperty("createdByUserAccountID")
@@ -44,7 +43,6 @@ public class Actor implements Serializable {
 
 	@JoinColumn(name="last_edited_by_user_account_id")
 	@JsonIgnore
-	// @JsonBackReference(value = "UserAccount-Actor2")
 	private UserAccount lastEditedByUserAccount;
 	@Transient
 	@JsonProperty("lastEditedByUserAccountID")
@@ -130,12 +128,14 @@ public class Actor implements Serializable {
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor1")
-	@JsonManagedReference(value = "Actor-ActorRelatesToActor1")
+	@JsonIgnore // TODO temporary until implemented
+	// @JsonManagedReference(value = "Actor-ActorRelatesToActor1")
 	private List<ActorRelatesToActor> actorRelatesToActors1;
 
 	//bi-directional many-to-one association to ActorRelatesToActor
 	@OneToMany(mappedBy="actor2")
-	@JsonManagedReference(value = "Actor-ActorRelatesToActor2")
+	@JsonIgnore // TODO temporary until implemented
+	// @JsonManagedReference(value = "Actor-ActorRelatesToActor2")
 	private List<ActorRelatesToActor> actorRelatesToActors2;
 
 	//bi-directional many-to-many association to Annotation

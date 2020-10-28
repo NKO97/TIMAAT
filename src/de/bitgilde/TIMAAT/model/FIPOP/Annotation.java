@@ -167,7 +167,15 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-many association to Medium
 	@ManyToMany(mappedBy="annotations")
-	@JsonIgnore
+	@JoinTable(
+		name="annotation_has_medium"
+		, inverseJoinColumns={
+			@JoinColumn(name="medium_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		)
 	private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Motivation

@@ -3,8 +3,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,7 +35,6 @@ public class MediumAnalysisList implements Serializable {
 	@JsonProperty("mediumID")
 	private int mediumID;
 
-
 	// TODO text and title from translation
 
 	@Column(name="created_at")
@@ -49,13 +46,11 @@ public class MediumAnalysisList implements Serializable {
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
   @JsonManagedReference(value = "MediumAnalysisList-AnalysisSegment")
-	@CascadeOnDelete
 	private List<AnalysisSegment> analysisSegments;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="mediumAnalysisList", cascade={CascadeType.ALL})
   @JsonManagedReference(value = "MediumAnalysisList-Annotation")
-	@CascadeOnDelete
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList

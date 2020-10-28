@@ -22,13 +22,13 @@ public class ActorRelatesToActor implements Serializable {
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
 	@JoinColumn(name="actor_id")
-	@JsonBackReference(value = "Actor-ActorRelatesToActor1")
+	// @JsonBackReference(value = "Actor-ActorRelatesToActor1")
 	private Actor actor1;
 
 	//bi-directional many-to-one association to Actor
 	@ManyToOne
 	@JoinColumn(name="relates_to_actor_id")
-	@JsonBackReference(value = "Actor-ActorRelatesToActor2")
+	// @JsonBackReference(value = "Actor-ActorRelatesToActor2")
 	private Actor actor2;
 
 	//bi-directional many-to-one association to ActorActorRelationshipType

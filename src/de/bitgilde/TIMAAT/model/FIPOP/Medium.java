@@ -37,7 +37,6 @@ public class Medium implements Serializable {
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
-	// @JsonBackReference(value = "UserAccount-Medium")
 	private UserAccount createdByUserAccount;
 	@Transient
 	@JsonProperty("createdByUserAccountID")
@@ -60,22 +59,13 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-many association to Annotation
 	@ManyToMany
-	@JoinTable(
-		name="annotation_has_medium"
-		, joinColumns={
-			@JoinColumn(name="medium_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="annotation_id")
-			}
-		)
+	@JsonIgnore
 	private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
-	// @JsonBackReference(value = "UserAccount-Medium2")
 	private UserAccount lastEditedByUserAccount;
 	@Transient
 	@JsonProperty("lastEditedByUserAccountID")
