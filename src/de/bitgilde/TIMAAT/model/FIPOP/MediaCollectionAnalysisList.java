@@ -39,12 +39,25 @@ public class MediaCollectionAnalysisList implements Serializable {
 	private MediaCollection mediaCollection;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisListHasTag
-	@OneToMany(mappedBy="mediaCollectionAnalysisList")
-	private List<MediaCollectionAnalysisListHasTag> mediaCollectionAnalysisListHasTags;
+	// @OneToMany(mappedBy="mediaCollectionAnalysisList")
+	// private List<MediaCollectionAnalysisListHasTag> mediaCollectionAnalysisListHasTags;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisListTranslation
 	@OneToMany(mappedBy="mediaCollectionAnalysisList")
 	private List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations;
+
+	//bi-directional many-to-many association to Tag
+	@ManyToMany
+	@JoinTable(
+		name="media_collection_analysis_list_has_tag"
+		, inverseJoinColumns={
+			@JoinColumn(name="tag_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="media_collection_analysis_list_id")
+			}
+		)
+	private List<Tag> tags;
 
 	public MediaCollectionAnalysisList() {
 	}
@@ -97,27 +110,27 @@ public class MediaCollectionAnalysisList implements Serializable {
 		this.mediaCollection = mediaCollection;
 	}
 
-	public List<MediaCollectionAnalysisListHasTag> getMediaCollectionAnalysisListHasTags() {
-		return this.mediaCollectionAnalysisListHasTags;
-	}
+	// public List<MediaCollectionAnalysisListHasTag> getMediaCollectionAnalysisListHasTags() {
+	// 	return this.mediaCollectionAnalysisListHasTags;
+	// }
 
-	public void setMediaCollectionAnalysisListHasTags(List<MediaCollectionAnalysisListHasTag> mediaCollectionAnalysisListHasTags) {
-		this.mediaCollectionAnalysisListHasTags = mediaCollectionAnalysisListHasTags;
-	}
+	// public void setMediaCollectionAnalysisListHasTags(List<MediaCollectionAnalysisListHasTag> mediaCollectionAnalysisListHasTags) {
+	// 	this.mediaCollectionAnalysisListHasTags = mediaCollectionAnalysisListHasTags;
+	// }
 
-	public MediaCollectionAnalysisListHasTag addMediaCollectionAnalysisListHasTag(MediaCollectionAnalysisListHasTag mediaCollectionAnalysisListHasTag) {
-		getMediaCollectionAnalysisListHasTags().add(mediaCollectionAnalysisListHasTag);
-		mediaCollectionAnalysisListHasTag.setMediaCollectionAnalysisList(this);
+	// public MediaCollectionAnalysisListHasTag addMediaCollectionAnalysisListHasTag(MediaCollectionAnalysisListHasTag mediaCollectionAnalysisListHasTag) {
+	// 	getMediaCollectionAnalysisListHasTags().add(mediaCollectionAnalysisListHasTag);
+	// 	mediaCollectionAnalysisListHasTag.setMediaCollectionAnalysisList(this);
 
-		return mediaCollectionAnalysisListHasTag;
-	}
+	// 	return mediaCollectionAnalysisListHasTag;
+	// }
 
-	public MediaCollectionAnalysisListHasTag removeMediaCollectionAnalysisListHasTag(MediaCollectionAnalysisListHasTag mediaCollectionAnalysisListHasTag) {
-		getMediaCollectionAnalysisListHasTags().remove(mediaCollectionAnalysisListHasTag);
-		mediaCollectionAnalysisListHasTag.setMediaCollectionAnalysisList(null);
+	// public MediaCollectionAnalysisListHasTag removeMediaCollectionAnalysisListHasTag(MediaCollectionAnalysisListHasTag mediaCollectionAnalysisListHasTag) {
+	// 	getMediaCollectionAnalysisListHasTags().remove(mediaCollectionAnalysisListHasTag);
+	// 	mediaCollectionAnalysisListHasTag.setMediaCollectionAnalysisList(null);
 
-		return mediaCollectionAnalysisListHasTag;
-	}
+	// 	return mediaCollectionAnalysisListHasTag;
+	// }
 
 	public List<MediaCollectionAnalysisListTranslation> getMediaCollectionAnalysisListTranslations() {
 		return this.mediaCollectionAnalysisListTranslations;
@@ -139,6 +152,14 @@ public class MediaCollectionAnalysisList implements Serializable {
 		mediaCollectionAnalysisListTranslation.setMediaCollectionAnalysisList(null);
 
 		return mediaCollectionAnalysisListTranslation;
+	}
+
+	public List<Tag> getTags() {
+		return this.tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 
 }

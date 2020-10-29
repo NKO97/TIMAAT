@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
@@ -68,6 +69,20 @@ public class EndpointAnalysisList {
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		entityManager.refresh(mediumAnalysisList);
 		return Response.ok().entity(mediumAnalysisList.getTags()).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/categorySet/list")
+	public Response getCategorySetList(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnalysisList: getCategorySetList - ID: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+
+		return Response.ok().entity(categorySetList).build();
 	}
 
 	@POST
@@ -152,6 +167,8 @@ public class EndpointAnalysisList {
 				mediumAnalysisList.setTitle(trans.getTitle(), trans.getLanguage().getCode());
 				mediumAnalysisList.setText(trans.getText(), trans.getLanguage().getCode());
 			}
+		List<CategorySet> oldCategorySets = mediumAnalysisList.getCategorySets();
+		mediumAnalysisList.setCategorySets(updatedList.getCategorySets());
 		List<Tag> oldTags = mediumAnalysisList.getTags();
 		mediumAnalysisList.setTags(updatedList.getTags());
 		
@@ -163,6 +180,12 @@ public class EndpointAnalysisList {
 		entityManager.persist(mediumAnalysisList);
 		entityTransaction.commit();
 		entityManager.refresh(mediumAnalysisList);
+		for (CategorySet categorySet : mediumAnalysisList.getCategorySets()) {
+			entityManager.refresh(categorySet);
+		}
+		for (CategorySet categorySet : oldCategorySets) {
+			entityManager.refresh(categorySet);
+		}
 		for (Tag tag : mediumAnalysisList.getTags()) {
 			entityManager.refresh(tag);
 		}
@@ -320,6 +343,62 @@ public class EndpointAnalysisList {
 		;
 		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-segment", mediumAnalysisList.getId(), seg);
 
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{analysisListId}/categorySet/{categorySetId}")
+	@Secured
+	public Response addExistingCategorySet(@PathParam("analysisListId") int analysisListId,
+																 				 @PathParam("categorySetId") int categorySetId) {
+		
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+			CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
+			if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+			
+        // attach categorySet to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		analysisList.getCategorySets().add(categorySet);
+    		categorySet.getMediumAnalysisLists().add(analysisList);
+    		entityManager.merge(categorySet);
+    		entityManager.merge(analysisList);
+    		entityManager.persist(analysisList);
+    		entityManager.persist(categorySet);
+    		entityTransaction.commit();
+    		entityManager.refresh(analysisList);
+ 	
+		return Response.ok().entity(categorySet).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{analysisListId}/categorySet/{categorySetId}")
+	@Secured
+	public Response removeCategorySet(@PathParam("analysisListId") int analysisListId,
+																		@PathParam("categorySetId") int categorySetId) {
+		
+    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+			CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
+    	if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+    	
+        	// attach categorySet to annotation and vice versa    	
+    		EntityTransaction entityTransaction = entityManager.getTransaction();
+    		entityTransaction.begin();
+    		analysisList.getCategorySets().remove(categorySet);
+    		categorySet.getMediumAnalysisLists().remove(analysisList);
+    		entityManager.merge(categorySet);
+    		entityManager.merge(analysisList);
+    		entityManager.persist(analysisList);
+    		entityManager.persist(categorySet);
+    		entityTransaction.commit();
+    		entityManager.refresh(analysisList);
+ 	
 		return Response.ok().build();
 	}
 

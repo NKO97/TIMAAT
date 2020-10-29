@@ -72,7 +72,7 @@
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-tags');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-categories-and-tags');
 			});
 			/*
 			this.listView.find('.timaat-annotation-list-categories').popover({

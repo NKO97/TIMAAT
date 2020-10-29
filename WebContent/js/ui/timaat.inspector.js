@@ -589,7 +589,7 @@
 			
 			// animation panel default UI setting
 			this.disablePanel('timaat-inspector-animation');
-			this.disablePanel('timaat-inspector-tags');
+			this.disablePanel('timaat-inspector-categories-and-tags');
 			this.disablePanel('timaat-inspector-actors');
 			this.disablePanel('timaat-inspector-events');
 			this.disablePanel('timaat-inspector-locations');
@@ -620,6 +620,7 @@
 						this.enablePanel('timaat-inspector-events');
 						this.enablePanel('timaat-inspector-locations');
 						this.enablePanel('timaat-inspector-analysis');
+						this.enablePanel('timaat-inspector-categories-and-tags');
 					}
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
@@ -658,6 +659,8 @@
 					$("#timaat-inspector-meta-comment").val(comment);
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);	
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien und Tags');
+
 					if ( !anno ) this.open('timaat-inspector-metadata');
 					else this.updateItem();
 					
@@ -678,15 +681,75 @@
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 
-						// annotation panel
+						// category and annotation panel
+						$('#annotation-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#annotation-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#annotation-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#annotation-categories-multi-select-dropdown').find('option').remove();
+
 						$('#annotation-tags-multi-select-dropdown').val(null).trigger('change');
 						if ($('#annotation-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
 							$('#annotation-tags-multi-select-dropdown').select2('destroy');
 						}
 						$('#annotation-tags-multi-select-dropdown').find('option').remove();
-						this.enablePanel('timaat-inspector-tags');
-						$('.tagPanel').hide();
+
+						$('.categoryAndTagPanel').hide();
+						$('#annotationCategoryPanel').show();
 						$('#annotationTagPanel').show();
+
+						$('#annotation-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/annotation/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnnotationService.getSelectedCategories(item.model.id).then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#annotation-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					
 						$('#annotation-tags-multi-select-dropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
@@ -761,15 +824,77 @@
 					$('#timaat-inspector-meta-submit').html(submit);
 					$("#timaat-inspector-meta-title").val(title).trigger('input');
 					$("#timaat-inspector-meta-comment").val(comment);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien-Sets und Tags');
 					if ( item != null ) {
+						$('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
+						if ($('#mediumAnalysisList-categorySets-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#mediumAnalysisList-categorySets-multi-select-dropdown').select2('destroy');
+						}
+						$('#mediumAnalysisList-categorySets-multi-select-dropdown').find('option').remove();
+
 						$('#mediumAnalysisList-tags-multi-select-dropdown').val(null).trigger('change');
 						if ($('#mediumAnalysisList-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
 							$('#mediumAnalysisList-tags-multi-select-dropdown').select2('destroy');
 						}
 						$('#mediumAnalysisList-tags-multi-select-dropdown').find('option').remove();
-						this.enablePanel('timaat-inspector-tags');
-						$('.tagPanel').hide();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategorySetPanel').show();
 						$('#mediumAnalysisListTagPanel').show();
+						this.enablePanel('timaat-inspector-categories-and-tags');
+
+						$('#mediumAnalysisList-categorySets-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/category/set/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getCategorySetList(item.id).then(function(data) {
+							console.log("TCL: then: data", data);
+							var categorySetSelect = $('#mediumAnalysisList-categorySets-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySetSelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySetSelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+
 						$('#mediumAnalysisList-tags-multi-select-dropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,

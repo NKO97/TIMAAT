@@ -51,6 +51,30 @@
 			
 		},
 
+		async getSelectedCategories(annotationId) {
+      console.log("TCL: getCategoryList -> annotationId", annotationId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getCategorySetList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		async getTagList(annotationId) {
       // console.log("TCL: getTagList -> for annotationId", annotationId);
 			return new Promise(resolve => {
@@ -146,17 +170,25 @@
     
     async updateAnnotation(annotationModel) {
 			console.log("TCL: updateAnnotation -> annotationModel", annotationModel);
-			// var list = {
-			// 		id: annotation.id,
-			// 		mediumannotationTranslations: annotation.mediumannotationTranslations,
-			// 		mediumID: annotation.mediumID
-			// };
+			var annotation = {
+					id: annotationModel.id,
+					annotationTranslations: annotationModel.annotationTranslations,
+					categories: annotationModel.categories,
+					comment: annotationModel.comment,
+					sequenceEndTime: annotationModel.sequenceEndTime,
+					sequenceStartTime: annotationModel.sequenceStartTime,
+					selectorSvgs: annotationModel.selectorSvgs,
+					layerVisual: annotationModel.layerVisual,
+					tags: annotationModel.tags,
+					title: annotationModel.title,
+					// mediumID: annotationModel.mediumID,
+			};
 			delete annotationModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationModel.id,
 					type:"PATCH",
-					data: JSON.stringify(annotationModel),
+					data: JSON.stringify(annotation),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -268,6 +300,50 @@
 				console.log( e.responseText );
 				return false;
 			});
+		},
+
+		async addCategory(annotationId, categoryId) {
+			console.log("TCL: addCategory -> annotationId, categoryId", annotationId, categoryId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async removeCategory(annotationId, categoryId) {
+			// console.log("TCL: removeCategory -> annotationId, categoryName", annotationId, categoryName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
 		},
 
 		async addTag(annotationId, tagId) {

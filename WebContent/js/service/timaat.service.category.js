@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.CategoryService = {
 
 		async createCategoryOrCategorySet(type, model) {

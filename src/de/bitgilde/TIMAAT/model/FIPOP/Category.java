@@ -27,16 +27,7 @@ public class Category implements Serializable {
 	private String name;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany
-	@JoinTable(
-		name="annotation_has_category"
-		, joinColumns={
-			@JoinColumn(name="category_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="annotation_id")
-			}
-		)
+	@ManyToMany(mappedBy = "categories")
 	@JsonIgnore
 	private List<Annotation> annotations;
 

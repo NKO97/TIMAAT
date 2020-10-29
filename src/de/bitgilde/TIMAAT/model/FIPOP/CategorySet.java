@@ -65,6 +65,11 @@ public class CategorySet implements Serializable {
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
 	//bi-directional many-to-one association to UserAccountHasCategorySet
+	@ManyToMany(mappedBy="categorySets")
+	@JsonIgnore
+	private List<MediumAnalysisList> mediumAnalysisLists;
+
+	//bi-directional many-to-one association to UserAccountHasCategorySet
 	@OneToMany(mappedBy="categorySet")
 	@JsonIgnore
 	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
@@ -196,6 +201,14 @@ public class CategorySet implements Serializable {
 		categorySetHasCategory.setCategorySet(null);
 
 		return categorySetHasCategory;
+	}
+
+	public List<MediumAnalysisList> getMediumAnalysisLists() {
+		return this.mediumAnalysisLists;
+	}
+
+	public void setMediumAnalysisLists(List<MediumAnalysisList> mediumAnalysisLists) {
+		this.mediumAnalysisLists = mediumAnalysisLists;
 	}
 
 	public List<UserAccountHasCategorySet> getUserAccountHasCategorySets() {

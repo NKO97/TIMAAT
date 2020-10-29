@@ -51,6 +51,30 @@
 			
 		},
 
+		async getCategorySetList(mediumAnalysisListId) {
+      console.log("TCL: getCategorySetList -> mediumAnalysisListId", mediumAnalysisListId);
+			return new Promise(resolve => {
+				jQuery.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/list/",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getCategorySetList -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		async getTagList(mediumAnalysisListId) {
       // console.log("TCL: getTagList -> for mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
@@ -116,7 +140,8 @@
 			var list = {
 					id: analysisList.id,
 					mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
-					mediumID: analysisList.mediumID
+					mediumID: analysisList.mediumID,
+					categorySets: analysisList.categorySets
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id,
@@ -186,6 +211,50 @@
 				console.log( "error", e );
 				console.log( e.responseText );
 			});
+		},
+
+		async addCategorySet(mediumAnalysisListId, categorySetId) {
+			console.log("TCL: addCategorySet -> mediumAnalysisListId, categorySetId", mediumAnalysisListId, categorySetId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/"+categorySetId,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
+		async removeCategorySet(mediumAnalysisListId, categorySetId) {
+			// console.log("TCL: removeCategorySet -> mediumAnalysisListId, categorySetName", mediumAnalysisListId, categorySetName);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/"+categorySetId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log( "error", e );
+					console.log( e.responseText );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
 		},
 
 		async addTag(mediumAnalysisListId, tagId) {

@@ -140,7 +140,16 @@ public class Annotation implements Serializable {
 	// private List<Audience> audiences;
 
 	//bi-directional many-to-many association to Category
-	@ManyToMany(mappedBy="annotations")
+	@ManyToMany
+	@JoinTable(
+		name="annotation_has_category"
+		, inverseJoinColumns={
+			@JoinColumn(name="category_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="annotation_id")
+			}
+		)
 	private List<Category> categories;
 
 	//bi-directional many-to-many association to Event

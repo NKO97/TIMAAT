@@ -53,6 +53,19 @@ public class MediumAnalysisList implements Serializable {
   @JsonManagedReference(value = "MediumAnalysisList-Annotation")
 	private List<Annotation> annotations;
 
+	//bi-directional many-to-many association to CategorySet
+	@ManyToMany
+	@JoinTable(
+		name="medium_analysis_list_has_category_set"
+		, inverseJoinColumns={
+			@JoinColumn(name="category_set_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="medium_analysis_list_id")
+			}
+		)
+	private List<CategorySet> categorySets;
+
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @ManyToOne
 	// @JoinColumn(name="media_collection_analysis_list_id")
@@ -176,6 +189,14 @@ public class MediumAnalysisList implements Serializable {
 		annotation.setMediumAnalysisList(null);
 
 		return annotation;
+	}
+
+	public List<CategorySet> getCategorySets() {
+		return this.categorySets;
+	}
+
+	public void setCategorySets(List<CategorySet> categorySets) {
+		this.categorySets = categorySets;
 	}
 
 	// public MediaCollectionAnalysisList getMediaCollectionAnalysisList() {

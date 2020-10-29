@@ -221,8 +221,7 @@ public class EndpointCategorySet {
 		List<SelectElement> categorySelectList = new ArrayList<>();
 		List<Category> categoryList = castList(Category.class, query.getResultList());
 		for (Category category : categoryList) {
-			categorySelectList.add(new SelectElement(category.getId(),
-																					 category.getName()));
+			categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 		}
 		return Response.ok().entity(categorySelectList).build();
 	}
