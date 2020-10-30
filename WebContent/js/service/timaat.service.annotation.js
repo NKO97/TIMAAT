@@ -20,16 +20,6 @@
 }(function (TIMAAT) {
 
 	TIMAAT.AnnotationService = {
-		
-		logout: function() {
-			console.log("TCL: logout: function()");
-			TIMAAT.Service.state = 2;
-			TIMAAT.Service.token = null;
-			TIMAAT.Service.session = null;
-			location.reload(true);
-			// TODO refactor
-			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
-		},
 
 		getAnnotations(videoId, callback) {
 			console.log("TCL: getAnnotations -> getAnnotations(videoId, callback) ");

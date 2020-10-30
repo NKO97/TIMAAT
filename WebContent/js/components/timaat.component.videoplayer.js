@@ -1075,7 +1075,6 @@
 		},
 		
 		updateAnalysisList: function(analysislist) {
-			console.log("TCL: updateAnalysisList: function(analysislist)");
 			console.log("TCL: analysislist", analysislist);
 			// sync to server
 			TIMAAT.AnalysisListService.updateAnalysisList(analysislist);

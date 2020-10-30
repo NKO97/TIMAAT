@@ -23,7 +23,7 @@
     languages: null,
 		
 		init: function() {
-    console.log("TCL: init: function()");
+    // console.log("TCL: init: function()");
 			TIMAAT.LanguageLists.initLanguages();
 			$('.lists-datatables').hide();
 			// $('.languages-datatable').show();

@@ -3,7 +3,10 @@ package de.bitgilde.TIMAAT.rest.endpoint;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -30,7 +33,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
@@ -353,23 +358,23 @@ public class EndpointAnalysisList {
 	public Response addExistingCategorySet(@PathParam("analysisListId") int analysisListId,
 																 				 @PathParam("categorySetId") int categorySetId) {
 		
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
-			CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
-			if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
-			
-        // attach categorySet to annotation and vice versa    	
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		analysisList.getCategorySets().add(categorySet);
-    		categorySet.getMediumAnalysisLists().add(analysisList);
-    		entityManager.merge(categorySet);
-    		entityManager.merge(analysisList);
-    		entityManager.persist(analysisList);
-    		entityManager.persist(categorySet);
-    		entityTransaction.commit();
-    		entityManager.refresh(analysisList);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
+		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		analysisList.getCategorySets().add(categorySet);
+		categorySet.getMediumAnalysisLists().add(analysisList);
+		entityManager.merge(categorySet);
+		entityManager.merge(analysisList);
+		entityManager.persist(analysisList);
+		entityManager.persist(categorySet);
+		entityTransaction.commit();
+		entityManager.refresh(analysisList);
  	
 		return Response.ok().entity(categorySet).build();
 	}
@@ -381,23 +386,48 @@ public class EndpointAnalysisList {
 	public Response removeCategorySet(@PathParam("analysisListId") int analysisListId,
 																		@PathParam("categorySetId") int categorySetId) {
 		
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
-			CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
-    	if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
-    	
-        	// attach categorySet to annotation and vice versa    	
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		analysisList.getCategorySets().remove(categorySet);
-    		categorySet.getMediumAnalysisLists().remove(analysisList);
-    		entityManager.merge(categorySet);
-    		entityManager.merge(analysisList);
-    		entityManager.persist(analysisList);
-    		entityManager.persist(categorySet);
-    		entityTransaction.commit();
-    		entityManager.refresh(analysisList);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
+		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// TODO delete categories from annotations of matching categorySets
+		List<Category> categoryList = new ArrayList<>();
+		Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+		Iterator<CategorySetHasCategory> itr = cshc.iterator();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		while (itr.hasNext()) {
+			// categorySelectList.add(new SelectElement(itr.next().getCategory().getId(), itr.next().getCategory().getName()));
+			categoryList.add(itr.next().getCategory());
+		}
+		for (Annotation annotation : analysisList.getAnnotations()) {
+			List<Category> annotationCategoryList = annotation.getCategories();
+			List<Category> categoriesToRemove = categoryList.stream()
+																										 .distinct()
+																										 .filter(annotationCategoryList::contains)
+																										 .collect(Collectors.toList());
+			entityTransaction.begin();
+			for (Category category : categoriesToRemove) {
+				annotation.getCategories().remove(category);
+			}
+			entityManager.merge(annotation);
+			entityManager.persist(annotation);
+			entityTransaction.commit();
+			entityManager.refresh(annotation);
+		}
+
+		// attach categorySet to annotation and vice versa    	
+		entityTransaction.begin();
+		analysisList.getCategorySets().remove(categorySet);
+		categorySet.getMediumAnalysisLists().remove(analysisList);
+		entityManager.merge(categorySet);
+		entityManager.merge(analysisList);
+		entityManager.persist(analysisList);
+		entityManager.persist(categorySet);
+		entityTransaction.commit();
+		entityManager.refresh(analysisList);
  	
 		return Response.ok().build();
 	}
@@ -409,23 +439,23 @@ public class EndpointAnalysisList {
 	public Response addExistingTag(@PathParam("analysisListId") int analysisListId,
 																 @PathParam("tagId") int tagId) {
 		
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
-			Tag tag = entityManager.find(Tag.class, tagId);
-			if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-			
-        // attach tag to annotation and vice versa    	
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		analysisList.getTags().add(tag);
-    		tag.getMediumAnalysisLists().add(analysisList);
-    		entityManager.merge(tag);
-    		entityManager.merge(analysisList);
-    		entityManager.persist(analysisList);
-    		entityManager.persist(tag);
-    		entityTransaction.commit();
-    		entityManager.refresh(analysisList);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		Tag tag = entityManager.find(Tag.class, tagId);
+		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach tag to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		analysisList.getTags().add(tag);
+		tag.getMediumAnalysisLists().add(analysisList);
+		entityManager.merge(tag);
+		entityManager.merge(analysisList);
+		entityManager.persist(analysisList);
+		entityManager.persist(tag);
+		entityTransaction.commit();
+		entityManager.refresh(analysisList);
  	
 		return Response.ok().entity(tag).build();
 	}
@@ -437,23 +467,23 @@ public class EndpointAnalysisList {
 	public Response removeTag(@PathParam("analysisListId") int analysisListId,
 														@PathParam("tagId") int tagId) {
 		
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-			if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
-			Tag tag = entityManager.find(Tag.class, tagId);
-    	if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-    	
-        	// attach tag to annotation and vice versa    	
-    		EntityTransaction entityTransaction = entityManager.getTransaction();
-    		entityTransaction.begin();
-    		analysisList.getTags().remove(tag);
-    		tag.getMediumAnalysisLists().remove(analysisList);
-    		entityManager.merge(tag);
-    		entityManager.merge(analysisList);
-    		entityManager.persist(analysisList);
-    		entityManager.persist(tag);
-    		entityTransaction.commit();
-    		entityManager.refresh(analysisList);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		Tag tag = entityManager.find(Tag.class, tagId);
+		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+		
+			// attach tag to annotation and vice versa    	
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			analysisList.getTags().remove(tag);
+			tag.getMediumAnalysisLists().remove(analysisList);
+			entityManager.merge(tag);
+			entityManager.merge(analysisList);
+			entityManager.persist(analysisList);
+			entityManager.persist(tag);
+			entityTransaction.commit();
+			entityManager.refresh(analysisList);
  	
 		return Response.ok().build();
 	}

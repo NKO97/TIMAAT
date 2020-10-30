@@ -383,10 +383,48 @@
         var categorySetIdList = [];
 
         for (; i < formDataRaw.length; i++) {
-            categorySetIdList.push( {id: formDataRaw[i].value} );
+            categorySetIdList.push( {id: Number(formDataRaw[i].value)} );
         }
         console.log("TCL: categorySetIdList", categorySetIdList);
+        // TODO check if any annotation is using categories from category sets that will be removed with this operation
+        var annosUseCategorySet = false;
+        var annoInBothLists = false;
+        if (categorySetIdList.length < mediumAnalysisList.categorySets.length) {
+          annosUseCategorySet = true;
+          console.log("TCL: list contains less sets than before.");
+        } else {
+          i = 0;
+          var j = 0;
+          for (; i < mediumAnalysisList.categorySets.length; i++) {
+            annoInBothLists = false;
+            for (; j < categorySetIdList.length; j++) {
+              if (mediumAnalysisList.categorySets[i].id == categorySetIdList[j].id) {
+                annoInBothLists = true;
+                console.log("TCL: match found!");
+                break;
+              }
+            }
+            if (!annoInBothLists) {
+              console.log("TCL mediumAnalysisList.categorySets[i].id not available anymore", mediumAnalysisList.categorySets[i].id);
+              annosUseCategorySet = true;
+              break;
+            }
+          }
+        }
+        if (annosUseCategorySet) {
+          $('#timaat-mediumAnalysisList-categorySet-in-use').data('mediumAnalysisList', mediumAnalysisList);
+          $('#timaat-mediumAnalysisList-categorySet-in-use').data('categorySetIdList', categorySetIdList);
+          $('#timaat-mediumAnalysisList-categorySet-in-use').modal('show');
+        } else 
         mediumAnalysisList = await TIMAAT.CategoryLists.updateMediumAnalysisListHasCategorySetsList(mediumAnalysisList, categorySetIdList);
+      });
+
+      $('#timaat-mediumAnalysisList-categorySet-in-use-confirm').on('click', async function(event) {
+        var modal = $('#timaat-mediumAnalysisList-categorySet-in-use');
+        var mediumAnalysisList = modal.data('mediumAnalysisList');
+        var categorySetIdList = modal.data('categorySetIdList');
+        await TIMAAT.CategoryLists.updateMediumAnalysisListHasCategorySetsList(mediumAnalysisList, categorySetIdList);
+        modal.modal('hide');
       });
 
       // inspector event handler
@@ -1363,13 +1401,21 @@
 			try {
 				var existingMediumAnalysisListHasCategorySetsEntries = await TIMAAT.AnalysisListService.getCategorySetList(mediumAnalysisListModel.id);
         console.log("TCL: existingMediumAnalysisListHasCategorySetsEntries", existingMediumAnalysisListHasCategorySetsEntries);
-				if (categorySetIdList == null) { //* all entries will be deleted
+        if (categorySetIdList == null || categorySetIdList.length == 0) { //* all entries will be deleted
+          console.log("TCL: delete all entries");
 					mediumAnalysisListModel.categorySets = [];
-					await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
-				} else if (existingMediumAnalysisListHasCategorySetsEntries.length == 0) { //* all entries will be added
+          await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
+          // remove categories from annotations that belong to those category sets (= all)
+          var i = 0;
+          for (; i < mediumAnalysisListModel.annotations.length; i++) {
+            await TIMAAT.CategoryLists.updateAnnotationHasCategoriesList(mediumAnalysisListModel.annotations[i], null);
+          }
+        } else if (existingMediumAnalysisListHasCategorySetsEntries.length == 0) { //* all entries will be added
+          console.log("TCL: add  all entries");
 					mediumAnalysisListModel.categorySets = categorySetIdList;
 					await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
-				} else { //* delete removed entries
+        } else { //* delete removed entries
+          console.log("TCL: add/delete entries");
 					var entriesToDelete = [];
 					var i = 0;
 					for (; i < existingMediumAnalysisListHasCategorySetsEntries.length; i++) {
@@ -1393,8 +1439,13 @@
 						for (; i < entriesToDelete.length; i++) {
 							var index = mediumAnalysisListModel.categorySets.findIndex(({id}) => id === entriesToDelete[i].id);
 							mediumAnalysisListModel.categorySets.splice(index,1);
-							await TIMAAT.AnalysisListService.removeCategorySet(mediumAnalysisListModel.id, entriesToDelete[i].id);
-						}
+              await TIMAAT.AnalysisListService.removeCategorySet(mediumAnalysisListModel.id, entriesToDelete[i].id);
+            }
+            // categories will be removed from annotations if corresponding category set is removed from analysislist
+            i = 0;
+            for (; i < mediumAnalysisListModel.annotations.length; i++) {
+              mediumAnalysisListModel.annotations[i].categories = await TIMAAT.AnnotationService.getSelectedCategories(mediumAnalysisListModel.annotations[i].id);
+            }
 					}
 					//* add existing categorySets
 					var idsToCreate = [];
@@ -1423,7 +1474,15 @@
 							await TIMAAT.AnalysisListService.addCategorySet(mediumAnalysisListModel.id, idsToCreate[i].id);
 						}
           }
-				}
+          await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
+          console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.curList);
+          var i = 0;
+          for (; i < TIMAAT.VideoPlayer.annotationList.length; i++) {
+            TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.annotationList[i]);
+            TIMAAT.VideoPlayer.curAnnotation.updateUI();
+          }
+          TIMAAT.VideoPlayer.curAnnotation = null;
+        }
 			} catch(error) {
 				console.log( "error: ", error);
 			}
@@ -1438,7 +1497,7 @@
         if (categoryIdList == null) { //* all entries will be deleted
           console.log("TCL: delete all categories");
 					annotationModel.categories = [];
-					await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
+          await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
         } else if (existingAnnotationHasCategoriesEntries.length == 0) { //* all entries will be added
           console.log("TCL: add all categories");
 					annotationModel.categories = categoryIdList;
@@ -1498,7 +1557,10 @@
 							await TIMAAT.AnnotationService.addCategory(annotationModel.id, idsToCreate[i].id);
 						}
           }
-				}
+        }
+        if (TIMAAT.VideoPlayer.curAnnotation) {
+          TIMAAT.VideoPlayer.curAnnotation.updateUI();
+        }
 			} catch(error) {
 				console.log( "error: ", error);
 			}

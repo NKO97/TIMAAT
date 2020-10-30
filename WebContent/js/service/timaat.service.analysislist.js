@@ -246,6 +246,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
+        	console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
