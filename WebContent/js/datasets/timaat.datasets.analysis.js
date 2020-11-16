@@ -71,13 +71,13 @@
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
-          case 2: // Greimas Actantial Model
+          case 2: // Greimas Actantial Model //* won't be implemented
 
           break;
           case 3: // Van Sijll Cinematic Storytelling
 
           break;
-          case 4: // Lohtman Renner Spacial Semantics
+          case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
           break;
           case 5: // Genette Narrative Discourse
@@ -503,13 +503,13 @@
             `</form>`);
           $('#martinez-scheffel-unreliable-narration-select-dropdown').select2(select2Options);
         break;
-        case 2: // Greimas Actantial Model
+        case 2: // Greimas Actantial Model //* won't be implemented
 
         break;
         case 3: // Van Sijll Cinematic Storytelling
 
         break;
-        case 4: // Lohtman Renner Spacial Semantics
+        case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
         break;
         case 5: // Genette Narrative Discourse
@@ -1168,13 +1168,13 @@
               <td>`+data.analysisMethod.martinezScheffelUnreliableNarration.martinezScheffelUnreliableNarrationTranslations[0].type+`</td>
             </tr>`;
         break;
-        case 2: // Greimas Actantial Model
+        case 2: // Greimas Actantial Model //* won't be implemented
 
         break;
         case 3: // Van Sijll Cinematic Storytelling
 
         break;
-        case 4: // Lohtman Renner Spacial Semantics
+        case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
         break;
         case 5: // Genette Narrative Discourse

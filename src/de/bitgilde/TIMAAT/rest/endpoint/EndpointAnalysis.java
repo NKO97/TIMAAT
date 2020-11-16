@@ -165,13 +165,13 @@ public class EndpointAnalysis {
 				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMartinezScheffelUnreliableNarration().getMartinezScheffelUnreliableNarrationTranslations().get(0).getType()));
 			}
 			break;
-			case 2: // Greimas Actantial Model
+			case 2: // Greimas Actantial Model //* won't be implemented
 
 			break;
 			case 3: // Van Sijll Cinematic Storytelling
 
 			break;
-			case 4: // Lohtman Renner Spacial Semantics
+			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
 			break;
 			case 5: // Genette Narrative Discourse
@@ -320,13 +320,13 @@ public class EndpointAnalysis {
 		switch (methodTypeId) {
 			case 1: // Martinez Scheffel Unreliable Narration
 			break;
-			case 2: // Greimas Actantial Model
+			case 2: // Greimas Actantial Model //* won't be implemented
 
 			break;
 			case 3: // Van Sijll Cinematic Storytelling
 
 			break;
-			case 4: // Lohtman Renner Spacial Semantics
+			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
 			break;
 			case 5: // Genette Narrative Discourse
