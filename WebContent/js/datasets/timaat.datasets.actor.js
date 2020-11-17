@@ -4979,19 +4979,6 @@
 
 		_actorRemoved: async function(actor) {
 			console.log("TCL: actor", actor);
-			// remove all citizenships from actorPerson
-			// TODO check if this can be solved via CASCADE
-			if (actor.model.actorType.actorTypeTranslations[0].type == "person") {
-				try {
-					var i = 0;
-					for (; i < actor.model.actorPerson.citizenships.length; i++ ) { // remove obsolete citizenships
-						TIMAAT.ActorService.removeCitizenship(actor.model.actorPerson.citizenships[i]);
-						actor.model.actorPerson.citizenships.splice(i,1);
-					}
-				} catch (error) {
-					console.log("error:", error);
-				}
-			}
 			if (actor.model.actorType.actorTypeTranslations[0].type == "collective") {
 				try {
 					// delete actorPersonIsMemberOfActorCollectives information from currently loaded actorPersons // TODO
