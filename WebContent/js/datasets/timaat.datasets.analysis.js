@@ -74,16 +74,16 @@
           case 2: // Greimas Actantial Model //* won't be implemented
 
           break;
-          case 3: // Van Sijll Cinematic Storytelling
+          case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
 
           break;
           case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
           break;
-          case 5: // Genette Narrative Discourse
+          case 5: // Genette Narrative Discourse //* won't be implemented
 
           break;
-          case 6: // Stanzel Narrative Situations
+          case 6: // Stanzel Narrative Situations //* won't be implemented
 
           break;
           case 7: // Color Temperature
@@ -135,12 +135,12 @@
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
-          case 18: // Zelizer Beese Voice of the Visual
-            analysisMethodId = Number($('#zelizer-beese-voice-of-the-visual-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+          case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
+            // analysisMethodId = Number($('#zelizer-beese-voice-of-the-visual-select-dropdown').val());
+            // analysisModel.analysisMethod.id = analysisMethodId; 
+            // analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
-          case 19: // Barthes Rhetoric of the Image
+          case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
           break;
           case 20: // Sound Effect Descriptive
@@ -506,16 +506,16 @@
         case 2: // Greimas Actantial Model //* won't be implemented
 
         break;
-        case 3: // Van Sijll Cinematic Storytelling
+        case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
 
         break;
         case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
         break;
-        case 5: // Genette Narrative Discourse
+        case 5: // Genette Narrative Discourse //* won't be implemented
 
         break;
-        case 6: // Stanzel Narrative Situations
+        case 6: // Stanzel Narrative Situations //* won't be implemented
 
         break;
         case 7: // Color Temperature
@@ -695,28 +695,28 @@
             `</form>`);
           $('#camera-handling-select-dropdown').select2(select2Options);
         break;
-        case 18: // Zelizer Beese Voice of the Visual
-          $('#analysisAddLabel').text('Choose Voice of the Visual (Zelizer & Beese)');
-          modal.find('.modal-body').html(`
-            <form role="form" id="newAnalysisMethodModalForm">
-              <div class="form-group">
-                <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
-                <div class="col-md-12">
-                  <select class="form-control form-control-md select-dropdown"
-                          style="width:100%;"
-                          id="zelizer-beese-voice-of-the-visual-select-dropdown"
-                          name="analysisMethodId"
-                          data-role="analysisMethodId"
-                          data-placeholder="Select voice of the visual"
-                          required>
-                  </select>
-              </div>
-            </div>`+
-            remarkHtml +
-          `</form>`);
-          $('#zelizer-beese-voice-of-the-visual-select-dropdown').select2(select2Options);
+        case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
+          // $('#analysisAddLabel').text('Choose Voice of the Visual (Zelizer & Beese)');
+          // modal.find('.modal-body').html(`
+          //   <form role="form" id="newAnalysisMethodModalForm">
+          //     <div class="form-group">
+          //       <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
+          //       <div class="col-md-12">
+          //         <select class="form-control form-control-md select-dropdown"
+          //                 style="width:100%;"
+          //                 id="zelizer-beese-voice-of-the-visual-select-dropdown"
+          //                 name="analysisMethodId"
+          //                 data-role="analysisMethodId"
+          //                 data-placeholder="Select voice of the visual"
+          //                 required>
+          //         </select>
+          //     </div>
+          //   </div>`+
+          //   remarkHtml +
+          // `</form>`);
+          // $('#zelizer-beese-voice-of-the-visual-select-dropdown').select2(select2Options);
         break;
-        case 19: // Barthes Rhetoric of the Image
+        case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
         break;
         case 20: // Sound Effect Descriptive
@@ -1171,16 +1171,16 @@
         case 2: // Greimas Actantial Model //* won't be implemented
 
         break;
-        case 3: // Van Sijll Cinematic Storytelling
+        case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
 
         break;
         case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
         break;
-        case 5: // Genette Narrative Discourse
+        case 5: // Genette Narrative Discourse //* won't be implemented
 
         break;
-        case 6: // Stanzel Narrative Situations
+        case 6: // Stanzel Narrative Situations //* won't be implemented
 
         break;
         case 7: // Color Temperature
@@ -1252,14 +1252,14 @@
               <td>`+data.analysisMethod.cameraHandling.cameraHandlingTranslations[0].type+`</td>
             </tr>`;
         break;
-        case 18: // Zelizer Beese Voice of the Visual
-          details +=
-            `<tr>
-              <td>Voice of the Visual (Zelizer & Beese):</td>
-              <td>`+data.analysisMethod.zelizerBeeseVoiceOfTheVisual.zelizerBeeseVoiceOfTheVisualTranslations[0].type+`</td>
-            </tr>`;
+        case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
+          // details +=
+          //   `<tr>
+          //     <td>Voice of the Visual (Zelizer & Beese):</td>
+          //     <td>`+data.analysisMethod.zelizerBeeseVoiceOfTheVisual.zelizerBeeseVoiceOfTheVisualTranslations[0].type+`</td>
+          //   </tr>`;
         break;
-        case 19: // Barthes Rhetoric of the Image
+        case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
         break;
         case 20: // Sound Effect Descriptive
@@ -1572,7 +1572,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,18,20,22,23,25].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,13,14,17,20,22,23,25].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

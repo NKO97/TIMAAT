@@ -28,11 +28,6 @@ public class Language implements Serializable {
 
 	private String name;
 
-	// //bi-directional many-to-one association to ActantialModelFacetTypeTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<ActantialModelFacetTypeTranslation> actantialModelFacetTypeTranslations;
-
 	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -153,11 +148,6 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<ChangeInTempoTranslation> changeInTempoTranslations;
 
-	// //bi-directional many-to-one association to CinematicStorytellingConventionTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<CinematicStorytellingConventionTranslation> cinematicStorytellingConventionTranslations;
-
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -218,16 +208,6 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<EventTypeTranslation> eventTypeTranslations;
 
-	// //bi-directional many-to-one association to FrequencyOfEventsTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<FrequencyOfEventsTranslation> frequencyOfEventsTranslations;
-
-	// //bi-directional many-to-one association to GreimasActantialModelTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<GreimasActantialModelTranslation> greimasActantialModelTranslations;
-
 	//bi-directional many-to-one association to InstrumentSubtypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -247,11 +227,6 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<LightingTranslation> LightingTranslations;
-
-	// //bi-directional many-to-one association to LevelOfConcreteActionTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<LevelOfConcreteActionTranslation> levelOfConcreteActionTranslations;
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="language")
@@ -322,36 +297,6 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<MusicalKeyTranslation> musicalKeyTranslations;
-
-	// //bi-directional many-to-one association to NarrativeDistanceTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarrativeDistanceTranslation> narrativeDistanceTranslations;
-
-	// //bi-directional many-to-one association to NarrativeFocalizationTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarrativeFocalizationTranslation> narrativeFocalizationTranslations;
-
-	// //bi-directional many-to-one association to NarrativeLevelTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarrativeLevelTranslation> narrativeLevelTranslations;
-
-	// //bi-directional many-to-one association to NarrativeMovementTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarrativeMovementTranslation> narrativeMovementTranslations;
-
-	// //bi-directional many-to-one association to NarrativeSituationTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarrativeSituationTranslation> narrativeSituationTranslations;
-
-	// //bi-directional many-to-one association to NarratorRelationshipTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<NarratorRelationshipTranslation> narratorRelationshipTranslations;
 
 	// //bi-directional many-to-one association to NoiseSubtypeTranslation
 	// @OneToMany(mappedBy="language")
@@ -458,16 +403,6 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<SoundEffectTypeTranslation> soundEffectTypeTranslations;
 
-	// //bi-directional many-to-one association to SpatialSemanticsTypeActorPersonTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations;
-
-	// //bi-directional many-to-one association to SpatialSemanticsTypeSpaceTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<SpatialSemanticsTypeSpaceTranslation> spatialSemanticsTypeSpaceTranslations;
-
 	//bi-directional many-to-one association to SvgShapeTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -478,30 +413,15 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<TempoMarkingTranslation> tempoMarkingTranslations;
 
-	// //bi-directional many-to-one association to TemporalOrderTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<TemporalOrderTranslation> temporalOrderTranslations;
-
 	//bi-directional many-to-one association to TerritoryTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<TerritoryTranslation> territoryTranslations;
 
-	// //bi-directional many-to-one association to TimeOfTheNarratingTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<TimeOfTheNarratingTranslation> timeOfTheNarratingTranslations;
-
 	//bi-directional many-to-one association to Title
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<Title> titles;
-
-	// //bi-directional many-to-one association to VanSijllCinematicStorytellingTranslation
-	// @OneToMany(mappedBy="language")
-	// @JsonIgnore
-	// private List<VanSijllCinematicStorytellingTranslation> vanSijllCinematicStorytellingTranslations;
 
 	//bi-directional many-to-one association to VoiceTypeTranslation
 	@OneToMany(mappedBy="language")
@@ -512,11 +432,6 @@ public class Language implements Serializable {
 	// @OneToMany(mappedBy="language")
 	// @JsonIgnore
 	// private List<WorkAnalysisListTranslation> workAnalysisListTranslations;
-
-	//bi-directional many-to-one association to ZelizerBeeseVoiceOfTheVisualTranslation
-	@OneToMany(mappedBy="language")
-	@JsonIgnore
-	private List<ZelizerBeeseVoiceOfTheVisualTranslation> zelizerBeeseVoiceOfTheVisualTranslations;
 
 	public Language() {
 	}
@@ -552,28 +467,6 @@ public class Language implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	// public List<ActantialModelFacetTypeTranslation> getActantialModelFacetTypeTranslations() {
-	// 	return this.actantialModelFacetTypeTranslations;
-	// }
-
-	// public void setActantialModelFacetTypeTranslations(List<ActantialModelFacetTypeTranslation> actantialModelFacetTypeTranslations) {
-	// 	this.actantialModelFacetTypeTranslations = actantialModelFacetTypeTranslations;
-	// }
-
-	// public ActantialModelFacetTypeTranslation addActantialModelFacetTypeTranslation(ActantialModelFacetTypeTranslation actantialModelFacetTypeTranslation) {
-	// 	getActantialModelFacetTypeTranslations().add(actantialModelFacetTypeTranslation);
-	// 	actantialModelFacetTypeTranslation.setLanguage(this);
-
-	// 	return actantialModelFacetTypeTranslation;
-	// }
-
-	// public ActantialModelFacetTypeTranslation removeActantialModelFacetTypeTranslation(ActantialModelFacetTypeTranslation actantialModelFacetTypeTranslation) {
-	// 	getActantialModelFacetTypeTranslations().remove(actantialModelFacetTypeTranslation);
-	// 	actantialModelFacetTypeTranslation.setLanguage(null);
-
-	// 	return actantialModelFacetTypeTranslation;
-	// }
 
 	public List<ActorActorRelationshipTypeTranslation> getActorActorRelationshipTypeTranslations() {
 		return this.actorActorRelationshipTypeTranslations;
@@ -1103,28 +996,6 @@ public class Language implements Serializable {
 		return changeInTempoTranslation;
 	}
 
-	// public List<CinematicStorytellingConventionTranslation> getCinematicStorytellingConventionTranslations() {
-	// 	return this.cinematicStorytellingConventionTranslations;
-	// }
-
-	// public void setCinematicStorytellingConventionTranslations(List<CinematicStorytellingConventionTranslation> cinematicStorytellingConventionTranslations) {
-	// 	this.cinematicStorytellingConventionTranslations = cinematicStorytellingConventionTranslations;
-	// }
-
-	// public CinematicStorytellingConventionTranslation addCinematicStorytellingConventionTranslation(CinematicStorytellingConventionTranslation cinematicStorytellingConventionTranslation) {
-	// 	getCinematicStorytellingConventionTranslations().add(cinematicStorytellingConventionTranslation);
-	// 	cinematicStorytellingConventionTranslation.setLanguage(this);
-
-	// 	return cinematicStorytellingConventionTranslation;
-	// }
-
-	// public CinematicStorytellingConventionTranslation removeCinematicStorytellingConventionTranslation(CinematicStorytellingConventionTranslation cinematicStorytellingConventionTranslation) {
-	// 	getCinematicStorytellingConventionTranslations().remove(cinematicStorytellingConventionTranslation);
-	// 	cinematicStorytellingConventionTranslation.setLanguage(null);
-
-	// 	return cinematicStorytellingConventionTranslation;
-	// }
-
 	public List<CitizenshipTranslation> getCitizenshipTranslations() {
 		return this.citizenshipTranslations;
 	}
@@ -1389,50 +1260,6 @@ public class Language implements Serializable {
 		return eventTypeTranslation;
 	}
 
-	// public List<FrequencyOfEventsTranslation> getFrequencyOfEventsTranslations() {
-	// 	return this.frequencyOfEventsTranslations;
-	// }
-
-	// public void setFrequencyOfEventsTranslations(List<FrequencyOfEventsTranslation> frequencyOfEventsTranslations) {
-	// 	this.frequencyOfEventsTranslations = frequencyOfEventsTranslations;
-	// }
-
-	// public FrequencyOfEventsTranslation addFrequencyOfEventsTranslation(FrequencyOfEventsTranslation frequencyOfEventsTranslation) {
-	// 	getFrequencyOfEventsTranslations().add(frequencyOfEventsTranslation);
-	// 	frequencyOfEventsTranslation.setLanguage(this);
-
-	// 	return frequencyOfEventsTranslation;
-	// }
-
-	// public FrequencyOfEventsTranslation removeFrequencyOfEventsTranslation(FrequencyOfEventsTranslation frequencyOfEventsTranslation) {
-	// 	getFrequencyOfEventsTranslations().remove(frequencyOfEventsTranslation);
-	// 	frequencyOfEventsTranslation.setLanguage(null);
-
-	// 	return frequencyOfEventsTranslation;
-	// }
-
-	// public List<GreimasActantialModelTranslation> getGreimasActantialModelTranslations() {
-	// 	return this.greimasActantialModelTranslations;
-	// }
-
-	// public void setGreimasActantialModelTranslations(List<GreimasActantialModelTranslation> greimasActantialModelTranslations) {
-	// 	this.greimasActantialModelTranslations = greimasActantialModelTranslations;
-	// }
-
-	// public GreimasActantialModelTranslation addGreimasActantialModelTranslation(GreimasActantialModelTranslation greimasActantialModelTranslation) {
-	// 	getGreimasActantialModelTranslations().add(greimasActantialModelTranslation);
-	// 	greimasActantialModelTranslation.setLanguage(this);
-
-	// 	return greimasActantialModelTranslation;
-	// }
-
-	// public GreimasActantialModelTranslation removeGreimasActantialModelTranslation(GreimasActantialModelTranslation greimasActantialModelTranslation) {
-	// 	getGreimasActantialModelTranslations().remove(greimasActantialModelTranslation);
-	// 	greimasActantialModelTranslation.setLanguage(null);
-
-	// 	return greimasActantialModelTranslation;
-	// }
-
 	public List<InstrumentSubtypeTranslation> getInstrumentSubtypeTranslations() {
 		return this.instrumentSubtypeTranslations;
 	}
@@ -1498,28 +1325,6 @@ public class Language implements Serializable {
 
 		return jinsTranslation;
 	}
-
-	// public List<LevelOfConcreteActionTranslation> getLevelOfConcreteActionTranslations() {
-	// 	return this.levelOfConcreteActionTranslations;
-	// }
-
-	// public void setLevelOfConcreteActionTranslations(List<LevelOfConcreteActionTranslation> levelOfConcreteActionTranslations) {
-	// 	this.levelOfConcreteActionTranslations = levelOfConcreteActionTranslations;
-	// }
-
-	// public LevelOfConcreteActionTranslation addLevelOfConcreteActionTranslation(LevelOfConcreteActionTranslation levelOfConcreteActionTranslation) {
-	// 	getLevelOfConcreteActionTranslations().add(levelOfConcreteActionTranslation);
-	// 	levelOfConcreteActionTranslation.setLanguage(this);
-
-	// 	return levelOfConcreteActionTranslation;
-	// }
-
-	// public LevelOfConcreteActionTranslation removeLevelOfConcreteActionTranslation(LevelOfConcreteActionTranslation levelOfConcreteActionTranslation) {
-	// 	getLevelOfConcreteActionTranslations().remove(levelOfConcreteActionTranslation);
-	// 	levelOfConcreteActionTranslation.setLanguage(null);
-
-	// 	return levelOfConcreteActionTranslation;
-	// }
 
 	public List<LocationTranslation> getLocationTranslations() {
 		return this.locationTranslations;
@@ -1828,138 +1633,6 @@ public class Language implements Serializable {
 
 		return musicalKeyTranslation;
 	}
-
-	// public List<NarrativeDistanceTranslation> getNarrativeDistanceTranslations() {
-	// 	return this.narrativeDistanceTranslations;
-	// }
-
-	// public void setNarrativeDistanceTranslations(List<NarrativeDistanceTranslation> narrativeDistanceTranslations) {
-	// 	this.narrativeDistanceTranslations = narrativeDistanceTranslations;
-	// }
-
-	// public NarrativeDistanceTranslation addNarrativeDistanceTranslation(NarrativeDistanceTranslation narrativeDistanceTranslation) {
-	// 	getNarrativeDistanceTranslations().add(narrativeDistanceTranslation);
-	// 	narrativeDistanceTranslation.setLanguage(this);
-
-	// 	return narrativeDistanceTranslation;
-	// }
-
-	// public NarrativeDistanceTranslation removeNarrativeDistanceTranslation(NarrativeDistanceTranslation narrativeDistanceTranslation) {
-	// 	getNarrativeDistanceTranslations().remove(narrativeDistanceTranslation);
-	// 	narrativeDistanceTranslation.setLanguage(null);
-
-	// 	return narrativeDistanceTranslation;
-	// }
-
-	// public List<NarrativeFocalizationTranslation> getNarrativeFocalizationTranslations() {
-	// 	return this.narrativeFocalizationTranslations;
-	// }
-
-	// public void setNarrativeFocalizationTranslations(List<NarrativeFocalizationTranslation> narrativeFocalizationTranslations) {
-	// 	this.narrativeFocalizationTranslations = narrativeFocalizationTranslations;
-	// }
-
-	// public NarrativeFocalizationTranslation addNarrativeFocalizationTranslation(NarrativeFocalizationTranslation narrativeFocalizationTranslation) {
-	// 	getNarrativeFocalizationTranslations().add(narrativeFocalizationTranslation);
-	// 	narrativeFocalizationTranslation.setLanguage(this);
-
-	// 	return narrativeFocalizationTranslation;
-	// }
-
-	// public NarrativeFocalizationTranslation removeNarrativeFocalizationTranslation(NarrativeFocalizationTranslation narrativeFocalizationTranslation) {
-	// 	getNarrativeFocalizationTranslations().remove(narrativeFocalizationTranslation);
-	// 	narrativeFocalizationTranslation.setLanguage(null);
-
-	// 	return narrativeFocalizationTranslation;
-	// }
-
-	// public List<NarrativeLevelTranslation> getNarrativeLevelTranslations() {
-	// 	return this.narrativeLevelTranslations;
-	// }
-
-	// public void setNarrativeLevelTranslations(List<NarrativeLevelTranslation> narrativeLevelTranslations) {
-	// 	this.narrativeLevelTranslations = narrativeLevelTranslations;
-	// }
-
-	// public NarrativeLevelTranslation addNarrativeLevelTranslation(NarrativeLevelTranslation narrativeLevelTranslation) {
-	// 	getNarrativeLevelTranslations().add(narrativeLevelTranslation);
-	// 	narrativeLevelTranslation.setLanguage(this);
-
-	// 	return narrativeLevelTranslation;
-	// }
-
-	// public NarrativeLevelTranslation removeNarrativeLevelTranslation(NarrativeLevelTranslation narrativeLevelTranslation) {
-	// 	getNarrativeLevelTranslations().remove(narrativeLevelTranslation);
-	// 	narrativeLevelTranslation.setLanguage(null);
-
-	// 	return narrativeLevelTranslation;
-	// }
-
-	// public List<NarrativeMovementTranslation> getNarrativeMovementTranslations() {
-	// 	return this.narrativeMovementTranslations;
-	// }
-
-	// public void setNarrativeMovementTranslations(List<NarrativeMovementTranslation> narrativeMovementTranslations) {
-	// 	this.narrativeMovementTranslations = narrativeMovementTranslations;
-	// }
-
-	// public NarrativeMovementTranslation addNarrativeMovementTranslation(NarrativeMovementTranslation narrativeMovementTranslation) {
-	// 	getNarrativeMovementTranslations().add(narrativeMovementTranslation);
-	// 	narrativeMovementTranslation.setLanguage(this);
-
-	// 	return narrativeMovementTranslation;
-	// }
-
-	// public NarrativeMovementTranslation removeNarrativeMovementTranslation(NarrativeMovementTranslation narrativeMovementTranslation) {
-	// 	getNarrativeMovementTranslations().remove(narrativeMovementTranslation);
-	// 	narrativeMovementTranslation.setLanguage(null);
-
-	// 	return narrativeMovementTranslation;
-	// }
-
-	// public List<NarrativeSituationTranslation> getNarrativeSituationTranslations() {
-	// 	return this.narrativeSituationTranslations;
-	// }
-
-	// public void setNarrativeSituationTranslations(List<NarrativeSituationTranslation> narrativeSituationTranslations) {
-	// 	this.narrativeSituationTranslations = narrativeSituationTranslations;
-	// }
-
-	// public NarrativeSituationTranslation addNarrativeSituationTranslation(NarrativeSituationTranslation narrativeSituationTranslation) {
-	// 	getNarrativeSituationTranslations().add(narrativeSituationTranslation);
-	// 	narrativeSituationTranslation.setLanguage(this);
-
-	// 	return narrativeSituationTranslation;
-	// }
-
-	// public NarrativeSituationTranslation removeNarrativeSituationTranslation(NarrativeSituationTranslation narrativeSituationTranslation) {
-	// 	getNarrativeSituationTranslations().remove(narrativeSituationTranslation);
-	// 	narrativeSituationTranslation.setLanguage(null);
-
-	// 	return narrativeSituationTranslation;
-	// }
-
-	// public List<NarratorRelationshipTranslation> getNarratorRelationshipTranslations() {
-	// 	return this.narratorRelationshipTranslations;
-	// }
-
-	// public void setNarratorRelationshipTranslations(List<NarratorRelationshipTranslation> narratorRelationshipTranslations) {
-	// 	this.narratorRelationshipTranslations = narratorRelationshipTranslations;
-	// }
-
-	// public NarratorRelationshipTranslation addNarratorRelationshipTranslation(NarratorRelationshipTranslation narratorRelationshipTranslation) {
-	// 	getNarratorRelationshipTranslations().add(narratorRelationshipTranslation);
-	// 	narratorRelationshipTranslation.setLanguage(this);
-
-	// 	return narratorRelationshipTranslation;
-	// }
-
-	// public NarratorRelationshipTranslation removeNarratorRelationshipTranslation(NarratorRelationshipTranslation narratorRelationshipTranslation) {
-	// 	getNarratorRelationshipTranslations().remove(narratorRelationshipTranslation);
-	// 	narratorRelationshipTranslation.setLanguage(null);
-
-	// 	return narratorRelationshipTranslation;
-	// }
 
 	// public List<NoiseSubtypeTranslation> getNoiseSubtypeTranslations() {
 	// 	return this.noiseSubtypeTranslations;
@@ -2423,50 +2096,6 @@ public class Language implements Serializable {
 	// 	return soundEffectTypeTranslation;
 	// }
 
-	// public List<SpatialSemanticsTypeActorPersonTranslation> getSpatialSemanticsTypeActorPersonTranslations() {
-	// 	return this.spatialSemanticsTypeActorPersonTranslations;
-	// }
-
-	// public void setSpatialSemanticsTypeActorPersonTranslations(List<SpatialSemanticsTypeActorPersonTranslation> spatialSemanticsTypeActorPersonTranslations) {
-	// 	this.spatialSemanticsTypeActorPersonTranslations = spatialSemanticsTypeActorPersonTranslations;
-	// }
-
-	// public SpatialSemanticsTypeActorPersonTranslation addSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
-	// 	getSpatialSemanticsTypeActorPersonTranslations().add(spatialSemanticsTypeActorPersonTranslation);
-	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(this);
-
-	// 	return spatialSemanticsTypeActorPersonTranslation;
-	// }
-
-	// public SpatialSemanticsTypeActorPersonTranslation removeSpatialSemanticsTypeActorPersonTranslation(SpatialSemanticsTypeActorPersonTranslation spatialSemanticsTypeActorPersonTranslation) {
-	// 	getSpatialSemanticsTypeActorPersonTranslations().remove(spatialSemanticsTypeActorPersonTranslation);
-	// 	spatialSemanticsTypeActorPersonTranslation.setLanguage(null);
-
-	// 	return spatialSemanticsTypeActorPersonTranslation;
-	// }
-
-	// public List<SpatialSemanticsTypeSpaceTranslation> getSpatialSemanticsTypeSpaceTranslations() {
-	// 	return this.spatialSemanticsTypeSpaceTranslations;
-	// }
-
-	// public void setSpatialSemanticsTypeSpaceTranslations(List<SpatialSemanticsTypeSpaceTranslation> spatialSemanticsTypeSpaceTranslations) {
-	// 	this.spatialSemanticsTypeSpaceTranslations = spatialSemanticsTypeSpaceTranslations;
-	// }
-
-	// public SpatialSemanticsTypeSpaceTranslation addSpatialSemanticsTypeSpaceTranslation(SpatialSemanticsTypeSpaceTranslation spatialSemanticsTypeSpaceTranslation) {
-	// 	getSpatialSemanticsTypeSpaceTranslations().add(spatialSemanticsTypeSpaceTranslation);
-	// 	spatialSemanticsTypeSpaceTranslation.setLanguage(this);
-
-	// 	return spatialSemanticsTypeSpaceTranslation;
-	// }
-
-	// public SpatialSemanticsTypeSpaceTranslation removeSpatialSemanticsTypeSpaceTranslation(SpatialSemanticsTypeSpaceTranslation spatialSemanticsTypeSpaceTranslation) {
-	// 	getSpatialSemanticsTypeSpaceTranslations().remove(spatialSemanticsTypeSpaceTranslation);
-	// 	spatialSemanticsTypeSpaceTranslation.setLanguage(null);
-
-	// 	return spatialSemanticsTypeSpaceTranslation;
-	// }
-
 	public List<SvgShapeTypeTranslation> getSvgShapeTypeTranslations() {
 		return this.svgShapeTypeTranslations;
 	}
@@ -2511,28 +2140,6 @@ public class Language implements Serializable {
 		return tempoMarkingTranslation;
 	}
 
-	// public List<TemporalOrderTranslation> getTemporalOrderTranslations() {
-	// 	return this.temporalOrderTranslations;
-	// }
-
-	// public void setTemporalOrderTranslations(List<TemporalOrderTranslation> temporalOrderTranslations) {
-	// 	this.temporalOrderTranslations = temporalOrderTranslations;
-	// }
-
-	// public TemporalOrderTranslation addTemporalOrderTranslation(TemporalOrderTranslation temporalOrderTranslation) {
-	// 	getTemporalOrderTranslations().add(temporalOrderTranslation);
-	// 	temporalOrderTranslation.setLanguage(this);
-
-	// 	return temporalOrderTranslation;
-	// }
-
-	// public TemporalOrderTranslation removeTemporalOrderTranslation(TemporalOrderTranslation temporalOrderTranslation) {
-	// 	getTemporalOrderTranslations().remove(temporalOrderTranslation);
-	// 	temporalOrderTranslation.setLanguage(null);
-
-	// 	return temporalOrderTranslation;
-	// }
-
 	public List<TerritoryTranslation> getTerritoryTranslations() {
 		return this.territoryTranslations;
 	}
@@ -2555,28 +2162,6 @@ public class Language implements Serializable {
 		return territoryTranslation;
 	}
 
-	// public List<TimeOfTheNarratingTranslation> getTimeOfTheNarratingTranslations() {
-	// 	return this.timeOfTheNarratingTranslations;
-	// }
-
-	// public void setTimeOfTheNarratingTranslations(List<TimeOfTheNarratingTranslation> timeOfTheNarratingTranslations) {
-	// 	this.timeOfTheNarratingTranslations = timeOfTheNarratingTranslations;
-	// }
-
-	// public TimeOfTheNarratingTranslation addTimeOfTheNarratingTranslation(TimeOfTheNarratingTranslation timeOfTheNarratingTranslation) {
-	// 	getTimeOfTheNarratingTranslations().add(timeOfTheNarratingTranslation);
-	// 	timeOfTheNarratingTranslation.setLanguage(this);
-
-	// 	return timeOfTheNarratingTranslation;
-	// }
-
-	// public TimeOfTheNarratingTranslation removeTimeOfTheNarratingTranslation(TimeOfTheNarratingTranslation timeOfTheNarratingTranslation) {
-	// 	getTimeOfTheNarratingTranslations().remove(timeOfTheNarratingTranslation);
-	// 	timeOfTheNarratingTranslation.setLanguage(null);
-
-	// 	return timeOfTheNarratingTranslation;
-	// }
-
 	public List<Title> getTitles() {
 		return this.titles;
 	}
@@ -2598,28 +2183,6 @@ public class Language implements Serializable {
 
 		return title;
 	}
-
-	// public List<VanSijllCinematicStorytellingTranslation> getVanSijllCinematicStorytellingTranslations() {
-	// 	return this.vanSijllCinematicStorytellingTranslations;
-	// }
-
-	// public void setVanSijllCinematicStorytellingTranslations(List<VanSijllCinematicStorytellingTranslation> vanSijllCinematicStorytellingTranslations) {
-	// 	this.vanSijllCinematicStorytellingTranslations = vanSijllCinematicStorytellingTranslations;
-	// }
-
-	// public VanSijllCinematicStorytellingTranslation addVanSijllCinematicStorytellingTranslation(VanSijllCinematicStorytellingTranslation vanSijllCinematicStorytellingTranslation) {
-	// 	getVanSijllCinematicStorytellingTranslations().add(vanSijllCinematicStorytellingTranslation);
-	// 	vanSijllCinematicStorytellingTranslation.setLanguage(this);
-
-	// 	return vanSijllCinematicStorytellingTranslation;
-	// }
-
-	// public VanSijllCinematicStorytellingTranslation removeVanSijllCinematicStorytellingTranslation(VanSijllCinematicStorytellingTranslation vanSijllCinematicStorytellingTranslation) {
-	// 	getVanSijllCinematicStorytellingTranslations().remove(vanSijllCinematicStorytellingTranslation);
-	// 	vanSijllCinematicStorytellingTranslation.setLanguage(null);
-
-	// 	return vanSijllCinematicStorytellingTranslation;
-	// }
 
 	public List<VoiceTypeTranslation> getVoiceTypeTranslations() {
 		return this.voiceTypeTranslations;
@@ -2664,27 +2227,5 @@ public class Language implements Serializable {
 
 	// 	return workAnalysisListTranslation;
 	// }
-
-	public List<ZelizerBeeseVoiceOfTheVisualTranslation> getZelizerBeeseVoiceOfTheVisualTranslations() {
-		return this.zelizerBeeseVoiceOfTheVisualTranslations;
-	}
-
-	public void setZelizerBeeseVoiceOfTheVisualTranslations(List<ZelizerBeeseVoiceOfTheVisualTranslation> zelizerBeeseVoiceOfTheVisualTranslations) {
-		this.zelizerBeeseVoiceOfTheVisualTranslations = zelizerBeeseVoiceOfTheVisualTranslations;
-	}
-
-	public ZelizerBeeseVoiceOfTheVisualTranslation addZelizerBeeseVoiceOfTheVisualTranslation(ZelizerBeeseVoiceOfTheVisualTranslation zelizerBeeseVoiceOfTheVisualTranslation) {
-		getZelizerBeeseVoiceOfTheVisualTranslations().add(zelizerBeeseVoiceOfTheVisualTranslation);
-		zelizerBeeseVoiceOfTheVisualTranslation.setLanguage(this);
-
-		return zelizerBeeseVoiceOfTheVisualTranslation;
-	}
-
-	public ZelizerBeeseVoiceOfTheVisualTranslation removeZelizerBeeseVoiceOfTheVisualTranslation(ZelizerBeeseVoiceOfTheVisualTranslation zelizerBeeseVoiceOfTheVisualTranslation) {
-		getZelizerBeeseVoiceOfTheVisualTranslations().remove(zelizerBeeseVoiceOfTheVisualTranslation);
-		zelizerBeeseVoiceOfTheVisualTranslation.setLanguage(null);
-
-		return zelizerBeeseVoiceOfTheVisualTranslation;
-	}
 
 }

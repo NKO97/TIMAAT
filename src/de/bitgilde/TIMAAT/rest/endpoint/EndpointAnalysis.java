@@ -168,16 +168,16 @@ public class EndpointAnalysis {
 			case 2: // Greimas Actantial Model //* won't be implemented
 
 			break;
-			case 3: // Van Sijll Cinematic Storytelling
+			case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
 
 			break;
 			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
 			break;
-			case 5: // Genette Narrative Discourse
+			case 5: // Genette Narrative Discourse //* won't be implemented
 
 			break;
-			case 6: // Stanzel Narrative Situations
+			case 6: // Stanzel Narrative Situations //* won't be implemented
 
 			break;
 			case 7: // Color temperature
@@ -229,12 +229,12 @@ public class EndpointAnalysis {
 					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraHandling().getCameraHandlingTranslations().get(0).getType()));
 				}
 			break;
-			case 18: // Zelizer Beese Voice of the Visual
-				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getZelizerBeeseVoiceOfTheVisual().getZelizerBeeseVoiceOfTheVisualTranslations().get(0).getType()));
-				}
+			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
+				// for (AnalysisMethod analysisMethod : analysisMethodList) {
+				// 	analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getZelizerBeeseVoiceOfTheVisual().getZelizerBeeseVoiceOfTheVisualTranslations().get(0).getType()));
+				// }
 			break;
-			case 19: // Barthes Rhetoric of the Image
+			case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
 			break;
 			case 20: // Sound Effect Descriptive
@@ -323,16 +323,16 @@ public class EndpointAnalysis {
 			case 2: // Greimas Actantial Model //* won't be implemented
 
 			break;
-			case 3: // Van Sijll Cinematic Storytelling
+			case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
 
 			break;
 			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
 
 			break;
-			case 5: // Genette Narrative Discourse
+			case 5: // Genette Narrative Discourse //* won't be implemented
 
 			break;
-			case 6: // Stanzel Narrative Situations
+			case 6: // Stanzel Narrative Situations //* won't be implemented
 
 			break;
 			case 7: // Color temperature
@@ -360,9 +360,9 @@ public class EndpointAnalysis {
 			break;
 			case 17: // Camera Handling
 			break;
-			case 18: // Zelizer Beese Voice of the Visual
+			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
 			break;
-			case 19: // Barthes Rhetoric of the Image
+			case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
 			break;
 			case 20: // Sound Effect Descriptive

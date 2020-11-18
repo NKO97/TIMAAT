@@ -202,8 +202,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Voice</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceTypeTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisual</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ZelizerBeeseVoiceOfTheVisualTranslation</class>
 		<properties>
 			<property name="eclipselink.ddl-generation.output-mode" value="database"/>
 			<property name="autoReconnect" value="true"/>

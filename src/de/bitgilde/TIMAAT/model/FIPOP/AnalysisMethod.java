@@ -52,10 +52,6 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private AnalysisVoice analysisVoice;
 
-	// //bi-directional one-to-one association to BarthesRhetoricOfTheImage
-	// @OneToOne(mappedBy="analysisMethod")
-	// private BarthesRhetoricOfTheImage barthesRhetoricOfTheImage;
-
 	//bi-directional one-to-one association to CameraAxisOfAction
 	@OneToOne(mappedBy="analysisMethod")
 	private CameraAxisOfAction cameraAxisOfAction;
@@ -100,21 +96,9 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective;
 
-	// //bi-directional one-to-one association to GenetteNarrativeDiscourse
-	// @OneToOne(mappedBy="analysisMethod")
-	// private GenetteNarrativeDiscourse genetteNarrativeDiscourse;
-
-	// //bi-directional one-to-one association to GreimasActantialModel
-	// @OneToOne(mappedBy="analysisMethod")
-	// private GreimasActantialModel greimasActantialModel;
-
 	//bi-directional one-to-one association to ColorTemperature
 	@OneToOne(mappedBy="analysisMethod")
 	private Lighting lighting;
-
-	// //bi-directional one-to-one association to LotmanRennerSpatialSemantics
-	// @OneToOne(mappedBy="analysisMethod")
-	// private LotmanRennerSpatialSemantics lotmanRennerSpatialSemantic;
 
 	//bi-directional one-to-one association to MartinezScheffelUnreliableNarration
 	@OneToOne(mappedBy="analysisMethod")
@@ -124,17 +108,6 @@ public class AnalysisMethod implements Serializable {
 	@OneToOne(mappedBy="analysisMethod")
 	private SoundEffectDescriptive soundEffectDescriptive;
 
-	// //bi-directional one-to-one association to StanzelNarrativeSituation
-	// @OneToOne(mappedBy="analysisMethod")
-	// private StanzelNarrativeSituation stanzelNarrativeSituation;
-
-	// //bi-directional one-to-one association to VanSijllCinematicStorytelling
-	// @OneToOne(mappedBy="analysisMethod")
-	// private VanSijllCinematicStorytelling vanSijllCinematicStorytelling;
-
-	//bi-directional one-to-one association to ZelizerBeeseVoiceOfTheVisual
-	@OneToOne(mappedBy="analysisMethod")
-	private ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual;
 
 	public AnalysisMethod() {
 	}
@@ -215,14 +188,6 @@ public class AnalysisMethod implements Serializable {
 
 	// public void setAnalysisVoice(AnalysisVoice analysisVoice) {
 	// 	this.analysisVoice = analysisVoice;
-	// }
-
-	// public BarthesRhetoricOfTheImage getBarthesRhetoricOfTheImage() {
-	// 	return this.barthesRhetoricOfTheImage;
-	// }
-
-	// public void setBarthesRhetoricOfTheImage(BarthesRhetoricOfTheImage barthesRhetoricOfTheImage) {
-	// 	this.barthesRhetoricOfTheImage = barthesRhetoricOfTheImage;
 	// }
 
 	public CameraAxisOfAction getCameraAxisOfAction() {
@@ -313,22 +278,6 @@ public class AnalysisMethod implements Serializable {
 	// 	this.conceptCameraPositionAndPerspective = conceptCameraPositionAndPerspective;
 	// }
 
-	// public GenetteNarrativeDiscourse getGenetteNarrativeDiscourse() {
-	// 	return this.genetteNarrativeDiscourse;
-	// }
-
-	// public void setGenetteNarrativeDiscourse(GenetteNarrativeDiscourse genetteNarrativeDiscourse) {
-	// 	this.genetteNarrativeDiscourse = genetteNarrativeDiscourse;
-	// }
-
-	// public GreimasActantialModel getGreimasActantialModel() {
-	// 	return this.greimasActantialModel;
-	// }
-
-	// public void setGreimasActantialModel(GreimasActantialModel greimasActantialModel) {
-	// 	this.greimasActantialModel = greimasActantialModel;
-	// }
-
 	public Lighting getLighting() {
 		return this.lighting;
 	}
@@ -336,14 +285,6 @@ public class AnalysisMethod implements Serializable {
 	public void setLighting(Lighting lighting) {
 		this.lighting = lighting;
 	}
-
-	// public LotmanRennerSpatialSemantics getLotmanRennerSpatialSemantic() {
-	// 	return this.lotmanRennerSpatialSemantic;
-	// }
-
-	// public void setLotmanRennerSpatialSemantic(LotmanRennerSpatialSemantics lotmanRennerSpatialSemantic) {
-	// 	this.lotmanRennerSpatialSemantic = lotmanRennerSpatialSemantic;
-	// }
 
 	public MartinezScheffelUnreliableNarration getMartinezScheffelUnreliableNarration() {
 		return this.martinezScheffelUnreliableNarration;
@@ -359,30 +300,6 @@ public class AnalysisMethod implements Serializable {
 
 	public void setSoundEffectDescriptive(SoundEffectDescriptive soundEffectDescriptive) {
 		this.soundEffectDescriptive = soundEffectDescriptive;
-	}
-
-	// public StanzelNarrativeSituation getStanzelNarrativeSituation() {
-	// 	return this.stanzelNarrativeSituation;
-	// }
-
-	// public void setStanzelNarrativeSituation(StanzelNarrativeSituation stanzelNarrativeSituation) {
-	// 	this.stanzelNarrativeSituation = stanzelNarrativeSituation;
-	// }
-
-	// public VanSijllCinematicStorytelling getVanSijllCinematicStorytelling() {
-	// 	return this.vanSijllCinematicStorytelling;
-	// }
-
-	// public void setVanSijllCinematicStorytelling(VanSijllCinematicStorytelling vanSijllCinematicStorytelling) {
-	// 	this.vanSijllCinematicStorytelling = vanSijllCinematicStorytelling;
-	// }
-
-	public ZelizerBeeseVoiceOfTheVisual getZelizerBeeseVoiceOfTheVisual() {
-		return this.zelizerBeeseVoiceOfTheVisual;
-	}
-
-	public void setZelizerBeeseVoiceOfTheVisual(ZelizerBeeseVoiceOfTheVisual zelizerBeeseVoiceOfTheVisual) {
-		this.zelizerBeeseVoiceOfTheVisual = zelizerBeeseVoiceOfTheVisual;
 	}
 
 }
