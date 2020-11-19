@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+@Deprecated
 public class ServiceScheduler implements ServletContextListener {
 	
     private static Thread t = null;
