@@ -230,9 +230,6 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-				// for (AnalysisMethod analysisMethod : analysisMethodList) {
-				// 	analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getZelizerBeeseVoiceOfTheVisual().getZelizerBeeseVoiceOfTheVisualTranslations().get(0).getType()));
-				// }
 			break;
 			case 19: // Barthes Rhetoric of the Image //* won't be implemented
 

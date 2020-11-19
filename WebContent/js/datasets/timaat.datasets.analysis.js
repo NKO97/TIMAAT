@@ -54,7 +54,6 @@
             cameraVerticalAngle: null,
             colorTemperature: null,
             soundEffectDescriptive: null,
-            zelizerBeeseVoiceOfTheVisual: null
           },
           preproduction: "",
           remark: remark
@@ -136,9 +135,7 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-            // analysisMethodId = Number($('#zelizer-beese-voice-of-the-visual-select-dropdown').val());
-            // analysisModel.analysisMethod.id = analysisMethodId; 
-            // analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+
           break;
           case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
@@ -696,25 +693,7 @@
           $('#camera-handling-select-dropdown').select2(select2Options);
         break;
         case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-          // $('#analysisAddLabel').text('Choose Voice of the Visual (Zelizer & Beese)');
-          // modal.find('.modal-body').html(`
-          //   <form role="form" id="newAnalysisMethodModalForm">
-          //     <div class="form-group">
-          //       <label for="zelizer-beese-voice-of-the-visual-select-dropdown">Voice of the visual</label>
-          //       <div class="col-md-12">
-          //         <select class="form-control form-control-md select-dropdown"
-          //                 style="width:100%;"
-          //                 id="zelizer-beese-voice-of-the-visual-select-dropdown"
-          //                 name="analysisMethodId"
-          //                 data-role="analysisMethodId"
-          //                 data-placeholder="Select voice of the visual"
-          //                 required>
-          //         </select>
-          //     </div>
-          //   </div>`+
-          //   remarkHtml +
-          // `</form>`);
-          // $('#zelizer-beese-voice-of-the-visual-select-dropdown').select2(select2Options);
+
         break;
         case 19: // Barthes Rhetoric of the Image //* won't be implemented
 
@@ -1253,11 +1232,7 @@
             </tr>`;
         break;
         case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-          // details +=
-          //   `<tr>
-          //     <td>Voice of the Visual (Zelizer & Beese):</td>
-          //     <td>`+data.analysisMethod.zelizerBeeseVoiceOfTheVisual.zelizerBeeseVoiceOfTheVisualTranslations[0].type+`</td>
-          //   </tr>`;
+
         break;
         case 19: // Barthes Rhetoric of the Image //* won't be implemented
 

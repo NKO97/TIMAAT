@@ -147,10 +147,6 @@ public class Actor implements Serializable {
 	@OneToOne(mappedBy="actor")
 	private ActorCollective actorCollective;
 
-	//bi-directional many-to-one association to GreimasActantialModelHasActor
-	// @OneToMany(mappedBy="actor")
-	// private List<GreimasActantialModelHasActor> greimasActantialModelHasActors;
-
 	//bi-directional one-to-one association to ActorPerson
 	@OneToOne(mappedBy="actor")
 	private ActorPerson actorPerson;
@@ -505,28 +501,6 @@ public class Actor implements Serializable {
 	public void setActorCollective(ActorCollective actorCollective) {
 		this.actorCollective = actorCollective;
 	}
-
-	// public List<GreimasActantialModelHasActor> getGreimasActantialModelHasActors() {
-	// 	return this.greimasActantialModelHasActors;
-	// }
-
-	// public void setGreimasActantialModelHasActors(List<GreimasActantialModelHasActor> greimasActantialModelHasActors) {
-	// 	this.greimasActantialModelHasActors = greimasActantialModelHasActors;
-	// }
-
-	// public GreimasActantialModelHasActor addGreimasActantialModelHasActor(GreimasActantialModelHasActor greimasActantialModelHasActor) {
-	// 	getGreimasActantialModelHasActors().add(greimasActantialModelHasActor);
-	// 	greimasActantialModelHasActor.setActor(this);
-
-	// 	return greimasActantialModelHasActor;
-	// }
-
-	// public GreimasActantialModelHasActor removeGreimasActantialModelHasActor(GreimasActantialModelHasActor greimasActantialModelHasActor) {
-	// 	getGreimasActantialModelHasActors().remove(greimasActantialModelHasActor);
-	// 	greimasActantialModelHasActor.setActor(null);
-
-	// 	return greimasActantialModelHasActor;
-	// }
 
 	public ActorPerson getActorPerson() {
 		return this.actorPerson;
