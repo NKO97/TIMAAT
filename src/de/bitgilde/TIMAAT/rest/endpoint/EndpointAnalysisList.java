@@ -306,8 +306,8 @@ public class EndpointAnalysisList {
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle() != null ) seg.getAnalysisSegmentTranslations().get(0).setTitle(updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription() != null ) seg.getAnalysisSegmentTranslations().get(0).setShortDescription(updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getComment() != null ) seg.getAnalysisSegmentTranslations().get(0).setComment(updatedSegment.getAnalysisSegmentTranslations().get(0).getComment());
-		if ( updatedSegment.getSegmentStartTime() != null ) seg.setSegmentStartTime(updatedSegment.getSegmentStartTime());
-		if ( updatedSegment.getSegmentEndTime() != null ) seg.setSegmentEndTime(updatedSegment.getSegmentEndTime());
+		seg.setSegmentStartTime(updatedSegment.getSegmentStartTime());
+		seg.setSegmentEndTime(updatedSegment.getSegmentEndTime());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();

@@ -422,8 +422,8 @@
 						segment.model.analysisSegmentTranslations[0].title = title;
 						segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
 						segment.model.analysisSegmentTranslations[0].comment = comment;
-						segment.model.startTime = startTime;
-						segment.model.endTime = endTime;
+						segment.model.segmentStartTime = startTime*1000.0;
+						segment.model.segmentEndTime = endTime*1000.0;
 						// update segment UI
 						TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
 					} else {
@@ -435,8 +435,8 @@
 								shortDescription: shortDescription,
 								comment: comment
 							}],
-							startTime: startTime,
-							endTime: endTime
+							segmentStartTime: startTime*1000,
+							segmentEndTime: endTime*1000
 						};
 						TIMAAT.Service.createSegment(model, TIMAAT.VideoPlayer.curList.id, TIMAAT.VideoPlayer._segmentAdded);
 					}
@@ -967,16 +967,16 @@
 					var title = (segment) ? segment.model.analysisSegmentTranslations[0].title : "";
 					var shortDescription = (segment) ? segment.model.analysisSegmentTranslations[0].shortDescription : "";
 					var comment = (segment) ? segment.model.analysisSegmentTranslations[0].comment : "";
-					var startTime = (segment) ? segment.model.startTime : TIMAAT.VideoPlayer.video.currentTime;
-					var endTime = (segment) ? segment.model.endTime : TIMAAT.VideoPlayer.video.duration;				
+					var startTime = (segment) ? segment.model.segmentStartTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (segment) ? segment.model.segmentEndTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
 					// find closest segment to adjust end time
 					if ( TIMAAT.VideoPlayer.curList != null && TIMAAT.VideoPlayer.curList.segments != null) {
 						TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
-							if ( segment.model.startTime > startTime && segment.model.endTime < endTime )
-								endTime = segment.model.endTime;
+							if ( segment.model.segmentStartTime/1000.0 > startTime && segment.model.segmentEndTime/1000.0 < endTime )
+								endTime = segment.model.segmentEndTime;
 						});
 					}
-					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.segmentStartTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
 					var end = TIMAAT.Util.formatTime(endTime, true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
@@ -1020,8 +1020,8 @@
 				let title = this.state.item.model.analysisSegmentTranslations[0].title;
 				let shortDescription = this.state.item.model.analysisSegmentTranslations[0].shortDescription;
 				let comment = this.state.item.model.analysisSegmentTranslations[0].comment;
-				let startTime = this.state.item.model.startTime;
-				let endTime = this.state.item.model.endTime;
+				let startTime = this.state.item.model.segmentStartTime/1000.0;
+				let endTime = this.state.item.model.segmentEndTime/1000.0;
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state

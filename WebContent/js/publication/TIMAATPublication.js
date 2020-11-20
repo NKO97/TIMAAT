@@ -3,6 +3,8 @@ class AnalysisSegment {
 					// setup model
 					this.model = model;
 					this.active = false;
+					this._startTime = this.model.segmentStartTime/1000.0;
+					this._endTime = this.model.segmentEndTime/1000.0;
 					
 					// create and style list view element
 					this.listView = $(`
@@ -25,12 +27,12 @@ class AnalysisSegment {
 				}
 				
 				updateUI() {
-					this.listView.attr('data-starttime', this.model.startTime * 1000);
-					let timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
+					this.listView.attr('data-starttime', this.model.segmentStartTime);
+					let timeString = " "+TIMAATPub.formatTime(this.model.segmentStartTime/1000.0, true);
 					let title = this.model.analysisSegmentTranslations[0].title;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
 					let comment = this.model.analysisSegmentTranslations[0].comment;
-					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
+					if ( this.model.segmentStartTime != this.model.segmentEndTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.segmentEndTime/1000.0, true);
 					this.listView.find('.timaat-annotation-segment-title').html(title);
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
@@ -45,8 +47,8 @@ class AnalysisSegment {
 					// update timeline position
 					let magicoffset = 0;
 					let width =  100;
-					let length = (this.model.endTime - this.model.startTime) / TIMAATPub.duration * width;
-					let offset = this.model.startTime / TIMAATPub.duration * width;
+					let length = ((this.model.segmentEndTime - this.model.segmentStartTime)/1000.0) / TIMAATPub.duration * width;
+					let offset = (this.model.segmentStartTime/1000.0) / TIMAATPub.duration * width;
 					this.timelineView.css('width', length+'%');
 					this.timelineView.css('margin-left', (offset+magicoffset)+'%');
 
@@ -59,25 +61,25 @@ class AnalysisSegment {
 					var segment = this; // save annotation for events
 					// attach event handlers
 					this.listView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.listView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
@@ -95,7 +97,7 @@ class AnalysisSegment {
 					
 				updateStatus(time) {
 					var status = false;
-					if ( time >= this.model.startTime && time <= this.model.endTime) status = true;
+					if ( time >= this.model.segmentStartTime/1000.0 && time <= this.model.segmentEndTime/1000.0) status = true;
 
 					if ( status != this.active ) {
 						this.active = status;
@@ -1237,15 +1239,15 @@ class TIMAATPublication {
 	
 	sortSegments() {
 		this.curList.segments.sort(function (a, b) {
-			if ( b.model.startTime < a.model.startTime ) return 1;
-			if ( b.model.startTime > a.model.startTime ) return -1;
+			if ( b.model.segmentStartTime < a.model.segmentStartTime ) return 1;
+			if ( b.model.segmentStartTime > a.model.segmentStartTime ) return -1;
 			return 0;
 		})
 	}
 	
 	updateControlsTimeout() {
-		if ( this.ui.controlsTimout ) clearTimeout(this.ui.controlsTimout);
-		if ( !this.ui.onControls ) this.ui.controlsTimout = setTimeout(function() {$('#timaat-video-controls').fadeOut('slow')}, 3000);
+		if ( this.ui.controlsTimeout ) clearTimeout(this.ui.controlsTimeout);
+		if ( !this.ui.onControls ) this.ui.controlsTimeout = setTimeout(function() {$('#timaat-video-controls').fadeOut('slow')}, 3000);
 	}
 	
 	updateListUI() {
