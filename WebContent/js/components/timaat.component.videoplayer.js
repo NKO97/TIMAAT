@@ -751,8 +751,8 @@
 		sortSegments: function() {
 			if ( !TIMAAT.VideoPlayer.curList || !TIMAAT.VideoPlayer.curList.segments ) return;
 			TIMAAT.VideoPlayer.curList.segments.sort(function (a, b) {
-				if ( b.model.startTime < a.model.startTime ) return 1;
-				if ( b.model.startTime > a.model.startTime ) return -1;
+				if ( b.model.segmentStartTime < a.model.segmentStartTime ) return 1;
+				if ( b.model.segmentStartTime > a.model.segmentStartTime ) return -1;
 				return 0;
 			})
 		},
@@ -1459,9 +1459,9 @@
 					}
 
 					if ( curSegment ) {
-						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime
-								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.endTime )
-								TIMAAT.VideoPlayer.jumpTo(curSegment.model.startTime);
+						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.segmentStartTime/1000.0
+								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.segmentEndTime/1000.0 )
+								TIMAAT.VideoPlayer.jumpTo(curSegment.model.segmentSartTime/1000.0);
 					}
 				}
 			} 
