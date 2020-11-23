@@ -2042,8 +2042,10 @@
 				$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
 				$('.mediadatasheet-form-edit-button').show();
 				if ( mediumTypeData.model.fileStatus == 'noFile' || !mediumTypeData.model.fileStatus) {
-					$('.datasheet-form-upload-button').prop('disabled', false);
-					$('.datasheet-form-upload-button').show();
+					if (mediumTypeData.model.mediumVideo || mediumTypeData.model.mediumImage) {
+						$('.datasheet-form-upload-button').prop('disabled', false);
+						$('.datasheet-form-upload-button').show();
+					}
 					$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				} else {
@@ -2176,8 +2178,10 @@
 			// $('#timaat-mediadatasets-medium-preview-form-edit :input').prop('disabled', false);
 			// $('#timaat-mediadatasets-medium-preview-form-edit').show();
 			if ( mediumTypeData.model.fileStatus == 'noFile' || !mediumTypeData.model.fileStatus) {
-				$('.datasheet-form-upload-button').prop('disabled', false);
-				$('.datasheet-form-upload-button').show();
+				if (mediumTypeData.model.mediumVideo || mediumTypeData.model.mediumImage) {
+					$('.datasheet-form-upload-button').prop('disabled', false);
+					$('.datasheet-form-upload-button').show();
+				}
 				$('.datasheet-form-annotate-button').hide();
 				$('.datasheet-form-annotate-button').prop('disabled', true);
 				$('.video-preview').hide();
@@ -2363,8 +2367,10 @@
 				$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
 				$('.mediadatasheet-form-edit-button').show();
 				if ( medium.model.fileStatus == 'noFile' || !medium.model.fileStatus) {
-					$('.datasheet-form-upload-button').prop('disabled', false);
-					$('.datasheet-form-upload-button').show();
+					if (medium.model.mediumVideo || medium.model.mediumImage) {
+						$('.datasheet-form-upload-button').prop('disabled', false);
+						$('.datasheet-form-upload-button').show();
+					}
 					$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				} else {
@@ -2550,8 +2556,10 @@
 				$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
 				$('.mediadatasheet-form-edit-button').show();
 				if ( medium.model.fileStatus == 'noFile' || !medium.model.fileStatus) {
-					$('.datasheet-form-upload-button').prop('disabled', false);
-					$('.datasheet-form-upload-button').show();
+					if (medium.model.mediumVideo || medium.model.mediumImage) {
+						$('.datasheet-form-upload-button').prop('disabled', false);
+						$('.datasheet-form-upload-button').show();
+					}
 					$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				} else {
@@ -2815,8 +2823,10 @@
 				$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
 				$('.mediadatasheet-form-edit-button').show();
 				if ( medium.model.fileStatus == 'noFile' || !medium.model.fileStatus) {
-					$('.datasheet-form-upload-button').prop('disabled', false);
-					$('.datasheet-form-upload-button').show();
+					if (medium.model.mediumVideo || medium.model.mediumImage) {
+						$('.datasheet-form-upload-button').prop('disabled', false);
+						$('.datasheet-form-upload-button').show();
+					}
 					$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				} else {
