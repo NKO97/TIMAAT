@@ -145,7 +145,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -426,7 +426,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -485,7 +485,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -544,7 +544,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -603,7 +603,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -662,7 +662,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -784,7 +784,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			if ( start != null && start > 0 ) query.setFirstResult(start);
@@ -857,7 +857,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles

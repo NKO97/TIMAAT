@@ -90,12 +90,12 @@ public class EndpointCategorySet {
 		if (search != null && search.length() > 0 ) {
 			// calculate search result # of records
 			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(c) FROM Category c WHERE lower(SELECT c.name) LIKE lower(concat('%', :name,'%'))");
+				"SELECT COUNT(c) FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name "+direction);
 			countQuery.setParameter("name", search);
 			recordsFiltered = (long) countQuery.getSingleResult();
 			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT c FROM Category c WHERE lower(SELECT c.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
+				"SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
 			query.setParameter("name", search);
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(

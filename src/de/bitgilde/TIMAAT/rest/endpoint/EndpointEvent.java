@@ -121,7 +121,7 @@ public class EndpointEvent {
 		List<Event> eventList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT e FROM Event e WHERE lower("+languageQuery+") LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT e, et FROM Event e, EventTranslation et WHERE e.id = et.event.id AND lower("+languageQuery+") LIKE lower(concat('%', :search, '%')) ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles

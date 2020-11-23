@@ -124,7 +124,7 @@ public class EndpointRole {
 		if ( draw == null ) draw = 0;
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-		String languageQuery = "SELECT rgt.name FROM RoleGroupTranslation rgt WHERE rgt.role.id = rg.id AND rgt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
+		String languageQuery = "SELECT rgt.name FROM RoleGroupTranslation rgt WHERE rgt.roleGroup.id = rg.id AND rgt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";

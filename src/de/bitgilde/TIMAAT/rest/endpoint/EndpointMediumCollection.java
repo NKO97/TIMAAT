@@ -92,7 +92,7 @@ public class EndpointMediumCollection {
 		List<MediaCollection> mediumCollectionList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT mc FROM MediaCollection mc WHERE lower(mc.title) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT mc FROM MediaCollection mc WHERE lower(mc.title) LIKE lower(concat('%', :search, '%')) ORDER BY mc.title "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all mediaCollections

@@ -150,7 +150,7 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -332,7 +332,7 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
@@ -451,7 +451,7 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all media belonging to those titles
