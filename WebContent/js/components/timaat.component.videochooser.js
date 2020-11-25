@@ -517,7 +517,7 @@
 							return titleDisplay;
 						}
 					},
-					{ data: 'mediumVideo.length', name: 'duration', className: 'duration' , render: function(data, type, medium, meta) {
+					{ data: 'mediumVideo.length', name: 'duration', className: 'duration', render: function(data, type, medium, meta) {
 							if (medium.mediumVideo) {
 								return TIMAAT.Util.formatTime(data);
 							}
