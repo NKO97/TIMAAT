@@ -144,14 +144,10 @@ public class EndpointMediumCollection {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching media			
-			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
+			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.title1.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			mediumList = castList(Medium.class, query.getResultList());
-			int j = 0;
-			for (;j < mediumList.size(); j++) {
-				System.out.println("#name: " + mediumList.get(j).getDisplayTitle());
-			}
 			// find all media
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
@@ -223,7 +219,7 @@ public class EndpointMediumCollection {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching media
-			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumNotInListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
+			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumNotInListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.title1.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			mediumList = castList(Medium.class, query.getResultList());
