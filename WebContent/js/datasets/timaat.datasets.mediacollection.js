@@ -1112,7 +1112,9 @@
 					"beforeSend": function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
-					"dataSrc": function(data) { return data.data; }
+					"dataSrc": function(data) { 
+						return data.data;
+					}
 				},
 				"createdRow": function(row, data, dataIndex) {
 					let mediumElement = $(row);
@@ -1199,9 +1201,9 @@
 				lengthChange: false,
 				pageLength  : 10,
 				pagingType  : 'full',
-				dom         : 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				// dom         : 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				"dom"           : '<lf<t>ip>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-				// searching   : false,
 				deferLoading: 0,
 				order       : [[ 0, 'asc' ]],
 				processing  : true,
@@ -1212,11 +1214,11 @@
 					"dataType"   : "json",
 					"data"       : function(data) {
 						let serverData = {
-							draw        : data.draw,
-							start       : data.start,
-							length      : data.length,
-							orderby     : data.columns[data.order[0].column].name,
-							dir         : data.order[0].dir,
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
