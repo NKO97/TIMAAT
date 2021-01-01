@@ -48,7 +48,7 @@ public class MediaCollection implements Serializable {
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 
 	//bi-directional many-to-many association to Tag
-	@OneToMany
+	@ManyToMany
 	@JoinTable(
 		name="media_collection_has_tag"
 		, inverseJoinColumns={
