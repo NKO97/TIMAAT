@@ -101,14 +101,13 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getActorList(
-			@QueryParam("draw") Integer draw,
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length,
-			@QueryParam("orderby") String orderby,
-			@QueryParam("dir") String direction,
-			@QueryParam("search") String search,
-			@QueryParam("exclude_annotation") Integer annotationID)
+	public Response getActorList(@QueryParam("draw") Integer draw,
+															 @QueryParam("start") Integer start,
+															 @QueryParam("length") Integer length,
+															 @QueryParam("orderby") String orderby,
+															 @QueryParam("dir") String direction,
+															 @QueryParam("search") String search,
+															 @QueryParam("exclude_annotation") Integer annotationID)
 	{
 		// System.out.println("EndpointActor: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
 		if ( draw == null ) draw = 0;
@@ -116,9 +115,9 @@ public class EndpointActor {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "a.id";
+		String column = "a.displayName.name";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name";
 		}
 		
 		// define default query strings
@@ -153,10 +152,11 @@ public class EndpointActor {
 			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			
 			for (ActorName actorName : actorNameList) {
 				if (annotationID != null) {
 					Boolean annoConnected = false;
@@ -174,7 +174,19 @@ public class EndpointActor {
 				}
 			}
 			recordsFiltered = actorList.size();
-
+			List<Actor> filteredActorList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredActorList.add(actorList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 			// calculate search result # of records
 			// countQuery = entityManager.createQuery(actorSearchCountQuery);
 			// countQuery.setParameter("title1", search);
@@ -315,9 +327,9 @@ public class EndpointActor {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "ap.actorId";
+		String column = "ap.actor.displayName.name";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "ap.actor.displayName.name"; // TODO change displayName access in DB-Schema 
+			if (orderby.equalsIgnoreCase("name")) column = "ap.actor.displayName.name";
 		}
 
 		// calculate total # of records
@@ -332,19 +344,33 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
+			sql = "SELECT an FROM ActorName an WHERE an.actor.actorType.id = 1 AND lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+
 			for (ActorName actorName : actorNameList) {
-				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorPerson() != null)) { // TODO actor.getActorType().. may be more efficient
+				if (!(actorList.contains(actorName.getActor()))) {
 					actorList.add(actorName.getActor());
 				}
 			}
 			recordsFiltered = actorList.size();
+			List<Actor> filteredActorList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredActorList.add(actorList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 		} else {
 			sql = "SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -434,7 +460,7 @@ public class EndpointActor {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "ac.actorId";
+		String column = "ac.actor.displayName.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "ac.actor.displayName.name"; // TODO change displayName access in DB-Schema 
 		}
@@ -451,19 +477,33 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
+			sql = "SELECT an FROM ActorName an WHERE an.actor.actorType.id = 2 AND lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+
 			for (ActorName actorName : actorNameList) {
-				if (!(actorList.contains(actorName.getActor())) && (actorName.getActor().getActorCollective() != null)) { // TODO actor.getActorType().. may be more efficient
+				if (!(actorList.contains(actorName.getActor()))) {
 					actorList.add(actorName.getActor());
 				}
 			}
 			recordsFiltered = actorList.size();
+			List<Actor> filteredActorList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredActorList.add(actorList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 		} else {
 			sql = "SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
