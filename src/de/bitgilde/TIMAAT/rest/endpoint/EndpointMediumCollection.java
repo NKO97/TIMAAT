@@ -151,6 +151,10 @@ public class EndpointMediumCollection {
 			// find all media
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
+			if ( length == -1 ) { // display all results
+				length = mediumList.size();
+				query.setMaxResults(length);
+			}
 			// List<Title> titleList = castList(Title.class, query.getResultList());
 			// System.out.println("#searchResults: "+ titleList.size());
 			// for (Title title : titleList) {

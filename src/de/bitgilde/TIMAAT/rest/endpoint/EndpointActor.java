@@ -149,29 +149,33 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
+			sql = "SELECT DISTINCT a FROM Actor a, ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) AND an.actor = a ORDER BY a.displayName.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			actorList = castList(Actor.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
+			if ( length == -1 ) { // display all results
+				length = actorList.size();
+				query.setMaxResults(length);
+			}
 			
-			for (ActorName actorName : actorNameList) {
-				if (annotationID != null) {
+			for (Actor actor : actorList) {
+				if (annotationID != null) { // TODO structure needs to be reversed?
 					Boolean annoConnected = false;
-					for (Annotation annotation : actorName.getActor().getAnnotations()) {
+					for (Annotation annotation : actor.getAnnotations()) {
 						if (annotation.getId() == annotationID) {
 							annoConnected = true;
 						}
 					}
-					if (!annoConnected && !(actorList.contains(actorName.getActor()))) {
-						actorList.add(actorName.getActor());
+					if (!annoConnected && !(actorList.contains(actor))) {
+						actorList.add(actor);
 					}
 				}
-				else if (!(actorList.contains(actorName.getActor()))) {
-					actorList.add(actorName.getActor());
-				}
+				// else if (!(actorList.contains(actor))) { // TODO: should be obsolete with SELECT DISTINCT
+				// 	actorList.add(actor);
+				// }
 			}
 			recordsFiltered = actorList.size();
 			List<Actor> filteredActorList = new ArrayList<>();
@@ -344,19 +348,23 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE an.actor.actorType.id = 1 AND lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
+			sql = "SELECT DISTINCT a FROM Actor a, ActorName an WHERE an.actor.actorType.id = 1 AND lower(an.name) LIKE lower(concat('%', :search, '%')) AND an.actor = a ORDER BY a.displayName.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			actorList = castList(Actor.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-
-			for (ActorName actorName : actorNameList) {
-				if (!(actorList.contains(actorName.getActor()))) {
-					actorList.add(actorName.getActor());
-				}
+			if ( length == -1 ) { // display all results
+				length = actorList.size();
+				query.setMaxResults(length);
 			}
+
+			// for (Actor actor : actorList) {
+			// 	if (!(actorList.contains(actor))) { // TODO: should be obsolete with SELECT DISTINCT
+			// 		actorList.add(actor);
+			// 	}
+			// }
 			recordsFiltered = actorList.size();
 			List<Actor> filteredActorList = new ArrayList<>();
 			int i = start;
@@ -477,19 +485,23 @@ public class EndpointActor {
 		List<Actor> actorList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT an FROM ActorName an WHERE an.actor.actorType.id = 2 AND lower(an.name) LIKE lower(concat('%', :search, '%')) ORDER BY an.name "+direction;
+			sql = "SELECT DISTINCT a FROM Actor a, ActorName an WHERE an.actor.actorType.id = 2 AND lower(an.name) LIKE lower(concat('%', :search, '%')) AND an.actor = a ORDER BY a.displayName.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
-			List<ActorName> actorNameList = castList(ActorName.class, query.getResultList());
+			actorList = castList(Actor.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-
-			for (ActorName actorName : actorNameList) {
-				if (!(actorList.contains(actorName.getActor()))) {
-					actorList.add(actorName.getActor());
-				}
+			if ( length == -1 ) { // display all results
+				length = actorList.size();
+				query.setMaxResults(length);
 			}
+
+			// for (Actor actor : actorList) {
+			// 	if (!(actorList.contains(actor))) {// TODO: should be obsolete with SELECT DISTINCT
+			// 		actorList.add(actor);
+			// 	}
+			// }
 			recordsFiltered = actorList.size();
 			List<Actor> filteredActorList = new ArrayList<>();
 			int i = start;
