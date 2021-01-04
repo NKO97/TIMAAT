@@ -37,7 +37,7 @@ class AnalysisSegment {
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
 					this.timelineView.find('.timaat-timeline-segment-title ').html(title);
-					this.timelineView.attr('title', '<strong>'+title+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+this.model.segmentStartTime+' - '+this.model.segmentEndTime+'</div>'+desc);
+					this.timelineView.attr('title', '<strong>'+title+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.segmentStartTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.segmentEndTime/1000.0, true)+'</div>'+desc);
 					// comment
 					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
 						this.listView.find('.timaat-annotation-segment-comment-icon').show();
