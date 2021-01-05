@@ -134,7 +134,8 @@
 			$('.timaat-sidebar-tab a').removeClass('selected');
 			$('#timaat-component-'+component).show();
 			if (component == 'videoplayer' && TIMAAT.VideoPlayer.selectedVideo) {
-				TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
+				if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.model.video.id != TIMAAT.VideoPlayer.selectedVideo.model.id )
+					TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
 				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
 			}
 			if (component == 'media') {
