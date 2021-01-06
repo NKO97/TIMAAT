@@ -30,13 +30,21 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AddressType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AddressTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Analysis</class> 
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisActionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMusic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisScene</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSceneTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequence</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequenceTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSpeech</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisTake</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisTakeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisVoice</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>

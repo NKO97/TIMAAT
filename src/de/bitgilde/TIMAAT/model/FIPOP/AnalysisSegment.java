@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class AnalysisSegment implements Serializable {
 	@Column(name="segment_start_time", columnDefinition = "INT")
 	private long segmentStartTime;
 
+	//bi-directional many-to-one association to AnalysisScene
+	@OneToMany(mappedBy="analysisSegment")
+	@JsonManagedReference(value = "AnalysisSegment-AnalysisScene")
+	private List<AnalysisScene> analysisScenes;
+
+	//bi-directional many-to-one association to AnalysisSequence
+	@OneToMany(mappedBy="analysisSegment")
+	@JsonManagedReference(value = "AnalysisSegment-AnalysisSequence")
+	private List<AnalysisSequence> analysisSequences;
+
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
 	@JoinColumn(name="analysis_list_id")
@@ -38,7 +49,6 @@ public class AnalysisSegment implements Serializable {
 
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="analysisSegment", cascade = CascadeType.ALL)
-	// @JsonManagedReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
 
 	public AnalysisSegment() {
@@ -93,6 +103,50 @@ public class AnalysisSegment implements Serializable {
 	// 	if ( this.segmentEndTime == null ) this.segmentEndTime = new Time(0);
 	// 	this.segmentEndTime.setTime((long)(endTime*1000f));
 	// }
+
+	public List<AnalysisScene> getAnalysisScenes() {
+		return this.analysisScenes;
+	}
+
+	public void setAnalysisScenes(List<AnalysisScene> analysisScenes) {
+		this.analysisScenes = analysisScenes;
+	}
+
+	public AnalysisScene addAnalysisScene(AnalysisScene analysisScene) {
+		getAnalysisScenes().add(analysisScene);
+		analysisScene.setAnalysisSegment(this);
+
+		return analysisScene;
+	}
+
+	public AnalysisScene removeAnalysisScene(AnalysisScene analysisScene) {
+		getAnalysisScenes().remove(analysisScene);
+		// analysisScene.setMediumAnalysisList(null);
+
+		return analysisScene;
+	}
+
+	public List<AnalysisSequence> getAnalysisSequences() {
+		return this.analysisSequences;
+	}
+
+	public void setAnalysisSequences(List<AnalysisSequence> analysisSequences) {
+		this.analysisSequences = analysisSequences;
+	}
+
+	public AnalysisSequence addAnalysisSequence(AnalysisSequence analysisSequence) {
+		getAnalysisSequences().add(analysisSequence);
+		analysisSequence.setAnalysisSegment(this);
+
+		return analysisSequence;
+	}
+
+	public AnalysisSequence removeAnalysisSequence(AnalysisSequence analysisSequence) {
+		getAnalysisSequences().remove(analysisSequence);
+		// analysisSequence.setMediumAnalysisList(null);
+
+		return analysisSequence;
+	}
 
 	public MediumAnalysisList getMediumAnalysisList() {
 		return this.mediumAnalysisList;
