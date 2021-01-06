@@ -1058,7 +1058,7 @@ public class EndpointActor {
 	@Path("{person_id}/translation/{id}")
 	public Response createPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id, String jsonData) {
 		
-		System.out.println("PersonEndpoint: createPersonTranslation jsonData: "+jsonData);
+		// System.out.println("PersonEndpoint: createPersonTranslation jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorPersonTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1095,7 +1095,7 @@ public class EndpointActor {
 		// add log entry (always in conjunction with person)
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 																				UserLogManager.LogEvents.PERSONCREATED);
-		System.out.println("PersonEndpoint: person translation created with id "+newTranslation.getId());
+		// System.out.println("PersonEndpoint: person translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();
 	}
@@ -1107,7 +1107,7 @@ public class EndpointActor {
 	@Path("{person_id}/translation/{id}")
 	public Response updateActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id, String jsonData) {
 
-		System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - jsonData"+ jsonData);
+		// System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorPersonTranslation updatedTranslation = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1136,7 +1136,7 @@ public class EndpointActor {
 		// add log entry (always in conjunction with person)
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 		// 																				UserLogManager.LogEvents.PERSONEDITED);
-		System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - updated");
+		// System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - updated");
 
 		return Response.ok().entity(personTranslation).build();
 
@@ -1149,7 +1149,7 @@ public class EndpointActor {
 	@Secured
 	public Response deleteActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id) {	
 
-		System.out.println("ActorPersonEndpoint: deleteActorPersonTranslation");
+		// System.out.println("ActorPersonEndpoint: deleteActorPersonTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		ActorPersonTranslation personTranslation = entityManager.find(ActorPersonTranslation.class, id);
 
