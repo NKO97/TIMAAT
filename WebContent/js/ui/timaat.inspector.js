@@ -973,7 +973,7 @@
 					if ( TIMAAT.VideoPlayer.curList != null && TIMAAT.VideoPlayer.curList.segments != null) {
 						TIMAAT.VideoPlayer.curList.segments.forEach(function(segment) {
 							if ( segment.model.segmentStartTime/1000.0 > startTime && segment.model.segmentEndTime/1000.0 < endTime )
-								endTime = segment.model.segmentEndTime;
+								endTime = segment.model.segmentEndTime/1000.0;
 						});
 					}
 					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.segmentStartTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);

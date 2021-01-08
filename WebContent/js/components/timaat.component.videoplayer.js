@@ -848,6 +848,7 @@
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(0);
 				$('#timaat-video-seek-bar').val(0);
+				TIMAAT.VideoPlayer.video.currentTime = 0;
 			}
 			if ( this.overlay ) TIMAAT.VideoPlayer.viewer.removeLayer(this.overlay);
 			
@@ -927,9 +928,11 @@
 			TIMAAT.VideoPlayer.viewer.setMaxBounds(this.videoBounds);
 			TIMAAT.VideoPlayer.viewer.fitBounds(this.videoBounds);
 			this.overlay = L.videoOverlay(videoUrl, this.videoBounds, { autoplay: false, loop: false} ).addTo(TIMAAT.VideoPlayer.viewer);
-			this.video = this.overlay.getElement();			
+			this.video = this.overlay.getElement();
+
 			// attach event handlers for UI elements
 			$(this.video).on('canplay', function(ev) {
+				TIMAAT.VideoPlayer.video.currentTime = 0;
 				$('#timaat-video-seek-bar').val(0);
 				TIMAAT.VideoPlayer.viewer.invalidateSize(true);				
 				TIMAAT.UI.setWaiting(false);
