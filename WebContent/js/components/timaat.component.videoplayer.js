@@ -844,7 +844,7 @@
 			this.curAnnotation = null;			
 			// remove old video
 			if ( TIMAAT.VideoPlayer.video ) {
-				$(TIMAAT.VideoPlayer.video).unbind('canplay');
+				$(TIMAAT.VideoPlayer.video).off('canplay');
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(0);
 				$('#timaat-video-seek-bar').val(0);
@@ -931,11 +931,13 @@
 			this.video = this.overlay.getElement();
 
 			// attach event handlers for UI elements
+			let curVideo = this.video;
 			$(this.video).on('canplay', function(ev) {
 				TIMAAT.VideoPlayer.video.currentTime = 0;
 				$('#timaat-video-seek-bar').val(0);
 				TIMAAT.VideoPlayer.viewer.invalidateSize(true);				
 				TIMAAT.UI.setWaiting(false);
+				$(curVideo).off('canplay');
 			});
 			$(this.video).on('timeupdate', function(ev) {
 				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true));		
