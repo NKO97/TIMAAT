@@ -1392,6 +1392,7 @@ class TIMAATPublication {
 		
 
 		// settings events
+		$('.timaat-publication-settings').on('click', function(ev) {ev.stopPropagation();});
 		$('.settings-stop-image').prop('checked', TIMAATSettings.stopImage == true);
 		$('.settings-stop-polygon').prop('checked', TIMAATSettings.stopPolygon == true);
 		$('.settings-stop-audio').prop('checked', TIMAATSettings.stopAudio == true);
