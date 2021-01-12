@@ -151,6 +151,19 @@ public class EndpointAnalysisList {
 		return Response.ok().entity(newList).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getAnalysisList(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnalysisList: getAnalysisList - ID: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+
+		return Response.ok().entity(mediumAnalysisList).build();
+	}
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

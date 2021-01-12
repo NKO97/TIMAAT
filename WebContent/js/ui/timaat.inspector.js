@@ -368,7 +368,7 @@
 			});
 
 			// attach listeners
-			$('#timaat-inspector-meta-submit').on('click', function(ev) {
+			$('#timaat-inspector-meta-submit').on('click', async function(ev) {
 				if ( !inspector.state.type ) return;
 				// annotations
 				if ( inspector.state.type == 'annotation' ) {
@@ -418,58 +418,55 @@
 					var transcript = $('timaat-inspector-meta-transcript').val();
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
-					console.log("TCL Inspector ~ checkForOverlappingSegments ~ startTime, endTime", startTime, endTime);
 
-					var overlapping = false;
-					var i = 0;
-					var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
-          console.log("TCL Inspector ~ $ ~ TIMAAT.VideoPlayer.curAnalysisList", TIMAAT.VideoPlayer.curAnalysisList);
-          // console.log("TCL Inspector ~ $ ~ segmentList", segmentList);
-					if (segment) {
-            // console.log("TCL Inspector ~ $ ~ segment", segment);
-						var index = segmentList.findIndex(({id}) => id === segment.model.id);
-            // console.log("TCL Inspector ~ $ ~ index", index);
-						segmentList.splice(index,1);
-					}
-					// console.log("TCL Inspector ~ $ ~ segmentList", segmentList);
-					for (; i < segmentList.length; i++) {
-						// console.log("TCL Inspector ~ $ ~ segmentList[i].segmentEndTime", segmentList[i].segmentEndTime);
-            // console.log("TCL Inspector ~ $ ~ segmentList[i].segmentStartTime", segmentList[i].segmentStartTime);
-						if (!(endTime <= segmentList[i].segmentStartTime || startTime >= segmentList[i].segmentEndTime) ) {
-							overlapping = true;
-							// console.log("TCL Inspector ~ checkForOverlappingSegments ~ overlapping", overlapping);
-							break;
-						}
-					}
-
-					if (overlapping) {
-						$('#timaat-videoplayer-segment-overlapping').modal('show');
+					// early out: segment has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-segment-noRange').modal('show');
 					} else {
+						var overlapping = false;
+						var i = 0;
+						var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
 						if (segment) {
-							segment.model.analysisSegmentTranslations[0].title = title;
-							segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
-							segment.model.analysisSegmentTranslations[0].comment = comment;
-							segment.model.analysisSegmentTranslations[0].transcript = transcript;
-							segment.model.segmentStartTime = startTime;
-							segment.model.segmentEndTime = endTime;
-
-							// update segment UI
-							TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
-							// TIMAAT.VideoPlayer.updateAnalysisList(TIMAAT.VideoPlayer.curAnalysisList)
+							var index = segmentList.findIndex(({id}) => id === segment.id);
+							segmentList.splice(index,1);
+						}
+						for (; i < segmentList.length; i++) {
+							if (!(endTime <= segmentList[i].segmentStartTime || startTime >= segmentList[i].segmentEndTime) ) {
+								overlapping = true;
+								break;
+							}
+						}
+						// early out: segment overlaps with other segments
+						if (overlapping) {
+							$('#timaat-videoplayer-segment-overlapping').modal('show');
 						} else {
-							var model = {
-								id: 0,
-								analysisSegmentTranslations: [{
+							if (segment) {
+								segment.model.analysisSegmentTranslations[0].title = title;
+								segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
+								segment.model.analysisSegmentTranslations[0].comment = comment;
+								segment.model.analysisSegmentTranslations[0].transcript = transcript;
+								segment.model.segmentStartTime = startTime;
+								segment.model.segmentEndTime = endTime;
+
+								// update segment UI
+								TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
+							} else {
+								var model = {
 									id: 0,
-									title: title,
-									shortDescription: shortDescription,
-									comment: comment,
-									transcript: transcript
-								}],
-								segmentStartTime: startTime*1000,
-								segmentEndTime: endTime*1000
-							};
-							TIMAAT.Service.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+									analysisSegmentTranslations: [{
+										id: 0,
+										title: title,
+										shortDescription: shortDescription,
+										comment: comment,
+										transcript: transcript
+									}],
+									segmentStartTime: startTime*1000,
+									segmentEndTime: endTime*1000
+								};
+								TIMAAT.Service.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+							}
+							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
 				}
@@ -608,7 +605,7 @@
 		}		
 
 		setItem(item, type=null) {
-      console.log("TCL: Inspector -> setItem -> item, type", item, type);
+      // console.log("TCL: Inspector -> setItem -> item, type", item, type);
 			this.state.item = item;
 			this.state.type = type;
 			
