@@ -136,7 +136,7 @@
 			if (component == 'videoplayer' && TIMAAT.VideoPlayer.selectedVideo) {
 				if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.model.video.id != TIMAAT.VideoPlayer.selectedVideo.model.id )
 					TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
-				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 			}
 			if (component == 'media') {
 				$('#previewTab').removeClass('annotationView');
@@ -155,7 +155,7 @@
 				console.log("notification data", notification);
 				// TODO refactor
 				// only show if notification is for current list
-				if ( TIMAAT.VideoPlayer.curList && TIMAAT.VideoPlayer.curList.id == notification.dataID ) {
+				if ( TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.curAnalysisList.id == notification.dataID ) {
 					TIMAAT.UI.showNotification( notification );
 					// trigger local event and action
 					console.log("trigger ",notification.message+'.notification.TIMAAT');

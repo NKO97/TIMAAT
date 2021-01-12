@@ -947,7 +947,8 @@ class TIMAATPublication {
 		let startList = (this.video) ? TIMAATPub.video.mediumAnalysisLists[0] : null;
 		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.video ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-		if ( this.video ) this.setupAnnotations(startList);
+    console.log("TCL ~ TIMAATPublication ~ run ~ startList", startList);
+		if ( this.video ) this.setupAnalysisList(startList);
 
 		// restore session
 		if ( hash && hash.length > 1 ) location.hash = hash;
@@ -1114,17 +1115,17 @@ class TIMAATPublication {
 	}
 	
 	setListMetadata() {
-		if ( !this.curList ) return;
+		if ( !this.curAnalysisList ) return;
 
-		if ( !this.curList.mediumAnalysisListTranslations[0].title || this.curList.mediumAnalysisListTranslations[0].title.length == 0) this.ui.list.title.addClass('empty');
+		if ( !this.curAnalysisList.mediumAnalysisListTranslations[0].title || this.curAnalysisList.mediumAnalysisListTranslations[0].title.length == 0) this.ui.list.title.addClass('empty');
 		else {
 			this.ui.list.title.removeClass('empty');
-			this.ui.list.title.find('.contents').html(this.curList.mediumAnalysisListTranslations[0].title);
+			this.ui.list.title.find('.contents').html(this.curAnalysisList.mediumAnalysisListTranslations[0].title);
 		}
-		if ( !this.curList.mediumAnalysisListTranslations[0].text || this.curList.mediumAnalysisListTranslations[0].text.length == 0) this.ui.list.comment.addClass('empty');
+		if ( !this.curAnalysisList.mediumAnalysisListTranslations[0].text || this.curAnalysisList.mediumAnalysisListTranslations[0].text.length == 0) this.ui.list.comment.addClass('empty');
 		else {
 			this.ui.list.comment.removeClass('empty');
-			this.ui.list.comment.find('.contents').html(this.curList.mediumAnalysisListTranslations[0].text);
+			this.ui.list.comment.find('.contents').html(this.curAnalysisList.mediumAnalysisListTranslations[0].text);
 		}
 	}
 
@@ -1186,25 +1187,23 @@ class TIMAATPublication {
 		this.ui.annotation.links.addClass('empty');
 		
 	}
-
-
 	
-	setupAnnotations(annotations, changehash=true) {
+	setupAnalysisList(analysislist, changehash=true) {
 		if ( !this.video ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		
-		if ( this.annotations ) this.annotations.ui.removeClass('selected');
+		if ( this.analysislist ) this.analysislist.ui.removeClass('selected');
 
 		// setup model
-		this.annotations = annotations;
-		this.annotations.ui.addClass('selected');
-		this.ui.listLabel.text(this.annotations.ui.find('.item-title').text());
+		this.analysislist = analysislist;
+		this.analysislist.ui.addClass('selected');
+		this.ui.listLabel.text(this.analysislist.ui.find('.item-title').text());
 		// clear polygon UI
 		this.viewer.annoLayer.eachLayer(function(layer) {layer.remove()});
 
 		// clear old list contents if any			
-		if ( this.curList != null && this.curList.segments != null) {
-			this.curList.segments.forEach(function(segment) {
+		if ( this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null) {
+			this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 				segment.removeUI();
 			});
 			this.annotationList.forEach(function(anno) {
@@ -1212,22 +1211,22 @@ class TIMAATPublication {
 			});
 		}
 		this.annotationList = [];
-		this.curList = annotations;
+		this.curAnalysisList = analysislist;
 		this.setListMetadata();
 		
 		// setup segment model
-		if ( !this.curList.segments ) {
-			this.curList.segments = [];
-			for ( let segment of this.curList.analysisSegments ) this.curList.segments.push(new AnalysisSegment(segment));
+		if ( !this.curAnalysisList.analysisSegmentsUI ) {
+			this.curAnalysisList.analysisSegmentsUI = [];
+			for ( let segment of this.curAnalysisList.analysisSegments ) this.curAnalysisList.analysisSegmentsUI.push(new AnalysisSegment(segment));
 		}
 		this.sortSegments();
 		
 		
 		// build annotation list from model
-		if ( annotations )
-			for (let annotation of annotations.annotations) this.annotationList.push(new Annotation(annotation));
+		if ( analysislist )
+			for (let annotation of analysislist.annotations) this.annotationList.push(new Annotation(annotation));
 						
-		if ( this.curList != null && this.curList.segments != null) this.curList.segments.forEach(function(segment) {
+		if ( this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null) this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 			segment.addUI();
 		});
 		this.selectAnnotation(null, changehash);
@@ -1238,7 +1237,7 @@ class TIMAATPublication {
 	}
 	
 	sortSegments() {
-		this.curList.segments.sort(function (a, b) {
+		this.curAnalysisList.analysisSegmentsUI.sort(function (a, b) {
 			if ( b.model.segmentStartTime < a.model.segmentStartTime ) return 1;
 			if ( b.model.segmentStartTime > a.model.segmentStartTime ) return -1;
 			return 0;
@@ -1348,7 +1347,7 @@ class TIMAATPublication {
 				let item = $('<li class="list-group-item list-group-item-action pt-0 pb-0 pl-2 pr-2"><i class="fas fa-check-circle"></i> <span class="item-title">'+list.mediumAnalysisListTranslations[0].title+'</span></li>');
 				list.ui = item;
 				this.ui.analysislist.append(item);
-				item.on('click', ev => { TIMAATPub.setupAnnotations(list) });
+				item.on('click', ev => { TIMAATPub.setupAnalysisList(list) });
 			}
 		
 			// mediumvideo metadata
@@ -1561,7 +1560,7 @@ class TIMAATPublication {
 			for ( let annoList of this.video.mediumAnalysisLists ) for ( let anno of annoList.annotations ) if ( anno.uuid.uuid == id ) list = annoList;
 			if ( !list ) return;
 			
-			if ( list.id != TIMAATPub.curList.id ) TIMAATPub.setupAnnotations(list, false);
+			if ( list.id != TIMAATPub.curAnalysisList.id ) TIMAATPub.setupAnalysisList(list, false);
 			
 			if ( !TIMAATPub.curAnnotation || TIMAATPub.curAnnotation.model.uuid.uuid != id ) for ( let anno of TIMAATPub.annotationList ) if ( anno.model.uuid.uuid == id ) {
 				TIMAATPub.selectAnnotation(anno);

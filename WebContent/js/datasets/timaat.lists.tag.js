@@ -146,7 +146,7 @@
 				// var modal = $('#timaat-analysislistdatasets-mediumanalysislist-tags');
 				if (!$('#mediumAnalysisListTagsForm').valid()) 
 					return false;
-				var mediumAnalysisList = TIMAAT.VideoPlayer.curList;
+				var mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
         console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
 				var formDataRaw = $('#mediumAnalysisListTagsForm').serializeArray();
         console.log("TCL: formDataRaw", formDataRaw);
@@ -209,7 +209,7 @@
 					},
 					minimumInputLength: 0,
 				});
-				TIMAAT.AnalysisListService.getTagList(TIMAAT.VideoPlayer.curList.id).then(function(data) {
+				TIMAAT.AnalysisListService.getTagList(TIMAAT.VideoPlayer.curAnalysisList.id).then(function(data) {
 					console.log("TCL: then: data", data);
 					var tagSelect = $('#mediumAnalysisList-tags-multi-select-dropdown');
 					if (data.length > 0) {

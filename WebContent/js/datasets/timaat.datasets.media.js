@@ -497,7 +497,7 @@
 				// setup video in player
 				TIMAAT.VideoPlayer.setupVideo(medium.model);
 				// load video annotations from server
-				TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+				TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 			});
 			
 			// Key press events
@@ -1969,7 +1969,7 @@
 		},
 
 		mediumFormDatasheet: async function(action, mediumType, mediumTypeData) {
-			console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
+			// console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
 			TIMAAT.MediaDatasets.selectLastSelection(mediumType, mediumTypeData.model.id);
 			TIMAAT.MediaDatasets.selectLastSelection('medium', mediumTypeData.model.id);
 			$('#timaat-mediadatasets-metadata-form').trigger('reset');
@@ -4923,7 +4923,7 @@
 		},
 
 		clearLastMediumSelection: function (type) {
-    	console.log("TCL: clearLastMediumSelection type", type);
+    	// console.log("TCL: clearLastMediumSelection type", type);
 			let i = 0;
 			switch (type) {
 				case 'medium':

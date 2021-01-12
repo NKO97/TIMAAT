@@ -109,7 +109,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="medium")
-    @JsonManagedReference(value = "Medium-MediumAnalysisList")
+  @JsonManagedReference(value = "Medium-MediumAnalysisList")
 	private List<MediumAnalysisList> mediumAnalysisLists;
 
 	//bi-directional one-to-one association to MediumAudio

@@ -76,7 +76,7 @@ public class EndpointAnalysisList {
 	@Path("{id}/hasTagList")
 	public Response getMediumAnalysisListTagList(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointMediumAnalysisList: getTagList");
+		System.out.println("EndpointAnalysisList: getTagList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
@@ -157,7 +157,7 @@ public class EndpointAnalysisList {
 	@Path("{id}")
 	@Secured
 	public Response updateAnalysisList(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointMediumAnalysisList: updateAnalysisList "+ jsonData);
+		System.out.println("EndpointAnalysisList: updateAnalysisList "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList updatedList = null;
 
@@ -298,6 +298,7 @@ public class EndpointAnalysisList {
 	@Path("segment/{id}")
 	@Secured
 	public Response updateAnalysisSegment(@PathParam("id") int id, String jsonData) {
+		System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment updatedSegment = null;
 

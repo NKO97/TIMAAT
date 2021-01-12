@@ -811,7 +811,7 @@
 						// setup medium in player
 						TIMAAT.VideoPlayer.setupVideo(medium);
 						// load medium annotations from server
-						TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupAnalysisLists);
+						TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {

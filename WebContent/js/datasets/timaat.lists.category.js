@@ -245,6 +245,7 @@
           },
           minimumInputLength: 0,
         });
+        //! getCategoryList does not exist anymore. NEEDS FIXING (error thrown when cancel connected categories button in annotation)
         TIMAAT.AnnotationService.getCategoryList(TIMAAT.VideoPlayer.curAnnotation.id).then(function(data) {
           console.log("TCL: then: data", data);
           var categorySelect = $('#annotation-categories-multi-select-dropdown');
@@ -375,7 +376,7 @@
         console.log("TCL: Submit category sets for analysis list");
         if (!$('#mediumAnalysisListCategorySetsForm').valid()) 
           return false;
-        var mediumAnalysisList = TIMAAT.VideoPlayer.curList;
+        var mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
         console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
         var formDataRaw = $('#mediumAnalysisListCategorySetsForm').serializeArray();
         console.log("TCL: formDataRaw", formDataRaw);
@@ -464,7 +465,7 @@
           },
           minimumInputLength: 0,
         });
-        TIMAAT.AnalysisListService.getCategorySetList(TIMAAT.VideoPlayer.curList.id).then(function(data) {
+        TIMAAT.AnalysisListService.getCategorySetList(TIMAAT.VideoPlayer.curAnalysisList.id).then(function(data) {
           console.log("TCL: then: data", data);
           var categorySetSelect = $('#mediumAnalysisList-categorySets-multi-select-dropdown');
           if (data.length > 0) {
@@ -1475,7 +1476,8 @@
 						}
           }
           await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
-          console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.curList);
+          //! TODO check if annotationList or curAnalysisList.annotations should be checked here
+          console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.annotationList);
           var i = 0;
           for (; i < TIMAAT.VideoPlayer.annotationList.length; i++) {
             TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.annotationList[i]);

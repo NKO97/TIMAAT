@@ -58,6 +58,11 @@ public class Language implements Serializable {
 	// @JsonIgnore
 	// private List<AmbienceTypeTranslation> ambienceTypeTranslations;
 
+	//bi-directional many-to-one association to AnalysisSegmentTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<AnalysisActionTranslation> analysisActionTranslations;
+
 	//bi-directional many-to-one association to AnalysisMethodTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -66,7 +71,22 @@ public class Language implements Serializable {
 	//bi-directional many-to-one association to AnalysisSegmentTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
+	private List<AnalysisSceneTranslation> analysisSceneTranslations;
+
+	//bi-directional many-to-one association to AnalysisSegmentTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	private List<AnalysisSegmentTranslation> analysisSegmentTranslations;
+
+	//bi-directional many-to-one association to AnalysisSegmentTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<AnalysisSequenceTranslation> analysisSequenceTranslations;
+
+	//bi-directional many-to-one association to AnalysisSegmentTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<AnalysisTakeTranslation> analysisTakeTranslations;
 
 	// //bi-directional many-to-one association to AnnotationTextualBodyTranslation
 	// @OneToMany(mappedBy="language")
@@ -622,6 +642,50 @@ public class Language implements Serializable {
 		return analysisMethodTypeTranslation;
 	}
 
+	public List<AnalysisActionTranslation> getAnalysisActionTranslations() {
+		return this.analysisActionTranslations;
+	}
+
+	public void setAnalysisActionTranslations(List<AnalysisActionTranslation> analysisActionTranslations) {
+		this.analysisActionTranslations = analysisActionTranslations;
+	}
+
+	public AnalysisActionTranslation addAnalysisActionTranslation(AnalysisActionTranslation analysisActionTranslation) {
+		getAnalysisActionTranslations().add(analysisActionTranslation);
+		analysisActionTranslation.setLanguage(this);
+
+		return analysisActionTranslation;
+	}
+
+	public AnalysisActionTranslation removeAnalysisActionTranslation(AnalysisActionTranslation analysisActionTranslation) {
+		getAnalysisActionTranslations().remove(analysisActionTranslation);
+		analysisActionTranslation.setLanguage(null);
+
+		return analysisActionTranslation;
+	}
+
+	public List<AnalysisSceneTranslation> getAnalysisSceneTranslations() {
+		return this.analysisSceneTranslations;
+	}
+
+	public void setAnalysisSceneTranslations(List<AnalysisSceneTranslation> analysisSceneTranslations) {
+		this.analysisSceneTranslations = analysisSceneTranslations;
+	}
+
+	public AnalysisSceneTranslation addAnalysisSceneTranslation(AnalysisSceneTranslation analysisSceneTranslation) {
+		getAnalysisSceneTranslations().add(analysisSceneTranslation);
+		analysisSceneTranslation.setLanguage(this);
+
+		return analysisSceneTranslation;
+	}
+
+	public AnalysisSceneTranslation removeAnalysisSceneTranslation(AnalysisSceneTranslation analysisSceneTranslation) {
+		getAnalysisSceneTranslations().remove(analysisSceneTranslation);
+		analysisSceneTranslation.setLanguage(null);
+
+		return analysisSceneTranslation;
+	}
+
 	public List<AnalysisSegmentTranslation> getAnalysisSegmentTranslations() {
 		return this.analysisSegmentTranslations;
 	}
@@ -642,6 +706,50 @@ public class Language implements Serializable {
 		analysisSegmentTranslation.setLanguage(null);
 
 		return analysisSegmentTranslation;
+	}
+
+	public List<AnalysisSequenceTranslation> getAnalysisSequenceTranslations() {
+		return this.analysisSequenceTranslations;
+	}
+
+	public void setAnalysisSequenceTranslations(List<AnalysisSequenceTranslation> analysisSequenceTranslations) {
+		this.analysisSequenceTranslations = analysisSequenceTranslations;
+	}
+
+	public AnalysisSequenceTranslation addAnalysisSequenceTranslation(AnalysisSequenceTranslation analysisSequenceTranslation) {
+		getAnalysisSequenceTranslations().add(analysisSequenceTranslation);
+		analysisSequenceTranslation.setLanguage(this);
+
+		return analysisSequenceTranslation;
+	}
+
+	public AnalysisSequenceTranslation removeAnalysisSequenceTranslation(AnalysisSequenceTranslation analysisSequenceTranslation) {
+		getAnalysisSequenceTranslations().remove(analysisSequenceTranslation);
+		analysisSequenceTranslation.setLanguage(null);
+
+		return analysisSequenceTranslation;
+	}
+
+	public List<AnalysisTakeTranslation> getAnalysisTakeTranslations() {
+		return this.analysisTakeTranslations;
+	}
+
+	public void setAnalysisTakeTranslations(List<AnalysisTakeTranslation> analysisTakeTranslations) {
+		this.analysisTakeTranslations = analysisTakeTranslations;
+	}
+
+	public AnalysisTakeTranslation addAnalysisTakeTranslation(AnalysisTakeTranslation analysisTakeTranslation) {
+		getAnalysisTakeTranslations().add(analysisTakeTranslation);
+		analysisTakeTranslation.setLanguage(this);
+
+		return analysisTakeTranslation;
+	}
+
+	public AnalysisTakeTranslation removeAnalysisTakeTranslation(AnalysisTakeTranslation analysisTakeTranslation) {
+		getAnalysisTakeTranslations().remove(analysisTakeTranslation);
+		analysisTakeTranslation.setLanguage(null);
+
+		return analysisTakeTranslation;
 	}
 
 	// public List<AnnotationTextualBodyTranslation> getAnnotationTextualBodyTranslations() {

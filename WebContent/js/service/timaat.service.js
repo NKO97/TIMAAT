@@ -261,7 +261,7 @@
 		},
 
 		updateSegment(segment) {
-			// console.log("TCL: updateSegment -> segment", segment);
+			console.log("TCL: updateSegment -> segment", segment);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/segment/"+segment.model.id,
 				type:"PATCH",
@@ -272,6 +272,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
+				console.log("TCL: updateSegment -> done", data);
 				segment.model = data;
 			})
 			.fail(function(e) {
@@ -293,8 +294,8 @@
 				// TODO refactor
 				
 				// remove segment
-				var index = TIMAAT.VideoPlayer.curList.segments.indexOf(segment);
-				if (index > -1) TIMAAT.VideoPlayer.curList.segments.splice(index, 1);
+				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.indexOf(segment);
+				if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.splice(index, 1);
 
 				// update UI
 				segment.removeUI();
