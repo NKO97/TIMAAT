@@ -460,8 +460,8 @@
 										comment: comment,
 										transcript: transcript
 									}],
-									segmentStartTime: startTime*1000,
-									segmentEndTime: endTime*1000
+									segmentStartTime: startTime,
+									segmentEndTime: endTime
 								};
 								TIMAAT.Service.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
 							}
