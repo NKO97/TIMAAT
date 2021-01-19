@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -36,13 +37,17 @@ public class AnalysisSequence implements Serializable {
 	private AnalysisSegment analysisSegment;
 
 	//bi-directional many-to-one association to AnalysisSequenceTranslation
-	@OneToMany(mappedBy="analysisSequence")
+	@OneToMany(mappedBy="analysisSequence", cascade = CascadeType.ALL)
 	private List<AnalysisSequenceTranslation> analysisSequenceTranslations;
 
 	//bi-directional many-to-one association to AnalysisTake
 	@OneToMany(mappedBy="analysisSequence")
 	@JsonManagedReference(value = "AnalysisSequence-AnalysisTake")
 	private List<AnalysisTake> analysisTakes;
+
+	@Transient
+	@JsonProperty("segmentId")
+	private int segmentId;
 
 	public AnalysisSequence() {
 	}
@@ -53,6 +58,14 @@ public class AnalysisSequence implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getSegmentId() {
+		return this.segmentId;
+	}
+
+	public void setSegmentId(int segmentId) {
+		this.segmentId = segmentId;
 	}
 
 	public long getEndTime() {

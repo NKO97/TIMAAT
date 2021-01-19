@@ -25,11 +25,11 @@ public class AnalysisSegment implements Serializable {
 
 	// TODO get name from translation
 
-	@Column(name="segment_end_time", columnDefinition = "INT")
-	private long segmentEndTime;
+	@Column(name="end_time", columnDefinition = "INT")
+	private long endTime;
 
-	@Column(name="segment_start_time", columnDefinition = "INT")
-	private long segmentStartTime;
+	@Column(name="start_time", columnDefinition = "INT")
+	private long startTime;
 
 	//bi-directional many-to-one association to AnalysisScene
 	@OneToMany(mappedBy="analysisSegment")
@@ -62,46 +62,46 @@ public class AnalysisSegment implements Serializable {
 		this.id = id;
 	}
 
-	public long getSegmentEndTime() { // TODO get and set correct segment time values after change from Timestamp to Time
-		return this.segmentEndTime;
-		// if ( segmentEndTime == null ) return -1;
-		// return segmentEndTime.getTime()/1000f;
+	public long getEndTime() { // TODO get and set correct segment time values after change from Timestamp to Time
+		return this.endTime;
+		// if ( endTime == null ) return -1;
+		// return endTime.getTime()/1000f;
 	}
 
-	public void setSegmentEndTime(long segmentEndTime) {
-		this.segmentEndTime = segmentEndTime;
-		// this.segmentEndTime = new java.sql.Timestamp((long)(segmentEndTime*1000f));
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
+		// this.endTime = new java.sql.Timestamp((long)(endTime*1000f));
 	}
 
-	public long getSegmentStartTime() {
-		return this.segmentStartTime;
-		// if ( segmentStartTime == null ) return -1;
-		// return segmentStartTime.getTime()/1000f;
+	public long getStartTime() {
+		return this.startTime;
+		// if ( startTime == null ) return -1;
+		// return startTime.getTime()/1000f;
 	}
 
-	public void setSegmentStartTime(long segmentStartTime) {
-		this.segmentStartTime = segmentStartTime;
-		// this.segmentStartTime = new java.sql.Timestamp((long)(segmentStartTime*1000f));
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+		// this.startTime = new java.sql.Timestamp((long)(startTime*1000f));
 	}
 
 	// public float getStartTime() {
-	// 	if ( this.segmentStartTime == null ) return -1;
-	// 	return segmentStartTime.getTime()/1000f;
+	// 	if ( this.startTime == null ) return -1;
+	// 	return startTime.getTime()/1000f;
 	// }
 
 	// public void setStartTime(float startTime) {
-	// 	if ( this.segmentStartTime == null ) this.segmentStartTime = new Time(0);
-	// 	this.segmentStartTime.setTime((long)(startTime*1000f));
+	// 	if ( this.startTime == null ) this.startTime = new Time(0);
+	// 	this.startTime.setTime((long)(startTime*1000f));
 	// }
 
 	// public float getEndTime() {
-	// 	if ( segmentEndTime == null ) return -1;
-	// 	return segmentEndTime.getTime()/1000f;
+	// 	if ( endTime == null ) return -1;
+	// 	return endTime.getTime()/1000f;
 	// }
 
 	// public void setEndTime(float endTime) {
-	// 	if ( this.segmentEndTime == null ) this.segmentEndTime = new Time(0);
-	// 	this.segmentEndTime.setTime((long)(endTime*1000f));
+	// 	if ( this.endTime == null ) this.endTime = new Time(0);
+	// 	this.endTime.setTime((long)(endTime*1000f));
 	// }
 
 	public List<AnalysisScene> getAnalysisScenes() {

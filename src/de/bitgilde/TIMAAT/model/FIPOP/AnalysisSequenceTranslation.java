@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the analysis_sequence_translation database table.
@@ -35,6 +37,7 @@ public class AnalysisSequenceTranslation implements Serializable {
 	//bi-directional many-to-one association to AnalysisSequence
 	@ManyToOne
 	@JoinColumn(name="analysis_sequence_id")
+	@JsonIgnore
 	private AnalysisSequence analysisSequence;
 
 	public AnalysisSequenceTranslation() {

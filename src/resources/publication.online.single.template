@@ -132,7 +132,7 @@
 
 
 			<div class="metadata-section segment-metadata d-none">
-			<div class="metadata-field segment-title">
+			<div class="metadata-field segment-name">
 			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-indent"></i> Titel des Segments</div>
 			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
 			</div>

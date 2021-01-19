@@ -26,7 +26,7 @@
 			  this.annotation = annotation;
 			  this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
-			  this._to = Math.max(annotation.startTime, annotation.model.sequenceEndTime/1000.0);
+			  this._to = Math.max(annotation.startTime, annotation.model.endTime/1000.0);
 			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
 			  
 			  // construct marker element

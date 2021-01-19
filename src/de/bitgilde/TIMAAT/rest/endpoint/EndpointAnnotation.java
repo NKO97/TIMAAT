@@ -599,8 +599,8 @@ public class EndpointAnnotation {
 		// if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
 		// if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
 
-		annotation.setSequenceStartTime(updatedAnno.getSequenceStartTime());
-		annotation.setSequenceEndTime(updatedAnno.getSequenceEndTime());
+		annotation.setStartTime(updatedAnno.getStartTime());
+		annotation.setEndTime(updatedAnno.getEndTime());
 		annotation.setLayerVisual(updatedAnno.getLayerVisual());
 
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null )

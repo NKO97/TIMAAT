@@ -178,7 +178,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	width: 100%;
 }
 
-#timaat-inspector-meta-comment-group textarea {
+#timaat-inspector-meta-comment-group, #timaat-inspector-meta-transcript-group textarea {
 	min-height: 6rem;
 }
 
@@ -313,7 +313,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	color: #6c757d;
 }
 .timaat-annotation-list-title,
-.timaat-annotation-segment-title {
+.timaat-annotation-segment-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -444,6 +444,14 @@ a.dropdown-item {
 	cursor: pointer;
 }
 
+.dropdown-item-indented {
+	text-indent: 10%;
+}
+
+.dropdown-item-double-indented {
+	text-indent: 20%;
+}
+
 #timaat-videoplayer-viewer-overlay {
 	display: none;
 	z-index: 1000;
@@ -460,9 +468,15 @@ a.dropdown-item {
 	z-index: 100;
 }
 
-#timaat-timeline-segment-pane {
+#timaat-timeline-segment-pane, 
+#timaat-timeline-sequence-pane,
+#timaat-timeline-take-pane,
+#timaat-timeline-scene-pane,
+#timaat-timeline-action-pane {
 	width: 100%;
 	height: 15px;
+	display: none;
+	margin-bottom: 2px;
 }
 
 #timaat-timeline-keyframe-pane {
@@ -497,7 +511,11 @@ a.dropdown-item {
 .timaat-timeline-keyframe .timaat-timeline-keyframehead.selected {
 	background: #6c757d !important;
 }
-.timaat-timeline-segment {
+.timaat-timeline-segment,
+.timaat-timeline-sequence,
+.timaat-timeline-take,
+.timaat-timeline-scene,
+.timaat-timeline-action {
 	position: absolute;
 	border-left: 1px solid #aeb8c1;
 	border-right: 1px solid #aeb8c1;
@@ -507,7 +525,11 @@ a.dropdown-item {
 	background-color: #6c757d;	
 	cursor: pointer;
 }
-.timaat-timeline-segment-title {
+.timaat-timeline-segment-name,
+.timaat-timeline-sequence-name,
+.timaat-timeline-take-name,
+.timaat-timeline-scene-name,
+.timaat-timeline-action-name {
 	padding-left: 3px;
 	font-size: 0.70rem;
 	overflow: hidden;
@@ -679,6 +701,10 @@ a.dropdown-item {
 }
 #side-menu li a:hover {
 	color: #23527c;	
+}
+
+#timaat-timeline-slider-pane {
+	margin-top: 2px;
 }
 
 .timaat-timeline-slider {

@@ -45,11 +45,11 @@ public class Annotation implements Serializable {
 	@Column(name="layer_visual")
 	private int layerVisual;
 
-	@Column(name="sequence_start_time", columnDefinition = "INT")
-	private long sequenceStartTime;
+	@Column(name="start_time", columnDefinition = "INT")
+	private long startTime;
 
-	@Column(name="sequence_end_time", columnDefinition = "INT")
-	private long sequenceEndTime;
+	@Column(name="end_time", columnDefinition = "INT")
+	private long endTime;
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
@@ -273,20 +273,20 @@ public class Annotation implements Serializable {
 		this.layerVisual = layerVisual;
 	}
 
-	public long getSequenceEndTime() {
-		return this.sequenceEndTime;
+	public long getEndTime() {
+		return this.endTime;
 	}
 
-	public void setSequenceEndTime(long sequenceEndTime) {
-		this.sequenceEndTime = sequenceEndTime;
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
 	}
 
-	public long getSequenceStartTime() {
-		return this.sequenceStartTime;
+	public long getStartTime() {
+		return this.startTime;
 	}
 
-	public void setSequenceStartTime(long sequenceStartTime) {
-		this.sequenceStartTime = sequenceStartTime;
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 
 	public List<Analysis> getAnalysis() {

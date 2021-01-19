@@ -259,6 +259,7 @@ public class EndpointAnalysisList {
 	@Secured
 	@Path("{analysisListId}/segment")
 	public Response createAnalysisSegment(@PathParam("analysisListId") int analysisListId, String jsonData) {
+		System.out.println("createAnalysisSegment - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment newSegment = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -314,13 +315,12 @@ public class EndpointAnalysisList {
 		System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment updatedSegment = null;
-
     	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, id);
-    	if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, id);
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
 		
-    	// parse JSON data
+		// parse JSON data
 		try {
 			updatedSegment = mapper.readValue(jsonData, AnalysisSegment.class);
 		} catch (IOException e) {
@@ -328,12 +328,13 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedSegment == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
-		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setTitle(updatedSegment.getAnalysisSegmentTranslations().get(0).getTitle());
+		// update analysislist
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getName() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setName(updatedSegment.getAnalysisSegmentTranslations().get(0).getName());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setShortDescription(updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getComment() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setComment(updatedSegment.getAnalysisSegmentTranslations().get(0).getComment());
-		analysisSegment.setSegmentStartTime(updatedSegment.getSegmentStartTime());
-		analysisSegment.setSegmentEndTime(updatedSegment.getSegmentEndTime());
+		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setTranscript(updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript());
+		analysisSegment.setStartTime(updatedSegment.getStartTime());
+		analysisSegment.setEndTime(updatedSegment.getEndTime());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -390,6 +391,7 @@ public class EndpointAnalysisList {
 	@Secured
 	@Path("{segmentId}/sequence")
 	public Response createAnalysisSequence(@PathParam("segmentId") int segmentId, String jsonData) {
+		System.out.println("EndpointAnalysisList: createAnalysisSequence - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSequence newSequence = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -407,6 +409,10 @@ public class EndpointAnalysisList {
 		// sanitize object data
 		newSequence.setId(0);
 		analysisSegment.addAnalysisSequence(newSequence);
+		newSequence.getAnalysisSequenceTranslations().get(0).setId(0);
+		newSequence.getAnalysisSequenceTranslations().get(0).setAnalysisSequence(newSequence);
+		newSequence.getAnalysisSequenceTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		
 		
 		// persist analysissequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -566,6 +572,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response updateAnalysisSequenceTranslation(@PathParam("translation_id") int translationId,
 																										String jsonData) {
+		System.out.println("updateAnalysisSequenceTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSequenceTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -582,9 +589,9 @@ public class EndpointAnalysisList {
 		    	
     	// update analysislist
 		if ( updatedTranslation.getName() != null ) analysisSequenceTranslation.setName(updatedTranslation.getName());
-		if ( updatedTranslation.getShortDescription() != null ) analysisSequenceTranslation.setShortDescription(updatedTranslation.getShortDescription());
-		if ( updatedTranslation.getComment() != null ) analysisSequenceTranslation.setComment(updatedTranslation.getComment());
-		if ( updatedTranslation.getTranscript() != null ) analysisSequenceTranslation.setTranscript(updatedTranslation.getTranscript());
+		analysisSequenceTranslation.setShortDescription(updatedTranslation.getShortDescription());
+		analysisSequenceTranslation.setComment(updatedTranslation.getComment());
+		analysisSequenceTranslation.setTranscript(updatedTranslation.getTranscript());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -653,6 +660,9 @@ public class EndpointAnalysisList {
 		// sanitize object data
 		newScene.setId(0);
 		analysisSegment.addAnalysisScene(newScene);
+		newScene.getAnalysisSceneTranslations().get(0).setId(0);
+		newScene.getAnalysisSceneTranslations().get(0).setAnalysisScene(newScene);
+		newScene.getAnalysisSceneTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		// persist analysisscene and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -809,7 +819,9 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("scene/translation/{translation_id}")
 	@Secured
-	public Response updateAnalysisSceneTranslation(@PathParam("translation_id") int translationId, String jsonData) {
+	public Response updateAnalysisSceneTranslation(@PathParam("translation_id") int translationId,
+																										String jsonData) {
+		System.out.println("updateAnalysisSceneTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSceneTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -826,9 +838,9 @@ public class EndpointAnalysisList {
 		    	
     	// update analysislist
 		if ( updatedTranslation.getName() != null ) analysisSceneTranslation.setName(updatedTranslation.getName());
-		if ( updatedTranslation.getShortDescription() != null ) analysisSceneTranslation.setShortDescription(updatedTranslation.getShortDescription());
-		if ( updatedTranslation.getComment() != null ) analysisSceneTranslation.setComment(updatedTranslation.getComment());
-		if ( updatedTranslation.getTranscript() != null ) analysisSceneTranslation.setTranscript(updatedTranslation.getTranscript());
+		analysisSceneTranslation.setShortDescription(updatedTranslation.getShortDescription());
+		analysisSceneTranslation.setComment(updatedTranslation.getComment());
+		analysisSceneTranslation.setTranscript(updatedTranslation.getTranscript());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -896,6 +908,10 @@ public class EndpointAnalysisList {
 		// sanitize object data
 		newTake.setId(0);
 		analysisSequence.addAnalysisTake(newTake);
+		newTake.getAnalysisTakeTranslations().get(0).setId(0);
+		newTake.getAnalysisTakeTranslations().get(0).setAnalysisTake(newTake);
+		newTake.getAnalysisTakeTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		
 		
 		// persist analysistake and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1052,7 +1068,9 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("take/translation/{translation_id}")
 	@Secured
-	public Response updateAnalysisTakeTranslation(@PathParam("translation_id") int translationId, String jsonData) {
+	public Response updateAnalysisTakeTranslation(@PathParam("translation_id") int translationId,
+																										String jsonData) {
+		System.out.println("updateAnalysisTakeTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTakeTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1069,9 +1087,9 @@ public class EndpointAnalysisList {
 		    	
     	// update analysislist
 		if ( updatedTranslation.getName() != null ) analysisTakeTranslation.setName(updatedTranslation.getName());
-		if ( updatedTranslation.getShortDescription() != null ) analysisTakeTranslation.setShortDescription(updatedTranslation.getShortDescription());
-		if ( updatedTranslation.getComment() != null ) analysisTakeTranslation.setComment(updatedTranslation.getComment());
-		if ( updatedTranslation.getTranscript() != null ) analysisTakeTranslation.setTranscript(updatedTranslation.getTranscript());
+		analysisTakeTranslation.setShortDescription(updatedTranslation.getShortDescription());
+		analysisTakeTranslation.setComment(updatedTranslation.getComment());
+		analysisTakeTranslation.setTranscript(updatedTranslation.getTranscript());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1139,6 +1157,9 @@ public class EndpointAnalysisList {
 		// sanitize object data
 		newAction.setId(0);
 		analysisScene.addAnalysisAction(newAction);
+		newAction.getAnalysisActionTranslations().get(0).setId(0);
+		newAction.getAnalysisActionTranslations().get(0).setAnalysisAction(newAction);
+		newAction.getAnalysisActionTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		// persist analysisaction and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1295,7 +1316,9 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("action/translation/{translation_id}")
 	@Secured
-	public Response updateAnalysisActionTranslation(@PathParam("translation_id") int translationId, String jsonData) {
+	public Response updateAnalysisActionTranslation(@PathParam("translation_id") int translationId,
+																										String jsonData) {
+		System.out.println("updateAnalysisActionTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisActionTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1312,9 +1335,9 @@ public class EndpointAnalysisList {
 		    	
     	// update analysislist
 		if ( updatedTranslation.getName() != null ) analysisActionTranslation.setName(updatedTranslation.getName());
-		if ( updatedTranslation.getShortDescription() != null ) analysisActionTranslation.setShortDescription(updatedTranslation.getShortDescription());
-		if ( updatedTranslation.getComment() != null ) analysisActionTranslation.setComment(updatedTranslation.getComment());
-		if ( updatedTranslation.getTranscript() != null ) analysisActionTranslation.setTranscript(updatedTranslation.getTranscript());
+		analysisActionTranslation.setShortDescription(updatedTranslation.getShortDescription());
+		analysisActionTranslation.setComment(updatedTranslation.getComment());
+		analysisActionTranslation.setTranscript(updatedTranslation.getTranscript());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();

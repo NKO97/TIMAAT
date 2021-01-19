@@ -3,8 +3,8 @@ class AnalysisSegment {
 					// setup model
 					this.model = model;
 					this.active = false;
-					this._startTime = this.model.segmentStartTime/1000.0;
-					this._endTime = this.model.segmentEndTime/1000.0;
+					this._startTime = this.model.startTime/1000.0;
+					this._endTime = this.model.endTime/1000.0;
 					
 					// create and style list view element
 					this.listView = $(`
@@ -12,14 +12,14 @@ class AnalysisSegment {
 							<div class="d-flex justify-content-between">
 								<span class="font-weight-bold pt-1 text-light pl-1">
 									<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i> 
-									<span class="timaat-annotation-segment-title"></span>
+									<span class="timaat-annotation-segment-name"></span>
 								</span>
 							</div>
 						</li>`
 					);
 					this.timelineView = $(`
 						<div class="timaat-timeline-segment progress bg-info border border-dark" data-toggle="tooltip" data-placement="top" data-html="true">
-							<!-- <div class="timaat-timeline-segment-title text-white font-weight-bold"></div> -->
+							<!-- <div class="timaat-timeline-segment-name text-white font-weight-bold"></div> -->
 						</div>`
 					);
 					
@@ -27,17 +27,17 @@ class AnalysisSegment {
 				}
 				
 				updateUI() {
-					this.listView.attr('data-starttime', this.model.segmentStartTime);
-					let timeString = " "+TIMAATPub.formatTime(this.model.segmentStartTime/1000.0, true);
+					this.listView.attr('data-starttime', this.model.startTime);
+					let timeString = " "+TIMAATPub.formatTime(this.model.startTime/1000.0, true);
 					let title = this.model.analysisSegmentTranslations[0].title;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
 					let comment = this.model.analysisSegmentTranslations[0].comment;
-					if ( this.model.segmentStartTime != this.model.segmentEndTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.segmentEndTime/1000.0, true);
-					this.listView.find('.timaat-annotation-segment-title').html(title);
+					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true);
+					this.listView.find('.timaat-annotation-segment-name').html(title);
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
-					this.timelineView.find('.timaat-timeline-segment-title ').html(title);
-					this.timelineView.attr('title', '<strong>'+title+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.segmentStartTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.segmentEndTime/1000.0, true)+'</div>'+desc);
+					this.timelineView.find('.timaat-timeline-segment-name ').html(title);
+					this.timelineView.attr('title', '<strong>'+title+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true)+'</div>'+desc);
 					// comment
 					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
 						this.listView.find('.timaat-annotation-segment-comment-icon').show();
@@ -47,8 +47,8 @@ class AnalysisSegment {
 					// update timeline position
 					let magicoffset = 0;
 					let width =  100;
-					let length = ((this.model.segmentEndTime - this.model.segmentStartTime)/1000.0) / TIMAATPub.duration * width;
-					let offset = (this.model.segmentStartTime/1000.0) / TIMAATPub.duration * width;
+					let length = ((this.model.endTime - this.model.startTime)/1000.0) / TIMAATPub.duration * width;
+					let offset = (this.model.startTime/1000.0) / TIMAATPub.duration * width;
 					this.timelineView.css('width', length+'%');
 					this.timelineView.css('margin-left', (offset+magicoffset)+'%');
 
@@ -61,25 +61,25 @@ class AnalysisSegment {
 					var segment = this; // save annotation for events
 					// attach event handlers
 					this.listView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.listView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.segmentStartTime/1000.0, segment.model.segmentEndTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
@@ -97,7 +97,7 @@ class AnalysisSegment {
 					
 				updateStatus(time) {
 					var status = false;
-					if ( time >= this.model.segmentStartTime/1000.0 && time <= this.model.segmentEndTime/1000.0) status = true;
+					if ( time >= this.model.startTime/1000.0 && time <= this.model.endTime/1000.0) status = true;
 
 					if ( status != this.active ) {
 						this.active = status;
@@ -116,7 +116,7 @@ class Marker {
 			  this.annotation = annotation;
 			  this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
-			  this._to = Math.max(annotation.startTime, annotation.model.sequenceEndTime/1000.0);
+			  this._to = Math.max(annotation.startTime, annotation.model.endTime/1000.0);
 			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
 			  
 			  // construct marker element
@@ -481,8 +481,8 @@ class Annotation {
 			this.model.selectorSvgs[0].svgData = JSON.stringify(this.svg.model);
 		}
 
-		this._startTime = this.model.sequenceStartTime/1000.0;
-		this._endTime = this.model.sequenceEndTime/1000.0;
+		this._startTime = this.model.startTime/1000.0;
+		this._endTime = this.model.endTime/1000.0;
 		this._layerVisual = this.model.layerVisual;
 		// create keyframes
 		for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new Keyframe(keyframe, this));
@@ -613,10 +613,10 @@ class Annotation {
 
 		
 		updateUI() {
-			this.listView.attr('data-starttime', this.model.sequenceStartTime);
+			this.listView.attr('data-starttime', this.model.startTime);
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-			var timeString = " "+TIMAATPub.formatTime(this.model.sequenceStartTime/1000.0, true);
-			if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.sequenceEndTime/1000.0, true);
+			var timeString = " "+TIMAATPub.formatTime(this.model.startTime/1000.0, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true);
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// categories
@@ -1137,6 +1137,7 @@ class TIMAATPublication {
 		let title = segment.model.analysisSegmentTranslations[0].title;
 		let desc = ( segment.model.analysisSegmentTranslations[0].shortDescription ) ? segment.model.analysisSegmentTranslations[0].shortDescription : '';
 		let comment = segment.model.analysisSegmentTranslations[0].comment;
+		let transcript = segment.model.analysisSegmentTranslations[0].transcript;
 
 		if ( !title || title.length == 0) this.ui.segment.title.addClass('empty');
 		else {
@@ -1153,8 +1154,140 @@ class TIMAATPublication {
 			this.ui.segment.comment.removeClass('empty');
 			this.ui.segment.comment.find('.contents').html(comment);
 		}
+		if ( !transcript || transcript.length == 0) this.ui.segment.transcript.addClass('empty');
+		else {
+			this.ui.segment.transcript.removeClass('empty');
+			this.ui.segment.transcript.find('.contents').html(transcript);
+		}
 	}
-	
+
+	setSequenceMetadata(sequence) {
+		if ( !sequence ) return;
+		
+		this.ui.sequenceMetadata.removeClass('d-none');
+
+		let title = sequence.model.analysisSequenceTranslations[0].title;
+		let desc = ( sequence.model.analysisSequenceTranslations[0].shortDescription ) ? sequence.model.analysisSequenceTranslations[0].shortDescription : '';
+		let comment = sequence.model.analysisSequenceTranslations[0].comment;
+		let transcript = sequence.model.analysisSequenceTranslations[0].transcript;
+
+		if ( !title || title.length == 0) this.ui.sequence.title.addClass('empty');
+		else {
+			this.ui.sequence.title.removeClass('empty');
+			this.ui.sequence.title.find('.contents').html(title);
+		}
+		if ( !desc || desc.length == 0) this.ui.sequence.description.addClass('empty');
+		else {
+			this.ui.sequence.description.removeClass('empty');
+			this.ui.sequence.description.find('.contents').html(desc);
+		}
+		if ( !comment || comment.length == 0) this.ui.sequence.comment.addClass('empty');
+		else {
+			this.ui.sequence.comment.removeClass('empty');
+			this.ui.sequence.comment.find('.contents').html(comment);
+		}
+		if ( !transcript || transcript.length == 0) this.ui.sequence.transcript.addClass('empty');
+		else {
+			this.ui.sequence.transcript.removeClass('empty');
+			this.ui.sequence.transcript.find('.contents').html(transcript);
+		}
+	}
+
+	setTakeMetadata(take) {
+		if ( !take ) return;
+		
+		this.ui.takeMetadata.removeClass('d-none');
+
+		let title = take.model.analysisTakeTranslations[0].title;
+		let desc = ( take.model.analysisTakeTranslations[0].shortDescription ) ? take.model.analysisTakeTranslations[0].shortDescription : '';
+		let comment = take.model.analysisTakeTranslations[0].comment;
+		let transcript = take.model.analysisTakeTranslations[0].transcript;
+
+		if ( !title || title.length == 0) this.ui.take.title.addClass('empty');
+		else {
+			this.ui.take.title.removeClass('empty');
+			this.ui.take.title.find('.contents').html(title);
+		}
+		if ( !desc || desc.length == 0) this.ui.take.description.addClass('empty');
+		else {
+			this.ui.take.description.removeClass('empty');
+			this.ui.take.description.find('.contents').html(desc);
+		}
+		if ( !comment || comment.length == 0) this.ui.take.comment.addClass('empty');
+		else {
+			this.ui.take.comment.removeClass('empty');
+			this.ui.take.comment.find('.contents').html(comment);
+		}
+		if ( !transcript || transcript.length == 0) this.ui.take.transcript.addClass('empty');
+		else {
+			this.ui.take.transcript.removeClass('empty');
+			this.ui.take.transcript.find('.contents').html(transcript);
+		}
+	}
+
+	setSceneMetadata(scene) {
+		if ( !scene ) return;
+		
+		this.ui.sceneMetadata.removeClass('d-none');
+
+		let title = scene.model.analysisSceneTranslations[0].title;
+		let desc = ( scene.model.analysisSceneTranslations[0].shortDescription ) ? scene.model.analysisSceneTranslations[0].shortDescription : '';
+		let comment = scene.model.analysisSceneTranslations[0].comment;
+		let transcript = scene.model.analysisSceneTranslations[0].transcript;
+
+		if ( !title || title.length == 0) this.ui.scene.title.addClass('empty');
+		else {
+			this.ui.scene.title.removeClass('empty');
+			this.ui.scene.title.find('.contents').html(title);
+		}
+		if ( !desc || desc.length == 0) this.ui.scene.description.addClass('empty');
+		else {
+			this.ui.scene.description.removeClass('empty');
+			this.ui.scene.description.find('.contents').html(desc);
+		}
+		if ( !comment || comment.length == 0) this.ui.scene.comment.addClass('empty');
+		else {
+			this.ui.scene.comment.removeClass('empty');
+			this.ui.scene.comment.find('.contents').html(comment);
+		}
+		if ( !transcript || transcript.length == 0) this.ui.scene.transcript.addClass('empty');
+		else {
+			this.ui.scene.transcript.removeClass('empty');
+			this.ui.scene.transcript.find('.contents').html(transcript);
+		}
+	}
+
+	setActionMetadata(action) {
+		if ( !action ) return;
+		
+		this.ui.actionMetadata.removeClass('d-none');
+
+		let title = action.model.analysisActionTranslations[0].title;
+		let desc = ( action.model.analysisActionTranslations[0].shortDescription ) ? action.model.analysisActionTranslations[0].shortDescription : '';
+		let comment = action.model.analysisActionTranslations[0].comment;
+		let transcript = action.model.analysisActionTranslations[0].transcript;
+
+		if ( !title || title.length == 0) this.ui.action.title.addClass('empty');
+		else {
+			this.ui.action.title.removeClass('empty');
+			this.ui.action.title.find('.contents').html(title);
+		}
+		if ( !desc || desc.length == 0) this.ui.action.description.addClass('empty');
+		else {
+			this.ui.action.description.removeClass('empty');
+			this.ui.action.description.find('.contents').html(desc);
+		}
+		if ( !comment || comment.length == 0) this.ui.action.comment.addClass('empty');
+		else {
+			this.ui.action.comment.removeClass('empty');
+			this.ui.action.comment.find('.contents').html(comment);
+		}
+		if ( !transcript || transcript.length == 0) this.ui.action.transcript.addClass('empty');
+		else {
+			this.ui.action.transcript.removeClass('empty');
+			this.ui.action.transcript.find('.contents').html(transcript);
+		}
+	}
 	
 	selectAnnotation(annotation, changehash=true) {
 		if ( this.curAnnotation == annotation && annotation != null ) return;
@@ -1238,8 +1371,8 @@ class TIMAATPublication {
 	
 	sortSegments() {
 		this.curAnalysisList.analysisSegmentsUI.sort(function (a, b) {
-			if ( b.model.segmentStartTime < a.model.segmentStartTime ) return 1;
-			if ( b.model.segmentStartTime > a.model.segmentStartTime ) return -1;
+			if ( b.model.startTime < a.model.startTime ) return 1;
+			if ( b.model.startTime > a.model.startTime ) return -1;
 			return 0;
 		})
 	}
@@ -1295,7 +1428,7 @@ class TIMAATPublication {
 				comment : $('.list-comment'),
 			},
 			segment: {
-				title : $('.segment-title'),
+				title : $('.segment-name'),
 				description : $('.segment-description'),
 				comment : $('.segment-comment'),
 			},

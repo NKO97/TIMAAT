@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -35,8 +36,12 @@ public class AnalysisTake implements Serializable {
 	private AnalysisSequence analysisSequence;
 
 	//bi-directional many-to-one association to AnalysisTakeTranslation
-	@OneToMany(mappedBy="analysisTake")
+	@OneToMany(mappedBy="analysisTake", cascade = CascadeType.ALL)
 	private List<AnalysisTakeTranslation> analysisTakeTranslations;
+
+	@Transient
+	@JsonProperty("sequenceId")
+	private int sequenceId;
 
 	public AnalysisTake() {
 	}
@@ -47,6 +52,14 @@ public class AnalysisTake implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getSequenceId() {
+		return this.sequenceId;
+	}
+
+	public void setSequenceId(int sequenceId) {
+		this.sequenceId = sequenceId;
 	}
 
 	public long getEndTime() {

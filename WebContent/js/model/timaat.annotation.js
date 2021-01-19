@@ -38,8 +38,8 @@
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
 
-			this._startTime = this.model.sequenceStartTime/1000.0;
-			this._endTime = this.model.sequenceEndTime/1000.0;
+			this._startTime = this.model.startTime/1000.0;
+			this._endTime = this.model.endTime/1000.0;
 			this._layerVisual = this.model.layerVisual;
 			// create keyframes
 			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
@@ -420,10 +420,10 @@
 		
 		updateUI() {
 			// console.log("TCL: Annotation -> updateUI -> updateUI()");
-			this.listView.attr('data-starttime', this.model.sequenceStartTime);
+			this.listView.attr('data-starttime', this.model.startTime);
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-			var timeString = " "+TIMAAT.Util.formatTime(this.model.sequenceStartTime/1000.0, true);
-			if ( this.model.sequenceStartTime != this.model.sequenceEndTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.sequenceEndTime/1000.0, true);
+			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// categories
@@ -546,8 +546,8 @@
 		
 		getModel() {
 //					console.log("TCL: Annotation -> getModel -> getModel()");
-//					this.model.sequenceStartTime = TIMAAT.Util.formatTime(this.model.startTime, true);
-//					this.model.sequenceEndTime = TIMAAT.Util.formatTime(this.model.startTime, true);
+//					this.model.startTime = TIMAAT.Util.formatTime(this.model.startTime, true);
+//					this.model.endTime = TIMAAT.Util.formatTime(this.model.startTime, true);
 			return this.model;
 		}
 		
@@ -557,8 +557,8 @@
 			this.svg.layer.clearLayers();
 			this.svg.items = Array();
 			this._layerVisual = this.model.layerVisual;
-			this._startTime = this.model.sequenceStartTime/1000.0;
-			this._endTime = this.model.sequenceEndTime/1000.0;
+			this._startTime = this.model.startTime/1000.0;
+			this._endTime = this.model.endTime/1000.0;
 			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
 			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
 			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
@@ -819,8 +819,8 @@
 		_syncToModel() {
 			// console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 			let jsonData = { keyframes: [] };
-			this.model.sequenceStartTime = this._startTime*1000.0;
-			this.model.sequenceEndTime = this._endTime*1000.0;
+			this.model.startTime = this._startTime*1000.0;
+			this.model.endTime = this._endTime*1000.0;
 			this.model.layerVisual = this._layerVisual;
 
 			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds

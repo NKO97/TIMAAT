@@ -373,7 +373,7 @@
 				// annotations
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
-					var title = $("#timaat-inspector-meta-title").val();
+					var title = $("#timaat-inspector-meta-name").val();
 					var opacity = $("#timaat-inspector-meta-opacity").val();
 					var layerVisual = 1;
 					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
@@ -384,8 +384,8 @@
 					if (anno) {
 						anno.model.title = title;
 						anno.model.comment = comment;
-						anno.model.sequenceStartTime = startTime*1000.0;
-						anno.model.sequenceEndTime = endTime*1000.0;
+						anno.model.startTime = startTime*1000.0;
+						anno.model.endTime = endTime*1000.0;
 						anno.svg.color = color;
 						anno.opacity = opacity;
 						anno.layerVisual = layerVisual;
@@ -398,7 +398,7 @@
 				// analysis lists
 				if ( inspector.state.type == 'analysislist' ) {
 					var list = inspector.state.item;
-					var title = $('#timaat-inspector-meta-title').val();
+					var title = $('#timaat-inspector-meta-name').val();
 					var comment = $('#timaat-inspector-meta-comment').val();				
 					if (list) {
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title', title);
@@ -412,10 +412,10 @@
 				// analysis segments
 				if ( inspector.state.type == 'analysissegment' ) {
 					var segment = inspector.state.item;
-					var title = $('#timaat-inspector-meta-title').val();
+					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
 					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('timaat-inspector-meta-transcript').val();
+					var transcript = $('#timaat-inspector-meta-transcript').val();
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -427,11 +427,11 @@
 						var i = 0;
 						var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
 						if (segment) {
-							var index = segmentList.findIndex(({id}) => id === segment.id);
+							var index = segmentList.findIndex(({id}) => id === segment.model.id);
 							segmentList.splice(index,1);
 						}
 						for (; i < segmentList.length; i++) {
-							if (!(endTime <= segmentList[i].segmentStartTime || startTime >= segmentList[i].segmentEndTime) ) {
+							if (!(endTime <= segmentList[i].startTime || startTime >= segmentList[i].endTime) ) {
 								overlapping = true;
 								break;
 							}
@@ -441,12 +441,12 @@
 							$('#timaat-videoplayer-segment-overlapping').modal('show');
 						} else {
 							if (segment) {
-								segment.model.analysisSegmentTranslations[0].title = title;
+								segment.model.analysisSegmentTranslations[0].name = name;
 								segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
 								segment.model.analysisSegmentTranslations[0].comment = comment;
 								segment.model.analysisSegmentTranslations[0].transcript = transcript;
-								segment.model.segmentStartTime = startTime;
-								segment.model.segmentEndTime = endTime;
+								segment.model.startTime = startTime;
+								segment.model.endTime = endTime;
 
 								// update segment UI
 								TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
@@ -455,18 +455,286 @@
 									id: 0,
 									analysisSegmentTranslations: [{
 										id: 0,
-										title: title,
+										name: name,
 										shortDescription: shortDescription,
 										comment: comment,
 										transcript: transcript
 									}],
-									segmentStartTime: startTime,
-									segmentEndTime: endTime
+									startTime: startTime,
+									endTime: endTime
 								};
-								TIMAAT.Service.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+								TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+						}
+					}
+				}
+				// analysis sequences
+				if ( inspector.state.type == 'analysissequence' ) {
+					var sequence = inspector.state.item;
+          console.log("TCL: Inspector -> $ -> sequence", sequence);
+					var name = $('#timaat-inspector-meta-name').val();
+					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
+					var comment = $('#timaat-inspector-meta-comment').val();
+					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+
+					// early out: sequence's time range exceeds segment's time range
+					// TODO
+					// early out: sequence has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-sequence-noRange').modal('show');
+					} else {
+						var overlapping = false;
+						var i = 0;
+						var sequenceList = TIMAAT.VideoPlayer.curSegment.model.analysisSequences;
+						if (sequence) {
+							var index = sequenceList.findIndex(({id}) => id === sequence.model.id);
+							sequenceList.splice(index,1);
+						}
+						for (; i < sequenceList.length; i++) {
+							if (!(endTime <= sequenceList[i].startTime || startTime >= sequenceList[i].endTime) ) {
+								overlapping = true;
+								break;
+							}
+						}
+						// early out: sequence overlaps with other sequences
+						if (overlapping) {
+							$('#timaat-videoplayer-sequence-overlapping').modal('show');
+						} else {
+							if (sequence) {
+								sequence.model.analysisSequenceTranslations[0].name = name;
+								sequence.model.analysisSequenceTranslations[0].shortDescription = shortDescription;
+								sequence.model.analysisSequenceTranslations[0].comment = comment;
+								sequence.model.analysisSequenceTranslations[0].transcript = transcript;
+								sequence.model.startTime = startTime;
+								sequence.model.endTime = endTime;
+								sequence.model.segmentId = TIMAAT.VideoPlayer.curSegment.model.id;
+
+								// update sequence UI
+								TIMAAT.VideoPlayer.updateAnalysisSequence(sequence);
+							} else {
+								var model = {
+									id: 0,
+									analysisSequenceTranslations: [{
+										id: 0,
+										name: name,
+										shortDescription: shortDescription,
+										comment: comment,
+										transcript: transcript
+									}],
+									startTime: startTime,
+									endTime: endTime,
+									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
+								};
+								sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sequenceAdded);
+								sequence = new TIMAAT.AnalysisSequence(sequence);
+								TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
+							}
+							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+							TIMAAT.VideoPlayer.curSegment.model.analysisSequences = tempList.analysisSequences;
+						}
+					}
+				}
+				// analysis takes
+				if ( inspector.state.type == 'analysistake' ) {
+					var take = inspector.state.item;
+					var name = $('#timaat-inspector-meta-name').val();
+					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
+					var comment = $('#timaat-inspector-meta-comment').val();
+					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+
+					// early out: take's time range exceeds sequence's time range
+					// TODO
+					// early out: take has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-take-noRange').modal('show');
+					} else {
+						var overlapping = false;
+						var i = 0;
+						var takeList = TIMAAT.VideoPlayer.curSequence.model.analysisTakes;
+						if (take) {
+							var index = takeList.findIndex(({id}) => id === take.model.id);
+							takeList.splice(index,1);
+						}
+						for (; i < takeList.length; i++) {
+							if (!(endTime <= takeList[i].startTime || startTime >= takeList[i].endTime) ) {
+								overlapping = true;
+								break;
+							}
+						}
+						// early out: take overlaps with other takes
+						if (overlapping) {
+							$('#timaat-videoplayer-take-overlapping').modal('show');
+						} else {
+							if (take) {
+								take.model.analysisTakeTranslations[0].name = name;
+								take.model.analysisTakeTranslations[0].shortDescription = shortDescription;
+								take.model.analysisTakeTranslations[0].comment = comment;
+								take.model.analysisTakeTranslations[0].transcript = transcript;
+								take.model.startTime = startTime;
+								take.model.endTime = endTime;
+
+								// update take UI
+								TIMAAT.VideoPlayer.updateAnalysisTake(take);
+							} else {
+								var model = {
+									id: 0,
+									analysisTakeTranslations: [{
+										id: 0,
+										name: name,
+										shortDescription: shortDescription,
+										comment: comment,
+										transcript: transcript
+									}],
+									startTime: startTime,
+									endTime: endTime,
+									sequenceId: TIMAAT.VideoPlayer.curSequence.model.id
+								};
+								take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id, TIMAAT.VideoPlayer._takeAdded);
+								take = new TIMAAT.AnalysisTake(take);
+								TIMAAT.VideoPlayer._takeAdded(take, true);
+							}
+							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+							TIMAAT.VideoPlayer.curSequence.analysisTakes = tempList.analysisTakes;
+						}
+					}
+				}
+				// analysis scenes
+				if ( inspector.state.type == 'analysisscene' ) {
+					var scene = inspector.state.item;
+					var name = $('#timaat-inspector-meta-name').val();
+					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
+					var comment = $('#timaat-inspector-meta-comment').val();
+					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+
+					// early out: scene's time range exceeds segment's time range
+					// TODO
+					// early out: scene has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-scene-noRange').modal('show');
+					} else {
+						var overlapping = false;
+						var i = 0;
+						var sceneList = TIMAAT.VideoPlayer.curSegment.model.analysisScenes;
+						if (scene) {
+							var index = sceneList.findIndex(({id}) => id === scene.model.id);
+							sceneList.splice(index,1);
+						}
+						for (; i < sceneList.length; i++) {
+							if (!(endTime <= sceneList[i].startTime || startTime >= sceneList[i].endTime) ) {
+								overlapping = true;
+								break;
+							}
+						}
+						// early out: scene overlaps with other scenes
+						if (overlapping) {
+							$('#timaat-videoplayer-scene-overlapping').modal('show');
+						} else {
+							if (scene) {
+								scene.model.analysisSceneTranslations[0].name = name;
+								scene.model.analysisSceneTranslations[0].shortDescription = shortDescription;
+								scene.model.analysisSceneTranslations[0].comment = comment;
+								scene.model.analysisSceneTranslations[0].transcript = transcript;
+								scene.model.startTime = startTime;
+								scene.model.endTime = endTime;
+
+								// update scene UI
+								TIMAAT.VideoPlayer.updateAnalysisScene(scene);
+							} else {
+								var model = {
+									id: 0,
+									analysisSceneTranslations: [{
+										id: 0,
+										name: name,
+										shortDescription: shortDescription,
+										comment: comment,
+										transcript: transcript
+									}],
+									startTime: startTime,
+									endTime: endTime,
+									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
+								};
+								scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
+								scene = new TIMAAT.AnalysisScene(scene);
+								TIMAAT.VideoPlayer._sceneAdded(scene, true);
+								// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
+							}
+							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+							TIMAAT.VideoPlayer.curSegment.model.analysisScenes = tempList.analysisScenes;
+						}
+					}
+				}
+				// analysis actions
+				if ( inspector.state.type == 'analysisaction' ) {
+					var action = inspector.state.item;
+					var name = $('#timaat-inspector-meta-name').val();
+					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
+					var comment = $('#timaat-inspector-meta-comment').val();
+					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+
+					// early out: action's time range exceeds scene's time range
+					// TODO
+					// early out: action has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-action-noRange').modal('show');
+					} else {
+						var overlapping = false;
+						var i = 0;
+						var actionList = TIMAAT.VideoPlayer.curScene.model.analysisActions;
+						if (action) {
+							var index = actionList.findIndex(({id}) => id === action.model.id);
+							actionList.splice(index,1);
+						}
+						for (; i < actionList.length; i++) {
+							if (!(endTime <= actionList[i].startTime || startTime >= actionList[i].endTime) ) {
+								overlapping = true;
+								break;
+							}
+						}
+						// early out: action overlaps with other actions
+						if (overlapping) {
+							$('#timaat-videoplayer-action-overlapping').modal('show');
+						} else {
+							if (action) {
+								action.model.analysisActionTranslations[0].name = name;
+								action.model.analysisActionTranslations[0].shortDescription = shortDescription;
+								action.model.analysisActionTranslations[0].comment = comment;
+								action.model.analysisActionTranslations[0].transcript = transcript;
+								action.model.startTime = startTime;
+								action.model.endTime = endTime;
+
+								// update action UI
+								TIMAAT.VideoPlayer.updateAnalysisAction(action);
+							} else {
+								var model = {
+									id: 0,
+									analysisActionTranslations: [{
+										id: 0,
+										name: name,
+										shortDescription: shortDescription,
+										comment: comment,
+										transcript: transcript
+									}],
+									startTime: startTime,
+									endTime: endTime,
+									sceneId: TIMAAT.VideoPlayer.curScene.model.id
+								};
+								action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id, TIMAAT.VideoPlayer._actionAdded);
+								action = new TIMAAT.AnalysisAction(action);
+								TIMAAT.VideoPlayer._actionAdded(action, true);
+								// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
+							}
+							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+							TIMAAT.VideoPlayer.curScene.analysisActions = tempList.analysisActions;
 						}
 					}
 				}
@@ -478,8 +746,8 @@
 			this.cp = $('#timaat-inspector-meta-colorPicker').data("plugin_tinycolorpicker");
 			this.cp.setColor('rgb(3, 145, 206)');
 
-			$('#timaat-inspector-meta-title').on('input', function(ev) {
-				if ( $("#timaat-inspector-meta-title").val().length > 0 ) {
+			$('#timaat-inspector-meta-name').on('input', function(ev) {
+				if ( $("#timaat-inspector-meta-name").val().length > 0 ) {
 					$('#timaat-inspector-meta-submit').prop('disabled', false);
 					$('#timaat-inspector-meta-submit').removeAttr('disabled');
 				} else {
@@ -608,6 +876,16 @@
       // console.log("TCL: Inspector -> setItem -> item, type", item, type);
 			this.state.item = item;
 			this.state.type = type;
+
+			// hide segment substructure elements 
+			$('#timaat-analysissequence-add').addClass("timaat-item-disabled");
+			$('#timaat-analysissequence-add').removeAttr('onclick');
+			$('#timaat-analysistake-add').addClass("timaat-item-disabled");
+			$('#timaat-analysistake-add').removeAttr('onclick');
+			$('#timaat-analysisscene-add').addClass("timaat-item-disabled");
+			$('#timaat-analysisscene-add').removeAttr('onclick');
+			$('#timaat-analysisaction-add').addClass("timaat-item-disabled");
+			$('#timaat-analysisaction-add').removeAttr('onclick');
 			
 			// metadata panel default UI setting
 			$('#timaat-inspector-meta-start').prop('disabled', false);
@@ -665,6 +943,7 @@
 					}
 					$('#timaat-inspector-meta-shortDescription-group').hide();
 					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').hide();
 					var anno = item;
 					var heading = (anno) ? "Annotation bearbeiten" : "Annotation hinzufügen";
 					var submit = (anno) ? "Speichern" : "Hinzufügen";
@@ -675,13 +954,13 @@
 					var stroke = (anno) ? anno.stroke : 2;
 					var layerVisual = (anno) ? anno.layerVisual : (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 					var comment = (anno) ? anno.model.comment : "";
-					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceStartTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
-					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.sequenceEndTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
 					this.cp.setColor('#'+color);
-					$("#timaat-inspector-meta-title").val(title).trigger('input');
+					$("#timaat-inspector-meta-name").val(title).trigger('input');
 					$("#timaat-inspector-meta-opacity").val(opacity);
 					this._setInspectorStroke(stroke);
 					this._setInspectorAnnotationType(layerVisual);
@@ -842,6 +1121,7 @@
 					$('#timaat-inspector-meta-timecode-group').hide();
 					$('#timaat-inspector-meta-shortDescription-group').hide();
 					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').hide();
 					var list = item;
 					if ( !list ) this.open('timaat-inspector-metadata');
 					var heading = (list) ? '<i class="fas fa-list-alt"></i> Analyse bearbeiten' : '<i class="fas fa-list-alt"></i> Analyse hinzufügen';
@@ -851,7 +1131,7 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-title").val(title).trigger('input');
+					$("#timaat-inspector-meta-name").val(title).trigger('input');
 					$("#timaat-inspector-meta-comment").val(comment);
 					$('#timaat-inspector-categories-and-tags-title').html('Kategorien-Sets und Tags');
 					if ( item != null ) {
@@ -983,39 +1263,236 @@
 				}
 				// analysis segments
 				if ( type == 'analysissegment' ) {
+					// show segment substructure elements
+					$('#timaat-analysissequence-add').removeClass("timaat-item-disabled");
+					$('#timaat-analysissequence-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSequence()');
+					$('#timaat-analysisscene-add').removeClass("timaat-item-disabled");
+					$('#timaat-analysisscene-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisScene()');
+
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
 					$('#timaat-inspector-meta-timecode-group').show();
 					$('#timaat-inspector-meta-shortDescription-group').show();
 					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').show();
 					var segment = item;
 					if ( !segment ) this.open('timaat-inspector-metadata');
 					var heading = (segment) ? '<i class="fas fa-indent"></i> Segment bearbeiten' : '<i class="fas fa-indent"></i> Segment hinzufügen';
 					var submit = (segment) ? "Speichern" : "Hinzufügen";
-					var title = (segment) ? segment.model.analysisSegmentTranslations[0].title : "";
+					var name = (segment) ? segment.model.analysisSegmentTranslations[0].name : "";
 					var shortDescription = (segment) ? segment.model.analysisSegmentTranslations[0].shortDescription : "";
 					var comment = (segment) ? segment.model.analysisSegmentTranslations[0].comment : "";
-					var startTime = (segment) ? segment.model.segmentStartTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
-					var endTime = (segment) ? segment.model.segmentEndTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
+					var transcript = (segment) ? segment.model.analysisSegmentTranslations[0].transcript : "";
+					var startTime = (segment) ? segment.model.startTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (segment) ? segment.model.endTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
 					// find closest segment to adjust end time
 					if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) {
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
-							if ( segment.model.segmentStartTime/1000.0 > startTime && segment.model.segmentEndTime/1000.0 < endTime )
-								endTime = segment.model.segmentEndTime/1000.0;
+							if ( segment.model.startTime/1000.0 > startTime && segment.model.endTime/1000.0 < endTime )
+								endTime = segment.model.endTime/1000.0;
 						});
 					}
-					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.segmentStartTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					var start = (segment) ? TIMAAT.Util.formatTime(segment.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
 					var end = TIMAAT.Util.formatTime(endTime, true);
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-title").val(title).trigger('input');
+					$("#timaat-inspector-meta-name").val(name).trigger('input');
 					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
 					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
+					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
 					$("#timaat-inspector-meta-start").val(start);
 					$("#timaat-inspector-meta-end").val(end);
 					(segment) ? $('#timaat-segment-delete-submit').show() : $('#timaat-segment-delete-submit').hide();
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+				}
+				// analysis sequences
+				if ( type == 'analysissequence' ) {
+					// show sequence substructure elements
+					$('#timaat-analysistake-add').removeClass("timaat-item-disabled");
+					$('#timaat-analysistake-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisTake()');
+
+					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
+					$('#timaat-inspector-meta-timecode-group').show();
+					$('#timaat-inspector-meta-shortDescription-group').show();
+					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').show();
+					var sequence = item;
+					if ( !sequence ) this.open('timaat-inspector-metadata');
+					var heading = (sequence) ? '<i class="fas fa-indent"></i> Sequenz bearbeiten' : '<i class="fas fa-indent"></i> Sequenz hinzufügen';
+					var submit = (sequence) ? "Speichern" : "Hinzufügen";
+					var name = (sequence) ? sequence.model.analysisSequenceTranslations[0].name : "";
+					var shortDescription = (sequence) ? sequence.model.analysisSequenceTranslations[0].shortDescription : "";
+					var comment = (sequence) ? sequence.model.analysisSequenceTranslations[0].comment : "";
+					var transcript = (sequence) ? sequence.model.analysisSequenceTranslations[0].transcript : "";
+					var startTime = (sequence) ? sequence.model.startTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (sequence) ? sequence.model.endTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
+					// find closest sequence to adjust end time
+					if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
+							if ( sequence.model.startTime/1000.0 > startTime && sequence.model.endTime/1000.0 < endTime )
+								endTime = sequence.model.endTime/1000.0;
+						});
+					}
+					var start = (sequence) ? TIMAAT.Util.formatTime(sequence.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					if (start < TIMAAT.VideoPlayer.curSegment.model.startTime)
+						start = TIMAAT.VideoPlayer.curSegment.model.startTime;
+					var end = TIMAAT.Util.formatTime(endTime, true);
+					if (end > TIMAAT.VideoPlayer.curSegment.model.endTime)
+						end = TIMAAT.VideoPlayer.curSegment.model.endTime;
+
+					// setup UI from Video Player state
+					$('#timaat-inspector-metadata-title').html(heading);
+					$('#timaat-inspector-meta-submit').html(submit);
+					$("#timaat-inspector-meta-name").val(name).trigger('input');
+					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
+					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
+					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
+					$("#timaat-inspector-meta-start").val(start);
+					$("#timaat-inspector-meta-end").val(end);
+					(sequence) ? $('#timaat-sequence-delete-submit').show() : $('#timaat-sequence-delete-submit').hide();
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+				}
+				// analysis takes
+				if ( type == 'analysistake' ) {
+					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
+					$('#timaat-inspector-meta-timecode-group').show();
+					$('#timaat-inspector-meta-shortDescription-group').show();
+					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').show();
+					var take = item;
+					if ( !take ) this.open('timaat-inspector-metadata');
+					var heading = (take) ? '<i class="fas fa-indent"></i> Take bearbeiten' : '<i class="fas fa-indent"></i> Take hinzufügen';
+					var submit = (take) ? "Speichern" : "Hinzufügen";
+					var name = (take) ? take.model.analysisTakeTranslations[0].name : "";
+					var shortDescription = (take) ? take.model.analysisTakeTranslations[0].shortDescription : "";
+					var comment = (take) ? take.model.analysisTakeTranslations[0].comment : "";
+					var transcript = (take) ? take.model.analysisTakeTranslations[0].transcript : "";
+					var startTime = (take) ? take.model.startTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (take) ? take.model.endTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
+					// find closest take to adjust end time
+					if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
+							if ( take.model.startTime/1000.0 > startTime && take.model.endTime/1000.0 < endTime )
+								endTime = take.model.endTime/1000.0;
+						});
+					}
+					var start = (take) ? TIMAAT.Util.formatTime(take.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					if (start < TIMAAT.VideoPlayer.curSequence.model.startTime)
+						start = TIMAAT.VideoPlayer.curSequence.model.startTime;
+					var end = TIMAAT.Util.formatTime(endTime, true);
+					if (end > TIMAAT.VideoPlayer.curSequence.model.endTime)
+						end = TIMAAT.VideoPlayer.curSequence.model.endTime;
+
+					// setup UI from Video Player state
+					$('#timaat-inspector-metadata-title').html(heading);
+					$('#timaat-inspector-meta-submit').html(submit);
+					$("#timaat-inspector-meta-name").val(name).trigger('input');
+					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
+					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
+					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
+					$("#timaat-inspector-meta-start").val(start);
+					$("#timaat-inspector-meta-end").val(end);
+					(take) ? $('#timaat-take-delete-submit').show() : $('#timaat-take-delete-submit').hide();
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+				}
+				// analysis scenes
+				if ( type == 'analysisscene' ) {
+					// show scene substructure elements
+					$('#timaat-analysisaction-add').removeClass("timaat-item-disabled");
+					$('#timaat-analysisaction-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisAction()');
+
+					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
+					$('#timaat-inspector-meta-timecode-group').show();
+					$('#timaat-inspector-meta-shortDescription-group').show();
+					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').show();
+					var scene = item;
+					if ( !scene ) this.open('timaat-inspector-metadata');
+					var heading = (scene) ? '<i class="fas fa-indent"></i> Scene bearbeiten' : '<i class="fas fa-indent"></i> Scene hinzufügen';
+					var submit = (scene) ? "Speichern" : "Hinzufügen";
+					var name = (scene) ? scene.model.analysisSceneTranslations[0].name : "";
+					var shortDescription = (scene) ? scene.model.analysisSceneTranslations[0].shortDescription : "";
+					var comment = (scene) ? scene.model.analysisSceneTranslations[0].comment : "";
+					var transcript = (scene) ? scene.model.analysisSceneTranslations[0].transcript : "";
+					var startTime = (scene) ? scene.model.startTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (scene) ? scene.model.endTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
+					// find closest scene to adjust end time
+					if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
+							if ( scene.model.startTime/1000.0 > startTime && scene.model.endTime/1000.0 < endTime )
+								endTime = scene.model.endTime/1000.0;
+						});
+					}
+					var start = (scene) ? TIMAAT.Util.formatTime(scene.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					if (start < TIMAAT.VideoPlayer.curSegment.model.startTime)
+						start = TIMAAT.VideoPlayer.curSegment.model.startTime;
+					var end = TIMAAT.Util.formatTime(endTime, true);
+					if (end > TIMAAT.VideoPlayer.curSegment.model.endTime)
+						end = TIMAAT.VideoPlayer.curSegment.model.endTime;
+
+					// setup UI from Video Player state
+					$('#timaat-inspector-metadata-title').html(heading);
+					$('#timaat-inspector-meta-submit').html(submit);
+					$("#timaat-inspector-meta-name").val(name).trigger('input');
+					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
+					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
+					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
+					$("#timaat-inspector-meta-start").val(start);
+					$("#timaat-inspector-meta-end").val(end);
+					(scene) ? $('#timaat-scene-delete-submit').show() : $('#timaat-scene-delete-submit').hide();
+					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+				}
+				// analysis actions
+				if ( type == 'analysisaction' ) {
+					$('#timaat-inspector-meta-color-group').hide();
+					$('#timaat-inspector-meta-opacity-group').hide();
+					$('#timaat-inspector-meta-type-group').hide();
+					$('#timaat-inspector-meta-timecode-group').show();
+					$('#timaat-inspector-meta-shortDescription-group').show();
+					$('#timaat-inspector-meta-comment-group').show();
+					$('#timaat-inspector-meta-transcript-group').show();
+					var action = item;
+					if ( !action ) this.open('timaat-inspector-metadata');
+					var heading = (action) ? '<i class="fas fa-indent"></i> Action bearbeiten' : '<i class="fas fa-indent"></i> Action hinzufügen';
+					var submit = (action) ? "Speichern" : "Hinzufügen";
+					var name = (action) ? action.model.analysisActionTranslations[0].name : "";
+					var shortDescription = (action) ? action.model.analysisActionTranslations[0].shortDescription : "";
+					var comment = (action) ? action.model.analysisActionTranslations[0].comment : "";
+					var transcript = (action) ? action.model.analysisActionTranslations[0].transcript : "";
+					var startTime = (action) ? action.model.startTime/1000.0 : TIMAAT.VideoPlayer.video.currentTime;
+					var endTime = (action) ? action.model.endTime/1000.0 : TIMAAT.VideoPlayer.video.duration;				
+					// find closest action to adjust end time
+					if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
+							if ( action.model.startTime/1000.0 > startTime && action.model.endTime/1000.0 < endTime )
+								endTime = action.model.endTime/1000.0;
+						});
+					}
+					var start = (action) ? TIMAAT.Util.formatTime(action.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					if (start < TIMAAT.VideoPlayer.curScene.model.startTime)
+						start = TIMAAT.VideoPlayer.curScene.model.startTime;
+					var end = TIMAAT.Util.formatTime(endTime, true);
+					if (end > TIMAAT.VideoPlayer.curScene.model.endTime)
+						end = TIMAAT.VideoPlayer.curScene.model.endTime;
+
+					// setup UI from Video Player state
+					$('#timaat-inspector-metadata-title').html(heading);
+					$('#timaat-inspector-meta-submit').html(submit);
+					$("#timaat-inspector-meta-name").val(name).trigger('input');
+					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
+					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
+					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
+					$("#timaat-inspector-meta-start").val(start);
+					$("#timaat-inspector-meta-end").val(end);
+					(action) ? $('#timaat-action-delete-submit').show() : $('#timaat-action-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
 			}
@@ -1046,17 +1523,87 @@
 					this.ui.keyframeList.append(keyframe.ui.inspectorView);
 			} else
 			if (  this.state.type == 'analysissegment' ) {
-				let title = this.state.item.model.analysisSegmentTranslations[0].title;
+				let name = this.state.item.model.analysisSegmentTranslations[0].name;
 				let shortDescription = this.state.item.model.analysisSegmentTranslations[0].shortDescription;
 				let comment = this.state.item.model.analysisSegmentTranslations[0].comment;
-				let startTime = this.state.item.model.segmentStartTime/1000.0;
-				let endTime = this.state.item.model.segmentEndTime/1000.0;
+				let transcript = this.state.item.model.analysisSegmentTranslations[0].transcript;
+				let startTime = this.state.item.model.startTime/1000.0;
+				let endTime = this.state.item.model.endTime/1000.0;
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-title").val(title);
+				$("#timaat-inspector-meta-name").val(name);
 				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
 				$("#timaat-inspector-meta-comment").val(comment);
+				$("#timaat-inspector-meta-transcript").val(transcript);
+				$("#timaat-inspector-meta-start").val(start);
+				$("#timaat-inspector-meta-end").val(end);
+			} else
+			if (  this.state.type == 'analysissequence' ) {
+				let name = this.state.item.model.analysisSequenceTranslations[0].name;
+				let shortDescription = this.state.item.model.analysisSequenceTranslations[0].shortDescription;
+				let comment = this.state.item.model.analysisSequenceTranslations[0].comment;
+				let transcript = this.state.item.model.analysisSequenceTranslations[0].transcript;
+				let startTime = this.state.item.model.startTime/1000.0;
+				let endTime = this.state.item.model.endTime/1000.0;
+				let start = TIMAAT.Util.formatTime(startTime, true);
+				let end = TIMAAT.Util.formatTime(endTime, true);
+				// setup UI from Video Player state
+				$("#timaat-inspector-meta-name").val(name);
+				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
+				$("#timaat-inspector-meta-comment").val(comment);
+				$("#timaat-inspector-meta-transcript").val(transcript);
+				$("#timaat-inspector-meta-start").val(start);
+				$("#timaat-inspector-meta-end").val(end);
+			} else
+			if (  this.state.type == 'analysistake' ) {
+				let name = this.state.item.model.analysisTakeTranslations[0].name;
+				let shortDescription = this.state.item.model.analysisTakeTranslations[0].shortDescription;
+				let comment = this.state.item.model.analysisTakeTranslations[0].comment;
+				let transcript = this.state.item.model.analysisTakeTranslations[0].transcript;
+				let startTime = this.state.item.model.startTime/1000.0;
+				let endTime = this.state.item.model.endTime/1000.0;
+				let start = TIMAAT.Util.formatTime(startTime, true);
+				let end = TIMAAT.Util.formatTime(endTime, true);
+				// setup UI from Video Player state
+				$("#timaat-inspector-meta-name").val(name);
+				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
+				$("#timaat-inspector-meta-comment").val(comment);
+				$("#timaat-inspector-meta-transcript").val(transcript);
+				$("#timaat-inspector-meta-start").val(start);
+				$("#timaat-inspector-meta-end").val(end);
+			} else
+			if (  this.state.type == 'analysisscene' ) {
+				let name = this.state.item.model.analysisSceneTranslations[0].name;
+				let shortDescription = this.state.item.model.analysisSceneTranslations[0].shortDescription;
+				let comment = this.state.item.model.analysisSceneTranslations[0].comment;
+				let transcript = this.state.item.model.analysisSceneTranslations[0].transcript;
+				let startTime = this.state.item.model.startTime/1000.0;
+				let endTime = this.state.item.model.endTime/1000.0;
+				let start = TIMAAT.Util.formatTime(startTime, true);
+				let end = TIMAAT.Util.formatTime(endTime, true);
+				// setup UI from Video Player state
+				$("#timaat-inspector-meta-name").val(name);
+				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
+				$("#timaat-inspector-meta-comment").val(comment);
+				$("#timaat-inspector-meta-transcript").val(transcript);
+				$("#timaat-inspector-meta-start").val(start);
+				$("#timaat-inspector-meta-end").val(end);
+			} else
+			if (  this.state.type == 'analysisaction' ) {
+				let name = this.state.item.model.analysisActionTranslations[0].name;
+				let shortDescription = this.state.item.model.analysisActionTranslations[0].shortDescription;
+				let comment = this.state.item.model.analysisActionTranslations[0].comment;
+				let transcript = this.state.item.model.analysisActionTranslations[0].transcript;
+				let startTime = this.state.item.model.startTime/1000.0;
+				let endTime = this.state.item.model.endTime/1000.0;
+				let start = TIMAAT.Util.formatTime(startTime, true);
+				let end = TIMAAT.Util.formatTime(endTime, true);
+				// setup UI from Video Player state
+				$("#timaat-inspector-meta-name").val(name);
+				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
+				$("#timaat-inspector-meta-comment").val(comment);
+				$("#timaat-inspector-meta-transcript").val(transcript);
 				$("#timaat-inspector-meta-start").val(start);
 				$("#timaat-inspector-meta-end").val(end);
 			}

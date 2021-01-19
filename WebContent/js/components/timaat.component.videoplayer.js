@@ -24,6 +24,11 @@
 		annotationList: [],
 		curAnnotation: null,
 		curAnalysisList: null,
+		curSegment: null,
+		curSequence: null,
+		curScene: null,
+		curTake: null,
+		curAction: null,
 		curCategorySet: null,
 		tagAutocomplete: [],
 		markerList: [],
@@ -83,11 +88,12 @@
 					if (localSegment) {
 						// update local segment
 						localSegment.model = segment;
-						TIMAAT.VideoPlayer.sortSegments();
+						TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
+						// TIMAAT.VideoPlayer.sortSegments();
 						// update UI list view
 						console.log("TCL: segment.updateUI()");
 						localSegment.updateUI();      
-						localSegment.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+						// localSegment.updateStatus(TIMAAT.VideoPlayer.video.currentTime); //? obsolete as it's also done in updateListUI()
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						TIMAAT.VideoPlayer.inspector.updateItem();
@@ -135,7 +141,7 @@
 						localAnno.discardChanges();
 						// update UI list view
 						localAnno.updateUI();
-						localAnno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+						// localAnno.updateStatus(TIMAAT.VideoPlayer.video.currentTime); //? obsolete as it's also done in updateListUI()
 						TIMAAT.VideoPlayer.updateUI();
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
@@ -715,8 +721,22 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissegment' ) return;
 				var segment = TIMAAT.VideoPlayer.inspector.state.item;
 				if (segment) {
-					TIMAAT.Service.removeSegment(segment);
-					TIMAAT.VideoPlayer.sortSegments();
+					TIMAAT.AnalysisListService.removeSegment(segment);
+					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				modal.modal('hide');
+			});
+
+			$('#timaat-sequence-delete-commit-submit').on('click', async function(ev) {
+				var modal = $('#timaat-videoplayer-sequence-delete');
+				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissequence' ) return;
+				var sequence = TIMAAT.VideoPlayer.inspector.state.item;
+				if (sequence) {
+					await TIMAAT.AnalysisListService.removeSequence(sequence);
+					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.indexOf(sequence);
+					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.splice(index, 1);
+					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequentsUI);
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
 				modal.modal('hide');
@@ -744,15 +764,13 @@
 			$('#timaat-publication-settings-submit').on('click', ev => {
 				TIMAAT.VideoPlayer._updatePublicationSettings();
 			})
-
-
 		},
-		
-		sortSegments: function() {
-			if ( !TIMAAT.VideoPlayer.curAnalysisList || !TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI ) return;
-			TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.sort(function (a, b) {
-				if ( b.model.segmentStartTime < a.model.segmentStartTime ) return 1;
-				if ( b.model.segmentStartTime > a.model.segmentStartTime ) return -1;
+
+		sort: function(elements) {
+			if ( !elements ) return;
+			elements.sort(function (a, b) {
+				if ( b.model.startTime < a.model.startTime ) return 1;
+				if ( b.model.startTime > a.model.startTime ) return -1;
 				return 0;
 			})
 		},
@@ -868,8 +886,16 @@
 			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeAttr('onclick');
-			$('#timaat-analysissegment-edit').addClass("timaat-item-disabled");
-			$('#timaat-analysissegment-edit').removeAttr('onclick');
+			$('#timaat-analysissegment-add').addClass("timaat-item-disabled");
+			$('#timaat-analysissegment-add').removeAttr('onclick');
+			$('#timaat-analysissequence-add').addClass("timaat-item-disabled");
+			$('#timaat-analysissequence-add').removeAttr('onclick');
+			$('#timaat-analysistake-add').addClass("timaat-item-disabled");
+			$('#timaat-analysistake-add').removeAttr('onclick');
+			$('#timaat-analysisscene-add').addClass("timaat-item-disabled");
+			$('#timaat-analysisscene-add').removeAttr('onclick');
+			$('#timaat-analysisaction-add').addClass("timaat-item-disabled");
+			$('#timaat-analysisaction-add').removeAttr('onclick');
 			$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-delete').removeAttr('onclick');
 			$('#timaat-analysislist-add').addClass("timaat-item-disabled");
@@ -967,12 +993,38 @@
 			// setup segment model
 			lists.forEach(function(list) {
 				list.analysisSegmentsUI = Array();
+				list.analysisSequencesUI = Array();
+				list.analysisTakesUI = Array();
+				list.analysisScenesUI = Array();
+				list.analysisActionsUI = Array();
 				list.analysisSegments.forEach(function(segment) {
 					list.analysisSegmentsUI.push(new TIMAAT.AnalysisSegment(segment));
+					segment.analysisSequences.forEach(function(sequence) {
+						sequence.segmentId = segment.id;
+						list.analysisSequencesUI.push(new TIMAAT.AnalysisSequence(sequence));
+						sequence.analysisTakes.forEach(function(take) {
+							take.sequenceId = sequence.id;
+							list.analysisTakesUI.push(new TIMAAT.AnalysisTake(take));
+						});
+					});
+					segment.analysisScenes.forEach(function(scene) {
+						scene.segmentId = segment.id;
+						list.analysisScenesUI.push(new TIMAAT.AnalysisScene(scene));
+						scene.analysisActions.forEach(function(action) {
+							action.sceneId = scene.id;
+							list.analysisActionsUI.push(new TIMAAT.AnalysisAction(action));
+						});
+					});
 				});
 			});
-			TIMAAT.VideoPlayer.sortSegments();
-			
+			if (TIMAAT.VideoPlayer.curAnalysisList) {
+				TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
+				TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
+				TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
+				TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
+				TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
+			}
+
 			// update UI
 			$('#timaat-analysislist-options').prop('disabled', false);
 			$('#timaat-analysislist-options').removeAttr('disabled');
@@ -985,8 +1037,8 @@
 				$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysisList()');
-				$('#timaat-analysissegment-edit').removeClass("timaat-item-disabled");
-				$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
+				$('#timaat-analysissegment-add').removeClass("timaat-item-disabled");
+				$('#timaat-analysissegment-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 				$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysisList()');
 				$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
@@ -1000,8 +1052,16 @@
 				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeAttr('onclick');
-				$('#timaat-analysissegment-edit').addClass("timaat-item-disabled");
-				$('#timaat-analysissegment-edit').removeAttr('onclick');
+				$('#timaat-analysissegment-add').addClass("timaat-item-disabled");
+				$('#timaat-analysissegment-add').removeAttr('onclick');
+				$('#timaat-analysissequence-add').addClass("timaat-item-disabled");
+				$('#timaat-analysissequence-add').removeAttr('onclick');
+				$('#timaat-analysistake-add').addClass("timaat-item-disabled");
+				$('#timaat-analysistake-add').removeAttr('onclick');
+				$('#timaat-analysisscene-add').addClass("timaat-item-disabled");
+				$('#timaat-analysisscene-add').removeAttr('onclick');
+				$('#timaat-analysisaction-add').addClass("timaat-item-disabled");
+				$('#timaat-analysisaction-add').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
 				$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
@@ -1014,6 +1074,11 @@
 		setupAnalysisList: function(analysislist) {
 			console.log("TCL: setupAnalysisList: ", analysislist);
 			if ( TIMAAT.VideoPlayer.curAnnotation ) TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+			$('#timaat-timeline-segment-pane').hide();
+			$('#timaat-timeline-sequence-pane').hide();
+			$('#timaat-timeline-take-pane').hide();
+			$('#timaat-timeline-scene-pane').hide();
+			$('#timaat-timeline-action-pane').hide();
 
 			// setup model
 			TIMAAT.VideoPlayer.model.analysislist = analysislist;
@@ -1024,13 +1089,35 @@
 			TIMAAT.VideoPlayer.viewer.editTools.editLayer.eachLayer(function(layer) {layer.remove()});
 
 			// clear old list contents if any
-			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) {
-				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
-					segment.removeUI();
-				});
-				TIMAAT.VideoPlayer.annotationList.forEach(function(anno) {
-					anno.remove();
-				});
+			if (TIMAAT.VideoPlayer.curAnalysisList != null) {
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
+						segment.removeUI();
+					});
+					TIMAAT.VideoPlayer.annotationList.forEach(function(anno) {
+						anno.remove();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
+						sequence.removeUI();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
+						take.removeUI();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
+						scene.removeUI();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
+						action.removeUI();
+					});
+				}
 			}
 			TIMAAT.VideoPlayer.annotationList = [];
 			TIMAAT.VideoPlayer.curAnalysisList = analysislist;
@@ -1040,10 +1127,38 @@
 					TIMAAT.VideoPlayer.annotationList.push(new TIMAAT.Annotation(annotation));				
 				});
 			}
-			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) 
-      	TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
-					segment.addUI();
-				});
+			if (TIMAAT.VideoPlayer.curAnalysisList != null) {
+				if (TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) {
+					TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
+						segment.addUI();
+						$('#timaat-timeline-segment-pane').show();
+					});
+					if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
+							sequence.addUI();
+							$('#timaat-timeline-sequence-pane').show();
+						});
+						if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null) {
+							TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
+								take.addUI();
+								$('#timaat-timeline-take-pane').show();
+							});
+						}
+					}
+					if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null) {
+						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
+							scene.addUI();
+							$('#timaat-timeline-scene-pane').show();
+						});
+						if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null) {
+							TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
+								action.addUI();
+								$('#timaat-timeline-action-pane').show();
+							});
+						}
+					}
+				}
+			}
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
@@ -1136,7 +1251,7 @@
 			// update UI list view
 			annotation.updateUI();
 			console.log("TCL: annotation.updateUI()");
-			annotation.updateStatus(this.video.currentTime);
+			// annotation.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
 			this.updateUI();
 			this.updateListUI();
 			this.sortListUI();
@@ -1220,13 +1335,13 @@
 			console.log("TCL: updateAnalysisSegment: function(segment)");
 			console.log("TCL: segment", segment);
 			// sync to server
-			TIMAAT.Service.updateSegment(segment);
-			TIMAAT.VideoPlayer.sortSegments();
+			TIMAAT.AnalysisListService.updateSegment(segment);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 
 			// update UI list view
 			console.log("TCL: segment.updateUI()");
 			segment.updateUI();      
-			segment.updateStatus(this.video.currentTime);
+			// segment.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
 			this.updateListUI();
 			this.sortListUI();
 			console.log("TCL ~ segment", segment);
@@ -1239,6 +1354,146 @@
 			var segment = $('#timaat-videoplayer-segment-meta').data('segment');
 			$('#timaat-videoplayer-segment-delete').data('segment', segment);
 			$('#timaat-videoplayer-segment-delete').modal('show');
+		},
+
+		addAnalysisSequence: function() {
+			console.log("TCL: addAnalysisSequence: function()");
+			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
+			TIMAAT.VideoPlayer.inspector.setItem(null,'analysissequence');
+			// $('#timaat-videoplayer-sequence-meta').data('sequence', null);
+			// $('#timaat-videoplayer-sequence-meta').modal('show');
+		},
+
+		updateAnalysisSequence: async function(sequence) {
+			console.log("TCL: updateAnalysisSequence: function(sequence)", sequence);
+			// sync to server
+			await TIMAAT.AnalysisListService.updateSequence(sequence);
+			await TIMAAT.AnalysisListService.updateSequenceTranslation(sequence.model.analysisSequenceTranslations[0]);
+			
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
+
+			// update UI list view
+			console.log("TCL: sequence.updateUI()");
+			sequence.updateUI();      
+			// sequence.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			this.updateListUI();
+			// this.sortListUI();
+			console.log("TCL ~ sequence", sequence);
+		},
+		
+		removeAnalysisSequence: function() {
+			console.log("TCL: removeAnalysisSequence: function() ");
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-sequence-meta').modal('hide');
+			var sequence = $('#timaat-videoplayer-sequence-meta').data('sequence');
+			$('#timaat-videoplayer-sequence-delete').data('sequence', sequence);
+			$('#timaat-videoplayer-sequence-delete').modal('show');
+		},
+
+		addAnalysisTake: function() {
+			console.log("TCL: addAnalysisTake: function()");
+			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
+			TIMAAT.VideoPlayer.inspector.setItem(null,'analysistake');
+			// $('#timaat-videoplayer-take-meta').data('take', null);
+			// $('#timaat-videoplayer-take-meta').modal('show');
+		},
+
+		updateAnalysisTake: async function(take) {
+			console.log("TCL: updateAnalysisTake: function(take)", take);
+			// sync to server
+			await TIMAAT.AnalysisListService.updateTake(take);
+			await TIMAAT.AnalysisListService.updateTakeTranslation(take.model.analysisTakeTranslations[0]);
+
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
+
+			// update UI list view
+			console.log("TCL: take.updateUI()");
+			take.updateUI();      
+			// take.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			this.updateListUI();
+			// this.sortListUI();
+			console.log("TCL ~ take", take);
+		},
+		
+		removeAnalysisTake: function() {
+			console.log("TCL: removeAnalysisTake: function() ");
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-take-meta').modal('hide');
+			var take = $('#timaat-videoplayer-take-meta').data('take');
+			$('#timaat-videoplayer-take-delete').data('take', take);
+			$('#timaat-videoplayer-take-delete').modal('show');
+		},
+
+		addAnalysisScene: function() {
+			console.log("TCL: addAnalysisScene: function()");
+			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
+			TIMAAT.VideoPlayer.inspector.setItem(null,'analysisscene');
+			// $('#timaat-videoplayer-scene-meta').data('scene', null);
+			// $('#timaat-videoplayer-scene-meta').modal('show');
+		},
+
+		updateAnalysisScene: async function(scene) {
+			console.log("TCL: updateAnalysisScene: function(scene)", scene);
+			// sync to server
+			await TIMAAT.AnalysisListService.updateScene(scene);
+			await TIMAAT.AnalysisListService.updateSceneTranslation(scene.model.analysisSceneTranslations[0]);
+
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
+
+			// update UI list view
+			console.log("TCL: scene.updateUI()");
+			scene.updateUI();      
+			// scene.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			this.updateListUI();
+			// this.sortListUI();
+			console.log("TCL ~ scene", scene);
+		},
+		
+		removeAnalysisScene: function() {
+			console.log("TCL: removeAnalysisScene: function() ");
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-scene-meta').modal('hide');
+			var scene = $('#timaat-videoplayer-scene-meta').data('scene');
+			$('#timaat-videoplayer-scene-delete').data('scene', scene);
+			$('#timaat-videoplayer-scene-delete').modal('show');
+		},
+
+		addAnalysisAction: function() {
+			console.log("TCL: addAnalysisAction: function()");
+			TIMAAT.VideoPlayer.pause();
+			TIMAAT.VideoPlayer.selectAnnotation(null);
+			TIMAAT.VideoPlayer.inspector.setItem(null,'analysisaction');
+			// $('#timaat-videoplayer-action-meta').data('action', null);
+			// $('#timaat-videoplayer-action-meta').modal('show');
+		},
+
+		updateAnalysisAction: async function(action) {
+			console.log("TCL: updateAnalysisAction: function(action)", action);
+			// sync to server
+			await TIMAAT.AnalysisListService.updateAction(action);
+			await TIMAAT.AnalysisListService.updateActionTranslation(action.model.analysisActionTranslations[0]);
+
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
+
+			// update UI list view
+			console.log("TCL: action.updateUI()");
+			action.updateUI();      
+			// action.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			this.updateListUI();
+			// this.sortListUI();
+			console.log("TCL ~ action", action);
+		},
+		
+		removeAnalysisAction: function() {
+			console.log("TCL: removeAnalysisAction: function() ");
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-action-meta').modal('hide');
+			var action = $('#timaat-videoplayer-action-meta').data('action');
+			$('#timaat-videoplayer-action-delete').data('action', action);
+			$('#timaat-videoplayer-action-delete').modal('show');
 		},
 		
 		offLinePublication: function() {
@@ -1266,7 +1521,7 @@
 		},
 
 		sortListUI: function() {
-//			console.log("TCL: sortListUI: function()");
+			// console.log("TCL: sortListUI: function()");
 			$("#timaat-annotation-list li").sort(function (a, b) {
 				if ( (parseFloat($(b).attr('data-starttime'))) < (parseFloat($(a).attr('data-starttime'))) ) return 1;
 				if ( (parseFloat($(b).attr('data-starttime'))) > (parseFloat($(a).attr('data-starttime'))) ) return -1;
@@ -1299,8 +1554,6 @@
 				}
 			}
 			$('#timaat-timeline-marker-pane').css('height', (15+(maxOffset*12))+'px');
-			
-			
 		},
 		
 		updateListUI: function() {
@@ -1308,7 +1561,23 @@
 			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) 
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-			});
+					if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null)
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
+							sequence.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+							if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null)
+								TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
+									take.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+								});
+						});
+					if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null)
+						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
+							scene.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+							if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null)
+								TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
+									action.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+								});
+						});
+				});
 			if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 		},
 		
@@ -1323,7 +1592,7 @@
 			else $('#timaat-timeline-keyframe-pane').hide();
 			let enabled = this.curAnnotation && this.curAnnotation.isActive() && this.curAnnotation.isOnKeyframe();
 			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled(enabled);
-//			$('.repeatbutton').prop('disabled', TIMAAT.VideoPlayer.curAnnotation == null );
+			// $('.repeatbutton').prop('disabled', TIMAAT.VideoPlayer.curAnnotation == null );
 		},
 		
 		pause: function() {
@@ -1345,20 +1614,17 @@
 		},
 		
 		jumpTo: function(time) {
-			// console.log("TCL: jumpTo: function(time)");
-			// console.log("TCL: time", time);
+			// console.log("TCL: jumpTo: function(time)", time);
 			if ( !this.video ) return;
 			this.video.currentTime = time;
-			this.updateListUI();
+			// this.updateListUI(); //? should be obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
 		},
 		
 		jumpVisible: function(start, end) {
-			// console.log("TCL: jumpVisible: function(start, end)");
-			// console.log("TCL: start", start);
-			// console.log("TCL: end", end);
+			// console.log("TCL: jumpVisible: function(start, end)", start, end);
 			if ( !this.video ) return;
 			var curTime = this.video.currentTime;
-			if ( curTime < start || curTime > end ) this.video.currentTime = start;
+			if ( curTime < start || curTime >= end ) this.video.currentTime = start;
 			this.updateListUI();
 		},
 		
@@ -1465,14 +1731,13 @@
 					}
 
 					if ( curSegment ) {
-						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.segmentStartTime/1000.0
-								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.segmentEndTime/1000.0 )
-								TIMAAT.VideoPlayer.jumpTo(curSegment.model.segmentStartTime/1000.0);
+						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime/1000.0
+								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.endTime/1000.0 )
+								TIMAAT.VideoPlayer.jumpTo(curSegment.model.startTime/1000.0);
 					}
 				}
 			} 
 				
-			
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
 				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
 		},
@@ -1498,8 +1763,8 @@
 			$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysisList()');
-			$('#timaat-analysissegment-edit').removeClass("timaat-item-disabled");
-			$('#timaat-analysissegment-edit').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
+			$('#timaat-analysissegment-add').removeClass("timaat-item-disabled");
+			$('#timaat-analysissegment-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegment()');
 			$('#timaat-analysislist-delete').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-delete').attr('onclick','TIMAAT.VideoPlayer.removeAnalysisList()');
 			$('#timaat-medium-offlinepublication').removeClass("timaat-item-disabled");
@@ -1527,8 +1792,8 @@
 				$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-edit').removeAttr('onclick');
-				$('#timaat-analysissegment-edit').addClass("timaat-item-disabled");
-				$('#timaat-analysissegment-edit').removeAttr('onclick');
+				$('#timaat-analysissegment-add').addClass("timaat-item-disabled");
+				$('#timaat-analysissegment-add').removeAttr('onclick');
 				$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 				$('#timaat-analysislist-delete').removeAttr('onclick');
 				$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
@@ -1578,7 +1843,7 @@
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI = [];
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.push(segment);
-			TIMAAT.VideoPlayer.sortSegments();
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 			segment.addUI();
 
 			if ( openInspector ) {
@@ -1590,6 +1855,86 @@
 			// update UI
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_sequenceAdded: function(sequence, openInspector=true) {
+			console.log("TCL: _sequenceAdded: function(sequence)", sequence);
+			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI) {
+				TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI = [];
+			}
+			TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.push(sequence);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
+			sequence.addUI();
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.selectAnnotation(null);
+				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'analysissequence');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			TIMAAT.VideoPlayer.updateListUI();
+			// TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_takeAdded: function(take, openInspector=true) {
+			console.log("TCL: _takeAdded: function(take)", take);
+			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI) {
+				TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI = [];
+			}
+			TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.push(take);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
+			take.addUI();
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.selectAnnotation(null);
+				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			TIMAAT.VideoPlayer.updateListUI();
+			// TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_sceneAdded: function(scene, openInspector=true) {
+			console.log("TCL: _sceneAdded: function(scene)", scene);
+			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI) {
+				TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI = [];
+			}
+			TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.push(scene);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
+			scene.addUI();
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.selectAnnotation(null);
+				TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			TIMAAT.VideoPlayer.updateListUI();
+			// TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_actionAdded: function(action, openInspector=true) {
+			console.log("TCL: _actionAdded: function(action)", action);
+			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI) {
+				TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI = [];
+			}
+			TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.push(action);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
+			action.addUI();
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.selectAnnotation(null);
+				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			TIMAAT.VideoPlayer.updateListUI();
+			// TIMAAT.VideoPlayer.sortListUI();
 		},
 
 	}

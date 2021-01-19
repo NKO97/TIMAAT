@@ -42,7 +42,7 @@
 		},
 
 		async getSelectedCategories(annotationId) {
-      console.log("TCL: getCategoryList -> annotationId", annotationId);
+      // console.log("TCL: getCategoryList -> annotationId", annotationId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/list/",
@@ -53,7 +53,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCategorySetList -> data", data);
+					// console.log("TCL: getCategorySetList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -94,8 +94,8 @@
 			var model = { 	
 				id: 0, 
 				analysisListID: list,
-				sequenceStartTime: startTime,
-				sequenceEndTime: endTime,
+				startTime: startTime,
+				endTime: endTime,
 				layerVisual: layerVisual,
 //				actors: [],
 //				annotations1: [],
@@ -165,8 +165,8 @@
 					annotationTranslations: annotationModel.annotationTranslations,
 					categories: annotationModel.categories,
 					comment: annotationModel.comment,
-					sequenceEndTime: annotationModel.sequenceEndTime,
-					sequenceStartTime: annotationModel.sequenceStartTime,
+					endTime: annotationModel.endTime,
+					startTime: annotationModel.startTime,
 					selectorSvgs: annotationModel.selectorSvgs,
 					layerVisual: annotationModel.layerVisual,
 					tags: annotationModel.tags,

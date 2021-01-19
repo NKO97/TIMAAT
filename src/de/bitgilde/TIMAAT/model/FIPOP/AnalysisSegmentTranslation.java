@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -20,23 +20,25 @@ public class AnalysisSegmentTranslation implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private String title;
+	private String comment;
+
+	//bi-directional many-to-one association to Language
+	@ManyToOne
+	private Language language;	
+
+	private String name;
 
 	@Column(name="short_description")
 	private String shortDescription;
 
-	private String comment;
+	@Lob
+	private String transcript;
 
 	//bi-directional many-to-one association to AnalysisSegment
 	@ManyToOne
-	@JsonBackReference(value = "AnalysisSegment-AnalysisSegmentTranslation")
 	@JoinColumn(name="analysis_segment_id")
+	@JsonIgnore	
 	private AnalysisSegment analysisSegment;
-
-	//bi-directional many-to-one association to Language
-	@ManyToOne
-	// @JsonBackReference(value = "Language-AnalysisSegmentTranslation")
-	private Language language;
 
 	public AnalysisSegmentTranslation() {
 	}
@@ -49,12 +51,12 @@ public class AnalysisSegmentTranslation implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return this.title;
+	public String getName() {
+		return this.name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getShortDescription() {
@@ -71,6 +73,14 @@ public class AnalysisSegmentTranslation implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getTranscript() {
+		return this.transcript;
+	}
+
+	public void setTranscript(String transcript) {
+		this.transcript = transcript;
 	}
 
 	public AnalysisSegment getAnalysisSegment() {
