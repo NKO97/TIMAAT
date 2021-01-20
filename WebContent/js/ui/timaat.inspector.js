@@ -482,9 +482,11 @@
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
 					// early out: sequence's time range exceeds segment's time range
-					// TODO
+					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
+						$('#timaat-videoplayer-sequence-outOfBounds').modal('show');
+					}
 					// early out: sequence has no time range
-					if (startTime == endTime) {
+					else if (startTime == endTime) {
 						$('#timaat-videoplayer-sequence-noRange').modal('show');
 					} else {
 						var overlapping = false;
@@ -549,7 +551,9 @@
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
 					// early out: take's time range exceeds sequence's time range
-					// TODO
+					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
+						$('#timaat-videoplayer-take-outOfBounds').modal('show');
+					}
 					// early out: take has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-take-noRange').modal('show');
@@ -615,7 +619,9 @@
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
 					// early out: scene's time range exceeds segment's time range
-					// TODO
+					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
+						$('#timaat-videoplayer-scene-outOfBounds').modal('show');
+					}
 					// early out: scene has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-scene-noRange').modal('show');
@@ -682,7 +688,9 @@
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
 					// early out: action's time range exceeds scene's time range
-					// TODO
+					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
+						$('#timaat-videoplayer-action-outOfBounds').modal('show');
+					}
 					// early out: action has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-action-noRange').modal('show');
