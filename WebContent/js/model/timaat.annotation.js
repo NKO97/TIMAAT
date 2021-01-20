@@ -199,15 +199,22 @@
 			$(this.listView).on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
-				else TIMAAT.VideoPlayer.selectAnnotation(null);
-//						TIMAAT.VideoPlayer.selectAnnotation(ev.data);
+				else {
+					TIMAAT.VideoPlayer.selectAnnotation(null);
+				}
+				console.log("TCL: Annotation click -> $ -> TIMAAT.VideoPlayer.updateListUI()");
+				TIMAAT.VideoPlayer.updateListUI();
+				// TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.pause();
 			});
 			$(this.listView).on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
+				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				console.log("TCL: Annotation dblClick -> $ -> TIMAAT.VideoPlayer.updateListUI()");
+				TIMAAT.VideoPlayer.updateListUI();
 			});
 
 			// create marker with UI
@@ -232,7 +239,6 @@
 			}
 		};
 
-		
 		isAnimation() {
 			return this.svg.keyframes.length > 1;
 		}
@@ -416,7 +422,6 @@
 		hasPolygons() {
 			return this.svg.items.length > 0;
 		}
-
 		
 		updateUI() {
 			// console.log("TCL: Annotation -> updateUI -> updateUI()");
@@ -543,7 +548,6 @@
 			return this.changed;
 		}
 
-		
 		getModel() {
 //					console.log("TCL: Annotation -> getModel -> getModel()");
 //					this.model.startTime = TIMAAT.Util.formatTime(this.model.startTime, true);
@@ -592,7 +596,7 @@
 
 		updateStatus(time) {
 			time = parseFloat(time.toFixed(3));
-//					console.log("TCL: Annotation -> updateStatus -> time", time);
+			// console.log('TCL: Annotation -> updateStatus -> time', time);
 			let animTime = time - this._startTime;
 			animTime = parseFloat(animTime.toFixed(3));
 			var active = false;
@@ -612,7 +616,7 @@
 		}
 		
 		setActive(active) {
-//					console.log("TCL: Annotation -> setActive -> active", active);
+			// console.log("TCL: Annotation -> setActive -> active", active);
 			if ( this.active == active ) return;
 			this.active = active;
 			if ( active ) {

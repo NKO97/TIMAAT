@@ -1503,6 +1503,8 @@
 					(action) ? $('#timaat-action-delete-submit').show() : $('#timaat-action-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
+				console.log("TCL: setItem -> $ -> TIMAAT.VideoPlayer.updateListUI()");
+				TIMAAT.VideoPlayer.updateListUI();
 			}
 		}
 		

@@ -495,6 +495,7 @@
 				var medium = $('#timaat-mediadatasets-metadata-form').data('medium');
 				TIMAAT.UI.showComponent('videoplayer');
 				// setup video in player
+				// console.log("TCL: setupVideo");
 				TIMAAT.VideoPlayer.setupVideo(medium.model);
 				// load video annotations from server
 				TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);

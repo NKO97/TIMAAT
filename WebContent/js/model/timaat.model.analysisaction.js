@@ -95,11 +95,12 @@
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === action.model.sceneId);
 				TIMAAT.VideoPlayer.curScene = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index];
-        console.log("TCL: AnalysisAction -> this.timelineView.on -> TIMAAT.VideoPlayer.curScene", TIMAAT.VideoPlayer.curScene);
 				index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curScene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
-        console.log("TCL: AnalysisAction -> this.timelineView.on -> TIMAAT.VideoPlayer.curSegment", TIMAAT.VideoPlayer.curSegment);
 				TIMAAT.VideoPlayer.curAction = action;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'action';
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -119,6 +120,9 @@
 				index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curScene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
 				TIMAAT.VideoPlayer.curAction = action;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'action';
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -137,15 +141,32 @@
 			this.updateUI();
 		}
 			
-		updateStatus(time) {
-			// console.log("TCL: AnalysisAction -> updateStatus -> time", time);
-			var status = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) status = true;
+		updateStatus(time, onTimeUpdate) {
+			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
+			var highlight = false;
+			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
 
-			if ( status != this.active ) {
-				this.active = status;
-				if ( this.active ) this.timelineView.addClass('bg-info');
-				else this.timelineView.removeClass('bg-info');
+			if ( highlight != this.highlighted ) { // highlight changed?
+				this.highlighted = highlight;
+				if ( this.highlighted ) { //  element highlighted at current time?
+					if (!this.timelineView[0].classList.contains('bg-primary')) // only add bg-info if not already selected element
+						this.timelineView.addClass('bg-info');
+				}
+				else { // element not highlighted at current time
+					this.timelineView.removeClass('bg-info');
+					if (!onTimeUpdate) // keep bg-primary if time changed due to timeline-slider change
+						this.timelineView.removeClass('bg-primary');
+				}
+			} else { // highlight remains unchanged
+				if (TIMAAT.VideoPlayer.selectedElementType != 'action') { // update bg-primary if other element in same structure is selected
+					this.timelineView.removeClass('bg-primary');
+					if(this.highlighted) {
+						this.timelineView.addClass('bg-info');
+					}
+				}
+				if (TIMAAT.VideoPlayer.curAction && this.model.id != TIMAAT.VideoPlayer.curAction.model.id) { // update bg-primary when switching elements on same hierarchy via timeline-slider and selecting
+					this.timelineView.removeClass('bg-primary');
+				}
 			}
 		}
 

@@ -2682,7 +2682,7 @@
 		},
 
 		loadActorDataTables: async function() {
-			console.log("TCL: loadActorDataTables: async function()");
+			// console.log("TCL: loadActorDataTables: async function()");
 			TIMAAT.ActorDatasets.setupActorDatatable();
 			TIMAAT.ActorDatasets.setupPersonDatatable();
 			TIMAAT.ActorDatasets.setupCollectiveDatatable();
@@ -5672,7 +5672,7 @@
 		},
 
 		setupActorDatatable: function() {
-			console.log("TCL: setupDatatable");
+			// console.log("TCL: setupActorDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -5818,7 +5818,7 @@
 		},
 
 		setupPersonDatatable: function() {			
-			// console.log("TCL: setupDatatable");
+			// console.log("TCL: setupPersonDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -5955,7 +5955,7 @@
 		},
 
 		setupCollectiveDatatable: function() {			
-			// console.log("TCL: setupDatatable");
+			// console.log("TCL: setupCollectiveDatatable");
 			// setup datatable
 			TIMAAT.ActorDatasets.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],

@@ -81,7 +81,7 @@
 			$('#timaat-timeline-sequence-pane').append(this.timelineView);
 
 			var sequence = this; // save annotation for events
-      console.log("TCL: AnalysisSequence -> addUI -> sequence", sequence);
+      // console.log("TCL: AnalysisSequence -> addUI -> sequence", sequence);
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
@@ -91,11 +91,12 @@
 			// 	TIMAAT.VideoPlayer.inspector.setItem(sequence, 'analysissequence');
 			// });
 			this.timelineView.on('click', this, function(ev) {
-				console.log("TCL: AnalysisSequence -> addUI -> sequence", sequence);
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === sequence.model.segmentId);
-        console.log("TCL: AnalysisSequence -> this.timelineView.on -> index", index);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
 				TIMAAT.VideoPlayer.curSequence = sequence;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
@@ -111,11 +112,12 @@
 			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			// });
 			this.timelineView.on('dblclick', this, function(ev) {
-				console.log("TCL: AnalysisSequence -> addUI -> sequence", sequence);
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === sequence.model.segmentId);
-        console.log("TCL: AnalysisSequence -> this.timelineView.on -> index", index);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
 				TIMAAT.VideoPlayer.curSequence = sequence;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
@@ -135,15 +137,32 @@
 			this.updateUI();
 		}
 			
-		updateStatus(time) {
-			// console.log("TCL: AnalysisSequence -> updateStatus -> time", time);
-			var status = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) status = true;
+		updateStatus(time, onTimeUpdate) {
+			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
+			var highlight = false;
+			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
 
-			if ( status != this.active ) {
-				this.active = status;
-				if ( this.active ) this.timelineView.addClass('bg-info');
-				else this.timelineView.removeClass('bg-info');
+			if ( highlight != this.highlighted ) { // highlight changed?
+				this.highlighted = highlight;
+				if ( this.highlighted ) { //  element highlighted at current time?
+					if (!this.timelineView[0].classList.contains('bg-primary')) // only add bg-info if not already selected element
+						this.timelineView.addClass('bg-info');
+				}
+				else { // element not highlighted at current time
+					this.timelineView.removeClass('bg-info');
+					if (!onTimeUpdate) // keep bg-primary if time changed due to timeline-slider change
+						this.timelineView.removeClass('bg-primary');
+				}
+			} else { // highlight remains unchanged
+				if (TIMAAT.VideoPlayer.selectedElementType != 'sequence') { // update bg-primary if other element in same structure is selected
+					this.timelineView.removeClass('bg-primary');
+					if(this.highlighted) {
+						this.timelineView.addClass('bg-info');
+					}
+				}
+				if (TIMAAT.VideoPlayer.curSequence && this.model.id != TIMAAT.VideoPlayer.curSequence.model.id) { // update bg-primary when switching elements on same hierarchy via timeline-slider and selecting
+					this.timelineView.removeClass('bg-primary');
+				}
 			}
 		}
 

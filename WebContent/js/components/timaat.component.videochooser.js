@@ -423,6 +423,7 @@
 						TIMAAT.UI.showComponent('videoplayer');
 
 						// setup video in player
+						// console.log("TCL: setupVideo");
 						TIMAAT.VideoPlayer.setupVideo(video);
 						// load video annotations from server
 						TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);

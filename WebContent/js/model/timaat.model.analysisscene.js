@@ -96,6 +96,9 @@
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === scene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
 				TIMAAT.VideoPlayer.curScene = scene;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'scene';
 				TIMAAT.VideoPlayer.curAction = null;
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
@@ -114,6 +117,9 @@
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === scene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
 				TIMAAT.VideoPlayer.curScene = scene;
+				this.classList.replace('bg-info', 'bg-primary');
+				this.classList.add('bg-primary');
+				TIMAAT.VideoPlayer.selectedElementType = 'scene';
 				TIMAAT.VideoPlayer.curAction = null;
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
@@ -133,15 +139,32 @@
 			this.updateUI();
 		}
 			
-		updateStatus(time) {
-//					console.log("TCL: AnalysisScene -> updateStatus -> time", time);
-			var status = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) status = true;
+		updateStatus(time, onTimeUpdate) {
+			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
+			var highlight = false;
+			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
 
-			if ( status != this.active ) {
-				this.active = status;
-				if ( this.active ) this.timelineView.addClass('bg-info');
-				else this.timelineView.removeClass('bg-info');
+			if ( highlight != this.highlighted ) { // highlight changed?
+				this.highlighted = highlight;
+				if ( this.highlighted ) { //  element highlighted at current time?
+					if (!this.timelineView[0].classList.contains('bg-primary')) // only add bg-info if not already selected element
+						this.timelineView.addClass('bg-info');
+				}
+				else { // element not highlighted at current time
+					this.timelineView.removeClass('bg-info');
+					if (!onTimeUpdate) // keep bg-primary if time changed due to timeline-slider change
+						this.timelineView.removeClass('bg-primary');
+				}
+			} else { // highlight remains unchanged
+				if (TIMAAT.VideoPlayer.selectedElementType != 'scene') { // update bg-primary if other element in same structure is selected
+					this.timelineView.removeClass('bg-primary');
+					if(this.highlighted) {
+						this.timelineView.addClass('bg-info');
+					}
+				}
+				if (TIMAAT.VideoPlayer.curScene && this.model.id != TIMAAT.VideoPlayer.curScene.model.id) { // update bg-primary when switching elements on same hierarchy via timeline-slider and selecting
+					this.timelineView.removeClass('bg-primary');
+				}
 			}
 		}
 

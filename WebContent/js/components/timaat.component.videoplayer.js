@@ -38,6 +38,7 @@
 		volume: 1,
 		repeatSection: false,
 		selectedVideo: null,
+		selectedElementType: null,
 		
 		init: function() {
 			// init UI
@@ -91,9 +92,9 @@
 						TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 						// TIMAAT.VideoPlayer.sortSegments();
 						// update UI list view
-						console.log("TCL: segment.updateUI()");
-						localSegment.updateUI();      
+						localSegment.updateUI();
 						// localSegment.updateStatus(TIMAAT.VideoPlayer.video.currentTime); //? obsolete as it's also done in updateListUI()
+						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						TIMAAT.VideoPlayer.inspector.updateItem();
@@ -143,6 +144,7 @@
 						localAnno.updateUI();
 						// localAnno.updateStatus(TIMAAT.VideoPlayer.video.currentTime); //? obsolete as it's also done in updateListUI()
 						TIMAAT.VideoPlayer.updateUI();
+						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						if ( TIMAAT.VideoPlayer.inspector.state.item == localAnno )  TIMAAT.VideoPlayer.inspector.setItem(localAnno, 'annotation');
@@ -166,6 +168,7 @@
 
 						// update UI list view
 						localAnno.remove();
+						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						if ( TIMAAT.VideoPlayer.inspector.state.item == localAnno ) TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -850,7 +853,7 @@
 		},
 		
 		setupVideo: function(video) {
-			console.log("TCL: setupVideo: function(video) ", video);
+			// console.log("TCL: setupVideo: function(video) ", video);
 			// setup model
 			if ( video.mediumVideo.length < 0 ) video.mediumVideo.length += 3600; // temp fix for DB problems
 			this.curFrameRate = 25; // TODO
@@ -971,7 +974,8 @@
 				$('#timaat-video-seek-bar').val(value);
 				$('#timaat-video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
 				// update annotation list UI
-				TIMAAT.VideoPlayer.updateListUI();
+				console.log("TCL: timeupdate -> TIMAAT.VideoPlayer.updateListUI()");
+				TIMAAT.VideoPlayer.updateListUI("timeupdate");
 				if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.animCtrl.updateUI();
 				TIMAAT.VideoPlayer.updateUI();
 			});
@@ -980,7 +984,7 @@
 		},
 		
 		setupMediumAnalysisLists: function (lists) {
-			console.log("TCL: setupMediumAnalysisLists: ", lists);
+			// console.log("TCL: setupMediumAnalysisLists: ", lists);
 			// clear old lists if any
 			$('#timaat-analysislist-chooser').empty();
 			// setup model
@@ -1072,7 +1076,7 @@
 		},
 		
 		setupAnalysisList: function(analysislist) {
-			console.log("TCL: setupAnalysisList: ", analysislist);
+			// console.log("TCL: setupAnalysisList: ", analysislist);
 			if ( TIMAAT.VideoPlayer.curAnnotation ) TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 			$('#timaat-timeline-segment-pane').hide();
 			$('#timaat-timeline-sequence-pane').hide();
@@ -1159,11 +1163,12 @@
 					}
 				}
 			}
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
+			console.log("TCL: setupAnalysisList -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysislist');			
 
 			// setup analysislist UI
@@ -1250,9 +1255,9 @@
 			TIMAAT.AnnotationService.updateAnnotation(annotation.model);
 			// update UI list view
 			annotation.updateUI();
-			console.log("TCL: annotation.updateUI()");
 			// annotation.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
 			this.updateUI();
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			this.sortListUI();
 		},
@@ -1273,7 +1278,6 @@
 			// update UI list view
 			this.updateListUI();
 			this.sortListUI();
-			console.log("TCL: this.updateUI()");
 			this.updateUI();      
 		},
 		
@@ -1286,10 +1290,17 @@
 		},
 				
 		selectAnnotation: function(annotation) {
-			// console.log("TCL: selectAnnotation: function(annotation)");
-			// console.log("TCL: annotation", annotation);
-			if ( annotation ) TIMAAT.VideoPlayer.inspector.setItem(annotation, 'annotation');
-			else TIMAAT.VideoPlayer.inspector.setItem(null);
+			// console.log("TCL: selectAnnotation: function(annotation)", annotation);
+			if ( annotation ) {
+				TIMAAT.VideoPlayer.inspector.setItem(annotation, 'annotation');
+				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
+			}
+			else {
+				if (TIMAAT.VideoPlayer.selectedElementType == 'annotation') {
+					TIMAAT.VideoPlayer.selectedElementType = null;
+				}
+        TIMAAT.VideoPlayer.inspector.setItem(null);
+			}
 			if ( this.curAnnotation == annotation && annotation != null ) return;
 			if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 			this.curAnnotation = annotation;
@@ -1342,6 +1353,7 @@
 			console.log("TCL: segment.updateUI()");
 			segment.updateUI();      
 			// segment.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			this.sortListUI();
 			console.log("TCL ~ segment", segment);
@@ -1377,6 +1389,7 @@
 			console.log("TCL: sequence.updateUI()");
 			sequence.updateUI();      
 			// sequence.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			// this.sortListUI();
 			console.log("TCL ~ sequence", sequence);
@@ -1412,6 +1425,7 @@
 			console.log("TCL: take.updateUI()");
 			take.updateUI();      
 			// take.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			// this.sortListUI();
 			console.log("TCL ~ take", take);
@@ -1447,6 +1461,7 @@
 			console.log("TCL: scene.updateUI()");
 			scene.updateUI();      
 			// scene.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			// this.sortListUI();
 			console.log("TCL ~ scene", scene);
@@ -1482,6 +1497,7 @@
 			console.log("TCL: action.updateUI()");
 			action.updateUI();      
 			// action.updateStatus(this.video.currentTime); //? obsolete as it's also done in updateListUI()
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			this.updateListUI();
 			// this.sortListUI();
 			console.log("TCL ~ action", action);
@@ -1556,25 +1572,25 @@
 			$('#timaat-timeline-marker-pane').css('height', (15+(maxOffset*12))+'px');
 		},
 		
-		updateListUI: function() {
-			// console.log("TCL: updateListUI: function()");
+		updateListUI: function(viaTimeUpdate = null) {
+			console.log("TCL: updateListUI: function()");
 			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) 
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
-					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
 					if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null)
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
-							sequence.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+							sequence.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
 							if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null)
 								TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
-									take.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+									take.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
 								});
 						});
 					if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null)
 						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
-							scene.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+							scene.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
 							if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null)
 								TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
-									action.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+									action.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
 								});
 						});
 				});
@@ -1625,7 +1641,8 @@
 			if ( !this.video ) return;
 			var curTime = this.video.currentTime;
 			if ( curTime < start || curTime >= end ) this.video.currentTime = start;
-			this.updateListUI();
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// this.updateListUI(); //? should be obsolete as on timeupdate is called afterward?
 		},
 		
 		_updatePublicationSettings: function() {
@@ -1812,6 +1829,7 @@
 			annotation.updateUI();
 			console.log("TCL: annotation.updateUI()");
 			annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			if ( openInspector ) TIMAAT.VideoPlayer.selectAnnotation(annotation);
@@ -1831,6 +1849,7 @@
 
 			// update UI list view
 			annotation.remove();
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -1853,6 +1872,7 @@
 			}
 
 			// update UI
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 		},
@@ -1873,6 +1893,7 @@
 			}
 
 			// update UI
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
@@ -1893,6 +1914,7 @@
 			}
 
 			// update UI
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
@@ -1913,6 +1935,7 @@
 			}
 
 			// update UI
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
@@ -1933,12 +1956,11 @@
 			}
 
 			// update UI
+			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
 
 	}
-	
-	
 
 }, window));

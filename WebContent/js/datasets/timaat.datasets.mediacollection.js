@@ -495,7 +495,7 @@
     },
     
     loadMediaCollectionDataTables: async function() {
-    	console.log("TCL: loadMediaCollectionDataTables: async function()");
+    	// console.log("TCL: loadMediaCollectionDataTables: async function()");
 			TIMAAT.MediaCollectionDatasets.setupMediumCollectionListDataTable();
 			TIMAAT.MediaCollectionDatasets.setupMediumCollectionItemListDataTable();
 			TIMAAT.MediaCollectionDatasets.setupMediumCollectionAddMediaDataTable();
@@ -729,7 +729,7 @@
 		},
 
 		setupMediumCollectionItemListDataTable: async function() {
-			console.log("TCL: setupMediumCollectionItemListDataTable");      
+			// console.log("TCL: setupMediumCollectionItemListDataTable");      
       TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList = $('#timaat-mediacollectiondatasets-mediumcollection-items-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -809,6 +809,7 @@
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						TIMAAT.UI.showComponent('videoplayer');
 						// setup medium in player
+						console.log("TCL: setupVideo");
 						TIMAAT.VideoPlayer.setupVideo(medium);
 						// load medium annotations from server
 						TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
@@ -949,7 +950,7 @@
 		},
 
 		setupMediumCollectionListDataTable: function() {			
-			console.log("TCL: setupMediumCollectionListDataTable");
+			// console.log("TCL: setupMediumCollectionListDataTable");
 			TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList = $('#timaat-mediacollectiondatasets-mediacollection-list-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
