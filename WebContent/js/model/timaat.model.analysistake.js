@@ -98,7 +98,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
 				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
@@ -120,7 +120,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
 				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});

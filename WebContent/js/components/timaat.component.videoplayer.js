@@ -1221,7 +1221,8 @@
 			TIMAAT.VideoPlayer.sortListUI();
 			
 			// TIMAAT.VideoPlayer.selectAnnotation(null);
-			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysislist');			
+			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysislist');
+			TIMAAT.VideoPlayer.selectedElementType = 'analysislist';
 
 			// setup analysislist UI
 			$('#timaat-annotation-list-loader').hide();
@@ -1909,8 +1910,12 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.push(segment);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
+			TIMAAT.VideoPlayer.jumpTo(segment.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.selectedElementType = 'segment';
 			segment.addUI();
 			TIMAAT.VideoPlayer.curSegment = segment;
+			TIMAAT.VideoPlayer.curSegment.timelineView[0].classList.replace('bg-info', 'bg-primary');
+			TIMAAT.VideoPlayer.curSegment.timelineView[0].classList.add('bg-primary');
 
 			if ( openInspector ) {
 				TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -1932,9 +1937,12 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.push(sequence);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
-			// TIMAAT.VideoPlayer.curSegment.model.analysisSequences.push(sequence.model);
+			TIMAAT.VideoPlayer.jumpTo(sequence.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 			sequence.addUI();
 			TIMAAT.VideoPlayer.curSequence = sequence;
+			TIMAAT.VideoPlayer.curSequence.timelineView[0].classList.replace('bg-info', 'bg-primary');
+			TIMAAT.VideoPlayer.curSequence.timelineView[0].classList.add('bg-primary');
 
 			if ( openInspector ) {
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -1956,8 +1964,12 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.push(take);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
+			TIMAAT.VideoPlayer.jumpTo(take.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.selectedElementType = 'take';
 			take.addUI();
 			TIMAAT.VideoPlayer.curTake = take;
+			TIMAAT.VideoPlayer.curTake.timelineView[0].classList.replace('bg-info', 'bg-primary');
+			TIMAAT.VideoPlayer.curTake.timelineView[0].classList.add('bg-primary');
 
 			if ( openInspector ) {
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -1980,8 +1992,12 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.push(scene);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
+			TIMAAT.VideoPlayer.jumpTo(scene.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.selectedElementType = 'scene';
 			scene.addUI();
 			TIMAAT.VideoPlayer.curScene = scene;
+			TIMAAT.VideoPlayer.curScene.timelineView[0].classList.replace('bg-info', 'bg-primary');
+			TIMAAT.VideoPlayer.curScene.timelineView[0].classList.add('bg-primary');
 
 			if ( openInspector ) {
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -2003,8 +2019,12 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.push(action);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
+			TIMAAT.VideoPlayer.jumpTo(action.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.selectedElementType = 'action';
 			action.addUI();
 			TIMAAT.VideoPlayer.curAction = action;
+			TIMAAT.VideoPlayer.curAction.timelineView[0].classList.replace('bg-info', 'bg-primary');
+			TIMAAT.VideoPlayer.curAction.timelineView[0].classList.add('bg-primary');
 
 			if ( openInspector ) {
 				// TIMAAT.VideoPlayer.selectAnnotation(null);

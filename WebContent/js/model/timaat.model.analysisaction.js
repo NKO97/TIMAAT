@@ -100,7 +100,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'action';
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
@@ -122,7 +122,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'action';
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});

@@ -97,7 +97,7 @@
 				TIMAAT.VideoPlayer.curTake = null;
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'analysissequence');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
@@ -118,7 +118,7 @@
 				TIMAAT.VideoPlayer.curTake = null;
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'analysissequence');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
