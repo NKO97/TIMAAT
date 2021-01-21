@@ -540,9 +540,7 @@
 								TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							console.log("TCL: Inspector -> $ -> tempList", tempList);
-							var index = tempList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSequences = tempList.analysisSegments[index].analysisSequences;
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
 				}
@@ -610,7 +608,7 @@
 								TIMAAT.VideoPlayer._takeAdded(take, true);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curSequence.analysisTakes = tempList.analysisTakes;
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
 				}
@@ -679,7 +677,7 @@
 								// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curSegment.model.analysisScenes = tempList.analysisScenes;
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
 				}
@@ -748,7 +746,7 @@
 								// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curScene.analysisActions = tempList.analysisActions;
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
 				}
