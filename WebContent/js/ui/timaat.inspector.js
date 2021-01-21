@@ -44,6 +44,7 @@
 			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
 			this.ui.keyframeList = $('#timaat-inspector-animation-keyframes');
 			let inspector = this;
+      console.log("TCL: Inspector -> constructor -> inspector", inspector);
 			
 			// actors panel
 			this.ui.actorLang = {
@@ -463,7 +464,10 @@
 									startTime: startTime,
 									endTime: endTime
 								};
-								TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+								// TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+								segment = await TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id);
+								segment = new TIMAAT.AnalysisSegment(segment);
+								TIMAAT.VideoPlayer._segmentAdded(segment, true);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
@@ -531,12 +535,14 @@
 									endTime: endTime,
 									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
 								};
-								sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sequenceAdded);
+								sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id);
 								sequence = new TIMAAT.AnalysisSequence(sequence);
 								TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
 							}
 							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curSegment.model.analysisSequences = tempList.analysisSequences;
+							console.log("TCL: Inspector -> $ -> tempList", tempList);
+							var index = tempList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+							TIMAAT.VideoPlayer.curAnalysisList.analysisSequences = tempList.analysisSegments[index].analysisSequences;
 						}
 					}
 				}
@@ -599,7 +605,7 @@
 									endTime: endTime,
 									sequenceId: TIMAAT.VideoPlayer.curSequence.model.id
 								};
-								take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id, TIMAAT.VideoPlayer._takeAdded);
+								take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id);
 								take = new TIMAAT.AnalysisTake(take);
 								TIMAAT.VideoPlayer._takeAdded(take, true);
 							}
@@ -667,7 +673,7 @@
 									endTime: endTime,
 									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
 								};
-								scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
+								scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id);
 								scene = new TIMAAT.AnalysisScene(scene);
 								TIMAAT.VideoPlayer._sceneAdded(scene, true);
 								// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
@@ -736,7 +742,7 @@
 									endTime: endTime,
 									sceneId: TIMAAT.VideoPlayer.curScene.model.id
 								};
-								action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id, TIMAAT.VideoPlayer._actionAdded);
+								action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id);
 								action = new TIMAAT.AnalysisAction(action);
 								TIMAAT.VideoPlayer._actionAdded(action, true);
 								// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
@@ -747,6 +753,32 @@
 					}
 				}
 				
+			});
+
+			$('#timaat-inspector-meta-delete').on('click', function(event) {
+				switch (inspector.state.type) {
+					case 'analysislist':
+						TIMAAT.VideoPlayer.removeAnalysisList();
+					break;
+					case 'annotation':
+						TIMAAT.VideoPlayer.removeAnnotation();
+					break;
+					case 'analysissegment':
+						TIMAAT.VideoPlayer.removeAnalysisSegment();
+					break;
+					case 'analysissequence':
+						TIMAAT.VideoPlayer.removeAnalysisSequence();
+					break;
+					case 'analysistake':
+						TIMAAT.VideoPlayer.removeAnalysisTake();
+					break;
+					case 'analysisscene':
+						TIMAAT.VideoPlayer.removeAnalysisScene();
+					break;
+					case 'analysisaction':
+						TIMAAT.VideoPlayer.removeAnalysisAction();
+					break;
+				}
 			});
 			
 			// setup annotation metadata UI and events

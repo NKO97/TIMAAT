@@ -29,14 +29,11 @@
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item timaat-annotation-list-sequence p-0 bg-secondary">
-						<div class="d-flex justify-content-between">
-							<span class="font-weight-bold pt-1 text-light pl-1">
-								<i class="timaat-annotation-sequence-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-								<span class="timaat-annotation-sequence-name"></span>
-							</span>
-						<button type="button" class="btn btn-sm btn-danger" onclick="TIMAAT.VideoPlayer.removeAnalysisSequence();">
-							<i class="fas fa-trash"></i>
-						</button>
+					<div class="d-flex justify-content-between">
+						<span class="font-weight-bold pt-1 text-light pl-1">
+							<i class="timaat-annotation-sequence-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
+							<span class="timaat-annotation-sequence-name"></span>
+						</span>
 					</div>
 				</li>`
 			);

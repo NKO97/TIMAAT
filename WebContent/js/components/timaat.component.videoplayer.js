@@ -499,8 +499,6 @@
 
 			// setup sidebar inspector controls
 			TIMAAT.VideoPlayer.inspector = new TIMAAT.Inspector(TIMAAT.VideoPlayer.viewer);			
-
-
 			
 			// setup timeline view events
 			$('.timaat-button-videolayer').on('click', function(ev) {
@@ -719,19 +717,23 @@
 				modal.modal('hide');
 			});
 			
-			$('#timaat-segment-delete-commit-submit').on('click', function(ev) {
+			$('#timaat-segment-delete-commit-submit').on('click', async function(ev) {
 				var modal = $('#timaat-videoplayer-segment-delete');
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissegment' ) return;
 				var segment = TIMAAT.VideoPlayer.inspector.state.item;
 				if (segment) {
-					TIMAAT.AnalysisListService.removeSegment(segment);
+					await TIMAAT.AnalysisListService.removeSegment(segment);
+					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.indexOf(segment);
+					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.splice(index, 1);
+					segment.removeUI();
 					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curSegment = null;
 				modal.modal('hide');
 			});
 
-			$('#timaat-sequence-delete-commit-submit').on('click', async function(ev) {
+			$('#timaat-sequence-delete-commit-submit').on('click', async function(event) {
 				var modal = $('#timaat-videoplayer-sequence-delete');
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissequence' ) return;
 				var sequence = TIMAAT.VideoPlayer.inspector.state.item;
@@ -739,9 +741,59 @@
 					await TIMAAT.AnalysisListService.removeSequence(sequence);
 					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.indexOf(sequence);
 					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.splice(index, 1);
+					sequence.removeUI();
 					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequentsUI);
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curSequence = null;
+				modal.modal('hide');
+			});
+
+			$('#timaat-take-delete-commit-submit').on('click', async function(event) {
+				var modal = $('#timaat-videoplayer-take-delete');
+				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysistake' ) return;
+				var take = TIMAAT.VideoPlayer.inspector.state.item;
+				if (take) {
+					await TIMAAT.AnalysisListService.removeTake(take);
+					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.indexOf(take);
+					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.splice(index, 1);
+					take.removeUI();
+					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curTake = null;
+				modal.modal('hide');
+			});
+
+			$('#timaat-scene-delete-commit-submit').on('click', async function(event) {
+				var modal = $('#timaat-videoplayer-scene-delete');
+				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysisscene' ) return;
+				var scene = TIMAAT.VideoPlayer.inspector.state.item;
+				if (scene) {
+					await TIMAAT.AnalysisListService.removeScene(scene);
+					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.indexOf(scene);
+					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.splice(index, 1);
+					scene.removeUI();
+					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curScene = null;
+				modal.modal('hide');
+			});
+
+			$('#timaat-action-delete-commit-submit').on('click', async function(event) {
+				var modal = $('#timaat-videoplayer-action-delete');
+				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysisaction' ) return;
+				var action = TIMAAT.VideoPlayer.inspector.state.item;
+				if (action) {
+					await TIMAAT.AnalysisListService.removeAction(action);
+					var index = TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.indexOf(action);
+					if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.splice(index, 1);
+					action.removeUI();
+					TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curAction = null;
 				modal.modal('hide');
 			});
 
@@ -1218,9 +1270,9 @@
 		
 		removeAnalysisList: function() {
 			console.log("TCL: removeAnalysisList: function()");
-			if ( !TIMAAT.VideoPlayer.curAnalysisList ) return;
+			if ( !this.curAnalysisList ) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-analysislist-delete').data('analysislist', TIMAAT.VideoPlayer.curAnalysisList);
+			$('#timaat-videoplayer-analysislist-delete').data('analysislist', this.curAnalysisList);
 			$('#timaat-videoplayer-analysislist-delete').modal('show');
 		},
 		
@@ -1361,17 +1413,16 @@
 		
 		removeAnalysisSegment: function() {
 			console.log("TCL: removeAnalysisSegment: function() ");
+			if (!this.curSegment) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-segment-meta').modal('hide');
-			var segment = $('#timaat-videoplayer-segment-meta').data('segment');
-			$('#timaat-videoplayer-segment-delete').data('segment', segment);
+			$('#timaat-videoplayer-segment-delete').data('segment', this.curSegment);
 			$('#timaat-videoplayer-segment-delete').modal('show');
 		},
 
 		addAnalysisSequence: function() {
 			console.log("TCL: addAnalysisSequence: function()");
 			TIMAAT.VideoPlayer.pause();
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null,'analysissequence');
 			// $('#timaat-videoplayer-sequence-meta').data('sequence', null);
 			// $('#timaat-videoplayer-sequence-meta').modal('show');
@@ -1397,17 +1448,16 @@
 		
 		removeAnalysisSequence: function() {
 			console.log("TCL: removeAnalysisSequence: function() ");
+			if (!this.curSequence) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-sequence-meta').modal('hide');
-			var sequence = $('#timaat-videoplayer-sequence-meta').data('sequence');
-			$('#timaat-videoplayer-sequence-delete').data('sequence', sequence);
+			$('#timaat-videoplayer-sequcence-delete').data('sequence', this.curSequence);
 			$('#timaat-videoplayer-sequence-delete').modal('show');
 		},
 
 		addAnalysisTake: function() {
 			console.log("TCL: addAnalysisTake: function()");
 			TIMAAT.VideoPlayer.pause();
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null,'analysistake');
 			// $('#timaat-videoplayer-take-meta').data('take', null);
 			// $('#timaat-videoplayer-take-meta').modal('show');
@@ -1433,17 +1483,16 @@
 		
 		removeAnalysisTake: function() {
 			console.log("TCL: removeAnalysisTake: function() ");
+			if (!this.curTake) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-take-meta').modal('hide');
-			var take = $('#timaat-videoplayer-take-meta').data('take');
-			$('#timaat-videoplayer-take-delete').data('take', take);
+			$('#timaat-videoplayer-take-delete').data('take', this.curTake);
 			$('#timaat-videoplayer-take-delete').modal('show');
 		},
 
 		addAnalysisScene: function() {
 			console.log("TCL: addAnalysisScene: function()");
 			TIMAAT.VideoPlayer.pause();
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null,'analysisscene');
 			// $('#timaat-videoplayer-scene-meta').data('scene', null);
 			// $('#timaat-videoplayer-scene-meta').modal('show');
@@ -1469,17 +1518,16 @@
 		
 		removeAnalysisScene: function() {
 			console.log("TCL: removeAnalysisScene: function() ");
+			if (!this.curScene) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-scene-meta').modal('hide');
-			var scene = $('#timaat-videoplayer-scene-meta').data('scene');
-			$('#timaat-videoplayer-scene-delete').data('scene', scene);
+			$('#timaat-videoplayer-scene-delete').data('scene', this.curScene);
 			$('#timaat-videoplayer-scene-delete').modal('show');
 		},
 
 		addAnalysisAction: function() {
 			console.log("TCL: addAnalysisAction: function()");
 			TIMAAT.VideoPlayer.pause();
-			TIMAAT.VideoPlayer.selectAnnotation(null);
+			// TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null,'analysisaction');
 			// $('#timaat-videoplayer-action-meta').data('action', null);
 			// $('#timaat-videoplayer-action-meta').modal('show');
@@ -1505,10 +1553,9 @@
 		
 		removeAnalysisAction: function() {
 			console.log("TCL: removeAnalysisAction: function() ");
+			if (!this.curAction) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-action-meta').modal('hide');
-			var action = $('#timaat-videoplayer-action-meta').data('action');
-			$('#timaat-videoplayer-action-delete').data('action', action);
+			$('#timaat-videoplayer-action-delete').data('action', this.curAction);
 			$('#timaat-videoplayer-action-delete').modal('show');
 		},
 		
@@ -1856,14 +1903,14 @@
 		},
 		
 		_segmentAdded: function(segment, openInspector=true) {
-			console.log("TCL: _segmentAdded: function(segment)");
-			console.log("TCL: segment", segment);
+			console.log("TCL: _segmentAdded: function(segment)", segment);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI = [];
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.push(segment);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 			segment.addUI();
+			TIMAAT.VideoPlayer.curSegment = segment;
 
 			if ( openInspector ) {
 				TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -1872,6 +1919,7 @@
 			}
 
 			// update UI
+			$('#timaat-timeline-segment-pane').show();
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
@@ -1884,15 +1932,18 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.push(sequence);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
+			// TIMAAT.VideoPlayer.curSegment.model.analysisSequences.push(sequence.model);
 			sequence.addUI();
+			TIMAAT.VideoPlayer.curSequence = sequence;
 
 			if ( openInspector ) {
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'analysissequence');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			}
 
 			// update UI
+			$('#timaat-timeline-sequence-pane').show();
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
@@ -1906,14 +1957,17 @@
 			TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.push(take);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
 			take.addUI();
+			TIMAAT.VideoPlayer.curTake = take;
 
 			if ( openInspector ) {
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			}
 
 			// update UI
+			$('#timaat-timeline-take-pane').show();
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
@@ -1927,14 +1981,16 @@
 			TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.push(scene);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
 			scene.addUI();
+			TIMAAT.VideoPlayer.curScene = scene;
 
 			if ( openInspector ) {
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			}
 
 			// update UI
+			$('#timaat-timeline-scene-pane').show();
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
@@ -1948,14 +2004,16 @@
 			TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.push(action);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
 			action.addUI();
+			TIMAAT.VideoPlayer.curAction = action;
 
 			if ( openInspector ) {
-				TIMAAT.VideoPlayer.selectAnnotation(null);
+				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			}
 
 			// update UI
+			$('#timaat-timeline-action-pane').show();
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
