@@ -469,13 +469,20 @@ a.dropdown-item {
 }
 
 #timaat-timeline-segment-pane, 
-#timaat-timeline-sequence-pane,
 #timaat-timeline-take-pane,
-#timaat-timeline-scene-pane,
 #timaat-timeline-action-pane {
 	width: 100%;
 	height: 15px;
 	display: none;
+	margin-bottom: 2px;
+}
+
+#timaat-timeline-sequence-pane,
+#timaat-timeline-scene-pane {
+	width: 100%;
+	height: 15px;
+	display: none;
+	margin-top: 5px;
 	margin-bottom: 2px;
 }
 
