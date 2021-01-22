@@ -222,6 +222,8 @@
 				id: 0,
 				remark: mediumModel.remark,
 				releaseDate: mediumModel.releaseDate,
+				recordingStartDate: mediumModel.recordingStartDate,
+				recordingEndDate: mediumModel.recordingEndDate,
 				copyright: mediumModel.copyright,
 				mediaType: {
 					id: mediumModel.mediaType.id,
@@ -445,6 +447,8 @@
 			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = {};
 			tempMediumModel.releaseDate = mediumModel.releaseDate;
+			tempMediumModel.recordingStartDate = mediumModel.recordingStartDate;
+			tempMediumModel.recordingEndDate = mediumModel.recordingEndDate;
 			tempMediumModel.remark = mediumModel.remark;
 			tempMediumModel.copyright = mediumModel.copyright;
 			tempMediumModel.displayTitle = mediumModel.displayTitle;

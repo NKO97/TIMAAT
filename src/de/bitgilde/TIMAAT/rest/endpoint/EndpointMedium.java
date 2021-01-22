@@ -1137,6 +1137,8 @@ public class EndpointMedium {
 		// update medium
 		// if ( updatedMedium.getMediaType() != null ) medium.setMediaType(updatedMedium.getMediaType()); // Don't change media type. MediumSubType won't match anymore
 		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
+		medium.setRecordingStartDate(updatedMedium.getRecordingStartDate());
+		medium.setRecordingEndDate(updatedMedium.getRecordingEndDate());
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
 		if ( updatedMedium.getDisplayTitle() != null ) medium.setDisplayTitle(updatedMedium.getDisplayTitle());

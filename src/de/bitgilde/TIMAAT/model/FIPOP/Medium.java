@@ -55,6 +55,12 @@ public class Medium implements Serializable {
 	@Column(name="release_date", columnDefinition = "DATE")
 	private Date releaseDate;
 
+	@Column(name="recording_start_date", columnDefinition = "DATE")
+	private Date recordingStartDate;
+
+	@Column(name="recording_end_date", columnDefinition = "DATE")
+	private Date recordingEndDate;
+
 	private String remark;
 
 	//bi-directional many-to-many association to Annotation
@@ -336,6 +342,22 @@ public class Medium implements Serializable {
 
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+
+	public Date getRecordingStartDate() {
+		return this.recordingStartDate;
+	}
+
+	public void setRecordingStartDate(Date recordingStartDate) {
+		this.recordingStartDate = recordingStartDate;
+	}
+
+	public Date getRecordingEndDate() {
+		return this.recordingEndDate;
+	}
+
+	public void setRecordingEndDate(Date recordingEndDate) {
+		this.recordingEndDate = recordingEndDate;
 	}
 
 	public String getRemark() {

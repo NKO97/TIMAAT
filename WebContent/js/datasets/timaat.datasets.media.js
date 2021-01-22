@@ -253,6 +253,8 @@
 				// console.log("TCL: formDataSanitized", formDataSanitized);
 				formDataSanitized.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
 				// formDataSanitized.releaseDate = (formDataObject.releaseDate != null && !(isNaN(formDataObject.releaseDate))) ? moment.utc(formDataObject.releaseDate, "YYYY-MM-DD") : null;
+				formDataSanitized.recordingStartDate = moment.utc(formDataObject.recordingStartDate, "YYYY-MM-DD");
+				formDataSanitized.recordingEndDate = moment.utc(formDataObject.recordingEndDate, "YYYY-MM-DD");
 				formDataSanitized.displayTitleLanguageId = Number(formDataObject.displayTitleLanguageId);
 				formDataSanitized.sourceUrl = (formDataObject.sourceUrl.length == 0 ) ? null : formDataObject.sourceUrl;
 				formDataSanitized.sourceIsPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
@@ -1964,6 +1966,8 @@
 
 			// setup form
 			$('#timaat-mediadatasets-metadata-medium-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-mediadatasets-metadata-medium-recordingtartdate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-mediadatasets-metadata-medium-recordingenddate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
 			// $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
@@ -2076,6 +2080,8 @@
 				// if (mediumType == 'medium') { $('#timaat-mediadatasets-metadata-medium-mediatype-id').prop('disabled', true);
 				// }	else {	$('#timaat-mediadatasets-metadata-medium-mediatype-id').hide(); }
 				$('#timaat-mediadatasets-metadata-medium-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-mediadatasets-metadata-medium-recordingstartdate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('#timaat-mediadatasets-metadata-medium-recordingenddate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('#timaat-mediadatasets-metadata-form :input').prop('disabled', false);
 				$('.datasheet-form-tag-button').hide();
@@ -2110,6 +2116,12 @@
 			if (data.releaseDate != null && !(isNaN(data.releaseDate)))
 				$('#timaat-mediadatasets-metadata-medium-releasedate').val(moment.utc(data.releaseDate).format('YYYY-MM-DD'));
 				else $('#timaat-mediadatasets-metadata-medium-releasedate').val('');
+			if (data.recordingStartDate != null && !(isNaN(data.recordingStartDate)))
+				$('#timaat-mediadatasets-metadata-medium-recordingstartdate').val(moment.utc(data.recordingStartDate).format('YYYY-MM-DD'));
+				else $('#timaat-mediadatasets-metadata-medium-recordingstartdate').val('');
+			if (data.recordingEndDate != null && !(isNaN(data.recordingEndDate)))
+				$('#timaat-mediadatasets-metadata-medium-recordingenddate').val(moment.utc(data.recordingEndDate).format('YYYY-MM-DD'));
+				else $('#timaat-mediadatasets-metadata-medium-recordingenddate').val('');
 			// display-title data
 			$('#timaat-mediadatasets-metadata-medium-title').val(data.displayTitle.name);
 			// source data
@@ -3378,6 +3390,8 @@
     	// console.log("TCL: medium, formDataObject", medium, formDataObject);
 			// medium data
 			medium.model.releaseDate = formDataObject.releaseDate;
+			medium.model.recordingStartDate = formDataObject.recordingStartDate;
+			medium.model.recordingEndDate = formDataObject.recordingEndDate;
 			medium.model.copyright = formDataObject.copyright;
 			medium.model.remark = formDataObject.remark;
 			// display-title data
@@ -3430,6 +3444,8 @@
 				remark: formDataObject.remark,
 				copyright: formDataObject.copyright,
 				releaseDate: formDataObject.releaseDate,
+				recordingStartDate: formDataObject.recordingStartDate,
+				recordingEndDate: formDataObject.recordingEndDate,
 				mediaType: {
 					id: typeId,
 				},
