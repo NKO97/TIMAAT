@@ -1344,13 +1344,14 @@
                       </button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysisList()" id="timaat-analysislist-edit">Analyse bearbeiten...</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-add">
-                          <i class="fas fa-indent"></i> Neues Segment
-                        </a>
-                        <a class="dropdown-item dropdown-item-indented" onclick="TIMAAT.VideoPlayer.addAnalysisSequence()" id="timaat-analysissequence-add">Sequenz hinzufügen</a>
-                        <a class="dropdown-item dropdown-item-double-indented" onclick="TIMAAT.VideoPlayer.addAnalysisTake()" id="timaat-analysistake-add">Take hinzufügen</a>
-                        <a class="dropdown-item dropdown-item-indented" onclick="TIMAAT.VideoPlayer.addAnalysisScene()" id="timaat-analysisscene-add">Scene hinzufügen</a>
-                        <a class="dropdown-item dropdown-item-double-indented" onclick="TIMAAT.VideoPlayer.addAnalysisAction()" id="timaat-analysisaction-add">Action hinzufügen</a>
+                        <a class="dropdown-item dropdown-toggle" id="timaat-analysislist-segment-options" disabled href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Segmentstruktur</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisSegment()" id="timaat-analysissegment-add">Neues Segment</a>
+                          <a class="dropdown-item dropdown-item-indented" onclick="TIMAAT.VideoPlayer.addAnalysisSequence()" id="timaat-analysissequence-add">Sequence hinzufügen</a>
+                          <a class="dropdown-item dropdown-item-double-indented" onclick="TIMAAT.VideoPlayer.addAnalysisTake()" id="timaat-analysistake-add">Take hinzufügen</a>
+                          <a class="dropdown-item dropdown-item-indented" onclick="TIMAAT.VideoPlayer.addAnalysisScene()" id="timaat-analysisscene-add">Scene hinzufügen</a>
+                          <a class="dropdown-item dropdown-item-double-indented" onclick="TIMAAT.VideoPlayer.addAnalysisAction()" id="timaat-analysisaction-add">Action hinzufügen</a>
+                        </div>
                         <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Neue Analyse erstellen</a>
                         <!-- <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysisList()" id="timaat-analysislist-delete">Analyse löschen</a> -->
