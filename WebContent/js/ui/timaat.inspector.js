@@ -379,21 +379,21 @@
 					var layerVisual = 1;
 					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
 					var comment = $("#timaat-inspector-meta-comment").val();
-					var startTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-start").val());
-					var endTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-end").val());
+					var startTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-start").val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-end").val())*1000.0;
 					var color = inspector.cp.colorHex.substring(1);
 					if (anno) {
 						anno.model.title = title;
 						anno.model.comment = comment;
-						anno.model.startTime = startTime*1000.0;
-						anno.model.endTime = endTime*1000.0;
+						anno.model.startTime = startTime;
+						anno.model.endTime = endTime;
 						anno.svg.color = color;
 						anno.opacity = opacity;
 						anno.layerVisual = layerVisual;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
-						TIMAAT.AnnotationService.createAnnotation(title, comment, startTime*1000.0, endTime*1000.0, color, 1, layerVisual, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
+						TIMAAT.AnnotationService.createAnnotation(title, comment, startTime, endTime, color, 1, layerVisual, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
 				}
 				// analysis lists
