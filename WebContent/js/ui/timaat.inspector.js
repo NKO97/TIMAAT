@@ -849,20 +849,27 @@
 				startTime = TIMAAT.VideoPlayer.video.currentTime;
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
 					case 'analysissequence':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
+						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime));
+            console.log("TCL: Inspector -> $ -> duration", duration);
+						// if ((startTime + duration) > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
+						// 	duration = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime;
 					break;
 					case 'analysistake':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0;
+						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0 - startTime));
 					break;
 					case 'analysisscene':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
+						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime));
 					break;
 					case 'analysisaction':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curScene.model.startTime/1000.0;
+						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curScene.model.endTime/1000.0 - startTime));
 					break;
 				}
 				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
@@ -875,19 +882,19 @@
 				var endTime = TIMAAT.VideoPlayer.video.currentTime
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
 					case 'analysissequence':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0;
 					break;
 					case 'analysistake':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0;
 					break;
 					case 'analysisscene':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0;
 					break;
 					case 'analysisaction':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0)
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curScene.model.endTime/1000.0;
 					break;
 				}
