@@ -967,6 +967,16 @@
 			$('#timaat-inspector-meta-end').prop('disabled', false);
 			$('#timaat-inspector-meta-setend').prop('disabled', false);
 			$('#timaat-inspector-meta-setend-dropdown').prop('disabled', false);
+
+			if (item) {
+				$('#timaat-inspector-meta-delete').prop('disabled', false);
+				$('#timaat-inspector-meta-delete').removeAttr('disabled');
+				$('#timaat-inspector-meta-delete').show();
+			} else {
+				$('#timaat-inspector-meta-delete').prop('disabled', true);
+				$('#timaat-inspector-meta-delete').attr('disabled');
+				$('#timaat-inspector-meta-delete').hide();
+			}
 			
 			// animation panel default UI setting
 			this.disablePanel('timaat-inspector-animation');
