@@ -847,13 +847,50 @@
 				var duration = endTime-startTime;
 				duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.video.duration));
 				startTime = TIMAAT.VideoPlayer.video.currentTime;
-				endTime = startTime+duration;
+				switch (TIMAAT.VideoPlayer.inspector.state.type) {
+					case 'analysissequence':
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
+							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
+					break;
+					case 'analysistake':
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0)
+							startTime = TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0;
+					break;
+					case 'analysisscene':
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
+							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
+					break;
+					case 'analysisaction':
+						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0)
+							startTime = TIMAAT.VideoPlayer.curScene.model.startTime/1000.0;
+					break;
+				}
 				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
+				endTime = startTime+duration;
 				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
+
 			$('#timaat-inspector-meta-setend').on('click', function() {
-				var endTime = TIMAAT.VideoPlayer.video.currentTime;
+				var endTime = TIMAAT.VideoPlayer.video.currentTime
+				switch (TIMAAT.VideoPlayer.inspector.state.type) {
+					case 'analysissequence':
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
+							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0;
+					break;
+					case 'analysistake':
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0)
+							endTime = TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0;
+					break;
+					case 'analysisscene':
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
+							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0;
+					break;
+					case 'analysisaction':
+						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0)
+							endTime = TIMAAT.VideoPlayer.curScene.model.endTime/1000.0;
+					break;
+				}
 				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
