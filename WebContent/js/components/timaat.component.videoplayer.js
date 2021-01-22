@@ -1026,7 +1026,7 @@
 				$('#timaat-video-seek-bar').val(value);
 				$('#timaat-video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
 				// update annotation list UI
-				console.log("TCL: timeupdate -> TIMAAT.VideoPlayer.updateListUI()");
+				// console.log("TCL: timeupdate -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI("timeupdate");
 				if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.animCtrl.updateUI();
 				TIMAAT.VideoPlayer.updateUI();
@@ -1621,7 +1621,7 @@
 		},
 		
 		updateListUI: function(viaTimeUpdate = null) {
-			console.log("TCL: updateListUI: function()");
+			// console.log("TCL: updateListUI: function()");
 			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) 
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
