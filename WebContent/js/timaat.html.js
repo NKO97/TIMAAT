@@ -5,6 +5,21 @@ $('#timaat-login-modal').on('shown.bs.modal', function() {
 
 // <!-- client side form validation -->
 var mediumFormMetadata = $('#timaat-mediadatasets-metadata-form');
+
+// jQuery.validator.addMethod("greaterThan", 
+// function(value, element, params) {
+
+//     if (!/Invalid|NaN/.test(new Date(value))) {
+//         return new Date(value) > new Date($(params).val());
+//     }
+
+//     return isNaN(value) && isNaN($(params).val()) 
+//         || (Number(value) > Number($(params).val())); 
+// },'Must be greater than {0}.');
+jQuery.validator.addMethod("greaterThanStart", function (value, element, params) {
+  return this.optional(element) || new Date(value) >= new Date($(params).val());
+},'Must be greater than recording start date.');
+
 var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').validate({
   rules: {
     displayTitle: {
@@ -27,6 +42,10 @@ var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').valid
     // length: {
 
     // },
+    recordingEndDate: {
+      required: function(element) {return ($("#timaat-mediadatasets-metadata-medium-recordingenddate").val()!="");},
+      greaterThanStart: '#timaat-mediadatasets-metadata-medium-recordingstartdate'
+    },
     width: {
       number: true,
       max: 65535
@@ -73,6 +92,9 @@ var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').valid
     // length: {
 
     // },
+    recordingEndDate: {
+      greaterThan: "Recording end date has to be later than recording start date."
+    },
     width: {
       number: "Please provide a valid number",
       max: "Please provide a value not greater 65535"
