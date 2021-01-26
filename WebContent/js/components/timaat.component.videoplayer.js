@@ -559,6 +559,28 @@
 			var preview = $('#timaat-video-seek-bar-preview');
 			preview.removeClass('show');
 			preview.hide();
+
+			// init summernote fields
+			$('#timaat-inspector-meta-comment').summernote({
+				toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+				],
+				disableDragAndDrop: true,
+				tabDisable: false,
+				codeviewFilter: true,
+				codeviewIframeFilter: true,
+				codeviewIframeWhitelistSrc: []
+			});
+			$('#timaat-inspector-meta-transcript').summernote({
+				toolbar: [
+					['style', ['bold', 'italic', 'underline', 'clear']],
+				],
+				disableDragAndDrop: true,
+				tabDisable: false,
+				codeviewFilter: true,
+				codeviewIframeFilter: true,
+				codeviewIframeWhitelistSrc: []
+			});
 		    
 			// setup video controls UI events
 			// TODO refactor

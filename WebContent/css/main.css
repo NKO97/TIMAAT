@@ -186,6 +186,10 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	min-height: 3rem;
 }
 
+.note-toolbar {
+ background-color:lightgray;
+}
+
 .timaat-medium-thumbnail {
 	cursor: ew-resize;
 }

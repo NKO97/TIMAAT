@@ -21,6 +21,7 @@ requirejs.config({
 		"leaflet-sidebar"               : '../vendor/leaflet/plugins/leaflet-sidebar-v2/js/leaflet-sidebar.min',
 		"popper"                        : '../vendor/popper/popper.min',
 		"select2"                       : '../vendor/select2/js/select2.min',
+		"summernote"										: '../vendor/summernote/summernote.min',
 		"sbadmin2"                      : 'sb-admin-2',
 		"TIMAAT"                        : 'timaat.main',
 		"TIMAAT-html"                   : 'timaat.html',
@@ -91,9 +92,10 @@ requirejs.config({
 		'jquery-datetime'       : { deps: [ 'jquery' ], exports: 'jQuery.datetimepicker' },
 		'jquery-tinycolorpicker': { deps: [ 'jquery' ], exports: 'jQuery.tinycolorpicker' },
 		'jquery-dropzone'       : { deps: [ 'jquery' ], exports: 'jQuery.dropzone' },
-		'bootstrap'             : { deps: [ 'jquery' ], },
+		'bootstrap'             : { deps: [ 'jquery', 'jquery-ui' ], },
 		'moment'                : { deps: [ 'jquery' ], exports: 'moment' },
 		'datatables'            : { deps: [ 'bootstrap', 'jquery' ], exports: 'datatables' },
+		'summernote'            : { deps: [ 'bootstrap', 'jquery', 'jquery-ui' ], exports: 'summernote' },
 		'leaflet-editable'      : { deps: [ 'leaflet' ], },
 		'leaflet-pathdrag'      : { deps: [ 'leaflet' ], exports: 'L.PathDraggable' },
 		'leaflet-pathtransform' : { deps: [ 'leaflet', 'leaflet-pathdrag' ], },
@@ -118,9 +120,8 @@ require(['domReady',
 	'popper',
 	'bootstrap',
 	'select2',
-	
-	'argon2',
-	
+	'summernote',
+	'argon2',	
 	'leaflet',
 	'leaflet-editable',
 	'leaflet-pathdrag',
@@ -199,9 +200,7 @@ require(['domReady',
 		  window.moment = moment;		  
 		  // init UI
 		  TIMAAT.UI.init();
-		  console.log("TIMAAT::Ready");
-
-	  });
-		  
+			console.log("TIMAAT::Ready");
+		});
   });
 });

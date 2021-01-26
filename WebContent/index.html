@@ -18,8 +18,7 @@
 
 
     <!-- TIMAAT -->
-	  <script data-main="js/timaat.init.js" src="js/require.js"></script>
-
+    <script data-main="js/timaat.init.js" src="js/require.js"></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,6 +50,9 @@
 
     <!--Select2 CSS -->
     <link href="vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Summernote CSS -->
+    <link href="vendor/summernote/summernote.min.css" rel="stylesheet">
 
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
@@ -1067,7 +1069,7 @@
                   </div>
                   <div id="timaat-inspector-meta-comment-group" class="form-group form-group-sm mb-3">
                     <label class="col-form-label col-form-label-sm" for="timaat-inspector-meta-comment">Comment</label>
-                    <textarea class="form-control form-control-sm" id="timaat-inspector-meta-comment" placeholder="Comment" aria-label="Kommentar" ></textarea>
+                    <textarea class="form-control form-control-sm" id="timaat-inspector-meta-comment" placeholder="Comment" aria-label="Kommentar"></textarea>
                   </div>
                   <div id="timaat-inspector-meta-transcript-group" class="form-group form-group-sm mb-3">
                     <label class="col-form-label col-form-label-sm" for="timaat-inspector-meta-transcript">Transcript</label>
@@ -1336,7 +1338,7 @@
               <h1>Kein Video geladen</h1>
             </div>
           </div>		
-          <div class="row timaat-videoplayer-ui" style="padding-top: 1em;">
+          <div class="row timaat-videoplayer-ui" style="padding-top: 1em;"> <!-- analysislist menu-->
             <div class="col-lg-3">
               <div class="card">
                 <div class="card-header" style="padding:0">
@@ -1458,7 +1460,7 @@
               </div>
             </div>		
           </div>
-          <div class="row timaat-videoplayer-ui">
+          <div class="row timaat-videoplayer-ui"> <!-- timeline -->
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
@@ -1498,7 +1500,7 @@
               </div>
             </div>
           </div>
-          <div class="row timaat-videoplayer-ui">
+          <div class="row timaat-videoplayer-ui"> <!-- medium dataset-->
             <div class="col-md-12" style="padding-top: 5px;">
               <div>
                 <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseMediaTabs" aria-expanded="false" aria-controls="collapseMediaTabs">

@@ -373,13 +373,13 @@
 				// annotations
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
-					var title = $("#timaat-inspector-meta-name").val();
-					var opacity = $("#timaat-inspector-meta-opacity").val();
+					var title = $('#timaat-inspector-meta-name').val();
+					var opacity = $('#timaat-inspector-meta-opacity').val();
 					var layerVisual = 1;
 					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
-					var comment = $("#timaat-inspector-meta-comment").val();
-					var startTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-start").val())*1000.0;
-					var endTime = TIMAAT.Util.parseTime($("#timaat-inspector-meta-end").val())*1000.0;
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 					var color = inspector.cp.colorHex.substring(1);
 					if (anno) {
 						anno.model.title = title;
@@ -399,7 +399,7 @@
 				if ( inspector.state.type == 'analysislist' ) {
 					var list = inspector.state.item;
 					var title = $('#timaat-inspector-meta-name').val();
-					var comment = $('#timaat-inspector-meta-comment').val();				
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');				
 					if (list) {
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'text', comment);
@@ -414,8 +414,8 @@
 					var segment = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -479,8 +479,8 @@
           console.log("TCL: Inspector -> $ -> sequence", sequence);
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -548,8 +548,8 @@
 					var take = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -616,8 +616,8 @@
 					var scene = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -685,8 +685,8 @@
 					var action = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').val();
-					var transcript = $('#timaat-inspector-meta-transcript').val();
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
@@ -749,7 +749,7 @@
 						}
 					}
 				}
-				
+
 			});
 
 			$('#timaat-inspector-meta-delete').on('click', function(event) {
@@ -784,7 +784,7 @@
 			this.cp.setColor('rgb(3, 145, 206)');
 
 			$('#timaat-inspector-meta-name').on('input', function(ev) {
-				if ( $("#timaat-inspector-meta-name").val().length > 0 ) {
+				if ( $('#timaat-inspector-meta-name').val().length > 0 ) {
 					$('#timaat-inspector-meta-submit').prop('disabled', false);
 					$('#timaat-inspector-meta-submit').removeAttr('disabled');
 				} else {
@@ -797,7 +797,7 @@
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					if ( !anno ) return;
-					var opacity = $("#timaat-inspector-meta-opacity").val();
+					var opacity = $('#timaat-inspector-meta-opacity').val();
 					anno.opacity = opacity;
 					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
 				}
@@ -831,8 +831,8 @@
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 				startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 				endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
-				$("#timaat-inspector-meta-start").val(TIMAAT.Util.formatTime(startTime, true));
-				$("#timaat-inspector-meta-end").val(TIMAAT.Util.formatTime(endTime, true));			
+				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));			
 				
 				if ( inspector.state.item && inspector.state.type == 'annotation' ) {
 					inspector.state.item.startTime = startTime;
@@ -1051,13 +1051,13 @@
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
 					this.cp.setColor('#'+color);
-					$("#timaat-inspector-meta-name").val(title).trigger('input');
-					$("#timaat-inspector-meta-opacity").val(opacity);
+					$('#timaat-inspector-meta-name').val(title).trigger('input');
+					$('#timaat-inspector-meta-opacity').val(opacity);
 					this._setInspectorStroke(stroke);
 					this._setInspectorAnnotationType(layerVisual);
-					$("#timaat-inspector-meta-comment").val(comment);
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);	
+					$('#timaat-inspector-meta-comment').summernote('code', comment);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);	
 					$('#timaat-inspector-categories-and-tags-title').html('Kategorien und Tags');
 
 					if ( !anno ) this.open('timaat-inspector-metadata');
@@ -1222,8 +1222,8 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(title).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment);
+					$('#timaat-inspector-meta-name').val(title).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);	
 					$('#timaat-inspector-categories-and-tags-title').html('Kategorien-Sets und Tags');
 					if ( item != null ) {
 						$('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
@@ -1389,12 +1389,12 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(name).trigger('input');
-					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
-					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);
+					$('#timaat-inspector-meta-name').val(name).trigger('input');
+					$('#timaat-inspector-meta-shortDescription').val(shortDescription).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);
 					(segment) ? $('#timaat-segment-delete-submit').show() : $('#timaat-segment-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
@@ -1440,12 +1440,12 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(name).trigger('input');
-					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
-					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);
+					$('#timaat-inspector-meta-name').val(name).trigger('input');
+					$('#timaat-inspector-meta-shortDescription').val(shortDescription).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);
 					(sequence) ? $('#timaat-sequence-delete-submit').show() : $('#timaat-sequence-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
@@ -1486,12 +1486,12 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(name).trigger('input');
-					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
-					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);
+					$('#timaat-inspector-meta-name').val(name).trigger('input');
+					$('#timaat-inspector-meta-shortDescription').val(shortDescription).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);
 					(take) ? $('#timaat-take-delete-submit').show() : $('#timaat-take-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
@@ -1537,12 +1537,12 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(name).trigger('input');
-					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
-					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);
+					$('#timaat-inspector-meta-name').val(name).trigger('input');
+					$('#timaat-inspector-meta-shortDescription').val(shortDescription).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);
 					(scene) ? $('#timaat-scene-delete-submit').show() : $('#timaat-scene-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
@@ -1583,12 +1583,12 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					$("#timaat-inspector-meta-name").val(name).trigger('input');
-					$("#timaat-inspector-meta-shortDescription").val(shortDescription).trigger('input');
-					$("#timaat-inspector-meta-comment").val(comment).trigger('input');
-					$("#timaat-inspector-meta-transcript").val(transcript).trigger('input');
-					$("#timaat-inspector-meta-start").val(start);
-					$("#timaat-inspector-meta-end").val(end);
+					$('#timaat-inspector-meta-name').val(name).trigger('input');
+					$('#timaat-inspector-meta-shortDescription').val(shortDescription).trigger('input');
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+					$('#timaat-inspector-meta-start').val(start);
+					$('#timaat-inspector-meta-end').val(end);
 					(action) ? $('#timaat-action-delete-submit').show() : $('#timaat-action-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 				}
@@ -1604,8 +1604,8 @@
 				var end = TIMAAT.Util.formatTime(this.state.item.endTime, true);
 				// update UI
 				// metadata panel
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 				
 				// animation panel
 				if ( this.state.item.isAnimation() ) {
@@ -1631,12 +1631,12 @@
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-name").val(name);
-				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
-				$("#timaat-inspector-meta-comment").val(comment);
-				$("#timaat-inspector-meta-transcript").val(transcript);
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-name').val(name);
+				$('#timaat-inspector-meta-shortDescription').val(shortDescription);
+				$('#timaat-inspector-meta-comment').summernote('code', comment);	
+				$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 			} else
 			if (  this.state.type == 'analysissequence' ) {
 				let name = this.state.item.model.analysisSequenceTranslations[0].name;
@@ -1648,12 +1648,12 @@
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-name").val(name);
-				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
-				$("#timaat-inspector-meta-comment").val(comment);
-				$("#timaat-inspector-meta-transcript").val(transcript);
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-name').val(name);
+				$('#timaat-inspector-meta-shortDescription').val(shortDescription);
+				$('#timaat-inspector-meta-comment').summernote('code', comment);	
+				$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 			} else
 			if (  this.state.type == 'analysistake' ) {
 				let name = this.state.item.model.analysisTakeTranslations[0].name;
@@ -1665,12 +1665,12 @@
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-name").val(name);
-				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
-				$("#timaat-inspector-meta-comment").val(comment);
-				$("#timaat-inspector-meta-transcript").val(transcript);
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-name').val(name);
+				$('#timaat-inspector-meta-shortDescription').val(shortDescription);
+				$('#timaat-inspector-meta-comment').summernote('code', comment);	
+				$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 			} else
 			if (  this.state.type == 'analysisscene' ) {
 				let name = this.state.item.model.analysisSceneTranslations[0].name;
@@ -1682,12 +1682,12 @@
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-name").val(name);
-				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
-				$("#timaat-inspector-meta-comment").val(comment);
-				$("#timaat-inspector-meta-transcript").val(transcript);
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-name').val(name);
+				$('#timaat-inspector-meta-shortDescription').val(shortDescription);
+				$('#timaat-inspector-meta-comment').summernote('code', comment);	
+				$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 			} else
 			if (  this.state.type == 'analysisaction' ) {
 				let name = this.state.item.model.analysisActionTranslations[0].name;
@@ -1699,12 +1699,12 @@
 				let start = TIMAAT.Util.formatTime(startTime, true);
 				let end = TIMAAT.Util.formatTime(endTime, true);
 				// setup UI from Video Player state
-				$("#timaat-inspector-meta-name").val(name);
-				$("#timaat-inspector-meta-shortDescription").val(shortDescription);
-				$("#timaat-inspector-meta-comment").val(comment);
-				$("#timaat-inspector-meta-transcript").val(transcript);
-				$("#timaat-inspector-meta-start").val(start);
-				$("#timaat-inspector-meta-end").val(end);
+				$('#timaat-inspector-meta-name').val(name);
+				$('#timaat-inspector-meta-shortDescription').val(shortDescription);
+				$('#timaat-inspector-meta-comment').summernote('code', comment);	
+				$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
+				$('#timaat-inspector-meta-start').val(start);
+				$('#timaat-inspector-meta-end').val(end);
 			}
 
 		};
@@ -1722,8 +1722,8 @@
 			endTime = startTime+time;
 			startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 			endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
-			$("#timaat-inspector-meta-start").val(TIMAAT.Util.formatTime(startTime, true));
-			$("#timaat-inspector-meta-end").val(TIMAAT.Util.formatTime(endTime, true));
+			$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
+			$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
 			
 			if ( this.state.item && this.state.type == 'annotation' ) {
 				this.state.item.startTime = startTime;
