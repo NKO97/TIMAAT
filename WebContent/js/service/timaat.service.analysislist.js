@@ -177,27 +177,27 @@
 
 		async updateMediumAnalysisList(analysisList) {
 			console.log("TCL: updateAnalysisList -> analysisList", analysisList);
-			// var list = {
-			// 		id: analysisList.id,
-			// 		mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
-			// 		mediumID: analysisList.mediumId,
-			// 		tags: analysisList.tags
-			// };
-			delete analysisList.ui;
-			// delete analysisList.analysisSegments;
-			delete analysisList.analysisSegmentsUI;
+			var updateList = {
+				// annotationa: analysisList.annotations,
+				// analysisSegments: analysisList.analysisSegments,
+				categorySets: analysisList.categorySets,
+				id: analysisList.id,
+				mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
+				mediumID: analysisList.mediumId,
+				tags: analysisList.tags,
+			};
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+analysisList.id,
 					type:"PATCH",
-					data: JSON.stringify(analysisList),
+					data: JSON.stringify(updateList),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: updateAnalysisList -> data", data);
+					console.log("TCL: updateAnalysisList -> data", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error", e );
