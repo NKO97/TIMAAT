@@ -6,16 +6,6 @@ $('#timaat-login-modal').on('shown.bs.modal', function() {
 // <!-- client side form validation -->
 var mediumFormMetadata = $('#timaat-mediadatasets-metadata-form');
 
-// jQuery.validator.addMethod("greaterThan", 
-// function(value, element, params) {
-
-//     if (!/Invalid|NaN/.test(new Date(value))) {
-//         return new Date(value) > new Date($(params).val());
-//     }
-
-//     return isNaN(value) && isNaN($(params).val()) 
-//         || (Number(value) > Number($(params).val())); 
-// },'Must be greater than {0}.');
 jQuery.validator.addMethod("greaterThanStart", function (value, element, params) {
   return this.optional(element) || new Date(value) >= new Date($(params).val());
 },'Must be greater than recording start date.');
