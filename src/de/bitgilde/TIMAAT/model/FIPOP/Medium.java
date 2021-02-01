@@ -79,7 +79,8 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
 	@OneToMany(mappedBy="medium")
-	@JsonBackReference(value = "Medium-MediaCollectionHasMedium")
+	// @JsonBackReference(value = "Medium-MediaCollectionHasMedium")
+	@JsonIgnore
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 	
 	//bi-directional many-to-one association to MediaType
