@@ -20,6 +20,10 @@ public class MediaCollectionHasMediumPK implements Serializable {
 
 	public MediaCollectionHasMediumPK() {
 	}
+	public MediaCollectionHasMediumPK(int mediaCollectionId, int mediumId) {
+		this.mediaCollectionId = mediaCollectionId;
+		this.mediumId = mediumId;
+	}
 	public int getMediaCollectionId() {
 		return this.mediaCollectionId;
 	}

@@ -142,7 +142,7 @@
 							target.mediaCollectionHasMediums.forEach(function(item) {
 								if ( item.medium && item.medium.id == medium.id ) found = true;
 							});
-							
+							// console.log("TCL: TIMAAT.VideoChooser.dt.$ -> found", found);
 							if ( !found ) target.mediaCollectionHasMediums.push({
 								id: null,
 								medium: medium,
@@ -353,9 +353,9 @@
 				"pagingType"    : "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
+				"scrollX"       : true,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
-				"scrollX"       : true,
 				"rowId"					: 'id',
 				"serverSide"		: true,
 				"ajax": {
@@ -475,13 +475,13 @@
 
 				},
 				"columns": [
-					{ data: 'id', className: 'videochooser-item', orderable: false, render: function(data, type, video, meta) {
+					{ data: 'id', className: 'videochooser-item', orderable: false, width: '5%', render: function(data, type, video, meta) {
 						return '<input type="checkbox" aria-label="Checkbox">';
-					}, createdCell( cell, cellData, rowData, rowIndex, colIndex ) {
-						$(cell).attr('id', 'videochooser-item-'+cellData);
-					}
+						}, createdCell( cell, cellData, rowData, rowIndex, colIndex ) {
+							$(cell).attr('id', 'videochooser-item-'+cellData);
+						}
 					},
-					{ data: null, className: 'videochooser-item-preview', orderable: false, render: function(data, type, medium, meta) {
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, medium, meta) {
 						let ui;
 						if (medium.mediumVideo) {
 							ui = `
@@ -503,7 +503,7 @@
 						return ui;
 						}
 					},
-					{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
+					{ data: 'id', name: 'title', className: 'title', width: '38%', render: function(data, type, medium, meta) {
 						// console.log("TCL: medium", medium);
 						let titleDisplay = `<p>`+medium.displayTitle.name+`</p>`;
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
@@ -518,18 +518,18 @@
 							return titleDisplay;
 						}
 					},
-					{ data: 'mediumVideo.length', name: 'duration', className: 'duration', render: function(data, type, medium, meta) {
+					{ data: 'mediumVideo.length', name: 'duration', className: 'duration', width: '10%', render: function(data, type, medium, meta) {
 							if (medium.mediumVideo) {
 								return TIMAAT.Util.formatTime(data);
 							}
 							return "";
 						}
 					},
-					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, render: function(data, type, video, meta) {
+					{ data: 'mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '10%', render: function(data, type, video, meta) {
 							return TIMAAT.VideoChooser._getProducer(video);
 						}
 					},
-					{ data: 'releaseDate', name: 'releaseDate', className: 'date', render: function(data, type, medium, meta) {
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, medium, meta) {
 							if (medium.mediumVideo) {
 								if (data == null) return "";
 								return moment.utc(data).format('YYYY-MM-DD');
@@ -537,7 +537,7 @@
 							return "";
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, render: function(data, type, medium, meta) {
+					{ data: null, className: 'actions', orderable: false, width: '7%', render: function(data, type, medium, meta) {
 						let ui;
 						if (medium.mediumVideo) {
 							ui = `<div>
@@ -556,7 +556,7 @@
 						} else {
 							ui = `<div>`;
 						}
-						ui += `<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>`;
+						ui += `<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>`;
 						if ( TIMAAT.VideoChooser.collection ) ui += `<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>`;
 						ui += '</div>';
 							return ui;
@@ -973,7 +973,7 @@
 								</form>
 
 								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>
-								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+								<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
 								<button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-video-collectionitemremove"><i class="fas fa-folder-minus"></i></button>
 							</div>
 						</td>

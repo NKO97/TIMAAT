@@ -3,7 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -20,6 +21,7 @@ public class MediaCollectionHasMedium implements Serializable {
 	private MediaCollectionHasMediumPK id;
 
 	@ManyToOne
+	@JsonManagedReference(value = "Medium-MediaCollectionHasMedium")
 	@JoinColumn(name="medium_id")
 	private Medium medium;
 
@@ -28,11 +30,17 @@ public class MediaCollectionHasMedium implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
+	@JsonBackReference(value = "MediaCollection-MediaCollectionHasMedium")
 	@JoinColumn(name="media_collection_id")
-	@JsonIgnore
 	private MediaCollection mediaCollection;
 
 	public MediaCollectionHasMedium() {
+	}
+
+	public MediaCollectionHasMedium(MediaCollection mediaCollection, Medium medium) {
+		this.mediaCollection = mediaCollection;
+		this.medium = medium;
+		this.id = new MediaCollectionHasMediumPK(mediaCollection.getId(), medium.getId());
 	}
 
 	public MediaCollectionHasMediumPK getId() {

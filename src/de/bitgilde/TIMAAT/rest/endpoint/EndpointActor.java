@@ -1718,8 +1718,8 @@ public class EndpointActor {
 		// System.out.println("EndpointActor: updateActorHasAddress - only logging remains");	
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ADDRESSEDITED);
 		System.out.println("EndpointActor: updateActorHasAddress - update complete");	
 		return Response.ok().entity(actorHasAddress).build();
 	}
@@ -1741,8 +1741,8 @@ public class EndpointActor {
 		entityTransaction.commit();
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSDELETED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ADDRESSDELETED);
 		System.out.println("EndpointActor: deleteAddress - delete complete");	
 		return Response.ok().build();
 	}

@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.List;
 
 
@@ -45,6 +47,7 @@ public class MediaCollection implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
 	@OneToMany(mappedBy="mediaCollection")
+	@JsonManagedReference(value = "MediaCollection-MediaCollectionHasMedium")
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 
 	//bi-directional many-to-many association to Tag
