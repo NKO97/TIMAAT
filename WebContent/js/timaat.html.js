@@ -23,15 +23,6 @@ var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').valid
     typeId: {
       required: true,
     },
-    // releaseDate: {
-    //   dateISO: true,
-    // },
-    // sourceLastAccessed: {
-    //   dateISO: true,
-    // },
-    // length: {
-
-    // },
     recordingEndDate: {
       required: function(element) {return ($("#timaat-mediadatasets-metadata-medium-recordingenddate").val()!="");},
       greaterThanStart: '#timaat-mediadatasets-metadata-medium-recordingstartdate'
@@ -73,15 +64,6 @@ var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').valid
     typeId: {
       required: "Please provide the type of the medium"
     },
-    // releaseDate: {
-    //   dateISO: "Please provide a valid date"
-    // },
-    // sourceLastAccessed: {
-    //   dateISO: "Please provide a valid date"
-    // },
-    // length: {
-
-    // },
     recordingEndDate: {
       greaterThan: "Recording end date has to be later than recording start date."
     },
@@ -195,7 +177,11 @@ var mediumCollectionFormMetadataValidator = $('#timaat-mediacollectiondatasets-m
     },
     typeId: {
       required: true,
-    }    
+    },
+    ended: {
+      required: function(element) {return ($("#timaat-mediacollectiondatasets-metadata-series-ended").val()!="");},
+      greaterThanStart: '#timaat-mediacollectiondatasets-metadata-series-started'
+    },
   },
   messages: {
     title: {
@@ -205,7 +191,10 @@ var mediumCollectionFormMetadataValidator = $('#timaat-mediacollectiondatasets-m
     },
     typeId: {
       required: "Please provide the type of the medium collection"
-    }
+    },
+    ended: {
+      greaterThan: "End date has to be later than start date."
+    },
   },
   submitHandler: function(mediumCollectionFormMetadata) {
     mediumCollectionFormMetadata.submit();
