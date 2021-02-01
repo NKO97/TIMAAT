@@ -1399,6 +1399,7 @@
 				case 'Series':
 					model = {
 						mediaCollectionId: 0,
+						seasons: formDataObject.seasons,
 						started: formDataObject.started,
 						ended: formDataObject.ended
 					};
