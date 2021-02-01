@@ -62,6 +62,9 @@
 				TIMAAT.MediaDatasets.mediaLoaded = true;
 			}
 			TIMAAT.UI.showComponent('media');
+			if ($('#collections-tab').hasClass('active')) {
+				TIMAAT.MediaCollectionDatasets.loadMediaCollections();
+			} 
 		},
 
 		initMediaTypes: function() {
