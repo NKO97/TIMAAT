@@ -1,0 +1,2 @@
+ALTER TABLE `FIPOP`.`medium_has_title` DROP FOREIGN KEY `fk_medium_has_title_title1`;
+ALTER TABLE `FIPOP`.`medium_has_title` ADD CONSTRAINT `fk_medium_has_title_title1` FOREIGN KEY (`title_id`) REFERENCES `FIPOP`.`title` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
