@@ -793,6 +793,7 @@
 					languageSelect.append(option).trigger('change');
 					$('input[name="newTitle['+i+']"]').rules('add', { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="newTitle['+i+']"]').attr('value', TIMAAT.MediaDatasets.replaceSpecialCharacters(title));
+					$('#title-language-select-dropdown').empty();
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
