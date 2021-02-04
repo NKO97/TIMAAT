@@ -335,6 +335,223 @@
 				}
 			});
 
+			// category set button handler
+			$('.datasheet-form-categoryset-button').on('click', async function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				var modal = $('#timaat-mediadatasets-medium-categorysets');
+				modal.data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
+				var medium = modal.data('medium');
+				modal.find('.modal-body').html(`
+					<form role="form" id="mediumCategorySetsForm">
+						<div class="form-group">
+							<!-- <label for="medium-categorySets-multi-select-dropdown">Medium category sets</label> -->
+							<div class="col-md-12">
+								<select class="form-control form-control-md multi-select-dropdown"
+												style="width:100%;"
+												id="medium-categorySets-multi-select-dropdown"
+												name="categorySetId"
+												data-role="categorySetId"
+												data-placeholder="Select medium category sets"
+												multiple="multiple">
+								</select>
+							</div>
+						</div>
+					</form>`);
+				$('#medium-categorySets-multi-select-dropdown').select2({
+					closeOnSelect: false,
+					scrollAfterSelect: true,
+					allowClear: true,
+					minimumResultsForSearch: 10,
+					ajax: {
+						url: 'api/category/set/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+				TIMAAT.MediaService.getCategorySetList(medium.model.id).then(function(data) {
+					// console.log("TCL: then: data", data);
+					var categorySetSelect = $('#medium-categorySets-multi-select-dropdown');
+					if (data.length > 0) {
+						data.sort((a, b) => (a.name > b.name)? 1 : -1);
+						// create the options and append to Select2
+						var i = 0;
+						for (; i < data.length; i++) {
+							var option = new Option(data[i].name, data[i].id, true, true);
+							categorySetSelect.append(option).trigger('change');
+						}
+						// manually trigger the 'select2:select' event
+						categorySetSelect.trigger({
+							type: 'select2:select',
+							params: {
+								data: data
+							}
+						});
+					}
+				});
+				modal.modal('show');
+			});
+
+			// submit category set modal button functionality
+			$('#timaat-mediadatasets-modal-categoryset-submit').on('click', async function(event) {
+				event.preventDefault();
+				// console.log("TCL: submit category set list");
+				var modal = $('#timaat-mediadatasets-medium-categorysets');
+				if (!$('#mediumCategorySetsForm').valid()) 
+					return false;
+				var medium = modal.data('medium');
+				// console.log("TCL: medium", medium);
+				var formDataRaw = $('#mediumCategorySetsForm').serializeArray();
+				// console.log("TCL: formDataRaw", formDataRaw);
+				var i = 0;
+				var categorySetIdList = [];
+				var newCategorySetList = [];
+				for (; i < formDataRaw.length; i++) {
+					if (isNaN(Number(formDataRaw[i].value))) {
+						newCategorySetList.push( { id: 0, name: formDataRaw[i].value} ); // new category sets that have to be added to the system first
+					} else {
+						categorySetIdList.push( {id: formDataRaw[i].value} );
+					}
+				}
+				medium.model = await TIMAAT.MediaDatasets.updateMediumHasCategorySetsList(medium.model, categorySetIdList);
+				if (newCategorySetList.length > 0) {
+					var updatedMediumModel = await TIMAAT.MediaDatasets.addCategorySetsToMedium(medium.model, newCategorySetList);
+					// console.log("TCL: updatedMediumModel", updatedMediumModel);
+					medium.model.categorySets = updatedMediumModel.categorySets;
+				}
+				$('#timaat-mediadatasets-metadata-form').data('medium', medium);
+				modal.modal('hide');
+			});
+
+			// category button handler
+			$('.datasheet-form-category-button').on('click', async function(event) {
+				event.stopPropagation();
+				TIMAAT.UI.hidePopups();
+				var modal = $('#timaat-mediadatasets-medium-categories');
+				modal.data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
+				var medium = modal.data('medium');
+				modal.find('.modal-body').html(`
+					<form role="form" id="mediumCategoriesForm">
+						<div class="form-group">
+							<!-- <label for="medium-categories-multi-select-dropdown">Medium categories</label> -->
+							<div class="col-md-12">
+								<select class="form-control form-control-md multi-select-dropdown"
+												style="width:100%;"
+												id="medium-categories-multi-select-dropdown"
+												name="categoryId"
+												data-role="categoryId"
+												data-placeholder="Select medium categories"
+												multiple="multiple">
+								</select>
+							</div>
+						</div>
+					</form>`);
+				$('#medium-categories-multi-select-dropdown').select2({
+					closeOnSelect: false,
+					scrollAfterSelect: true,
+					allowClear: true,
+					minimumResultsForSearch: 10,
+					ajax: {
+						url: 'api/medium/'+medium.model.id+'/category/selectList/',
+						// url: 'api/category/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							return {
+								search: params.term,
+								page: params.page
+							};          
+						},
+						processResults: function(data, params) {
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: true
+					},
+					minimumInputLength: 0,
+				});
+				TIMAAT.MediaService.getSelectedCategories(medium.model.id).then(function(data) {
+					// console.log("TCL: then: data", data);
+					var categorySelect = $('#medium-categories-multi-select-dropdown');
+					if (data.length > 0) {
+						data.sort((a, b) => (a.name > b.name)? 1 : -1);
+						// create the options and append to Select2
+						var i = 0;
+						for (; i < data.length; i++) {
+							var option = new Option(data[i].name, data[i].id, true, true);
+							categorySelect.append(option).trigger('change');
+						}
+						// manually trigger the 'select2:select' event
+						categorySelect.trigger({
+							type: 'select2:select',
+							params: {
+								data: data
+							}
+						});
+					}
+				});
+				modal.modal('show');
+			});
+
+			// submit category modal button functionality
+			$('#timaat-mediadatasets-modal-category-submit').on('click', async function(event) {
+				event.preventDefault();
+				// console.log("TCL: submit category list");
+				var modal = $('#timaat-mediadatasets-medium-categories');
+				if (!$('#mediumCategoriesForm').valid()) 
+					return false;
+				var medium = modal.data('medium');
+				// console.log("TCL: medium", medium);
+				var formDataRaw = $('#mediumCategoriesForm').serializeArray();
+				// console.log("TCL: formDataRaw", formDataRaw);
+				var i = 0;
+				var categoryIdList = [];
+				var newCategoryList = [];
+				for (; i < formDataRaw.length; i++) {
+					if (isNaN(Number(formDataRaw[i].value))) {
+						newCategoryList.push( { id: 0, name: formDataRaw[i].value} ); // new categories that have to be added to the system first
+					} else {
+						categoryIdList.push( {id: formDataRaw[i].value} );
+					}
+				}
+				medium.model = await TIMAAT.MediaDatasets.updateMediumHasCategoriesList(medium.model, categoryIdList);
+				if (newCategoryList.length > 0) {
+					var updatedMediumModel = await TIMAAT.MediaDatasets.addCategoriesToMedium(medium.model, newCategoryList);
+					// console.log("TCL: updatedMediumModel", updatedMediumModel);
+					medium.model.categories = updatedMediumModel.categories;
+				}
+				$('#timaat-mediadatasets-metadata-form').data('medium', medium);
+				modal.modal('hide');
+			});
+
 			// tag button handler
 			$('.datasheet-form-tag-button').on('click', async function(event) {
 				event.stopPropagation();
@@ -343,7 +560,7 @@
 				modal.data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
 				var medium = modal.data('medium');
 				modal.find('.modal-body').html(`
-					<form role="form" id="mediumTagsModalForm">
+					<form role="form" id="mediumTagsForm">
 						<div class="form-group">
 							<label for="medium-tags-multi-select-dropdown">Medium tags</label>
 							<div class="col-md-12">
@@ -416,13 +633,14 @@
 			// submit tag modal button functionality
 			$('#timaat-mediadatasets-modal-tag-submit').on('click', async function(event) {
 				event.preventDefault();
+				// console.log("TCL: submit tag list");
 				var modal = $('#timaat-mediadatasets-medium-tags');
-				if (!$('#mediumTagsModalForm').valid()) 
+				if (!$('#mediumTagsForm').valid()) 
 					return false;
 				var medium = modal.data('medium');
-        console.log("TCL: medium", medium);
-				var formDataRaw = $('#mediumTagsModalForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: medium", medium);
+				var formDataRaw = $('#mediumTagsForm').serializeArray();
+        // console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var tagIdList = [];
 				var newTagList = [];
@@ -2044,12 +2262,9 @@
 
 			if ( action == 'show') {
 				$('#timaat-mediadatasets-metadata-form :input').prop('disabled', true);
-				$('.datasheet-form-tag-button').prop('disabled', false);
-				$('.datasheet-form-tag-button :input').prop('disabled', false);
-				$('.datasheet-form-tag-button').show();
-				$('.mediadatasheet-form-edit-button').prop('disabled', false);
-				$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
-				$('.mediadatasheet-form-edit-button').show();
+				$('.datasheet-form-button').prop('disabled', false);
+				$('.datasheet-form-button :input').prop('disabled', false);
+				$('.datasheet-form-button').show();
 				if ( mediumTypeData.model.fileStatus == 'noFile' || !mediumTypeData.model.fileStatus) {
 					if (mediumTypeData.model.mediumVideo || mediumTypeData.model.mediumImage) {
 						$('.datasheet-form-upload-button').prop('disabled', false);
@@ -2072,9 +2287,6 @@
 					$('.datasheet-form-annotate-button').hide();
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				}
-				$('.mediadatasheet-form-delete-button').prop('disabled', false);
-				$('.mediadatasheet-form-delete-button :input').prop('disabled', false);
-				$('.mediadatasheet-form-delete-button').show();
 				$('#timaat-mediadatasets-metadata-form-submit').hide();
 				$('#timaat-mediadatasets-metadata-form-dismiss').hide();
 				$('#mediumFormHeader').html(mediumType+" Datasheet (#"+ mediumTypeData.model.id+')');
@@ -2088,19 +2300,13 @@
 				$('#timaat-mediadatasets-metadata-medium-recordingenddate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('#timaat-mediadatasets-metadata-form :input').prop('disabled', false);
-				$('.datasheet-form-tag-button').hide();
-				$('.datasheet-form-tag-button').prop('disabled', true);
-				$('.datasheet-form-tag-button :input').prop('disabled', true);
-				$('.mediadatasheet-form-edit-button').hide();
-				$('.mediadatasheet-form-edit-button').prop('disabled', true);
-				$('.mediadatasheet-form-edit-button :input').prop('disabled', true);
+				$('.datasheet-form-button').hide();
+				$('.datasheet-form-button').prop('disabled', true);
+				$('.datasheet-form-button :input').prop('disabled', true);
 				$('.datasheet-form-upload-button').hide();
 				$('.datasheet-form-upload-button').prop('disabled', true);
 				$('.datasheet-form-annotate-button').hide();
 				$('.datasheet-form-annotate-button').prop('disabled', true);
-				$('.mediadatasheet-form-delete-button').hide();
-				$('.mediadatasheet-form-delete-button').prop('disabled', true);
-				$('.mediadatasheet-form-delete-button :input').prop('disabled', true);
 				$('#timaat-mediadatasets-metadata-form-submit').html('Save');
 				$('#timaat-mediadatasets-metadata-form-submit').show();
 				$('#timaat-mediadatasets-metadata-form-dismiss').show();
@@ -3274,6 +3480,170 @@
 			};
 		},
 
+		updateMediumHasCategorySetsList: async function(mediumModel, categorySetIdList) {
+    	// console.log("TCL: mediumModel, categorySetIdList", mediumModel, categorySetIdList);
+			try {
+				var existingMediumHasCategorySetsEntries = await TIMAAT.MediaService.getCategorySetList(mediumModel.id);
+        // console.log("TCL: existingMediumHasCategorySetsEntries", existingMediumHasCategorySetsEntries);
+				if (categorySetIdList == null) { //* all entries will be deleted
+					mediumModel.categorySets = [];
+					await TIMAAT.MediaService.updateMedium(mediumModel);
+				} else if (existingMediumHasCategorySetsEntries.length == 0) { //* all entries will be added
+					mediumModel.categorySets = categorySetIdList;
+					await TIMAAT.MediaService.updateMedium(mediumModel);
+				} else { //* delete removed entries
+					var entriesToDelete = [];
+					var i = 0;
+					for (; i < existingMediumHasCategorySetsEntries.length; i++) {
+						var deleteId = true;
+						var j = 0;
+						for (; j < categorySetIdList.length; j++) {
+							if (existingMediumHasCategorySetsEntries[i].id == categorySetIdList[j].id) {
+								deleteId = false;
+								break; // no need to check further if match was found
+							}
+						}
+						if (deleteId) { // id is in existingMediumHasCategorySetEntries but not in categorySetIdList
+              // console.log("TCL: deleteId", deleteId);
+							entriesToDelete.push(existingMediumHasCategorySetsEntries[i]);
+							existingMediumHasCategorySetsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+							i--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					if (entriesToDelete.length > 0) { // anything to delete?
+						var i = 0;
+						for (; i < entriesToDelete.length; i++) {
+							var index = mediumModel.categorySets.findIndex(({id}) => id === entriesToDelete[i].id);
+							mediumModel.categorySets.splice(index,1);
+							await TIMAAT.MediaService.removeCategorySet(mediumModel.id, entriesToDelete[i].id);
+						}
+					}
+					//* add existing categorySets
+					var idsToCreate = [];
+          i = 0;
+          for (; i < categorySetIdList.length; i++) {
+            var idExists = false;
+            var item = { id: 0 };
+            var j = 0;
+            for (; j < existingMediumHasCategorySetsEntries.length; j++) {
+              if (categorySetIdList[i].id == existingMediumHasCategorySetsEntries[j].id) {
+                idExists = true;
+                break; // no need to check further if match was found
+              }
+            }
+            if (!idExists) {
+              item.id = categorySetIdList[i].id;
+              idsToCreate.push(item);
+            }
+          }
+          // console.log("TCL: idsToCreate", idsToCreate);
+          if (idsToCreate.length > 0) { // anything to add?
+            // console.log("TCL: idsToCreate", idsToCreate);
+						var i = 0;
+						for (; i < idsToCreate.length; i++) {
+							mediumModel.categorySets.push(idsToCreate[i]);
+							await TIMAAT.MediaService.addCategorySet(mediumModel.id, idsToCreate[i].id);
+						}
+          }
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
+			return mediumModel;
+		},
+
+		addCategorySetsToMedium: async function(mediumModel, newCategorySetList) {
+      // console.log("TCL: addCategorySetsToMedium:function -> mediumModel, newCategorySetList", mediumModel, newCategorySetList);
+			var i = 0;
+			for (; i < newCategorySetList.length; i++) {
+				await TIMAAT.MediaService.addCategorySet(mediumModel.id, newCategorySetList[i].id);
+				mediumModel.categorySets.push(newCategorySetList[i]);
+			}
+			return mediumModel;
+		},
+
+		updateMediumHasCategoriesList: async function(mediumModel, categoryIdList) {
+    	// console.log("TCL: mediumModel, categoryIdList", mediumModel, categoryIdList);
+			try {
+				var existingMediumHasCategoriesEntries = await TIMAAT.MediaService.getSelectedCategories(mediumModel.id);
+        // console.log("TCL: existingMediumHasCategoriesEntries", existingMediumHasCategoriesEntries);
+				if (categoryIdList == null) { //* all entries will be deleted
+					mediumModel.categories = [];
+					await TIMAAT.MediaService.updateMedium(mediumModel);
+				} else if (existingMediumHasCategoriesEntries.length == 0) { //* all entries will be added
+					mediumModel.categories = categoryIdList;
+					await TIMAAT.MediaService.updateMedium(mediumModel);
+				} else { //* delete removed entries
+					var entriesToDelete = [];
+					var i = 0;
+					for (; i < existingMediumHasCategoriesEntries.length; i++) {
+						var deleteId = true;
+						var j = 0;
+						for (; j < categoryIdList.length; j++) {
+							if (existingMediumHasCategoriesEntries[i].id == categoryIdList[j].id) {
+								deleteId = false;
+								break; // no need to check further if match was found
+							}
+						}
+						if (deleteId) { // id is in existingMediumHasCategoryEntries but not in categoryIdList
+              // console.log("TCL: deleteId", deleteId);
+							entriesToDelete.push(existingMediumHasCategoriesEntries[i]);
+							existingMediumHasCategoriesEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+							i--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					if (entriesToDelete.length > 0) { // anything to delete?
+						var i = 0;
+						for (; i < entriesToDelete.length; i++) {
+							var index = mediumModel.categories.findIndex(({id}) => id === entriesToDelete[i].id);
+							mediumModel.categories.splice(index,1);
+							await TIMAAT.MediaService.removeCategory(mediumModel.id, entriesToDelete[i].id);
+						}
+					}
+					//* add existing categories
+					var idsToCreate = [];
+          i = 0;
+          for (; i < categoryIdList.length; i++) {
+            var idExists = false;
+            var item = { id: 0 };
+            var j = 0;
+            for (; j < existingMediumHasCategoriesEntries.length; j++) {
+              if (categoryIdList[i].id == existingMediumHasCategoriesEntries[j].id) {
+                idExists = true;
+                break; // no need to check further if match was found
+              }
+            }
+            if (!idExists) {
+              item.id = categoryIdList[i].id;
+              idsToCreate.push(item);
+            }
+          }
+          // console.log("TCL: idsToCreate", idsToCreate);
+          if (idsToCreate.length > 0) { // anything to add?
+            // console.log("TCL: idsToCreate", idsToCreate);
+						var i = 0;
+						for (; i < idsToCreate.length; i++) {
+							mediumModel.categories.push(idsToCreate[i]);
+							await TIMAAT.MediaService.addCategory(mediumModel.id, idsToCreate[i].id);
+						}
+          }
+				}
+			} catch(error) {
+				console.log( "error: ", error);
+			}
+			return mediumModel;
+		},
+
+		addCategoriesToMedium: async function(mediumModel, newCategoryList) {
+      // console.log("TCL: addCategoriesToMedium:function -> mediumModel, newCategoryList", mediumModel, newCategoryList);
+			var i = 0;
+			for (; i < newCategoryList.length; i++) {
+				await TIMAAT.MediaService.addCategory(mediumModel.id, newCategoryList[i].id);
+				mediumModel.categories.push(newCategoryList[i]);
+			}
+			return mediumModel;
+		},
+
 		updateMediumHasTagsList: async function(mediumModel, tagIdList) {
     	console.log("TCL: mediumModel, tagIdList", mediumModel, tagIdList);
 			try {
@@ -3347,6 +3717,7 @@
 		},
 
 		createNewTagsAndAddToMedium: async function(mediumModel, newTagList) {
+      // console.log("TCL: createNewTagsAndAddToMedium:function -> mediumModel, newTagList", mediumModel, newTagList);
 			var i = 0;
 			for (; i < newTagList.length; i++) {
 				newTagList[i] = await TIMAAT.Service.createTag(newTagList[i].name);

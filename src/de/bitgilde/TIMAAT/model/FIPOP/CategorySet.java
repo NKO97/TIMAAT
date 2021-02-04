@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -64,6 +65,11 @@ public class CategorySet implements Serializable {
 	@JsonManagedReference(value = "CategorySet-CategorySetHasCategory")
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
+	//bi-directional many-to-many association to Medium
+	@ManyToMany(mappedBy="categorySets")
+	@JsonIgnore
+	private List<Medium> mediums;
+
 	//bi-directional many-to-one association to UserAccountHasCategorySet
 	@ManyToMany(mappedBy="categorySets")
 	@JsonIgnore
@@ -73,8 +79,6 @@ public class CategorySet implements Serializable {
 	@OneToMany(mappedBy="categorySet")
 	@JsonIgnore
 	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
-
-//	private List<CategorySetHasCategory> categories = new ArrayList<>();
 
 	public CategorySet() {
 	}
@@ -201,6 +205,14 @@ public class CategorySet implements Serializable {
 		categorySetHasCategory.setCategorySet(null);
 
 		return categorySetHasCategory;
+	}
+
+	public List<Medium> getMediums() {
+		return this.mediums;
+	}
+
+	public void setMediums(List<Medium> mediums) {
+		this.mediums = mediums;
 	}
 
 	public List<MediumAnalysisList> getMediumAnalysisLists() {

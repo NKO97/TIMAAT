@@ -150,6 +150,19 @@ public class Medium implements Serializable {
 	// @JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
+	//bi-directional many-to-many association to CategorySet
+	@ManyToMany
+	@JoinTable(
+		name="medium_has_category_set"
+		, joinColumns={
+			@JoinColumn(name="medium_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="category_set_id")
+			}
+		)
+	private List<CategorySet> categorySets;
+
 	//bi-directional many-to-many association to Category
 	@ManyToMany
 	@JoinTable(
@@ -493,6 +506,14 @@ public class Medium implements Serializable {
 
 	public void setActorHasRoles(List<ActorHasRole> actorHasRoles) {
 		this.actorHasRoles = actorHasRoles;
+	}
+
+	public List<CategorySet> getCategorySets() {
+		return this.categorySets;
+	}
+
+	public void setCategorySets(List<CategorySet> categorySets) {
+		this.categorySets = categorySets;
 	}
 
 	public List<Category> getCategories() {

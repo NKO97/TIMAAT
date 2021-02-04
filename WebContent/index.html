@@ -2168,6 +2168,42 @@
                   </div>
                 </div>
               </div>
+              <div class="modal fade" id="timaat-mediadatasets-medium-categorysets" tabindex="-1" role="dialog" aria-labelledby="mediaCategorySetLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="mediaCategorySetLabel">Edit medium category sets</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-modal-categoryset-submit">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="timaat-mediadatasets-medium-categories" tabindex="-1" role="dialog" aria-labelledby="mediaCategoryLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="mediaCategoryLabel">Edit medium categories</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-modal-category-submit">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="modal fade" id="timaat-mediadatasets-medium-tags" tabindex="-1" role="dialog" aria-labelledby="mediaTagLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
@@ -2732,7 +2768,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-tag-button" title="Tag medium" name="tag">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-categoryset-button datasheet-form-button" title="Category sets" name="category sets">
+                                      <i class="fas fa-tags"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-category-button datasheet-form-button" title="Categories" name="categories">
+                                      <i class="fas fa-tag"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-tag-button datasheet-form-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button" title="Upload file" name="upload">
@@ -2741,10 +2783,10 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button datasheet-form-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button" title="Delete medium">
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button datasheet-form-button" title="Delete medium">
                                       <i class="fas fa-trash-alt"></i>
                                     </button>
                                   </div>

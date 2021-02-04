@@ -1433,6 +1433,7 @@ public class EndpointAnalysisList {
 			// categorySelectList.add(new SelectElement(itr.next().getCategory().getId(), itr.next().getCategory().getName()));
 			categoryList.add(itr.next().getCategory());
 		}
+		// remove categories from removed category set from all associated annotations of the annotation list the category set is removed from
 		for (Annotation annotation : analysisList.getAnnotations()) {
 			List<Category> annotationCategoryList = annotation.getCategories();
 			List<Category> categoriesToRemove = categoryList.stream()

@@ -42,7 +42,7 @@
 		},
 
 		async getSelectedCategories(annotationId) {
-      // console.log("TCL: getCategoryList -> annotationId", annotationId);
+      // console.log("TCL: getSelectedCategories -> annotationId", annotationId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/list/",
@@ -53,7 +53,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: getCategorySetList -> data", data);
+					// console.log("TCL: getSelectedCategories -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
