@@ -4934,7 +4934,7 @@
 				break;
 			}
 			// console.log("TCL: table", table);
-			// remove selection from old rows
+			// remove selection from old rows 
 			if (TIMAAT.MediaDatasets.selectedMediumId && TIMAAT.MediaDatasets.selectedMediumId != id) {
 				$(table.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');
 			}
