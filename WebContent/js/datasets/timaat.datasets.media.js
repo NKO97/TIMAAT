@@ -181,6 +181,7 @@
 			$('.mediadatasheet-form-delete-button').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
+				$('#videoPreview').get(0).pause();
 				$('#timaat-mediadatasets-medium-delete').data('medium', $('#timaat-mediadatasets-metadata-form').data('medium'));
 				$('#timaat-mediadatasets-medium-delete').modal('show');
 			});
@@ -1648,6 +1649,7 @@
 			$('.media-datatable').show();
 			$('.form').hide();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', 'medium');
+			$('#videoPreview').get(0).pause();
 			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
 			// TIMAAT.MediaDatasets.setMediumList();
 		},
@@ -1667,6 +1669,7 @@
     	console.log("TCL: loadMediumSubtype - type", type);
 			$('.media-datatables').hide();
 			$('.form').hide();
+			$('#videoPreview').get(0).pause();
 			TIMAAT.MediaDatasets.clearLastMediumSelection(type);
 			$('.'+type+'s-datatable').show();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', type);
@@ -1908,6 +1911,7 @@
 			// $('.nav-tabs a[href="#mediumTitles"]').hide();
 			$('#timaat-mediadatasets-metadata-form').data(mediumType, null);
 			mediumFormMetadataValidator.resetForm();
+			$('#videoPreview').get(0).pause();
 
 			$('#timaat-mediadatasets-metadata-form').trigger('reset');
 			$('#timaat-mediadatasets-metadata-form').show();
@@ -1957,9 +1961,14 @@
 			$('.mediadatasheet-form-edit-button').hide();
 			$('.mediadatasheet-form-edit-button').prop('disabled', true);
 			$('.mediadatasheet-form-edit-button :input').prop('disabled', true);
+			$('.datasheet-form-tag-button').hide();
+			$('.datasheet-form-tag-button').prop('disabled', true);
+			$('.datasheet-form-tag-button :input').prop('disabled', true);
 			$('.mediadatasheet-form-delete-button').hide();
 			$('.datasheet-form-upload-button').hide();
 			$('.datasheet-form-upload-button').prop('disabled', true);
+			$('.datasheet-form-annotate-button').hide();
+			$('.datasheet-form-annotate-button').prop('disabled', true);
       $('#timaat-mediadatasets-metadata-form-submit').html('Add');
       $('#timaat-mediadatasets-metadata-form-submit').show();
       $('#timaat-mediadatasets-metadata-form-dismiss').show();
@@ -1990,6 +1999,7 @@
 			$('.source-data').show();
 			$('.'+mediumType+'-data').show();
 			mediumFormMetadataValidator.resetForm();
+			$('#videoPreview').get(0).pause();
 
 			// show tabs
 			if ($('#previewTab').hasClass('annotationView')) {
@@ -2237,8 +2247,7 @@
 							$('.image-preview').show();
 						} else {
 							$('.image-preview').hide();
-							// $('#videoSource').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
-							$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
+								$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
 							$('.video-preview').show();
 						}
 					default:
@@ -2268,6 +2277,7 @@
 			};
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
 			mediumFormTitlesValidator.resetForm();
+			$('#videoPreview').get(0).pause();
 			$('.nav-tabs a[href="#mediumTitles"]').focus();
 			$('#timaat-mediadatasets-medium-titles-form').show();
 			
@@ -2485,6 +2495,7 @@
 			};
 			$('#timaat-mediadatasets-medium-languagetracks-form').trigger('reset');
 			mediumFormLanguageTracksValidator.resetForm();
+			$('#videoPreview').get(0).pause();
 			$('.nav-tabs a[href="#mediumLanguageTracks"]').focus();
 			$('#timaat-mediadatasets-medium-languagetracks-form').show();
 			
@@ -2707,6 +2718,7 @@
 			};
 			$('#timaat-mediadatasets-medium-actorwithroles-form').trigger('reset');
 			// mediumFormActorRolesValidator.resetForm();
+			$('#videoPreview').get(0).pause();
 			$('.nav-tabs a[href="#mediumActorRoles"]').focus();
 			$('#timaat-mediadatasets-medium-actorwithroles-form').show();
 

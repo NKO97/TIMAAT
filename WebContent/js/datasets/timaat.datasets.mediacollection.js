@@ -487,6 +487,7 @@
 		loadMediaCollections: function() {
 			$('.media-datatables').hide();
 			$('.mediacollection-datatable').show();
+			$('#videoPreview').get(0).pause();
 			TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
 		},
 		
