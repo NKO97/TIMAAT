@@ -133,7 +133,6 @@ public class EndpointMedium {
 		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-
 		// calculate total # of records
 		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
 		long recordsTotal = (long) countQuery.getSingleResult();
@@ -145,21 +144,40 @@ public class EndpointMedium {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT m FROM Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumList = castList(Medium.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium))) {
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumList.size();
+				query.setMaxResults(length);
 			}
 			recordsFiltered = mediumList.size();
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			for (Medium medium : mediumList) {
+				String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
+				switch (type) {
+					case "video":
+						// strip analysis lists for faster response --> get lists via EndpointAnalysisList
+						medium.getMediumAnalysisLists().clear();
+					break;
+				}
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -423,24 +441,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumAudio> mediumAudioList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT ma FROM MediumAudio ma, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND ma.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumAudioList = castList(MediumAudio.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumAudio() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumAudioList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumAudioList.size();
+			for (MediumAudio mediumAudio : mediumAudioList) {
+				mediumAudio.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumAudio.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -482,24 +515,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumDocument> mediumDocumentList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT md FROM MediumDocument md, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND md.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumDocumentList = castList(MediumDocument.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumDocument() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumDocumentList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumDocumentList.size();
+			for (MediumDocument mediumDocument : mediumDocumentList) {
+				mediumDocument.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumDocument.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -541,24 +589,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumImage> mediumImageList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT mi FROM MediumImage mi, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND mi.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumImageList = castList(MediumImage.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumImage() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumImageList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumImageList.size();
+			for (MediumImage mediumImage : mediumImageList) {
+				mediumImage.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumImage.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -600,24 +663,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumSoftware> mediumSoftwareList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT ms FROM MediumSoftware ms, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND ms.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumSoftwareList = castList(MediumSoftware.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumSoftware() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumSoftwareList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumSoftwareList.size();
+			for (MediumSoftware mediumSoftware : mediumSoftwareList) {
+				mediumSoftware.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumSoftware.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -659,24 +737,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumText> mediumTextList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT mt FROM MediumText mt, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND mt.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumTextList = castList(MediumText.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumText() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumTextList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumTextList.size();
+			for (MediumText mediumText : mediumTextList) {
+				mediumText.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumText.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -781,46 +874,50 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumVideo> mediumVideoList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT mv FROM MediumVideo mv, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND mv.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumVideoList = castList(MediumVideo.class, query.getResultList());
+			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			// find all media belonging to those titles
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumVideo() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumVideoList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumVideoList.size();
+			for (MediumVideo mediumVideo : mediumVideoList) {
+				mediumVideo.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumVideo.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
-		}
-
-				
-		for (Medium medium : mediumList ) {
-			// if ( medium.getMediumVideo() != null ) {
-				// medium.setFileStatus(mediumFileStatus(medium.getId(), "video"));
-				// medium.setViewToken(issueFileToken(medium.getId()));
-
-				// medium.getMediumVideo().setStatus(videoStatus(medium.getId()));
-				// medium.getMediumVideo().setViewToken(issueFileToken(medium.getId()));
-				// strip analysis lists for faster response --> get lists via EndpointAnalysisList
+			for (Medium medium : mediumList) {
 				medium.getMediumAnalysisLists().clear();
-			// }
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 		}
-
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -854,24 +951,39 @@ public class EndpointMedium {
 		// search
 		Query query;
 		String sql;
+		List<MediumVideogame> mediumVideogameList = new ArrayList<>();
 		List<Medium> mediumList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching titles
-			sql = "SELECT t FROM Title t WHERE lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY t.name "+direction;
+			sql = "SELECT DISTINCT mv FROM MediumVideogame mv, Medium m, Title t WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) AND mv.medium = m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
+			mediumVideogameList = castList(MediumVideogame.class, query.getResultList());
 			// find all media belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
-			List<Title> titleList = castList(Title.class, query.getResultList());
-			for (Title title : titleList) {
-				for (Medium medium : title.getMediums3()) {
-					if (!(mediumList.contains(medium)) && (medium.getMediumVideogame() != null)) { // TODO medium.getMediaType().. may be more efficient
-						mediumList.add(medium);
-					}
-				}
+			if ( length == -1) { // display all results
+				length = mediumVideogameList.size();
+				query.setMaxResults(length);
 			}
-			recordsFiltered = mediumList.size();
+			recordsFiltered = mediumVideogameList.size();
+			for (MediumVideogame mediumVideogame : mediumVideogameList) {
+				mediumVideogame.getMedium().getMediumAnalysisLists().clear();
+				mediumList.add(mediumVideogame.getMedium());
+			}
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
