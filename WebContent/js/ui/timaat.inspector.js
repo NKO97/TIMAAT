@@ -427,7 +427,7 @@
 						var i = 0;
 						var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
 						if (segment) {
-							var index = segmentList.findIndex(({id}) => id === segment.model.id);
+							let index = segmentList.findIndex(({id}) => id === segment.model.id);
 							segmentList.splice(index,1);
 						}
 						for (; i < segmentList.length; i++) {
@@ -493,12 +493,13 @@
 						$('#timaat-videoplayer-sequence-noRange').modal('show');
 					} else {
 						var overlapping = false;
-						var i = 0;
-						var sequenceList = TIMAAT.VideoPlayer.curSegment.model.analysisSequences;
+						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+						let sequenceList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences;
 						if (sequence) {
-							var index = sequenceList.findIndex(({id}) => id === sequence.model.id);
+							let index = sequenceList.findIndex(({id}) => id === sequence.model.id);
 							sequenceList.splice(index,1);
 						}
+						i = 0;
 						for (; i < sequenceList.length; i++) {
 							if (!(endTime <= sequenceList[i].startTime || startTime >= sequenceList[i].endTime) ) {
 								overlapping = true;
@@ -562,12 +563,14 @@
 						$('#timaat-videoplayer-take-noRange').modal('show');
 					} else {
 						var overlapping = false;
-						var i = 0;
-						var takeList = TIMAAT.VideoPlayer.curSequence.model.analysisTakes;
+						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+						let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSequence.model.id);
+						let takeList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences[j].analysisTakes;
 						if (take) {
-							var index = takeList.findIndex(({id}) => id === take.model.id);
+							let index = takeList.findIndex(({id}) => id === take.model.id);
 							takeList.splice(index,1);
 						}
+						i = 0;
 						for (; i < takeList.length; i++) {
 							if (!(endTime <= takeList[i].startTime || startTime >= takeList[i].endTime) ) {
 								overlapping = true;
@@ -630,12 +633,13 @@
 						$('#timaat-videoplayer-scene-noRange').modal('show');
 					} else {
 						var overlapping = false;
-						var i = 0;
-						var sceneList = TIMAAT.VideoPlayer.curSegment.model.analysisScenes;
+						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+						let sceneList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes;
 						if (scene) {
-							var index = sceneList.findIndex(({id}) => id === scene.model.id);
+							let index = sceneList.findIndex(({id}) => id === scene.model.id);
 							sceneList.splice(index,1);
 						}
+						i = 0;
 						for (; i < sceneList.length; i++) {
 							if (!(endTime <= sceneList[i].startTime || startTime >= sceneList[i].endTime) ) {
 								overlapping = true;
@@ -699,12 +703,14 @@
 						$('#timaat-videoplayer-action-noRange').modal('show');
 					} else {
 						var overlapping = false;
-						var i = 0;
-						var actionList = TIMAAT.VideoPlayer.curScene.model.analysisActions;
+						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+						let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes.findIndex(({id}) => id === TIMAAT.VideoPlayer.curScene.model.id);
+						let actionList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes[j].analysisActions;
 						if (action) {
-							var index = actionList.findIndex(({id}) => id === action.model.id);
+							let index = actionList.findIndex(({id}) => id === action.model.id);
 							actionList.splice(index,1);
 						}
+						i = 0;
 						for (; i < actionList.length; i++) {
 							if (!(endTime <= actionList[i].startTime || startTime >= actionList[i].endTime) ) {
 								overlapping = true;
