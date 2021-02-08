@@ -129,6 +129,7 @@
 			// console.log("TCL: component", component);
 			TIMAAT.UI.component = component;
 			TIMAAT.VideoPlayer.pause(); // TODO refactor
+			$('#videoPreview').get(0).pause();
 			$('.timaat-component').hide();
 			$('.timaat-sidebar-tab').removeClass('bg-info');
 			$('.timaat-sidebar-tab a').removeClass('selected');

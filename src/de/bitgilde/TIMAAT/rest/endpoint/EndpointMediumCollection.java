@@ -225,7 +225,7 @@ public class EndpointMediumCollection {
 			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, new ArrayList<>())).build();
 		}
 		MediaCollection mediaCollection = entityManager.find(MediaCollection.class, id);
-		// if (mediaCollection == null) return Response.status(Status.BAD_REQUEST).build();
+		if (mediaCollection == null) return Response.status(Status.BAD_REQUEST).build();
 		List<MediaCollectionHasMedium> mediaCollectionHasMediumList = mediaCollection.getMediaCollectionHasMediums();
 		List<Medium> collectionMedia = new ArrayList<>();
 		for (MediaCollectionHasMedium mediaCollectionHasMedium : mediaCollectionHasMediumList) {

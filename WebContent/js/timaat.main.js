@@ -10,7 +10,7 @@
 	// var yyyy = today.getFullYear();	
 	// today = yyyy + '-' + mm + '-' + dd;
 
-	var version = 'v0.10.5b-dev (2021-02-01)';
+	var version = 'v0.10.5e-dev (2021-02-08)';
 
 	document.title = 'TIMAAT - Client '+version;
 	$('#timaat-version-info').text(version);

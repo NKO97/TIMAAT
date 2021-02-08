@@ -65,10 +65,10 @@
 
 			// confirm delete medium collection modal functionality
 			$('#timaat-mediacollectiondatasets-modal-delete-submit').on('click', async function(ev) {
-				console.log("TCL: delete media collection");
+				// console.log("TCL: delete media collection");
 				var modal = $('#timaat-mediacollectiondatasets-mediumcollection-delete');
 				var mediumCollection = modal.data('mediumCollection');
-        console.log("TCL: mediumCollection", mediumCollection);
+        // console.log("TCL: mediumCollection", mediumCollection);
 				if (mediumCollection) {
 					try {	
 						await TIMAAT.MediaCollectionDatasets._mediumCollectionRemoved(mediumCollection);
@@ -120,12 +120,12 @@
 				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', false);
 				var formData = $('#timaat-mediacollectiondatasets-metadata-form').serializeArray();
 				$('#timaat-mediacollectiondatasets-metadata-type-id').prop('disabled', true);
-        console.log("TCL: formData", formData);
+        // console.log("TCL: formData", formData);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
-				console.log("TCL: formDataObject", formDataObject);
+				// console.log("TCL: formDataObject", formDataObject);
 				// sanitize form data
 				var formDataSanitized = formDataObject;
 				formDataSanitized.typeId = Number(formDataObject.typeId);
@@ -142,7 +142,7 @@
 					formDataSanitized.started = moment.utc(formDataObject.started, "YYYY-MM-DD");
 					formDataSanitized.ended = moment.utc(formDataObject.ended, "YYYY-MM-DD");
 					}
-				console.log("TCL: formDataSanitized", formDataSanitized);
+				// console.log("TCL: formDataSanitized", formDataSanitized);
 				
 				if (mediumCollection) { // update medium collection
 					// medium collection data
@@ -170,7 +170,7 @@
 					var newMediumCollection = await TIMAAT.MediaCollectionDatasets.createMediumCollection(type, mediumCollectionModel, mediumCollectionSubtypeModel);
 					mediumCollection = new TIMAAT.MediumCollection(newMediumCollection);
 					$('#timaat-mediacollectiondatasets-metadata-form').data('mediumCollection', mediumCollection);
-					// $('#media-tab-mediumcollection-metadata-form').trigger('click');
+					$('#media-tab-mediumcollection-metadata-form').trigger('click');
 				}
 				await TIMAAT.MediaCollectionDatasets.refreshDataTable();
 				TIMAAT.MediaCollectionDatasets.selectLastListSelection(mediumCollection.model.id);
@@ -487,6 +487,7 @@
 		loadMediaCollections: function() {
 			$('.media-datatables').hide();
 			$('.mediacollection-datatable').show();
+			$('#videoPreview').get(0).pause();
 			TIMAAT.MediaCollectionDatasets.setMediumCollectionList();
 		},
 		
@@ -503,7 +504,7 @@
 		},
 
 		setMediumCollectionList: function() {
-    	console.log("TCL: setMediumCollectionList");
+    	// console.log("TCL: setMediumCollectionList");
 			$('.form').hide();
 			$('.mediacollection-items-datatable').hide();
 			$('.mediacollection-publication-sheet').hide();
@@ -1650,10 +1651,12 @@
 			// console.log("TCL: refreshDataTable");
 			// set ajax data source
       if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList) {
+				console.log("TCL: refresh media collection list");
         // TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
         TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionList.ajax.reload(null, false);
 			}
 			if (TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList) {
+				console.log("TCL: refresh media collection item list");
         // TIMAAT.MediaCollectionDatasets.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
         TIMAAT.MediaCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
       }
