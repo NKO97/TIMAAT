@@ -29,15 +29,15 @@ class AnalysisSegment {
 				updateUI() {
 					this.listView.attr('data-starttime', this.model.startTime);
 					let timeString = " "+TIMAATPub.formatTime(this.model.startTime/1000.0, true);
-					let title = this.model.analysisSegmentTranslations[0].title;
+					let name = this.model.analysisSegmentTranslations[0].name;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
 					let comment = this.model.analysisSegmentTranslations[0].comment;
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true);
-					this.listView.find('.timaat-annotation-segment-name').html(title);
+					this.listView.find('.timaat-annotation-segment-name').html(name);
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
-					this.timelineView.find('.timaat-timeline-segment-name ').html(title);
-					this.timelineView.attr('title', '<strong>'+title+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true)+'</div>'+desc);
+					this.timelineView.find('.timaat-timeline-segment-name ').html(name);
+					this.timelineView.attr('title', '<strong>'+name+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true)+'</div>'+desc);
 					// comment
 					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
 						this.listView.find('.timaat-annotation-segment-comment-icon').show();
@@ -1135,15 +1135,15 @@ class TIMAATPublication {
 		
 		this.ui.segmentMetadata.removeClass('d-none');
 
-		let title = segment.model.analysisSegmentTranslations[0].title;
+		let name = segment.model.analysisSegmentTranslations[0].name;
 		let desc = ( segment.model.analysisSegmentTranslations[0].shortDescription ) ? segment.model.analysisSegmentTranslations[0].shortDescription : '';
 		let comment = segment.model.analysisSegmentTranslations[0].comment;
 		let transcript = segment.model.analysisSegmentTranslations[0].transcript;
 
-		if ( !title || title.length == 0) this.ui.segment.title.addClass('empty');
+		if ( !name || name.length == 0) this.ui.segment.name.addClass('empty');
 		else {
 			this.ui.segment.title.removeClass('empty');
-			this.ui.segment.title.find('.contents').html(title);
+			this.ui.segment.title.find('.contents').html(name);
 		}
 		if ( !desc || desc.length == 0) this.ui.segment.description.addClass('empty');
 		else {
@@ -1167,15 +1167,15 @@ class TIMAATPublication {
 		
 		this.ui.sequenceMetadata.removeClass('d-none');
 
-		let title = sequence.model.analysisSequenceTranslations[0].title;
+		let name = sequence.model.analysisSequenceTranslations[0].name;
 		let desc = ( sequence.model.analysisSequenceTranslations[0].shortDescription ) ? sequence.model.analysisSequenceTranslations[0].shortDescription : '';
 		let comment = sequence.model.analysisSequenceTranslations[0].comment;
 		let transcript = sequence.model.analysisSequenceTranslations[0].transcript;
 
-		if ( !title || title.length == 0) this.ui.sequence.title.addClass('empty');
+		if ( !name || name.length == 0) this.ui.sequence.name.addClass('empty');
 		else {
-			this.ui.sequence.title.removeClass('empty');
-			this.ui.sequence.title.find('.contents').html(title);
+			this.ui.sequence.name.removeClass('empty');
+			this.ui.sequence.name.find('.contents').html(name);
 		}
 		if ( !desc || desc.length == 0) this.ui.sequence.description.addClass('empty');
 		else {
@@ -1199,15 +1199,15 @@ class TIMAATPublication {
 		
 		this.ui.takeMetadata.removeClass('d-none');
 
-		let title = take.model.analysisTakeTranslations[0].title;
+		let name = take.model.analysisTakeTranslations[0].name;
 		let desc = ( take.model.analysisTakeTranslations[0].shortDescription ) ? take.model.analysisTakeTranslations[0].shortDescription : '';
 		let comment = take.model.analysisTakeTranslations[0].comment;
 		let transcript = take.model.analysisTakeTranslations[0].transcript;
 
-		if ( !title || title.length == 0) this.ui.take.title.addClass('empty');
+		if ( !name || name.length == 0) this.ui.take.name.addClass('empty');
 		else {
-			this.ui.take.title.removeClass('empty');
-			this.ui.take.title.find('.contents').html(title);
+			this.ui.take.name.removeClass('empty');
+			this.ui.take.name.find('.contents').html(name);
 		}
 		if ( !desc || desc.length == 0) this.ui.take.description.addClass('empty');
 		else {
@@ -1231,15 +1231,15 @@ class TIMAATPublication {
 		
 		this.ui.sceneMetadata.removeClass('d-none');
 
-		let title = scene.model.analysisSceneTranslations[0].title;
+		let name = scene.model.analysisSceneTranslations[0].name;
 		let desc = ( scene.model.analysisSceneTranslations[0].shortDescription ) ? scene.model.analysisSceneTranslations[0].shortDescription : '';
 		let comment = scene.model.analysisSceneTranslations[0].comment;
 		let transcript = scene.model.analysisSceneTranslations[0].transcript;
 
-		if ( !title || title.length == 0) this.ui.scene.title.addClass('empty');
+		if ( !name || name.length == 0) this.ui.scene.name.addClass('empty');
 		else {
-			this.ui.scene.title.removeClass('empty');
-			this.ui.scene.title.find('.contents').html(title);
+			this.ui.scene.name.removeClass('empty');
+			this.ui.scene.name.find('.contents').html(name);
 		}
 		if ( !desc || desc.length == 0) this.ui.scene.description.addClass('empty');
 		else {
@@ -1263,15 +1263,15 @@ class TIMAATPublication {
 		
 		this.ui.actionMetadata.removeClass('d-none');
 
-		let title = action.model.analysisActionTranslations[0].title;
+		let name = action.model.analysisActionTranslations[0].name;
 		let desc = ( action.model.analysisActionTranslations[0].shortDescription ) ? action.model.analysisActionTranslations[0].shortDescription : '';
 		let comment = action.model.analysisActionTranslations[0].comment;
 		let transcript = action.model.analysisActionTranslations[0].transcript;
 
-		if ( !title || title.length == 0) this.ui.action.title.addClass('empty');
+		if ( !name || name.length == 0) this.ui.action.name.addClass('empty');
 		else {
-			this.ui.action.title.removeClass('empty');
-			this.ui.action.title.find('.contents').html(title);
+			this.ui.action.name.removeClass('empty');
+			this.ui.action.name.find('.contents').html(name);
 		}
 		if ( !desc || desc.length == 0) this.ui.action.description.addClass('empty');
 		else {
