@@ -21,11 +21,9 @@
 	
 	TIMAAT.Keyframe = class Keyframe {
 		constructor(keyframe, annotation) {
-//			console.log("TCL: Keyframe -> constructor -> keyframe, annotation", keyframe, annotation);
+			// console.log("TCL: Keyframe -> constructor -> keyframe, annotation", keyframe, annotation);
 			this.parent = annotation;
-			this.annotation = annotation;
 			this.model = keyframe;
-			this.annotationID = annotation.model.id;
 			this._time = this.model.time;
 			this._visible = true;
 			this._selected = false;

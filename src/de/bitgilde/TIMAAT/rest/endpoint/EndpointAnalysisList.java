@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.rest.endpoint;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -98,6 +101,237 @@ public class EndpointAnalysisList {
 		return Response.ok().entity(categorySetList).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("segment/{id}/category/list")
+	public Response getSegmentSelectedCategories(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
+		List<Category> categoryList = segment.getCategories();
+		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		return Response.ok().entity(categoryList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("segment/{id}/category/selectList")
+	public Response getSegmentCategorySelectList(@PathParam("id") Integer id,
+																							 @QueryParam("start") Integer start,
+																							 @QueryParam("length") Integer length,
+																							 @QueryParam("orderby") String orderby,
+																							 @QueryParam("dir") String direction,
+																							 @QueryParam("search") String search)
+	{
+		System.out.println("EndpointAnalysisList: getSegmentCategorySelectList - Id: "+ id);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
+		MediumAnalysisList mediumAnalysisList = segment.getMediumAnalysisList();
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+		List<Category> categoryList = new ArrayList<>();
+		List<SelectElement> categorySelectList = new ArrayList<>();
+
+		for (CategorySet categorySet : categorySetList) {
+			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+			Iterator<CategorySetHasCategory> itr = cshc.iterator();
+			while (itr.hasNext()) {
+				categoryList.add(itr.next().getCategory());
+			}
+		}
+
+		// search
+		Query query;
+		String sql;
+		if (search != null && search.length() > 0) {
+			// find all matching names
+			sql = "SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC";
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			// find all categories belonging to those names
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
+			for (Category category : searchCategoryList) {
+				if (categoryList.contains(category)) {
+					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				}
+			}
+		} else {
+			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			for (Category category : categoryList) {
+				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			}
+		}
+		
+		return Response.ok().entity(categorySelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("sequence/{id}/category/list")
+	public Response getSequenceSelectedCategories(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
+		List<Category> categoryList = sequence.getCategories();
+		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		return Response.ok().entity(categoryList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("sequence/{id}/category/selectList")
+	public Response getSequenceCategorySelectList(@PathParam("id") Integer id,
+																							 @QueryParam("start") Integer start,
+																							 @QueryParam("length") Integer length,
+																							 @QueryParam("orderby") String orderby,
+																							 @QueryParam("dir") String direction,
+																							 @QueryParam("search") String search)
+	{
+		System.out.println("EndpointAnalysisList: getSequenceCategorySelectList - Id: "+ id);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
+		MediumAnalysisList mediumAnalysisList = sequence.getAnalysisSegment().getMediumAnalysisList();
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+		List<Category> categoryList = new ArrayList<>();
+		List<SelectElement> categorySelectList = new ArrayList<>();
+
+		for (CategorySet categorySet : categorySetList) {
+			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+			Iterator<CategorySetHasCategory> itr = cshc.iterator();
+			while (itr.hasNext()) {
+				categoryList.add(itr.next().getCategory());
+			}
+		}
+
+		// search
+		Query query;
+		String sql;
+		if (search != null && search.length() > 0) {
+			// find all matching names
+			sql = "SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC";
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			// find all categories belonging to those names
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
+			for (Category category : searchCategoryList) {
+				if (categoryList.contains(category)) {
+					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				}
+			}
+		} else {
+			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			for (Category category : categoryList) {
+				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			}
+		}
+		
+		return Response.ok().entity(categorySelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("scene/{id}/category/list")
+	public Response getSceneSelectedCategories(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
+		List<Category> categoryList = scene.getCategories();
+		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		return Response.ok().entity(categoryList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("scene/{id}/category/selectList")
+	public Response getSceneCategorySelectList(@PathParam("id") Integer id,
+																							 @QueryParam("start") Integer start,
+																							 @QueryParam("length") Integer length,
+																							 @QueryParam("orderby") String orderby,
+																							 @QueryParam("dir") String direction,
+																							 @QueryParam("search") String search)
+	{
+		System.out.println("EndpointAnalysisList: getSceneCategorySelectList - Id: "+ id);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
+		MediumAnalysisList mediumAnalysisList = scene.getAnalysisSegment().getMediumAnalysisList();
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+		List<Category> categoryList = new ArrayList<>();
+		List<SelectElement> categorySelectList = new ArrayList<>();
+
+		for (CategorySet categorySet : categorySetList) {
+			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+			Iterator<CategorySetHasCategory> itr = cshc.iterator();
+			while (itr.hasNext()) {
+				categoryList.add(itr.next().getCategory());
+			}
+		}
+
+		// search
+		Query query;
+		String sql;
+		if (search != null && search.length() > 0) {
+			// find all matching names
+			sql = "SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC";
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			// find all categories belonging to those names
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
+			for (Category category : searchCategoryList) {
+				if (categoryList.contains(category)) {
+					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				}
+			}
+		} else {
+			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			for (Category category : categoryList) {
+				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			}
+		}
+		
+		return Response.ok().entity(categorySelectList).build();
+	}
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -149,6 +383,160 @@ public class EndpointAnalysisList {
 		UserLogManager.getLogger().addLogEntry(newList.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
 		
 		return Response.ok().entity(newList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("action/{id}/category/list")
+	public Response getActionSelectedCategories(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
+		List<Category> categoryList = action.getCategories();
+		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		return Response.ok().entity(categoryList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("action/{id}/category/selectList")
+	public Response getActionCategorySelectList(@PathParam("id") Integer id,
+																							 @QueryParam("start") Integer start,
+																							 @QueryParam("length") Integer length,
+																							 @QueryParam("orderby") String orderby,
+																							 @QueryParam("dir") String direction,
+																							 @QueryParam("search") String search)
+	{
+		System.out.println("EndpointAnalysisList: getActionCategorySelectList - Id: "+ id);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
+		MediumAnalysisList mediumAnalysisList = action.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList();
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+		List<Category> categoryList = new ArrayList<>();
+		List<SelectElement> categorySelectList = new ArrayList<>();
+
+		for (CategorySet categorySet : categorySetList) {
+			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+			Iterator<CategorySetHasCategory> itr = cshc.iterator();
+			while (itr.hasNext()) {
+				categoryList.add(itr.next().getCategory());
+			}
+		}
+
+		// search
+		Query query;
+		String sql;
+		if (search != null && search.length() > 0) {
+			// find all matching names
+			sql = "SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC";
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			// find all categories belonging to those names
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
+			for (Category category : searchCategoryList) {
+				if (categoryList.contains(category)) {
+					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				}
+			}
+		} else {
+			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			for (Category category : categoryList) {
+				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			}
+		}
+		
+		return Response.ok().entity(categorySelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("take/{id}/category/list")
+	public Response getTakeSelectedCategories(@PathParam("id") Integer id)
+	{
+		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisTake take = entityManager.find(AnalysisTake.class, id);
+		List<Category> categoryList = take.getCategories();
+		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		return Response.ok().entity(categoryList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("take/{id}/category/selectList")
+	public Response getTakeCategorySelectList(@PathParam("id") Integer id,
+																							 @QueryParam("start") Integer start,
+																							 @QueryParam("length") Integer length,
+																							 @QueryParam("orderby") String orderby,
+																							 @QueryParam("dir") String direction,
+																							 @QueryParam("search") String search)
+	{
+		System.out.println("EndpointAnalysisList: getTakeCategorySelectList - Id: "+ id);
+
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisTake take = entityManager.find(AnalysisTake.class, id);
+		MediumAnalysisList mediumAnalysisList = take.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList();
+		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
+		List<Category> categoryList = new ArrayList<>();
+		List<SelectElement> categorySelectList = new ArrayList<>();
+
+		for (CategorySet categorySet : categorySetList) {
+			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
+			Iterator<CategorySetHasCategory> itr = cshc.iterator();
+			while (itr.hasNext()) {
+				categoryList.add(itr.next().getCategory());
+			}
+		}
+
+		// search
+		Query query;
+		String sql;
+		if (search != null && search.length() > 0) {
+			// find all matching names
+			sql = "SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC";
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			// find all categories belonging to those names
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
+			for (Category category : searchCategoryList) {
+				if (categoryList.contains(category)) {
+					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				}
+			}
+		} else {
+			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			for (Category category : categoryList) {
+				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			}
+		}
+		
+		return Response.ok().entity(categorySelectList).build();
 	}
 
 	@GET
@@ -328,13 +716,14 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedSegment == null ) return Response.notModified().build();
 		    	
-		// update analysislist
+		// update segment
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getName() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setName(updatedSegment.getAnalysisSegmentTranslations().get(0).getName());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setShortDescription(updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getComment() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setComment(updatedSegment.getAnalysisSegmentTranslations().get(0).getComment());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setTranscript(updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript());
 		analysisSegment.setStartTime(updatedSegment.getStartTime());
 		analysisSegment.setEndTime(updatedSegment.getEndTime());
+		if (updatedSegment.getCategories() != null) analysisSegment.setCategories(updatedSegment.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -459,9 +848,10 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedSequence == null ) return Response.notModified().build();
 		    	
-    // update analysislist
+    // update sequence
 		analysisSequence.setStartTime(updatedSequence.getStartTime());
 		analysisSequence.setEndTime(updatedSequence.getEndTime());
+		if (updatedSequence.getCategories() != null) analysisSequence.setCategories(updatedSequence.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -587,7 +977,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    	// update sequence translation
 		if ( updatedTranslation.getName() != null ) analysisSequenceTranslation.setName(updatedTranslation.getName());
 		analysisSequenceTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisSequenceTranslation.setComment(updatedTranslation.getComment());
@@ -709,9 +1099,10 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedScene == null ) return Response.notModified().build();
 		    	
-    // update analysislist
+    // update scene
 		analysisScene.setStartTime(updatedScene.getStartTime());
 		analysisScene.setEndTime(updatedScene.getEndTime());
+		if (updatedScene.getCategories() != null) analysisScene.setCategories(updatedScene.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -836,7 +1227,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    	// update scene translation
 		if ( updatedTranslation.getName() != null ) analysisSceneTranslation.setName(updatedTranslation.getName());
 		analysisSceneTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisSceneTranslation.setComment(updatedTranslation.getComment());
@@ -958,9 +1349,10 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedTake == null ) return Response.notModified().build();
 		    	
-    // update analysislist
+    // update take
 		analysisTake.setStartTime(updatedTake.getStartTime());
 		analysisTake.setEndTime(updatedTake.getEndTime());
+		if (updatedTake.getCategories() != null) analysisTake.setCategories(updatedTake.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1085,7 +1477,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    	// update take translation
 		if ( updatedTranslation.getName() != null ) analysisTakeTranslation.setName(updatedTranslation.getName());
 		analysisTakeTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisTakeTranslation.setComment(updatedTranslation.getComment());
@@ -1206,9 +1598,10 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedAction == null ) return Response.notModified().build();
 		    	
-    // update analysislist
+    // update action
 		analysisAction.setStartTime(updatedAction.getStartTime());
 		analysisAction.setEndTime(updatedAction.getEndTime());
+		if (updatedAction.getCategories() != null) analysisAction.setCategories(updatedAction.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1333,7 +1726,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    	// update action translation
 		if ( updatedTranslation.getName() != null ) analysisActionTranslation.setName(updatedTranslation.getName());
 		analysisActionTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisActionTranslation.setComment(updatedTranslation.getComment());
@@ -1410,6 +1803,146 @@ public class EndpointAnalysisList {
 		return Response.ok().entity(categorySet).build();
 	}
 
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("segment/{segmentId}/category/{categoryId}")
+	@Secured
+	public Response addExistingCategoryToSegment(@PathParam("segmentId") int segmentId,
+																 				 		 	 @PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, segmentId);
+		if ( segment == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		segment.getCategories().add(category);
+		category.getAnalysisSegments().add(segment);
+		entityManager.merge(category);
+		entityManager.merge(segment);
+		entityManager.persist(segment);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(segment);
+ 	
+		return Response.ok().entity(category).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("sequence/{sequenceId}/category/{categoryId}")
+	@Secured
+	public Response addExistingCategoryToSequence(@PathParam("sequenceId") int sequenceId,
+																 				 		 	 @PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, sequenceId);
+		if ( sequence == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		sequence.getCategories().add(category);
+		category.getAnalysisSequences().add(sequence);
+		entityManager.merge(category);
+		entityManager.merge(sequence);
+		entityManager.persist(sequence);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(sequence);
+ 	
+		return Response.ok().entity(category).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("take/{takeId}/category/{categoryId}")
+	@Secured
+	public Response addExistingCategoryToTake(@PathParam("takeId") int takeId,
+																 				 		 	 @PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisTake take = entityManager.find(AnalysisTake.class, takeId);
+		if ( take == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		take.getCategories().add(category);
+		category.getAnalysisTakes().add(take);
+		entityManager.merge(category);
+		entityManager.merge(take);
+		entityManager.persist(take);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(take);
+ 	
+		return Response.ok().entity(category).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("scene/{sceneId}/category/{categoryId}")
+	@Secured
+	public Response addExistingCategoryToScene(@PathParam("sceneId") int sceneId,
+																 				 		 	 @PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisScene scene = entityManager.find(AnalysisScene.class, sceneId);
+		if ( scene == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		scene.getCategories().add(category);
+		category.getAnalysisScenes().add(scene);
+		entityManager.merge(category);
+		entityManager.merge(scene);
+		entityManager.persist(scene);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(scene);
+ 	
+		return Response.ok().entity(category).build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("action/{actionId}/category/{categoryId}")
+	@Secured
+	public Response addExistingCategoryToAction(@PathParam("actionId") int actionId,
+																 				 		 	 @PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisAction action = entityManager.find(AnalysisAction.class, actionId);
+		if ( action == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// attach categorySet to annotation and vice versa    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		action.getCategories().add(category);
+		category.getAnalysisActions().add(action);
+		entityManager.merge(category);
+		entityManager.merge(action);
+		entityManager.persist(action);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(action);
+ 	
+		return Response.ok().entity(category).build();
+	}
+
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/categorySet/{categorySetId}")
@@ -1460,6 +1993,146 @@ public class EndpointAnalysisList {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(analysisList);
+ 	
+		return Response.ok().build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("segment/{segmentId}/category/{categoryId}")
+	@Secured
+	public Response removeSegmentCategory(@PathParam("segmentId") int segmentId,
+																 				@PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// attach categorySet to annotation and vice versa
+		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		entityTransaction.begin();
+		analysisSegment.getCategories().remove(category);
+		category.getAnalysisSegments().remove(analysisSegment);
+		entityManager.merge(category);
+		entityManager.merge(analysisSegment);
+		entityManager.persist(analysisSegment);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(analysisSegment);
+ 	
+		return Response.ok().build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("sequence/{sequenceId}/category/{categoryId}")
+	@Secured
+	public Response removeSequenceCategory(@PathParam("sequenceId") int sequenceId,
+																 				@PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
+		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// attach categorySet to annotation and vice versa
+		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		entityTransaction.begin();
+		analysisSequence.getCategories().remove(category);
+		category.getAnalysisSequences().remove(analysisSequence);
+		entityManager.merge(category);
+		entityManager.merge(analysisSequence);
+		entityManager.persist(analysisSequence);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(analysisSequence);
+ 	
+		return Response.ok().build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("take/{takeId}/category/{categoryId}")
+	@Secured
+	public Response removeTakeCategory(@PathParam("takeId") int takeId,
+																 				@PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
+		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// attach categorySet to annotation and vice versa
+		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		entityTransaction.begin();
+		analysisTake.getCategories().remove(category);
+		category.getAnalysisTakes().remove(analysisTake);
+		entityManager.merge(category);
+		entityManager.merge(analysisTake);
+		entityManager.persist(analysisTake);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(analysisTake);
+ 	
+		return Response.ok().build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("scene/{sceneId}/category/{categoryId}")
+	@Secured
+	public Response removeSceneCategory(@PathParam("sceneId") int sceneId,
+																 				@PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
+		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// attach categorySet to annotation and vice versa
+		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		entityTransaction.begin();
+		analysisScene.getCategories().remove(category);
+		category.getAnalysisScenes().remove(analysisScene);
+		entityManager.merge(category);
+		entityManager.merge(analysisScene);
+		entityManager.persist(analysisScene);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(analysisScene);
+ 	
+		return Response.ok().build();
+	}
+	
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("action/{actionId}/category/{categoryId}")
+	@Secured
+	public Response removeActionCategory(@PathParam("actionId") int actionId,
+																 				@PathParam("categoryId") int categoryId) {
+		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
+		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
+		Category category = entityManager.find(Category.class, categoryId);
+		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// attach categorySet to annotation and vice versa
+		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		entityTransaction.begin();
+		analysisAction.getCategories().remove(category);
+		category.getAnalysisActions().remove(analysisAction);
+		entityManager.merge(category);
+		entityManager.merge(analysisAction);
+		entityManager.persist(analysisAction);
+		entityManager.persist(category);
+		entityTransaction.commit();
+		entityManager.refresh(analysisAction);
  	
 		return Response.ok().build();
 	}
@@ -1519,5 +2192,13 @@ public class EndpointAnalysisList {
  	
 		return Response.ok().build();
 	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+    List<T> r = new ArrayList<T>(c.size());
+    for(Object o: c)
+      r.add(clazz.cast(o));
+    return r;
+  }
+
 
 }

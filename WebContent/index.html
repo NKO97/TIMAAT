@@ -1120,30 +1120,137 @@
                       </form>
                     </div>
                   </div>
-                  <div id="annotationCategoryPanel" class="categoryAndTagPanel">
-                    <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .category-annotation-wrapper">
+                  <div id="mediumAnalysisListCategoryPanel" class="categoryAndTagPanel">
+                    <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .category-analysislist-wrapper">
                       <i class="collapse-icon fas fa-fw"></i> Verknüpfte Kategorien
                     </button>
-                    <div class="category-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
-                      <form role="form" id="annotationCategoriesForm">
-                        <div class="form-group">
-                          <!-- <label for="annotation-categories-multi-select-dropdown">Annotation categories</label> -->
-                          <div class="col-md-12">
-                            <select class="form-control form-control-md multi-select-dropdown"
-                                    style="width:100%;"
-                                    id="annotation-categories-multi-select-dropdown"
-                                    name="categoryId"
-                                    data-role="categoryId"
-                                    data-placeholder="Select annotation categories"
-                                    multiple="multiple">
-                            </select>
+                    <div class="category-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                      <div id="annotation-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="annotationCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="annotation-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="annotation-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                        <div class="annotation-category-form-submit">
-                          <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-category-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-category-form-dismiss" name="dismiss">Cancel</button>
-                        </div>
-                      </form>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="segment-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="segmentCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="segment-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="segment-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-segment-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-segment-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="scene-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="sceneCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="scene-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="scene-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-scene-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-scene-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="sequence-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="sequenceCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="sequence-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="sequence-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-sequence-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-sequence-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="action-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="actionCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="action-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="action-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-action-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-action-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="take-categories" class="mediumAnalysisListCategories">
+                        <form role="form" id="takeCategoriesForm">
+                          <div class="form-group">
+                            <!-- <label for="take-categories-multi-select-dropdown">Annotation categories</label> -->
+                            <div class="col-md-12">
+                              <select class="form-control form-control-md multi-select-dropdown"
+                                      style="width:100%;"
+                                      id="take-categories-multi-select-dropdown"
+                                      name="categoryId"
+                                      data-role="categoryId"
+                                      data-placeholder="Select categories"
+                                      multiple="multiple">
+                              </select>
+                            </div>
+                          </div>
+                          <div class="annotation-category-form-submit">
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-take-category-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-take-category-form-dismiss" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                   <hr />

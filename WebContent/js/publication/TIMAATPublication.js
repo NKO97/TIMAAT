@@ -112,9 +112,10 @@ class AnalysisSegment {
 
 class Marker {
 		  constructor(annotation) {
+     		console.log("TCL: Marker -> constructor -> annotation", annotation);
 			  this.parent = annotation;
 			  this.annotation = annotation;
-			  this.annotationID = annotation.model.id;
+			  // this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
 			  this._to = Math.max(annotation.startTime, annotation.model.endTime/1000.0);
 			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
@@ -124,7 +125,7 @@ class Marker {
 					  offset: 0,
 					  element: $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerbar"></div><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>'),
 			  };
-			  this.ui.element.attr('id','timaat-marker-'+this.annotationID);
+			  this.ui.element.attr('id','timaat-marker-'+this.parent.model.id);
 			    
 			  this.regionstart = $(this.ui.element.find('.timaat-timeline-marker-start'));
 			  this.regionend = $(this.ui.element.find('.timaat-timeline-marker-end'));
@@ -254,9 +255,9 @@ class Marker {
 class Keyframe {
 		constructor(keyframe, annotation) {
 			this.parent = annotation;
-			this.annotation = annotation;
+			// this.annotation = annotation;
 			this.model = keyframe;
-			this.annotationID = annotation.model.id;
+			// this.annotationID = annotation.model.id;
 			this._time = this.model.time;
 			this._visible = true;
 			this._selected = false;

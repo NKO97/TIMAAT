@@ -744,7 +744,7 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissegment' ) return;
 				var segment = TIMAAT.VideoPlayer.inspector.state.item;
 				if (segment) {
-					await TIMAAT.AnalysisListService.removeSegment(segment);
+					await TIMAAT.AnalysisListService.removeSegment(segment.model);
 					// let index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.indexOf(segment);
 					// if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.splice(index, 1);
 					// segment.removeUI();
@@ -760,7 +760,7 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysissequence' ) return;
 				var sequence = TIMAAT.VideoPlayer.inspector.state.item;
 				if (sequence) {
-					await TIMAAT.AnalysisListService.removeSequence(sequence);
+					await TIMAAT.AnalysisListService.removeSequence(sequence.model);
 					// var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.indexOf(sequence);
 					// if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.splice(index, 1);
 					// sequence.removeUI();
@@ -777,7 +777,7 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysistake' ) return;
 				var take = TIMAAT.VideoPlayer.inspector.state.item;
 				if (take) {
-					await TIMAAT.AnalysisListService.removeTake(take);
+					await TIMAAT.AnalysisListService.removeTake(take.model);
 					// var index = TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.indexOf(take);
 					// if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.splice(index, 1);
 					// take.removeUI();
@@ -794,7 +794,7 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysisscene' ) return;
 				var scene = TIMAAT.VideoPlayer.inspector.state.item;
 				if (scene) {
-					await TIMAAT.AnalysisListService.removeScene(scene);
+					await TIMAAT.AnalysisListService.removeScene(scene.model);
 					// var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.indexOf(scene);
 					// if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.splice(index, 1);
 					// scene.removeUI();
@@ -811,7 +811,7 @@
 				if ( TIMAAT.VideoPlayer.inspector.state.type != 'analysisaction' ) return;
 				var action = TIMAAT.VideoPlayer.inspector.state.item;
 				if (action) {
-					await TIMAAT.AnalysisListService.removeAction(action);
+					await TIMAAT.AnalysisListService.removeAction(action.model);
 					// var index = TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.indexOf(action);
 					// if (index > -1) TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.splice(index, 1);
 					// action.removeUI();
@@ -1421,12 +1421,12 @@
 			// $('#timaat-videoplayer-segment-meta').modal('show');
 		},
 		
-		updateAnalysisSegment: function(segment) {
+		updateAnalysisSegment: async function(segment) {
 			console.log("TCL: updateAnalysisSegment: function(segment)");
 			console.log("TCL: segment", segment);
 			// sync to server
-			TIMAAT.AnalysisListService.updateSegment(segment);
-			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
+			await TIMAAT.AnalysisListService.updateSegment(segment.model);
+			await TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
 
 			// update UI list view
 			console.log("TCL: segment.updateUI()");
@@ -1458,7 +1458,7 @@
 		updateAnalysisSequence: async function(sequence) {
 			console.log("TCL: updateAnalysisSequence: function(sequence)", sequence);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateSequence(sequence);
+			await TIMAAT.AnalysisListService.updateSequence(sequence.model);
 			await TIMAAT.AnalysisListService.updateSequenceTranslation(sequence.model.analysisSequenceTranslations[0]);
 			
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
@@ -1493,7 +1493,7 @@
 		updateAnalysisTake: async function(take) {
 			console.log("TCL: updateAnalysisTake: function(take)", take);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateTake(take);
+			await TIMAAT.AnalysisListService.updateTake(take.model);
 			await TIMAAT.AnalysisListService.updateTakeTranslation(take.model.analysisTakeTranslations[0]);
 
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
@@ -1528,7 +1528,7 @@
 		updateAnalysisScene: async function(scene) {
 			console.log("TCL: updateAnalysisScene: function(scene)", scene);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateScene(scene);
+			await TIMAAT.AnalysisListService.updateScene(scene.model);
 			await TIMAAT.AnalysisListService.updateSceneTranslation(scene.model.analysisSceneTranslations[0]);
 
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
@@ -1563,7 +1563,7 @@
 		updateAnalysisAction: async function(action) {
 			console.log("TCL: updateAnalysisAction: function(action)", action);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateAction(action);
+			await TIMAAT.AnalysisListService.updateAction(action.model);
 			await TIMAAT.AnalysisListService.updateActionTranslation(action.model.analysisActionTranslations[0]);
 
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);

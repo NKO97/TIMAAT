@@ -30,6 +30,19 @@ public class AnalysisScene implements Serializable {
 	@Column(name="start_time", columnDefinition = "INT")
 	private long startTime;
 
+	//bi-directional many-to-many association to Category
+	@ManyToMany
+	@JoinTable(
+		name="analysis_scene_has_category"
+		, inverseJoinColumns={
+			@JoinColumn(name="category_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="analysis_scene_id")
+			}
+		)
+	private List<Category> categories;
+
 	//bi-directional many-to-one association to AnalysisAction
 	@OneToMany(mappedBy="analysisScene")
 	@JsonManagedReference(value = "AnalysisScene-AnalysisAction")
@@ -82,6 +95,14 @@ public class AnalysisScene implements Serializable {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public List<Category> getCategories() {
+		return this.categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	public List<AnalysisAction> getAnalysisActions() {

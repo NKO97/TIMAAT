@@ -158,34 +158,35 @@
 		// 	});
     // },
     
-    async updateAnnotation(annotationModel) {
-			console.log("TCL: updateAnnotation -> annotationModel", annotationModel);
-			var annotation = {
-					id: annotationModel.id,
-					annotationTranslations: annotationModel.annotationTranslations,
-					categories: annotationModel.categories,
-					comment: annotationModel.comment,
-					endTime: annotationModel.endTime,
-					startTime: annotationModel.startTime,
-					selectorSvgs: annotationModel.selectorSvgs,
-					layerVisual: annotationModel.layerVisual,
-					tags: annotationModel.tags,
-					title: annotationModel.title,
-					// mediumID: annotationModel.mediumID,
-			};
-			delete annotationModel.ui;
+    async updateAnnotation(model) {
+			console.log("TCL: updateAnnotation -> model", model);
+			// var annotation = {
+			// 		id: model.id,
+			// 		annotationTranslations: model.annotationTranslations,
+			// 		categories: model.categories,
+			// 		comment: model.comment,
+			// 		endTime: model.endTime,
+			// 		startTime: model.startTime,
+			// 		selectorSvgs: model.selectorSvgs,
+			// 		layerVisual: model.layerVisual,
+			// 		tags: model.tags,
+			// 		title: model.title,
+			// 		// mediumID: model.mediumID,
+			// };
+      // console.log("TCL: updateAnnotation -> annotation", annotation);
+			// delete model.ui;
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id,
 					type:"PATCH",
-					data: JSON.stringify(annotation),
+					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        console.log("TCL: updateAnnotation -> data", data);
+        	console.log("TCL: updateAnnotation -> data", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log( "error", e );

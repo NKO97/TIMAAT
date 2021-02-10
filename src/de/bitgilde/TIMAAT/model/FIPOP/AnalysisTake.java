@@ -29,6 +29,19 @@ public class AnalysisTake implements Serializable {
 	@Column(name="start_time", columnDefinition = "INT")
 	private long startTime;
 
+	//bi-directional many-to-many association to Category
+	@ManyToMany
+	@JoinTable(
+		name="analysis_take_has_category"
+		, inverseJoinColumns={
+			@JoinColumn(name="category_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="analysis_take_id")
+			}
+		)
+	private List<Category> categories;
+
 	//bi-directional many-to-one association to AnalysisSequence
 	@ManyToOne
 	@JoinColumn(name="analysis_sequence_id")
@@ -76,6 +89,14 @@ public class AnalysisTake implements Serializable {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public List<Category> getCategories() {
+		return this.categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	public AnalysisSequence getAnalysisSequence() {

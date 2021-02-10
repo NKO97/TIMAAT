@@ -1086,7 +1086,7 @@
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 
-						// category and annotation panel
+						// category and tag panel
 						$('#annotation-categories-multi-select-dropdown').val(null).trigger('change');
 						if ($('#annotation-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
 							$('#annotation-categories-multi-select-dropdown').select2('destroy');
@@ -1100,7 +1100,9 @@
 						$('#annotation-tags-multi-select-dropdown').find('option').remove();
 
 						$('.categoryAndTagPanel').hide();
-						$('#annotationCategoryPanel').show();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#annotation-categories').show();
 						$('#annotationTagPanel').show();
 
 						$('#annotation-categories-multi-select-dropdown').select2({
@@ -1366,6 +1368,10 @@
 					$('#timaat-analysisscene-add').removeClass("timaat-item-disabled");
 					$('#timaat-analysisscene-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisScene()');
 
+					if (item != null) {
+						this.enablePanel('timaat-inspector-categories-and-tags');
+					}
+
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
@@ -1374,6 +1380,7 @@
 					$('#timaat-inspector-meta-comment-group').show();
 					$('#timaat-inspector-meta-transcript-group').show();
 					var segment = item;
+          console.log("TCL: Inspector -> setItem -> segment", segment);
 					if ( !segment ) this.open('timaat-inspector-metadata');
 					var heading = (segment) ? '<i class="fas fa-indent"></i> Segment bearbeiten' : '<i class="fas fa-indent"></i> Segment hinzufügen';
 					var submit = (segment) ? "Speichern" : "Hinzufügen";
@@ -1401,11 +1408,82 @@
 					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+
 					(segment) ? $('#timaat-segment-delete-submit').show() : $('#timaat-segment-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+
+					if (segment) {
+						// category panel
+						$('#segment-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#segment-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#segment-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#segment-categories-multi-select-dropdown').find('option').remove();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#segment-categories').show();
+
+						$('#segment-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/analysislist/segment/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, 'segment').then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#segment-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
 				}
 				// analysis sequences
 				if ( type == 'analysissequence' ) {
+					if (item != null) {
+						this.enablePanel('timaat-inspector-categories-and-tags');
+					}
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
@@ -1452,11 +1530,82 @@
 					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+
 					(sequence) ? $('#timaat-sequence-delete-submit').show() : $('#timaat-sequence-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+
+					if (sequence) {
+						// category panel
+						$('#sequence-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#sequence-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#sequence-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#sequence-categories-multi-select-dropdown').find('option').remove();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#sequence-categories').show();
+
+						$('#sequence-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/analysislist/sequence/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, 'sequence').then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#sequence-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
 				}
 				// analysis takes
 				if ( type == 'analysistake' ) {
+					if (item != null) {
+						this.enablePanel('timaat-inspector-categories-and-tags');
+					}
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
@@ -1498,11 +1647,82 @@
 					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+
 					(take) ? $('#timaat-take-delete-submit').show() : $('#timaat-take-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+
+					if (take) {
+						// category panel
+						$('#take-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#take-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#take-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#take-categories-multi-select-dropdown').find('option').remove();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#take-categories').show();
+
+						$('#take-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/analysislist/take/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, 'take').then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#take-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
 				}
 				// analysis scenes
 				if ( type == 'analysisscene' ) {
+					if (item != null) {
+						this.enablePanel('timaat-inspector-categories-and-tags');
+					}
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
@@ -1549,11 +1769,82 @@
 					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+
 					(scene) ? $('#timaat-scene-delete-submit').show() : $('#timaat-scene-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+
+					if (scene) {
+						// category panel
+						$('#scene-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#scene-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#scene-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#scene-categories-multi-select-dropdown').find('option').remove();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#scene-categories').show();
+
+						$('#scene-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/analysislist/scene/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, 'scene').then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#scene-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
 				}
 				// analysis actions
 				if ( type == 'analysisaction' ) {
+					if (item != null) {
+						this.enablePanel('timaat-inspector-categories-and-tags');
+					}
 					$('#timaat-inspector-meta-color-group').hide();
 					$('#timaat-inspector-meta-opacity-group').hide();
 					$('#timaat-inspector-meta-type-group').hide();
@@ -1579,7 +1870,7 @@
 					// 	});
 					// }
 					// Adjust start time to match current time frame if within segment
-					if (!scene) {
+					if (!action) {
 						if (TIMAAT.VideoPlayer.video.currentTime >= startTime && TIMAAT.VideoPlayer.video.currentTime < endTime)
 							startTime = TIMAAT.VideoPlayer.video.currentTime;
 					}
@@ -1595,8 +1886,76 @@
 					$('#timaat-inspector-meta-transcript').summernote('code', transcript);	
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
+					$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+
 					(action) ? $('#timaat-action-delete-submit').show() : $('#timaat-action-delete-submit').hide();
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+
+					if (action) {
+						// category panel
+						$('#action-categories-multi-select-dropdown').val(null).trigger('change');
+						if ($('#action-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+							$('#action-categories-multi-select-dropdown').select2('destroy');
+						}
+						$('#action-categories-multi-select-dropdown').find('option').remove();
+
+						$('.categoryAndTagPanel').hide();
+						$('#mediumAnalysisListCategoryPanel').show();
+						$('.mediumAnalysisListCategories').hide();
+						$('#action-categories').show();
+
+						$('#action-categories-multi-select-dropdown').select2({
+							closeOnSelect: false,
+							scrollAfterSelect: true,
+							allowClear: true,
+							minimumResultsForSearch: 10,
+							ajax: {
+								url: 'api/analysislist/action/'+item.model.id+'/category/selectList/',
+								type: 'GET',
+								dataType: 'json',
+								delay: 250,
+								headers: {
+									"Authorization": "Bearer "+TIMAAT.Service.token,
+									"Content-Type": "application/json",
+								},
+								// additional parameters
+								data: function(params) {
+									return {
+										search: params.term,
+										page: params.page
+									};          
+								},
+								processResults: function(data, params) {
+									params.page = params.page || 1;
+									return {
+										results: data
+									};
+								},
+								cache: true
+							},
+							minimumInputLength: 0,
+						});
+						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, 'action').then(function(data) {
+							// console.log("TCL: then: data", data);
+							var categorySelect = $('#action-categories-multi-select-dropdown');
+							if (data.length > 0) {
+								data.sort((a, b) => (a.name > b.name)? 1 : -1);
+								// create the options and append to Select2
+								var i = 0;
+								for (; i < data.length; i++) {
+									var option = new Option(data[i].name, data[i].id, true, true);
+									categorySelect.append(option).trigger('change');
+								}
+								// manually trigger the 'select2:select' event
+								categorySelect.trigger({
+									type: 'select2:select',
+									params: {
+										data: data
+									}
+								});
+							}
+						});
+					}
 				}
 				// console.log("TCL: setItem -> $ -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI();
@@ -1713,7 +2072,7 @@
 				$('#timaat-inspector-meta-end').val(end);
 			}
 
-		};
+		}
 		
 		setMetaEnd(time) {
 //			console.log("TCL: setMetaEnd: function(time)");

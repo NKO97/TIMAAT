@@ -31,6 +31,31 @@ public class Category implements Serializable {
 	@JsonIgnore
 	private List<Annotation> annotations;
 
+	//bi-directional many-to-many association to AnalysisSegment
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
+	private List<AnalysisSegment> analysisSegments;
+
+	//bi-directional many-to-many association to AnalysisSequence
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
+	private List<AnalysisSequence> analysisSequences;
+
+	//bi-directional many-to-many association to AnalysisScene
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
+	private List<AnalysisScene> analysisScenes;
+
+	//bi-directional many-to-many association to AnalysisAction
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
+	private List<AnalysisAction> analysisActions;
+
+	//bi-directional many-to-many association to AnalysisTake
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore
+	private List<AnalysisTake> analysisTakes;
+
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="category")
 	// @JsonIgnore
@@ -99,12 +124,45 @@ public class Category implements Serializable {
 		this.mediums = mediums;
 	}
 
-	// get all CategorySets this category is a member of
-	// @JsonIgnore
-	// public List<CategorySet> getCategorySets() { // TODO
-	// 	// Find all CategorySetHasCategory where Category appears
-	// 	// list all CategorySets found that way
-	// 	return null;
-	// }
+	public List<AnalysisSegment> getAnalysisSegments() {
+		return this.analysisSegments;
+	}
+
+	public void setAnalysisSegments(List<AnalysisSegment> analysisSegments) {
+		this.analysisSegments = analysisSegments;
+	}
+
+	public List<AnalysisSequence> getAnalysisSequences() {
+		return this.analysisSequences;
+	}
+
+	public void setAnalysisSequences(List<AnalysisSequence> analysisSequences) {
+		this.analysisSequences = analysisSequences;
+	}
+
+	public List<AnalysisTake> getAnalysisTakes() {
+		return this.analysisTakes;
+	}
+
+	public void setAnalysisTakes(List<AnalysisTake> analysisTakes) {
+		this.analysisTakes = analysisTakes;
+	}
+
+	public List<AnalysisScene> getAnalysisScenes() {
+		return this.analysisScenes;
+	}
+
+	public void setAnalysisScenes(List<AnalysisScene> analysisScenes) {
+		this.analysisScenes = analysisScenes;
+	}
+
+	public List<AnalysisAction> getAnalysisActions() {
+		return this.analysisActions;
+	}
+
+	public void setAnalysisActions(List<AnalysisAction> analysisActions) {
+		this.analysisActions = analysisActions;
+	}
+
 
 }

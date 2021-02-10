@@ -23,13 +23,24 @@ public class AnalysisSegment implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	// TODO get name from translation
-
 	@Column(name="end_time", columnDefinition = "INT")
 	private long endTime;
 
 	@Column(name="start_time", columnDefinition = "INT")
 	private long startTime;
+
+	//bi-directional many-to-many association to Category
+	@ManyToMany
+	@JoinTable(
+		name="analysis_segment_has_category"
+		, inverseJoinColumns={
+			@JoinColumn(name="category_id")
+			}
+		, joinColumns={
+			@JoinColumn(name="analysis_segment_id")
+			}
+		)
+	private List<Category> categories;
 
 	//bi-directional many-to-one association to AnalysisScene
 	@OneToMany(mappedBy="analysisSegment")
@@ -62,47 +73,29 @@ public class AnalysisSegment implements Serializable {
 		this.id = id;
 	}
 
-	public long getEndTime() { // TODO get and set correct segment time values after change from Timestamp to Time
+	public long getEndTime() {
 		return this.endTime;
-		// if ( endTime == null ) return -1;
-		// return endTime.getTime()/1000f;
 	}
 
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
-		// this.endTime = new java.sql.Timestamp((long)(endTime*1000f));
 	}
 
 	public long getStartTime() {
 		return this.startTime;
-		// if ( startTime == null ) return -1;
-		// return startTime.getTime()/1000f;
 	}
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
-		// this.startTime = new java.sql.Timestamp((long)(startTime*1000f));
 	}
 
-	// public float getStartTime() {
-	// 	if ( this.startTime == null ) return -1;
-	// 	return startTime.getTime()/1000f;
-	// }
+	public List<Category> getCategories() {
+		return this.categories;
+	}
 
-	// public void setStartTime(float startTime) {
-	// 	if ( this.startTime == null ) this.startTime = new Time(0);
-	// 	this.startTime.setTime((long)(startTime*1000f));
-	// }
-
-	// public float getEndTime() {
-	// 	if ( endTime == null ) return -1;
-	// 	return endTime.getTime()/1000f;
-	// }
-
-	// public void setEndTime(float endTime) {
-	// 	if ( this.endTime == null ) this.endTime = new Time(0);
-	// 	this.endTime.setTime((long)(endTime*1000f));
-	// }
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
 
 	public List<AnalysisScene> getAnalysisScenes() {
 		return this.analysisScenes;
