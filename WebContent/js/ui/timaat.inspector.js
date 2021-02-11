@@ -418,59 +418,85 @@
 					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+					let i = 0;
 
 					// early out: segment has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-segment-noRange').modal('show');
-					} else {
-						var overlapping = false;
-						var i = 0;
-						var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
-						if (segment) {
-							let index = segmentList.findIndex(({id}) => id === segment.model.id);
-							segmentList.splice(index,1);
-						}
-						for (; i < segmentList.length; i++) {
-							if (!(endTime <= segmentList[i].startTime || startTime >= segmentList[i].endTime) ) {
-								overlapping = true;
-								break;
+						return;
+					}
+					// early out: segment's sequences and scenes do not exceed new time range 
+					if (segment) {
+						let sequenceList = TIMAAT.VideoPlayer.curSegment.model.analysisSequences;
+						i = 0;
+						for (; i < sequenceList.length; i++) {
+							if (startTime > sequenceList[i].startTime || endTime < sequenceList[i].endTime) {
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-title').html('Segment time interval too small');
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#timaat-videoplayer-element-outOfBounds').modal('show');
+								return;
 							}
 						}
-						// early out: segment overlaps with other segments
-						if (overlapping) {
-							$('#timaat-videoplayer-segment-overlapping').modal('show');
-						} else {
-							if (segment) {
-								segment.model.analysisSegmentTranslations[0].name = name;
-								segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
-								segment.model.analysisSegmentTranslations[0].comment = comment;
-								segment.model.analysisSegmentTranslations[0].transcript = transcript;
-								segment.model.startTime = startTime;
-								segment.model.endTime = endTime;
+						let sceneList = TIMAAT.VideoPlayer.curSegment.model.analysisScenes;
+						i = 0;
+						for (; i < sceneList.length; i++) {
+							if (startTime > sceneList[i].startTime || endTime < sceneList[i].endTime) {
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-title').html('Segment time interval too small');
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#timaat-videoplayer-element-outOfBounds').modal('show');
+								return;
+							}
+						}
+					}
 
-								// update segment UI
-								TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
-							} else {
-								var model = {
-									id: 0,
-									analysisSegmentTranslations: [{
-										id: 0,
-										name: name,
-										shortDescription: shortDescription,
-										comment: comment,
-										transcript: transcript
-									}],
-									startTime: startTime,
-									endTime: endTime
-								};
-								// TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
-								segment = await TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id);
-								segment = new TIMAAT.AnalysisSegment(segment);
-								TIMAAT.VideoPlayer._segmentAdded(segment, true);
-							}
-							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					// segment has a time range and still encompasses its sub elements. Now check for overlap with other segments
+					var overlapping = false;
+					i = 0;
+					var segmentList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments;
+					if (segment) {
+						let index = segmentList.findIndex(({id}) => id === segment.model.id);
+						segmentList.splice(index,1);
+					}
+					for (; i < segmentList.length; i++) {
+						if (!(endTime <= segmentList[i].startTime || startTime >= segmentList[i].endTime) ) {
+							overlapping = true;
+							break;
 						}
+					}
+					// early out: segment overlaps with other segments
+					if (overlapping) {
+						$('#timaat-videoplayer-segment-overlapping').modal('show');
+					} else {
+						if (segment) {
+							segment.model.analysisSegmentTranslations[0].name = name;
+							segment.model.analysisSegmentTranslations[0].shortDescription = shortDescription;
+							segment.model.analysisSegmentTranslations[0].comment = comment;
+							segment.model.analysisSegmentTranslations[0].transcript = transcript;
+							segment.model.startTime = startTime;
+							segment.model.endTime = endTime;
+
+							// update segment UI
+							TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
+						} else {
+							var model = {
+								id: 0,
+								analysisSegmentTranslations: [{
+									id: 0,
+									name: name,
+									shortDescription: shortDescription,
+									comment: comment,
+									transcript: transcript
+								}],
+								startTime: startTime,
+								endTime: endTime
+							};
+							// TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
+							segment = await TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id);
+							segment = new TIMAAT.AnalysisSegment(segment);
+							TIMAAT.VideoPlayer._segmentAdded(segment, true);
+						}
+						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 					}
 				}
 				// analysis sequences
@@ -483,66 +509,84 @@
 					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+					let i = 0;
 
+					// early out: sequence has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-sequence-noRange').modal('show');
+						return;
+					} 
 					// early out: sequence's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
 						$('#timaat-videoplayer-sequence-outOfBounds').modal('show');
+						return;
 					}
-					// early out: sequence has no time range
-					else if (startTime == endTime) {
-						$('#timaat-videoplayer-sequence-noRange').modal('show');
-					} else {
-						var overlapping = false;
-						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
-						let sequenceList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences;
-						if (sequence) {
-							let index = sequenceList.findIndex(({id}) => id === sequence.model.id);
-							sequenceList.splice(index,1);
-						}
+					if (sequence) {
+						// early out: sequence's takes do not exceed new time range
+						let takeList = TIMAAT.VideoPlayer.curSequence.model.analysisTakes;
 						i = 0;
-						for (; i < sequenceList.length; i++) {
-							if (!(endTime <= sequenceList[i].startTime || startTime >= sequenceList[i].endTime) ) {
-								overlapping = true;
-								break;
+						for (; i < takeList.length; i++) {
+							if (startTime > takeList[i].startTime || endTime < takeList[i].endTime) {
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-title').html('Sequence time interval too small');
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-body').html("The sequence's time interval has to be large enough to encompass its elements. Remove or alter conflicting takes first.");
+								$('#timaat-videoplayer-element-outOfBounds').modal('show');
+								return;
 							}
-						}
-						// early out: sequence overlaps with other sequences
-						if (overlapping) {
-							$('#timaat-videoplayer-sequence-overlapping').modal('show');
-						} else {
-							if (sequence) {
-								sequence.model.analysisSequenceTranslations[0].name = name;
-								sequence.model.analysisSequenceTranslations[0].shortDescription = shortDescription;
-								sequence.model.analysisSequenceTranslations[0].comment = comment;
-								sequence.model.analysisSequenceTranslations[0].transcript = transcript;
-								sequence.model.startTime = startTime;
-								sequence.model.endTime = endTime;
-								sequence.model.segmentId = TIMAAT.VideoPlayer.curSegment.model.id;
-
-								// update sequence UI
-								TIMAAT.VideoPlayer.updateAnalysisSequence(sequence);
-							} else {
-								var model = {
-									id: 0,
-									analysisSequenceTranslations: [{
-										id: 0,
-										name: name,
-										shortDescription: shortDescription,
-										comment: comment,
-										transcript: transcript
-									}],
-									startTime: startTime,
-									endTime: endTime,
-									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
-								};
-								sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id);
-								sequence = new TIMAAT.AnalysisSequence(sequence);
-								TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
-							}
-							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
+
+					// sequence has a time range, does not exceed its segment's, and still encompasses its sub elements. Now check for overlap with other sequences
+					var overlapping = false;
+					i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+					let sequenceList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences;
+					if (sequence) {
+						let index = sequenceList.findIndex(({id}) => id === sequence.model.id);
+						sequenceList.splice(index,1);
+					}
+					i = 0;
+					for (; i < sequenceList.length; i++) {
+						if (!(endTime <= sequenceList[i].startTime || startTime >= sequenceList[i].endTime) ) {
+							overlapping = true;
+							break;
+						}
+					}
+					// early out: sequence overlaps with other sequences
+					if (overlapping) {
+						$('#timaat-videoplayer-sequence-overlapping').modal('show');
+					} else {
+						if (sequence) {
+							sequence.model.analysisSequenceTranslations[0].name = name;
+							sequence.model.analysisSequenceTranslations[0].shortDescription = shortDescription;
+							sequence.model.analysisSequenceTranslations[0].comment = comment;
+							sequence.model.analysisSequenceTranslations[0].transcript = transcript;
+							sequence.model.startTime = startTime;
+							sequence.model.endTime = endTime;
+							sequence.model.segmentId = TIMAAT.VideoPlayer.curSegment.model.id;
+
+							// update sequence UI
+							TIMAAT.VideoPlayer.updateAnalysisSequence(sequence);
+						} else {
+							var model = {
+								id: 0,
+								analysisSequenceTranslations: [{
+									id: 0,
+									name: name,
+									shortDescription: shortDescription,
+									comment: comment,
+									transcript: transcript
+								}],
+								startTime: startTime,
+								endTime: endTime,
+								segmentId: TIMAAT.VideoPlayer.curSegment.model.id
+							};
+							sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id);
+							sequence = new TIMAAT.AnalysisSequence(sequence);
+							TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
+						}
+						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					}
+					
 				}
 				// analysis takes
 				if ( inspector.state.type == 'analysistake' ) {
@@ -554,65 +598,69 @@
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
-					// early out: take's time range exceeds sequence's time range
-					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
-						$('#timaat-videoplayer-take-outOfBounds').modal('show');
-					}
 					// early out: take has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-take-noRange').modal('show');
-					} else {
-						var overlapping = false;
-						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
-						let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSequence.model.id);
-						let takeList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences[j].analysisTakes;
-						if (take) {
-							let index = takeList.findIndex(({id}) => id === take.model.id);
-							takeList.splice(index,1);
-						}
-						i = 0;
-						for (; i < takeList.length; i++) {
-							if (!(endTime <= takeList[i].startTime || startTime >= takeList[i].endTime) ) {
-								overlapping = true;
-								break;
-							}
-						}
-						// early out: take overlaps with other takes
-						if (overlapping) {
-							$('#timaat-videoplayer-take-overlapping').modal('show');
-						} else {
-							if (take) {
-								take.model.analysisTakeTranslations[0].name = name;
-								take.model.analysisTakeTranslations[0].shortDescription = shortDescription;
-								take.model.analysisTakeTranslations[0].comment = comment;
-								take.model.analysisTakeTranslations[0].transcript = transcript;
-								take.model.startTime = startTime;
-								take.model.endTime = endTime;
+						return;
+					} 
+					// early out: take's time range exceeds sequence's time range
+					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
+						$('#timaat-videoplayer-take-outOfBounds').modal('show');
+						return;
+					}
 
-								// update take UI
-								TIMAAT.VideoPlayer.updateAnalysisTake(take);
-							} else {
-								var model = {
-									id: 0,
-									analysisTakeTranslations: [{
-										id: 0,
-										name: name,
-										shortDescription: shortDescription,
-										comment: comment,
-										transcript: transcript
-									}],
-									startTime: startTime,
-									endTime: endTime,
-									sequenceId: TIMAAT.VideoPlayer.curSequence.model.id
-								};
-								take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id);
-								take = new TIMAAT.AnalysisTake(take);
-								TIMAAT.VideoPlayer._takeAdded(take, true);
-							}
-							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					// take has a time range and does not exceed its sequence's. Now check for overlap with other takes
+					var overlapping = false;
+					let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+					let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSequence.model.id);
+					let takeList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisSequences[j].analysisTakes;
+					if (take) {
+						let index = takeList.findIndex(({id}) => id === take.model.id);
+						takeList.splice(index,1);
+					}
+					i = 0;
+					for (; i < takeList.length; i++) {
+						if (!(endTime <= takeList[i].startTime || startTime >= takeList[i].endTime) ) {
+							overlapping = true;
+							break;
 						}
 					}
+					// early out: take overlaps with other takes
+					if (overlapping) {
+						$('#timaat-videoplayer-take-overlapping').modal('show');
+					} else {
+						if (take) {
+							take.model.analysisTakeTranslations[0].name = name;
+							take.model.analysisTakeTranslations[0].shortDescription = shortDescription;
+							take.model.analysisTakeTranslations[0].comment = comment;
+							take.model.analysisTakeTranslations[0].transcript = transcript;
+							take.model.startTime = startTime;
+							take.model.endTime = endTime;
+
+							// update take UI
+							TIMAAT.VideoPlayer.updateAnalysisTake(take);
+						} else {
+							var model = {
+								id: 0,
+								analysisTakeTranslations: [{
+									id: 0,
+									name: name,
+									shortDescription: shortDescription,
+									comment: comment,
+									transcript: transcript
+								}],
+								startTime: startTime,
+								endTime: endTime,
+								sequenceId: TIMAAT.VideoPlayer.curSequence.model.id
+							};
+							take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id);
+							take = new TIMAAT.AnalysisTake(take);
+							TIMAAT.VideoPlayer._takeAdded(take, true);
+						}
+						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					}
+					
 				}
 				// analysis scenes
 				if ( inspector.state.type == 'analysisscene' ) {
@@ -623,66 +671,84 @@
 					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
+					let i = 0;
 
-					// early out: scene's time range exceeds segment's time range
-					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
-						$('#timaat-videoplayer-scene-outOfBounds').modal('show');
-					}
 					// early out: scene has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-scene-noRange').modal('show');
-					} else {
-						var overlapping = false;
-						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
-						let sceneList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes;
-						if (scene) {
-							let index = sceneList.findIndex(({id}) => id === scene.model.id);
-							sceneList.splice(index,1);
-						}
+						return;
+					} 
+					// early out: scene's time range exceeds segment's time range
+					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
+						$('#timaat-videoplayer-scene-outOfBounds').modal('show');
+						return;
+					}
+					// early out: scene's actions do not exceed new time range
+					if (scene) {
+						let actionList = TIMAAT.VideoPlayer.curScene.model.analysisActions;
 						i = 0;
-						for (; i < sceneList.length; i++) {
-							if (!(endTime <= sceneList[i].startTime || startTime >= sceneList[i].endTime) ) {
-								overlapping = true;
-								break;
+						for (; i < actionList.length; i++) {
+							if (startTime > actionList[i].startTime || endTime < actionList[i].endTime) {
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-title').html('Scene time interval too small');
+								$('#timaat-videoplayer-element-outOfBounds').find('.modal-body').html("The scene's time interval has to be large enough to encompass its elements. Remove or alter conflicting actions first.");
+								$('#timaat-videoplayer-element-outOfBounds').modal('show');
+								return;
 							}
-						}
-						// early out: scene overlaps with other scenes
-						if (overlapping) {
-							$('#timaat-videoplayer-scene-overlapping').modal('show');
-						} else {
-							if (scene) {
-								scene.model.analysisSceneTranslations[0].name = name;
-								scene.model.analysisSceneTranslations[0].shortDescription = shortDescription;
-								scene.model.analysisSceneTranslations[0].comment = comment;
-								scene.model.analysisSceneTranslations[0].transcript = transcript;
-								scene.model.startTime = startTime;
-								scene.model.endTime = endTime;
-
-								// update scene UI
-								TIMAAT.VideoPlayer.updateAnalysisScene(scene);
-							} else {
-								var model = {
-									id: 0,
-									analysisSceneTranslations: [{
-										id: 0,
-										name: name,
-										shortDescription: shortDescription,
-										comment: comment,
-										transcript: transcript
-									}],
-									startTime: startTime,
-									endTime: endTime,
-									segmentId: TIMAAT.VideoPlayer.curSegment.model.id
-								};
-								scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id);
-								scene = new TIMAAT.AnalysisScene(scene);
-								TIMAAT.VideoPlayer._sceneAdded(scene, true);
-								// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
-							}
-							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 						}
 					}
+					
+					// scene has a time range, does not exceed its segment's, and still encompasses its sub elements. Now check for overlap with other scenes
+					var overlapping = false;
+					i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+					let sceneList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes;
+					if (scene) {
+						let index = sceneList.findIndex(({id}) => id === scene.model.id);
+						sceneList.splice(index,1);
+					}
+					i = 0;
+					for (; i < sceneList.length; i++) {
+						if (!(endTime <= sceneList[i].startTime || startTime >= sceneList[i].endTime) ) {
+							overlapping = true;
+							break;
+						}
+					}
+					// early out: scene overlaps with other scenes
+					if (overlapping) {
+						$('#timaat-videoplayer-scene-overlapping').modal('show');
+					} else {
+						if (scene) {
+							scene.model.analysisSceneTranslations[0].name = name;
+							scene.model.analysisSceneTranslations[0].shortDescription = shortDescription;
+							scene.model.analysisSceneTranslations[0].comment = comment;
+							scene.model.analysisSceneTranslations[0].transcript = transcript;
+							scene.model.startTime = startTime;
+							scene.model.endTime = endTime;
+
+							// update scene UI
+							TIMAAT.VideoPlayer.updateAnalysisScene(scene);
+						} else {
+							var model = {
+								id: 0,
+								analysisSceneTranslations: [{
+									id: 0,
+									name: name,
+									shortDescription: shortDescription,
+									comment: comment,
+									transcript: transcript
+								}],
+								startTime: startTime,
+								endTime: endTime,
+								segmentId: TIMAAT.VideoPlayer.curSegment.model.id
+							};
+							scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id);
+							scene = new TIMAAT.AnalysisScene(scene);
+							TIMAAT.VideoPlayer._sceneAdded(scene, true);
+							// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
+						}
+						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					}
+					
 				}
 				// analysis actions
 				if ( inspector.state.type == 'analysisaction' ) {
@@ -694,66 +760,70 @@
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val())*1000.0;
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val())*1000.0;
 
-					// early out: action's time range exceeds scene's time range
-					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
-						$('#timaat-videoplayer-action-outOfBounds').modal('show');
-					}
 					// early out: action has no time range
 					if (startTime == endTime) {
 						$('#timaat-videoplayer-action-noRange').modal('show');
-					} else {
-						var overlapping = false;
-						let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
-						let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes.findIndex(({id}) => id === TIMAAT.VideoPlayer.curScene.model.id);
-						let actionList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes[j].analysisActions;
-						if (action) {
-							let index = actionList.findIndex(({id}) => id === action.model.id);
-							actionList.splice(index,1);
-						}
-						i = 0;
-						for (; i < actionList.length; i++) {
-							if (!(endTime <= actionList[i].startTime || startTime >= actionList[i].endTime) ) {
-								overlapping = true;
-								break;
-							}
-						}
-						// early out: action overlaps with other actions
-						if (overlapping) {
-							$('#timaat-videoplayer-action-overlapping').modal('show');
-						} else {
-							if (action) {
-								action.model.analysisActionTranslations[0].name = name;
-								action.model.analysisActionTranslations[0].shortDescription = shortDescription;
-								action.model.analysisActionTranslations[0].comment = comment;
-								action.model.analysisActionTranslations[0].transcript = transcript;
-								action.model.startTime = startTime;
-								action.model.endTime = endTime;
-
-								// update action UI
-								TIMAAT.VideoPlayer.updateAnalysisAction(action);
-							} else {
-								var model = {
-									id: 0,
-									analysisActionTranslations: [{
-										id: 0,
-										name: name,
-										shortDescription: shortDescription,
-										comment: comment,
-										transcript: transcript
-									}],
-									startTime: startTime,
-									endTime: endTime,
-									sceneId: TIMAAT.VideoPlayer.curScene.model.id
-								};
-								action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id);
-								action = new TIMAAT.AnalysisAction(action);
-								TIMAAT.VideoPlayer._actionAdded(action, true);
-								// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
-							}
-							var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+						return;
+					} 
+					// early out: action's time range exceeds scene's time range
+					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
+						$('#timaat-videoplayer-action-outOfBounds').modal('show');
+						return;
+					}
+					
+					// action has a time range and does not exceed its scene's. Now check for overlap with other actions
+					var overlapping = false;
+					let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
+					let j = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes.findIndex(({id}) => id === TIMAAT.VideoPlayer.curScene.model.id);
+					let actionList = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments[i].analysisScenes[j].analysisActions;
+					if (action) {
+						let index = actionList.findIndex(({id}) => id === action.model.id);
+						actionList.splice(index,1);
+					}
+					i = 0;
+					for (; i < actionList.length; i++) {
+						if (!(endTime <= actionList[i].startTime || startTime >= actionList[i].endTime) ) {
+							overlapping = true;
+							break;
 						}
 					}
+					// early out: action overlaps with other actions
+					if (overlapping) {
+						$('#timaat-videoplayer-action-overlapping').modal('show');
+					} else {
+						if (action) {
+							action.model.analysisActionTranslations[0].name = name;
+							action.model.analysisActionTranslations[0].shortDescription = shortDescription;
+							action.model.analysisActionTranslations[0].comment = comment;
+							action.model.analysisActionTranslations[0].transcript = transcript;
+							action.model.startTime = startTime;
+							action.model.endTime = endTime;
+
+							// update action UI
+							TIMAAT.VideoPlayer.updateAnalysisAction(action);
+						} else {
+							var model = {
+								id: 0,
+								analysisActionTranslations: [{
+									id: 0,
+									name: name,
+									shortDescription: shortDescription,
+									comment: comment,
+									transcript: transcript
+								}],
+								startTime: startTime,
+								endTime: endTime,
+								sceneId: TIMAAT.VideoPlayer.curScene.model.id
+							};
+							action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id);
+							action = new TIMAAT.AnalysisAction(action);
+							TIMAAT.VideoPlayer._actionAdded(action, true);
+							// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
+						}
+						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
+					}
+					
 				}
 
 			});
