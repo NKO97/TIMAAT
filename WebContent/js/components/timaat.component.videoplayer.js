@@ -967,16 +967,8 @@
 			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeAttr('onclick');
-			$('#timaat-analysissegment-add').addClass("timaat-item-disabled");
-			$('#timaat-analysissegment-add').removeAttr('onclick');
-			$('#timaat-analysissequence-add').addClass("timaat-item-disabled");
-			$('#timaat-analysissequence-add').removeAttr('onclick');
-			$('#timaat-analysistake-add').addClass("timaat-item-disabled");
-			$('#timaat-analysistake-add').removeAttr('onclick');
-			$('#timaat-analysisscene-add').addClass("timaat-item-disabled");
-			$('#timaat-analysisscene-add').removeAttr('onclick');
-			$('#timaat-analysisaction-add').addClass("timaat-item-disabled");
-			$('#timaat-analysisaction-add').removeAttr('onclick');
+			$('.timaat-segment-structure-add').addClass("timaat-item-disabled");
+			$('.timaat-segment-structure-add').removeAttr('onclick');
 			$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-delete').removeAttr('onclick');
 			$('#timaat-analysislist-add').addClass("timaat-item-disabled");
