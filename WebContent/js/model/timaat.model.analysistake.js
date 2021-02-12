@@ -85,7 +85,7 @@
 			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
 			// });
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === take.model.sequenceId);
@@ -99,14 +99,14 @@
 				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+				TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curTake = take;
 			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
 			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			// });
 			this.timelineView.on('dblclick', this, function(ev) {
@@ -121,7 +121,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(take, 'analysistake');
+				TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
 			// console.log("TCL: AnalysisTake -> addUI -> this.updateUI()");

@@ -1921,19 +1921,11 @@
               await TIMAAT.AnnotationService.updateAnnotation(model);
             break;
             case 'segment':
-              await TIMAAT.AnalysisListService.updateSegment(model);
-            break;
             case 'sequence':
-              await TIMAAT.AnalysisListService.updateSequence(model);
-            break;
             case 'take':
-              await TIMAAT.AnalysisListService.updateTake(model);
-            break;
             case 'scene':
-              await TIMAAT.AnalysisListService.updateScene(model);
-            break;
             case 'action':
-              await TIMAAT.AnalysisListService.updateAction(model);
+              await TIMAAT.AnalysisListService.updateSegmentElement(type, model);
             break;
           }
         } else if (existingEntries.length == 0) { //* all entries will be added
@@ -1944,19 +1936,11 @@
               await TIMAAT.AnnotationService.updateAnnotation(model);
             break;
             case 'segment':
-              await TIMAAT.AnalysisListService.updateSegment(model);
-            break;
             case 'sequence':
-              await TIMAAT.AnalysisListService.updateSequence(model);
-            break;
             case 'take':
-              await TIMAAT.AnalysisListService.updateTake(model);
-            break;
             case 'scene':
-              await TIMAAT.AnalysisListService.updateScene(model);
-            break;
             case 'action':
-              await TIMAAT.AnalysisListService.updateAction(model);
+              await TIMAAT.AnalysisListService.updateSegmentElement(type, model);
             break;
           }
         } else { //* delete removed entries

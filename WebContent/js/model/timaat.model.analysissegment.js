@@ -95,7 +95,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');
+				TIMAAT.VideoPlayer.inspector.setItem(segment, 'segment');
 			});
 			this.timelineView.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.curSegment = segment;
@@ -107,7 +107,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');
+				TIMAAT.VideoPlayer.inspector.setItem(segment, 'segment');
 			});
 			this.listView.on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.curSegment = segment;
@@ -119,7 +119,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');
+				TIMAAT.VideoPlayer.inspector.setItem(segment, 'segment');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
 			this.timelineView.on('dblclick', this, function(ev) {
@@ -132,7 +132,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(segment, 'analysissegment');
+				TIMAAT.VideoPlayer.inspector.setItem(segment, 'segment');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
 			// console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");

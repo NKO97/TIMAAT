@@ -87,7 +87,7 @@
 			// 	TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 			// });
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === scene.model.segmentId);
@@ -100,14 +100,14 @@
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
+				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curScene = scene;
 			// 	TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			// });
 			this.timelineView.on('dblclick', this, function(ev) {
@@ -121,7 +121,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(scene, 'analysisscene');
+				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
 			// console.log("TCL: AnalysisScene -> addUI -> this.updateUI()");

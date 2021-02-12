@@ -87,7 +87,7 @@
 			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 			// });
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === action.model.sceneId);
@@ -101,14 +101,14 @@
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
+				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curAction = action;
 			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
+			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			// });
 			this.timelineView.on('dblclick', this, function(ev) {
@@ -123,7 +123,7 @@
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				TIMAAT.VideoPlayer.inspector.setItem(action, 'analysisaction');
+				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			});
 			// console.log("TCL: AnalysisAction -> addUI -> this.updateUI()");

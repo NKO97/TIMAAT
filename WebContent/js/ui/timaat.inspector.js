@@ -410,7 +410,7 @@
 					}
 				}
 				// analysis segments
-				if ( inspector.state.type == 'analysissegment' ) {
+				if ( inspector.state.type == 'segment' ) {
 					var segment = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
@@ -422,9 +422,9 @@
 
 					// early out: segment has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Segment has no time range');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Segments need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment has no time range');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Segments need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
 					// early out: segment's sequences and scenes do not exceed new time range 
@@ -433,9 +433,9 @@
 						i = 0;
 						for (; i < sequenceList.length; i++) {
 							if (startTime > sequenceList[i].startTime || endTime < sequenceList[i].endTime) {
-								$('#timaat-videoplayer-element-modal').find('.modal-title').html('Segment time interval too small');
-								$('#timaat-videoplayer-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
-								$('#timaat-videoplayer-element-modal').modal('show');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment time interval too small');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#timaat-videoplayer-segment-element-modal').modal('show');
 								return;
 							}
 						}
@@ -443,9 +443,9 @@
 						i = 0;
 						for (; i < sceneList.length; i++) {
 							if (startTime > sceneList[i].startTime || endTime < sceneList[i].endTime) {
-								$('#timaat-videoplayer-element-modal').find('.modal-title').html('Segment time interval too small');
-								$('#timaat-videoplayer-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
-								$('#timaat-videoplayer-element-modal').modal('show');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment time interval too small');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#timaat-videoplayer-segment-element-modal').modal('show');
 								return;
 							}
 						}
@@ -467,9 +467,9 @@
 					}
 					// early out: segment overlaps with other segments
 					if (overlapping) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Segment is overlapping');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Segments are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment is overlapping');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Segments are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 					} else {
 						if (segment) {
 							segment.model.analysisSegmentTranslations[0].name = name;
@@ -480,7 +480,7 @@
 							segment.model.endTime = endTime;
 
 							// update segment UI
-							TIMAAT.VideoPlayer.updateAnalysisSegment(segment);
+							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, segment);
 						} else {
 							var model = {
 								id: 0,
@@ -494,8 +494,7 @@
 								startTime: startTime,
 								endTime: endTime
 							};
-							// TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._segmentAdded);
-							segment = await TIMAAT.AnalysisListService.createSegment(model, TIMAAT.VideoPlayer.curAnalysisList.id);
+							segment = await TIMAAT.AnalysisListService.createSegmentElement(inspector.state.type, model, TIMAAT.VideoPlayer.curAnalysisList.id);
 							segment = new TIMAAT.AnalysisSegment(segment);
 							TIMAAT.VideoPlayer._segmentAdded(segment, true);
 						}
@@ -504,7 +503,7 @@
 					}
 				}
 				// analysis sequences
-				if ( inspector.state.type == 'analysissequence' ) {
+				if ( inspector.state.type == 'sequence' ) {
 					var sequence = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> sequence", sequence);
 					var name = $('#timaat-inspector-meta-name').val();
@@ -517,16 +516,16 @@
 
 					// early out: sequence has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Sequence has no time range');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Sequences need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence has no time range');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Sequences need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					} 
 					// early out: sequence's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Sequence out of bounds');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("The sequence's start and end time have to be within the range of the segment it belongs to.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence out of bounds');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The sequence's start and end time have to be within the range of the segment it belongs to.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
 					if (sequence) {
@@ -535,9 +534,9 @@
 						i = 0;
 						for (; i < takeList.length; i++) {
 							if (startTime > takeList[i].startTime || endTime < takeList[i].endTime) {
-								$('#timaat-videoplayer-element-modal').find('.modal-title').html('Sequence time interval too small');
-								$('#timaat-videoplayer-element-modal').find('.modal-body').html("The sequence's time interval has to be large enough to encompass its elements. Remove or alter conflicting takes first.");
-								$('#timaat-videoplayer-element-modal').modal('show');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence time interval too small');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The sequence's time interval has to be large enough to encompass its elements. Remove or alter conflicting takes first.");
+								$('#timaat-videoplayer-segment-element-modal').modal('show');
 								return;
 							}
 						}
@@ -560,9 +559,9 @@
 					}
 					// early out: sequence overlaps with other sequences
 					if (overlapping) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Sequence is overlapping');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Sequences are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence is overlapping');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Sequences are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 					} else {
 						if (sequence) {
 							sequence.model.analysisSequenceTranslations[0].name = name;
@@ -574,7 +573,7 @@
 							sequence.model.segmentId = TIMAAT.VideoPlayer.curSegment.model.id;
 
 							// update sequence UI
-							TIMAAT.VideoPlayer.updateAnalysisSequence(sequence);
+							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, sequence);
 						} else {
 							var model = {
 								id: 0,
@@ -589,7 +588,7 @@
 								endTime: endTime,
 								segmentId: TIMAAT.VideoPlayer.curSegment.model.id
 							};
-							sequence = await TIMAAT.AnalysisListService.createSequence(model, TIMAAT.VideoPlayer.curSegment.model.id);
+							sequence = await TIMAAT.AnalysisListService.createSegmentElement(inspector.state.type, model, TIMAAT.VideoPlayer.curSegment.model.id);
 							sequence = new TIMAAT.AnalysisSequence(sequence);
 							TIMAAT.VideoPlayer._sequenceAdded(sequence, true);
 						}
@@ -599,7 +598,7 @@
 					
 				}
 				// analysis takes
-				if ( inspector.state.type == 'analysistake' ) {
+				if ( inspector.state.type == 'take' ) {
 					var take = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
@@ -610,16 +609,16 @@
 
 					// early out: take has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Take has no time range');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Takes need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take has no time range');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Takes need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					} 
 					// early out: take's time range exceeds sequence's time range
 					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Take out of bounds');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("The take's start and end time have to be within the range of the sequence it belongs to.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take out of bounds');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The take's start and end time have to be within the range of the sequence it belongs to.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
 
@@ -641,9 +640,9 @@
 					}
 					// early out: take overlaps with other takes
 					if (overlapping) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Take is overlapping');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Takes are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take is overlapping');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Takes are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 					} else {
 						if (take) {
 							take.model.analysisTakeTranslations[0].name = name;
@@ -654,7 +653,7 @@
 							take.model.endTime = endTime;
 
 							// update take UI
-							TIMAAT.VideoPlayer.updateAnalysisTake(take);
+							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, take);
 						} else {
 							var model = {
 								id: 0,
@@ -669,7 +668,7 @@
 								endTime: endTime,
 								sequenceId: TIMAAT.VideoPlayer.curSequence.model.id
 							};
-							take = await TIMAAT.AnalysisListService.createTake(model, TIMAAT.VideoPlayer.curSequence.model.id);
+							take = await TIMAAT.AnalysisListService.createSegmentElement(inspector.state.type, model, TIMAAT.VideoPlayer.curSequence.model.id);
 							take = new TIMAAT.AnalysisTake(take);
 							TIMAAT.VideoPlayer._takeAdded(take, true);
 						}
@@ -679,7 +678,7 @@
 					
 				}
 				// analysis scenes
-				if ( inspector.state.type == 'analysisscene' ) {
+				if ( inspector.state.type == 'scene' ) {
 					var scene = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
@@ -691,16 +690,16 @@
 
 					// early out: scene has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Scene has no time range');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Scenes need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene has no time range');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Scenes need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					} 
 					// early out: scene's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Scene out of bounds');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("The scene's start and end time have to be within the range of the segment it belongs to.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene out of bounds');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The scene's start and end time have to be within the range of the segment it belongs to.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
 					// early out: scene's actions do not exceed new time range
@@ -709,9 +708,9 @@
 						i = 0;
 						for (; i < actionList.length; i++) {
 							if (startTime > actionList[i].startTime || endTime < actionList[i].endTime) {
-								$('#timaat-videoplayer-element-modal').find('.modal-title').html('Scene time interval too small');
-								$('#timaat-videoplayer-element-modal').find('.modal-body').html("The scene's time interval has to be large enough to encompass its elements. Remove or alter conflicting actions first.");
-								$('#timaat-videoplayer-element-modal').modal('show');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene time interval too small');
+								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The scene's time interval has to be large enough to encompass its elements. Remove or alter conflicting actions first.");
+								$('#timaat-videoplayer-segment-element-modal').modal('show');
 								return;
 							}
 						}
@@ -734,9 +733,9 @@
 					}
 					// early out: scene overlaps with other scenes
 					if (overlapping) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Scene is overlapping');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Scenes are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene is overlapping');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Scenes are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 					} else {
 						if (scene) {
 							scene.model.analysisSceneTranslations[0].name = name;
@@ -747,7 +746,7 @@
 							scene.model.endTime = endTime;
 
 							// update scene UI
-							TIMAAT.VideoPlayer.updateAnalysisScene(scene);
+							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, scene);
 						} else {
 							var model = {
 								id: 0,
@@ -762,10 +761,9 @@
 								endTime: endTime,
 								segmentId: TIMAAT.VideoPlayer.curSegment.model.id
 							};
-							scene = await TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id);
+							scene = await TIMAAT.AnalysisListService.createSegmentElement(inspector.state.type, model, TIMAAT.VideoPlayer.curSegment.model.id);
 							scene = new TIMAAT.AnalysisScene(scene);
 							TIMAAT.VideoPlayer._sceneAdded(scene, true);
-							// TIMAAT.AnalysisListService.createScene(model, TIMAAT.VideoPlayer.curSegment.model.id, TIMAAT.VideoPlayer._sceneAdded);
 						}
 						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
@@ -773,7 +771,7 @@
 					
 				}
 				// analysis actions
-				if ( inspector.state.type == 'analysisaction' ) {
+				if ( inspector.state.type == 'action' ) {
 					var action = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
@@ -784,16 +782,16 @@
 
 					// early out: action has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Action has no time range');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Actions need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action has no time range');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Actions need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					} 
 					// early out: action's time range exceeds scene's time range
 					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Action out of bounds');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("The action's start and end time have to be within the range of the scene it belongs to.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action out of bounds');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The action's start and end time have to be within the range of the scene it belongs to.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
 					
@@ -815,9 +813,9 @@
 					}
 					// early out: action overlaps with other actions
 					if (overlapping) {
-						$('#timaat-videoplayer-element-modal').find('.modal-title').html('Action is overlapping');
-						$('#timaat-videoplayer-element-modal').find('.modal-body').html("Actions are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-element-modal').modal('show');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action is overlapping');
+						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Actions are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-segment-element-modal').modal('show');
 					} else {
 						if (action) {
 							action.model.analysisActionTranslations[0].name = name;
@@ -828,7 +826,7 @@
 							action.model.endTime = endTime;
 
 							// update action UI
-							TIMAAT.VideoPlayer.updateAnalysisAction(action);
+							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, action);
 						} else {
 							var model = {
 								id: 0,
@@ -843,10 +841,9 @@
 								endTime: endTime,
 								sceneId: TIMAAT.VideoPlayer.curScene.model.id
 							};
-							action = await TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.model.id);
+							action = await TIMAAT.AnalysisListService.createSegmentElement(inspector.state.type, model, TIMAAT.VideoPlayer.curScene.model.id);
 							action = new TIMAAT.AnalysisAction(action);
 							TIMAAT.VideoPlayer._actionAdded(action, true);
-							// TIMAAT.AnalysisListService.createAction(model, TIMAAT.VideoPlayer.curScene.id, TIMAAT.VideoPlayer._actionAdded);
 						}
 						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
@@ -863,20 +860,20 @@
 					case 'annotation':
 						TIMAAT.VideoPlayer.removeAnnotation();
 					break;
-					case 'analysissegment':
-						TIMAAT.VideoPlayer.removeAnalysisSegment();
+					case 'segment':
+						TIMAAT.VideoPlayer.removeAnalysisSegmentElement('segment', TIMAAT.VideoPlayer.curSegment);
 					break;
-					case 'analysissequence':
-						TIMAAT.VideoPlayer.removeAnalysisSequence();
+					case 'sequence':
+						TIMAAT.VideoPlayer.removeAnalysisSegmentElement('sequence', TIMAAT.VideoPlayer.curSequence);
 					break;
-					case 'analysistake':
-						TIMAAT.VideoPlayer.removeAnalysisTake();
+					case 'take':
+						TIMAAT.VideoPlayer.removeAnalysisSegmentElement('take', TIMAAT.VideoPlayer.curTake);
 					break;
-					case 'analysisscene':
-						TIMAAT.VideoPlayer.removeAnalysisScene();
+					case 'scene':
+						TIMAAT.VideoPlayer.removeAnalysisSegmentElement('scene', TIMAAT.VideoPlayer.curScene);
 					break;
-					case 'analysisaction':
-						TIMAAT.VideoPlayer.removeAnalysisAction();
+					case 'action':
+						TIMAAT.VideoPlayer.removeAnalysisSegmentElement('action', TIMAAT.VideoPlayer.curAction);
 					break;
 				}
 			});
@@ -951,7 +948,7 @@
 				duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.video.duration));
 				startTime = TIMAAT.VideoPlayer.video.currentTime;
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
-					case 'analysissequence':
+					case 'sequence':
 						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
 						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime));
@@ -959,17 +956,17 @@
 						// if ((startTime + duration) > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 						// 	duration = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime;
 					break;
-					case 'analysistake':
+					case 'take':
 						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0;
 						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0 - startTime));
 					break;
-					case 'analysisscene':
+					case 'scene':
 						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
 						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime));
 					break;
-					case 'analysisaction':
+					case 'action':
 						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curScene.model.startTime/1000.0;
 						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curScene.model.endTime/1000.0 - startTime));
@@ -984,16 +981,16 @@
 			$('#timaat-inspector-meta-setend').on('click', function() {
 				var endTime = TIMAAT.VideoPlayer.video.currentTime
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
-					case 'analysissequence':
-					case 'analysisscene':
+					case 'sequence':
+					case 'scene':
 						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0;
 					break;
-					case 'analysistake':
+					case 'take':
 						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curSequence.model.endTime/1000.0;
 					break;
-					case 'analysisaction':
+					case 'action':
 						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime/1000.0)
 							endTime = TIMAAT.VideoPlayer.curScene.model.endTime/1000.0;
 					break;
@@ -1448,7 +1445,7 @@
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
-				case 'analysissegment':
+				case 'segment':
 					// metadata panel
 					this.enablePanel('timaat-inspector-metadata');
 					this.initInspectorMetadataSegmentElements();
@@ -1463,9 +1460,9 @@
 					// list menu items -> show segment substructure elements
 					if (item) {
 						$('#timaat-analysissequence-add').removeClass("timaat-item-disabled");
-						$('#timaat-analysissequence-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSequence()');
+						$('#timaat-analysissequence-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("sequence")');
 						$('#timaat-analysisscene-add').removeClass("timaat-item-disabled");
-						$('#timaat-analysisscene-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisScene()');
+						$('#timaat-analysisscene-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("scene")');
 					}
 	
 					// setup UI from Video Player state
@@ -1551,7 +1548,7 @@
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
-				case 'analysissequence':
+				case 'sequence':
 					// metadata panel
 					this.enablePanel('timaat-inspector-metadata');
 					this.initInspectorMetadataSegmentElements();
@@ -1566,7 +1563,7 @@
 					// list menu items -> show sequence substructure elements
 					if (item) {
 						$('#timaat-analysistake-add').removeClass("timaat-item-disabled");
-						$('#timaat-analysistake-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisTake()');
+						$('#timaat-analysistake-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("take")');
 					}
 
 					// setup UI from Video Player state
@@ -1657,7 +1654,7 @@
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
-				case 'analysistake':
+				case 'take':
 					// metadata panel
 					this.enablePanel('timaat-inspector-metadata');
 					this.initInspectorMetadataSegmentElements();
@@ -1757,7 +1754,7 @@
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
-				case 'analysisscene':
+				case 'scene':
 					// metadata panel
 					this.enablePanel('timaat-inspector-metadata');
 					this.initInspectorMetadataSegmentElements();
@@ -1772,7 +1769,7 @@
 					// list menu items -> show scene substructure elements
 					if (item) {
 						$('#timaat-analysisaction-add').removeClass("timaat-item-disabled");
-						$('#timaat-analysisaction-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisAction()');
+						$('#timaat-analysisaction-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("action")');
 					}
 
 					// setup UI from Video Player state
@@ -1863,7 +1860,7 @@
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
-				case 'analysisaction':
+				case 'action':
 					// metadata panel
 					this.enablePanel('timaat-inspector-metadata');
 					this.initInspectorMetadataSegmentElements();
@@ -2022,7 +2019,7 @@
 					for (let keyframe of this.state.item.svg.keyframes)
 						this.ui.keyframeList.append(keyframe.ui.inspectorView);
 				break;
-				case 'analysissegment':
+				case 'segment':
 					model.name = this.state.item.model.analysisSegmentTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSegmentTranslations[0].shortDescription;
 					model.comment = this.state.item.model.analysisSegmentTranslations[0].comment;
@@ -2032,7 +2029,7 @@
 					// setup UI from Video Player state
 					this.fillInspectorMetadataSegmentElements(model);
 				break;
-				case 'analysissequence':
+				case 'sequence':
 					model.name = this.state.item.model.analysisSequenceTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSequenceTranslations[0].shortDescription;
 					model.comment = this.state.item.model.analysisSequenceTranslations[0].comment;
@@ -2042,7 +2039,7 @@
 					// setup UI from Video Player state
 					this.fillInspectorMetadataSegmentElements(model);
 				break;
-				case 'analysistake':
+				case 'take':
 					model.name = this.state.item.model.analysisTakeTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisTakeTranslations[0].shortDescription;
 					model.comment = this.state.item.model.analysisTakeTranslations[0].comment;
@@ -2052,7 +2049,7 @@
 					// setup UI from Video Player state
 					this.fillInspectorMetadataSegmentElements(model);
 				break;
-				case 'analysisscene':
+				case 'scene':
 					model.name = this.state.item.model.analysisSceneTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSceneTranslations[0].shortDescription;
 					model.comment = this.state.item.model.analysisSceneTranslations[0].comment;
@@ -2062,7 +2059,7 @@
 					// setup UI from Video Player state
 					this.fillInspectorMetadataSegmentElements(model);
 				break;
-				case 'analysisaction':
+				case 'action':
 					model.name = this.state.item.model.analysisActionTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisActionTranslations[0].shortDescription;
 					model.comment = this.state.item.model.analysisActionTranslations[0].comment;
