@@ -1097,8 +1097,6 @@
             case 'category': //* find all categorySets this category is connected to and delete the connection
               var i = 0;
               for (; i < existingCategorySetOrCategoryEntries.length; i++) {
-                // var index = existingCategorySetOrCategoryEntries.findIndex( ({categorySet}) => categorySet.model.categorySetHasCategories.id.categoryId === categoryOrCategorySet.id)
-                // existingCategorySetOrCategoryEntries[i].model.categorySetHasCategories.splice(index,1);
                 await TIMAAT.CategoryService.deleteCategorySetHasCategory(existingCategorySetOrCategoryEntries[i].id, categoryOrCategorySet.id);
               }
             break;
@@ -1116,8 +1114,6 @@
             case 'category': //* find all categorySets this category shall be connected to and add the connection
               var i = 0;
               for (; i < categoryOrCategorySetIdList.length; i++) {
-                // console.log("TCL: categoryOrCategorySetIdList[i].id", categoryOrCategorySetIdList[i].id);
-                // var categorySet = await TIMAAT.CategoryService.getCategorySet(categoryOrCategorySetIdList[i].id);
                 var newCategorySetHasCategory = {
                   categorySetHasCategories: [],
                   categorySetHasCategory: null,
@@ -1174,18 +1170,12 @@
               case 'category': //* find the corresponding categorySet and delete the connection with this category
                 var i = 0;
                 for (; i < categorySetOrCategoryEntriesToDelete.length; i++) {
-                  // console.log("TCL: categorySetOrCategoryEntriesToDelete[i].id", categorySetOrCategoryEntriesToDelete[i].id);
-                  // var categorySet = await TIMAAT.CategoryService.getCategorySet(categorySetOrCategoryEntriesToDelete[i].id);
-                  // var index = categorySet.categorySetHasCategories.findIndex(({id}) => id === categoryOrCategorySet.id);
-                  // categorySet.categorySetHasCategories.id.splice(index,1);
                   await TIMAAT.CategoryService.deleteCategorySetHasCategory(categorySetOrCategoryEntriesToDelete[i].id, categoryOrCategorySet.id);
                 }
               break;
               case 'categoryset': //* delete connections with categories
                 var i = 0;
                 for (; i < categorySetOrCategoryEntriesToDelete.length; i++) {
-                  // var index = categoryOrCategorySet.categorySetHasCategories.findIndex(({id}) => id === categorySetOrCategoryEntriesToDelete[i].id);
-                  // categoryOrCategorySet.categorySetHasCategories.splice(index,1);
                   await TIMAAT.CategoryService.deleteCategorySetHasCategory(categoryOrCategorySet.id, categorySetOrCategoryEntriesToDelete[i].id);
                 }
               break;
@@ -1218,11 +1208,7 @@
               case 'category': //* find the corresponding categorySets and add the connection with this category
                 var i = 0;
                 for (; i < idsToCreate.length; i++ ) {
-                  console.log("TCL: idsToCreate[i]", idsToCreate[i]);
-                  // var categorySet = await TIMAAT.CategoryService.getCategorySet(idsToCreate[i]);
-                  // console.log("TCL: categorySet", categorySet);
-                  // categorySet.categorySetHasCategories.push({id: {categorySetId: categorySet.id, categoryId: idsToCreate[i]}});
-                  // console.log("TCL: categorySet", categorySet);
+                  // console.log("TCL: idsToCreate[i]", idsToCreate[i]);
                   var newCategorySetHasCategory = {
                     categorySetHasCategories: [],
                     categorySetHasCategory: null,
