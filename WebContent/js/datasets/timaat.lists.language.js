@@ -297,7 +297,11 @@
       $('.name-data').show();
       
       $('#timaat-languagelists-metadata-form-edit').hide();
-      $('#timaat-languagelists-metadata-form-delete').hide();
+      $('#timaat-languagelists-metadata-form-edit').prop('disabled', true);
+      $('#timaat-languagelists-metadata-form-edit :input').prop('disabled', true);
+      // $('#timaat-languagelists-metadata-form-delete').prop('disabled', false);
+      // $('#timaat-languagelists-metadata-form-delete :input').prop('disabled', false);
+      // $('#timaat-languagelists-metadata-form-delete').show();
       $('#timaat-languagelists-metadata-form-submit').html("Add");
       $('#timaat-languagelists-metadata-form-submit').show();
       $('#timaat-languagelists-metadata-form-dismiss').show();
@@ -322,9 +326,9 @@
         $('#timaat-languagelists-metadata-form-edit').prop('disabled', false);
         $('#timaat-languagelists-metadata-form-edit :input').prop('disabled', false);
         $('#timaat-languagelists-metadata-form-edit').show();
-        $('#timaat-languagelists-metadata-form-delete').prop('disabled', false);
-        $('#timaat-languagelists-metadata-form-delete :input').prop('disabled', false);
-        $('#timaat-languagelists-metadata-form-delete').show();
+        // $('#timaat-languagelists-metadata-form-delete').prop('disabled', false);
+        // $('#timaat-languagelists-metadata-form-delete :input').prop('disabled', false);
+        // $('#timaat-languagelists-metadata-form-delete').show();
         $('#timaat-languagelists-metadata-form-submit').hide();
         $('#timaat-languagelists-metadata-form-dismiss').hide();
         $('#languageFormHeader').html("Language Datasheet (#"+ data.model.id+')');
@@ -334,9 +338,9 @@
         $('#timaat-languagelists-metadata-form-edit').hide();
         $('#timaat-languagelists-metadata-form-edit').prop('disabled', true);
         $('#timaat-languagelists-metadata-form-edit :input').prop('disabled', true);
-        $('#timaat-languagelists-metadata-form-delete').hide();
-        $('#timaat-languagelists-metadata-form-delete').prop('disabled', true);
-        $('#timaat-languagelists-metadata-form-delete :input').prop('disabled', true);
+        // $('#timaat-languagelists-metadata-form-delete').hide();
+        // $('#timaat-languagelists-metadata-form-delete').prop('disabled', true);
+        // $('#timaat-languagelists-metadata-form-delete :input').prop('disabled', true);
         $('#timaat-languagelists-metadata-form-submit').html("Save");
         $('#timaat-languagelists-metadata-form-submit').show();
         $('#timaat-languagelists-metadata-form-dismiss').show();
