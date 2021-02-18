@@ -313,19 +313,9 @@
 			$('#timaat-eventdatasets-metadata-form').show();
 			$('.datasheet-data').hide();
 			$('.event-data').show();
-			$('#timaat-eventdatasets-metadata-form-edit').hide();
-      $('#timaat-eventdatasets-metadata-form-delete').hide();
-      $('#timaat-eventdatasets-metadata-form-submit').html('Add');
-      $('#timaat-eventdatasets-metadata-form-submit').show();
-			$('#timaat-eventdatasets-metadata-form-dismiss').show();
-			$('#timaat-eventdatasets-metadata-form :input').prop('disabled', false);
+			this.initEventFormDataForEdit();
+			$('#timaat-eventdatasets-metadata-form-submit').html('Add');
 			$('#eventFormHeader').html("Add Event");
-
-			$('#timaat-eventdatasets-metadata-event-name').focus();
-			
-			// setup form
-			$('#timaat-eventdatasets-metadata-event-began-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-eventdatasets-metadata-event-ended-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			// TODO event domain
 			// TODO event type
 		},
@@ -339,44 +329,22 @@
 			eventFormMetadataValidator.resetForm();
 
 			// show tabs
-
 			$('.nav-tabs a[href="#eventDatasheet"]').focus();
 			$('#timaat-eventdatasets-metadata-form').show();
 
 			if ( action == 'show') {
 				$('#timaat-eventdatasets-metadata-form :input').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-tag').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-tag :input').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-tag').show();
-				$('#timaat-eventdatasets-metadata-form-edit').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-edit :input').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-edit').show();
-				$('#timaat-eventdatasets-metadata-form-delete').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-delete :input').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-form-delete').show();
+				$('.eventdatasheet-form-button').prop('disabled', false);
+				$('.eventdatasheet-form-button :input').prop('disabled', false);
+				$('.eventdatasheet-form-button').show();
 				$('#timaat-eventdatasets-metadata-form-submit').hide();
 				$('#timaat-eventdatasets-metadata-form-dismiss').hide();
 				$('#eventFormHeader').html("Event Datasheet (#"+ eventData.model.id+')');
 			}
 			else if (action == 'edit') {
-				$('.event-datasheet-form-submit').show();
-				$('#timaat-eventdatasets-metadata-form :input').prop('disabled', false);
-				$('#timaat-eventdatasets-metadata-event-began-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-eventdatasets-metadata-event-ended-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-eventdatasets-metadata-form-tag').hide();
-				$('#timaat-eventdatasets-metadata-form-tag').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-tag :input').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-edit').hide();
-				$('#timaat-eventdatasets-metadata-form-edit').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-edit :input').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-delete').hide();
-				$('#timaat-eventdatasets-metadata-form-delete').prop('disabled', true);
-				$('#timaat-eventdatasets-metadata-form-delete :input').prop('disabled', true);
+				this.initEventFormDataForEdit();
 				$('#timaat-eventdatasets-metadata-form-submit').html("Save");
-				$('#timaat-eventdatasets-metadata-form-submit').show();
-				$('#timaat-eventdatasets-metadata-form-dismiss').show();
 				$('#eventFormHeader').html("Edit Event");
-				$('#timaat-eventdatasets-metadata-event-name').focus();
 			}
 
 			// setup UI
@@ -561,6 +529,19 @@
 					description: formDataObject.description
 				}];
 			return model;
+		},
+
+		initEventFormDataForEdit: function() {
+			// setup form
+			$('#timaat-eventdatasets-metadata-event-began-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-eventdatasets-metadata-event-ended-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#timaat-eventdatasets-metadata-form :input').prop('disabled', false);
+			$('.eventdatasheet-form-button').hide();
+			$('.eventdatasheet-form-button').prop('disabled', true);
+			$('.eventdatasheet-form-button :input').prop('disabled', true);
+			$('#timaat-eventdatasets-metadata-form-submit').show();
+			$('#timaat-eventdatasets-metadata-form-dismiss').show();
+			$('#timaat-eventdatasets-metadata-event-name').focus();
 		},
 
 		setupEventDataTable: function() {
