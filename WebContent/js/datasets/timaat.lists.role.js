@@ -490,17 +490,11 @@
 			$('.datasheet-data').hide();
       $('.name-data').show();
       
-      $('#timaat-rolelists-metadata-form-edit').hide();
-      $('#timaat-rolelists-metadata-form-delete').hide();
+      this.initRoleOrRoleGroupFormDataForEdit();
       $('#timaat-rolelists-metadata-form-submit').html("Add");
-      $('#timaat-rolelists-metadata-form-submit').show();
-      $('#timaat-rolelists-metadata-form-dismiss').show();
-			$('#timaat-rolelists-metadata-form :input').prop('disabled', false);
       $('#roleOrRoleGroupFormHeader').html("Add "+type);
-      
-      $('#timaat-rolelists-metadata-name').focus();
     },
-    
+
     roleOrRoleGroupFormDatasheet: async function(action, type, data) {
       console.log("TCL: action, type, data: ", action, type, data);
       var node = document.getElementById("dynamic-role-ispartof-rolegroup-fields");
@@ -694,29 +688,17 @@
 
       if ( action == 'show') {
         $('#timaat-rolelists-metadata-form :input').prop('disabled', true);
-        $('#timaat-rolelists-metadata-form-edit').prop('disabled', false);
-        $('#timaat-rolelists-metadata-form-edit :input').prop('disabled', false);
-        $('#timaat-rolelists-metadata-form-edit').show();
-        $('#timaat-rolelists-metadata-form-delete').prop('disabled', false);
-        $('#timaat-rolelists-metadata-form-delete :input').prop('disabled', false);
-        $('#timaat-rolelists-metadata-form-delete').show();
+        $('.rolelists-form-button').prop('disabled', false);
+        $('.rolelists-form-button :input').prop('disabled', false);
+        $('.rolelists-form-button').show();
         $('#timaat-rolelists-metadata-form-submit').hide();
         $('#timaat-rolelists-metadata-form-dismiss').hide();
         $('#roleOrRoleGroupFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
-        $('#timaat-rolelists-metadata-form :input').prop('disabled', false);
-        $('#timaat-rolelists-metadata-form-edit').hide();
-        $('#timaat-rolelists-metadata-form-edit').prop('disabled', true);
-        $('#timaat-rolelists-metadata-form-edit :input').prop('disabled', true);
-        $('#timaat-rolelists-metadata-form-delete').hide();
-        $('#timaat-rolelists-metadata-form-delete').prop('disabled', true);
-        $('#timaat-rolelists-metadata-form-delete :input').prop('disabled', true);
+        this.initRoleOrRoleGroupFormDataForEdit();
         $('#timaat-rolelists-metadata-form-submit').html("Save");
-        $('#timaat-rolelists-metadata-form-submit').show();
-        $('#timaat-rolelists-metadata-form-dismiss').show();
         $('#roleOrRoleGroupFormHeader').html("Edit "+type);
-        $('#timaat-rolelists-metadata-name').focus();
       }
       // name data
       switch(type) {
@@ -1057,6 +1039,17 @@
       TIMAAT.ActorDatasets.refreshDatatable('person');
       TIMAAT.ActorDatasets.refreshDatatable('collective');
     },
+
+    initRoleOrRoleGroupFormDataForEdit: function() {
+      $('.rolelists-form-button').hide();
+      $('.rolelists-form-button').prop('disabled', true);
+      $('.rolelists-form-button :input').prop('disabled', true);
+      $('#timaat-rolelists-metadata-form :input').prop('disabled', false);
+      $('#timaat-rolelists-metadata-form-submit').show();
+      $('#timaat-rolelists-metadata-form-dismiss').show();
+      $('#timaat-rolelists-metadata-name').focus();
+    },
+    
 
     _roleOrRoleGroupRemoved: async function(type, model) {
       console.log("TCL: _roleOrRoleGroupRemoved: type, model", type, model);
