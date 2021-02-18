@@ -287,7 +287,7 @@
 		},
 
 		async getActorHasImageList(id) {
-			console.log("TCL: getActorImageList -> id: ", id);
+			console.log("TCL: getActorHasImageList -> id: ", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/image/list/",
@@ -298,7 +298,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorRolesList -> data", data);
+					console.log("TCL: getActorHasImageList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {

@@ -73,6 +73,7 @@
 				if (actorType) TIMAAT.ActorDatasets._actorTypeRemoved(actorType);
 				modal.modal('hide');
 			});
+
 			// add actorType button
 			$('#timaat-actortype-add').attr('onclick','TIMAAT.ActorDatasets.addActorType()');
 
@@ -317,7 +318,8 @@
 							actor.model.actorCollective.disbanded = formDataSanitized.disbanded;
 						break;
 					}
-					await TIMAAT.ActorDatasets.updateActor(type, actor, formImageIds);
+					await TIMAAT.ActorDatasets.updateActor(type, actor);
+					await TIMAAT.ActorDatasets.updateActorHasMediumImageList(actor, formImageIds);
 					// actor.updateUI();
 				} else { // create new actor
 					var actorModel = await TIMAAT.ActorDatasets.createActorModel(type, formDataSanitized);
@@ -1326,6 +1328,7 @@
 				if (addressType) TIMAAT.ActorDatasets._addressTypeRemoved(addressType);
 				modal.modal('hide');
 			});
+
 			// add addressType button
 			$('#timaat-addresstype-add').attr('onclick','TIMAAT.ActorDatasets.addAddressType()');
 
@@ -1677,6 +1680,7 @@
 				if (emailAddressType) TIMAAT.ActorDatasets._emailAddressTypeRemoved(emailAddressType);
 				modal.modal('hide');
 			});
+
 			// add emailAddressType button
 			$('#timaat-emailaddresstype-add').attr('onclick','TIMAAT.ActorDatasets.addEmailAddressType()');
 
@@ -2029,6 +2033,7 @@
 				if (phoneNumberType) TIMAAT.ActorDatasets._phoneNumberTypeRemoved(phoneNumberType);
 				modal.modal('hide');
 			});
+
 			// add phoneNumberType button
 			$('#timaat-phonenumbertype-add').attr('onclick','TIMAAT.ActorDatasets.addPhoneNumberType()');
 
@@ -2885,6 +2890,7 @@
       // console.log("TCL: TIMAAT.ActorDatasets.personIsMemberOfCollectives", TIMAAT.ActorDatasets.personIsMemberOfCollectives);
 		},
 
+		// TODO
 		setCitizenshipsList: function(actor) {
 
 		},
@@ -2964,108 +2970,105 @@
 			$('.datasheet-data').hide();
 			$('.name-data').show();
 			$('.actor-data').show();
-			// if (actorType == "actor") {
-			// 	$('.actortype-data').show();
-			// }	else {
-			// 	$('.actortype-data').hide();
-			// }
 			$('.'+actorType+'-data').show();
-			$('#timaat-actordatasets-metadata-form-edit').hide();
-      $('#timaat-actordatasets-metadata-form-delete').hide();
-      $('#timaat-actordatasets-metadata-form-submit').html('Add');
-      $('#timaat-actordatasets-metadata-form-submit').show();
-			$('#timaat-actordatasets-metadata-form-dismiss').show();
-			$('#actor-datasheet-form-profile-image-selection').show();
-			$('#timaat-actordatasets-metadata-form :input').prop('disabled', false);
-			$('#actorFormHeader').html("Add "+actorType);
-
-			$('#timaat-actordatasets-metadata-actor-name').focus();
-
-			let imageSelect =
-					`<label class="col-form-label col-form-label-sm">Change the associated profile images (max. 5 in total):</label>
-					<div class="form-group" data-role="profileImages-entry">
-						<div class="form-row">
-							<div class="col-md-12">
-								<label class="sr-only">Profile Image(s)</label>
-								<select class="form-control form-control-sm"
-												id="actor-profile-image-multi-select-dropdown"
-												name="imageId"
-												data-placeholder="Select images"
-												multiple="multiple"
-												readonly="true">
-								</select>
-							</div>
-						</div>
-					</div>`;
-				$('#actor-datasheet-form-profile-image-selection').append(imageSelect);
-				  function formatPreview(data) {
-          // console.log("TCL: formatPreview -> data", data);
-					if (data.loading) {
-						return data.text;
-					}
-					var $container = $(
-						"<div class='select2-result-repository clearfix' style='display:flex'>" +
-							"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
-							"<div class='select2-result-repository__meta'>" +
-								"<div class='select2-result-repository__title'></div>" +
-								"<div class='select2-result-repository__description'></div>" +
-							"</div>" +
-						"</div>");
-					$container.find('.select2-result-repository__title').text(data.text);
-					return $container;
-				};
-				
-				function formatSelection(data) {
-					return data.text;
-				}
-				$('#actor-profile-image-multi-select-dropdown').select2({
-					closeOnSelect: false,
-					scrollAfterSelect: false,
-					maximumSelectionLength: 5,
-					allowClear: true,
-					ajax: {
-						url: 'api/medium/image/selectList/',
-						type: 'GET',
-						dataType: 'json',
-						delay: 250,
-						headers: {
-							"Authorization": "Bearer "+TIMAAT.Service.token,
-							"Content-Type": "application/json",
-						},
-						// additional parameters
-						data: function(params) {
-							// console.log("TCL: data: params", params);
-							return {
-								search: params.term,
-								page: params.page
-							};          
-						},
-						processResults: function(data, params) {
-							// console.log("TCL: processResults: data", data);
-							params.page = params.page || 1;
-							return {
-								results: data,
-								// pagination: {
-								// 	more: (params.page * 10) < data.total_count
-								// }
-							};
-						},
-						cache: true
-					},
-					templateResult: formatPreview,
-					templateSelection: formatSelection,
-					minimumInputLength: 0,
-					placeholder: 'Select image(s) (max. 5)'
-				});
-
 			// setup form
-			$('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
+			$('#timaat-actordatasets-metadata-form-submit').html('Add');
+			$('#actorFormHeader').html("Add "+actorType);
+			this.initActorFormDatasheetForEdit();
+			// $('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
+		},
+
+		initActorFormDatasheetForEdit: function() {
 			$('#timaat-actordatasets-metadata-actor-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-actor-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-person-dateofbirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-person-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-collective-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-collective-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('.actordatasheet-form-button').hide();
+			$('.actordatasheet-form-button').prop('disabled', true);
+			$('.actordatasheet-form-button :input').prop('disabled', true);
+			$('#timaat-actordatasets-metadata-form :input').prop('disabled', false);
+			$('#timaat-actordatasets-metadata-form-submit').show();
+			$('#timaat-actordatasets-metadata-form-dismiss').show();
+			$('#actor-datasheet-form-profile-image-selection').show();
+			$('#timaat-actordatasets-metadata-actor-name').focus();
+			let imageSelect =
+				`<label class="col-form-label col-form-label-sm">Change the associated profile images (max. 5 in total):</label>
+				<div class="form-group" data-role="profileImages-entry">
+					<div class="form-row">
+						<div class="col-md-12">
+							<label class="sr-only">Profile Image(s)</label>
+							<select class="form-control form-control-sm"
+											id="actor-profile-image-multi-select-dropdown"
+											name="imageId"
+											data-placeholder="Select images"
+											multiple="multiple"
+											readonly="true">
+							</select>
+						</div>
+					</div>
+				</div>`;
+			$('#actor-datasheet-form-profile-image-selection').append(imageSelect);
+			function formatPreview(data) {
+				// console.log("TCL: formatPreview -> data", data);
+				if (data.loading) {
+					return data.text;
+				}
+				var $container = $(
+					"<div class='select2-result-repository clearfix' style='display:flex'>" +
+						"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
+						"<div class='select2-result-repository__meta'>" +
+							"<div class='select2-result-repository__title'></div>" +
+							"<div class='select2-result-repository__description'></div>" +
+						"</div>" +
+					"</div>");
+				$container.find('.select2-result-repository__title').text(data.text);
+				return $container;
+			};
+			
+			function formatSelection(data) {
+				return data.text;
+			}
+			$('#actor-profile-image-multi-select-dropdown').select2({
+				closeOnSelect: false,
+				scrollAfterSelect: false,
+				maximumSelectionLength: 5,
+				allowClear: true,
+				ajax: {
+					url: 'api/medium/image/selectList/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data,
+							// pagination: {
+							// 	more: (params.page * 10) < data.total_count
+							// }
+						};
+					},
+					cache: true
+				},
+				templateResult: formatPreview,
+				templateSelection: formatSelection,
+				minimumInputLength: 0,
+				placeholder: 'Select image(s) (max. 5)'
+			});
 		},
 
 		actorFormDatasheet: async function(action, actorType, actorTypeData) {
@@ -3111,12 +3114,13 @@
 			}
 
 			$('#timaat-actordatasets-metadata-form').attr('data-type', actorType);
+			actorFormMetadataValidator.resetForm();
+
 			$('.datasheet-data').hide();
 			$('.name-data').show();
 			$('.actor-data').show();
 			// if (actorType == "actor") { $('.actortype-data').show(); }	else {	$('.actortype-data').hide(); }		
 			$('.'+actorType+'-data').show();
-			actorFormMetadataValidator.resetForm();
 
 			// show tabs
 			$('.'+actorType+'-data-tab').show();
@@ -3134,15 +3138,9 @@
 
 			if ( action == 'show') {
 				$('#timaat-actordatasets-metadata-form :input').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-tag').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-tag :input').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-tag').show();
-				$('#timaat-actordatasets-metadata-form-edit').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-edit :input').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-edit').show();
-				$('#timaat-actordatasets-metadata-form-delete').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-delete :input').prop('disabled', false);
-				$('#timaat-actordatasets-metadata-form-delete').show();
+				$('.actordatasheet-form-button').show();
+				$('.actordatasheet-form-button').prop('disabled', false);
+				$('.actordatasheet-form-button :input').prop('disabled', false);
 				$('#timaat-actordatasets-metadata-form-submit').hide();
 				$('#timaat-actordatasets-metadata-form-dismiss').hide();
 				$('#actor-datasheet-form-profile-image-selection').hide();
@@ -3150,117 +3148,25 @@
 			}
 			else if (action == 'edit') {
 				$('.'+actorType+'-datasheet-form-submit').show();
-				$('#timaat-actordatasets-metadata-form :input').prop('disabled', false);
-				// if (actorType == "actor") {	$('#timaat-actordatasets-metadata-actor-actortype-id').prop('disabled', true); }
-				// else { $('#timaat-actordatasets-metadata-actor-actortype-id').hide(); }
-				$('#timaat-actordatasets-metadata-actor-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-actor-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-person-dateofbirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-person-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-collective-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-collective-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('#timaat-actordatasets-metadata-form-tag').hide();
-				$('#timaat-actordatasets-metadata-form-tag').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-tag :input').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-edit').hide();
-				$('#timaat-actordatasets-metadata-form-edit').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-edit :input').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-delete').hide();
-				$('#timaat-actordatasets-metadata-form-delete').prop('disabled', true);
-				$('#timaat-actordatasets-metadata-form-delete :input').prop('disabled', true);
 				$('#timaat-actordatasets-metadata-form-submit').html("Save");
-				$('#timaat-actordatasets-metadata-form-submit').show();
-				$('#timaat-actordatasets-metadata-form-dismiss').show();
-				$('#actor-datasheet-form-profile-image-selection').show();
 				$('#actorFormHeader').html("Edit "+actorType);
-				$('#timaat-actordatasets-metadata-actor-name').focus();
+				this.initActorFormDatasheetForEdit();
 
-				let imageSelect =
-					`<label class="col-form-label col-form-label-sm">Change the associated profile images (max. 5 in total):</label>
-					<div class="form-group" data-role="profileImages-entry">
-						<div class="form-row">
-							<div class="col-md-12">
-								<label class="sr-only">Profile Image(s)</label>
-								<select class="form-control form-control-sm"
-												id="actor-profile-image-multi-select-dropdown"
-												name="imageId"
-												data-placeholder="Select images"
-												multiple="multiple"
-												readonly="true">
-								</select>
-							</div>
-						</div>
-					</div>`;
-				$('#actor-datasheet-form-profile-image-selection').append(imageSelect);
-				  function formatPreview(data) {
-          // console.log("TCL: formatPreview -> data", data);
-					if (data.loading) {
-						return data.text;
-					}
-					var $container = $(
-						"<div class='select2-result-repository clearfix' style='display:flex'>" +
-							"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
-							"<div class='select2-result-repository__meta'>" +
-								"<div class='select2-result-repository__title'></div>" +
-								"<div class='select2-result-repository__description'></div>" +
-							"</div>" +
-						"</div>");
-					$container.find('.select2-result-repository__title').text(data.text);
-					return $container;
-				};
-				
-				function formatSelection(data) {
-					return data.text;
-				}
-				$('#actor-profile-image-multi-select-dropdown').select2({
-					closeOnSelect: false,
-					scrollAfterSelect: false,
-					maximumSelectionLength: 5,
-					allowClear: true,
-					ajax: {
-						url: 'api/medium/image/selectList/',
-						type: 'GET',
-						dataType: 'json',
-						delay: 250,
-						headers: {
-							"Authorization": "Bearer "+TIMAAT.Service.token,
-							"Content-Type": "application/json",
-						},
-						// additional parameters
-						data: function(params) {
-							// console.log("TCL: data: params", params);
-							return {
-								search: params.term,
-								page: params.page
-							};          
-						},
-						processResults: function(data, params) {
-							// console.log("TCL: processResults: data", data);
-							params.page = params.page || 1;
-							return {
-								results: data,
-								// pagination: {
-								// 	more: (params.page * 10) < data.total_count
-								// }
-							};
-						},
-						cache: true
-					},
-					templateResult: formatPreview,
-					templateSelection: formatSelection,
-					minimumInputLength: 0,
-					placeholder: 'Select image(s) (max. 5)'
-				});
 				var profileImageSelect = $('#actor-profile-image-multi-select-dropdown');
 				await TIMAAT.ActorService.getActorHasImageList(actorTypeData.model.id).then(async function(data) {
-					// console.log("TCL: then: data", data);
+					console.log("TCL: then: data", data);
 					if (data.length > 0) {
-						data.sort((a, b) => (a.displayTitle.name > b.displayTitle.name)? 1 : -1);
-						// create the options and append to Select2
-						var i = 0;
+						let i = 0;
+						let mediumList = [];
 						for (; i < data.length; i++) {
 							let medium = await TIMAAT.MediaService.getMedium(data[i].mediumId);
-							var option = new Option(medium.displayTitle.name, data[i].mediumId, true, true);
+							mediumList.push(medium);
+						}
+						mediumList.sort((a, b) => (a.displayTitle.name > b.displayTitle.name)? 1 : -1);
+						// create the options and append to Select2
+						i = 0;
+						for (; i < mediumList.length; i++) {
+							var option = new Option(mediumList[i].displayTitle.name, mediumList[i].id, true, true);
 							profileImageSelect.append(option).trigger('change');
 						}
 						// manually trigger the 'select2:select' event
@@ -3457,6 +3363,8 @@
 
 		actorFormAddresses: function(action, actor) {
     	console.log("TCL: actorFormAddresses: action, actor", action, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-actorhasaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3662,6 +3570,8 @@
 
 		actorFormEmailAddresses: function(action, actor) {
     	console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3757,6 +3667,8 @@
 
 		actorFormPhoneNumbers: function(action, actor) {
     	console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3855,6 +3767,8 @@
 
 		actorFormMemberOfCollectives: async function(action, type, actor) {
     	console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-personismemberofcollective-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -4010,6 +3924,8 @@
 
 		actorFormRoles: async function(action, actor) {
 			console.log("TCL: actorFormRoles: action, actor", action, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-actorhasrole-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -4103,6 +4019,8 @@
 
 		actorFormRoleMedium: async function(action, actor) {
 			console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
+			TIMAAT.ActorDatasets.selectLastSelection(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
+			TIMAAT.ActorDatasets.selectLastSelection('actor', actor.model.id);
 			var node = document.getElementById("dynamic-actorroleinmedium-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -4454,8 +4372,8 @@
 			}
 		},
 
-		updateActor: async function(actorSubtype, actor, imageIdList) {
-			console.log("TCL: updateActor: async function: ", actorSubtype, actor, imageIdList);
+		updateActor: async function(actorSubtype, actor) {
+			console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
 				try {
 					// update birthname
 					if (actor.model.birthName) { // actor initially has no birth name set
@@ -4519,6 +4437,12 @@
 					console.log( "error: ", error);
 				};
 
+				// update data that is part of actor (includes updating last edited by/at)
+				var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
+		},
+
+		updateActorHasMediumImageList: async function(actor, imageIdList) {
+			console.log("TCL: updateActorHasMediumImageList:function -> actor, imageIdList", actor, imageIdList);
 				try { // update actor_has_medium_image table entries
 					var existingActorHasImageEntries = await TIMAAT.ActorService.getActorHasImageList(actor.model.id);
 					console.log("TCL: existingActorHasImageEntries", existingActorHasImageEntries);
@@ -4526,7 +4450,7 @@
 					if (imageIdList == null) { //* all entries will be deleted
 						// console.log("TCL: delete all existingActorHasImageEntries: ", existingActorHasImageEntries);
 						actor.model.profileImages = [];
-						await TIMAAT.ActorService.updateActor(actor.model);        
+						actor.model = await TIMAAT.ActorService.updateActor(actor.model);        
 					} else if (existingActorHasImageEntries.length == 0) { //* all entries will be added
 						// console.log("TCL: add all imageIdList: ", imageIdList);
 						var i = 0;
@@ -4534,7 +4458,7 @@
 							actor.model.profileImages.push(imageIdList[i]);
 						}
 						console.log("TCL: actor.model.profileImages", actor.model.profileImages);
-						await TIMAAT.ActorService.updateActor(actor.model);          
+						actor.model = await TIMAAT.ActorService.updateActor(actor.model);          
 					} else { //* add/remove entries
 						// delete removed entries
 						var actorHasImageEntriesToDelete = [];
@@ -4595,24 +4519,16 @@
 								actor.model.profileImages.push(idsToCreate[i]);
 							}
 							// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
-							await TIMAAT.ActorService.updateActor(actor.model);
+							actor.model = await TIMAAT.ActorService.updateActor(actor.model);
 						}
 					}
 				} catch(error) {
 					console.log( "error: ", error);
 				};
-	
-				try {
-					// update data that is part of actor (includes updating last edited by/at)
-					// update display name
-					// var tempDisplayName = await TIMAAT.ActorService.updateName(actor.model.displayName);
-					var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
-					// actor.model.displayName = tempDisplayName;
-					console.log("TCL: tempActorModel", tempActorModel);
-				} catch(error) {
-					console.log( "error: ", error);
-				}
-				// actor.updateUI();
+
+				// update data that is part of actor (includes updating last edited by/at)
+				var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
+				// return tempActorModel;
 		},
 
 		updateName: async function(name, actor) {
