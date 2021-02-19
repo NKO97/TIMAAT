@@ -243,9 +243,8 @@
           },
           minimumInputLength: 0,
         });
-        //! getCategoryList does not exist anymore. NEEDS FIXING (error thrown when cancel connected categories button in annotation)
-        TIMAAT.AnnotationService.getCategoryList(TIMAAT.VideoPlayer.curAnnotation.id).then(function(data) {
-          console.log("TCL: then: data", data);
+        TIMAAT.AnnotationService.getSelectedCategories(TIMAAT.VideoPlayer.curAnnotation.model.id).then(function(data) {
+          // console.log("TCL: then: data", data);
           var categorySelect = $('#annotation-categories-multi-select-dropdown');
           if (data.length > 0) {
             data.sort((a, b) => (a.name > b.name)? 1 : -1);
