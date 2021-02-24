@@ -204,7 +204,7 @@
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-media">
-                <a href="#mediadatasets"
+                <a 
                   onclick="TIMAAT.MediaDatasets.initMediaComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
@@ -1942,31 +1942,31 @@
             <div class="col-md-12">
               <ul class="nav nav-pills" id="media-tabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
-                  <a class="nav-link" id="collections-tab" onclick="TIMAAT.MediaCollectionDatasets.loadMediaCollections()" data-toggle="tab" href="#mediaCollections" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
+                  <a class="nav-link" id="collections-tab" onclick="TIMAAT.MediaCollectionDatasets.loadMediaCollections()" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
                 </li>
                 <li class="nav-item active">
-                  <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" href="#media" role="tab" aria-controls="all media" aria-selected="true"><i class="fas fa-photo-video"></i> All Media</a>
+                  <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true"><i class="fas fa-photo-video"></i> All Media</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="audios-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" href="#audios" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
+                  <a class="nav-link" id="audios-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="documents-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('document')" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
+                  <a class="nav-link" id="documents-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('document')" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="images-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('image')" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
+                  <a class="nav-link" id="images-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('image')" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="softwares-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('software')" data-toggle="tab" href="#softwares" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
+                  <a class="nav-link" id="softwares-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('software')" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="texts-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('text')" data-toggle="tab" href="#texts" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
+                  <a class="nav-link" id="texts-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('text')" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videos-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('video')" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
+                  <a class="nav-link" id="videos-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('video')" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videogames-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('videogame')" data-toggle="tab" href="#videogames" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
+                  <a class="nav-link" id="videogames-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('videogame')" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
                 </li>
               </ul>
               <div class="tab-content" id="mediaTabsContent">
@@ -2024,7 +2024,7 @@
                       </div>
                       <div class="card media-datatables audios-datatable">
                         <div class="card-header">Audios
-                          <button type="button" id="timaat-mediadatasets-audio-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Audio">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right" title="Add Audio">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2048,7 +2048,7 @@
                       </div>
                       <div class="card media-datatables documents-datatable">
                         <div class="card-header">Documents
-                          <button type="button" id="timaat-mediadatasets-document-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Document">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right" title="Add Document">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2072,7 +2072,7 @@
                       </div>
                       <div class="card media-datatables images-datatable">
                         <div class="card-header">Images
-                          <button type="button" id="timaat-mediadatasets-image-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Image">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right" title="Add Image">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2096,7 +2096,7 @@
                       </div>
                       <div class="card media-datatables softwares-datatable">
                         <div class="card-header">Software
-                          <button type="button" id="timaat-mediadatasets-software-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Software">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right" title="Add Software">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2120,7 +2120,7 @@
                       </div>
                       <div class="card media-datatables texts-datatable">
                         <div class="card-header">Texts
-                          <button type="button" id="timaat-mediadatasets-text-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Text">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right" title="Add Text">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2144,7 +2144,7 @@
                       </div>
                       <div class="card media-datatables videos-datatable">
                         <div class="card-header">Videos
-                          <button type="button" id="timaat-mediadatasets-video-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Video">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right" title="Add Video">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2168,7 +2168,7 @@
                       </div>
                       <div class="card media-datatables videogames-datatable">
                         <div class="card-header">Videogames
-                          <button type="button" id="timaat-mediadatasets-videogame-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Videogame">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right" title="Add Videogame">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2194,51 +2194,32 @@
                     <!-- Media data -->
                     <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
                       <div id="timaat-mediadatasets-media-tabs">
-                        <ul class="nav nav-tabs media-nav-tabs">
+                        <ul class="nav nav-tabs mediacollection-nav-tabs">
                           <li class="nav-item media-data-tabs datasheet-tab mediacollection-data-tabs mediumcollection-data-tab">
-                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-metadata-form" href="#mediumCollectionDataSheet">Datasheet</a>
+                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-metadata-form">Datasheet</a>
                           </li>
                           <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-items-tab">
-                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-items-form" href="#mediumCollectionItems">Items</a>
+                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-items-form">Items</a>
                           </li>
                           <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-publication-tab">
-                            <a class="nav-link nav-link-media" id="mediacollection-tab-mediumcollection-publication-form" href="#mediumCollectionPublication">Publication</a>
+                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-publication-form" >Publication</a>
                           </li>
+                        </ul>
+                        <ul class="nav nav-tabs media-nav-tabs">
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-preview-form" href="#mediumPreview">Medium Preview</a>
+                            <a class="nav-link nav-link-media" id="media-tab-medium-preview-form">Medium Preview</a>
                           </li>
                           <li class="nav-item media-data-tabs datasheet-tab medium-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form" href="#mediumDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab audio-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-audio-metadata-form" href="#audioDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab document-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-document-metadata-form" href="#documentDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab image-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-image-metadata-form" href="#imageDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab software-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-software-metadata-form" href="#softwareDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab text-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-text-metadata-form" href="#textDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab video-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-video-metadata-form" href="#videoDatasheet">Datasheet</a>
-                          </li>
-                          <li class="nav-item media-data-tabs datasheet-tab videogame-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-videogame-metadata-form" href="#videogameDatasheet">Datasheet</a>
+                            <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form">Datasheet</a>
                           </li>
                           <li class="nav-item media-data-tabs title-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-titles-form" href="#mediumTitles">Medium titles</a>
+                            <a class="nav-link nav-link-media" id="media-tab-medium-titles-form">Medium titles</a>
                           </li>
                           <li class="nav-item media-data-tabs languagetrack-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form" href="#mediumLanguageTracks">Languages</a>
+                            <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form">Languages</a>
                           </li>
                           <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form" href="#mediumActorRoles">Actors</a>
+                            <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form">Actors</a>
                           </li>
                         </ul>
                         <!-- Data tab content -->

@@ -44,6 +44,7 @@
 			TIMAAT.VideoChooser.init();	 
 			TIMAAT.VideoPlayer.init();
 			TIMAAT.Settings.init();
+			TIMAAT.URLHistory.init();
 			
 			// After login show media library
 			TIMAAT.UI.showComponent('videochooser');

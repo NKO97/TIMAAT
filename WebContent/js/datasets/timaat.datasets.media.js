@@ -39,13 +39,6 @@
 		init: function() {
 			TIMAAT.MediaDatasets.initMedia();
 			// TIMAAT.MediaDatasets.initMediaTypes();
-			TIMAAT.MediaDatasets.initAudios();
-			TIMAAT.MediaDatasets.initDocuments();
-			TIMAAT.MediaDatasets.initImages();
-			TIMAAT.MediaDatasets.initSoftwares();
-			TIMAAT.MediaDatasets.initTexts();
-			TIMAAT.MediaDatasets.initVideos();
-			TIMAAT.MediaDatasets.initVideogames();
 			TIMAAT.MediaDatasets.initTitles();
 			TIMAAT.MediaDatasets.initLanguageTracks();
 			TIMAAT.MediaDatasets.initActorRoles();
@@ -56,15 +49,17 @@
 		},
 
 		initMediaComponent: function() {
-			console.log("TCL: initMediaComponent");
+			// console.log("TCL: initMediaComponent");
 			if (!TIMAAT.MediaDatasets.mediaLoaded) {
 				TIMAAT.MediaDatasets.setMediumList();
 				TIMAAT.MediaDatasets.mediaLoaded = true;
 			}
 			TIMAAT.UI.showComponent('media');
-			if ($('#collections-tab').hasClass('active')) {
-				TIMAAT.MediaCollectionDatasets.loadMediaCollections();
-			} 
+			// $('#media-tab').trigger('click');
+			TIMAAT.MediaDatasets.loadMedia();
+			// if ($('#collections-tab').hasClass('active')) {
+			// 	TIMAAT.MediaCollectionDatasets.loadMediaCollections();
+			// }
 		},
 
 		initMediaTypes: function() {
@@ -156,8 +151,9 @@
 				$('.form').hide();
 				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
 				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#mediumDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, $('#timaat-mediadatasets-metadata-form').data('medium'));
+				$('#timaat-mediadatasets-metadata-form').tab('show');
+				TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, medium);
+				TIMAAT.URLHistory.setURL(null, medium.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + medium.model.id);
 			});
 
 			$('#media-tab-medium-preview-form').on('click', function(event) {
@@ -188,18 +184,18 @@
 
 			// confirm delete medium modal functionality
 			$('#timaat-mediadatasets-modal-delete-submit').on('click', async function(event) {
-				var modal = $('#timaat-mediadatasets-medium-delete');
-				var medium = modal.data('medium');
+				let modal = $('#timaat-mediadatasets-medium-delete');
+				let medium = modal.data('medium');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				// console.log("TCL: medium", medium);
 				if (medium) {
-					var mediaType = medium.model.mediaType.mediaTypeTranslations[0].type;
 					try {	
 						await TIMAAT.MediaDatasets._mediumRemoved(medium);
 					} catch(error) {
 						console.log("error: ", error);
 					}
 					try {
-						await TIMAAT.MediaDatasets.refreshDatatable(mediaType);
+						await TIMAAT.MediaDatasets.refreshDatatable(type);
 						await TIMAAT.MediaDatasets.refreshDatatable('medium');
 					} catch(error) {
 						console.log("error: ", error);
@@ -209,6 +205,11 @@
 				$('#timaat-mediadatasets-metadata-form').hide();
 				$('.media-data-tabs').hide();
 				$('.form').hide();
+				if (	$('#timaat-mediadatasets-metadata-form').data('mediumType') == 'medium') {
+					TIMAAT.MediaDatasets.loadMedia();
+				} else {
+					TIMAAT.MediaDatasets.loadMediumSubtype(type);
+				}
 			});
 
 			// edit content form button handler
@@ -317,6 +318,7 @@
 					medium.model.fileStatus = 'noFile';
 					$('#timaat-mediadatasets-metadata-form').data('medium', medium);
 					$('#media-tab-medium-metadata-form').trigger('click');
+					TIMAAT.URLHistory.setURL(null, medium.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + medium.model.id);
 				}
 				await TIMAAT.MediaDatasets.refreshDatatable('medium');
 				await TIMAAT.MediaDatasets.refreshDatatable(type);
@@ -333,6 +335,7 @@
 					TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, medium);
 				} else { // dismiss medium creation
 					$('.form').hide();
+					TIMAAT.MediaDatasets.loadMediumSubtype(type);
 				}
 			});
 
@@ -736,139 +739,6 @@
 				if (event.which == '13') {
 					$('#timaat-mediadatasets-metadata-form-dismiss').trigger('click');
 				}
-			});
-
-		},
-
-		initAudios: function() {
-			// nav-bar functionality
-			$('#media-tab-audio-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add audio button functionality (opens form)
-			$('#timaat-mediadatasets-audio-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'audio');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("audio");
-			});
-
-		},
-
-		initDocuments: function() {
-			// nav-bar functionality
-			$('#media-tab-document-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#documentDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add document button functionality (opens form)
-			$('#timaat-mediadatasets-document-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'document');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("document");
-			});
-
-		},
-
-		initImages: function() {
-			// nav-bar functionality
-			$('#media-tab-image-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#imageDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add image button functionality (opens form)
-			$('#timaat-mediadatasets-image-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'image');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("image");
-			});
-
-		},
-
-		initSoftwares: function() {
-			// nav-bar functionality
-			$('#media-tab-software-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add software button functionality (opens form)
-			$('#timaat-mediadatasets-software-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'software');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("software");
-			});
-
-		},
-
-		initTexts: function() {
-			// nav-bar functionality
-			$('#media-tab-text-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#textDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add text button functionality (opens form)
-			$('#timaat-mediadatasets-text-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'text');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("text");
-			});
-
-		},
-
-		initVideos: function() {
-			// nav-bar functionality
-			$('#media-tab-video-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add medium button functionality (in medium list - opens datasheet form)
-			$('#timaat-mediadatasets-video-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'video');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("video");
-			});
-
-		},
-
-		initVideogames: function() {
-			// nav-bar functionality
-			$('#media-tab-videogame-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
-				$('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', $('#timaat-mediadatasets-metadata-form').data('medium'));
-			});
-
-			// add videogame button functionality (opens form)
-			$('#timaat-mediadatasets-videogame-add').on('click', function(event) {
-				$('#timaat-mediadatasets-metadata-form').attr('data-type', 'videogame');
-				$('#timaat-mediadatasets-metadata-form').data('medium', null);
-				TIMAAT.MediaDatasets.addMedium("videogame");
 			});
 
 		},
@@ -1746,10 +1616,12 @@
 			$('.media-datatables').hide();
 			$('.media-datatable').show();
 			$('.form').hide();
+			$('#timaat-mediadatasets-media-tabs').hide();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', 'medium');
 			$('#videoPreview').get(0).pause();
-			// TIMAAT.MediaService.listMedia(TIMAAT.MediaDatasets.setMediumList);
-			// TIMAAT.MediaDatasets.setMediumList();
+			this.selectLastSelection('medium', null);
+			this.subNavTab = 'datasheet';
+			TIMAAT.URLHistory.setURL(null, 'Medium Datasets ', '#medium/list');
 		},
 
 		loadMediaDataTables: async function() {
@@ -1766,11 +1638,16 @@
 		loadMediumSubtype: function(type) {
     	console.log("TCL: loadMediumSubtype - type", type);
 			$('.media-datatables').hide();
-			$('.form').hide();
-			$('#videoPreview').get(0).pause();
-			TIMAAT.MediaDatasets.clearLastMediumSelection(type);
 			$('.'+type+'s-datatable').show();
+			$('.form').hide();
+			$('#timaat-mediadatasets-media-tabs').hide();
 			$('#timaat-mediadatasets-metadata-form').data('mediumType', type);
+			$('#videoPreview').get(0).pause();
+			this.selectLastSelection('medium', null);
+			this.selectLastSelection(type, null);
+			this.subNavTab = 'datasheet';
+			TIMAAT.URLHistory.setURL(null, type[0].toUpperCase() + type.slice(1)+' Datasets ', '#medium/'+type+'/list');
+			this.clearLastMediumSelection(type);
 			switch (type) {
 				case 'audio':
 					// TIMAAT.MediaService.listMediumSubtype(type, TIMAAT.MediaDatasets.setAudioList);
@@ -2000,37 +1877,38 @@
 			});
 		},
 
-		addMedium: function(mediumType) {	
-			// console.log("TCL: addMedium: function()");
-			console.log("TCL: addMedium: mediumType", mediumType);
+		addMedium: function(type) {	
+			// console.log("TCL: addMedium: type", type);
 			$('.form').hide();
 			$('.media-data-tabs').hide();
-			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').show();
-			// $('.nav-tabs a[href="#mediumTitles"]').hide();
-			$('#timaat-mediadatasets-metadata-form').data(mediumType, null);
+			$('#timaat-mediadatasets-media-tabs').show();
+			$('#media-tab-medium-metadata-form').show();
+			$('#timaat-mediadatasets-metadata-form').attr('data-type', type);
+			$('#timaat-mediadatasets-metadata-form').data(type, null);
 			mediumFormMetadataValidator.resetForm();
 			$('#videoPreview').get(0).pause();
-
+			this.selectLastSelection(type, null);
+			this.subNavTab = 'datasheet';
 			$('#timaat-mediadatasets-metadata-form').trigger('reset');
 			$('#timaat-mediadatasets-metadata-form').show();
-			this.initMediumFormDatasheetData(mediumType);
+			this.initMediumFormDatasheetData(type);
 			this.getMediumFormTitleLanguageDropdownData();
 
 			// setup form
-			this.initMediumFormDatasheetForEdit(mediumType);
+			this.initMediumFormDatasheetForEdit(type);
 			$('#timaat-mediadatasets-metadata-form-submit').html('Add');
-			$('#mediumFormHeader').html("Add "+mediumType);
+			$('#mediumFormHeader').html("Add "+type);
 			$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
 			// $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
 		},
 
-		mediumFormDatasheet: async function(action, mediumType, mediumTypeData) {
-			// console.log("TCL: action, mediumType, mediumTypeData", action, mediumType, mediumTypeData);
-			this.selectLastSelection(mediumType, mediumTypeData.model.id);
-			this.selectLastSelection('medium', mediumTypeData.model.id);
+		mediumFormDatasheet: async function(action, type, typeData) {
+			// console.log("TCL: action, type, typeData", action, type, typeData);
+			this.selectLastSelection(type, typeData.model.id);
+			this.selectLastSelection('medium', typeData.model.id);
 			$('#timaat-mediadatasets-metadata-form').trigger('reset');
-			$('#timaat-mediadatasets-metadata-form').attr('data-type', mediumType);
-			this.initMediumFormDatasheetData(mediumType);
+			$('#timaat-mediadatasets-metadata-form').attr('data-type', type);
+			this.initMediumFormDatasheetData(type);
 			mediumFormMetadataValidator.resetForm();
 			$('#videoPreview').get(0).pause();
 
@@ -2041,17 +1919,18 @@
 				$('.preview-data-tab').show();
 				$('#previewTab').removeClass('annotationView');
 			}
-			$('.'+mediumType+'-data-tab').show();
+			$('.medium-data-tab').show();
 			$('.title-data-tab').show();
 			$('.languagetrack-data-tab').show();
 			$('.mediumactorwithrole-data-tab').show();
-
-			$('.nav-tabs a[href="#'+mediumType+'Datasheet"]').focus();
+			$('.nav-link-media').removeClass('active');
+			$('#media-tab-medium-metadata-form').addClass('active');
+			$('#media-tab-medium-metadata-form').focus();
 			$('#timaat-mediadatasets-metadata-form').show();
 
 			this.getMediumFormTitleLanguageDropdownData();
 			var languageSelect = $('#medium-title-language-select-dropdown');
-			var option = new Option(mediumTypeData.model.displayTitle.language.name, mediumTypeData.model.displayTitle.language.id, true, true);
+			var option = new Option(typeData.model.displayTitle.language.name, typeData.model.displayTitle.language.id, true, true);
 			languageSelect.append(option).trigger('change');
 
 			if ( action == 'show' ) {
@@ -2059,21 +1938,21 @@
 				$('.datasheet-form-button').prop('disabled', false);
 				$('.datasheet-form-button :input').prop('disabled', false);
 				$('.datasheet-form-button').show();
-				this.initMediumFormsForShow(mediumTypeData.model);
+				this.initMediumFormsForShow(typeData.model);
 				$('#timaat-mediadatasets-metadata-form-submit').hide();
 				$('#timaat-mediadatasets-metadata-form-dismiss').hide();
-				$('#mediumFormHeader').html(mediumType+" Datasheet (#"+ mediumTypeData.model.id+')');
+				$('#mediumFormHeader').html(type+" Datasheet (#"+ typeData.model.id+')');
 				$('#medium-title-language-select-dropdown').select2('destroy').attr("readonly", true);
 			}
 			else if ( action == 'edit' ) {
-				this.initMediumFormDatasheetForEdit(mediumType);
+				this.initMediumFormDatasheetForEdit(type);
 				$('#timaat-mediadatasets-metadata-form-submit').html('Save');
-				$('#mediumFormHeader').html("Edit "+mediumType);
+				$('#mediumFormHeader').html("Edit "+type);
 			}
 
-			// console.log("TCL: mediumTypeData", mediumTypeData);
+			// console.log("TCL: typeData", typeData);
 			// setup UI
-			var data = mediumTypeData.model;
+			var data = typeData.model;
       // console.log("data", data);
 
 			// medium data
@@ -2104,7 +1983,7 @@
 				else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
 				
 			// medium subtype specific data
-			switch (mediumType) {
+			switch (type) {
 				case 'audio':
 					$('#timaat-mediadatasets-metadata-audio-length').val(data.mediumAudio.length);
 				break;
@@ -2139,26 +2018,29 @@
 					else $('#timaat-mediadatasets-metadata-videogame-isepisode').prop('checked', false);
 				break;
 			}
-			$('#timaat-mediadatasets-metadata-form').data(mediumType, mediumTypeData);
+			$('#timaat-mediadatasets-metadata-form').data(type, typeData);
 		},
 
-		mediumFormPreview: function(mediumType, mediumTypeData) {
-			console.log("TCL: mediumType, mediumTypeData", mediumType, mediumTypeData);
-			TIMAAT.MediaDatasets.selectLastSelection(mediumType, mediumTypeData.model.id);
-			TIMAAT.MediaDatasets.selectLastSelection('medium', mediumTypeData.model.id);
+		mediumFormPreview: function(type, typeData) {
+			console.log("TCL: type, typeData", type, typeData);
+			TIMAAT.MediaDatasets.selectLastSelection(type, typeData.model.id);
+			TIMAAT.MediaDatasets.selectLastSelection('medium', typeData.model.id);
 			$('#timaat-mediadatasets-medium-preview-form').trigger('reset');
-			// $('#timaat-mediadatasets-metadata-form').attr('data-type', mediumType);
+			// $('#timaat-mediadatasets-metadata-form').attr('data-type', type);
 			// mediumFormMetadataValidator.resetForm();
+			TIMAAT.URLHistory.setURL(null, typeData.model.displayTitle.name + ' · Preview · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + typeData.model.id + '/preview');
 
-			$('.nav-tabs a[href="#mediumPreview"]').focus();
+			$('.nav-link-media').removeClass('active');
+			$('#media-tab-medium-preview-form').addClass('active');
+			$('#media-tab-medium-preview-form').focus();
 			$('#timaat-mediadatasets-medium-preview-form').show();
 
 			$('#timaat-mediadatasets-medium-preview-form :input').prop('disabled', true);
 			// $('#timaat-mediadatasets-medium-preview-form-edit').prop('disabled', false);
 			// $('#timaat-mediadatasets-medium-preview-form-edit :input').prop('disabled', false);
 			// $('#timaat-mediadatasets-medium-preview-form-edit').show();
-			if ( mediumTypeData.model.fileStatus == 'noFile' || !mediumTypeData.model.fileStatus) {
-				if (mediumTypeData.model.mediumVideo || mediumTypeData.model.mediumImage) {
+			if ( typeData.model.fileStatus == 'noFile' || !typeData.model.fileStatus) {
+				if (typeData.model.mediumVideo || typeData.model.mediumImage) {
 					$('.datasheet-form-upload-button').prop('disabled', false);
 					$('.datasheet-form-upload-button').show();
 				}
@@ -2166,7 +2048,7 @@
 				$('.datasheet-form-annotate-button').prop('disabled', true);
 				$('.video-preview').hide();
 				$('.image-preview').show();
-				switch (mediumType) {
+				switch (type) {
 					case 'image':
 						$('#mediumPreview').attr('src' , 'img/image-placeholder.png');
 					break;
@@ -2175,32 +2057,33 @@
 					break;
 				}
 			} else {
-				// console.log("TCL: display image preview");
 				$('.datasheet-form-upload-button').hide();
 				$('.datasheet-form-upload-button').prop('disabled', true);
-				if (mediumType == 'video') {
+				if (type == 'video') {
 					$('.datasheet-form-annotate-button').prop('disabled', false);
 					$('.datasheet-form-annotate-button').show();
 				} else {
 					$('.datasheet-form-annotate-button').hide();
 				$('.datasheet-form-annotate-button').prop('disabled', true);
 				}
-				switch (mediumType) {
+				switch (type) {
 					case 'image':
 						$('.video-preview').hide();
-						$('#mediumPreview').attr('src', '/TIMAAT/api/medium/image/'+mediumTypeData.model.id+'/preview'+'?token='+mediumTypeData.model.viewToken);
-						$('#mediumPreview').attr('title', mediumTypeData.model.displayTitle.name);
-						$('#mediumPreview').attr('alt', mediumTypeData.model.displayTitle.name);
+						$('#mediumPreview').attr('src', '/TIMAAT/api/medium/image/'+typeData.model.id+'/preview'+'?token='+typeData.model.viewToken);
+						$('#mediumPreview').attr('title', typeData.model.displayTitle.name);
+						$('#mediumPreview').attr('alt', typeData.model.displayTitle.name);
 						$('.image-preview').show();
 					break;
 					case 'video':
-						if ( mediumTypeData.model.fileStatus && mediumTypeData.model.fileStatus != 'ready' && mediumTypeData.model.fileStatus != 'transcoding' && mediumTypeData.model.fileStatus != 'waiting' ) {
+						if ( typeData.model.fileStatus && typeData.model.fileStatus != 'ready' && typeData.model.fileStatus != 'transcoding' && typeData.model.fileStatus != 'waiting' ) {
 							$('.video-preview').hide();
 							$('#mediumPreview').attr('src', 'img/preview-placeholder.png');
+							$('#mediumPreview').attr('title', 'placeholder');
+							$('#mediumPreview').attr('alt', 'placeholder');
 							$('.image-preview').show();
 						} else {
 							$('.image-preview').hide();
-								$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+mediumTypeData.model.id+'/download'+'?token='+mediumTypeData.model.viewToken);
+							$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+typeData.model.id+'/download'+'?token='+typeData.model.viewToken);
 							$('.video-preview').show();
 						}
 					default:
@@ -2211,9 +2094,7 @@
 			$('.mediadatasheet-form-delete-button').prop('disabled', false);
 			$('.mediadatasheet-form-delete-button :input').prop('disabled', false);
 			$('.mediadatasheet-form-delete-button').show();
-			// $('#timaat-mediadatasets-medium-preview-form-submit').hide();
-			// $('#timaat-mediadatasets-medium-preview-form-dismiss').hide();
-			$('#mediumPreviewFormHeader').html(mediumType+" Preview (#"+ mediumTypeData.model.id+')');
+			$('#mediumPreviewFormHeader').html(type+" Preview (#"+ typeData.model.id+')');
 		},
 
 		mediumFormTitles: function(action, medium) {
@@ -2231,7 +2112,10 @@
 			$('#timaat-mediadatasets-medium-titles-form').trigger('reset');
 			mediumFormTitlesValidator.resetForm();
 			$('#videoPreview').get(0).pause();
-			$('.nav-tabs a[href="#mediumTitles"]').focus();
+			TIMAAT.URLHistory.setURL(null, medium.model.displayTitle.name + ' · Titles · ' + medium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + medium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + medium.model.id + '/titles');
+			$('.nav-link-media').removeClass('active');
+			$('#media-tab-medium-titles-form').addClass('active');
+			$('#media-tab-medium-titles-form').focus();
 			$('#timaat-mediadatasets-medium-titles-form').show();
 			
 			// setup UI
@@ -2388,7 +2272,10 @@
 			$('#timaat-mediadatasets-medium-languagetracks-form').trigger('reset');
 			mediumFormLanguageTracksValidator.resetForm();
 			$('#videoPreview').get(0).pause();
-			$('.nav-tabs a[href="#mediumLanguageTracks"]').focus();
+			TIMAAT.URLHistory.setURL(null, medium.model.displayTitle.name + ' · Languages · ' + medium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + medium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + medium.model.id + '/languages');
+			$('.nav-link-media').removeClass('active');
+			$('#media-tab-medium-languagetracks-form').addClass('active');
+			$('#media-tab-medium-languagetracks-form').focus();
 			$('#timaat-mediadatasets-medium-languagetracks-form').show();
 			
 			// setup UI
@@ -2582,7 +2469,10 @@
 			$('#timaat-mediadatasets-medium-actorwithroles-form').trigger('reset');
 			// mediumFormActorRolesValidator.resetForm();
 			$('#videoPreview').get(0).pause();
-			$('.nav-tabs a[href="#mediumActorRoles"]').focus();
+			TIMAAT.URLHistory.setURL(null, medium.model.displayTitle.name + ' · Actors · ' + medium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + medium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + medium.model.id + '/actorsWithRoles');
+			$('.nav-link-media').removeClass('active');
+			$('#media-tab-medium-actorwithroles-form').addClass('active');
+			$('#media-tab-medium-actorwithroles-form').focus();
 			$('#timaat-mediadatasets-medium-actorwithroles-form').show();
 
 			// setup UI
@@ -2867,7 +2757,7 @@
 					var addedTitleModel = await TIMAAT.MediaService.addTitle(medium.model.id, newTitles[i]);
 					medium.model.titles.push(addedTitleModel);
 				}
-				// await TIMAAT.MediaDatasets.updateMedium(mediumType, medium);
+				// await TIMAAT.MediaDatasets.updateMedium(type, medium);
 			} catch(error) {
 				console.log( "error: ", error);
 			};
@@ -3871,12 +3761,14 @@
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						var type = selectedMedium.model.mediaType.mediaTypeTranslations[0].type;
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#'+type+'Datasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.'+type+'-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4052,12 +3944,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#audioDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#audioDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'audio', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.audio-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4206,12 +4101,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#documentDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#documentDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'document', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.document-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4359,12 +4257,16 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#imageDatasheet"]').tab('show');
+            	
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#imageDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'image', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.image-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4512,12 +4414,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#softwareDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'software', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.software-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4665,12 +4570,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#textDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#textDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'text', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.text-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4816,12 +4724,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#videoDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#videoDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.video-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -4972,12 +4883,15 @@
 
 						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
 						if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
-							$('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
+							$('#timaat-mediadatasets-media-tabs').show();
+							$('#timaat-mediadatasets-metadata-form').tab('show');
+							// $('.nav-tabs a[href="#videogameDatasheet"]').tab('show');
 							TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'videogame', selectedMedium);
+							TIMAAT.URLHistory.setURL(null, selectedMedium.model.displayTitle.name + ' · Datasets · ' + selectedMedium.model.mediaType.mediaTypeTranslations[0].type[0].toUpperCase() + selectedMedium.model.mediaType.mediaTypeTranslations[0].type.slice(1), '#medium/' + selectedMedium.model.id);
 						} else {
 							// show tabs
 							$('.preview-data-tab').show();
-							$('.videogame-data-tab').show();
+							$('.medium-data-tab').show();
 							$('.title-data-tab').show();
 							$('.languagetrack-data-tab').show();
 							$('.mediumactorwithrole-data-tab').show();
@@ -5080,12 +4994,12 @@
     	// console.log("TCL: clearLastMediumSelection type", type);
 			let i = 0;
 			switch (type) {
-				case 'medium':
-					for (; i < TIMAAT.MediaDatasets.media.length; i++) {
-						$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
-						$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
-					}
-				break;
+				// case 'medium':
+				// 	for (; i < TIMAAT.MediaDatasets.media.length; i++) {
+				// 		$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+				// 		$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+				// 	}
+				// break;
 				case 'audio':
 					for (; i < TIMAAT.MediaDatasets.audios.length; i++) {
 						$(TIMAAT.MediaDatasets.dataTableAudio.row('#'+TIMAAT.MediaDatasets.audios[i].model.id).node()).removeClass('selected');
@@ -5122,6 +5036,10 @@
 						$(TIMAAT.MediaDatasets.dataTableVideogame.row('#'+TIMAAT.MediaDatasets.videogames[i].model.id).node()).removeClass('selected');
 					}
 				break;
+			}
+			for (; i < TIMAAT.MediaDatasets.media.length; i++) {
+				$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
+				$(TIMAAT.VideoChooser.dt.row('#'+TIMAAT.MediaDatasets.media[i].model.id).node()).removeClass('selected');
 			}
 			// for (; i < TIMAAT.MediaDatasets.media.length; i++) {
 				$(TIMAAT.MediaDatasets.dataTableMedia.row('#'+TIMAAT.MediaDatasets.selectedMediumId).node()).removeClass('selected');

@@ -43,11 +43,11 @@ body {
 }
 
 body.timaat-login-modal-open #wrapper {
-    -webkit-filter: blur(50px);
-    -moz-filter: blur(50px);
-    -o-filter: blur(50px);
-    -ms-filter: blur(50px);
-    filter: blur(50px);
+	-webkit-filter: blur(50px);
+	-moz-filter: blur(50px);
+	-o-filter: blur(50px);
+	-ms-filter: blur(50px);
+	filter: blur(50px);
 }
 
 .modal-body {
@@ -62,6 +62,10 @@ p {
 
 p + p {
 	margin-top: 15px;
+}
+
+.nav-item {
+	color: #007bff;
 }
 
 .timaat-component {
