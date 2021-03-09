@@ -37,7 +37,7 @@
         $('.nav-tabs a[href="#tagDatasheet"]').tab('show');
         $('.form').hide();
         $('#timaat-taglists-metadata-form').show();
-        TIMAAT.TagLists.tagFormDatasheet('show', $('#timaat-taglists-metadata-form').data('tag'));
+        TIMAAT.TagLists.tagFormDataSheet('show', $('#timaat-taglists-metadata-form').data('tag'));
       });
 
       // confirm delete tag modal functionality
@@ -80,7 +80,7 @@
       $('#timaat-taglists-metadata-form-edit').on('click', function(event) {
         event.stopPropagation();
         TIMAAT.UI.hidePopups();
-        TIMAAT.TagLists.tagFormDatasheet('edit', $('#timaat-taglists-metadata-form').data('tag'));
+        TIMAAT.TagLists.tagFormDataSheet('edit', $('#timaat-taglists-metadata-form').data('tag'));
 			});
 
       // submit content form button functionality
@@ -122,7 +122,7 @@
             tag = new TIMAAT.Tag(newTag);
           }
           await TIMAAT.TagLists.refreshDatatable();
-          TIMAAT.TagLists.tagFormDatasheet('show', tag);
+          TIMAAT.TagLists.tagFormDataSheet('show', tag);
         }
         else {// duplicate tag name or code entered
           $('#timaat-taglists-tag-duplicate').modal('show');
@@ -133,7 +133,7 @@
 			$('#timaat-taglists-metadata-form-dismiss').on('click', function(event) {
 				var tag = $('#timaat-taglists-metadata-form').data('tag');
 				if (tag != null) {
-					TIMAAT.TagLists.tagFormDatasheet('show', tag);
+					TIMAAT.TagLists.tagFormDataSheet('show', tag);
 				} else { // dismiss tag creation
 					$('.form').hide();
 				}
@@ -167,7 +167,7 @@
 					console.log("TCL: updatedMediumAnalysisList", updatedMediumAnalysisList);
 					mediumAnalysisList.tags = updatedMediumAnalysisList.tags;
 				}
-				// $('#timaat-mediadatasets-metadata-form').data('mediumAnalysisList', mediumAnalysisList);
+				// $('#timaat-mediadatasets-medium-metadata-form').data('mediumAnalysisList', mediumAnalysisList);
 			});
 
       // inspector event handler
@@ -259,7 +259,7 @@
           console.log("TCL: updatedAnnotationModel", updatedAnnotationModel);
           annotation.model.tags = updatedAnnotationModel.tags;
         }
-        // $('#timaat-mediadatasets-metadata-form').data('annotation', annotation);
+        // $('#timaat-mediadatasets-medium-metadata-form').data('annotation', annotation);
       });
 
       // inspector event handler
@@ -432,7 +432,7 @@
               }
             }
             $('#timaat-taglists-metadata-form').data('tag', selectedTag);
-            TIMAAT.TagLists.tagFormDatasheet('show', selectedTag);
+            TIMAAT.TagLists.tagFormDataSheet('show', selectedTag);
           });
         },
         "columns": [
@@ -492,7 +492,7 @@
       $('#timaat-taglists-metadata-name').focus();
 		},
 		
-		tagFormDatasheet: async function(action, data) {
+		tagFormDataSheet: async function(action, data) {
       // console.log("TCL: action, data: ", action, data);
       $('#timaat-taglists-metadata-form').trigger('reset');
       $('.datasheet-data').hide();

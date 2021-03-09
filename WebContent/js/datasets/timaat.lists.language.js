@@ -37,7 +37,7 @@
         $('.nav-tabs a[href="#languageDatasheet"]').tab('show');
         $('.form').hide();
         $('#timaat-languagelists-metadata-form').show();
-        TIMAAT.LanguageLists.languageFormDatasheet('show', $('#timaat-languagelists-metadata-form').data('language'));
+        TIMAAT.LanguageLists.languageFormDataSheet('show', $('#timaat-languagelists-metadata-form').data('language'));
       });
 
       // confirm delete language modal functionality
@@ -80,7 +80,7 @@
       $('#timaat-languagelists-metadata-form-edit').on('click', function(event) {
         event.stopPropagation();
         TIMAAT.UI.hidePopups();
-        TIMAAT.LanguageLists.languageFormDatasheet('edit', $('#timaat-languagelists-metadata-form').data('language'));
+        TIMAAT.LanguageLists.languageFormDataSheet('edit', $('#timaat-languagelists-metadata-form').data('language'));
 			});
 
       // submit content form button functionality
@@ -122,7 +122,7 @@
             language = new TIMAAT.Language(newLanguage);
           }
           await TIMAAT.LanguageLists.refreshDatatable();
-          TIMAAT.LanguageLists.languageFormDatasheet('show', language);
+          TIMAAT.LanguageLists.languageFormDataSheet('show', language);
         }
         else {// duplicate language name or code entered
           $('#timaat-languagelists-language-duplicate').modal('show');
@@ -133,7 +133,7 @@
 			$('#timaat-languagelists-metadata-form-dismiss').on('click', function(event) {
 				var language = $('#timaat-languagelists-metadata-form').data('language');
 				if (language != null) {
-					TIMAAT.LanguageLists.languageFormDatasheet('show', language);
+					TIMAAT.LanguageLists.languageFormDataSheet('show', language);
 				} else { // dismiss language creation
 					$('.form').hide();
 				}
@@ -247,7 +247,7 @@
               }
             }
             $('#timaat-languagelists-metadata-form').data('language', selectedLanguage);
-            TIMAAT.LanguageLists.languageFormDatasheet('show', selectedLanguage);
+            TIMAAT.LanguageLists.languageFormDataSheet('show', selectedLanguage);
           });
         },
         "columns": [
@@ -311,7 +311,7 @@
       $('#timaat-languagelists-metadata-name').focus();
 		},
 		
-		languageFormDatasheet: async function(action, data) {
+		languageFormDataSheet: async function(action, data) {
       // console.log("TCL: action, data: ", action, data);
       $('#timaat-languagelists-metadata-form').trigger('reset');
       $('.datasheet-data').hide();

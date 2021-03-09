@@ -61,7 +61,7 @@
 				$('.languages-data-tabs').hide();
 				$('.nav-tabs a[href="#languageDatasheet"]').tab('show');
 				$('#timaat-languagelists-metadata-form').data('language', language);
-				TIMAAT.LanguageLists.languageFormDatasheet('show', language);
+				TIMAAT.LanguageLists.languageFormDataSheet('show', language);
 			});
     }
 

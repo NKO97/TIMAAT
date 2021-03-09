@@ -1,7 +1,12 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -103,16 +108,20 @@ public class EndpointPublication {
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
 		// find publication
-		Publication pub = null;
+		List<Publication> publicationList = new ArrayList<>();
+		Query query;
 		try {
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
-					.setParameter("collection", colId)
-					.setParameter("owner", userID)
-					.getSingleResult();
+			query = em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
+								.setParameter("collection", colId)
+								.setParameter("owner", userID);
 		} catch (Exception e) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
+		publicationList = castList(Publication.class, query.getResultList());
+		if ( publicationList.size() == 0) { // no publication defined yet
+			return Response.ok().entity(null).build();
+		}
+		Publication pub = publicationList.get(0);
 		if ( pub.getOwner().getId() != userID )
 			return Response.status(Status.FORBIDDEN).build();
 
@@ -268,5 +277,12 @@ public class EndpointPublication {
 		}
 		return Response.ok().build();
 	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
+    }
 
 }

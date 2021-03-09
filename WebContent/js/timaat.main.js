@@ -4,13 +4,7 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	// var today = new Date();
-	// var dd = String(today.getDate()).padStart(2, '0');
-	// var mm = String(today.getMonth() + 1).padStart(2, '0');
-	// var yyyy = today.getFullYear();	
-	// today = yyyy + '-' + mm + '-' + dd;
-
-	var version = 'v0.11.1-dev (2021-02-24)';
+	var version = 'v0.11.2-dev (2021-03-09)';
 
 	document.title = 'TIMAAT - Client '+version;
 	$('#timaat-version-info').text(version);

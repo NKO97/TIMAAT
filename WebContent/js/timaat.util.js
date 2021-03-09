@@ -136,7 +136,7 @@
 		},
 		
 		resolveUserID: function(idElement, myself) {
-    // console.log("TCL: resolveUserID: function(idElement, myself)");
+    	console.log("TCL: resolveUserID: function(idElement, myself)");
     // console.log("TCL:   -> idElement", idElement);
     // console.log("TCL:   -> myself", myself);
 			if ( !myself ) myself = "mir";

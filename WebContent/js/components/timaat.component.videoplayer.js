@@ -920,15 +920,15 @@
 			var medium = new TIMAAT.Medium(video, 'video');
 			TIMAAT.VideoPlayer.selectedVideo = medium;
 			TIMAAT.MediaDatasets.clearLastMediumSelection();
-			$('#timaat-mediadatasets-metadata-form').data('medium', medium);
+			$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
 			$('#timaat-mediadatasets-media-tabs').show();
-			if (TIMAAT.MediaDatasets.subNavTab == 'datasheet') {
+			if (TIMAAT.MediaDatasets.subNavTab == 'dataSheet') {
 				$('.nav-tabs .datasheet-tab').hide();
 				$('.nav-tabs .video-data-tab').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDatasheet('show', 'video', medium);
+				TIMAAT.MediaDatasets.mediumFormDataSheet('show', 'video', medium);
 			} else if ( TIMAAT.MediaDatasets.subNavTab == 'mediumPreview') {
-				TIMAAT.MediaDatasets.subNavTab = 'datasheet';
-				TIMAAT.MediaDatasets.lastForm = 'datasheet';
+				TIMAAT.MediaDatasets.subNavTab = 'dataSheet';
+				TIMAAT.MediaDatasets.lastForm = 'dataSheet';
 			}
 			else {
 				// show tabs
@@ -945,9 +945,9 @@
 			$('#timaat-videoplayer-medium-modals-container').append($('#timaat-medium-modals'));
 			TIMAAT.MediaDatasets.container = 'videoplayer';
 			$('.mediacollection-data-tabs').hide();
-			$('.mediacollection-items-datatable').hide();
-			$('#timaat-mediadatasets-metadata-form').show();
-			$('.mediacollection-publication-sheet').hide();
+			$('.mediacollection-mediaItems').hide();
+			$('#timaat-mediadatasets-medium-metadata-form').show();
+			$('.mediacollection-publication').hide();
 			$('#timaat-mediacollectiondatasets-mediumcollection-publication-loader').hide();
 			$('.datasheet-form-annotate-button').hide();
 			$('.datasheet-form-annotate-button').prop('disabled', true);

@@ -1558,7 +1558,7 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm categorylist-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm categorylist-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit data sheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
                                   <button type="button" class="btn btn-outline btn-danger btn-sm categorylist-form-delete-button" id="timaat-categorylists-metadata-form-delete" title="Delete">
@@ -1620,7 +1620,7 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm rolelists-form-button" id="timaat-rolelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm rolelists-form-button" id="timaat-rolelists-metadata-form-edit" title="Edit data sheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
                                   <button type="button" class="btn btn-outline btn-danger btn-sm rolelists-form-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
@@ -1685,7 +1685,7 @@
                           <button type="button" class="btn btn-secondary" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Cancel</button>
                         </div>
                       </form>
-                      <!-- language datasheet form -->
+                      <!-- language data sheet form -->
                       <form class="form" role="form" id="timaat-languagelists-metadata-form" name="timaat-languagelists-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
@@ -1942,31 +1942,31 @@
             <div class="col-md-12">
               <ul class="nav nav-pills" id="media-tabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
-                  <a class="nav-link" id="collections-tab" onclick="TIMAAT.MediaCollectionDatasets.loadMediaCollections()" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
-                </li>
-                <li class="nav-item active">
-                  <a class="nav-link active" id="media-tab" onclick="TIMAAT.MediaDatasets.loadMedia()" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true"><i class="fas fa-photo-video"></i> All Media</a>
+                  <a class="nav-link media-nav-bar-link" id="mediacollections-tab" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="audios-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('audio')" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
+                  <a class="nav-link media-nav-bar-link active" id="media-tab" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true"><i class="fas fa-photo-video"></i> All Media</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="documents-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('document')" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
+                  <a class="nav-link media-nav-bar-link" id="audios-tab" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="images-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('image')" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
+                  <a class="nav-link media-nav-bar-link" id="documents-tab" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="softwares-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('software')" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
+                  <a class="nav-link media-nav-bar-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="texts-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('text')" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
+                  <a class="nav-link media-nav-bar-link" id="softwares-tab" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videos-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('video')" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
+                  <a class="nav-link media-nav-bar-link" id="texts-tab" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="videogames-tab" onclick="TIMAAT.MediaDatasets.loadMediumSubtype('videogame')" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
+                  <a class="nav-link media-nav-bar-link" id="videos-tab" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link media-nav-bar-link" id="videogames-tab" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
                 </li>
               </ul>
               <div class="tab-content" id="mediaTabsContent">
@@ -1974,9 +1974,9 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Media lists -->
                     <div class="col-md-4">
-                      <div class="card media-datatables mediacollection-datatable">
+                      <div class="card media-datatables" id="mediacollection-datatable">
                         <div class="card-header">Media Collections
-                           <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-add" class="btn btn-outline btn-success btn-sm float-right">
+                           <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-add" class="btn btn-outline btn-success btn-sm float-right add-mediumcollection-button">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -1998,7 +1998,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables media-datatable">
+                      <div class="card media-datatables" id="media-datatable">
                         <div class="card-header">All Media
                            <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
@@ -2022,9 +2022,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables audios-datatable">
+                      <div class="card media-datatables" id="audios-datatable">
                         <div class="card-header">Audios
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right" title="Add Audio">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Audio">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2046,9 +2046,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables documents-datatable">
+                      <div class="card media-datatables" id="documents-datatable">
                         <div class="card-header">Documents
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right" title="Add Document">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Document">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2070,9 +2070,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables images-datatable">
+                      <div class="card media-datatables" id="images-datatable">
                         <div class="card-header">Images
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right" title="Add Image">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Image">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2094,9 +2094,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables softwares-datatable">
+                      <div class="card media-datatables" id="softwares-datatable">
                         <div class="card-header">Software
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right" title="Add Software">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Software">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2118,9 +2118,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables texts-datatable">
+                      <div class="card media-datatables" id="texts-datatable">
                         <div class="card-header">Texts
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right" title="Add Text">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Text">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2142,9 +2142,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables videos-datatable">
+                      <div class="card media-datatables" id="videos-datatable">
                         <div class="card-header">Videos
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right" title="Add Video">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Video">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2166,9 +2166,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables videogames-datatable">
+                      <div class="card media-datatables" id="videogames-datatable">
                         <div class="card-header">Videogames
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right" title="Add Videogame">
+                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Videogame">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2195,36 +2195,38 @@
                     <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
                       <div id="timaat-mediadatasets-media-tabs">
                         <ul class="nav nav-tabs mediacollection-nav-tabs">
-                          <li class="nav-item media-data-tabs datasheet-tab mediacollection-data-tabs mediumcollection-data-tab">
-                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-metadata-form">Datasheet</a>
+                          <li class="nav-item datasheet-tab mediacollection-data-tabs mediumcollection-data-tab">
+                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-metadata">Datasheet</a>
                           </li>
-                          <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-items-tab">
-                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-items-form">Items</a>
+                          <li class="nav-item mediacollection-data-tabs mediumcollection-items-tab">
+                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-items">Items</a>
                           </li>
-                          <li class="nav-item media-data-tabs mediacollection-data-tabs mediumcollection-publication-tab">
-                            <a class="nav-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-publication-form" >Publication</a>
+                          <li class="nav-item mediacollection-data-tabs mediumcollection-publication-tab">
+                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-publication" >Publication</a>
                           </li>
                         </ul>
                         <ul class="nav nav-tabs media-nav-tabs">
                           <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-preview-form">Medium Preview</a>
+                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-preview">Medium preview</a>
                           </li>
                           <li class="nav-item media-data-tabs datasheet-tab medium-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-metadata-form">Datasheet</a>
+                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-metadata">Data sheet</a>
                           </li>
                           <li class="nav-item media-data-tabs title-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-titles-form">Medium titles</a>
+                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-titles">Medium titles</a>
                           </li>
                           <li class="nav-item media-data-tabs languagetrack-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-languagetracks-form">Languages</a>
+                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-languagetracks">Languages</a>
                           </li>
                           <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
-                            <a class="nav-link nav-link-media" id="media-tab-medium-actorwithroles-form">Actors</a>
+                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-actorwithroles">Actors</a>
                           </li>
                         </ul>
+                      <!-- </div>
+                      <div id="media-dataset-content"> -->
                         <!-- Data tab content -->
                         <!-- collection form -->
-                        <form class="form" role="form" id="timaat-mediacollectiondatasets-metadata-form" name="timaat-mediacollectiondatasets-metadata-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="mediacollection-metadata" name="mediacollection-metadata" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2327,12 +2329,12 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="mediumcollection-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary" id="timaat-mediacollectiondatasets-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary" id="timaat-mediacollectiondatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="mediacollection-metadata-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary" id="mediacollection-metadata-dismiss" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- collection items -->
-                        <div class="card media-datatables mediacollection-items-datatable"> <!-- Medium collection item data -->
+                        <div class="card dataset-content mediacollection-datatables mediacollection-mediaItems" id="mediacollection-mediaItems"> <!-- Medium collection item data -->
                           <div class="card-header">Collection Items
                             <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-items-add" class="btn btn-outline btn-success btn-sm float-right">
                               <i class="fas fa-plus"></i></button>
@@ -2357,13 +2359,10 @@
                           </div>
                         </div>
                         <!-- collection publication settings -->
-                        <div class="card media-datatables mediacollection-publication-sheet"> <!-- Medium collection publication data -->
+                        <div class="card dataset-content mediacollection-datatables mediacollection-publication" id="mediacollection-publication"> <!-- Medium collection publication data -->
                           <div class="card-header">Collection Publication Settings
                             </div>
                           <div class="timaat-datasets-list-wrapper">
-                            <div id="timaat-mediacollectiondatasets-mediumcollection-publication-loader" class="text-center card-body bg-info text-white">
-                              <i class="fas fa-spinner fa-spin"></i> Loading data...
-                            </div>
                             <div class="card-body mediacollection-publication-wrapper">
                               <div class="custom-control custom-switch mt-3">
                                 <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
@@ -2398,7 +2397,7 @@
                           </div>
                         </div>                        
                         <!-- preview form -->
-                        <form class="form" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2436,7 +2435,7 @@
                           </div>
                         </form>
                         <!-- datasheet form -->
-                        <form class="form" role="form" id="timaat-mediadatasets-metadata-form" name="timaat-mediadatasets-metadata-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-metadata-form" name="timaat-mediadatasets-medium-metadata-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2633,12 +2632,12 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-medium-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-medium-metadata-form-dismiss" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- titles form -->
-                        <form class="form" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2701,7 +2700,7 @@
                           <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
                         </form>
                         <!-- language tracks form -->
-                        <form class="form" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2757,7 +2756,7 @@
                           <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Done</button>
                         </form>
                         <!-- actor-roles form -->
-                        <form class="form" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -3017,7 +3016,7 @@
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-locatedincountry-form" href="#actorLocatedInCountries">Whereabouts</a>
                         </li>
                         <li class="nav-item actors-data-tabs actorroles-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-roles-form" href="#actorRoles">Roles</a>
+                          <a class="nav-link nav-link-actors" id="actors-tab-actor-roles-form" href="#actorWithRoles">Roles</a>
                         </li>
                         <li class="nav-item actors-data-tabs actorrolemedium-data-tab">
                           <a class="nav-link nav-link-actors" id="actors-tab-actor-role-medium-form" href="#actorRoleMedium">Roles Medium</a>
@@ -3641,7 +3640,7 @@
                           <div data-role="dynamic-actorhasrole-fields" id="dynamic-actorhasrole-fields">
                             <div class="form-group">
                             </div>
-                          <!-- additional actorrole form content will be created dynamically --> 
+                          <!-- additional actor-role form content will be created dynamically --> 
                           </div>
                         </div>
                         <div class="actorrole-form-divider">

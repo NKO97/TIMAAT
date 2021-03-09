@@ -445,8 +445,8 @@
 						TIMAAT.MediaDatasets.selectLastSelection('medium', selectedMedium.model.id);
 						TIMAAT.MediaDatasets.selectLastSelection(type, selectedMedium.model.id);
 						TIMAAT.MediaDatasets.dataTableMedia.search(selectedMedium.model.displayTitle.name).draw();
-						$('#timaat-mediadatasets-metadata-form').data('medium', selectedMedium);
-						TIMAAT.MediaDatasets.mediumFormDatasheet('show', type, selectedMedium);
+						$('#timaat-mediadatasets-medium-metadata-form').data('medium', selectedMedium);
+						TIMAAT.MediaDatasets.mediumFormDataSheet('show', type, selectedMedium);
 					});
 
 					videoelement.on('click', '.timaat-video-collectionitemremove', function(ev) {
@@ -1055,8 +1055,8 @@
 						break;
 					}
 				}
-				$('#timaat-mediadatasets-metadata-form').data('medium', selectedVideo);
-				TIMAAT.MediaDatasets.mediumFormDatasheet("show", 'video', selectedVideo);
+				$('#timaat-mediadatasets-medium-metadata-form').data('medium', selectedVideo);
+				TIMAAT.MediaDatasets.mediumFormDataSheet("show", 'video', selectedVideo);
 			});
 
 			videoelement.on('click', '.timaat-video-collectionitemremove', function(ev) {

@@ -39,6 +39,28 @@
 			});
 		},
 
+		async getMediumCollection(id) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+id,
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: getMediumCollection -> data", data);
+					resolve(data);
+				}).fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});		
+		},
+
 		async getTagList(mediumCollectionId) {
       console.log("TCL: getTagList -> for mediumCollectionId", mediumCollectionId);
 			return new Promise(resolve => {

@@ -69,7 +69,7 @@ public class EndpointMediumCollection {
 																			@QueryParam("orderby") String orderby,
 																			@QueryParam("dir") String direction,
 																			@QueryParam("search") String search ) {
-		System.out.println("EndpointMediumCollection: getAllMediaCollections: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("EndpointMediumCollection: getAllMediaCollections: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -371,31 +371,42 @@ public class EndpointMediumCollection {
 		return Response.ok().entity(cols).build();
 	}
 
-	@GET
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	public Response getCollection(
-			@PathParam("id") int id,
-			@QueryParam("noContents") String noContents
-			) {
-		EntityManager em = TIMAATApp.emf.createEntityManager();
-		
-		MediaCollection col = em.find(MediaCollection.class, id);
-		
-		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
-		// strip analysislists
-		for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
-			m.getMedium().getMediumAnalysisLists().clear();
-			m.getMedium().getFileStatus();
-			m.getMedium().getViewToken();
 
-		}
-	
-		return Response.ok().entity(col).build();
+	@GET
+	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getMediumCollection(@PathParam("id") int id) {    	
+		MediaCollection mediumCollection = TIMAATApp.emf.createEntityManager().find(MediaCollection.class, id);
+		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		return Response.ok().entity(mediumCollection).build();
 	}
+
+	// @GET
+	// @Path("{id}")
+	// @Produces(MediaType.APPLICATION_JSON)
+	// @Secured
+	// public Response getCollection(
+	// 		@PathParam("id") int id,
+	// 		@QueryParam("noContents") String noContents
+	// 		) {
+	// 	EntityManager em = TIMAATApp.emf.createEntityManager();
+		
+	// 	MediaCollection col = em.find(MediaCollection.class, id);
+		
+	// 	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
+		
+	// 	if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
+	// 	// strip analysislists
+	// 	for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
+	// 		m.getMedium().getMediumAnalysisLists().clear();
+	// 		m.getMedium().getFileStatus();
+	// 		m.getMedium().getViewToken();
+
+	// 	}
+	
+	// 	return Response.ok().entity(col).build();
+	// }
 
 	@GET
 	@Path("{id}/media")

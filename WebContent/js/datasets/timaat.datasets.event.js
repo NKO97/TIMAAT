@@ -254,14 +254,14 @@
 			// key press events
 			$('#timaat-eventdatasets-metadata-form-submit').keypress(function(event) {
 				event.stopPropagation();
-				if (event.which == '13') {
+				if (event.which == '13') { // == enter
 					$('#timaat-eventdatasets-metadata-form-submit').trigger('click');
 				}
 			});
 
 			$('#timaat-eventdatasets-metadata-form-dismiss').keypress(function(event) {
 				event.stopPropagation();
-				if (event.which == '13') {
+				if (event.which == '13') { // == enter
 					$('#timaat-eventdatasets-metadata-form-dismiss').trigger('click');
 				}
 			});

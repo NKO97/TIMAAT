@@ -159,7 +159,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getMedium -> data", data);
+					// console.log("TCL: getMedium -> data", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log(e.responseText);

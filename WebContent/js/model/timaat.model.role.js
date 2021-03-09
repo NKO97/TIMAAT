@@ -61,7 +61,7 @@
 				$('.roles-data-tabs').hide();
 				$('.nav-tabs a[href="#roleDatasheet"]').tab('show');
 				$('#timaat-rolelists-metadata-form').data('role', role);
-				TIMAAT.RoleLists.roleOrRoleGroupFormDatasheet('show', 'role', role);
+				TIMAAT.RoleLists.roleOrRoleGroupFormDataSheet('show', 'role', role);
 			});
     }
 

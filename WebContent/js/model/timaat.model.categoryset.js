@@ -62,7 +62,7 @@
 				$('.nav-tabs a[href="#categorySetDatasheet"]').tab('show');
 				$('#timaat-categorylists-metadata-form').data('categoryset', categorySet);
         console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
-				TIMAAT.CategoryLists.categoryOrCategorySetFormDatasheet('show', 'categoryset', categorySet);
+				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'categoryset', categorySet);
 			});
     }
 

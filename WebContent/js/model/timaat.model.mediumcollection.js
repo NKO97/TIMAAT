@@ -102,7 +102,7 @@
 			// console.log("TCL: Medium -> remove -> remove()");
 			// remove medium from UI
 			this.listView.remove(); // TODO remove tags from medium_has_tags
-			$('#timaat-mediadatasets-metadata-form').data('medium', null);
+			$('#timaat-mediadatasets-medium-metadata-form').data('medium', null);
 		}
 
 	}

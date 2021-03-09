@@ -4,13 +4,13 @@ $('#timaat-login-modal').on('shown.bs.modal', function() {
 });
 
 // <!-- client side form validation -->
-var mediumFormMetadata = $('#timaat-mediadatasets-metadata-form');
+var mediumFormMetadata = $('#timaat-mediadatasets-medium-metadata-form');
 
 jQuery.validator.addMethod("greaterThanStart", function (value, element, params) {
   return this.optional(element) || new Date(value) >= new Date($(params).val());
 },'Must be greater than recording start date.');
 
-var mediumFormMetadataValidator = $('#timaat-mediadatasets-metadata-form').validate({
+var mediumFormMetadataValidator = $('#timaat-mediadatasets-medium-metadata-form').validate({
   rules: {
     displayTitle: {
       required: true,
@@ -167,8 +167,8 @@ var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithrol
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumCollectionFormMetadata = $('#timaat-mediacollectiondatasets-metadata-form');
-var mediumCollectionFormMetadataValidator = $('#timaat-mediacollectiondatasets-metadata-form').validate({
+var mediumCollectionFormMetadata = $('#mediacollection-metadata');
+var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata').validate({
   rules: {
     title: {
       required: true,

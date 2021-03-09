@@ -159,8 +159,8 @@
 			// 	$('.media-nav-tabs').show();
 			// 	$('.media-data-tabs').hide();
 			// 	$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-			// 	$('#timaat-mediadatasets-metadata-form').data('medium', medium);
-			// 	TIMAAT.MediaDatasets.mediumFormDatasheet("show", mediumType, medium);
+			// 	$('#timaat-mediadatasets-medium-metadata-form').data('medium', medium);
+			// 	TIMAAT.MediaDatasets.mediumFormDataSheet("show", mediumType, medium);
 			// 	// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			// });
 
@@ -181,7 +181,7 @@
 		updateUI() {
 			// console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
-			var type = $('#timaat-mediadatasets-metadata-form').data('mediumType');
+			var type = $('#timaat-mediadatasets-medium-metadata-form').data('mediumType');
 			var name = this.model.displayTitle.name;
 			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
 			this.listView.find('.timaat-mediadatasets-'+type+'-list-name').html(name);
@@ -206,7 +206,7 @@
 			// console.log("TCL: Medium -> remove -> remove()");
 			// remove medium from UI
 			this.listView.remove(); // TODO remove tags from medium_has_tags
-			$('#timaat-mediadatasets-metadata-form').data('medium', null);
+			$('#timaat-mediadatasets-medium-metadata-form').data('medium', null);
 		}
 
 	}

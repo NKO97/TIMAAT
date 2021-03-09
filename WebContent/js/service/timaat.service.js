@@ -30,7 +30,7 @@
 			TIMAAT.Service.state = 2;
 			TIMAAT.Service.token = null;
 			TIMAAT.Service.session = null;
-			location.reload(true);
+			location.reload();
 			// TODO refactor
 			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
 		},
@@ -49,7 +49,9 @@
 					console.log("TCL: getSinglePublication -> data", data);
 					resolve(data);
 				}).fail(function(e) {
-					resolve(null);
+					// resolve(null);
+					console.log(e.responseText);
+					console.log( "error", e );
 				});	
 			}).catch((error) => {
 				console.log( "error: ", error );
