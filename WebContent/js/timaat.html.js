@@ -346,8 +346,8 @@ var actorFormMemberOfCollectivesValidator = $('#actor-memberofcollectives-form')
     actorFormMemberOfCollectives.submit();
   },
 });
-var eventFormMetadata = $('#timaat-eventdatasets-metadata-form');
-var eventFormMetadataValidator = $('#timaat-eventdatasets-metadata-form').validate({
+var eventFormMetadata = $('#event-metadata-form');
+var eventFormMetadataValidator = $('#event-metadata-form').validate({
   rules: {
     name: {
       required: true,

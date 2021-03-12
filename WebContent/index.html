@@ -236,7 +236,7 @@
                 </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
-                  <!-- <a href="#locations"
+                  <!-- <a
                   onclick="TIMAAT.UI.showComponent('locations')"
                   data-toggle="popover"
                   data-trigger="hover"
@@ -252,7 +252,7 @@
                 <!-- </a> -->
               </li>              
               <li class="timaat-sidebar-tab timaat-sidebar-tab-events">
-                <a href="#events"
+                <a
                   onclick="TIMAAT.EventDatasets.initEventComponent()" 
                   data-toggle="popover"
                   data-trigger="hover"
@@ -2650,8 +2650,8 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="medium-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="medium-metadata-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="medium-metadata-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="medium-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- titles form -->
@@ -3076,10 +3076,10 @@
                                       <div class="carousel-inner carousel-centered" id="profile-image-carousel-inner">
                                       </div>
                                       <!-- Left and right controls -->
-                                      <a class="carousel-control-prev" href="#prev" data-slide="prev">
+                                      <a class="carousel-control-prev" data-slide="prev">
                                         <span class="carousel-control-prev-icon"></span>
                                       </a>
-                                      <a class="carousel-control-next" href="#next" data-slide="next">
+                                      <a class="carousel-control-next" data-slide="next">
                                         <span class="carousel-control-next-icon"></span>
                                       </a>
                                       <!-- additional profile image form content will be created dynamically --> 
@@ -3328,8 +3328,8 @@
                           </div> -->
                         </div>
                         <div class="actor-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="actor-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="actor-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="actor-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="actor-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                       <!-- names form -->
@@ -4211,7 +4211,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="events-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link active" id="events-tab" onclick="TIMAAT.EventDatasets.loadEvents()" data-toggle="tab" href="#events" role="tab" aria-controls="events" aria-selected="true">
+                  <a class="nav-link events-nav-bar-link active" id="events-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="true">
                     <i class="fas fa-id-badge"></i> Events
                   </a>
                 </li>
@@ -4221,9 +4221,9 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Events lists -->
                     <div class="col-md-4">
-                      <div class="card events-datatables events-datatable">
+                      <div class="card events-datatables" id="events-datatable">
                         <div class="card-header">Events
-                          <button type="button" id="timaat-eventdatasets-event-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" onclick="TIMAAT.EventDatasets.addEvent('event')" class="btn btn-outline btn-success btn-sm float-right add-event-button" title="Add Event">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -4249,13 +4249,13 @@
                     <!-- Events data -->
                     <div class="col-md-8" id="timaat-eventdatasets-events-tabs">
                       <ul class="nav nav-tabs events-nav-tabs">
-                        <li class="nav-item events-data-tabs event-data-tab">
-                          <a class="nav-link nav-link-events" id="events-tab-event-metadata-form" href="#eventDatasheet">Datasheet</a>
+                        <li class="nav-item event-data-tabs">
+                          <a class="nav-link event-content-nav-bar-link" id="events-tab-event-metadata">Datasheet</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
-                      <form class="form" role="form" id="timaat-eventdatasets-metadata-form" name="timaat-eventdatasets-metadata-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="event-metadata-form" name="event-metadata-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -4264,13 +4264,13 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-tag" title="Tag event" name="tag">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="event-metadata-form-tag" title="Tag event" name="tag">
                                     <i class="fas fa-tags"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="event-datasheet-form-edit-button" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-delete" title="Delete event">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="event-datasheet-form-delete-button" title="Delete event">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -4308,8 +4308,8 @@
                           </div>
                         </div>
                         <div class="event-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-eventdatasets-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-eventdatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="event-datasheet-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="event-datasheet-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>

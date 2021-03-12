@@ -21,47 +21,53 @@
 
 	TIMAAT.EventDatasets = {
 		events: null,
+		// subNavTab: 'dataSheet', // no subNavTabs currently exist
 		lastForm: null,
-		selectedId: null,
+		selectedEventId: null,
 
 		init: function() {
-			TIMAAT.EventDatasets.initEvents();
-			$('.events-data-tabs').hide();
-			$('.events-datatables').hide();
-			$('.events-datatable').show();
+			this.initEvents();
+			this.displayComponent('event', 'events-tab', 'events-datatable');
 		},
 
 		initEventComponent: function() {
-			console.log("TCL: initEventComponent");
-				if (!TIMAAT.EventDatasets.eventsLoaded) {
-					TIMAAT.EventDatasets.setEventList();
-					TIMAAT.EventDatasets.eventsLoaded = true;
+			// console.log("TCL: initEventComponent");
+				if (!this.eventsLoaded) {
+					this.setEventList();
 				}
 				TIMAAT.UI.showComponent('events');
+				$('#events-tab').trigger('click');
 			},
 
 		initEvents: function() {
-				// console.log("TCL: EventDatasets: initEvents: function()");
-
 			// nav-bar functionality
-			$('#events-tab-event-metadata-form').on('click', function(event) {
-				$('.form').hide();
-				TIMAAT.EventDatasets.subNavTab = null;
-				$('.nav-tabs a[href="#eventDatasheet"]').tab('show');
-				TIMAAT.EventDatasets.eventFormDataSheet('show', $('#timaat-eventdatasets-metadata-form').data('event'));
+			$('#events-tab').on('click', function(event) {
+				TIMAAT.EventDatasets.loadEvents();
+				TIMAAT.URLHistory.setURL(null, 'Event Datasets', '#event/list');
 			});
 
-			// add event button functionality (in event list - opens datasheet form)
-			$('#timaat-eventdatasets-event-add').on('click', function(event) {
-				$('#timaat-eventdatasets-metadata-form').data('event', null);
-				TIMAAT.EventDatasets.addEvent('event');
+			$('#events-tab-event-metadata').on('click', function(ev) {
+				let event = $('#event-metadata-form').data('event');
+				// let type = event.model.eventType.eventTypeTranslations[0].type;
+				let name = event.model.eventTranslations[0].name;
+				let id = event.model.id;
+				TIMAAT.EventDatasets.displayDataSetContentArea('event-metadata-form');
+				TIMAAT.EventDatasets.subNavTab = 'dataSheet';
+				TIMAAT.EventDatasets.lastForm = 'dataSheet';
+				TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
+				// TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'show', type);
+				// if ($('#event-metadata-form').attr('data-type') == 'event') {
+					TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + id);
+				// } else {
+				// 	TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + type + '/' + id);					
+				// }
 			});
 
 			// delete event button (in form) handler
-			$('#timaat-eventdatasets-metadata-form-delete').on('click', function(event) {
-				event.stopPropagation();
+			$('#event-datasheet-form-delete-button').on('click', function(ev) {
+				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-eventdatasets-event-delete').data('event', $('#timaat-eventdatasets-metadata-form').data('event'));
+				$('#timaat-eventdatasets-event-delete').data('event', $('#event-metadata-form').data('event'));
 				$('#timaat-eventdatasets-event-delete').modal('show');
 			});
 
@@ -82,32 +88,41 @@
 					}
 				}
 				modal.modal('hide');
-				$('#timaat-eventdatasets-metadata-form').hide();
-				$('.events-data-tabs').hide();
-				$('.form').hide();
+				TIMAAT.EventDatasets.hideDataSetContentContainer();
+				// if ( $('#event-metadata-form').data('type') == 'event') {
+					TIMAAT.EventDatasets.loadEvents();
+				// } else {
+				// 	TIMAAT.EventDatasets.loadEventSubtype(type);
+				// }
 			});
 
 			// edit content form button handler
-			$('#timaat-eventdatasets-metadata-form-edit').on('click', function(event) {
-				event.stopPropagation();
+			$('#event-datasheet-form-edit-button').on('click', function(ev) {
+				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.EventDatasets.eventFormDataSheet('edit',  $('#timaat-eventdatasets-metadata-form').data('event'));
+				let event = $('#event-metadata-form').data('event');
+				switch (TIMAAT.EventDatasets.lastForm) {
+					default:
+						// TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'edit', type);
+						TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'edit');
+					break;
+				}
 				// event.listView.find('.timaat-eventdatasets-event-list-tags').popover('show');
 			});
 			
 			// event form handlers
 			// submit event metadata button functionality
-			$('#timaat-eventdatasets-metadata-form-submit').on('click', async function(event) {
+			$('#event-datasheet-form-submit-button').on('click', async function(ev) {
 				// continue only if client side validation has passed
-				event.preventDefault();
-				if (!$('#timaat-eventdatasets-metadata-form').valid()) return false;
+				ev.preventDefault();
+				if (!$('#event-metadata-form').valid()) return false;
 
 				// the event model (in case of editing an existing event)
-				var event = $('#timaat-eventdatasets-metadata-form').data('event');				
+				var event = $('#event-metadata-form').data('event');				
 				// console.log("TCL: event", event);
 
 				// create/Edit event window submitted data
-				var formDataRaw = $('#timaat-eventdatasets-metadata-form').serializeArray();
+				var formDataRaw = $('#event-metadata-form').serializeArray();
 				var formDataObject = {};
 				$(formDataRaw).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -127,29 +142,32 @@
 					var eventTranslationModel = await TIMAAT.EventDatasets.createEventTranslationModel(formDataSanitized);
 					var newEvent = await TIMAAT.EventDatasets.createEvent(eventModel, eventTranslationModel);
 					event = new TIMAAT.Event(newEvent);
-					$('#timaat-eventdatasets-metadata-form').data('event', event);
+					$('#event-metadata-form').data('event', event);
+					$('#events-tab-event-metadata').trigger('click');
 				}
+				$('.add-event-button').prop('disabled', false);
+				$('.add-event-button :input').prop('disabled', false);
+				$('.add-event-button').show();
 				await TIMAAT.EventDatasets.refreshDataTable();
 				TIMAAT.EventDatasets.selectLastSelection(event.model.id);
-				TIMAAT.EventDatasets.eventFormDataSheet('show', event);
+				TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#timaat-eventdatasets-metadata-form-dismiss').on('click', function(event) {
-				var event = $('#timaat-eventdatasets-metadata-form').data('event');
-				if (event != null) {
-					TIMAAT.EventDatasets.eventFormDataSheet('show', event);
-				} else { // dismiss event creation
-					$('.form').hide();
-				}
+			$('#event-datasheet-form-dismiss-button').on('click', async function(event) {
+				$('.add-event-button').prop('disabled', false);
+				$('.add-event-button :input').prop('disabled', false);
+				$('.add-event-button').show();
+				let currentUrlHash = window.location.hash;
+        await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
 			// tag button handler
-			$('#timaat-eventdatasets-metadata-form-tag').on('click', async function(event) {
-				event.stopPropagation();
+			$('#event-metadata-form-tag').on('click', async function(ev) {
+				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-eventdatasets-event-tags');
-				modal.data('event', $('#timaat-eventdatasets-metadata-form').data('event'));
+				modal.data('event', $('#event-metadata-form').data('event'));
 				var event = modal.data('event');
 				modal.find('.modal-body').html(`
 					<form role="form" id="eventTagsModalForm">
@@ -222,8 +240,8 @@
 			});
 
 			// submit tag modal button functionality
-			$('#timaat-eventdatasets-modal-tag-submit').on('click', async function(event) {
-				event.preventDefault();
+			$('#timaat-eventdatasets-modal-tag-submit').on('click', async function(ev) {
+				ev.preventDefault();
 				var modal = $('#timaat-eventdatasets-event-tags');
 				if (!$('#eventTagsModalForm').valid()) 
 					return false;
@@ -247,127 +265,207 @@
 					console.log("TCL: updatedEventModel", updatedEventModel);
 					event.model.tags = updatedEventModel.tags;
 				}
-				$('#timaat-eventdatasets-metadata-form').data('event', event);
+				$('#event-metadata-form').data('event', event);
 				modal.modal('hide');
 			});
 
 			// key press events
-			$('#timaat-eventdatasets-metadata-form-submit').keypress(function(event) {
+			$('#event-datasheet-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#timaat-eventdatasets-metadata-form-submit').trigger('click');
+					$('#event-datasheet-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#timaat-eventdatasets-metadata-form-dismiss').keypress(function(event) {
+			$('#event-datasheet-form-dismiss-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#timaat-eventdatasets-metadata-form-dismiss').trigger('click');
+					$('#event-datasheet-form-dismiss-button').trigger('click');
 				}
 			});
 			
 		},
 
 		load: function() {
-			TIMAAT.EventDatasets.loadEvents();
+			this.loadEvents();
 		},
 
 		loadEvents: function() {
-    	// console.log("TCL: loadEvents: function()");
-			// load events
-			$('.events-datatables').hide();
-			$('.events-datatable').show();
-			TIMAAT.EventDatasets.clearLastSelection();
+			this.displayComponent('event', 'events-tab', 'events-datatable');
+			this.selectLastSelection(null);
+			this.subNavTab = 'dataSheet';
 		},
 
 		loadEventDataTables: async function() {
-			console.log("TCL: loadEventDataTables: async function()");
-			TIMAAT.EventDatasets.setupEventDataTable();
+			this.setupEventDataTable();
 		},
 		
 		setEventList: function(events) {
     	console.log("TCL: events", events);
-			$('.form').hide();
-			$('.events-data-tabs').hide();
-			if ( TIMAAT.EventDatasets.events == null ) return;
+			if ( this.events == null ) return;
+
+			this.clearLastSelection();
 
 			$('#timaat-eventdatasets-event-list-loader').remove();
 			// clear old UI list
 			$('#timaat-eventdatasets-event-list').empty();
 
 			// set ajax data source
-			if ( TIMAAT.EventDatasets.dataTableEvent ) {
-				// TIMAAT.EventDatasets.dataTableEvent.ajax.url('/TIMAAT/api/event/list');
-				TIMAAT.EventDatasets.dataTableEvent.ajax.reload(null, false);
-			}	
+			if ( this.dataTableEvent ) {
+				// this.dataTableEvent.ajax.url('/TIMAAT/api/event/list');
+				this.dataTableEvent.ajax.reload(null, false);
+			}
+			this.eventsLoaded = true;
+		},
+
+		// display all areas of the events component
+		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null) {
+			this.displayNavBarContainer();
+			this.setNavBarActiveLink(navBarLinkId);
+			this.setAndDisplayDataTableActiveActiveCard(dataTableCardClass);
+			this.displayDataSetContentContainer(navTabLinkId, contentId, type);
+		},
+
+		// display top nav bar row
+		displayNavBarContainer: function() {
+			$('#events-tabs').show();
+		},
+
+		setNavBarActiveLink: function(navBarLinkId) {
+			$('.events-nav-bar-link').removeClass('active');
+			if (navBarLinkId) {
+				$('#'+navBarLinkId).addClass('active');
+			}
+		},
+
+		// display left column (data table list) and show corresponding data
+		setAndDisplayDataTableActiveActiveCard: function(dataTableCardId) {
+			$('.events-datatables').hide();
+			if (dataTableCardId) {
+				$('#'+dataTableCardId).show();
+			}
+		},
+
+		// display right column (dataset content)
+		displayDataSetContentContainer: function(navTabLinkId=null, contentId=null, type=null) {
+			$('.events-data-tabs').hide();
+			if (navTabLinkId) {
+				this.displayAndSetDataSetContentNavTab(navTabLinkId, type);
+			}
+			this.displayDataSetContentArea(contentId);
+		},
+
+		hideDataSetContentContainer: function() {
+			this.displayDataSetContentContainer(null, null, null);
+		},
+
+		// display dataset content tab bar row
+		displayAndSetDataSetContentNavTab: function(navTabLinkId, type) {
+			if (type == 'event') {
+				$('.events-data-tabs').show();
+			}
+			this.setDataSetContentActiveNavTab(navTabLinkId);
+		},
+
+		setDataSetContentActiveNavTab: function(navTabLinkId) {
+			$('.events-content-nav-bar-link').removeClass('active');
+			if (navTabLinkId) {
+				$('#'+navTabLinkId).addClass('active');
+			}
+		},
+
+		// display dataset content data
+		displayDataSetContentArea: function(contentId) {
+			$('.dataset-content').hide();
+			if (contentId) {
+				$('#'+contentId).show();
+			}
+		},
+
+		displayDataSetContent: function(form, event, mode = 'show') {
+			this.subNavTab = form;
+			switch(form) {
+				case 'dataSheet':
+					this.setDataSetContentActiveNavTab('events-tab-event-metadata');
+					this.eventFormDataSheet(mode, event);
+				break;
+			}
 		},
 		
 		addEvent: function() {	
     	// console.log("TCL: addEvent: function()");
-			$('.form').hide();
-			$('.events-data-tabs').hide();
-			$('.nav-tabs a[href="#eventDatasheet"]').show();
+			this.displayDataSetContentContainer('events-tab-event-metadata', 'event-metadata-form');
+			$('.add-event-button').hide();
+			$('.add-event-button').prop('disabled', true);
+			$('.add-event-button :input').prop('disabled', true);
+			$('#event-metadata-form').data('event', null);
 			eventFormMetadataValidator.resetForm();
 
-			$('#timaat-eventdatasets-metadata-form').trigger('reset');
-			$('#timaat-eventdatasets-metadata-form').show();
-			$('.datasheet-data').hide();
-			$('.event-data').show();
+			this.selectLastSelection(null);
+			this.subNavTab = 'dataSheet';
+			$('#event-metadata-form').trigger('reset');
+
+			this.initFormDataSheetData();
 			this.initEventFormDataForEdit();
-			$('#timaat-eventdatasets-metadata-form-submit').html('Add');
+			$('#event-datasheet-form-submit-button').html('Add');
 			$('#eventFormHeader').html("Add Event");
 			// TODO event domain
 			// TODO event type
 		},
 
-		eventFormDataSheet: async function(action, eventData) {
-			console.log("TCL: action, eventData", action, eventData);
-			TIMAAT.EventDatasets.selectLastSelection(eventData.model.id);
-			$('#timaat-eventdatasets-metadata-form').trigger('reset');
-			$('.datasheet-data').hide();
-			$('.event-data').show();
+		eventFormDataSheet: async function(action, data) {
+			console.log("TCL: action, data", action, data);
+			this.selectLastSelection(data.model.id);
+			$('#event-metadata-form').trigger('reset');
+			this.initFormDataSheetData();
 			eventFormMetadataValidator.resetForm();
 
-			// show tabs
-			$('.nav-tabs a[href="#eventDatasheet"]').focus();
-			$('#timaat-eventdatasets-metadata-form').show();
-
 			if ( action == 'show') {
-				$('#timaat-eventdatasets-metadata-form :input').prop('disabled', true);
+				$('#event-metadata-form :input').prop('disabled', true);
 				$('.form-buttons').prop('disabled', false);
 				$('.form-buttons :input').prop('disabled', false);
 				$('.form-buttons').show();
-				$('#timaat-eventdatasets-metadata-form-submit').hide();
-				$('#timaat-eventdatasets-metadata-form-dismiss').hide();
-				$('#eventFormHeader').html("Event Datasheet (#"+ eventData.model.id+')');
+				this.initFormForShow(data.model);
+				$('#event-datasheet-form-submit-button').hide();
+				$('#event-datasheet-form-dismiss-button').hide();
+				$('#eventFormHeader').html("Event Datasheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
 				this.initEventFormDataForEdit();
-				$('#timaat-eventdatasets-metadata-form-submit').html("Save");
+				$('.add-event-button').hide();
+				$('.add-event-button').prop('disabled', true);
+				$('.add-event-button :input').prop('disabled', true);
+				$('#event-datasheet-form-submit-button').html("Save");
 				$('#eventFormHeader').html("Edit Event");
 			}
 
 			// setup UI
-			var data = eventData.model;
-			// event data
-			$('#timaat-eventdatasets-metadata-event-name').val(data.eventTranslations[0].name);
-			$('#timaat-eventdatasets-metadata-event-description').val(data.eventTranslations[0].description);
-			if (data.beganAt != null && !(isNaN(data.beganAt)))
-				$('#timaat-eventdatasets-metadata-event-began-at').val(moment.utc(data.beganAt).format('YYYY-MM-DD'));
+			$('#timaat-eventdatasets-metadata-event-name').val(data.model.eventTranslations[0].name);
+			$('#timaat-eventdatasets-metadata-event-description').val(data.model.eventTranslations[0].description);
+			if (data.model.beganAt != null && !(isNaN(data.model.beganAt)))
+				$('#timaat-eventdatasets-metadata-event-began-at').val(moment.utc(data.model.beganAt).format('YYYY-MM-DD'));
 				else $('#timaat-eventdatasets-metadata-event-began-at').val('');
-			if (data.endedAt != null && !(isNaN(data.endedAt)))
-				$('#timaat-eventdatasets-metadata-event-ended-at').val(moment.utc(data.endedAt).format('YYYY-MM-DD'));
+			if (data.model.endedAt != null && !(isNaN(data.endedAt)))
+				$('#timaat-eventdatasets-metadata-event-ended-at').val(moment.utc(data.model.endedAt).format('YYYY-MM-DD'));
 				else $('#timaat-eventdatasets-metadata-event-ended-at').val('');
 
-			$('#timaat-eventdatasets-metadata-form').data('event', eventData);
+			$('#event-metadata-form').data('event', data);
+		},
+
+		showLastForm: function() {
+			let event = $('#event-metadata-form').data('event');
+			switch (this.lastForm) {
+				case 'dataSheet':
+					this.displayDataSetContent('dataSheet', event);
+				break;
+			}
 		},
 
 		createEvent: async function(eventModel, eventTranslationModel) {
 			console.log("TCL: createEvent: async function(eventModel)", eventModel);
 			try {
 				// create event
-				var tempEventModel = eventModel;
-				var newEventModel = await TIMAAT.EventService.createEvent(tempEventModel);
+				var newEventModel = await TIMAAT.EventService.createEvent(eventModel);
         console.log("TCL: newEventModel", newEventModel);
 			} catch(error) {
 				console.log( "error: ", error);
@@ -535,19 +633,35 @@
 			// setup form
 			$('#timaat-eventdatasets-metadata-event-began-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-eventdatasets-metadata-event-ended-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-eventdatasets-metadata-form :input').prop('disabled', false);
+			$('#event-metadata-form :input').prop('disabled', false);
+			this.hideFormButtons();
+			$('#event-datasheet-form-submit-button').show();
+			$('#event-datasheet-form-dismiss-button').show();
+			$('#timaat-eventdatasets-metadata-event-name').focus();
+		},
+
+		initFormForShow: function (model) {
+			$('.eventdatasheet-form-edit-button').prop('disabled', false);
+			$('.eventdatasheet-form-edit-button :input').prop('disabled', false);
+			$('.eventdatasheet-form-edit-button').show();
+		},
+
+		initFormDataSheetData: function(type) {
+			$('.datasheet-data').hide();
+			$('.event-data').show();
+		},
+
+		hideFormButtons: function() {
 			$('.form-buttons').hide();
 			$('.form-buttons').prop('disabled', true);
 			$('.form-buttons :input').prop('disabled', true);
-			$('#timaat-eventdatasets-metadata-form-submit').show();
-			$('#timaat-eventdatasets-metadata-form-dismiss').show();
-			$('#timaat-eventdatasets-metadata-event-name').focus();
 		},
+
 
 		setupEventDataTable: function() {
 			console.log("TCL: setupDatatable");
 			// setup datatable
-			TIMAAT.EventDatasets.dataTableEvent = $('#timaat-eventdatasets-event-table').DataTable({
+			this.dataTableEvent = $('#timaat-eventdatasets-event-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -595,7 +709,7 @@
 				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
-					if (data.id == TIMAAT.EventDatasets.selectedId) {
+					if (data.id == TIMAAT.EventDatasets.selectedEventId) {
 						TIMAAT.EventDatasets.clearLastSelection();
 						$(row).addClass('selected');
 					}
@@ -609,33 +723,7 @@
 
 					eventElement.on('click', '.name', function(ev) {
 						ev.stopPropagation();
-						// show tag editor - trigger popup
-						TIMAAT.UI.hidePopups();
-						TIMAAT.UI.showComponent('events');
-						$('.form').hide();
-						$('.events-nav-tabs').show();
-						$('.events-data-tabs').hide();
-						var selectedEvent;
-						var i = 0;
-						for (; i < TIMAAT.EventDatasets.events.length; i++) {
-							if (TIMAAT.EventDatasets.events[i].model.id == event.id) {
-								selectedEvent = TIMAAT.EventDatasets.events[i];
-								break;
-							}
-						}
-						TIMAAT.EventDatasets.selectLastSelection(event.id);
-            console.log("TCL: event", event);
-						$('#timaat-eventdatasets-metadata-form').data('event', selectedEvent);
-						if (TIMAAT.EventDatasets.subNavTab) {
-							// console.log("TCL: TIMAAT.EventDatasets.subNavTab", TIMAAT.EventDatasets.subNavTab);
-							// show tabs
-							$('.event-data-tab').show();
-							$('.nav-tabs a[href="#'+TIMAAT.EventDatasets.subNavTab+'"]').tab('show');
-							TIMAAT.EventDatasets.showLastForm();
-						} else {
-							$('.nav-tabs a[href="#eventDatasheet"]').tab('show');
-							TIMAAT.EventDatasets.eventFormDataSheet('show', selectedEvent);
-						}
+						TIMAAT.EventDatasets.setDataTableOnItemSelect('event', event.id);
 					});
 				},
 				"columns": [{
@@ -664,30 +752,62 @@
 			});				
 		},
 
+		setDataTableOnItemSelect(type, previousEventId) {
+			// show tag editor - trigger popup
+			TIMAAT.UI.hidePopups();
+			switch (this.subNavTab) {
+				case 'dataSheet':
+					this.displayDataSetContentContainer('event-data-tab', 'event-metadata-form', 'event');
+				break;
+			}
+			this.clearLastSelection();
+			let index;
+			let selectedEvent;
+			switch (type) {
+				case 'event':
+					index = this.events.findIndex(({model}) => model.id === previousEventId);
+					selectedEvent = this.events[index];
+				break;
+			}
+			TIMAAT.EventDatasets.selectLastSelection(previousEventId);
+			$('#event-metadata-form').data('event', selectedEvent);
+			// if (type == 'event') {
+				TIMAAT.URLHistory.setURL(null, selectedEvent.model.eventTranslations[0].name + ' · Datasets', '#event/' + selectedEvent.model.id);
+				// type = selectedActor.model.actorType.actorTypeTranslations[0].type;
+			// } else {
+			// 	TIMAAT.URLHistory.setURL(null, selectedActor.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedActor.model.id);
+			// }
+			this.displayDataSetContent(this.subNavTab, selectedEvent);
+		},
+
 		selectLastSelection: function(id) {
 			// console.log("TCL: selectLastSelection: id", id);
-			// console.log("TCL: TIMAAT.EventDatasets.selectedId", TIMAAT.EventDatasets.selectedId);
-			var table = TIMAAT.EventDatasets.dataTableEvent;
-			// console.log("TCL: table", table);
 			// remove selection from old rows
-			if (TIMAAT.EventDatasets.selectedId && TIMAAT.EventDatasets.selectedId != id) {
-				$(table.row('#'+TIMAAT.EventDatasets.selectedId).node()).removeClass('selected');
+			if (this.selectedEventId && this.selectedEventId != id) {
+				$(this.dataTableEvent.row('#'+this.selectedEventId).node()).removeClass('selected');
 			}
-			TIMAAT.EventDatasets.selectedId = id;
 			// add selection to new rows
-			$(table.row('#'+TIMAAT.EventDatasets.selectedId).node()).addClass('selected');
+			if (id) {
+				$(this.dataTableEvent.row('#'+id).node()).addClass('selected');
+			}
+			this.selectedEventId = id;
+
 		},
 
 		clearLastSelection: function () {
-			$(TIMAAT.EventDatasets.dataTableEvent.row('#'+TIMAAT.EventDatasets.selectedId).node()).removeClass('selected');
-			TIMAAT.EventDatasets.selectedId = null;
+			let i = 0;
+			for (; i < this.events.length; i++) {
+				$(this.dataTableEvent.row('#'+this.events[i].model.id).node()).removeClass('selected');
+			}
+			$(this.dataTableEvent.row('#'+this.selectedEventId).node()).removeClass('selected');
+			this.selectedEventId = null;
 		},
 
 		refreshDataTable: async function() {
 			// console.log("TCL: refreshDataTable: ");
 			// set ajax data source
-			if (TIMAAT.EventDatasets.dataTableEvent) {
-				TIMAAT.EventDatasets.dataTableEvent.ajax.reload(null, false);
+			if (this.dataTableEvent) {
+				this.dataTableEvent.ajax.reload(null, false);
 			}	
 		},
 

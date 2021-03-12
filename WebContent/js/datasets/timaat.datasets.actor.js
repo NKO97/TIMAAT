@@ -299,7 +299,7 @@
 			});
 
 			// submit actor metadata button functionality
-			$('#actor-metadata-form-submit').on('click', async function(event) {
+			$('#actor-metadata-form-submit-button').on('click', async function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
 				if (!$('#actor-metadata-form').valid()) return false;
@@ -397,7 +397,7 @@
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#actor-metadata-form-dismiss').on('click', async function(event) {
+			$('#actor-metadata-form-dismiss-button').on('click', async function(event) {
 				$('.add-actor-button').prop('disabled', false);
 				$('.add-actor-button :input').prop('disabled', false);
 				$('.add-actor-button').show();
@@ -519,17 +519,17 @@
 			});
 
 			// key press events
-			$('#actor-metadata-form-submit').keypress(function(event) {
+			$('#actor-metadata-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-metadata-form-submit').trigger('click');
+					$('#actor-metadata-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#actor-metadata-form-dismiss').keypress(function(event) {
+			$('#actor-metadata-form-dismiss-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-metadata-form-dismiss').trigger('click');
+					$('#actor-metadata-form-dismiss-button').trigger('click');
 				}
 			});
 			
@@ -3082,7 +3082,7 @@
 			}
 			// this.getActorFormImageDropdownData();
 			this.initFormDataSheetForEdit(type);
-			$('#actor-metadata-form-submit').html('Add');
+			$('#actor-metadata-form-submit-button').html('Add');
 			$('#actorFormHeader').html("Add "+type);
 
 			$('#dynamic-profile-image-fields').hide();
@@ -3155,8 +3155,8 @@
 				$('.form-buttons :input').prop('disabled', false);
 				$('.form-buttons').show();
 				this.initFormsForShow(data.model);
-				$('#actor-metadata-form-submit').hide();
-				$('#actor-metadata-form-dismiss').hide();
+				$('#actor-metadata-form-submit-button').hide();
+				$('#actor-metadata-form-dismiss-button').hide();
 				$('#actor-datasheet-form-profile-image-selection').hide();
 				$('#actorFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
 				if (type == 'person') {
@@ -3168,7 +3168,7 @@
 				$('.add-actor-button').hide();
 				$('.add-actor-button').prop('disabled', true);
 				$('.add-actor-button :input').prop('disabled', true);
-				$('#actor-metadata-form-submit').html("Save");
+				$('#actor-metadata-form-submit-button').html("Save");
 				$('#actorFormHeader').html("Edit "+type);
 
 				var profileImageSelect = $('#actor-profile-image-multi-select-dropdown');
@@ -5534,8 +5534,8 @@
 			$('#timaat-actordatasets-metadata-collective-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#actor-metadata-form :input').prop('disabled', false);		
 			this.hideFormButtons();
-			$('#actor-metadata-form-submit').show();
-			$('#actor-metadata-form-dismiss').show();
+			$('#actor-metadata-form-submit-button').show();
+			$('#actor-metadata-form-dismiss-button').show();
 			$('#actor-datasheet-form-profile-image-selection').show();
 			$('#timaat-actordatasets-metadata-actor-name').focus();
 			let imageSelect =

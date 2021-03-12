@@ -117,7 +117,7 @@
 			// remove event from UI
 			this.listView.remove(); // TODO remove tags from event_has_tags
       // console.log("TCL: Event -> remove -> this", this);
-			$('#timaat-eventdatasets-metadata-form').data('event', null);
+			$('#event-metadata-form').data('event', null);
 		}
 	}
 	

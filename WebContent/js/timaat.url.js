@@ -308,6 +308,40 @@
             }
           }
           break;
+          case 'event': // #event...
+          // make sure media list is loaded
+          if (!TIMAAT.EventDatasets.eventsLoaded) {
+            TIMAAT.EventDatasets.setEventList();
+            TIMAAT.EventDatasets.eventsLoaded = true;
+          }
+          // show events component
+          TIMAAT.UI.showComponent('events');
+          // show corresponding event form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current event
+            $('#timaat-EventDatasets-event-list tr[id='+pathSegments[1]+']').trigger('click');
+            let event = {};
+            event.model = await TIMAAT.EventService.getEvent(pathSegments[1]);
+            // let type = event.model.eventType.eventTypeTranslations[0].type;
+            TIMAAT.EventDatasets.clearLastSelection('event');
+            if ( pathSegments.length == 2 ) { // #event/:id     (default view, show datasheet)
+              TIMAAT.EventDatasets.displayComponent('event', 'events-tab', 'events-datatable', 'events-tab-event-metadata', 'event-metadata-form');
+              TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
+            }
+            else { // other event form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.EventDatasets.clearLastSelection(pathSegments[1]);
+            switch (pathSegments[1]) {
+              case 'list': // #event/list
+                TIMAAT.EventDatasets.loadEvents();
+              break;
+            }
+          }
+          break;
         }
       }
 
