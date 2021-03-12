@@ -549,7 +549,7 @@
                   results: data
                 };
               },
-              cache: true
+              cache: false
             },
             minimumInputLength: 0,
           });
@@ -603,7 +603,7 @@
                   results: data
                 };
               },
-              cache: true
+              cache: false
             },
             minimumInputLength: 0,
           });
@@ -659,7 +659,7 @@
                   results: data
                 };
               },
-              cache: true
+              cache: false
             },
             minimumInputLength: 0,
           });          

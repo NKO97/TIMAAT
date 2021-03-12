@@ -167,7 +167,7 @@
 					console.log("TCL: updatedMediumAnalysisList", updatedMediumAnalysisList);
 					mediumAnalysisList.tags = updatedMediumAnalysisList.tags;
 				}
-				// $('#timaat-mediadatasets-medium-metadata-form').data('mediumAnalysisList', mediumAnalysisList);
+				// $('#medium-metadata-form').data('mediumAnalysisList', mediumAnalysisList);
 			});
 
       // inspector event handler
@@ -205,7 +205,7 @@
 								results: data
 							};
 						},
-						cache: true
+						cache: false
 					},
 					minimumInputLength: 0,
 				});
@@ -259,7 +259,7 @@
           console.log("TCL: updatedAnnotationModel", updatedAnnotationModel);
           annotation.model.tags = updatedAnnotationModel.tags;
         }
-        // $('#timaat-mediadatasets-medium-metadata-form').data('annotation', annotation);
+        // $('#medium-metadata-form').data('annotation', annotation);
       });
 
       // inspector event handler
@@ -297,7 +297,7 @@
                 results: data
               };
             },
-            cache: true
+            cache: false
           },
           minimumInputLength: 0,
         });

@@ -134,7 +134,7 @@
 			// remove actor from UI
 			this.listView.remove(); // TODO remove tags from actor_has_tags
       // console.log("TCL: Actor -> remove -> this", this);
-			$('#timaat-actordatasets-metadata-form').data('actor', null);
+			$('#actor-metadata-form').data('actor', null);
 		}
 	}
 	

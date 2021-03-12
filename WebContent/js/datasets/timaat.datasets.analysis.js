@@ -395,7 +395,7 @@
               results: data
             };
           },
-          cache: true
+          cache: false
         },
       };
       var audioPostProductionHtml = `<hr>

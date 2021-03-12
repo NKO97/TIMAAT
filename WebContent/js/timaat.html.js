@@ -4,13 +4,13 @@ $('#timaat-login-modal').on('shown.bs.modal', function() {
 });
 
 // <!-- client side form validation -->
-var mediumFormMetadata = $('#timaat-mediadatasets-medium-metadata-form');
+var mediumFormMetadata = $('#medium-metadata-form');
 
 jQuery.validator.addMethod("greaterThanStart", function (value, element, params) {
   return this.optional(element) || new Date(value) >= new Date($(params).val());
 },'Must be greater than recording start date.');
 
-var mediumFormMetadataValidator = $('#timaat-mediadatasets-medium-metadata-form').validate({
+var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
   rules: {
     displayTitle: {
       required: true,
@@ -96,8 +96,8 @@ var mediumFormMetadataValidator = $('#timaat-mediadatasets-medium-metadata-form'
     mediumFormMetadata.submit();
   },
 });
-var mediumFormTitles = $('#timaat-mediadatasets-medium-titles-form');
-var mediumFormTitlesValidator = $('#timaat-mediadatasets-medium-titles-form').validate({
+var mediumFormTitles = $('#medium-titles-form');
+var mediumFormTitlesValidator = $('#medium-titles-form').validate({
   rules: {
     title: {
       required: true,
@@ -122,8 +122,8 @@ var mediumFormTitlesValidator = $('#timaat-mediadatasets-medium-titles-form').va
     mediumFormTitles.submit();
   },
 });
-var mediumFormLanguageTracks = $('#timaat-mediadatasets-medium-languagetracks-form');
-var mediumFormLanguageTracksValidator = $('#timaat-mediadatasets-medium-languagetracks-form').validate({
+var mediumFormLanguageTracks = $('#medium-languagetracks-form');
+var mediumFormLanguageTracksValidator = $('#medium-languagetracks-form').validate({
   rules: {
     languageTrackTypeId: {
       required: true,
@@ -144,8 +144,8 @@ var mediumFormLanguageTracksValidator = $('#timaat-mediadatasets-medium-language
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumFormActorRoles = $('#timaat-mediadatasets-medium-actorwithroles-form');
-var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithroles-form').validate({
+var mediumFormActorRoles = $('#medium-actorwithroles-form');
+var mediumFormActorRolesValidator = $('#medium-actorwithroles-form').validate({
   ignore: [],
   rules: {
     actorId: {
@@ -167,8 +167,8 @@ var mediumFormActorRolesValidator = $('#timaat-mediadatasets-medium-actorwithrol
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumCollectionFormMetadata = $('#mediacollection-metadata');
-var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata').validate({
+var mediumCollectionFormMetadata = $('#mediacollection-metadata-form');
+var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata-form').validate({
   rules: {
     title: {
       required: true,
@@ -200,8 +200,8 @@ var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata').valid
     mediumCollectionFormMetadata.submit();
   },
 });
-var actorFormMetadata = $('#timaat-actordatasets-metadata-form');
-var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').validate({
+var actorFormMetadata = $('#actor-metadata-form');
+var actorFormMetadataValidator = $('#actor-metadata-form').validate({
   rules: {
     displayName: {
       required: true,
@@ -209,8 +209,11 @@ var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').valida
       maxlength: 200
     },
     typeId: {
-      required: true,
-    }     
+      required: true
+    },
+    seIx: {
+      required: true
+    }  
   },
   messages: {
     displayName: {
@@ -220,14 +223,17 @@ var actorFormMetadataValidator = $('#timaat-actordatasets-metadata-form').valida
     },
     typeId: {
       required: "Please provide the type of the actor"
+    },
+    sexId: {
+      required: "Please enter a sex for this person"
     }
   },
   submitHandler: function(actorFormMetadata) {
     actorFormMetadata.submit();
   },
 });
-var actorFormNames = $('#timaat-actordatasets-actor-actornames-form');
-var actorFormNamesValidator = $('#timaat-actordatasets-actor-actornames-form').validate({
+var actorFormNames = $('#actor-names-form');
+var actorFormNamesValidator = $('#actor-names-form').validate({
   rules: {
     actorName: {
       required: true,
@@ -246,8 +252,8 @@ var actorFormNamesValidator = $('#timaat-actordatasets-actor-actornames-form').v
     actorFormNames.submit();
   },
 });
-var actorFormAddresses = $('#timaat-actordatasets-actor-addresses-form');
-var actorFormAddressesValidator = $('#timaat-actordatasets-actor-addresses-form').validate({
+var actorFormAddresses = $('#actor-addresses-form');
+var actorFormAddressesValidator = $('#actor-addresses-form').validate({
   rules: {
     streetNumber: {
       maxlength: 10,
@@ -286,8 +292,8 @@ var actorFormAddressesValidator = $('#timaat-actordatasets-actor-addresses-form'
     actorFormAddresses.submit();
   },
 });
-var actorFormEmailAddresses = $('#timaat-actordatasets-actor-emailaddresses-form');
-var actorFormEmailAddressesValidator = $('#timaat-actordatasets-actor-emailaddresses-form').validate({
+var actorFormEmailAddresses = $('#actor-emailaddresses-form');
+var actorFormEmailAddressesValidator = $('#actor-emailaddresses-form').validate({
   rules: {
     email: {
       email: true
@@ -308,8 +314,8 @@ var actorFormEmailAddressesValidator = $('#timaat-actordatasets-actor-emailaddre
     actorFormEmailAddresses.submit();
   },
 });
-var actorFormPhoneNumbers = $('#timaat-actordatasets-actor-phonenumbers-form');
-var actorFormPhoneNumbersValidator = $('#timaat-actordatasets-actor-phonenumbers-form').validate({
+var actorFormPhoneNumbers = $('#actor-phonenumbers-form');
+var actorFormPhoneNumbersValidator = $('#actor-phonenumbers-form').validate({
   rules: {
     phoneNumberTypeId: {
       required: true
@@ -324,8 +330,8 @@ var actorFormPhoneNumbersValidator = $('#timaat-actordatasets-actor-phonenumbers
     actorFormPhoneNumbers.submit();
   },
 });
-var actorFormMemberOfCollectives = $('#timaat-actordatasets-actor-memberofcollective-form');
-var actorFormMemberOfCollectivesValidator = $('#timaat-actordatasets-actor-memberofcollective-form').validate({
+var actorFormMemberOfCollectives = $('#actor-memberofcollectives-form');
+var actorFormMemberOfCollectivesValidator = $('#actor-memberofcollectives-form').validate({
   rules: {
     collectiveId: {
       required: true

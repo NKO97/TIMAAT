@@ -203,7 +203,7 @@
         }
         console.log("TCL: categoryIdList", categoryIdList);
         annotation.model = await TIMAAT.CategoryLists.updateElementHasCategoriesList(annotation.model, categoryIdList, 'annotation');
-        // $('#timaat-mediadatasets-medium-metadata-form').data('annotation', annotation);
+        // $('#medium-metadata-form').data('annotation', annotation);
       });
 
       // inspector event handler
@@ -239,7 +239,7 @@
                 results: data
               };
             },
-            cache: true
+            cache: false
           },
           minimumInputLength: 0,
         });
@@ -300,7 +300,7 @@
         console.log("TCL: categoryIdList", categoryIdList);
         segmentElement.model = await TIMAAT.CategoryLists.updateElementHasCategoriesList(segmentElement.model, categoryIdList, type);
         console.log("TCL: $ -> segmentElement", segmentElement);
-        // $('#timaat-mediadatasets-medium-metadata-form').data('segment', segment);
+        // $('#medium-metadata-form').data('segment', segment);
       });
 
       // inspector event handler
@@ -355,7 +355,7 @@
                 results: data
               };
             },
-            cache: true
+            cache: false
           },
           minimumInputLength: 0,
         });
@@ -515,7 +515,7 @@
                 results: data
               };
             },
-            cache: true
+            cache: false
           },
           minimumInputLength: 0,
         });
@@ -906,7 +906,7 @@
                   results: data
                 };
               },
-              cache: true
+              cache: false
             },
             minimumInputLength: 0,
           });
@@ -962,7 +962,7 @@
                   results: data
                 };
               },
-              cache: true
+              cache: false
             },
             minimumInputLength: 0,
           });          

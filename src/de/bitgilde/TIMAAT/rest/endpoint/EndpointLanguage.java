@@ -98,9 +98,9 @@ public class EndpointLanguage {
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
-		List<Language> LanguageList = castList(Language.class, query.getResultList());
+		List<Language> languageList = castList(Language.class, query.getResultList());
 		
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, LanguageList)).build();
+		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, languageList)).build();
   }
 
 	@GET
@@ -138,13 +138,14 @@ public class EndpointLanguage {
 				// "SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
 				"SELECT l FROM Language l ORDER BY l.name ASC");
 		}
-		List<SelectElement> LanguageSelectList = new ArrayList<>();
-		List<Language> LanguageList = castList(Language.class, query.getResultList());
-		for (Language Language : LanguageList) {
-			LanguageSelectList.add(new SelectElement(Language.getId(),
-																					 Language.getName()));
+		List<SelectElement> languageSelectList = new ArrayList<>();
+		List<Language> languageList = castList(Language.class, query.getResultList());
+		for (Language language : languageList) {
+			languageSelectList.add(new SelectElement(language.getId(),
+																					 		 language.getName()));
+			// System.out.println("language select list entry - id: "+ language.getId() + " type: " + language.getName());
 		}
-		return Response.ok().entity(LanguageSelectList).build();
+		return Response.ok().entity(languageSelectList).build();
 	}
 
 	@POST

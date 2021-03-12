@@ -77,6 +77,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber;
 import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
+import de.bitgilde.TIMAAT.model.FIPOP.SexTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -718,6 +719,35 @@ public class EndpointActor {
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
 		entityManager.refresh(actor);
 		return Response.ok().entity(actor.getTags()).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("sex/selectList")
+	public Response getSexSelectList(@QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all Languages
+		System.out.println("EndpointActor: getSexSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		// search
+		Query query = TIMAATApp.emf.createEntityManager().createQuery(
+			"SELECT st FROM SexTranslation st WHERE st.language.id = (SELECT l.id FROM Language l WHERE l.code ='"+languageCode+"') ORDER BY st.type ASC");
+		List<SelectElement> sexSelectList = new ArrayList<>();
+		List<SexTranslation> sexTranslationList = castList(SexTranslation.class, query.getResultList());
+		for (SexTranslation sexTranslation : sexTranslationList) {
+			sexSelectList.add(new SelectElement(sexTranslation.getSex().getId(),
+																					sexTranslation.getType()));
+			// System.out.println("sex select list entry - id: "+ sexTranslation.getSex().getId() + " type: " + sexTranslation.getType());
+		}
+		return Response.ok().entity(sexSelectList).build();
 	}
 
 	@POST

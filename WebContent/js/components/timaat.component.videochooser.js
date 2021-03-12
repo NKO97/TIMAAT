@@ -445,7 +445,7 @@
 						TIMAAT.MediaDatasets.selectLastSelection('medium', selectedMedium.model.id);
 						TIMAAT.MediaDatasets.selectLastSelection(type, selectedMedium.model.id);
 						TIMAAT.MediaDatasets.dataTableMedia.search(selectedMedium.model.displayTitle.name).draw();
-						$('#timaat-mediadatasets-medium-metadata-form').data('medium', selectedMedium);
+						$('#medium-metadata-form').data('medium', selectedMedium);
 						TIMAAT.MediaDatasets.mediumFormDataSheet('show', type, selectedMedium);
 					});
 
@@ -1055,7 +1055,7 @@
 						break;
 					}
 				}
-				$('#timaat-mediadatasets-medium-metadata-form').data('medium', selectedVideo);
+				$('#medium-metadata-form').data('medium', selectedVideo);
 				TIMAAT.MediaDatasets.mediumFormDataSheet("show", 'video', selectedVideo);
 			});
 

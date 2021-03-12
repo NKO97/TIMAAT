@@ -220,7 +220,7 @@
                 </a>
               </li> 
               <li class="timaat-sidebar-tab timaat-sidebar-tab-actors">
-                <a href="#actordatasets"
+                <a 
                   onclick="TIMAAT.ActorDatasets.initActorComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
@@ -1942,31 +1942,49 @@
             <div class="col-md-12">
               <ul class="nav nav-pills" id="media-tabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="mediacollections-tab" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false"><i class="fas fa-object-group"></i> Collections</a>
+                  <a class="nav-link media-nav-bar-link" id="mediacollections-tab" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false">
+                    <i class="fas fa-object-group"></i> Collections
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link active" id="media-tab" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true"><i class="fas fa-photo-video"></i> All Media</a>
+                  <a class="nav-link media-nav-bar-link active" id="media-tab" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true">
+                    <i class="fas fa-photo-video"></i> All Media
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="audios-tab" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false"><i class="fas fa-file-audio"></i> Audios</a>
+                  <a class="nav-link media-nav-bar-link" id="audios-tab" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false">
+                    <i class="fas fa-file-audio"></i> Audios
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="documents-tab" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false"><i class="fas fa-file-pdf"></i> Documents</a>
+                  <a class="nav-link media-nav-bar-link" id="documents-tab" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false">
+                    <i class="fas fa-file-pdf"></i> Documents
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false"><i class="fas fa-file-image"></i> Images</a>
+                  <a class="nav-link media-nav-bar-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false">
+                    <i class="fas fa-file-image"></i> Images
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="softwares-tab" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false"><i class="fas fa-compact-disc"></i> Softwares</a>
+                  <a class="nav-link media-nav-bar-link" id="softwares-tab" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false">
+                    <i class="fas fa-compact-disc"></i> Softwares
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="texts-tab" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false"><i class="fas fa-file-alt"></i> Texts</a>
+                  <a class="nav-link media-nav-bar-link" id="texts-tab" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false">
+                    <i class="fas fa-file-alt"></i> Texts
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="videos-tab" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false"><i class="fas fa-file-video"></i> Videos</a>
+                  <a class="nav-link media-nav-bar-link" id="videos-tab" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false">
+                    <i class="fas fa-file-video"></i> Videos
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="videogames-tab" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false"><i class="fas fa-gamepad"></i> Videogames</a>
+                  <a class="nav-link media-nav-bar-link" id="videogames-tab" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false">
+                    <i class="fas fa-gamepad"></i> Videogames
+                  </a>
                 </li>
               </ul>
               <div class="tab-content" id="mediaTabsContent">
@@ -2226,7 +2244,7 @@
                       <div id="media-dataset-content"> -->
                         <!-- Data tab content -->
                         <!-- collection form -->
-                        <form class="form dataset-content" role="form" id="mediacollection-metadata" name="mediacollection-metadata" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="mediacollection-metadata-form" name="mediacollection-metadata-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2235,13 +2253,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediumcollection-form-tag-button mediumcollection-form-button" title="Tag collection" name="tag">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="mediumcollection-form-tag-button" title="Tag collection" name="tag">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediumcollection-form-edit-button mediumcollection-form-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="mediumcollection-form-edit-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediumcollection-form-delete-button mediumcollection-form-button" title="Delete medium collection">
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="mediumcollection-form-delete-button" title="Delete medium collection">
                                       <i class="fas fa-trash-alt"></i>
                                     </button>
                                   </div>
@@ -2329,14 +2347,14 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="mediumcollection-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary" id="mediacollection-metadata-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary" id="mediacollection-metadata-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="mediacollection-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary" id="mediacollection-metadata-form-dismiss" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- collection items -->
-                        <div class="card dataset-content mediacollection-datatables mediacollection-mediaItems" id="mediacollection-mediaItems"> <!-- Medium collection item data -->
+                        <div class="card dataset-content" id="mediacollection-mediaItems"> <!-- Medium collection item data -->
                           <div class="card-header">Collection Items
-                            <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-items-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <button type="button" id="mediumcollection-items-add-button" class="btn btn-outline btn-success btn-sm float-right">
                               <i class="fas fa-plus"></i></button>
                             </div>
                           <div class="timaat-datasets-list-wrapper">
@@ -2359,7 +2377,7 @@
                           </div>
                         </div>
                         <!-- collection publication settings -->
-                        <div class="card dataset-content mediacollection-datatables mediacollection-publication" id="mediacollection-publication"> <!-- Medium collection publication data -->
+                        <div class="card dataset-content" id="mediacollection-publication"> <!-- Medium collection publication data -->
                           <div class="card-header">Collection Publication Settings
                             </div>
                           <div class="timaat-datasets-list-wrapper">
@@ -2397,7 +2415,7 @@
                           </div>
                         </div>                        
                         <!-- preview form -->
-                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-preview-form" name="timaat-mediadatasets-medium-preview-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="medium-preview-form" name="medium-preview-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2406,13 +2424,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button datasheet-form-button" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button datasheet-form-button" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button datasheet-form-button" title="Delete medium">
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button form-buttons" title="Delete medium">
                                       <i class="fas fa-trash-alt"></i>
                                     </button>
                                   </div>
@@ -2435,7 +2453,7 @@
                           </div>
                         </form>
                         <!-- datasheet form -->
-                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-metadata-form" name="timaat-mediadatasets-medium-metadata-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="medium-metadata-form" name="medium-metadata-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2444,25 +2462,25 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-categoryset-button datasheet-form-button" title="Category sets" name="category sets">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-categoryset-button" title="Category sets" name="category sets">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-category-button datasheet-form-button" title="Categories" name="categories">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-category-button" title="Categories" name="categories">
                                       <i class="fas fa-tag"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-tag-button datasheet-form-button" title="Tags" name="tags">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button datasheet-form-button" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button datasheet-form-button" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button datasheet-form-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button datasheet-form-button" title="Delete medium">
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button form-buttons" title="Delete medium">
                                       <i class="fas fa-trash-alt"></i>
                                     </button>
                                   </div>
@@ -2479,7 +2497,7 @@
                                 </div>                            
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="medium-title-language-select-dropdown">Title's Language*</label>
-                                  <select class="form-control form-control-sm" 
+                                  <select class="form-control form-control-sm"
                                           id="medium-title-language-select-dropdown" 
                                           name="displayTitleLanguageId" 
                                           data-placeholder="Select title language"
@@ -2489,8 +2507,8 @@
                               </div>
                             </div>
                             <!-- <div class="form-group datasheet-data mediumtype-data">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-mediatype-id">Medium Type*</label>
-                              <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-mediatype-id" name="typeId" required>
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-type-id">Medium Type*</label>
+                              <select class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-type-id" name="typeId" required>
                                 <option value="" disabled selected hidden>[Choose medium type...]</option>
                                 <option value="1">Audio</option>
                                 <option value="2">Document</option>
@@ -2632,12 +2650,12 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-mediadatasets-medium-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-mediadatasets-medium-metadata-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="medium-metadata-form-submit" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="medium-metadata-form-dismiss" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- titles form -->
-                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-titles-form" name="timaat-mediadatasets-medium-titles-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="medium-titles-form" name="medium-titles-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2646,13 +2664,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button datasheet-form-button" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button datasheet-form-button" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right mediadatasheet-form-edit-button datasheet-form-button" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right mediadatasheet-form-edit-button form-buttons" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2696,11 +2714,11 @@
                           <div class="title-form-divider">
                             <hr>                            
                           </div>
-                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-titles-form-submit" name="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-titles-form-dismiss" name="dismiss">Abbruch</button>
+                          <button type="submit" class="btn btn-primary" id="medium-titles-form-submit" name="submit">Speichern</button>
+                          <button type="button" class="btn btn-secondary" id="medium-titles-form-dismiss" name="dismiss">Abbruch</button>
                         </form>
                         <!-- language tracks form -->
-                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-languagetracks-form" name="timaat-mediadatasets-medium-languagetracks-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="medium-languagetracks-form" name="medium-languagetracks-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2709,13 +2727,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button datasheet-form-button" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button datasheet-form-button" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button datasheet-form-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2753,10 +2771,10 @@
                           <div class="languagetrack-form-divider">
                             <hr>                            
                           </div>
-                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-languagetracks-form-done" name="done">Done</button>
+                          <button type="submit" class="btn btn-primary" id="medium-languagetracks-form-done" name="done">Done</button>
                         </form>
                         <!-- actor-roles form -->
-                        <form class="form dataset-content" role="form" id="timaat-mediadatasets-medium-actorwithroles-form" name="timaat-mediadatasets-medium-actorwithroles-form" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="medium-actorwithroles-form" name="medium-actorwithroles-form" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2765,13 +2783,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button datasheet-form-button" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button datasheet-form-button" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button datasheet-form-button" title="Edit datasheet" name="edit">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
                                     </button>
                                   </div>
@@ -2809,8 +2827,8 @@
                           <div class="actorwithrole-form-divider">
                             <hr>                            
                           </div>
-                          <button type="submit" class="btn btn-primary" id="timaat-mediadatasets-medium-actorwithroles-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-mediadatasets-medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary" id="medium-actorwithroles-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
                         </form>
                       </div>
                     </div>
@@ -2889,17 +2907,17 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="actors-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link active" id="actors-tab" onclick="TIMAAT.ActorDatasets.loadActors()" data-toggle="tab" href="#actors" role="tab" aria-controls="actors" aria-selected="true">
+                  <a class="nav-link actors-nav-bar-link active" id="actors-tab" data-toggle="tab" role="tab" aria-controls="actors" aria-selected="true">
                     <i class="fas fa-id-badge"></i> Actors
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="persons-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('person')" data-toggle="tab" href="#persons" role="tab" aria-controls="persons" aria-selected="false">
+                  <a class="nav-link actors-nav-bar-link" id="persons-tab" data-toggle="tab" role="tab" aria-controls="persons" aria-selected="false">
                     <i class="fas fa-address-card"></i> Persons
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="collectives-tab"  onclick="TIMAAT.ActorDatasets.loadActorSubtype('collective')" data-toggle="tab" href="#collectives" role="tab" aria-controls="collectives" aria-selected="false">
+                  <a class="nav-link actors-nav-bar-link" id="collectives-tab" data-toggle="tab" role="tab" aria-controls="collectives" aria-selected="false">
                     <i class="fas fa-users"></i> Collectives
                   </a>
                 </li>
@@ -2909,7 +2927,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Actors lists -->
                     <div class="col-md-4">
-                      <div class="card actors-datatables actors-datatable">
+                      <div class="card actors-datatables" id="actors-datatable">
                         <div class="card-header">Actors
                           <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
@@ -2923,7 +2941,7 @@
                             <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Titel</th>
+                                  <th>Title</th>
                                 </tr>
                               </thead>
                               <tbody id="timaat-actordatasets-actor-list">
@@ -2933,9 +2951,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card actors-datatables persons-datatable">
+                      <div class="card actors-datatables" id="persons-datatable">
                         <div class="card-header">Persons
-                          <button type="button" id="timaat-actordatasets-person-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Person">
+                          <button type="button" onclick="TIMAAT.ActorDatasets.addActor('person')" class="btn btn-outline btn-success btn-sm float-right add-actor-button" title="Add Person">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2947,7 +2965,7 @@
                             <table id="timaat-actordatasets-person-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Titel</th>
+                                  <th>Title</th>
                                 </tr>
                               </thead>
                               <tbody id="timaat-actordatasets-person-list">
@@ -2957,10 +2975,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card actors-datatables collectives-datatable">
+                      <div class="card actors-datatables" id="collectives-datatable">
                         <div class="card-header">Collectives
-                          <button type="button" id="timaat-actordatasets-collective-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Collective">
-                            <i class="fas fa-plus"></i>
+                          <button type="button" onclick="TIMAAT.ActorDatasets.addActor('collective')" class="btn btn-outline btn-success btn-sm float-right add-actor-button" title="Add Collective">                            <i class="fas fa-plus"></i>
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
@@ -2971,7 +2988,7 @@
                             <table id="timaat-actordatasets-collective-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Titel</th>
+                                  <th>Title</th>
                                 </tr>
                               </thead>
                               <tbody id="timaat-actordatasets-collective-list">
@@ -2985,46 +3002,40 @@
                     <!-- Actors data -->
                     <div class="col-md-8" id="timaat-actordatasets-actors-tabs">
                       <ul class="nav nav-tabs actors-nav-tabs">
-                        <li class="nav-item actors-data-tabs actor-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-metadata-form" href="#actorDatasheet">Datasheet</a>
+                        <li class="nav-item actor-data-tabs">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-metadata">Datasheet</a>
                         </li>
-                        <li class="nav-item actors-data-tabs person-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-person-metadata-form" href="#personDatasheet">Datasheet</a>
+                        <li class="nav-item actor-data-tabs name-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-names">Names</a>
                         </li>
-                        <li class="nav-item actors-data-tabs collective-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-collective-metadata-form" href="#collectiveDatasheet">Datasheet</a>
+                        <li class="nav-item actor-data-tabs address-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-addresses">Addresses</a>
                         </li>
-                        <li class="nav-item actors-data-tabs name-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-names-form" href="#actorNames">Names</a>
+                        <li class="nav-item actor-data-tabs emailaddress-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-emailaddresses">Emails</a>
                         </li>
-                        <li class="nav-item actors-data-tabs address-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-addresses-form" href="#actorAddresses">Addresses</a>
+                        <li class="nav-item actor-data-tabs phonenumber-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-phonenumbers">Phone Numbers</a>
                         </li>
-                        <li class="nav-item actors-data-tabs emailaddress-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-emailaddresses-form" href="#actorEmailAddresses">Emails</a>
+                        <li class="nav-item actor-data-tabs memberofcollective-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-memberofcollectives">Memberships</a>
                         </li>
-                        <li class="nav-item actors-data-tabs phonenumber-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-phonenumbers-form" href="#actorPhoneNumbers">Phone Numbers</a>
+                        <!-- <li class="nav-item actor-data-tabs actoractorrelationship-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-actorrelationships">Actor Relationships</a>
                         </li>
-                        <li class="nav-item actors-data-tabs memberofcollective-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-memberofcollectives-form" href="#actorMemberOfCollectives">Memberships</a>
+                        <li class="nav-item actor-data-tabs locatedincountry-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-locatedincountry">Whereabouts</a>
+                        </li> -->
+                        <li class="nav-item actor-data-tabs actorroles-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-roles">Roles</a>
                         </li>
-                        <li class="nav-item actors-data-tabs actoractorrelationship-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-actorrelationships-form" href="#actorActorRelatiohships">Actor Relationships</a>
-                        </li>
-                        <li class="nav-item actors-data-tabs locatedincountry-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-locatedincountry-form" href="#actorLocatedInCountries">Whereabouts</a>
-                        </li>
-                        <li class="nav-item actors-data-tabs actorroles-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-roles-form" href="#actorWithRoles">Roles</a>
-                        </li>
-                        <li class="nav-item actors-data-tabs actorrolemedium-data-tab">
-                          <a class="nav-link nav-link-actors" id="actors-tab-actor-role-medium-form" href="#actorRoleMedium">Roles Medium</a>
+                        <li class="nav-item actor-data-tabs actorroleinmedium-data-tab">
+                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-role-in-medium">Roles Medium</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
                       <!-- datasheet form -->
-                      <form class="form" role="form" id="timaat-actordatasets-metadata-form" name="timaat-actordatasets-metadata-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-metadata-form" name="actor-metadata-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -3033,13 +3044,13 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm actordatasheet-form-button" id="timaat-actordatasets-metadata-form-tag" title="Tag actor" name="tag">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="actor-metadata-form-tag" title="Tag actor" name="tag">
                                     <i class="fas fa-tags"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm actordatasheet-form-button" id="timaat-actordatasets-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons actordatasheet-form-edit-button" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm actordatasheet-form-button" id="timaat-actordatasets-metadata-form-delete" title="Delete actor">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="actor-metadata-form-delete" title="Delete actor">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -3125,13 +3136,17 @@
                                   <input type="text" class="form-control form-control-sm" id="timaat-actordatasets-metadata-person-title" name="title" placeholder="[Enter Title]" aria-describedby="Title">
                                 </div>
                                 <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-actordatasets-metadata-person-sex-type">Sex</label>
-                                  <select class="form-control form-control-sm" id="timaat-actordatasets-metadata-person-sex-type" name="sexId">
-                                    <option value="" disabled selected hidden>[Choose sex...]</option>
+                                  <label class="col-form-label col-form-label-sm" for="person-sex-type-select-dropdown">Sex*</label>
+                                  <select class="form-control form-control-sm" 
+                                          id="person-sex-type-select-dropdown" 
+                                          name="sexId"
+                                          data-placeholder="Select sex..."
+                                          required>
+                                    <!-- <option value="" disabled selected hidden>[Choose sex...]</option>
                                     <option value="1">Male</option>
                                     <option value="2">Female</option>
                                     <option value="3">Other</option>
-                                    <option value="4">Unknown</option>
+                                    <option value="4">Unknown</option> -->
                                   </select>
                                 </div>
                                 <div class="col-md-7">
@@ -3313,19 +3328,19 @@
                           </div> -->
                         </div>
                         <div class="actor-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="timaat-actordatasets-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="timaat-actordatasets-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="actor-metadata-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="actor-metadata-form-dismiss" name="dismiss">Cancel</button>
                         </div>
                       </form>
                       <!-- names form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-actornames-form" name="timaat-actordatasets-actor-actornames-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-names-form" name="actor-names-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorNamesLabel">Actor names</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-actornames-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-names-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3370,18 +3385,18 @@
                         <div class="name-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-actornames-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-actornames-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-names-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="actor-names-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- address form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-addresses-form" name="timaat-actordatasets-actor-addresses-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-addresses-form" name="actor-addresses-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorAddressesLabel">Actor addresses</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-addresses-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-addresses-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3444,18 +3459,18 @@
                         <div class="address-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-addresses-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-addresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- email address form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-emailaddresses-form" name="timaat-actordatasets-actor-emailaddresses-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-emailaddresses-form" name="actor-emailaddresses-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorEmailAddressesLabel">Actor email addresses</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-emailaddresses-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-emailaddresses-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3493,18 +3508,18 @@
                         <div class="emailaddress-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-emailaddresses-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-emailaddresses-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-emailaddresses-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="actor-emailaddresses-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- phone number form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-phonenumbers-form" name="timaat-actordatasets-actor-phonenumbers-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-phonenumbers-form" name="actor-phonenumbers-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorPhoneNumbersLabel">Actor phone numbers</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-phonenumbers-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-phonenumbers-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3542,18 +3557,18 @@
                         <div class="phonenumber-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-phonenumbers-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-phonenumbers-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- member of collective form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-memberofcollective-form" name="timaat-actordatasets-actor-memberofcollective-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-memberofcollectives-form" name="actor-memberofcollectives-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorMemberOfCollectiveLabel">Person is member of collectives</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-memberofcollective-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3619,18 +3634,18 @@
                         <div class="memberofcollective-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-memberofcollective-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-memberofcollective-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-memberofcollectives-form-submit" name="submit">Speichern</button>
+                        <button type="button" class="btn btn-secondary" id="actor-memberofcollectives-form-dismiss" name="dismiss">Abbruch</button>
                       </form>
                       <!-- actor role form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-role-form" name="timaat-actordatasets-actor-role-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-roles-form" name="actor-roles-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorRolesLabel">Actor has role(s)</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-role-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-roles-form-edit" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3647,18 +3662,18 @@
                           <hr>                            
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-form-submit" name="submit">Save</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-form-dismiss" name="dismiss">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="actor-roles-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-roles-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- actor role medium form -->
-                      <form class="form" role="form" id="timaat-actordatasets-actor-role-medium-form" name="timaat-actordatasets-actor-role-medium-form" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="actor-role-in-medium-form" name="actor-role-in-medium-form" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
                               <h5 class="form-title caps-title" id="actorRoleMediumLabel">Actor has role(s) in medium</h5>
                             </div>
                             <div class="col-md-2">
-                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right" id="timaat-actordatasets-actor-role-medium-form-edit" name="edit">
+                              <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" name="edit">
                                 <i class="fas fa-edit"></i>
                               </button>
                             </div>
@@ -3667,15 +3682,15 @@
                             <h6 class="form-header form-subheader">Producer in video(s):</h6>
                           </div>
                         </div>
-                        <div class="actor-role-medium-container">
+                        <div class="actor-role-in-medium-container">
                           <div data-role="dynamic-actorroleinmedium-fields" id="dynamic-actorroleinmedium-fields">
                             <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <button type="submit" class="btn btn-primary" id="timaat-actordatasets-actor-role-medium-form-submit" name="submit">Save</button>
-                        <button type="button" class="btn btn-secondary" id="timaat-actordatasets-actor-role-medium-form-dismiss" name="dismiss">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="actor-role-in-medium-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-role-in-medium-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                     </div>
                   </div>
@@ -4249,13 +4264,13 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm eventdatasheet-form-button" id="timaat-eventdatasets-metadata-form-tag" title="Tag event" name="tag">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-tag" title="Tag event" name="tag">
                                     <i class="fas fa-tags"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm eventdatasheet-form-button" id="timaat-eventdatasets-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-edit" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm eventdatasheet-form-button" id="timaat-eventdatasets-metadata-form-delete" title="Delete event">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="timaat-eventdatasets-metadata-form-delete" title="Delete event">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
