@@ -167,8 +167,8 @@ var mediumFormActorRolesValidator = $('#medium-actorwithroles-form').validate({
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumCollectionFormMetadata = $('#mediacollection-metadata-form');
-var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata-form').validate({
+var mediumCollectionFormMetadata = $('#mediumcollection-metadata-form');
+var mediumCollectionFormMetadataValidator = $('#mediumcollection-metadata-form').validate({
   rules: {
     title: {
       required: true,
@@ -179,8 +179,8 @@ var mediumCollectionFormMetadataValidator = $('#mediacollection-metadata-form').
       required: true,
     },
     ended: {
-      required: function(element) {return ($("#timaat-mediacollectiondatasets-metadata-series-ended").val()!="");},
-      greaterThanStart: '#timaat-mediacollectiondatasets-metadata-series-started'
+      required: function(element) {return ($("#timaat-mediumcollectiondatasets-metadata-series-ended").val()!="");},
+      greaterThanStart: '#timaat-mediumcollectiondatasets-metadata-series-started'
     },
   },
   messages: {
@@ -372,8 +372,8 @@ var eventFormMetadataValidator = $('#event-metadata-form').validate({
     eventFormMetadata.submit();
   },
 });
-var roleOrRoleGroupFormMetadata = $('#timaat-rolelists-metadata-form');
-var roleOrRoleGroupFormMetadataValidator = $('#timaat-rolelists-metadata-form').validate({
+var roleFormMetadata = $('#role-metadata-form');
+var roleFormMetadataValidator = $('#role-metadata-form').validate({
   rules: {
     name: {
       required: true,
@@ -388,12 +388,32 @@ var roleOrRoleGroupFormMetadataValidator = $('#timaat-rolelists-metadata-form').
       maxlength: "Name is too long: max length is 200"
     }
   },
-  submitHandler: function(roleOrRoleGroupFormMetadata) {
-    roleOrRoleGroupFormMetadata.submit();
+  submitHandler: function(roleFormMetadata) {
+    roleFormMetadata.submit();
   },
 });
-var categoryOrCategorySetFormMetadata = $('#timaat-categorylists-metadata-form');
-var categoryOrCategorySetFormMetadataValidator = $('#timaat-categorylists-metadata-form').validate({
+var roleGroupFormMetadata = $('#rolegroup-metadata-form');
+var roleGroupFormMetadataValidator = $('#rolegroup-metadata-form').validate({
+  rules: {
+    name: {
+      required: true,
+      minlength: 3,
+      maxlength: 200
+    }    
+  },
+  messages: {
+    name: {
+      required: "Enter a name (min length: 3)",
+      minlength: "Name too short: min length is 3",
+      maxlength: "Name is too long: max length is 200"
+    }
+  },
+  submitHandler: function(roleGroupFormMetadata) {
+    roleGroupFormMetadata.submit();
+  },
+});
+var categoryOrCategorySetFormMetadata = $('#category-metadata-form');
+var categoryOrCategorySetFormMetadataValidator = $('#category-metadata-form').validate({
   rules: {
     name: {
       required: true,
@@ -412,8 +432,8 @@ var categoryOrCategorySetFormMetadataValidator = $('#timaat-categorylists-metada
     categoryOrCategorySetFormMetadata.submit();
   },
 });
-var languageFormMetadata = $('#timaat-languagelists-metadata-form');
-var languageFormMetadataValidator = $('#timaat-languagelists-metadata-form').validate({
+var languageFormMetadata = $('#language-metadata-form');
+var languageFormMetadataValidator = $('#language-metadata-form').validate({
   rules: {
     name: {
       required: true,

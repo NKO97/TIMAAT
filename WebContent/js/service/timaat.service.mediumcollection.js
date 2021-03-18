@@ -19,12 +19,12 @@
 
 }(function (TIMAAT) {
 
-	TIMAAT.MediaCollectionService = {
+	TIMAAT.MediumCollectionService = {
 
 		getMediaCollections(callback) {
 			// console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/listCard?nocontents=1",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/listCard?nocontents=1",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -42,7 +42,7 @@
 		async getMediumCollection(id) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+id,
 					type:"GET",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -65,7 +65,7 @@
       console.log("TCL: getTagList -> for mediumCollectionId", mediumCollectionId);
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/hasTagList/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/hasTagList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -94,7 +94,7 @@
 					remark: comment,
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection",
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -115,7 +115,7 @@
       console.log("TCL: createMediumCollection -> mediumCollectionModel", mediumCollectionModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/0",
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/0",
 					type:"POST",
 					data: JSON.stringify(mediumCollectionModel),
 					contentType:"application/json; charset=utf-8",
@@ -138,7 +138,7 @@
       console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subTypeModel", type, mediumCollectionModel, subTypeModel);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+type+"/"+mediumCollectionModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+type+"/"+mediumCollectionModel.id,
 					type:"POST",
 					data: JSON.stringify(subTypeModel),
 					contentType:"application/json; charset=utf-8",
@@ -161,7 +161,7 @@
 			console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -185,7 +185,7 @@
 			// console.log("TCL: updateCollectionItem -> mediaCollectionHasMedium", mediaCollectionHasMedium);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId+"/order/"+sortOrder,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId+"/order/"+sortOrder,
 					type:"PATCH",
 					// data: JSON.stringify(mediaCollectionHasMedium),
 					contentType:"application/json; charset=utf-8",
@@ -209,7 +209,7 @@
 			// console.log("TCL: addTag -> mediumCollectionId, tagId", mediumCollectionId, tagId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/tag/"+tagId,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -240,7 +240,7 @@
 			delete tempCollection.ui;
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionModel.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionModel.id,
 					type:"PATCH",
 					data: JSON.stringify(tempCollection),
 					contentType:"application/json; charset=utf-8",
@@ -269,7 +269,7 @@
 			delete collection.ui;
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+type+"/"+collection.mediaCollectionId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+type+"/"+collection.mediaCollectionId,
 					type:"PATCH",
 					data: JSON.stringify(collection),
 					contentType:"application/json; charset=utf-8",
@@ -293,7 +293,7 @@
 			console.log("TCL: removeMediaCollection -> collection", collection);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collection.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collection.id,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -315,7 +315,7 @@
       console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+collectionId+"/medium/"+mediumId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -337,7 +337,7 @@
 			// console.log("TCL: removeTag -> mediumCollectionId, tagName", mediumCollectionId, tagName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediaCollection/"+mediumCollectionId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/tag/"+tagId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {

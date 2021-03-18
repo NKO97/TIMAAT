@@ -156,11 +156,11 @@
 			// 	// show tag editor - trigger popup
 			// 	TIMAAT.UI.hidePopups();
 			// 	$('.form').hide();
-			// 	$('.media-nav-tabs').show();
-			// 	$('.media-data-tabs').hide();
+			// 	$('.medium-nav-tabs').show();
+			// 	$('.medium-data-tabs').hide();
 			// 	$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
 			// 	$('#medium-metadata-form').data('medium', medium);
-			// 	TIMAAT.MediaDatasets.mediumFormDataSheet("show", mediumType, medium);
+			// 	TIMAAT.MediumDatasets.mediumFormDataSheet("show", mediumType, medium);
 			// 	// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
 			// });
 

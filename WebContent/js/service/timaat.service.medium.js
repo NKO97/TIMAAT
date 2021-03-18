@@ -19,9 +19,9 @@
 
 }(function (TIMAAT) {
 
-	TIMAAT.MediaService = {
+	TIMAAT.MediumService = {
 
-		listMediaTypes(callback) {
+		listMediumTypes(callback) {
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/mediatype/list",
 				type:"GET",
@@ -423,7 +423,7 @@
 		},
 
 		async addMediumHasActorWithRoles(mediumId, actorId, roleId) {
-    	console.log("TCL: addActorToMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
+    	console.log("TCL: addMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRole/"+roleId,
@@ -435,6 +435,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
+          // console.log("TCL: addMediumHasActorWithRoles - done -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.log( "error: ", error );
@@ -581,7 +582,7 @@
 		},
 
 		async updateMedium(mediumModel) {
-			console.log("TCL: MediaService: async updateMedium -> mediumModel", mediumModel);
+			console.log("TCL: MediumService: async updateMedium -> mediumModel", mediumModel);
 			var tempMediumModel = {};
 			tempMediumModel.releaseDate = mediumModel.releaseDate;
 			tempMediumModel.recordingStartDate = mediumModel.recordingStartDate;
@@ -619,7 +620,7 @@
 
 		// not yet needed (no translation data or translation table available at the moment)
 		// async updateMediumTranslation(medium) {
-		// 	// console.log("TCL: MediaService async updateMediumTranslation -> medium", medium);
+		// 	// console.log("TCL: MediumService async updateMediumTranslation -> medium", medium);
 		// 	var updatedMediumTranslation = {
 		// 		id: medium.model.mediumTranslations[0].id, // TODO get the correct translation_id
 		// 		name: medium.model.mediumTranslations[0].name,
@@ -687,7 +688,7 @@
 						// medium.fileStatus = data;
 						
 						// TIMAAT.VideoChooser.setVideoStatus(video);
-						// TIMAAT.MediaDatasets.displayFileStatus(medium);
+						// TIMAAT.MediumDatasets.displayFileStatus(medium);
 						
 						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
 						// 	window.clearInterval(medium.poll);
@@ -730,7 +731,7 @@
 		},
 
 		async updateTitle(title) {
-			// console.log("TCL: MediaService: async updateTitle -> title", title);
+			// console.log("TCL: MediumService: async updateTitle -> title", title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/title/"+title.id,

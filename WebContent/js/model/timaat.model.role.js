@@ -60,8 +60,8 @@
 				$('.roles-nav-tabs').show();
 				$('.roles-data-tabs').hide();
 				$('.nav-tabs a[href="#roleDatasheet"]').tab('show');
-				$('#timaat-rolelists-metadata-form').data('role', role);
-				TIMAAT.RoleLists.roleOrRoleGroupFormDataSheet('show', 'role', role);
+				$('#role-metadata-form').data('role', role);
+				TIMAAT.RoleLists.roleFormDataSheet('show', 'role', role);
 			});
     }
 
@@ -77,7 +77,7 @@
 			// remove role from UI
 			this.listView.remove();
       console.log("TCL: Role -> remove -> this", this);
-			$('#timaat-rolelists-metadata-form').data('role', null);
+			$('#role-metadata-form').data('role', null);
 			// remove from roles list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.roles.length; i++) {

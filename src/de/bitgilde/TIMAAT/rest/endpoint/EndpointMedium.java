@@ -190,7 +190,6 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-
 		// for (Medium m : mediumList) {
 		// 	MediumVideo video = m.getMediumVideo();
 		// 	if ( video != null ) {
@@ -2639,13 +2638,21 @@ public class EndpointMedium {
 		System.out.println("EndpointMedium: addMediumHasActorWithRoles - check if medium-actor-role combination already exists");
 		MediumHasActorWithRole mhawr = null;
 		try {
+			Query countQuery = entityManager.createQuery("SELECT COUNT(mhawr) FROM MediumHasActorWithRole mhawr WHERE mhawr.medium=:medium AND mhawr.actor=:actor AND mhawr.role=:role")
+																			.setParameter("medium", medium)
+																			.setParameter("actor", actor)
+																			.setParameter("role", role);
+			long recordsTotal = (long) countQuery.getSingleResult();
+			if (recordsTotal == 1) {
 			mhawr = (MediumHasActorWithRole) entityManager.createQuery(
 				"SELECT mhawr FROM MediumHasActorWithRole mhawr WHERE mhawr.medium=:medium AND mhawr.actor=:actor AND mhawr.role=:role")
 					.setParameter("medium", medium)
-					// .setParameter("actor", actor)
-					// .setParameter("role", role)
+					.setParameter("actor", actor)
+					.setParameter("role", role)
 					.getSingleResult();
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// doesn't matter
 		}
 		if ( mhawr == null ) {
@@ -2654,22 +2661,22 @@ public class EndpointMedium {
 			mhawr.setMedium(medium);
 			mhawr.setActor(actor);
 			mhawr.setRole(role);
-				try {
-					EntityTransaction entityTransaction = entityManager.getTransaction();
-					entityTransaction.begin();
-					entityManager.persist(mhawr);
-					entityTransaction.commit();
-					entityManager.refresh(medium);
-					entityManager.refresh(actor);
-					entityManager.refresh(role);
-					entityManager.refresh(mhawr);
-				} catch (Exception e) {
-					e.printStackTrace();
-					return Response.notModified().build();
-				}
+			try {
+				EntityTransaction entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.persist(mhawr);
+				entityTransaction.commit();
+				entityManager.refresh(medium);
+				entityManager.refresh(actor);
+				entityManager.refresh(role);
+				entityManager.refresh(mhawr);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Response.notModified().build();
 			}
+		}
 		System.out.println("EndpointMedium: addMediumHasActorWithRoles: entity transaction complete");
-					
+
 		// System.out.println("EndpointMedium: addActorToMediumHasActorWithRoles: add log entry");
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);

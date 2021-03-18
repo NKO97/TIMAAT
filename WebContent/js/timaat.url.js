@@ -66,9 +66,9 @@
           break;
           case 'medium': // #medium...
             // make sure media list is loaded
-            if (!TIMAAT.MediaDatasets.mediaLoaded) {
-              TIMAAT.MediaDatasets.setMediumList();
-              TIMAAT.MediaDatasets.mediaLoaded = true;
+            if (!TIMAAT.MediumDatasets.mediaLoaded) {
+              TIMAAT.MediumDatasets.setMediumList();
+              TIMAAT.MediumDatasets.mediaLoaded = true;
             }
             // show media component
             TIMAAT.UI.showComponent('media');
@@ -76,39 +76,38 @@
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current medium
               $('#timaat-mediadatasets-medium-list tr[id='+pathSegments[1]+']').trigger('click');
               let medium = {};
-              medium.model = await TIMAAT.MediaService.getMedium(pathSegments[1]);
-              let type = medium.model.mediaType.mediaTypeTranslations[0].type;
-              TIMAAT.MediaDatasets.clearLastSelection('medium');
+              medium.model = await TIMAAT.MediumService.getMedium(pathSegments[1]);
+              TIMAAT.UI.clearLastSelection('medium');
               if ( pathSegments.length == 2 ) { // #medium/:id     (default view, show datasheet)
-                TIMAAT.MediaDatasets.displayComponent('medium', 'media-tab', 'media-datatable', 'media-tab-medium-metadata', 'medium-metadata-form');
-                TIMAAT.MediaDatasets.displayDataSetContent('dataSheet', medium, 'show', type);
+                TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+                TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
               }
               else { // other medium form than datasheet
                 switch (pathSegments[2]) {
                   case 'preview': // #medium/:id/preview
-                    TIMAAT.MediaDatasets.displayComponent('medium', 'media-tab', 'media-datatable', 'media-tab-medium-preview', 'medium-preview-form');
-                    TIMAAT.MediaDatasets.displayDataSetContent('preview', medium, null, type);
+                    TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-preview', 'medium-preview-form');
+                    TIMAAT.UI.displayDataSetContent('preview', medium, 'medium');
                   break;
                   case 'titles': // #medium/:id/titles
-                    TIMAAT.MediaDatasets.displayComponent('medium', 'media-tab', 'media-datatable', 'media-tab-medium-titles', 'medium-titles-form');
-                    TIMAAT.MediaDatasets.displayDataSetContent('titles', medium);
+                    TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-titles', 'medium-titles-form');
+                    TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
                   break;
                   case 'languages': // #medium/:id/languages
-                    TIMAAT.MediaDatasets.displayComponent('medium', 'media-tab', 'media-datatable', 'media-tab-medium-languagetracks', 'medium-languagetracks-form');
-                    TIMAAT.MediaDatasets.displayDataSetContent('languageTracks', medium);
+                    TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-languagetracks', 'medium-languagetracks-form');
+                    TIMAAT.UI.displayDataSetContent('languageTracks', medium, 'medium');
                   break;
                   case 'actorsWithRoles': // #medium/:id/actorsWithRoles
-                    TIMAAT.MediaDatasets.displayComponent('medium', 'media-tab', 'media-datatable', 'media-tab-medium-actorwithroles', 'medium-actorwithroles-form');
-                    TIMAAT.MediaDatasets.displayDataSetContent('actorWithRoles', medium);
+                    TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-actorwithroles', 'medium-actorwithroles-form');
+                    TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                   break;
                 }
               }
             }
             else {
-              TIMAAT.MediaDatasets.clearLastSelection(pathSegments[1]);
+              TIMAAT.UI.clearLastSelection(pathSegments[1]);
               switch (pathSegments[1]) {
                 case 'list': // #medium/list
-                  TIMAAT.MediaDatasets.loadMedia();
+                  TIMAAT.MediumDatasets.loadMedia();
                 break;
                 case 'audio': // #medium/audio ...
                 case 'document': // #medium/document ...
@@ -117,87 +116,86 @@
                 case 'text': // #medium/text ...
                 case 'video': // #medium/video ...
                 case 'videogame': // #medium/videogame ...
-                  $('#medium-metadata-form').attr('data-type', pathSegments[1]);
+                  $('#medium-metadata-form').data('type', pathSegments[1]);
                   if (pathSegments.length >= 3 && !isNaN(pathSegments[2])) { // path segment is id of current medium
                     $('#timaat-mediadatasets-'+pathSegments[1]+'-list tr[id='+pathSegments[2]+']').trigger('click');
                     let medium = {};
-                    medium.model = await TIMAAT.MediaService.getMedium(pathSegments[2]);
+                    medium.model = await TIMAAT.MediumService.getMedium(pathSegments[2]);
                     let type = medium.model.mediaType.mediaTypeTranslations[0].type;
-                    TIMAAT.MediaDatasets.clearLastSelection(type);
+                    TIMAAT.UI.clearLastSelection(type);
                     if ( pathSegments.length == 3 ) { // #medium/:type/:id     (default view, show datasheet)
-                      TIMAAT.MediaDatasets.displayComponent('medium', type+'s-tab', type+'s-datatable', 'media-tab-medium-metadata', 'medium-metadata-form');
-                      TIMAAT.MediaDatasets.displayDataSetContent('dataSheet', medium, 'show', type);
+                      TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+                      TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
                     }
                     else { // other medium form than datasheet
                       switch (pathSegments[3]) {
                         case 'preview': // #medium/:type/:id/preview
-                          TIMAAT.MediaDatasets.displayComponent('medium', type+'s-tab', type+'s-datatable', 'media-tab-medium-preview', 'medium-preview-form');
-                          TIMAAT.MediaDatasets.displayDataSetContent('preview', medium, null, type);
+                          TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-preview', 'medium-preview-form');
+                          TIMAAT.UI.displayDataSetContent('preview', medium, type);
                         break;
                         case 'titles': // #medium/:type/:id/titles
-                          TIMAAT.MediaDatasets.displayComponent('medium', type+'s-tab', type+'s-datatable', 'media-tab-medium-titles', 'medium-titles-form');
-                          TIMAAT.MediaDatasets.displayDataSetContent('titles', medium);
+                          TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-titles', 'medium-titles-form');
+                          TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
                         break;
                         case 'languages': // #medium/:type/:id/languages
-                          TIMAAT.MediaDatasets.displayComponent('medium', type+'s-tab', type+'s-datatable', 'media-tab-medium-languagetracks', 'medium-languagetracks-form');
-                          TIMAAT.MediaDatasets.displayDataSetContent('languageTracks', medium);
+                          TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-languagetracks', 'medium-languagetracks-form');
+                          TIMAAT.UI.displayDataSetContent('languageTracks', medium, 'medium');
                         break;
                         case 'actorsWithRoles': // #medium/:type/:id/actorsWithRoles
-                          TIMAAT.MediaDatasets.displayComponent('medium', type+'s-tab', type+'s-datatable', 'media-tab-medium-actorwithroles', 'medium-actorwithroles-form');
-                          TIMAAT.MediaDatasets.displayDataSetContent('actorWithRoles', medium);
+                          TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-actorwithroles', 'medium-actorwithroles-form');
+                          TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                         break;
                       }
                     }
                   }
                   else if (pathSegments.length >= 3 && pathSegments[2] == 'list') { // .../list
-                    TIMAAT.MediaDatasets.clearLastSelection(pathSegments[1]);
-                    TIMAAT.MediaDatasets.loadMediumSubtype(pathSegments[1]);
+                    TIMAAT.UI.clearLastSelection(pathSegments[1]);
+                    TIMAAT.MediumDatasets.loadMediumSubtype(pathSegments[1]);
                   }
                 break;
               }
             }
           break;
-          case 'mediaCollection':
+          case 'mediumCollection':
             // TODO make sure media collections are loaded
             // show media collection component
             TIMAAT.UI.showComponent('media');
             
             // show corresponding medium collection form
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current medium collection
-              $('#timaat-mediacollectiondatasets-mediumcollection-list tr[id='+pathSegments[1]+']').trigger('click');
+              $('#timaat-mediumcollectiondatasets-mediumcollection-list tr[id='+pathSegments[1]+']').trigger('click');
               let mediumCollection = {};
-              mediumCollection.model = await TIMAAT.MediaCollectionService.getMediumCollection(pathSegments[1]);
-              let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
-              TIMAAT.MediaCollectionDatasets.clearLastSelection();
-              if (pathSegments.length == 2) { // #mediaCollection/:id    (default view, show datasheet)
-                TIMAAT.MediaDatasets.displayComponent('mediumCollection', 'mediacollections-tab', 'mediacollection-datatable', 'mediacollection-tab-mediumcollection-metadata', 'mediacollection-metadata-form');
-                TIMAAT.MediaCollectionDatasets.displayDataSetContent('dataSheet', mediumCollection, 'show', type);
+              mediumCollection.model = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
+              TIMAAT.UI.clearLastSelection('mediumCollection');
+              if (pathSegments.length == 2) { // #mediumCollection/:id    (default view, show datasheet)
+                TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-metadata', 'mediumcollection-metadata-form');
+                TIMAAT.UI.displayDataSetContent('dataSheet', mediumCollection, 'mediumCollection');
               }
-              else { // other mediaCollection form than datasheet
+              else { // other mediumCollection form than datasheet
                 switch (pathSegments[2]) {
-                  case 'items': // #mediaCollection/:id/items
-                    TIMAAT.MediaCollectionDatasets.clearLastItemSelection();
-                    TIMAAT.MediaDatasets.displayComponent('mediumCollection', 'mediacollections-tab', 'mediacollection-datatable', 'mediacollection-tab-mediumcollection-items', 'mediacollection-mediaItems');
-                    TIMAAT.MediaCollectionDatasets.displayDataSetContent('items', mediumCollection);
+                  case 'items': // #mediumCollection/:id/items
+                    TIMAAT.MediumCollectionDatasets.clearLastItemSelection();
+                    TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-items', 'mediumcollection-mediaItems');
+                    TIMAAT.UI.displayDataSetContent('items', mediumCollection, 'mediumCollection');
                   break;
-                  case 'publication': // #mediaCollection/:id/publication
-                  TIMAAT.MediaDatasets.displayComponent('mediumCollection', 'mediacollections-tab', 'mediacollection-datatable', 'mediacollection-tab-mediumcollection-publication', 'mediacollection-publication');
-                  TIMAAT.MediaCollectionDatasets.displayDataSetContent('publication', mediumCollection);
+                  case 'publication': // #mediumCollection/:id/publication
+                  TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-publication', 'mediumcollection-publication');
+                  TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
                   break;
                 }
               }
             }
             else {
-              TIMAAT.MediaCollectionDatasets.clearLastSelection();
+              TIMAAT.UI.clearLastSelection('mediumCollection');
               switch (pathSegments[1]) {
-              case 'list': // #mediaCollection/list
-                TIMAAT.MediaCollectionDatasets.loadMediaCollections();
+              case 'list': // #mediumCollection/list
+                TIMAAT.MediumCollectionDatasets.loadMediaCollections();
               break;
               }
             }
           break;
           case 'actor': // #actor...
-          // make sure media list is loaded
+          // make sure actor list is loaded
           if (!TIMAAT.ActorDatasets.actorsLoaded) {
             TIMAAT.ActorDatasets.setActorList();
             TIMAAT.ActorDatasets.actorsLoaded = true;
@@ -209,99 +207,97 @@
             $('#timaat-actordatasets-actor-list tr[id='+pathSegments[1]+']').trigger('click');
             let actor = {};
             actor.model = await TIMAAT.ActorService.getActor(pathSegments[1]);
-            let type = actor.model.actorType.actorTypeTranslations[0].type;
-            TIMAAT.ActorDatasets.clearLastSelection('actor');
+            TIMAAT.UI.clearLastSelection('actor');
             if ( pathSegments.length == 2 ) { // #actor/:id     (default view, show datasheet)
-              TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-metadata', 'actor-metadata-form');
-              TIMAAT.ActorDatasets.displayDataSetContent('dataSheet', actor, 'show', type);
+              TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-metadata', 'actor-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
             }
             else { // other actor form than datasheet
               switch (pathSegments[2]) {
                 case 'names': // #actor/:id/preview
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-names', 'actor-names-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('names', actor, null, type);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-names', 'actor-names-form');
+                  TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
                 break;
                 case 'addresses': // #actor/:id/titles
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-addresses', 'actor-addresses-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('addresses', actor);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-addresses', 'actor-addresses-form');
+                  TIMAAT.UI.displayDataSetContent('addresses', actor, 'actor');
                 break;
                 case 'emails': // #actor/:id/languages
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-emailaddresses', 'actor-emailaddresses-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('emails', actor);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-emailaddresses', 'actor-emailaddresses-form');
+                  TIMAAT.UI.displayDataSetContent('emails', actor, 'actor');
                 break;
                 case 'phoneNumbers': // #actor/:id/actorsWithRoles
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-phonenumbers', 'actor-phonenumbers-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('phoneNumbers', actor);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-phonenumbers', 'actor-phonenumbers-form');
+                  TIMAAT.UI.displayDataSetContent('phoneNumbers', actor, 'actor');
                 break;
                 case 'memberOfCollectives': // #actor/:id/preview
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-memberofcollectives', 'actor-memberofcollectives-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('memberOfCollectives', actor, null, type);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-memberofcollectives', 'actor-memberofcollectives-form');
+                  TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
                 break;
                 case 'roles': // #actor/:id/titles
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-roles', 'actor-roles-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('roles', actor);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-roles', 'actor-roles-form');
+                  TIMAAT.UI.displayDataSetContent('roles', actor, 'actor');
                 break;
                 case 'rolesInMedia': // #actor/:id/languages
-                  TIMAAT.ActorDatasets.displayComponent('actor', 'actors-tab', 'actors-datatable', 'actors-tab-actor-role-in-medium', 'actor-role-in-medium-form');
-                  TIMAAT.ActorDatasets.displayDataSetContent('rolesInMedia', actor);
+                  TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-role-in-medium', 'actor-role-in-medium-form');
+                  TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
                 break;
               }
             }
           }
           else {
-            TIMAAT.ActorDatasets.clearLastSelection(pathSegments[1]);
             switch (pathSegments[1]) {
               case 'list': // #actor/list
                 TIMAAT.ActorDatasets.loadActors();
               break;
               case 'person': // #actor/person ...
               case 'collective': // #actor/collective ...
-                $('#actor-metadata-form').attr('data-type', pathSegments[1]);
+                $('#actor-metadata-form').data('type', pathSegments[1]);
                 if (pathSegments.length >= 3 && !isNaN(pathSegments[2])) { // path segment is id of current actor
                   $('#timaat-actordatasets-'+pathSegments[1]+'-list tr[id='+pathSegments[2]+']').trigger('click');
                   let actor = {};
                   actor.model = await TIMAAT.ActorService.getActor(pathSegments[2]);
                   let type = actor.model.actorType.actorTypeTranslations[0].type;
-                  TIMAAT.ActorDatasets.clearLastSelection(type);
+                  TIMAAT.UI.clearLastSelection(type);
                   if ( pathSegments.length == 3 ) { // #actor/:type/:id     (default view, show datasheet)
-                    TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-metadata', 'actor-metadata-form');
-                    TIMAAT.ActorDatasets.displayDataSetContent('dataSheet', actor, 'show', type);
+                    TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-metadata', 'actor-metadata-form');
+                    TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
                   }
                   else { // other actor form than datasheet
                     switch (pathSegments[3]) {
                       case 'names': // #actor/:type/:id/preview
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-names', 'actor-names-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('names', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-names', 'actor-names-form');
+                        TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
                       break;
                       case 'addresses': // #actor/:type/:id/titles
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-addresses', 'actor-addresses-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('addresses', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-addresses', 'actor-addresses-form');
+                        TIMAAT.UI.displayDataSetContent('addresses', actor, 'actor');
                       break;
                       case 'emails': // #actor/:type/:id/languages
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-emailaddresses', 'actor-emailaddresses-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('emails', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-emailaddresses', 'actor-emailaddresses-form');
+                        TIMAAT.UI.displayDataSetContent('emails', actor, 'actor');
                       break;
                       case 'phoneNumbers': // #actor/:type/:id/actorsWithRoles
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-phonenumbers', 'actor-phonenumbers-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('phoneNumbers', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-phonenumbers', 'actor-phonenumbers-form');
+                        TIMAAT.UI.displayDataSetContent('phoneNumbers', actor, 'actor');
                       break;
                       case 'memberOfCollectives': // #actor/:type/:id/preview
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-memberofcollectives', 'actor-memberofcollectives-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('memberOfCollectives', actor, 'show', type);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-memberofcollectives', 'actor-memberofcollectives-form');
+                        TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
                       break;
                       case 'roles': // #actor/:type/:id/titles
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-roles', 'actor-roles-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('roles', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-roles', 'actor-roles-form');
+                        TIMAAT.UI.displayDataSetContent('roles', actor, 'actor');
                       break;
                       case 'rolesInMedia': // #actor/:type/:id/languages
-                        TIMAAT.ActorDatasets.displayComponent('actor', type+'s-tab', type+'s-datatable', 'actors-tab-actor-role-in-medium', 'actor-role-in-medium-form');
-                        TIMAAT.ActorDatasets.displayDataSetContent('rolesInMedia', actor);
+                        TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-role-in-medium', 'actor-role-in-medium-form');
+                        TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
                       break;
                     }
                   }
                 }
                 else if (pathSegments.length >= 3 && pathSegments[2] == 'list') { // .../list
-                  TIMAAT.ActorDatasets.clearLastSelection(pathSegments[1]);
+                  TIMAAT.UI.clearLastSelection(pathSegments[1]);
                   TIMAAT.ActorDatasets.loadActorSubtype(pathSegments[1]);
                 }
               break;
@@ -309,7 +305,7 @@
           }
           break;
           case 'event': // #event...
-          // make sure media list is loaded
+          // make sure event list is loaded
           if (!TIMAAT.EventDatasets.eventsLoaded) {
             TIMAAT.EventDatasets.setEventList();
             TIMAAT.EventDatasets.eventsLoaded = true;
@@ -318,14 +314,14 @@
           TIMAAT.UI.showComponent('events');
           // show corresponding event form
           if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current event
-            $('#timaat-EventDatasets-event-list tr[id='+pathSegments[1]+']').trigger('click');
+            $('#timaat-eventdatasets-event-list tr[id='+pathSegments[1]+']').trigger('click');
             let event = {};
             event.model = await TIMAAT.EventService.getEvent(pathSegments[1]);
             // let type = event.model.eventType.eventTypeTranslations[0].type;
-            TIMAAT.EventDatasets.clearLastSelection('event');
+            TIMAAT.UI.clearLastSelection('event');
             if ( pathSegments.length == 2 ) { // #event/:id     (default view, show datasheet)
-              TIMAAT.EventDatasets.displayComponent('event', 'events-tab', 'events-datatable', 'events-tab-event-metadata', 'event-metadata-form');
-              TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
+              TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable', 'event-tab-metadata', 'event-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', event, 'event');
             }
             else { // other event form than datasheet
               switch (pathSegments[2]) {
@@ -334,7 +330,7 @@
             }
           }
           else {
-            TIMAAT.EventDatasets.clearLastSelection(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('event');
             switch (pathSegments[1]) {
               case 'list': // #event/list
                 TIMAAT.EventDatasets.loadEvents();
@@ -342,9 +338,173 @@
             }
           }
           break;
+          case 'category': // #category...
+          // make sure category list is loaded
+          if (!TIMAAT.Lists.listsLoaded) {
+            TIMAAT.Lists.setLists();
+            TIMAAT.Lists.listsLoaded = true;
+          }
+          // show category component
+          TIMAAT.UI.showComponent('lists');
+          // show corresponding category form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current category
+            $('#timaat-categorylists-category-list tr[id='+pathSegments[1]+']').trigger('click');
+            let category = {};
+            category.model = await TIMAAT.CategoryService.getCategory(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('category');
+            if ( pathSegments.length == 2 ) { // #category/:id     (default view, show datasheet)
+              TIMAAT.UI.displayComponent('category', 'category-tab', 'category-datatable', 'list-tab-metadata', 'category-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', category, 'category');
+            }
+            else { // other category form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.UI.clearLastSelection(pathSegments[0]);
+            switch (pathSegments[1]) {
+              case 'list': // #category/list
+                TIMAAT.CategoryLists.loadCategories();
+              break;
+            }
+          }
+          break;
+          case 'categorySet': // #categorySet...
+          // make sure category set list is loaded
+          if (!TIMAAT.Lists.listsLoaded) {
+            TIMAAT.Lists.setLists();
+            TIMAAT.Lists.listsLoaded = true;
+          }
+          // show category set component
+          TIMAAT.UI.showComponent('lists');
+          // show corresponding category set form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current category set
+            $('#timaat-categorylists-categoryset-list tr[id='+pathSegments[1]+']').trigger('click');
+            let categorySet = {};
+            categorySet.model = await TIMAAT.CategorySetService.getCategorySet(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('categorySet');
+            if ( pathSegments.length == 2 ) { // #categorySet/:id     (default view, show datasheet)
+              TIMAAT.UI.displayComponent('categorySet', 'categoryset-tab', 'categoryset-datatable', 'list-tab-metadata', 'categoryset-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', categorySet, 'categorySet');
+            }
+            else { // other category set form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.UI.clearLastSelection(pathSegments[0]);
+            switch (pathSegments[1]) {
+              case 'list': // #categorySet/list
+                TIMAAT.CategoryLists.loadCategorySets();
+              break;
+            }
+          }
+          break;
+          case 'role': // #role...
+          // make sure role list is loaded
+          if (!TIMAAT.Lists.listsLoaded) {
+            TIMAAT.Lists.setLists();
+            TIMAAT.Lists.listsLoaded = true;
+          }
+          // show role component
+          TIMAAT.UI.showComponent('lists');
+          // show corresponding role form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current role
+            $('#timaat-rolelists-role-list tr[id='+pathSegments[1]+']').trigger('click');
+            let role = {};
+            role.model = await TIMAAT.RoleService.getRole(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('role');
+            if ( pathSegments.length == 2 ) { // #role/:id     (default view, show datasheet)
+              TIMAAT.UI.displayComponent('role', 'role-tab', 'role-datatable', 'list-tab-metadata', 'role-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', role, 'role');
+            }
+            else { // other role form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.UI.clearLastSelection(pathSegments[0]);
+            switch (pathSegments[1]) {
+              case 'list': // #role/list
+                TIMAAT.RoleLists.loadRoles();
+              break;
+            }
+          }
+          break;
+          case 'roleGroup': // #roleGroup...
+          // make sure role group list is loaded
+          if (!TIMAAT.Lists.listsLoaded) {
+            TIMAAT.Lists.setLists();
+            TIMAAT.Lists.listsLoaded = true;
+          }
+          // show role group component
+          TIMAAT.UI.showComponent('lists');
+          // show corresponding role group form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current role group
+            $('#timaat-rolelists-rolegroup-list tr[id='+pathSegments[1]+']').trigger('click');
+            let roleGroup = {};
+            roleGroup.model = await TIMAAT.RoleService.getRoleGroup(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('roleGroup');
+            if ( pathSegments.length == 2 ) { // #roleGroup/:id     (default view, show datasheet)
+              TIMAAT.UI.displayComponent('roleGroup', 'rolegroup-tab', 'rolegroup-datatable', 'list-tab-metadata', 'rolegroup-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', roleGroup, 'roleGroup');
+            }
+            else { // other role group form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.UI.clearLastSelection(pathSegments[0]);
+            switch (pathSegments[1]) {
+              case 'list': // #roleGroup/list
+                TIMAAT.RoleLists.loadRoleGroups();
+              break;
+            }
+          }
+          break;
+          case 'language': // #language...
+          // make sure language list is loaded
+          if (!TIMAAT.Lists.listsLoaded) {
+            TIMAAT.Lists.setLists();
+            TIMAAT.Lists.listsLoaded = true;
+          }
+          // show language component
+          TIMAAT.UI.showComponent('lists');
+          // show corresponding language form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current language
+            $('#timaat-languagelists-language-list tr[id='+pathSegments[1]+']').trigger('click');
+            let language = {};
+            language.model = await TIMAAT.LanguageService.getLanguage(pathSegments[1]);
+            TIMAAT.UI.clearLastSelection('language');
+            if ( pathSegments.length == 2 ) { // #language/:id     (default view, show datasheet)
+              TIMAAT.UI.displayComponent('language', 'language-tab', 'language-datatable', 'list-tab-metadata', 'language-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
+            }
+            else { // other language form than datasheet
+              switch (pathSegments[2]) {
+                //* no further data tabs currently available
+              }
+            }
+          }
+          else {
+            TIMAAT.UI.clearLastSelection(pathSegments[0]);
+            switch (pathSegments[1]) {
+              case 'list': // #language/list
+                TIMAAT.LanguageLists.loadLanguages();
+              break;
+            }
+          }
+          break;
         }
       }
-
     },
 
   }

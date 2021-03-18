@@ -60,9 +60,9 @@
 				$('.categorysets-nav-tabs').show();
 				$('.categorysets-data-tabs').hide();
 				$('.nav-tabs a[href="#categorySetDatasheet"]').tab('show');
-				$('#timaat-categorylists-metadata-form').data('categoryset', categorySet);
+				$('#category-metadata-form').data('categorySet', categorySet);
         console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
-				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'categoryset', categorySet);
+				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'categorySet', categorySet);
 			});
     }
 
@@ -77,7 +77,7 @@
 			// remove categoryset from UI
 			this.listView.remove();
       console.log("TCL: CategorySet -> remove -> this", this);
-			$('#timaat-categorylists-metadata-form').data('categoryset', null);
+			$('#category-metadata-form').data('categorySet', null);
 			// remove from categoryset lists
 			var index;
 			for (var i = 0; i < TIMAAT.CategoryLists.categorySets.length; i++) {
@@ -175,7 +175,7 @@
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
 	// 					// show metadata editor
-	// 					$('#timaat-categorylists-categoryset-meta').data('categoryset', categorySet);
+	// 					$('#timaat-categorylists-categoryset-meta').data('categorySet', categorySet);
 	// 					$('#timaat-categorylists-categoryset-meta').modal('show');			
 	// 				});
 					
@@ -183,7 +183,7 @@
 	// 				this.listView.find('.timaat-categoryset-remove').on('click', this, function(ev) {
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
-	// 					$('#timaat-categorylists-categoryset-delete').data('categoryset', categorySet);
+	// 					$('#timaat-categorylists-categoryset-delete').data('categorySet', categorySet);
 	// 					$('#timaat-categorylists-categoryset-delete').modal('show');
 	// 				});
 

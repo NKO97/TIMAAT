@@ -60,7 +60,7 @@
 				$('.categories-nav-tabs').show();
 				$('.categories-data-tabs').hide();
 				$('.nav-tabs a[href="#categoryDatasheet"]').tab('show');
-				$('#timaat-categorylists-metadata-form').data('category', category);
+				$('#category-metadata-form').data('category', category);
         console.log("TCL: Category -> constructor -> category", category);
 				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'category', category);
 			});
@@ -77,7 +77,7 @@
 			// remove category from UI
 			this.listView.remove();
       console.log("TCL: Category -> remove -> this", this);
-			$('#timaat-categorylists-metadata-form').data('category', null);
+			$('#category-metadata-form').data('category', null);
 			// remove from categoryset lists
 			var index;
 			for (var i = 0; i < TIMAAT.CategoryLists.categories.length; i++) {
@@ -175,7 +175,7 @@
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
 	// 					// show metadata editor
-	// 					$('#timaat-categorylists-categoryset-meta').data('categoryset', categorySet);
+	// 					$('#timaat-categorylists-categoryset-meta').data('categorySet', categorySet);
 	// 					$('#timaat-categorylists-categoryset-meta').modal('show');			
 	// 				});
 					
@@ -183,7 +183,7 @@
 	// 				this.listView.find('.timaat-categoryset-remove').on('click', this, function(ev) {
 	// 					ev.stopPropagation();
 	// 					TIMAAT.UI.hidePopups();				
-	// 					$('#timaat-categorylists-categoryset-delete').data('categoryset', categorySet);
+	// 					$('#timaat-categorylists-categoryset-delete').data('categorySet', categorySet);
 	// 					$('#timaat-categorylists-categoryset-delete').modal('show');
 	// 				});
 

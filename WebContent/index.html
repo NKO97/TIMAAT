@@ -188,8 +188,8 @@
                   </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-lists">
-                  <a href="#listdatasets"
-                    onclick="TIMAAT.CategoryLists.initListsComponent()"
+                  <a
+                    onclick="TIMAAT.Lists.initListsComponent()"
                     data-toggle="popover"
                     data-trigger="hover"
                     data-animation="false"
@@ -205,7 +205,7 @@
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-media">
                 <a 
-                  onclick="TIMAAT.MediaDatasets.initMediaComponent()"
+                  onclick="TIMAAT.MediumDatasets.initMediaComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -589,7 +589,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="timaat-mediumAnalysisList-categorySet-in-use-confirm">Confirm</button>
+                    <button type="button" class="btn btn-danger" id="timaat-mediumAnalysisList-categorySet-in-use-confirm-button">Confirm</button>
                   </div>
                 </div>
               </div>
@@ -623,7 +623,7 @@
                   <div class="modal-body">
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				            <button type="button" class="btn btn-danger" id="timaat-segment-element-delete-commit-submit">Delete</button>
                   </div>
                 </div>
@@ -802,8 +802,8 @@
                           </div>
                         </div>
                         <div class="mediumAnalysisList-categorySet-form-submit">
-                          <button type="submit" class="btn btn-outline-primary" id="timaat-mediumAnalysisList-categorySet-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-outline-secondary" id="timaat-mediumAnalysisList-categorySet-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-outline-primary" id="timaat-mediumAnalysisList-categorySet-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-outline-secondary" id="timaat-mediumAnalysisList-categorySet-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>
@@ -829,8 +829,8 @@
                             </div>
                           </div>
                           <div class="annotation-category-form-submit">
-                            <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-category-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-category-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-category-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-category-form-dismiss-button" name="dismiss">Cancel</button>
                           </div>
                         </form>
                       </div>
@@ -1206,7 +1206,7 @@
               <div class="collapse" id="collapseMediaTabs">
                 <div class="card">
                   <div class="card-body">
-                    <div id="timaat-videoplayer-media-tabs-container">
+                    <div id="timaat-videoplayer-medium-tabs-container">
                     </div>
                   </div>
                 </div>
@@ -1234,7 +1234,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="timaat-rolelists-role-delete-submit">Delete role</button>
+                    <button type="button" class="btn btn-danger" id="timaat-rolelists-role-delete-submit-button">Delete role</button>
                   </div>
                 </div>
               </div>
@@ -1254,7 +1254,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="timaat-rolelists-rolegroup-delete-submit">Delete role group</button>
+                    <button type="button" class="btn btn-danger" id="timaat-rolelists-rolegroup-delete-submit-button">Delete role group</button>
                   </div>
                 </div>
               </div>
@@ -1274,7 +1274,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-categorylists-category-delete-submit">Kategorie löschen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-categorylists-category-delete-submit-button">Kategorie löschen</button>
                   </div>
                 </div>
               </div>
@@ -1294,7 +1294,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-categorylists-categoryset-delete-submit">CategorySet löschen</button>
+                    <button type="button" class="btn btn-danger" id="timaat-categorylists-categoryset-delete-submit-button">CategorySet löschen</button>
                   </div>
                 </div>
               </div>
@@ -1314,7 +1314,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="timaat-languagelists-language-delete-submit">Delete language</button>
+                    <button type="button" class="btn btn-danger" id="timaat-languagelists-language-delete-submit-button">Delete language</button>
                   </div>
                 </div>
               </div>
@@ -1362,29 +1362,29 @@
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
-              <ul class="nav nav-pills" id="lists-tab" role="tablist">
-                <li class="nav-item active">
-                  <a class="nav-link active" id="categorysets-tab" onclick="TIMAAT.CategoryLists.loadCategorySets()" data-toggle="tab" href="#categorySetDatasheet" role="tab" aria-controls="categorysets" aria-selected="true">
+              <ul class="nav nav-pills" id="list-tabs" role="tablist"> <!-- Nav bar tabs -->
+                <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="categoryset-tab" data-toggle="tab" role="tab" aria-controls="categoryset" aria-selected="false">
                     <i class="fas fa-tags"></i> Category Sets
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="categories-tab" onclick="TIMAAT.CategoryLists.loadCategories()" data-toggle="tab" href="#timaat-categorylists-categories" role="tab" aria-controls="categories" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="category-tab" data-toggle="tab" role="tab" aria-controls="category" aria-selected="false">
                     <i class="fas fa-tag"></i> Categories
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="rolegroups-tab" onclick="TIMAAT.RoleLists.loadRoleGroups()" data-toggle="tab" href="#timaat-rolelists-rolegroups" role="tab" aria-controls="rolegroups" aria-selected="false">
-                    <i class="fas fa-users-cog"></i> RoleGroups
+                  <a class="nav-link top-nav-bar-link" id="rolegroup-tab" data-toggle="tab" role="tab" aria-controls="rolegroup" aria-selected="false">
+                    <i class="fas fa-users-cog"></i> Role Groups
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="roles-tab" onclick="TIMAAT.RoleLists.loadRoles()" data-toggle="tab" href="#timaat-rolelists-roles" role="tab" aria-controls="roles" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="role-tab" data-toggle="tab" role="tab" aria-controls="role" aria-selected="false">
                     <i class="fas fa-user-cog"></i> Roles
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="languages-tab" onclick="TIMAAT.LanguageLists.loadLanguages()" data-toggle="tab" href="#timaat-languagelists-languages" role="tab" aria-controls="languages" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="language-tab"  data-toggle="tab" role="tab" aria-controls="language" aria-selected="false">
                     <i class="fas fa-language"></i> Languages
                   </a>
                 </li>
@@ -1393,9 +1393,9 @@
                 <div class="tab-pane fade show active" id="timaat-lists-tags" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row timaat-lists-ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
-                      <div class="card lists-datatables categories-datatables categorysets-datatable">
+                      <div class="card datatables" id="categoryset-datatable">
                         <div class="card-header">Category sets
-                          <button type="button" id="timaat-categorylists-categoryset-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" onclick="TIMAAT.CategoryLists.addCategorySet()" class="btn btn-outline btn-success btn-sm float-right add-categoryset-button" title="Add Category Set">
                             <i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-lists-list-wrapper">
@@ -1424,9 +1424,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card lists-datatables categories-datatables categories-datatable">
+                      <div class="card datatables" id="category-datatable">
                         <div class="card-header">Categories
-                          <button type="button" id="timaat-categorylists-category-add" class="btn btn-outline btn-success btn-sm float-right">
+                          <button type="button" onclick="TIMAAT.CategoryLists.addCategory()" class="btn btn-outline btn-success btn-sm float-right add-category-button" title="Add Category">
                             <i class="fas fa-plus"></i></button>
                           </div>
                         <div class="timaat-lists-list-wrapper">
@@ -1455,9 +1455,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card lists-datatables roles-datatables rolegroups-datatable">
+                      <div class="card datatables" id="rolegroup-datatable">
                         <div class="card-header">RoleGroups
-                          <button type="button" id="timaat-rolelists-rolegroup-add" class="btn btn-outline btn-success btn-sm float-right" title="Add RoleGroup">
+                          <button type="button" onclick="TIMAAT.RoleLists.addRoleGroup()" class="btn btn-outline btn-success btn-sm float-right add-role-button" title="Add RoleGroup">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -1479,9 +1479,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card lists-datatables roles-datatables roles-datatable">
+                      <div class="card datatables" id="role-datatable">
                         <div class="card-header">Roles
-                          <button type="button" id="timaat-rolelists-role-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Role">
+                          <button type="button" onclick="TIMAAT.RoleLists.addRole()" class="btn btn-outline btn-success btn-sm float-right add-role-button" title="Add Role">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -1503,9 +1503,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card lists-datatables languages-datatables languages-datatable">
+                      <div class="card datatables" id="language-datatable">
                         <div class="card-header">Languages
-                          <button type="button" id="timaat-languagelists-language-add" class="btn btn-outline btn-success btn-sm float-right" title="Add Language">
+                          <button type="button" onclick="TIMAAT.LanguageLists.addLanguage()" class="btn btn-outline btn-success btn-sm float-right add-language-button" title="Add Language">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -1528,7 +1528,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-8" id="timaat-lists-tabs">
+                    <div class="col-lg-8">
+                      <ul class="nav nav-tabs" id="list-nav-tabs">
+                        <li class="nav-item list-data-tabs">
+                          <a class="nav-link content-nav-bar-link" id="list-tab-metadata">Datasheet</a>
+                        </li>
+                      </ul>
                       <!-- <div class="card">
                         <div class="card-header">Kategorien
                           <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
@@ -1548,20 +1553,20 @@
                         </div>
                       </div> -->
                       <!-- Data tab content -->
-                      <!-- category/categorysets datasheet form -->
-                      <form class="form" role="form" id="timaat-categorylists-metadata-form" name="timaat-categorylists-metadata-form" data-type="" method="POST" novalidate>
+                      <!-- category data sheet form -->
+                      <form class="form dataset-content" role="form" id="category-metadata-form" name="category-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="categoryOrCategorySetFormHeader">Category</h5>
+                              <h5 class="form-title caps-title" id="categoryFormHeader">Category</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm categorylist-form-edit-button" id="timaat-categorylists-metadata-form-edit" title="Edit data sheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="category-metadata-form-edit-button" title="Edit data sheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm categorylist-form-delete-button" id="timaat-categorylists-metadata-form-delete" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="category-metadata-form-delete-button" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1572,8 +1577,8 @@
                         <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
-                            <label class="col-form-label col-form-label-sm" for="timaat-categorylists-metadata-name">Name*</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-categorylists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                            <label class="col-form-label col-form-label-sm" for="timaat-category-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-category-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- category data -->
@@ -1588,6 +1593,40 @@
                               <div class="form-group">
                               </div>
                             </div>
+                          </div>
+                        </div>
+                        <!-- Save/Cancel buttons -->
+                        <div class="category-datasheet-form-submit">
+                          <button type="submit" class="btn btn-primary form-submit-button" id="category-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="category-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                        </div>
+                      </form>
+                      <!-- category sets data sheet form -->
+                      <form class="form dataset-content" role="form" id="categoryset-metadata-form" name="categoryset-metadata-form" data-type="" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="categorySetFormHeader">Category Set</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="categoryset-metadata-form-edit-button" title="Edit data sheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="categoryset-metadata-form-delete-button" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- name data -->
+                        <div class="form-group datasheet-data name-data">
+                          <div class="form-row">
+                            <label class="col-form-label col-form-label-sm" for="timaat-categoryset-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-categoryset-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- categoryset data -->
@@ -1605,25 +1644,25 @@
                           </div>
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <div class="category-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary" id="timaat-categorylists-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-categorylists-metadata-form-dismiss" name="dismiss">Cancel</button>
+                        <div class="categoryset-datasheet-form-submit">
+                          <button type="submit" class="btn btn-primary form-submit-button" id="categoryset-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="categoryset-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
-                      <!-- role/rolegroups datasheet form -->
-                      <form class="form" role="form" id="timaat-rolelists-metadata-form" name="timaat-rolelists-metadata-form" data-type="" method="POST" novalidate>
+                      <!-- role data sheet form -->
+                      <form class="form dataset-content" role="form" id="role-metadata-form" name="role-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="roleOrRoleGroupFormHeader">Role</h5>
+                              <h5 class="form-title caps-title" id="roleFormHeader">Role</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm rolelists-form-button" id="timaat-rolelists-metadata-form-edit" title="Edit data sheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="role-metadata-form-edit-button" title="Edit data sheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm rolelists-form-button" id="timaat-rolelists-metadata-form-delete" title="Delete">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="role-metadata-form-delete-button" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -1634,8 +1673,8 @@
                         <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
-                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-metadata-name">Name*</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-role-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-role-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- role data -->
@@ -1665,6 +1704,40 @@
                             </div>
                           </div>
                         </div>
+                        <!-- Save/Cancel buttons -->
+                        <div>
+                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="role-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="role-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                        </div>
+                      </form> 
+                      <!-- role group data sheet form -->
+                      <form class="form dataset-content" role="form" id="rolegroup-metadata-form" name="rolegroup-metadata-form" data-type="" method="POST" novalidate>
+                        <div class="form-header">
+                          <div class="form-row">
+                            <div class="col-md-10">
+                              <h5 class="form-title caps-title" id="roleGroupFormHeader">Role</h5>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="rolegroup-metadata-form-edit-button" title="Edit data sheet" name="edit">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="rolegroup-metadata-form-delete-button" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- name data -->
+                        <div class="form-group datasheet-data name-data">
+                          <div class="form-row">
+                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-rolegroup-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-rolegroup-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                          </div>
+                        </div>
                         <!-- role group data -->
                         <div class="form-group datasheet-data rolegroup-data">
                           <div class="form-header">
@@ -1680,13 +1753,13 @@
                           </div>
                         </div>
                         <!-- Save/Cancel buttons -->
-                        <div class="role-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary" id="timaat-rolelists-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-rolelists-metadata-form-dismiss" name="dismiss">Cancel</button>
+                        <div>
+                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="rolegroup-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="rolegroup-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
-                      </form>
+                      </form> 
                       <!-- language data sheet form -->
-                      <form class="form" role="form" id="timaat-languagelists-metadata-form" name="timaat-languagelists-metadata-form" data-type="" method="POST" novalidate>
+                      <form class="form dataset-content" role="form" id="language-metadata-form" name="language-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
@@ -1695,10 +1768,10 @@
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                  <button type="button" class="btn btn-outline btn-secondary btn-sm language-form-edit-button" id="timaat-languagelists-metadata-form-edit" title="Edit datasheet" name="edit">
+                                  <button type="button" class="btn btn-outline btn-secondary btn-sm language-form-edit-button" id="language-metadata-form-edit-button" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <!-- <button type="button" class="btn btn-outline btn-danger btn-sm language-form-delete-button" id="timaat-languagelists-metadata-form-delete" title="Delete">
+                                  <!-- <button type="button" class="btn btn-outline btn-danger btn-sm language-form-delete-button" id="language-metadata-form-delete-button" title="Delete">
                                     <i class="fas fa-trash-alt"></i>
                                   </button> -->
                                 </div>
@@ -1710,8 +1783,8 @@
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
                             <div class="col-md-6">
-                              <label class="col-form-label col-form-label-sm" for="timaat-languagelists-metadata-name">Language name*</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-languagelists-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Language name" minlength="3" maxlength="200" required>
+                              <label class="col-form-label col-form-label-sm" for="timaat-language-metadata-name">Language name*</label>
+                              <input type="text" class="form-control form-control-sm" id="timaat-language-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Language name" minlength="3" maxlength="200" required>
                             </div>
                             <div class="col-md-6">
                               <label class="col-form-label col-form-label-sm" for="timaat-languagelists-metadata-code">Language code (ISO-639-1)*</label>
@@ -1721,8 +1794,8 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <div class="category-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary" id="timaat-languagelists-metadata-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary" id="timaat-languagelists-metadata-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary" id="language-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="language-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>
@@ -1752,13 +1825,13 @@
                         Möchten Sie das ausgewählte Medium löschen?
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                        <button type="button" class="btn btn-danger" id="timaat-mediadatasets-modal-delete-submit">Medium löschen</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="timaat-mediadatasets-modal-delete-submit-button">Delete medium</button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="modal fade" id="timaat-mediacollectiondatasets-mediumcollection-delete" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionDeleteLabel" aria-hidden="true">
+                <div class="modal fade" id="timaat-mediumcollectiondatasets-mediumcollection-delete" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionDeleteLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -1771,8 +1844,8 @@
                         Do you want to delete the selected media collection?
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                        <button type="button" class="btn btn-danger" id="timaat-mediacollectiondatasets-modal-delete-submit">Delete media collection</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="timaat-mediumcollectiondatasets-modal-delete-submit-button">Delete media collection</button>
                       </div>
                     </div>
                   </div>
@@ -1818,7 +1891,7 @@
                   </div>
                 </div> 
               </div>
-              <div class="modal fade" id="timaat-mediacollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionItemAddLabel" aria-hidden="true">
+              <div class="modal fade" id="timaat-mediumcollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionItemAddLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -1918,7 +1991,7 @@
                   </div>
                 </div>
               </div>
-              <div class="modal fade" id="timaat-mediacollectiondatasets-mediumcollection-tags" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionTagLabel" aria-hidden="true">
+              <div class="modal fade" id="timaat-mediumcollectiondatasets-mediumcollection-tags" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionTagLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -1931,7 +2004,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn btn-primary" id="timaat-mediacollectiondatasets-modal-tag-submit">Save</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-mediumcollectiondatasets-modal-tag-submit-button">Save</button>
                     </div>
                   </div>
                 </div>
@@ -1940,83 +2013,83 @@
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-md-12">
-              <ul class="nav nav-pills" id="media-tabs" role="tablist"> <!-- Nav bar tabs -->
+              <ul class="nav nav-pills" id="medium-tabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="mediacollections-tab" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="mediumcollection-tab" data-toggle="tab" role="tab" aria-controls="media collections" aria-selected="false">
                     <i class="fas fa-object-group"></i> Collections
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link active" id="media-tab" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="true">
+                  <a class="nav-link top-nav-bar-link" id="medium-tab" data-toggle="tab" role="tab" aria-controls="all media" aria-selected="false">
                     <i class="fas fa-photo-video"></i> All Media
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="audios-tab" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="audio-tab" data-toggle="tab" role="tab" aria-controls="audios" aria-selected="false">
                     <i class="fas fa-file-audio"></i> Audios
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="documents-tab" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="document-tab" data-toggle="tab" role="tab" aria-controls="documents" aria-selected="false">
                     <i class="fas fa-file-pdf"></i> Documents
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="image-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false">
                     <i class="fas fa-file-image"></i> Images
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="softwares-tab" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="software-tab" data-toggle="tab" role="tab" aria-controls="softwares" aria-selected="false">
                     <i class="fas fa-compact-disc"></i> Softwares
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="texts-tab" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="text-tab" data-toggle="tab" role="tab" aria-controls="texts" aria-selected="false">
                     <i class="fas fa-file-alt"></i> Texts
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="videos-tab" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="video-tab" data-toggle="tab" role="tab" aria-controls="videos" aria-selected="false">
                     <i class="fas fa-file-video"></i> Videos
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link media-nav-bar-link" id="videogames-tab" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="videogame-tab" data-toggle="tab" role="tab" aria-controls="videogames" aria-selected="false">
                     <i class="fas fa-gamepad"></i> Videogames
                   </a>
                 </li>
               </ul>
               <div class="tab-content" id="mediaTabsContent">
-                <div class="tab-pane fade show active" id="media" role="tabpanel" aria-labelledby="media-tab">
+                <div class="tab-pane fade show active" id="media" role="tabpanel" aria-labelledby="medium-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Media lists -->
                     <div class="col-md-4">
-                      <div class="card media-datatables" id="mediacollection-datatable">
+                      <div class="card datatables" id="mediumcollection-datatable">
                         <div class="card-header">Media Collections
-                           <button type="button" id="timaat-mediacollectiondatasets-mediumcollection-add" class="btn btn-outline btn-success btn-sm float-right add-mediumcollection-button">
+                           <button type="button" onclick="TIMAAT.MediumCollectionDatasets.addMediumCollection()" class="btn btn-outline btn-success btn-sm float-right add-mediumcollection-button">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
                         <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediacollectiondatasets-mediumcollection-list-loader" class="text-center bg-info text-white">
+                          <div id="timaat-mediumcollectiondatasets-mediumcollection-list-loader" class="text-center bg-info text-white">
                             <i class="fas fa-spinner fa-spin"></i> Loading Data...
                           </div>
                           <div class="card-body">
-                            <table id="timaat-mediacollectiondatasets-mediacollection-list-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediacollection-table">
+                            <table id="timaat-mediumcollectiondatasets-mediacollection-list-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediumcollection-table">
                               <thead class="thead-dark">
                                 <tr>
                                   <th>Title</th>
                                 </tr>
                               </thead>
-                              <tbody id="timaat-mediacollectiondatasets-mediumcollection-list">
+                              <tbody id="timaat-mediumcollectiondatasets-mediumcollection-list">
                               </tbody>
                             </table>
                             <!-- <ul id="timaat-mediadatasets-medium-list" class="list-group list-group-flush"></ul> -->
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="media-datatable">
+                      <div class="card datatables" id="medium-datatable">
                         <div class="card-header">All Media
                            <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
@@ -2040,9 +2113,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="audios-datatable">
+                      <div class="card datatables" id="audio-datatable">
                         <div class="card-header">Audios
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Audio">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Audio">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2064,9 +2137,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="documents-datatable">
+                      <div class="card datatables" id="document-datatable">
                         <div class="card-header">Documents
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Document">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Document">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2088,9 +2161,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="images-datatable">
+                      <div class="card datatables" id="image-datatable">
                         <div class="card-header">Images
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Image">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Image">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2112,9 +2185,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="softwares-datatable">
+                      <div class="card datatables" id="software-datatable">
                         <div class="card-header">Software
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Software">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Software">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2136,9 +2209,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="texts-datatable">
+                      <div class="card datatables" id="text-datatable">
                         <div class="card-header">Texts
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Text">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Text">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2160,9 +2233,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="videos-datatable">
+                      <div class="card datatables" id="video-datatable">
                         <div class="card-header">Videos
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Video">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Video">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2184,9 +2257,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card media-datatables" id="videogames-datatable">
+                      <div class="card datatables" id="videogame-datatable">
                         <div class="card-header">Videogames
-                          <button type="button" onclick="TIMAAT.MediaDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Videogame">
+                          <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Videogame">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
@@ -2210,41 +2283,41 @@
                       </div>
                     </div>
                     <!-- Media data -->
-                    <div class="col-md-8" id="timaat-mediadatasets-media-tabs-container">
-                      <div id="timaat-mediadatasets-media-tabs">
-                        <ul class="nav nav-tabs mediacollection-nav-tabs">
-                          <li class="nav-item datasheet-tab mediacollection-data-tabs mediumcollection-data-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-metadata">Datasheet</a>
+                    <div class="col-md-8" id="timaat-mediadatasets-medium-tabs-container">
+                      <div id="timaat-mediadatasets-medium-tabs">
+                        <ul class="nav nav-tabs" id="mediumcollection-nav-tabs">
+                          <li class="nav-item datasheet-tab mediumcollection-data-tabs mediumcollection-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="mediumcollection-tab-metadata">Datasheet</a>
                           </li>
-                          <li class="nav-item mediacollection-data-tabs mediumcollection-items-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-items">Items</a>
+                          <li class="nav-item mediumcollection-data-tabs mediumcollection-items-tab">
+                            <a class="nav-link content-nav-bar-link" id="mediumcollection-tab-items">Items</a>
                           </li>
-                          <li class="nav-item mediacollection-data-tabs mediumcollection-publication-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-mediacollection" id="mediacollection-tab-mediumcollection-publication" >Publication</a>
+                          <li class="nav-item mediumcollection-data-tabs mediumcollection-publication-tab">
+                            <a class="nav-link content-nav-bar-link" id="mediumcollection-tab-publication" >Publication</a>
                           </li>
                         </ul>
-                        <ul class="nav nav-tabs media-nav-tabs">
-                          <li class="nav-item media-data-tabs preview-data-tab" id="previewTab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-preview">Medium preview</a>
+                        <ul class="nav nav-tabs" id="medium-nav-tabs">
+                          <li class="nav-item medium-data-tabs preview-data-tab" id="previewTab">
+                            <a class="nav-link content-nav-bar-link" id="medium-tab-preview">Medium preview</a>
                           </li>
-                          <li class="nav-item media-data-tabs datasheet-tab medium-data-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-metadata">Data sheet</a>
+                          <li class="nav-item medium-data-tabs datasheet-tab medium-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="medium-tab-metadata">Data sheet</a>
                           </li>
-                          <li class="nav-item media-data-tabs title-data-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-titles">Medium titles</a>
+                          <li class="nav-item medium-data-tabs title-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="medium-tab-titles">Medium titles</a>
                           </li>
-                          <li class="nav-item media-data-tabs languagetrack-data-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-languagetracks">Languages</a>
+                          <li class="nav-item medium-data-tabs languagetrack-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="medium-tab-languagetracks">Languages</a>
                           </li>
-                          <li class="nav-item media-data-tabs mediumactorwithrole-data-tab">
-                            <a class="nav-link media-content-nav-bar-link nav-link-media" id="media-tab-medium-actorwithroles">Actors</a>
+                          <li class="nav-item medium-data-tabs mediumactorwithrole-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="medium-tab-actorwithroles">Actors</a>
                           </li>
                         </ul>
                       <!-- </div>
                       <div id="media-dataset-content"> -->
                         <!-- Data tab content -->
                         <!-- collection form -->
-                        <form class="form dataset-content" role="form" id="mediacollection-metadata-form" name="mediacollection-metadata-form" data-type="" method="POST" novalidate>
+                        <form class="form dataset-content" role="form" id="mediumcollection-metadata-form" name="mediumcollection-metadata-form" data-type="" method="POST" novalidate>
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
@@ -2273,71 +2346,75 @@
                               <div class="form-group datasheet-data mediumcollection-data">
                                 <div class="form-row">
                                   <div class="col-md-12">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-title">Title*</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-title">Title*</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
                                   </div>                            
                                 </div>
                               </div>
                               <div class="form-group datasheet-data mediumcollection-data">
                                 <div class="form-row">
                                   <div class="col-md-6">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-type-id">Collection Type*</label>
-                                    <select class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-type-id" name="typeId" required>
-                                      <option value="" disabled selected hidden>[Choose collection type...]</option>
+                                    <label class="col-form-label col-form-label-sm" for="mediumcollection-type-select-dropdown">Collection Type*</label>
+                                    <select class="form-control form-control-sm" 
+                                            id="mediumcollection-type-select-dropdown" 
+                                            name="typeId"
+                                            data-placeholder="Select collection type..."
+                                            required>
+                                      <!-- <option value="" disabled selected hidden>[Choose collection type...]</option>
                                       <option value="1">Album</option>
                                       <option value="2">Collection</option>
-                                      <option value="3">Series</option>
+                                      <option value="3">Series</option> -->
                                     </select>
                                   </div>
                                   <div class="col-md-6" style="display:block; text-align:center">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
-                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-issystemic" name="isSystemic" aria-describedby="Is Collection Systemic">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
+                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-issystemic" name="isSystemic" aria-describedby="Is Collection Systemic">
                                   </div>
                                 </div>
                               </div>
                               <div class="form-group datasheet-data mediumcollection-data">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-remark">Remark</label>
-                                <textarea class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-remark">Remark</label>
+                                <textarea class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
                               </div>
                               <div class="form-group datasheet-data mediumcollection-Series-data">
                                 <div class="form-row">
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-seasons">Seasons</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-series-seasons">Seasons</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-started">Start Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-started" name="started" placeholder="[Enter start year]" aria-describedby="Start Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-series-started">Start Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-series-started" name="started" placeholder="[Enter start year]" aria-describedby="Start Year">
                                   </div>
                                   <div class="col-md-4">
-                                    <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-series-ended">End Year</label>
-                                    <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-series-ended" name="ended" placeholder="[Enter end year]" aria-describedby="End Year">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-series-ended">End Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-series-ended" name="ended" placeholder="[Enter end year]" aria-describedby="End Year">
                                   </div>
                                 </div>
                               </div>
                               <div class="form-group datasheet-data mediumcollection-Album-data">
-                                <label class="col-form-label col-form-label-sm" for="timaat-mediacollectiondatasets-metadata-album-tracks">Tracks</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediacollectiondatasets-metadata-album-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
+                                <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-album-tracks">Tracks</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-album-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
                               </div>
                             </fieldset>
                             <!-- <div class="mediacollection-items-container">
-                              <div class="card media-datatables mediumcollection-datatable">
+                              <div class="card datatables mediumcollection-datatable">
                                 <div class="card-header">Collection Items
-                                  <button type="button" id="timaat-mediacollectiondatasets-mediacollection-add" class="btn btn-outline btn-success btn-sm float-right">
+                                  <button type="button" id="timaat-mediumcollectiondatasets-mediacollection-add" class="btn btn-outline btn-success btn-sm float-right">
                                     <i class="fas fa-plus"></i></button>
                                   </div>
                                 <div class="timaat-datasets-list-wrapper">
-                                  <div id="timaat-mediacollectiondatasets-mediacollection-list-loader" class="text-center card-body bg-info text-white">
+                                  <div id="timaat-mediumcollectiondatasets-mediacollection-list-loader" class="text-center card-body bg-info text-white">
                                     <i class="fas fa-spinner fa-spin"></i> Loading data...
                                   </div>
                                   <div class="card-body">
-                                    <table id="timaat-mediacollectiondatasets-mediacollection-table" class="table table-striped table-bordered table-hover">
+                                    <table id="timaat-mediumcollectiondatasets-mediumcollection-table" class="table table-striped table-bordered table-hover">
                                       <thead class="thead-dark">
                                         <tr>
                                           <th>Title</th>
                                         </tr>
                                       </thead>
-                                      <tbody id="timaat-mediacollectiondatasets-mediacollection-list">
+                                      <tbody id="timaat-mediumcollectiondatasets-mediacollection-list">
                                       </tbody>
                                     </table>
                                   </div>
@@ -2347,22 +2424,22 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="mediumcollection-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary" id="mediacollection-metadata-form-submit" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary" id="mediacollection-metadata-form-dismiss" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary form-submit-buttons" id="mediumcollection-metadata-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary form-dismiss-buttons" id="mediumcollection-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- collection items -->
-                        <div class="card dataset-content" id="mediacollection-mediaItems"> <!-- Medium collection item data -->
+                        <div class="card dataset-content" id="mediumcollection-mediaItems"> <!-- Medium collection item data -->
                           <div class="card-header">Collection Items
                             <button type="button" id="mediumcollection-items-add-button" class="btn btn-outline btn-success btn-sm float-right">
                               <i class="fas fa-plus"></i></button>
                             </div>
                           <div class="timaat-datasets-list-wrapper">
-                            <div id="timaat-mediacollectiondatasets-mediumcollection-items-loader" class="text-center card-body bg-info text-white">
+                            <div id="timaat-mediumcollectiondatasets-mediumcollection-items-loader" class="text-center card-body bg-info text-white">
                               <i class="fas fa-spinner fa-spin"></i> Loading data...
                             </div>
                             <div class="card-body">
-                              <table id="timaat-mediacollectiondatasets-mediumcollection-items-table" class="table table-striped table-bordered table-hover">
+                              <table id="timaat-mediumcollectiondatasets-mediumcollection-items-table" class="table table-striped table-bordered table-hover">
                                 <thead class="thead-dark">
                                   <tr>
                                     <th>Order</th>
@@ -2370,18 +2447,18 @@
                                     <th>Actions</th>
                                   </tr>
                                 </thead>
-                                <tbody id="timaat-mediacollectiondatasets-mediumcollection-items">
+                                <tbody id="timaat-mediumcollectiondatasets-mediumcollection-items">
                                 </tbody>
                               </table>
                             </div>
                           </div>
                         </div>
                         <!-- collection publication settings -->
-                        <div class="card dataset-content" id="mediacollection-publication"> <!-- Medium collection publication data -->
+                        <div class="card dataset-content" id="mediumcollection-publication"> <!-- Medium collection publication data -->
                           <div class="card-header">Collection Publication Settings
                             </div>
                           <div class="timaat-datasets-list-wrapper">
-                            <div class="card-body mediacollection-publication-wrapper">
+                            <div class="card-body mediumcollection-publication-wrapper">
                               <div class="custom-control custom-switch mt-3">
                                 <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
                                 <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Collection publizieren</label>
@@ -2410,7 +2487,7 @@
                                 <span class="input-group-text btn reveal"><i class="fas fa-eye"></i></span>
                               </div>
                             </div>
-                              <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediacollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
+                              <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediumcollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
                             </div>
                           </div>
                         </div>                        
@@ -2714,8 +2791,8 @@
                           <div class="title-form-divider">
                             <hr>                            
                           </div>
-                          <button type="submit" class="btn btn-primary" id="medium-titles-form-submit" name="submit">Speichern</button>
-                          <button type="button" class="btn btn-secondary" id="medium-titles-form-dismiss" name="dismiss">Abbruch</button>
+                          <button type="submit" class="btn btn-primary" id="medium-titles-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="medium-titles-form-dismiss" name="dismiss">Cancel</button>
                         </form>
                         <!-- language tracks form -->
                         <form class="form dataset-content" role="form" id="medium-languagetracks-form" name="medium-languagetracks-form" method="POST" novalidate>
@@ -2857,8 +2934,8 @@
                     Möchten Sie den ausgewählten Akteur löschen?
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-actordatasets-modal-delete-submit">Akteur löschen</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="timaat-actordatasets-modal-delete-submit">Delete Actor</button>
                   </div>
                 </div>
               </div>
@@ -2905,29 +2982,29 @@
           <div class="row" style="padding-top: 1em;">
             <div class="col-md-12">
               <!-- Nav bar tabs -->
-              <ul class="nav nav-pills" id="actors-tabs" role="tablist">
+              <ul class="nav nav-pills" id="actor-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link actors-nav-bar-link active" id="actors-tab" data-toggle="tab" role="tab" aria-controls="actors" aria-selected="true">
+                  <a class="nav-link top-nav-bar-link active" id="actor-tab" data-toggle="tab" role="tab" aria-controls="actors" aria-selected="true">
                     <i class="fas fa-id-badge"></i> Actors
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link actors-nav-bar-link" id="persons-tab" data-toggle="tab" role="tab" aria-controls="persons" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="person-tab" data-toggle="tab" role="tab" aria-controls="persons" aria-selected="false">
                     <i class="fas fa-address-card"></i> Persons
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link actors-nav-bar-link" id="collectives-tab" data-toggle="tab" role="tab" aria-controls="collectives" aria-selected="false">
+                  <a class="nav-link top-nav-bar-link" id="collective-tab" data-toggle="tab" role="tab" aria-controls="collectives" aria-selected="false">
                     <i class="fas fa-users"></i> Collectives
                   </a>
                 </li>
               </ul>
               <div class="tab-content" id="actorsTabsContent">
-                <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors-tab">
+                <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actor-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Actors lists -->
                     <div class="col-md-4">
-                      <div class="card actors-datatables" id="actors-datatable">
+                      <div class="card datatables" id="actor-datatable">
                         <div class="card-header">Actors
                           <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
@@ -2951,7 +3028,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card actors-datatables" id="persons-datatable">
+                      <div class="card datatables" id="person-datatable">
                         <div class="card-header">Persons
                           <button type="button" onclick="TIMAAT.ActorDatasets.addActor('person')" class="btn btn-outline btn-success btn-sm float-right add-actor-button" title="Add Person">
                             <i class="fas fa-plus"></i>
@@ -2975,7 +3052,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card actors-datatables" id="collectives-datatable">
+                      <div class="card datatables" id="collective-datatable">
                         <div class="card-header">Collectives
                           <button type="button" onclick="TIMAAT.ActorDatasets.addActor('collective')" class="btn btn-outline btn-success btn-sm float-right add-actor-button" title="Add Collective">                            <i class="fas fa-plus"></i>
                           </button>
@@ -3000,37 +3077,37 @@
                       </div>
                     </div>
                     <!-- Actors data -->
-                    <div class="col-md-8" id="timaat-actordatasets-actors-tabs">
-                      <ul class="nav nav-tabs actors-nav-tabs">
+                    <div class="col-md-8" id="timaat-actordatasets-actor-tabs">
+                      <ul class="nav nav-tabs" id="actor-nav-tabs">
                         <li class="nav-item actor-data-tabs">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-metadata">Datasheet</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-metadata">Datasheet</a>
                         </li>
                         <li class="nav-item actor-data-tabs name-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-names">Names</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-names">Names</a>
                         </li>
                         <li class="nav-item actor-data-tabs address-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-addresses">Addresses</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-addresses">Addresses</a>
                         </li>
                         <li class="nav-item actor-data-tabs emailaddress-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-emailaddresses">Emails</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-emailaddresses">Emails</a>
                         </li>
                         <li class="nav-item actor-data-tabs phonenumber-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-phonenumbers">Phone Numbers</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-phonenumbers">Phone Numbers</a>
                         </li>
                         <li class="nav-item actor-data-tabs memberofcollective-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-memberofcollectives">Memberships</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-memberofcollectives">Memberships</a>
                         </li>
                         <!-- <li class="nav-item actor-data-tabs actoractorrelationship-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-actorrelationships">Actor Relationships</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-actorrelationships">Actor Relationships</a>
                         </li>
                         <li class="nav-item actor-data-tabs locatedincountry-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-locatedincountry">Whereabouts</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-locatedincountry">Whereabouts</a>
                         </li> -->
                         <li class="nav-item actor-data-tabs actorroles-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-roles">Roles</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-roles">Roles</a>
                         </li>
                         <li class="nav-item actor-data-tabs actorroleinmedium-data-tab">
-                          <a class="nav-link actor-content-nav-bar-link" id="actors-tab-actor-role-in-medium">Roles Medium</a>
+                          <a class="nav-link content-nav-bar-link" id="actor-tab-role-in-medium">Roles Medium</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->
@@ -3050,7 +3127,7 @@
                                   <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons actordatasheet-form-edit-button" title="Edit datasheet" name="edit">
                                     <i class="fas fa-edit"></i>
                                   </button>
-                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="actor-metadata-form-delete" title="Delete actor">
+                                  <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="actor-metadata-form-delete-button" title="Delete actor">
                                     <i class="fas fa-trash-alt"></i>
                                   </button>
                                 </div>
@@ -3385,8 +3462,8 @@
                         <div class="name-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="actor-names-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="actor-names-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-names-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-names-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- address form -->
                       <form class="form dataset-content" role="form" id="actor-addresses-form" name="actor-addresses-form" method="POST" novalidate>
@@ -3459,8 +3536,8 @@
                         <div class="address-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="actor-addresses-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="actor-addresses-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-addresses-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-addresses-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- email address form -->
                       <form class="form dataset-content" role="form" id="actor-emailaddresses-form" name="actor-emailaddresses-form" method="POST" novalidate>
@@ -3508,8 +3585,8 @@
                         <div class="emailaddress-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="actor-emailaddresses-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="actor-emailaddresses-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-emailaddresses-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-emailaddresses-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- phone number form -->
                       <form class="form dataset-content" role="form" id="actor-phonenumbers-form" name="actor-phonenumbers-form" method="POST" novalidate>
@@ -3557,8 +3634,8 @@
                         <div class="phonenumber-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="actor-phonenumbers-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="actor-phonenumbers-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-phonenumbers-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-phonenumbers-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- member of collective form -->
                       <form class="form dataset-content" role="form" id="actor-memberofcollectives-form" name="actor-memberofcollectives-form" method="POST" novalidate>
@@ -3634,8 +3711,8 @@
                         <div class="memberofcollective-form-divider">
                           <hr>                            
                         </div>
-                        <button type="submit" class="btn btn-primary" id="actor-memberofcollectives-form-submit" name="submit">Speichern</button>
-                        <button type="button" class="btn btn-secondary" id="actor-memberofcollectives-form-dismiss" name="dismiss">Abbruch</button>
+                        <button type="submit" class="btn btn-primary" id="actor-memberofcollectives-form-submit" name="submit">Save</button>
+                        <button type="button" class="btn btn-secondary" id="actor-memberofcollectives-form-dismiss" name="dismiss">Cancel</button>
                       </form>
                       <!-- actor role form -->
                       <form class="form dataset-content" role="form" id="actor-roles-form" name="actor-roles-form" method="POST" novalidate>
@@ -3717,7 +3794,7 @@
                     Möchten Sie den ausgewählten Ort löschen?
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="timaat-location-delete-submit">Ort löschen</button>
                   </div>
                 </div>
@@ -3752,7 +3829,7 @@
                   </select>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-location-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -3772,7 +3849,7 @@
                   Möchten Sie das ausgewählte Land löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-danger" id="timaat-country-delete-submit">Land löschen</button>
                 </div>
               </div>
@@ -3827,7 +3904,7 @@
                   </div>
                 </div>  
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-country-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -3847,7 +3924,7 @@
                   Möchten Sie die ausgewählte Provinz löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-danger" id="timaat-province-delete-submit">Provinz löschen</button>
                 </div>
               </div>
@@ -3872,7 +3949,7 @@
                   </div>
                 </div>  
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-province-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -3892,7 +3969,7 @@
                   Möchten Sie den ausgewählten Landkreis löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-danger" id="timaat-county-delete-submit">Landkreis löschen</button>
                 </div>
               </div>
@@ -3917,7 +3994,7 @@
                   </div>
                 </div>  
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-county-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -3937,7 +4014,7 @@
                   Möchten Sie die ausgewählte Stadt löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-danger" id="timaat-city-delete-submit">Stadt löschen</button>
                 </div>
               </div>
@@ -3962,7 +4039,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-city-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -3982,7 +4059,7 @@
                   Möchten Sie die ausgewählte Straße löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-danger" id="timaat-street-delete-submit">Straße löschen</button>
                 </div>
               </div>
@@ -4007,7 +4084,7 @@
                   </div>
                 </div>  
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-street-meta-submit" disabled>Hinzufügen</button>
                 </div>
               </div>
@@ -4016,24 +4093,24 @@
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <!-- Nav bar tabs -->
-              <ul class="nav nav-pills" id="locations-tabs" role="tablist">
+              <ul class="nav nav-pills" id="location-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link" id="locations-tab" onclick="TIMAAT.LocationDatasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Locations</a>
+                  <a class="nav-link" id="location-tab" onclick="TIMAAT.LocationDatasets.loadLocations()" data-toggle="tab" href="#locations" role="tab" aria-controls="locations" aria-selected="true"><i class="fas fa-map-marked-alt"></i> Locations</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="countries-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('country')" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Countries</a>
+                  <a class="nav-link" id="country-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('country')" data-toggle="tab" href="#countries" role="tab" aria-controls="countries" aria-selected="false"><i class="fas fa-object-group"></i> Countries</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="provinces-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('province')" data-toggle="tab" href="#provinces" role="tab" aria-controls="provinces" aria-selected="false"><i class="fas fa-map"></i> Provinces</a>
+                  <a class="nav-link" id="province-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('province')" data-toggle="tab" href="#provinces" role="tab" aria-controls="provinces" aria-selected="false"><i class="fas fa-map"></i> Provinces</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="counties-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('county')" data-toggle="tab" href="#counties" role="tab" aria-controls="counties" aria-selected="false"><i class="fas fa-map-marker"></i> Counties</a>
+                  <a class="nav-link" id="county-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('county')" data-toggle="tab" href="#counties" role="tab" aria-controls="counties" aria-selected="false"><i class="fas fa-map-marker"></i> Counties</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="cities-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('city')" data-toggle="tab" href="#cities" role="tab" aria-controls="cities" aria-selected="false"><i class="fas fa-city"></i> Cities</a>
+                  <a class="nav-link" id="city-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('city')" data-toggle="tab" href="#cities" role="tab" aria-controls="cities" aria-selected="false"><i class="fas fa-city"></i> Cities</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="streets-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('street')" data-toggle="tab" href="#streets" role="tab" aria-controls="streets" aria-selected="false"><i class="fas fa-road"></i> Streets</a>
+                  <a class="nav-link" id="street-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('street')" data-toggle="tab" href="#streets" role="tab" aria-controls="streets" aria-selected="false"><i class="fas fa-road"></i> Streets</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territorien</a>
@@ -4041,7 +4118,7 @@
               </ul>  
               <div class="tab-content" id="locationsTabContent">
                 <!-- Locations UI -->
-                <div class="tab-pane fade show active" id="locations" role="tabpanel" aria-labelledby="locations-tab">
+                <div class="tab-pane fade show active" id="locations" role="tabpanel" aria-labelledby="location-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4061,7 +4138,7 @@
                   </div>
                 </div>
                 <!-- Countries UI -->
-                <div class="tab-pane fade" id="countries" role="tabpanel" aria-labelledby="countries-tab">
+                <div class="tab-pane fade" id="countries" role="tabpanel" aria-labelledby="country-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4081,7 +4158,7 @@
                   </div>
                 </div>
                 <!-- Provinces UI -->
-                <div class="tab-pane fade" id="provinces" role="tabpanel" aria-labelledby="provinces-tab">
+                <div class="tab-pane fade" id="provinces" role="tabpanel" aria-labelledby="province-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4101,7 +4178,7 @@
                   </div>
                 </div>
                 <!-- Counties UI -->
-                <div class="tab-pane fade" id="counties" role="tabpanel" aria-labelledby="counties-tab">
+                <div class="tab-pane fade" id="counties" role="tabpanel" aria-labelledby="county-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4121,7 +4198,7 @@
                   </div>
                 </div>
                 <!-- Cities UI -->
-                <div class="tab-pane fade" id="cities" role="tabpanel" aria-labelledby="cities-tab">
+                <div class="tab-pane fade" id="cities" role="tabpanel" aria-labelledby="city-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4141,7 +4218,7 @@
                   </div>
                 </div>
                 <!-- Streets UI -->
-                <div class="tab-pane fade" id="streets" role="tabpanel" aria-labelledby="streets-tab">
+                <div class="tab-pane fade" id="streets" role="tabpanel" aria-labelledby="street-tab">
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
@@ -4182,8 +4259,8 @@
                   Möchten Sie das ausgewählte Ereignis löschen?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-danger" id="timaat-eventdatasets-modal-delete-submit">Ereignis löschen</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger" id="timaat-eventdatasets-modal-delete-submit-button">Ereignis löschen</button>
                 </div>
               </div>
             </div>
@@ -4209,19 +4286,19 @@
           <div class="row" style="padding-top: 1em;">
             <div class="col-md-12">
               <!-- Nav bar tabs -->
-              <ul class="nav nav-pills" id="events-tabs" role="tablist">
+              <ul class="nav nav-pills" id="event-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link events-nav-bar-link active" id="events-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="true">
+                  <a class="nav-link top-nav-bar-link active" id="event-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="true">
                     <i class="fas fa-id-badge"></i> Events
                   </a>
                 </li>
               </ul>
               <div class="tab-content" id="eventsTabsContent">
-                <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="events-tab">
+                <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="events">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Events lists -->
                     <div class="col-md-4">
-                      <div class="card events-datatables" id="events-datatable">
+                      <div class="card datatables" id="event-datatable">
                         <div class="card-header">Events
                           <button type="button" onclick="TIMAAT.EventDatasets.addEvent('event')" class="btn btn-outline btn-success btn-sm float-right add-event-button" title="Add Event">
                             <i class="fas fa-plus"></i>
@@ -4247,10 +4324,10 @@
                       </div>
                     </div>
                     <!-- Events data -->
-                    <div class="col-md-8" id="timaat-eventdatasets-events-tabs">
-                      <ul class="nav nav-tabs events-nav-tabs">
-                        <li class="nav-item event-data-tabs">
-                          <a class="nav-link event-content-nav-bar-link" id="events-tab-event-metadata">Datasheet</a>
+                    <div class="col-md-8" id="timaat-eventdatasets-event-tabs">
+                      <ul class="nav nav-tabs" id="event-nav-tabs">
+                        <li class="nav-item event-data-tabs event-data-tab">
+                          <a class="nav-link content-nav-bar-link" id="event-tab-metadata">Datasheet</a>
                         </li>
                       </ul>
                       <!-- Data tab content -->

@@ -26,14 +26,9 @@
 			TIMAAT.ActorDatasets.init();
 			TIMAAT.EventDatasets.init();
 			TIMAAT.LocationDatasets.init();
-			TIMAAT.MediaCollectionDatasets.init();
-			TIMAAT.MediaDatasets.init();
+			TIMAAT.MediumCollectionDatasets.init();
+			TIMAAT.MediumDatasets.init();
 			TIMAAT.AnalysisDatasets.init();
-			// Lists
-			TIMAAT.RoleLists.init();
-			TIMAAT.CategoryLists.init();
-			TIMAAT.LanguageLists.init();
-			TIMAAT.TagLists.init();
 		},
 
 		load: async function() {
@@ -41,24 +36,16 @@
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();
 			TIMAAT.LocationDatasets.load();
-			TIMAAT.MediaCollectionDatasets.load();
-			TIMAAT.MediaDatasets.load();
-			// Lists
-			TIMAAT.RoleLists.load();
-			TIMAAT.LanguageLists.load();
-			TIMAAT.CategoryLists.load();
-			TIMAAT.TagLists.load();
+			TIMAAT.MediumCollectionDatasets.load();
+			TIMAAT.MediumDatasets.load();
 		},
 
 		loadDataTables: function() {
-			TIMAAT.MediaCollectionDatasets.loadMediaCollectionDataTables();
-			TIMAAT.MediaDatasets.loadMediaDataTables();
+			TIMAAT.MediumCollectionDatasets.loadMediaCollectionDataTables();
+			TIMAAT.MediumDatasets.loadMediaDataTables();
 			TIMAAT.ActorDatasets.loadActorDataTables();
 			TIMAAT.AnalysisDatasets.loadAnalysisDataTables();
 			TIMAAT.EventDatasets.loadEventDataTables();
-			TIMAAT.RoleLists.loadRolesDataTables();
-			TIMAAT.LanguageLists.loadLanguagesDataTables();
-			TIMAAT.CategoryLists.loadCategoriesDataTables();
 		},
 
 	}

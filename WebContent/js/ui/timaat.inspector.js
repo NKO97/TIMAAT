@@ -1343,7 +1343,7 @@
 							allowClear: true,
 							minimumResultsForSearch: 10,
 							ajax: {
-								url: 'api/category/set/selectList/',
+								url: 'api/categorySet/selectList/',
 								type: 'GET',
 								dataType: 'json',
 								delay: 250,

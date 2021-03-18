@@ -25,8 +25,8 @@
 		init: function() {
     console.log("TCL: init: function()");
 			TIMAAT.TagLists.initTags();
-			$('.lists-datatables').hide();
-			// $('.tags-datatable').show();
+			$('.datatables').hide();
+			// $('.tag-datatable').show();
     },
 
 		initTags: function() {
@@ -51,7 +51,7 @@
             console.log("error: ", error);
           }
           try {
-            await TIMAAT.TagLists.refreshDatatable('tag');
+            await TIMAAT.UI.refreshDataTable('tag');
           } catch(error) {
             console.log("error: ", error);
           }
@@ -121,7 +121,7 @@
             var newTag = await TIMAAT.TagLists.createTag(tagModel);
             tag = new TIMAAT.Tag(newTag);
           }
-          await TIMAAT.TagLists.refreshDatatable();
+          await TIMAAT.UI.refreshDataTable('tag');
           TIMAAT.TagLists.tagFormDataSheet('show', tag);
         }
         else {// duplicate tag name or code entered
@@ -332,14 +332,14 @@
 		
 		loadTags: function() {
     // console.log("TCL: loadTags: function()");
-			$('.lists-datatables').hide();
-			$('.tags-datatable').show();
+			$('.datatables').hide();
+			$('.tag-datatable').show();
 			TIMAAT.TagLists.setTagList();
 		},
 
 		loadTagsDataTables: function() {
 			// console.log("TCL: loadTagsDataTables: function()");
-      TIMAAT.TagLists.setupTagDatatable();
+      TIMAAT.TagLists.setupTagDataTable();
 		},
 
 		setTagList: function() {
@@ -359,8 +359,8 @@
 			}
 		},
 
-		setupTagDatatable: function() {			
-      // console.log("TCL: setupTagDatatable");
+		setupTagDataTable: function() {			
+      // console.log("TCL: setupTagDataTable");
       // setup datatable
       TIMAAT.TagLists.dataTableTags = $('#timaat-taglists-tag-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -459,14 +459,6 @@
           },
         },				
       });				
-    },
-
-    refreshDatatable: async function() {
-      // console.log("TCL: refreshDatatable");
-      // set ajax data source
-      if (TIMAAT.TagLists.dataTableTags) {
-        TIMAAT.TagLists.dataTableTags.ajax.reload(null, false);
-      }	
     },
 
 		addTag: function() {	
@@ -570,7 +562,7 @@
         console.log( "error: ", error);
       };
 
-      TIMAAT.TagLists.refreshDatatable('tag');
+      await TIMAAT.UI.refreshDataTable('tag');
     },
 
     updateMediumAnalysisListHasTagsList: async function(mediumAnalysisListModel, tagIdList) {

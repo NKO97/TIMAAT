@@ -39,6 +39,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionSeries;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionType;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -50,7 +51,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 */
 
 @Service
-@Path("/mediaCollection")
+@Path("/mediumCollection")
 public class EndpointMediumCollection {
 	@Context
 	private UriInfo uriInfo;
@@ -371,7 +372,6 @@ public class EndpointMediumCollection {
 		return Response.ok().entity(cols).build();
 	}
 
-
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -498,6 +498,35 @@ public class EndpointMediumCollection {
 		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		entityManager.refresh(mediumCollection);
 		return Response.ok().entity(mediumCollection.getTags()).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("type/selectList")
+	public Response getTypeSelectList(@QueryParam("language") String languageCode) {
+		// returns list of id and name combinations of all Languages
+		System.out.println("EndpointMediumCollection: getTypeSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		class SelectElement{ 
+			public int id; 
+			public String text;
+			public SelectElement(int id, String text) {
+				this.id = id; this.text = text;
+			};
+		}
+		// search
+		Query query = TIMAATApp.emf.createEntityManager().createQuery(
+			"SELECT mctt FROM MediaCollectionTypeTranslation mctt WHERE mctt.language.id = (SELECT l.id FROM Language l WHERE l.code ='"+languageCode+"') ORDER BY mctt.type ASC");
+		List<SelectElement> typeSelectList = new ArrayList<>();
+		List<MediaCollectionTypeTranslation> typeTranslationList = castList(MediaCollectionTypeTranslation.class, query.getResultList());
+		for (MediaCollectionTypeTranslation typeTranslation : typeTranslationList) {
+			typeSelectList.add(new SelectElement(typeTranslation.getId(),
+																					typeTranslation.getType()));
+			// System.out.println("type select list entry - id: "+ typeTranslation.getType().getId() + " type: " + typeTranslation.getType());
+		}
+		return Response.ok().entity(typeSelectList).build();
 	}
 
 	@POST

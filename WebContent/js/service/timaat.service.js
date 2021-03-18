@@ -169,7 +169,7 @@
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/all",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/all",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -378,7 +378,7 @@
 					"categorySetHasCategories": [],
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/",
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -403,7 +403,7 @@
 					categorySetHasCategories: []
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+set.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+set.id,
 				type:"PATCH",
 				data: JSON.stringify(set),
 				contentType:"application/json; charset=utf-8",
@@ -428,7 +428,7 @@
 		// deleteCategorySet(categoryset) {
 		// 	console.log("TCL: deleteCategorySet -> categoryset", categoryset);
 		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/set/"+categoryset.model.id,
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categoryset.model.id,
 		// 		type:"DELETE",
 		// 		contentType:"application/json; charset=utf-8",
 		// 		beforeSend: function (xhr) {

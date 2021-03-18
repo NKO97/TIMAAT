@@ -60,7 +60,7 @@
 				$('.languages-nav-tabs').show();
 				$('.languages-data-tabs').hide();
 				$('.nav-tabs a[href="#languageDatasheet"]').tab('show');
-				$('#timaat-languagelists-metadata-form').data('language', language);
+				$('#language-metadata-form').data('language', language);
 				TIMAAT.LanguageLists.languageFormDataSheet('show', language);
 			});
     }
@@ -76,7 +76,7 @@
 			// remove language from UI
 			this.listView.remove();
       console.log("TCL: Language -> remove -> this", this);
-			$('#timaat-languagelists-metadata-form').data('language', null);
+			$('#language-metadata-form').data('language', null);
 			// remove from languageset lists
 			var index;
 			for (var i = 0; i < TIMAAT.LanguageLists.languages.length; i++) {

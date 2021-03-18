@@ -19,18 +19,18 @@
 
 }(function (TIMAAT) {
 	
-	TIMAAT.MediaType = class MediaType {
+	TIMAAT.MediumType = class MediumType {
 		constructor(model) {
-			// console.log("TCL: MediaType -> constructor -> model", model)
+			// console.log("TCL: MediumType -> constructor -> model", model)
 			// setup model
 			this.model = model;
 			// model.ui = this;
 
 			// create and style list view element
-			var deleteMediaTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediatype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
-			if ( model.id < 0 ) deleteMediaTypeButton = '';
+			var deleteMediumTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediatype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			if ( model.id < 0 ) deleteMediumTypeButton = '';
 			this.listView = $('<li class="list-group-item"> '
-				+ deleteMediaTypeButton +
+				+ deleteMediumTypeButton +
 				'<span class="timaat-mediatype-list-type"></span>' +
 				'<br> \
 				<div class="timaat-mediatype-list-count text-muted float-left"></div> \
@@ -39,7 +39,7 @@
 
 			$('#timaat-mediadatasets-mediumtype-list').append(this.listView);
 			this.updateUI();      
-			var MediaType = this; // save MediaType for system MediaTypes
+			var MediumType = this; // save MediumType for system MediumTypes
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
@@ -80,12 +80,12 @@
 				ev.stopPropagation();
 			});
 
-			// attach MediaType handlers
+			// attach MediumType handlers
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
 				// show metadata editor
-				$('#timaat-mediadatasets-mediumtype-meta').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-mediumtype-meta').data('MediumType', MediumType);
 				$('#timaat-mediadatasets-mediumtype-meta').modal('show');			
 			});
 
@@ -93,13 +93,13 @@
 			this.listView.find('.timaat-mediatype-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();				
-				$('#timaat-mediadatasets-mediumtype-delete').data('MediaType', MediaType);
+				$('#timaat-mediadatasets-mediumtype-delete').data('MediumType', MediumType);
 				$('#timaat-mediadatasets-mediumtype-delete').modal('show');
 			});
 		}
 
 		updateUI() {
-			// console.log("TCL: MediaType -> updateUI -> updateUI() -> model", this.model);
+			// console.log("TCL: MediumType -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var type = this.model.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
@@ -107,15 +107,15 @@
 		}
 
 		remove() {
-			console.log("TCL: MediaType -> remove -> remove()");
-			// remove MediaType from UI
+			console.log("TCL: MediumType -> remove -> remove()");
+			// remove MediumType from UI
 			this.listView.remove(); // TODO remove tags from medium_type_has_tags
-			// remove from MediaType list
-			var index = TIMAAT.MediaDatasets.mediaTypes.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.mediaTypes.splice(index, 1);
+			// remove from MediumType list
+			var index = TIMAAT.MediumDatasets.mediaTypes.indexOf(this);
+			if (index > -1) TIMAAT.MediumDatasets.mediaTypes.splice(index, 1);
 			// remove from model list
-			index = TIMAAT.MediaDatasets.mediaTypes.model.indexOf(this);
-			if (index > -1) TIMAAT.MediaDatasets.mediaTypes.model.splice(index, 1);
+			index = TIMAAT.MediumDatasets.mediaTypes.model.indexOf(this);
+			if (index > -1) TIMAAT.MediumDatasets.mediaTypes.model.splice(index, 1);
 		}
 	}
 	

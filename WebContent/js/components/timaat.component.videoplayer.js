@@ -919,16 +919,15 @@
 			$('.timaat-videoplayer-ui').show();
 			var medium = new TIMAAT.Medium(video, 'video');
 			TIMAAT.VideoPlayer.selectedVideo = medium;
-			TIMAAT.MediaDatasets.clearLastSelection();
+			TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
-			$('#timaat-mediadatasets-media-tabs').show();
-			if (TIMAAT.MediaDatasets.subNavTab == 'dataSheet') {
+			$('#timaat-mediadatasets-medium-tabs').show();
+			if (TIMAAT.UI.subNavTab == 'dataSheet') {
 				$('.nav-tabs .datasheet-tab').hide();
 				$('.nav-tabs .video-data-tab').tab('show');
-				TIMAAT.MediaDatasets.mediumFormDataSheet('show', 'video', medium);
-			} else if ( TIMAAT.MediaDatasets.subNavTab == 'mediumPreview') {
-				TIMAAT.MediaDatasets.subNavTab = 'dataSheet';
-				TIMAAT.MediaDatasets.lastForm = 'dataSheet';
+				TIMAAT.MediumDatasets.mediumFormDataSheet('show', 'video', medium);
+			} else if ( TIMAAT.UI.subNavTab == 'mediumPreview') {
+				TIMAAT.UI.subNavTab = 'dataSheet';
 			}
 			else {
 				// show tabs
@@ -936,19 +935,19 @@
 				$('.title-data-tab').show();
 				$('.languagetrack-data-tab').show();
 				$('.mediumactorwithrole-data-tab').show();
-				$('.nav-tabs a[href="#'+TIMAAT.MediaDatasets.subNavTab+'"]').tab('show');
-				TIMAAT.MediaDatasets.showLastForm();
+				$('.nav-tabs a[href="#'+TIMAAT.UI.subNavTab+'"]').tab('show');
+				// TIMAAT.MediumDatasets.showLastForm(); TODO
 			}
 			$('.preview-data-tab').hide();
 			$('#previewTab').addClass('annotationView');
-			$('#timaat-videoplayer-media-tabs-container').append($('#timaat-mediadatasets-media-tabs'));
+			$('#timaat-videoplayer-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 			$('#timaat-videoplayer-medium-modals-container').append($('#timaat-medium-modals'));
-			TIMAAT.MediaDatasets.container = 'videoplayer';
-			$('.mediacollection-data-tabs').hide();
-			$('#mediacollection-mediaItems').hide();
+			TIMAAT.MediumDatasets.container = 'videoplayer';
+			$('.mediumcollection-data-tabs').hide();
+			$('#mediumCollection-mediaItems').hide();
 			$('#medium-metadata-form').show();
-			$('#mediacollection-publication').hide();
-			$('#timaat-mediacollectiondatasets-mediumcollection-publication-loader').hide();
+			$('#mediumCollection-publication').hide();
+			$('#timaat-mediumcollectiondatasets-mediumcollection-publication-loader').hide();
 			$('.datasheet-form-annotate-button').hide();
 			$('.datasheet-form-annotate-button').prop('disabled', true);
 

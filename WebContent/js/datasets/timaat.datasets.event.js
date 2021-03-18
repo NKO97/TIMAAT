@@ -21,13 +21,10 @@
 
 	TIMAAT.EventDatasets = {
 		events: null,
-		// subNavTab: 'dataSheet', // no subNavTabs currently exist
-		lastForm: null,
-		selectedEventId: null,
 
 		init: function() {
 			this.initEvents();
-			this.displayComponent('event', 'events-tab', 'events-datatable');
+			TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
 		},
 
 		initEventComponent: function() {
@@ -36,27 +33,24 @@
 					this.setEventList();
 				}
 				TIMAAT.UI.showComponent('events');
-				$('#events-tab').trigger('click');
+				$('#event-tab').trigger('click');
 			},
 
 		initEvents: function() {
 			// nav-bar functionality
-			$('#events-tab').on('click', function(event) {
+			$('#event-tab').on('click', function(event) {
 				TIMAAT.EventDatasets.loadEvents();
 				TIMAAT.URLHistory.setURL(null, 'Event Datasets', '#event/list');
 			});
 
-			$('#events-tab-event-metadata').on('click', function(ev) {
+			$('#event-tab-metadata').on('click', function(ev) {
 				let event = $('#event-metadata-form').data('event');
 				// let type = event.model.eventType.eventTypeTranslations[0].type;
 				let name = event.model.eventTranslations[0].name;
 				let id = event.model.id;
-				TIMAAT.EventDatasets.displayDataSetContentArea('event-metadata-form');
-				TIMAAT.EventDatasets.subNavTab = 'dataSheet';
-				TIMAAT.EventDatasets.lastForm = 'dataSheet';
-				TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
-				// TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'show', type);
-				// if ($('#event-metadata-form').attr('data-type') == 'event') {
+				TIMAAT.UI.displayDataSetContentArea('event-metadata-form');
+				TIMAAT.UI.displayDataSetContent('dataSheet', event, 'event');
+				// if ($('#event-metadata-form').data('type') == 'event') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + id);
 				// } else {
 				// 	TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + type + '/' + id);					
@@ -72,7 +66,7 @@
 			});
 
 			// confirm delete event modal functionality
-			$('#timaat-eventdatasets-modal-delete-submit').on('click', async function(ev) {
+			$('#timaat-eventdatasets-modal-delete-submit-button').on('click', async function(ev) {
 				var modal = $('#timaat-eventdatasets-event-delete');
 				var event = modal.data('event');
 				if (event) {
@@ -82,13 +76,13 @@
 						console.log("error: ", error);
 					}
 					try {
-						await TIMAAT.EventDatasets.refreshDataTable();
+						await TIMAAT.UI.refreshDataTable('event');
 					} catch (error) {
 						console.log("error: ", error);
 					}
 				}
 				modal.modal('hide');
-				TIMAAT.EventDatasets.hideDataSetContentContainer();
+				TIMAAT.UI.hideDataSetContentContainer();
 				// if ( $('#event-metadata-form').data('type') == 'event') {
 					TIMAAT.EventDatasets.loadEvents();
 				// } else {
@@ -101,10 +95,9 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				let event = $('#event-metadata-form').data('event');
-				switch (TIMAAT.EventDatasets.lastForm) {
+				switch (TIMAAT.UI.subNavTab) {
 					default:
-						// TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'edit', type);
-						TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event, 'edit');
+						TIMAAT.UI.displayDataSetContent('dataSheet', event, 'event', 'edit');
 					break;
 				}
 				// event.listView.find('.timaat-eventdatasets-event-list-tags').popover('show');
@@ -143,14 +136,14 @@
 					var newEvent = await TIMAAT.EventDatasets.createEvent(eventModel, eventTranslationModel);
 					event = new TIMAAT.Event(newEvent);
 					$('#event-metadata-form').data('event', event);
-					$('#events-tab-event-metadata').trigger('click');
+					$('#event-tab-metadata').trigger('click');
 				}
 				$('.add-event-button').prop('disabled', false);
 				$('.add-event-button :input').prop('disabled', false);
 				$('.add-event-button').show();
-				await TIMAAT.EventDatasets.refreshDataTable();
-				TIMAAT.EventDatasets.selectLastSelection(event.model.id);
-				TIMAAT.EventDatasets.displayDataSetContent('dataSheet', event);
+				await TIMAAT.UI.refreshDataTable('event');
+				TIMAAT.UI.addSelectedClassToSelectedItem('event', event.model.id);
+				TIMAAT.UI.displayDataSetContent('dataSheet', event, 'event');
 			});
 
 			// cancel add/edit button in content form functionality
@@ -291,9 +284,9 @@
 		},
 
 		loadEvents: function() {
-			this.displayComponent('event', 'events-tab', 'events-datatable');
-			this.selectLastSelection(null);
-			this.subNavTab = 'dataSheet';
+			TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
+			TIMAAT.UI.addSelectedClassToSelectedItem('event', null);
+			TIMAAT.UI.subNavTab = 'dataSheet';
 		},
 
 		loadEventDataTables: async function() {
@@ -301,10 +294,10 @@
 		},
 		
 		setEventList: function(events) {
-    	console.log("TCL: events", events);
+    	// console.log("TCL: events", events);
 			if ( this.events == null ) return;
 
-			this.clearLastSelection();
+			TIMAAT.UI.clearLastSelection('event');
 
 			$('#timaat-eventdatasets-event-list-loader').remove();
 			// clear old UI list
@@ -318,91 +311,17 @@
 			this.eventsLoaded = true;
 		},
 
-		// display all areas of the events component
-		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null) {
-			this.displayNavBarContainer();
-			this.setNavBarActiveLink(navBarLinkId);
-			this.setAndDisplayDataTableActiveActiveCard(dataTableCardClass);
-			this.displayDataSetContentContainer(navTabLinkId, contentId, type);
-		},
-
-		// display top nav bar row
-		displayNavBarContainer: function() {
-			$('#events-tabs').show();
-		},
-
-		setNavBarActiveLink: function(navBarLinkId) {
-			$('.events-nav-bar-link').removeClass('active');
-			if (navBarLinkId) {
-				$('#'+navBarLinkId).addClass('active');
-			}
-		},
-
-		// display left column (data table list) and show corresponding data
-		setAndDisplayDataTableActiveActiveCard: function(dataTableCardId) {
-			$('.events-datatables').hide();
-			if (dataTableCardId) {
-				$('#'+dataTableCardId).show();
-			}
-		},
-
-		// display right column (dataset content)
-		displayDataSetContentContainer: function(navTabLinkId=null, contentId=null, type=null) {
-			$('.events-data-tabs').hide();
-			if (navTabLinkId) {
-				this.displayAndSetDataSetContentNavTab(navTabLinkId, type);
-			}
-			this.displayDataSetContentArea(contentId);
-		},
-
-		hideDataSetContentContainer: function() {
-			this.displayDataSetContentContainer(null, null, null);
-		},
-
-		// display dataset content tab bar row
-		displayAndSetDataSetContentNavTab: function(navTabLinkId, type) {
-			if (type == 'event') {
-				$('.events-data-tabs').show();
-			}
-			this.setDataSetContentActiveNavTab(navTabLinkId);
-		},
-
-		setDataSetContentActiveNavTab: function(navTabLinkId) {
-			$('.events-content-nav-bar-link').removeClass('active');
-			if (navTabLinkId) {
-				$('#'+navTabLinkId).addClass('active');
-			}
-		},
-
-		// display dataset content data
-		displayDataSetContentArea: function(contentId) {
-			$('.dataset-content').hide();
-			if (contentId) {
-				$('#'+contentId).show();
-			}
-		},
-
-		displayDataSetContent: function(form, event, mode = 'show') {
-			this.subNavTab = form;
-			switch(form) {
-				case 'dataSheet':
-					this.setDataSetContentActiveNavTab('events-tab-event-metadata');
-					this.eventFormDataSheet(mode, event);
-				break;
-			}
-		},
-		
 		addEvent: function() {	
     	// console.log("TCL: addEvent: function()");
-			this.displayDataSetContentContainer('events-tab-event-metadata', 'event-metadata-form');
+			TIMAAT.UI.displayDataSetContentContainer('event-tab-metadata', 'event-metadata-form');
 			$('.add-event-button').hide();
 			$('.add-event-button').prop('disabled', true);
 			$('.add-event-button :input').prop('disabled', true);
 			$('#event-metadata-form').data('event', null);
 			eventFormMetadataValidator.resetForm();
 
-			this.selectLastSelection(null);
-			this.subNavTab = 'dataSheet';
+			TIMAAT.UI.addSelectedClassToSelectedItem('event', null);
+			TIMAAT.UI.subNavTab = 'dataSheet';
 			$('#event-metadata-form').trigger('reset');
 
 			this.initFormDataSheetData();
@@ -415,7 +334,7 @@
 
 		eventFormDataSheet: async function(action, data) {
 			console.log("TCL: action, data", action, data);
-			this.selectLastSelection(data.model.id);
+			TIMAAT.UI.addSelectedClassToSelectedItem('event', data.model.id);
 			$('#event-metadata-form').trigger('reset');
 			this.initFormDataSheetData();
 			eventFormMetadataValidator.resetForm();
@@ -450,15 +369,6 @@
 				else $('#timaat-eventdatasets-metadata-event-ended-at').val('');
 
 			$('#event-metadata-form').data('event', data);
-		},
-
-		showLastForm: function() {
-			let event = $('#event-metadata-form').data('event');
-			switch (this.lastForm) {
-				case 'dataSheet':
-					this.displayDataSetContent('dataSheet', event);
-				break;
-			}
 		},
 
 		createEvent: async function(eventModel, eventTranslationModel) {
@@ -657,9 +567,8 @@
 			$('.form-buttons :input').prop('disabled', true);
 		},
 
-
 		setupEventDataTable: function() {
-			console.log("TCL: setupDatatable");
+			console.log("TCL: setupDataTable");
 			// setup datatable
 			this.dataTableEvent = $('#timaat-eventdatasets-event-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -709,8 +618,8 @@
 				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
-					if (data.id == TIMAAT.EventDatasets.selectedEventId) {
-						TIMAAT.EventDatasets.clearLastSelection();
+					if (data.id == TIMAAT.UI.selectedEventId) {
+						TIMAAT.UI.clearLastSelection('event');
 						$(row).addClass('selected');
 					}
 				},
@@ -755,12 +664,12 @@
 		setDataTableOnItemSelect(type, previousEventId) {
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
-			switch (this.subNavTab) {
+			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
-					this.displayDataSetContentContainer('event-data-tab', 'event-metadata-form', 'event');
+					TIMAAT.UI.displayDataSetContentContainer('event-data-tab', 'event-metadata-form', 'event');
 				break;
 			}
-			this.clearLastSelection();
+			TIMAAT.UI.clearLastSelection('event');
 			let index;
 			let selectedEvent;
 			switch (type) {
@@ -769,46 +678,16 @@
 					selectedEvent = this.events[index];
 				break;
 			}
-			TIMAAT.EventDatasets.selectLastSelection(previousEventId);
+			TIMAAT.UI.addSelectedClassToSelectedItem('event', previousEventId);
 			$('#event-metadata-form').data('event', selectedEvent);
+			$('#event-metadata-form').data('type', 'event');
 			// if (type == 'event') {
 				TIMAAT.URLHistory.setURL(null, selectedEvent.model.eventTranslations[0].name + ' · Datasets', '#event/' + selectedEvent.model.id);
 				// type = selectedActor.model.actorType.actorTypeTranslations[0].type;
 			// } else {
 			// 	TIMAAT.URLHistory.setURL(null, selectedActor.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedActor.model.id);
 			// }
-			this.displayDataSetContent(this.subNavTab, selectedEvent);
-		},
-
-		selectLastSelection: function(id) {
-			// console.log("TCL: selectLastSelection: id", id);
-			// remove selection from old rows
-			if (this.selectedEventId && this.selectedEventId != id) {
-				$(this.dataTableEvent.row('#'+this.selectedEventId).node()).removeClass('selected');
-			}
-			// add selection to new rows
-			if (id) {
-				$(this.dataTableEvent.row('#'+id).node()).addClass('selected');
-			}
-			this.selectedEventId = id;
-
-		},
-
-		clearLastSelection: function () {
-			let i = 0;
-			for (; i < this.events.length; i++) {
-				$(this.dataTableEvent.row('#'+this.events[i].model.id).node()).removeClass('selected');
-			}
-			$(this.dataTableEvent.row('#'+this.selectedEventId).node()).removeClass('selected');
-			this.selectedEventId = null;
-		},
-
-		refreshDataTable: async function() {
-			// console.log("TCL: refreshDataTable: ");
-			// set ajax data source
-			if (this.dataTableEvent) {
-				this.dataTableEvent.ajax.reload(null, false);
-			}	
+			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedEvent, 'event');
 		},
 
 	}

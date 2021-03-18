@@ -148,6 +148,18 @@ public class EndpointLanguage {
 		return Response.ok().entity(languageSelectList).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}")
+	public Response getLanguage(@PathParam("id") Integer id) {
+		System.out.println("EndpointLanguage: getLanguage with id "+ id);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Language language = entityManager.find(Language.class, id);
+
+		return Response.ok().entity(language).build();
+  }
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

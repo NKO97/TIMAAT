@@ -60,9 +60,9 @@
 				$('.rolegroups-nav-tabs').show();
 				$('.rolegroups-data-tabs').hide();
 				$('.nav-tabs a[href="#roleGroupDatasheet"]').tab('show');
-				$('#timaat-rolelists-metadata-form').data('rolegroup', roleGroup);
+				$('#rolegroup-metadata-form').data('rolegroup', roleGroup);
         console.log("TCL: RoleGroup -> constructor -> roleGroup", roleGroup);
-				TIMAAT.RoleLists.roleOrRoleGroupFormDataSheet('show', 'rolegroup', roleGroup);
+				TIMAAT.RoleLists.roleGroupFormDataSheet('show', 'rolegroup', roleGroup);
 			});
     }
 
@@ -77,7 +77,7 @@
 			// remove rolegroup from UI
 			this.listView.remove();
       console.log("TCL: RoleGroup -> remove -> this", this);
-			$('#timaat-rolelists-metadata-form').data('rolegroup', null);
+			$('#rolegroup-metadata-form').data('rolegroup', null);
 			// remove from role groups list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.roleGroups.length; i++) {
