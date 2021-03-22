@@ -503,6 +503,10 @@
             }
           }
           break;
+          case 'settings':
+            TIMAAT.UI.showComponent('settings');
+            TIMAAT.Settings.loadSettings();
+          break;
         }
       }
     },

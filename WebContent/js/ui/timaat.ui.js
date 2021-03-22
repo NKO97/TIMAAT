@@ -375,6 +375,9 @@
 				case 'mediumCollection':
 					$('#medium-tabs').show();
 				break;
+				case 'settings':
+					$('#settings-tabs').show();
+				break;
 			}
 		},
 

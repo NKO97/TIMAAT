@@ -22,10 +22,28 @@
 	TIMAAT.Settings = {
 		
 		init: function() {
+      this.initSettings();
+      TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
+		},
 
-		}
+    initSettingsComponent: function() {
+      TIMAAT.UI.showComponent('settings');
+      $('#settings-general-tab').trigger('click');
+    },
 
-		
+		initSettings: function() {
+      // nav-bar functionality
+			$('#settings-general-tab').on('click', function(event) {
+				TIMAAT.MediumDatasets.loadMedia();
+				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings');
+			});
+    },
+
+    loadSettings: function() {
+			TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
+			// TIMAAT.UI.addSelectedClassToSelectedItem('settings', null);
+			// TIMAAT.UI.subNavTab = 'dataSheet';
+		},
 		
 	}
 	

@@ -268,8 +268,8 @@
                 </a>
               </li>
               <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
-                <a href="#settings"
-                  onclick="TIMAAT.UI.showComponent('settings')"
+                <a 
+                  onclick="TIMAAT.Settings.initSettingsComponent()"
                   data-toggle="popover"
                   data-trigger="hover"
                   data-animation="false"
@@ -4287,14 +4287,14 @@
             <div class="col-md-12">
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="event-tabs" role="tablist">
-                <li class="nav-item active">
-                  <a class="nav-link top-nav-bar-link active" id="event-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="true">
+                <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="event-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="false">
                     <i class="fas fa-id-badge"></i> Events
                   </a>
                 </li>
               </ul>
               <div class="tab-content" id="eventsTabsContent">
-                <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="events">
+                <div class="tab-pane fade show" id="events" role="tabpanel" aria-labelledby="events">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Events lists -->
                     <div class="col-md-4">
@@ -4402,16 +4402,16 @@
         <div class="container-fluid timaat-component" id="timaat-component-settings">     
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
-              <ul class="nav nav-pills" id="settings-tab" role="tablist">
+              <ul class="nav nav-pills" id="settings-tabs" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link disabled" href="#timaat-settings-general" tabindex="-1" aria-disabled="true">
+                  <a class="nav-link top-nav-bar-link"  id="settings-general-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="false">
                     <i class="fas fa-cogs"></i> Allgemein
                   </a>
                 </li>
               </ul>
-              <div class="tab-content" id="timaat-settings-content">
-                <div class="tab-pane fade show active" id="timaat-settings-tags" role="tabpanel" aria-labelledby="home-tab">
-                  <div class="row timaat-settings-ui" style="padding-top: 1em;">
+              <div class="tab-content" id="settingsTabsContent">
+                <div class="tab-pane fade show" id="settings" role="tabpanel" aria-labelledby="settings">
+                  <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-4">
                     </div>
                     <div class="col-lg-6">
