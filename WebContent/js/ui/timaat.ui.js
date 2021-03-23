@@ -57,15 +57,11 @@
 			TIMAAT.Settings.init();
 			TIMAAT.URLHistory.init();
 			
-			// After login show media library
-			// TIMAAT.MediumDatasets.initMediaComponent();
-			TIMAAT.UI.showComponent('videochooser');
-
 			$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
-			console.log("TCL ~ TIMAAT.Service.state", TIMAAT.Service.state);
-			console.log("TCL ~ TIMAAT.Service.token", TIMAAT.Service.token);
+			// console.log("TCL ~ TIMAAT.Service.state", TIMAAT.Service.state);
+			// console.log("TCL ~ TIMAAT.Service.token", TIMAAT.Service.token);
 			if ( TIMAAT.Service.state != 1 ) {
 				$('body').addClass('timaat-login-modal-open');
 				$('#timaat-login-modal').modal('show');
@@ -331,12 +327,16 @@
             console.log("TCL ~ setTimeout ~ TIMAAT.Service.token", TIMAAT.Service.token);
 						$('body').removeClass('timaat-login-modal-open');
 						$('#timaat-login-modal').modal('hide');
-						$('#timaat-user-info').html(e.accountName);							
+						$('#timaat-user-info').html(e.accountName);
+
 						TIMAAT.VideoChooser.loadCollections();
 						TIMAAT.Datasets.loadDataTables();
 						TIMAAT.Datasets.load();
 						TIMAAT.Lists.loadDataTables();
 						TIMAAT.Lists.load();
+
+						// After login show media library
+						TIMAAT.VideoChooser.initVideoChooserComponent();
 					}).fail(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
 						console.log("TCL: processLogin fail: e", e);
@@ -377,6 +377,9 @@
 				break;
 				case 'settings':
 					$('#settings-tabs').show();
+				break;
+				case 'videochooser':
+					//* no nav bar in videochooser
 				break;
 			}
 		},
@@ -801,7 +804,7 @@
 		},
 
     clearLastSelection: function (type) {
-      console.log("TCL: type", type);
+      // console.log("TCL: type", type);
 			let i = 0;
 			switch (type) {
 				case 'category':

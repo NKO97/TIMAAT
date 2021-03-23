@@ -21,25 +21,28 @@
 
 	TIMAAT.EventDatasets = {
 		events: null,
+		eventsLoaded: false,
 
 		init: function() {
 			this.initEvents();
-			TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
 		},
 
 		initEventComponent: function() {
-			// console.log("TCL: initEventComponent");
-				if (!this.eventsLoaded) {
-					this.setEventList();
-				}
+			console.log("TCL: initEventComponent");
+			if (!this.eventsLoaded) {
+				this.setEventList();
+			}
+			if (TIMAAT.UI.component != 'events') {
 				TIMAAT.UI.showComponent('events');
 				$('#event-tab').trigger('click');
-			},
+			}
+		},
 
 		initEvents: function() {
 			// nav-bar functionality
 			$('#event-tab').on('click', function(event) {
 				TIMAAT.EventDatasets.loadEvents();
+				TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Event Datasets', '#event/list');
 			});
 
@@ -284,7 +287,6 @@
 		},
 
 		loadEvents: function() {
-			TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
 			TIMAAT.UI.addSelectedClassToSelectedItem('event', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
 		},
@@ -293,7 +295,7 @@
 			this.setupEventDataTable();
 		},
 		
-		setEventList: function(events) {
+		setEventList: function() {
     	// console.log("TCL: events", events);
 			if ( this.events == null ) return;
 

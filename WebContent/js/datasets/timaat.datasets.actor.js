@@ -42,7 +42,6 @@
 			this.initMemberOfCollectives();
 			this.initRoles();
 			this.initRoleMedium();
-			TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable');
 		},
 
 		initActorComponent: function() {
@@ -126,16 +125,19 @@
 			// console.log("TCL: ActorDatasets: initActors: function()");
 			$('#actor-tab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActors();
+				TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Actor Datasets ', '#actor/list');
 			});
 
 			$('#person-tab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActorSubtype('person');
+				TIMAAT.UI.displayComponent('actor', 'person-tab', 'person-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Person Datasets ', '#actor/person/list');
 			});
 
 			$('#collective-tab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActorSubtype('collective');
+				TIMAAT.UI.displayComponent('actor', 'collective-tab', 'collective-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Collective Datasets ', '#actor/collective/list');
 			});
 
@@ -184,7 +186,7 @@
 			$('#timaat-actordatasets-modal-delete-submit').on('click', async function(ev) {
 				var modal = $('#timaat-actordatasets-actor-delete');
 				var actor = modal.data('actor');
-				let type = $('#medium-metadata-form').data('type');
+				let type = $('#actor-metadata-form').data('type');
 				if (actor) {
 					try {
 						await TIMAAT.ActorDatasets._actorRemoved(actor);
@@ -2643,7 +2645,6 @@
 
 		loadActors: function() {
     	// console.log("TCL: loadActors: function()");
-			TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable');
 			$('#actor-metadata-form').data('type', 'actor');
 			TIMAAT.UI.addSelectedClassToSelectedItem('actor', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
@@ -2657,7 +2658,6 @@
 		},
 
 		loadActorSubtype: function(type) {
-			TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable');
 			$('#actor-metadata-form').data('type', type);
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';

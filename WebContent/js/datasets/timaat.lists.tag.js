@@ -25,7 +25,7 @@
 		init: function() {
     console.log("TCL: init: function()");
 			TIMAAT.TagLists.initTags();
-			$('.datatables').hide();
+			// $('.datatables').hide();
 			// $('.tag-datatable').show();
     },
 
@@ -332,7 +332,7 @@
 		
 		loadTags: function() {
     // console.log("TCL: loadTags: function()");
-			$('.datatables').hide();
+			// $('.datatables').hide();
 			$('.tag-datatable').show();
 			TIMAAT.TagLists.setTagList();
 		},

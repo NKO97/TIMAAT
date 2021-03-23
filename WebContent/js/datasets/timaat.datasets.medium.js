@@ -39,7 +39,6 @@
 			this.initTitles();
 			this.initLanguageTracks();
 			this.initActorRoles();
-			TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
 		},
 
 		initMediaComponent: function() {
@@ -138,41 +137,49 @@
 			// nav-bar functionality
 			$('#medium-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMedia();
+				TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Medium Datasets', '#medium/list');
 			});
 
 			$('#audio-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('audio');
+				TIMAAT.UI.displayComponent('medium', 'audio-tab', 'audio-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Audio Datasets', '#medium/audio/list');
 			});
 
 			$('#document-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('document');
+				TIMAAT.UI.displayComponent('medium', 'document-tab', 'document-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Document Datasets', '#medium/document/list');
 			});
 
 			$('#image-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('image');
+				TIMAAT.UI.displayComponent('medium', 'image-tab', 'image-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Image Datasets', '#medium/image/list');
 			});
 
 			$('#software-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('software');
+				TIMAAT.UI.displayComponent('medium', 'software-tab', 'software-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Software Datasets', '#medium/software/list');
 			});
 
 			$('#text-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('text');
+				TIMAAT.UI.displayComponent('medium', 'text-tab', 'text-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Text Datasets', '#medium/text/list');
 			});
 
 			$('#video-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('video');
+				TIMAAT.UI.displayComponent('medium', 'video-tab', 'video-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Video Datasets', '#medium/video/list');
 			});
 
 			$('#videogame-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('videogame');
+				TIMAAT.UI.displayComponent('medium', 'videogame-tab', 'videogame-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Videogame Datasets', '#medium/videogame/list');
 			});
 
@@ -1643,7 +1650,6 @@
 		},
 		
 		loadMedia: function() {
-			TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
 			$('#medium-metadata-form').data('type', 'medium');
 			$('#videoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem('medium', null);
@@ -1662,7 +1668,6 @@
 		},
 
 		loadMediumSubtype: function(type) {
-			TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable');
 			$('#medium-metadata-form').data('type', type);
 			$('#videoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);

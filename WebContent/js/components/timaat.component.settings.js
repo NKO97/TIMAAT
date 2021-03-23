@@ -34,7 +34,7 @@
 		initSettings: function() {
       // nav-bar functionality
 			$('#settings-general-tab').on('click', function(event) {
-				TIMAAT.MediumDatasets.loadMedia();
+				TIMAAT.Settings.loadSettings();
 				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings');
 			});
     },

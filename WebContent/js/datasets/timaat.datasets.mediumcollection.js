@@ -29,13 +29,13 @@
 			this.initMediaCollections();
 			this.initMediaCollectionItems();
 			this.initMediaCollectionPublication();
-			TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
 		},
 
 		initMediaCollections: function() {
 			// nav-bar functionality
 			$('#mediumcollection-tab').on('click', function(event) {
 				TIMAAT.MediumCollectionDatasets.loadMediaCollections();
+				TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Medium Collection Datasets', '#mediumCollection/list');
 			});
 
@@ -461,7 +461,6 @@
 		},
 
 		loadMediaCollections: function() {
-			TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
 			$('#mediumcollection-metadata-form').data('type', 'mediumCollection');
 			$('#videoPreview').get(0).pause();
 			this.setMediumCollectionList();
@@ -705,7 +704,7 @@
 					mediumCollectionElement.data('medium', mediumCollectionHasMedium.medium);
 					// mediumCollectionElement.find('input:checkbox').prop('checked', false);
 					// mediumCollectionElement.find('input:checkbox').change(function() {
-					// 	$('#timaat-videochooser-list-action-submit').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);				
+					// 	$('#timaat-videochooser-list-action-submit-button').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);				
 					// });
 
 					// if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);

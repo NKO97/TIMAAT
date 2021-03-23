@@ -156,7 +156,7 @@
           <div class="navbar-default sidebar" role="navigation">
             <ul id="side-menu">
               <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser">
-                  <a href="#mediaLibrary" 
+                  <a
                     onclick="TIMAAT.VideoChooser.initVideoChooserComponent()" 
                     data-toggle="popover" 
                     data-trigger="hover" 
@@ -308,7 +308,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-danger" id="timaat-mediacollection-delete-submit">Sammlung löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-mediacollection-delete-submit-button">Sammlung löschen</button>
                 </div>
               </div>
             </div>
@@ -332,17 +332,17 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                  <button type="button" class="btn btn-primary" id="timaat-mediacollection-meta-submit" disabled>Hinzufügen</button>
+                  <button type="button" class="btn btn-primary" id="timaat-mediacollection-meta-submit-button" disabled>Hinzufügen</button>
                 </div>
               </div>
             </div>
           </div>		
           <div class="row" style="padding-top: 1em;">
 			      <div class="col-3" style="padding-right:0">
-          	  <div class="card">
+          	  <div class="card datatables" id="videochooser-datatable">
 			          <div class="card-header">
                   <strong>Mediensammlungen</strong>
-                  <button type="button" onclick="TIMAAT.VideoChooser.addMediacollection()" class="btn btn-outline-success btn-sm float-right">
+                  <button type="button" onclick="TIMAAT.VideoChooser.addMediaCollection()" class="btn btn-outline-success btn-sm float-right">
                     <i class="fas fa-plus"></i>
                   </button></div>
 			            <div class="card-body" style="padding:0">
@@ -379,7 +379,7 @@
                       </select>
                     </div>
                     <div class="input-group-append">
-                      <button disabled id="timaat-videochooser-list-action-submit"
+                      <button disabled id="timaat-videochooser-list-action-submit-button"
                         type="button" class="btn btn-success">Ausführen</button>
                     </div>
                   </div>
@@ -2984,7 +2984,7 @@
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="actor-tabs" role="tablist">
                 <li class="nav-item active">
-                  <a class="nav-link top-nav-bar-link active" id="actor-tab" data-toggle="tab" role="tab" aria-controls="actors" aria-selected="true">
+                  <a class="nav-link top-nav-bar-link active" id="actor-tab" data-toggle="tab" role="tab" aria-controls="actor-tab" aria-selected="false">
                     <i class="fas fa-id-badge"></i> Actors
                   </a>
                 </li>
@@ -3000,7 +3000,7 @@
                 </li>
               </ul>
               <div class="tab-content" id="actorsTabsContent">
-                <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actor-tab">
+                <div class="tab-pane fade show active" id="actors" role="tabpanel" aria-labelledby="actors">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Actors lists -->
                     <div class="col-md-4">
@@ -4287,14 +4287,14 @@
             <div class="col-md-12">
               <!-- Nav bar tabs -->
               <ul class="nav nav-pills" id="event-tabs" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link top-nav-bar-link" id="event-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="false">
+                <li class="nav-item active">
+                  <a class="nav-link top-nav-bar-link active" id="event-tab" data-toggle="tab" role="tab" aria-controls="event-tab" aria-selected="false">
                     <i class="fas fa-id-badge"></i> Events
                   </a>
                 </li>
               </ul>
               <div class="tab-content" id="eventsTabsContent">
-                <div class="tab-pane fade show" id="events" role="tabpanel" aria-labelledby="events">
+                <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="events">
                   <div class="row ui" style="padding-top: 1em;">
                     <!-- Events lists -->
                     <div class="col-md-4">
@@ -4403,8 +4403,8 @@
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="settings-tabs" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link top-nav-bar-link"  id="settings-general-tab" data-toggle="tab" role="tab" aria-controls="events" aria-selected="false">
+                <li class="nav-item active">
+                  <a class="nav-link top-nav-bar-link active"  id="settings-general-tab" data-toggle="tab" role="tab" aria-controls="settings-general-tab" aria-selected="false">
                     <i class="fas fa-cogs"></i> Allgemein
                   </a>
                 </li>

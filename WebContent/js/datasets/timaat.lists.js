@@ -27,7 +27,6 @@
       TIMAAT.LanguageLists.initLanguages();
       TIMAAT.TagLists.init();
       this.initLists();
-      TIMAAT.UI.displayComponent(null, null, null);
     },
 
     initListsComponent: function() {
