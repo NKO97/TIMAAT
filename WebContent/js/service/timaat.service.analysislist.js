@@ -33,7 +33,7 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL getAnalysisLists ~ data", data);
+				// console.log("TCL getAnalysisLists ~ data", data);
 				callback(data);
 			})
 			.fail(function(e) {
@@ -42,9 +42,32 @@
 			
 		},
 
+		async getMediumAnalysisLists(mediumId) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysislists",
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getAnalysisLists -> data", data);
+					resolve(data);
+				})
+				.fail(function(e) {
+					console.log(e.responseText);
+					console.log( "error", e );
+				});	
+			}).catch((error) => {
+				console.log( "error: ", error );
+			});	
+		},
+
 		async getAnalysisList(mediumAnalysisListId) {
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
@@ -53,7 +76,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getAnalysisList -> data", data);
+					// console.log("TCL: getAnalysisList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -68,7 +91,7 @@
 		async getCategorySetList(mediumAnalysisListId) {
       // console.log("TCL: getCategorySetList -> mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/list/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
@@ -90,9 +113,9 @@
 		},
 
 		async getSelectedCategories(typeId, type) {
-			console.log("TCL: getSelectedCategories -> typeId, type", typeId, type);
+			// console.log("TCL: getSelectedCategories -> typeId, type", typeId, type);
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+typeId+"/category/list/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
@@ -116,7 +139,7 @@
 		async getTagList(mediumAnalysisListId) {
       // console.log("TCL: getTagList -> for mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
-				jQuery.ajax({
+				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/hasTagList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",

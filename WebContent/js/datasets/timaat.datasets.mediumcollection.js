@@ -551,7 +551,7 @@
 			// console.log("TCL: action, type, data", action, type, data);
 			TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', data.model.id);
 			$('#mediumcollection-metadata-form').trigger('reset');
-			$('#mediumcollection-metadata-form').data('data-type', type);
+			$('#mediumcollection-metadata-form').data('type', type);
 			this.initFormDataSheetData(type);
 			mediumFormMetadataValidator.resetForm();
 
@@ -1008,7 +1008,7 @@
 						$('#mediumcollection-metadata-form').data('mediumCollection', selectedMediumCollection);
 						let type = selectedMediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
 						$('#mediumcollection-metadata-form').data('type', type);
-						// $('#mediumcollection-metadata-form').data('data-type', type);
+						// $('#mediumcollection-metadata-form').data('type', type);
 						TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedMediumCollection, 'mediumCollection');
 						TIMAAT.URLHistory.setURL(null, selectedMediumCollection.model.title + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#mediumCollection/' + selectedMediumCollection.model.id);
 					});

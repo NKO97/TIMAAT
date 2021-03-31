@@ -1121,7 +1121,7 @@ public class EndpointMedium {
 																				@QueryParam("dir") String direction,
 																				@QueryParam("search") String search)
 	{
-		// System.out.println("EndpointAnnotation: getCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointMedium: getCategorySelectList - Id: "+ id);
 
 		class SelectElement{ 
 			public int id; 

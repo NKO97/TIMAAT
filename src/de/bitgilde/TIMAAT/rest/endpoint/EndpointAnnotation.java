@@ -210,7 +210,7 @@ public class EndpointAnnotation {
 			@QueryParam("search") String search, // not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
-		System.out.println("EndpointAnnotation: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -261,7 +261,7 @@ public class EndpointAnnotation {
 			@QueryParam("search") String search, // not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
-		System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -311,7 +311,7 @@ public class EndpointAnnotation {
 			@QueryParam("search") String search, // not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
-		System.out.println("EndpointAnnotation: getAnnotationEvent: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationEvent: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -354,11 +354,11 @@ public class EndpointAnnotation {
 	@Path("{id}/category/list")
 	public Response getSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);
 		List<Category> categoryList = annotation.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 

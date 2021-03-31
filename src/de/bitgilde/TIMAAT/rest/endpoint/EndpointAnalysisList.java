@@ -90,6 +90,23 @@ public class EndpointAnalysisList {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("{id}/elements")
+	public Response getMediumAnalysisListElements(@PathParam("id") Integer id)
+	{
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+		List<Annotation> annotations = mediumAnalysisList.getAnnotations();
+		List<AnalysisSegment> segments = mediumAnalysisList.getAnalysisSegments();
+		List<Object> elementList = new ArrayList<Object>();
+		elementList.addAll(annotations);
+		elementList.addAll(segments);
+		//* NB: returns an unsorted list
+		return Response.ok().entity(elementList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("{id}/categorySet/list")
 	public Response getCategorySetList(@PathParam("id") Integer id)
 	{
@@ -107,11 +124,11 @@ public class EndpointAnalysisList {
 	@Path("segment/{id}/category/list")
 	public Response getSegmentSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndPointAnalysisList: getSegmentSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
 		List<Category> categoryList = segment.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndPointAnalysisList: getSegmentSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -184,11 +201,11 @@ public class EndpointAnalysisList {
 	@Path("sequence/{id}/category/list")
 	public Response getSequenceSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndPointAnalysisList: getSequenceSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
 		List<Category> categoryList = sequence.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndPointAnalysisList: getSequenceSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -261,11 +278,11 @@ public class EndpointAnalysisList {
 	@Path("scene/{id}/category/list")
 	public Response getSceneSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndPointAnalysisList: getSceneSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
 		List<Category> categoryList = scene.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndPointAnalysisList: getSceneSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -391,11 +408,11 @@ public class EndpointAnalysisList {
 	@Path("action/{id}/category/list")
 	public Response getActionSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndPointAnalysisList: getActionSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
 		List<Category> categoryList = action.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndPointAnalysisList: getActionSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -468,11 +485,11 @@ public class EndpointAnalysisList {
 	@Path("take/{id}/category/list")
 	public Response getTakeSelectedCategories(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnnotation: getSelectedCategories - Id: "+ id);
+		// System.out.println("EndPointAnalysisList: getTakeSelectedCategories - Id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake take = entityManager.find(AnalysisTake.class, id);
 		List<Category> categoryList = take.getCategories();
-		System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
+		// System.out.println("EndPointAnalysisList: getTakeSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -545,7 +562,7 @@ public class EndpointAnalysisList {
 	@Path("{id}")
 	public Response getAnalysisList(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnalysisList: getAnalysisList - ID: "+ id);
+		// System.out.println("EndpointAnalysisList: getAnalysisList - ID: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
 

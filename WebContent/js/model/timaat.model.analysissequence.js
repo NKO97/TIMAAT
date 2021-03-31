@@ -48,6 +48,9 @@
 		updateUI() {
 			// console.log("TCL: AnalysisSequence -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
+			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('id', 'sequence-'+this.model.id);
+			this.listView.attr('data-type', 'sequence');
 			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
 			this.listView.find('.timaat-annotation-sequence-name').html(this.model.analysisSequenceTranslations[0].name);
@@ -98,7 +101,12 @@
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
+				//TODO
+				// TIMAAT.URLHistory.setURL(null, 'Sequence · '+sequence.model.analysisSequenceTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/sequence/'+sequence.model.id);
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
@@ -119,8 +127,13 @@
 				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				// TODO
+				// TIMAAT.URLHistory.setURL(null, 'Sequence · '+sequence.model.analysisSequenceTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/sequence/'+sequence.model.id);
 			});
 			// console.log("TCL: AnalysisSequence -> addUI -> this.updateUI()");
 			this.updateUI();

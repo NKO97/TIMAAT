@@ -37,7 +37,7 @@ public class NotificationWebSocket {
     
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("onMessage::From=" + session.getId() + " Message=" + message);
+        // System.out.println("onMessage::From=" + session.getId() + " Message=" + message);
         
         try {
         	NotificationRequest req = new ObjectMapper().readValue(message, NotificationRequest.class);

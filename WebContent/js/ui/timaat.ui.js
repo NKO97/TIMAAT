@@ -202,8 +202,11 @@
 				}
 				this.notificationSocket.onmessage = TIMAAT.UI.receiveNotification;
 				// send notification request to server
-			} else this.notificationSocket.send( JSON.stringify({token:TIMAAT.Service.token,request:type,dataID:dataID}) );
-
+			} else {
+				this.notificationSocket.onopen = function() { 
+					TIMAAT.UI.notificationSocket.send(JSON.stringify({token:TIMAAT.Service.token,request:type,dataID:dataID}));
+				}
+			}
 		},
 		
 		showNotification(notification) {
@@ -322,9 +325,9 @@
 					}).done(function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
 						TIMAAT.Service.session = e;
-            console.log("TCL ~ setTimeout ~ TIMAAT.Service.session", TIMAAT.Service.session);
+            // console.log("TCL ~ setTimeout ~ TIMAAT.Service.session", TIMAAT.Service.session);
 						TIMAAT.Service.token = e.token;
-            console.log("TCL ~ setTimeout ~ TIMAAT.Service.token", TIMAAT.Service.token);
+            // console.log("TCL ~ setTimeout ~ TIMAAT.Service.token", TIMAAT.Service.token);
 						$('body').removeClass('timaat-login-modal-open');
 						$('#timaat-login-modal').modal('hide');
 						$('#timaat-user-info').html(e.accountName);
@@ -462,7 +465,7 @@
 		},
 
 		displayDataSetContent: function(form, data, type, mode = 'show') {
-    console.log("TCL: displayDataSetContent: form, data, type, mode - ", form, data, type, mode);
+    // console.log("TCL: displayDataSetContent: form, data, type, mode - ", form, data, type, mode);
 			this.subNavTab = form;
       switch(type) {
         case 'category':
@@ -513,6 +516,8 @@
 						break;
 						case 'dataSheet':
 							this.setDataSetContentActiveNavTab('medium-tab-metadata');
+							type = data.model.mediaType.mediaTypeTranslations[0].type;
+              console.log("TCL: type", type);
 							TIMAAT.MediumDatasets.mediumFormDataSheet(mode, type, data);
 						break;
 						case 'titles':
@@ -533,6 +538,8 @@
           switch(form) {
             case 'dataSheet':
               this.setDataSetContentActiveNavTab('mediumcollection-tab-metadata');
+							type = data.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
+              console.log("TCL: type", type);
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormDataSheet(mode, type, data);
             break;
             case 'items':
@@ -557,6 +564,7 @@
 					switch(form) {
 						case 'dataSheet':
 							this.setDataSetContentActiveNavTab('actor-tab-metadata');
+							type = data.model.actorType.actorTypeTranslations[0].type;
 							TIMAAT.ActorDatasets.actorFormDataSheet(mode, type, data);
 						break;
 						case 'names':

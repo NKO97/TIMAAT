@@ -50,6 +50,9 @@
 		updateUI() {
 			// console.log("TCL: AnalysisScene -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
+			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('id', 'scene-'+this.model.id);
+			this.listView.attr('data-type', 'scene');
 			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
 			this.listView.find('.timaat-annotation-scene-name').html(this.model.analysisSceneTranslations[0].name);
@@ -100,7 +103,12 @@
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
+					// TODO
+					// TIMAAT.URLHistory.setURL(null, 'Scene · '+scene.model.analysisSceneTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/scene/'+scene.model.id);
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curScene = scene;
@@ -121,8 +129,13 @@
 				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime/1000.0, scene.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+					// TODO
+					// TIMAAT.URLHistory.setURL(null, 'Scene · '+scene.model.analysisSceneTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/scene/'+scene.model.id);
 			});
 			// console.log("TCL: AnalysisScene -> addUI -> this.updateUI()");
 			this.updateUI();

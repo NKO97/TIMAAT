@@ -33,7 +33,7 @@
         await TIMAAT.URLHistory.setupView(currentUrlHash);
       });
 
-      $(window).on( 'hashchange', async function( e ) {
+      $(window).on('hashchange', async function( e ) {
         // console.log("TCL ~ $ ~ hashchange");
         // TODO handling of deleted entries when using browser back button
 
@@ -108,6 +108,7 @@
               switch (pathSegments[1]) {
                 case 'list': // #medium/list
                   TIMAAT.MediumDatasets.loadMedia();
+                  TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
                 break;
                 case 'audio': // #medium/audio ...
                 case 'document': // #medium/document ...
@@ -151,12 +152,13 @@
                   else if (pathSegments.length >= 3 && pathSegments[2] == 'list') { // .../list
                     TIMAAT.UI.clearLastSelection(pathSegments[1]);
                     TIMAAT.MediumDatasets.loadMediumSubtype(pathSegments[1]);
+                    TIMAAT.UI.displayComponent('medium', pathSegments[1]+'-tab', pathSegments[1]+'-datatable');
                   }
                 break;
               }
             }
           break;
-          case 'mediumCollection':
+          case 'mediumCollection': // #mediumCollection...
             // TODO make sure media collections are loaded
             // show media collection component
             TIMAAT.UI.showComponent('media');
@@ -190,6 +192,7 @@
               switch (pathSegments[1]) {
               case 'list': // #mediumCollection/list
                 TIMAAT.MediumCollectionDatasets.loadMediaCollections();
+                TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
               break;
               }
             }
@@ -503,27 +506,27 @@
             }
           }
           break;
-          case 'settings':
+          case 'settings': // #settings...
             TIMAAT.UI.showComponent('settings');
             TIMAAT.Settings.loadSettings();
           break;
-          case 'mediaLibrary':
+          case 'mediaLibrary': // #mediaLibrary...
             // make sure videochooser collection list is loaded
             if (!TIMAAT.VideoChooser.videoChooserLoaded) {
               TIMAAT.VideoChooser.loadCollections();
               TIMAAT.VideoChooser.videoChooserLoaded = true;
             }
             TIMAAT.UI.showComponent('videochooser');
+            TIMAAT.UI.clearLastSelection('mediumCollection');
             // show corresponding videochooser collection list
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current videochooser collection item
-              $('#timaat-videochooser-collection-'+pathSegments[1]).trigger('click');
-              let collection = {};
-              collection.model = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
+              // $('#timaat-videochooser-collection-'+pathSegments[1]).trigger('click');
+              let collection = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
               // TIMAAT.UI.clearLastSelection('videochooser');
               if (pathSegments.length == 2) { // #mediaLibrary/:id (default view, show datatable)
-                // TIMAAT.VideoChooser.setCollection(collection);
+                TIMAAT.VideoChooser.setCollection(collection);
                 TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
-                TIMAAT.UI.displayDataSetContent('dataSheet', collection, 'videochooser');
+                // TIMAAT.UI.displayDataSetContent('dataSheet', collection, 'videochooser');
               }
               else { // other videochooser form than datatable
                 switch (pathSegments[2]) {
@@ -535,9 +538,64 @@
               // TIMAAT.UI.clearLastSelection('videochooser');
               switch (pathSegments[1]) {
                 case 'list': // #mediaLibrary/list
-                  $('#timaat-videochooser-collectionlibrary').trigger('click');
+                  // $('#timaat-videochooser-collectionlibrary').trigger('click');
+                  TIMAAT.VideoChooser.setCollection(null);
+				          TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
                 break;
               }
+            }
+          break;
+          case 'analysis': // #analysis...
+            // make sure analysis list is loaded
+            // if (!TIMAAT.VideoPlayer.curAnalysisList) {
+            //   TIMAAT.VideoPlayer.
+            //   TIMAAT.MediumDatasets.mediaLoaded = true;
+            // }
+            // show video player component
+            TIMAAT.UI.showComponent('videoplayer');
+            // show corresponding video and analysis lists
+            if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current analysis
+              // console.log("TCL: setupView:function -> pathSegments[1]", pathSegments[1]);
+              //* determine analysis list and corresponding medium via hashPath
+              let analysisList = await TIMAAT.AnalysisListService.getAnalysisList(pathSegments[1]);
+              let video = await TIMAAT.MediumService.getMedium(analysisList.mediumID);
+              //* load necessary data to display UI
+              TIMAAT.VideoPlayer.setupVideo(video);
+              let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
+              //* setup UI
+						  await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
+              // TIMAAT.VideoPlayer.setupAnalysisList(analysisList);
+              $('#timaat-analysislist-chooser').val(analysisList.id);
+              // console.log("TCL: setupView:function -> analysisList", analysisList);
+              $('#timaat-analysislist-chooser').trigger('change');
+              // TIMAAT.VideoPlayer.setupAnalysisList(analysisList);
+              // TIMAAT.UI.clearLastSelection('analysisList');
+              if ( pathSegments.length == 2 ) { // #analysis/:id     (default view, show analysis list)
+                //* no extra steps necessary that are not also required for annotations, segments, etc.
+                // TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+              }
+              // TODO annotation and segment data accessibility by url
+              // else { // element in analysis list selected
+              //   switch (pathSegments[2]) {
+              //     case 'annotation': // #analysis/:analysisId/annotation/:annotationId
+              //       console.log("TCL: setupView:function -> pathSegments[3] - Annotation: ", pathSegments[3]);
+              //     $('#annotation-'+pathSegments[3]).trigger('click');
+              //     break;
+              //     case 'segment': // #analysis/:analysisId/segment/:segmentId
+              //       console.log("TCL: setupView:function -> pathSegments[3] - Segment: ", pathSegments[3]);
+              //       $('#segment-'+pathSegments[3]).trigger('click');
+              //     break;
+              //     case 'scene': // #analysis/:analysisId/scene/:sceneId
+              //       $('#scene-'+pathSegments[3]).trigger('click');
+              //     break;
+              //     case 'action': // #analysis/:analysisId/action/:actionId
+              //       $('#action-'+pathSegments[3]).trigger('click');
+              //     break;
+              //     case 'take': // #analysis/:analysisId/take/:takeId
+              //       $('#take-'+pathSegments[3]).trigger('click');
+              //     break;
+              //   }
+              // }
             }
           break;
         }

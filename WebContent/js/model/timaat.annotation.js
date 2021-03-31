@@ -61,7 +61,7 @@
 				</li>`
 			);
 			
-//			console.log("TCL: Annotation -> constructor -> this.updateUI()");
+			// console.log("TCL: Annotation -> constructor -> this.updateUI()");
 			this.updateUI();
 					
 			let anno = this; // save annotation for events
@@ -74,17 +74,7 @@
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-categories-and-tags');
 			});
-			/*
-			this.listView.find('.timaat-annotation-list-categories').popover({
-				placement: 'right',
-				title: 'Categories bearbeiten',
-				trigger: 'click',
-				html: true,
-				content: '<div class="input-group ui-front"><input class="form-control timaat-category-input" type="text" value=""></div>',
-				container: 'body',
-				boundary: 'viewport',
-			});
-			*/
+
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
@@ -108,78 +98,7 @@
 				);
 				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 			});
-					
-			/*
-			// attach category editor
-			this.listView.find('.timaat-annotation-list-categories').on('shown.bs.popover', function (ev) {
-				var curtsname = "keins";
-				if ( TIMAAT.VideoPlayer.curCategoryset ) curtsname = TIMAAT.VideoPlayer.curCategoryset.model.name;
-						
-				var dropdown =  $('<br><div class="btn-group dropright timaat-categoryset-chooser d-flex">' +
-									'<button style="width:100%" type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-									'Categoryset: ' + curtsname + 
-									'</button>' +
-									'<div class="dropdown-menu">' +
-									'</div></div>');	
-				$($(this).data('bs.popover').tip).find('.popover-header').append(dropdown);
-				var tschooser = $($(this).data('bs.popover').tip).find('.timaat-categoryset-chooser');
 
-				var empty = $('<a class="dropdown-item">(kein Categoryset)</a>');
-				tschooser.find('.dropdown-menu').append(empty);
-				empty.on('click', function() {					
-					TIMAAT.VideoPlayer.setCategoryset(null);
-					dropdown.find('button').text("Categoryset: keins");
-				});
-				$(TIMAAT.Settings.categorysets).each(function(index, categoryset) {
-					var item = $('<a class="dropdown-item">'+categoryset.model.name+'</a>');
-					tschooser.find('.dropdown-menu').append(item);
-					item.on('click', function() {
-						TIMAAT.VideoPlayer.setCategoryset(categoryset);
-						dropdown.find('button').text("Categoryset: "+categoryset.model.name);				
-					});
-				});
-						
-//				$(this).data('bs.popover').config.content = 'new content';
-			});
-			this.listView.find('.timaat-annotation-list-categories').on('inserted.bs.popover', function () {
-				var categories = "";
-				anno.model.categories.forEach(function(item) { categories += ','+item.name });
-				categories = categories.substring(1);
-				$('.timaat-category-input').val(categories);
-				$('.timaat-category-input').categoriesInput({
-					placeholder: 'Category hinzufügen',
-					autocomplete: {
-						position: { my : "right top", at: "right bottom" },
-						source: TIMAAT.VideoPlayer.categoryAutocomplete,
-					},
-
-					onAddCategory: function(categoryinput,category) {
-						TIMAAT.Service.addCategory(anno, category, function(newcategory) {
-							anno.model.categories.push(newcategory);
-							console.log("TCL: Annotation -> constructor -> anno.updateUI()");
-							anno.updateUI();                
-						});
-					},
-					onRemoveCategory: function(categoryinput,category) {
-						TIMAAT.Service.removeCategory(anno, category, function(categoryname) {
-							// find category in model
-							var found = -1;
-							anno.model.categories.forEach(function(item, index) {
-								if ( item.name == categoryname ) found = index;
-							});
-							if (found > -1) anno.model.categories.splice(found, 1);
-							console.log("TCL: Annotation -> constructor -> anno.updateUI()");
-							anno.updateUI();                
-						});
-					},
-					onChange: function() {
-						if ( this.length == 1) $('#'+this[0].id+'_category').focus();
-					}
-				});
-			});
-			this.listView.find('.timaat-annotation-list-categories').on('hidden.bs.popover', function () { anno.updateUI(); });
-			console.log("TCL: Annotation -> constructor -> anno.updateUI()");
-*/
 			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
 			// attach user log info
@@ -202,18 +121,17 @@
 				else {
 					TIMAAT.VideoPlayer.selectAnnotation(null);
 				}
-				console.log("TCL: Annotation click -> $ -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI();
 				// TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.pause();
 			});
+
 			$(this.listView).on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
-				console.log("TCL: Annotation dblClick -> $ -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI();
 			});
 
@@ -426,6 +344,9 @@
 		updateUI() {
 			// console.log("TCL: Annotation -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
+			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('id', 'annotation-'+this.model.id);
+			this.listView.attr('data-type', 'annotation');
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);

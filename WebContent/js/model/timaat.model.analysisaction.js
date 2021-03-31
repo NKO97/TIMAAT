@@ -50,6 +50,9 @@
 		updateUI() {
 			// console.log("TCL: AnalysisAction -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
+			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('id', 'action-'+this.model.id);
+			this.listView.attr('data-type', 'action');
 			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
 			this.listView.find('.timaat-annotation-action-name').html(this.model.analysisActionTranslations[0].name);
@@ -101,7 +104,12 @@
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
+					// TODO
+					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curAction = action;
@@ -123,8 +131,13 @@
 				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/1000.0, action.model.endTime/1000.0);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
+				if (TIMAAT.VideoPlayer.curAnnotation) {
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+				}
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+					// TODO
+					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
 			});
 			// console.log("TCL: AnalysisAction -> addUI -> this.updateUI()");
 			this.updateUI();

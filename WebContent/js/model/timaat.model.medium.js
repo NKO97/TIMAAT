@@ -148,34 +148,6 @@
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
-
-			// attach medium handlers
-			// $(this.listView).on('click', this, function(ev) {
-			// 	// console.log("TCL: Medium -> constructor -> open medium datasheet");
-			// 	ev.stopPropagation();
-			// 	// show tag editor - trigger popup
-			// 	TIMAAT.UI.hidePopups();
-			// 	$('.form').hide();
-			// 	$('.medium-nav-tabs').show();
-			// 	$('.medium-data-tabs').hide();
-			// 	$('.nav-tabs a[href="#mediumDatasheet"]').tab("show");
-			// 	$('#medium-metadata-form').data('medium', medium);
-			// 	TIMAAT.MediumDatasets.mediumFormDataSheet("show", mediumType, medium);
-			// 	// medium.listView.find('.timaat-mediadatasets-medium-list-tags').popover('show');
-			// });
-
-			// annotate handler
-			// this.listView.find('.timaat-mediadatasets-medium-annotate').on('click', this, function(ev) {
-			// 	ev.stopPropagation();
-			// 	TIMAAT.UI.hidePopups();
-			// 	TIMAAT.UI.showComponent('videoplayer');
-			// 	console.log("TCL: Medium -> constructor -> medium", medium);
-			// 	// setup video in player
-			// 	TIMAAT.VideoPlayer.setupVideo(medium.model);
-			// 	// load video annotations from server
-			// 	TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
-			// });
-
 		}
 
 		updateUI() {

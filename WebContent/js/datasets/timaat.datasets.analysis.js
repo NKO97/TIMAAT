@@ -358,13 +358,13 @@
     },
 
     loadAnalysisDataTables: async function() {
-      console.log("TCL: loadAnalysisDataTables: async function()");
+      // console.log("TCL: loadAnalysisDataTables: async function()");
       TIMAAT.AnalysisDatasets.setupAnalysisMethodsDataTable();
       TIMAAT.AnalysisDatasets.setupAnnotationAnalysisDataTable();
     },
 
     annotationAnalysisMethodAddModal: function(annotationId, analysisMethodType) {
-      console.log("TCL: annotationId, analysisMethodType", annotationId, analysisMethodType);
+      // console.log("TCL: annotationId, analysisMethodType", annotationId, analysisMethodType);
       let modal = $('#timaat-videoplayer-analysis-add');
       modal.data('analysisMethodTypeId', analysisMethodType.id);
       modal.data('annotationId', annotationId);
