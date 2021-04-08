@@ -307,7 +307,7 @@
 				TIMAAT.UI.displayDataSetContentArea('mediumcollection-mediaItems');
 				TIMAAT.UI.subNavTab = 'items';
 				TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();
-		
+
 				if (TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
 					TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/' + id + '/hasMediaList')
 					TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
@@ -483,30 +483,19 @@
     	// console.log("TCL: setMediumCollectionList");
 			if ( this.mediaCollectionList == null ) return;
 
-			TIMAAT.UI.clearLastSelection('mediumCollection');
-			$('#timaat-mediumcollectiondatasets-mediumcollection-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediumcollectiondatasets-mediumcollection-list').empty();
-			
-			// set ajax data source
 			if ( this.dataTableMediaCollectionList ) {
 				this.dataTableMediaCollectionList.ajax.reload(null, false);
 			}
+			TIMAAT.UI.clearLastSelection('mediumCollection');
 		},
 
 		setMediumCollectionItemList: function() {
-    	// console.log("TCL: setMediumCollectionItemList");
+    	console.log("TCL: setMediumCollectionItemList");
 			if ( this.mediaCollectionItemList == null ) return;
 
-			this.clearLastItemSelection();
-			$('#timaat-mediumcollectiondatasets-mediumcollection-items-loader').remove();
-			// clear old UI list
-			$('#timaat-mediumcollectiondatasets-mediumcollection-items').empty();
-			
-			// set ajax data source
 			if ( this.dataTableMediaCollectionItemList ) {
-        // console.log("TCL: this.dataTableMediaCollectionItemList", this.dataTableMediaCollectionItemList);
 				this.dataTableMediaCollectionItemList.ajax.reload(null, false);
+				// this.clearLastItemSelection();
 			}
 		},
 
@@ -688,13 +677,13 @@
 						return data.data;       
 					}
 				},
-				"rowCallback": function( row, data ) {
-					// console.log("TCL: rowCallback: row, data", row, data);
-					if (data.id == TIMAAT.MediumCollectionDatasets.selectedMediumCollectionItemId) {
-						TIMAAT.MediumCollectionDatasets.clearLastItemSelection();
-						$(row).addClass('selected');
-					}
-				},
+				// "rowCallback": function( row, data ) {
+				// 	// console.log("TCL: rowCallback: row, data", row, data);
+				// 	if (data.id == TIMAAT.MediumCollectionDatasets.selectedMediumCollectionItemId) {
+				// 		TIMAAT.MediumCollectionDatasets.clearLastItemSelection();
+				// 		$(row).addClass('selected');
+				// 	}
+				// },
 				"createdRow": function(row, data, dataIndex) {
         	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
 					let mediumCollectionElement = $(row);
@@ -788,11 +777,11 @@
 						if (index < TIMAAT.MediumCollectionDatasets.mediaCollectionItemList.length) {
 							let sortOrder = TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index].sortOrder;
 							await TIMAAT.MediumCollectionService.updateCollectionItem(collectionId,
-																																			 mediumId,
-																																			 TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index+1].sortOrder);
+																																			  mediumId,
+																																			  TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index+1].sortOrder);
 							await TIMAAT.MediumCollectionService.updateCollectionItem(collectionId, 
-																																			 TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index+1].id.mediumId,
-																																			 sortOrder);
+																																			  TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index+1].id.mediumId,
+																																			  sortOrder);
 						}
 						await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
 					});
@@ -998,10 +987,12 @@
 						let index = TIMAAT.MediumCollectionDatasets.mediaCollectionList.findIndex(({model}) => model.id == mediumCollection.id);
 						let selectedMediumCollection = TIMAAT.MediumCollectionDatasets.mediaCollectionList[index];
 						TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', mediumCollection.id);
-						
 						if (TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
 							TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/'+mediumCollection.id+'/hasMediaList')
 							TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
+						// } else {
+						// 	await TIMAAT.MediumCollectionDatasets.setupMediumCollectionItemListDataTable(id);
+						// 	TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();
 						}
 
 						// console.log("TCL: selectedMediumCollection", selectedMediumCollection);
@@ -1517,21 +1508,21 @@
 			$('#timaat-mediumcollectiondatasets-metadata-title').focus();
 		},
 
-		selectLastItemSelection: function(id) {
-      if (this.selectedMediumCollectionItemId && this.selectedMediumCollectionItemId != id) {
-        $(this.dataTableMediaCollectionItemList.row('#'+this.selectedMediumCollectionItemId).node()).removeClass('selected');
-      }
-			$(this.dataTableMediaCollectionItemList.row('#'+id).node()).addClass('selected');
-			this.selectedMediumCollectionItemId = id;
-		},
+		// selectLastItemSelection: function(id) {
+    //   if (this.selectedMediumCollectionItemId && this.selectedMediumCollectionItemId != id) {
+    //     $(this.dataTableMediaCollectionItemList.row('#'+this.selectedMediumCollectionItemId).node()).removeClass('selected');
+    //   }
+		// 	$(this.dataTableMediaCollectionItemList.row('#'+id).node()).addClass('selected');
+		// 	this.selectedMediumCollectionItemId = id;
+		// },
 
-		clearLastItemSelection: function () {
-			let i = 0;
-			for (; i < this.mediaCollectionItemList.length; i++) {
-        $(this.dataTableMediaCollectionItemList.row('#'+this.mediaCollectionItemList[i].id.mediumId).node()).removeClass('selected');
-			}
-			this.selectedMediumCollectionItemId = null;
-		},
+		// clearLastItemSelection: function () {
+		// 	let i = 0;
+		// 	for (; i < this.mediaCollectionItemList.length; i++) {
+    //     $(this.dataTableMediaCollectionItemList.row('#'+this.mediaCollectionItemList[i].id.mediumId).node()).removeClass('selected');
+		// 	}
+		// 	this.selectedMediumCollectionItemId = null;
+		// },
 
 	}
 	

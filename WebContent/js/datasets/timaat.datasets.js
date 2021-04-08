@@ -31,7 +31,7 @@
 			TIMAAT.AnalysisDatasets.init();
 		},
 
-		load: async function() {
+		load: function() {
 			// Datasets
 			TIMAAT.ActorDatasets.load();
 			TIMAAT.EventDatasets.load();

@@ -108,7 +108,7 @@
 			
 			// event form handlers
 			// submit event metadata button functionality
-			$('#event-datasheet-form-submit-button').on('click', async function(ev) {
+			$('#event-metadata-form-submit-button').on('click', async function(ev) {
 				// continue only if client side validation has passed
 				ev.preventDefault();
 				if (!$('#event-metadata-form').valid()) return false;
@@ -150,7 +150,7 @@
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#event-datasheet-form-dismiss-button').on('click', async function(event) {
+			$('#event-metadata-form-dismiss-button').on('click', async function(event) {
 				$('.add-event-button').prop('disabled', false);
 				$('.add-event-button :input').prop('disabled', false);
 				$('.add-event-button').show();
@@ -266,17 +266,17 @@
 			});
 
 			// key press events
-			$('#event-datasheet-form-submit-button').keypress(function(event) {
+			$('#event-metadata-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#event-datasheet-form-submit-button').trigger('click');
+					$('#event-metadata-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#event-datasheet-form-dismiss-button').keypress(function(event) {
+			$('#event-metadata-form-dismiss-button').keypress(function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#event-datasheet-form-dismiss-button').trigger('click');
+					$('#event-metadata-form-dismiss-button').trigger('click');
 				}
 			});
 			
@@ -299,16 +299,11 @@
     	// console.log("TCL: events", events);
 			if ( this.events == null ) return;
 
-			TIMAAT.UI.clearLastSelection('event');
-
-			$('#timaat-eventdatasets-event-list-loader').remove();
-			// clear old UI list
-			$('#timaat-eventdatasets-event-list').empty();
-
 			// set ajax data source
 			if ( this.dataTableEvent ) {
 				// this.dataTableEvent.ajax.url('/TIMAAT/api/event/list');
 				this.dataTableEvent.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('event');
 			}
 			this.eventsLoaded = true;
 		},
@@ -328,7 +323,7 @@
 
 			this.initFormDataSheetData();
 			this.initEventFormDataForEdit();
-			$('#event-datasheet-form-submit-button').html('Add');
+			$('#event-metadata-form-submit-button').html('Add');
 			$('#eventFormHeader').html("Add Event");
 			// TODO event domain
 			// TODO event type
@@ -347,8 +342,8 @@
 				$('.form-buttons :input').prop('disabled', false);
 				$('.form-buttons').show();
 				this.initFormForShow(data.model);
-				$('#event-datasheet-form-submit-button').hide();
-				$('#event-datasheet-form-dismiss-button').hide();
+				$('#event-metadata-form-submit-button').hide();
+				$('#event-metadata-form-dismiss-button').hide();
 				$('#eventFormHeader').html("Event Datasheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
@@ -356,7 +351,7 @@
 				$('.add-event-button').hide();
 				$('.add-event-button').prop('disabled', true);
 				$('.add-event-button :input').prop('disabled', true);
-				$('#event-datasheet-form-submit-button').html("Save");
+				$('#event-metadata-form-submit-button').html("Save");
 				$('#eventFormHeader').html("Edit Event");
 			}
 
@@ -547,8 +542,8 @@
 			$('#timaat-eventdatasets-metadata-event-ended-at').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#event-metadata-form :input').prop('disabled', false);
 			this.hideFormButtons();
-			$('#event-datasheet-form-submit-button').show();
-			$('#event-datasheet-form-dismiss-button').show();
+			$('#event-metadata-form-submit-button').show();
+			$('#event-metadata-form-dismiss-button').show();
 			$('#timaat-eventdatasets-metadata-event-name').focus();
 		},
 

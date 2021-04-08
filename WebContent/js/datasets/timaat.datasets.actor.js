@@ -2631,8 +2631,6 @@
 		load: function() {
 			this.loadActors();
 			this.loadActorTypes();
-			this.setPersonList();
-			this.setCollectiveList();
 			this.loadAddressTypes();
 			this.loadEmailAddressTypes();
 			this.loadPhoneNumberTypes();
@@ -2648,10 +2646,11 @@
 			$('#actor-metadata-form').data('type', 'actor');
 			TIMAAT.UI.addSelectedClassToSelectedItem('actor', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
+			// TIMAAT.UI.clearLastSelection('actor');
+			this.setActorList();
 		},
 
 		loadActorDataTables: async function() {
-			// console.log("TCL: loadActorDataTables: async function()");
 			this.setupActorDataTable();
 			this.setupPersonDataTable();
 			this.setupCollectiveDataTable();
@@ -2661,7 +2660,7 @@
 			$('#actor-metadata-form').data('type', type);
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			TIMAAT.UI.clearLastSelection(type);
+			// TIMAAT.UI.clearLastSelection(type);
 			switch (type) {
 				case 'person':
 					this.setPersonList();
@@ -2687,9 +2686,6 @@
 		setActorTypeList: function(actorTypes) {
 			// console.log("TCL: actorTypes", actorTypes);
 			if ( !actorTypes ) return;
-			$('#timaat-actortype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actortype-list').empty();
 			// setup model
 			var actTypes = Array();
 			actorTypes.forEach(function(actorType) { 
@@ -2701,55 +2697,33 @@
 		},
 		
 		setActorList: function() {
-			console.log("TCL: setActorList");
 			if ( this.actors == null ) return;
-
-			TIMAAT.UI.clearLastSelection('actor');
-			$('#timaat-actordatasets-actor-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-list').empty();
-
-			// set ajax data source
 			if ( this.dataTableActor ) {
 				this.dataTableActor.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('actor');
 			}
 			this.actorsLoaded = true;
 		},
 
 		setPersonList: function() {
-			console.log("TCL: setPersonList");
 			if ( this.persons == null) return;
-			
-			$('#timaat-actordatasets-person-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-person-list').empty();
-
-			// set ajax data source
 			if ( this.dataTablePerson ) {
 				this.dataTablePerson.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('person');
 			}
 		},
 
 		setCollectiveList: function() {
-			console.log("TCL: setCollectiveList");
 			if ( this.collectives == null ) return;
-			
-			$('#timaat-actordatasets-collective-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-collective-list').empty();
-
-			// set ajax data source
 			if ( this.dataTableCollective ) {
 				this.dataTableCollective.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('collective');
 			}
 		},
 
 		setActorNameList: function(actor) {
 			console.log("TCL: setActorNameList -> actor", actor);
 			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-name-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-name-list').empty();
 			// setup model
 			var names = Array();
 			actor.model.actorNames.forEach(function(name) { 
@@ -2762,9 +2736,6 @@
 		setActorHasAddressList: function(actor) {
 			// console.log("TCL: setActorHasAddressList -> actor", actor);
 			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-address-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-address-list').empty();
 			// setup model
 			var actorHasAddrs = Array();
 			actor.model.actorHasAddresses.forEach(function(actorHasAddress) { 
@@ -2779,9 +2750,6 @@
 		setActorHasEmailAddressList: function(actor) {
 			// console.log("TCL: setActorHasEmailAddressList -> actor", actor);
 			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-emailaddress-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-emailaddress-list').empty();
 			// setup model
 			var actorHasEmailAddrs = Array();
 			actor.model.actorHasEmailAddresses.forEach(function(actorHasEmailAddress) { 
@@ -2794,9 +2762,6 @@
 		setActorHasPhoneNumberList: function(actor) {
 			// console.log("TCL: setActorHasPhoneNumberList -> actor", actor);
 			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-phonenumber-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-phonenumber-list').empty();
 			// setup model
 			var actorHasPhoneNmbrs = Array();
 			actor.model.actorHasPhoneNumbers.forEach(function(actorHasPhoneNumber) { 
@@ -2809,9 +2774,6 @@
 		setPersonIsMemberOfCollectiveList: function(actor, type) {
     	// console.log("TCL ~ $ ~ actor, type", actor, type);
 			if ( !actor ) return;
-			$('#timaat-actordatasets-actor-memberofcollective-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-actor-memberofcollective-list').empty();
 			// setup model
 			var actorIsMOfCs = Array();
 			switch (type) {
@@ -2839,9 +2801,6 @@
 		setAddressTypeList: function(addressTypes) {
 			// console.log("TCL: setAddressTypeList -> addressTypes", addressTypes);
 			if ( !addressTypes ) return;
-			$('#timaat-actordatasets-addresstype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-addresstype-list').empty();
 			// setup model
 			var addrTypes = Array();
 			addressTypes.forEach(function(addressType) { 
@@ -2854,9 +2813,6 @@
 		setEmailAddressTypeList: function(emailAddressTypes) {
 			// console.log("TCL: setAddressTypeList -> emailAddressTypes", emailAddressTypes);
 			if ( !emailAddressTypes ) return;
-			$('#timaat-actordatasets-emailaddresstype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-emailaddresstype-list').empty();
 			// setup model
 			var emailAddrTypes = Array();
 			emailAddressTypes.forEach(function(emailAddressType) { 
@@ -2869,9 +2825,6 @@
 		setPhoneNumberTypeList: function(phoneNumberTypes) {
 			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
-			$('#timaat-actordatasets-phonenumbertype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-actordatasets-phonenumbertype-list').empty();
 			// setup model
 			var phoneNmbrTypes = Array();
 			phoneNumberTypes.forEach(function(phoneNumberType) { 
@@ -2922,8 +2875,7 @@
 		},
 
 		actorFormDataSheet: async function(action, type, data) {
-			// console.log("TCL: action, type, data", action, type, data);
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
+			// console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
 			$('.carousel-inner').empty();
 			$('.carousel-indicators').empty();
 			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
@@ -2977,12 +2929,10 @@
 
 			if ( action == 'show') {
 				$('#actor-metadata-form :input').prop('disabled', true);
-				$('.form-buttons').prop('disabled', false);
-				$('.form-buttons :input').prop('disabled', false);
-				$('.form-buttons').show();
-				this.initFormsForShow(data.model);
-				$('#actor-metadata-form-submit-button').hide();
-				$('#actor-metadata-form-dismiss-button').hide();
+				// $('.form-buttons').prop('disabled', false);
+				// $('.form-buttons :input').prop('disabled', false);
+				// $('.form-buttons').show();
+				this.initFormForShow();
 				$('#actor-datasheet-form-profile-image-selection').hide();
 				$('#actorFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
 				if (type == 'person') {
@@ -3086,7 +3036,6 @@
 
 		actorFormNames: function(action, actor) {
 			console.log("TCL: actorFormNames: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-name-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3157,7 +3106,7 @@
 			}
 			if ( action == 'show') {
 				$('#actor-names-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-names-form-submit').hide();
 				$('#actor-names-form-dismiss').hide();
 				$('[data-role="new-name-fields"').hide();
@@ -3197,7 +3146,6 @@
 
 		actorFormAddresses: function(action, actor) {
     	console.log("TCL: actorFormAddresses: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-actorhasaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3363,7 +3311,7 @@
 			}
 			if ( action == 'show') {
 				$('#actor-addresses-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-addresses-form-submit').hide();
 				$('#actor-addresses-form-dismiss').hide();
 				$('[data-role="new-actorhasaddress-fields"').hide();
@@ -3396,7 +3344,6 @@
 
 		actorFormEmailAddresses: function(action, actor) {
     	console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3456,7 +3403,7 @@
 			}
 			if ( action == 'show') {
 				$('#actor-emailaddresses-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-emailaddresses-form-submit').hide();
 				$('#actor-emailaddresses-form-dismiss').hide();
 				$('[data-role="new-actorhasemailaddress-fields"').hide();
@@ -3484,7 +3431,6 @@
 
 		actorFormPhoneNumbers: function(action, actor) {
     	console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3547,7 +3493,7 @@
 			}
 			if ( action == 'show') {
 				$('#actor-phonenumbers-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-phonenumbers-form-submit').hide();
 				$('#actor-phonenumbers-form-dismiss').hide();
 				$('[data-role="new-actorhasphonenumber-fields"').hide();
@@ -3575,7 +3521,6 @@
 
 		actorFormMemberOfCollectives: async function(action, type, actor) {
     	console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-personismemberofcollective-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3635,7 +3580,7 @@
 			}
 			if ( action == 'show') {
 				$('#actor-memberofcollectives-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-memberofcollectives-form-submit').hide();
 				$('#actor-memberofcollectives-form-dismiss').hide();
 				$('[data-role="new-personismemberofcollective-fields"]').hide();
@@ -3724,7 +3669,6 @@
 
 		actorFormRoles: async function(action, actor) {
 			console.log("TCL: actorFormRoles: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-actorhasrole-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3788,7 +3732,7 @@
 
 			if ( action == 'show') {
 				$('#actor-roles-form :input').prop('disabled', true);
-				this.initFormsForShow(actor.model);
+				this.initFormForShow();
 				$('#actor-roles-form-submit').hide();
 				$('#actor-roles-form-dismiss').hide();
 				$('.actorroles-form-divider').hide();
@@ -3812,7 +3756,6 @@
 
 		actorFormRoleMedium: async function(action, actor) {
 			console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actor.model.actorType.actorTypeTranslations[0].type, actor.model.id);
 			var node = document.getElementById("dynamic-actorroleinmedium-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3884,7 +3827,7 @@
 
 				if ( action == 'show') {
 					$('#actor-role-in-medium-form :input').prop('disabled', true);
-					this.initFormsForShow(actor.model);
+					this.initFormForShow();
 					$('#actor-role-in-medium-form-submit').hide();
 					$('#actor-role-in-medium-form-dismiss').hide();
 					$('.actorrolemedium-form-divider').hide();
@@ -4471,7 +4414,7 @@
       };
       
 			await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
-			TIMAAT.UI.addSelectedClassToSelectedItem(actorModel.actorType.actorTypeTranslations[0].type, actorModel.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(actorModel.actorType.actorTypeTranslations[0].type, actorModel.id);
 		},
 
 		// TODO currently only for Producer.
@@ -5402,10 +5345,12 @@
 			});
 		},
 
-		initFormsForShow: function(model) {
-			$('.actordatasheet-form-edit-button').prop('disabled', false);
-			$('.actordatasheet-form-edit-button :input').prop('disabled', false);
-			$('.actordatasheet-form-edit-button').show();
+		initFormForShow: function() {
+			$('.form-buttons').prop('disabled', false);
+			$('.form-buttons :input').prop('disabled', false);
+			$('.form-buttons').show();
+      $('.form-submit-button').hide();
+      $('.form-dismiss-button').hide();
 		},
 
 		initFormDataSheetData: function(type) {
@@ -5494,21 +5439,22 @@
 					"dataSrc": function(data) {
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (last)", TIMAAT.ActorDatasets.actor);
 						// setup model
-						var acts = Array();
+						var actorArray = Array();
 						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
-								acts.push(new TIMAAT.Actor(actor, 'actor'));
+								actorArray.push(new TIMAAT.Actor(actor, 'actor'));
 							}
 						});
-						TIMAAT.ActorDatasets.actors = acts;
+						TIMAAT.ActorDatasets.actors = actorArray;
 						TIMAAT.ActorDatasets.actors.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (current)", TIMAAT.ActorDatasets.actor);
 						return data.data; // data.map(actor => new TIMAAT.Actor(actor));;
 					}
 				},
 				"rowCallback": function( row, data ) {
-					// console.log("TCL: row, data", row, data);
+					// console.log("TCL: rowCallback(actor) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
+						console.log("TCL: clear last selection 'actor'");
 						TIMAAT.UI.clearLastSelection('actor');
 						$(row).addClass('selected');
 					}
@@ -5607,21 +5553,22 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.ActorDatasets.persons (last)", TIMAAT.ActorDatasets.persons);
 						// setup model
-						var acts = Array();
+						var personArray = Array();
 						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
-								acts.push(new TIMAAT.Actor(actor, 'person'));
+								personArray.push(new TIMAAT.Actor(actor, 'person'));
 							}
 						});
-						TIMAAT.ActorDatasets.persons = acts;
+						TIMAAT.ActorDatasets.persons = personArray;
 						TIMAAT.ActorDatasets.persons.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.persons (current)", TIMAAT.ActorDatasets.persons);
 						return data.data;
 					}
 				},
 				"rowCallback": function( row, data ) {
-					// console.log("TCL: row, data", row, data);
+					// console.log("TCL: rowCallback(person) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
+						console.log("TCL: clear last selection 'person'");
 						TIMAAT.UI.clearLastSelection('person');
 						$(row).addClass('selected');
 					}
@@ -5711,21 +5658,22 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.ActorDatasets.collectives (last)", TIMAAT.ActorDatasets.collectives);
 						// setup model
-						var acts = Array();
+						var collectiveArray = Array();
 						data.data.forEach(function(actor) { 
 							if ( actor.id > 0 ) {
-								acts.push(new TIMAAT.Actor(actor, 'collective'));
+								collectiveArray.push(new TIMAAT.Actor(actor, 'collective'));
 							}
 						});
-						TIMAAT.ActorDatasets.collectives = acts;
+						TIMAAT.ActorDatasets.collectives = collectiveArray;
 						TIMAAT.ActorDatasets.collectives.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.collectives (current)", TIMAAT.ActorDatasets.collectives);
 						return data.data;
 					}
 				},
 				"rowCallback": function( row, data ) {
-					// console.log("TCL: row, data", row, data);
+					// console.log("TCL: rowCallback(collective) -  row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
+						console.log("TCL: clear last selection 'collective'");
 						TIMAAT.UI.clearLastSelection('collective');
 						$(row).addClass('selected');
 					}
@@ -5777,6 +5725,7 @@
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItemId) {
+    	console.log("TCL: setDataTableOnItemSelect -> type, selectedItemId", type, selectedItemId);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			switch (TIMAAT.UI.subNavTab) {
@@ -5823,14 +5772,14 @@
 				break;
 			}
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
-			$('#actor-metadata-form').data('type', type);
-			$('#actor-metadata-form').data('actor', selectedItem);
 			if (type == 'actor') {
 				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + selectedItem.model.id);
 				type = selectedItem.model.actorType.actorTypeTranslations[0].type;
 			} else {
 				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedItem.model.id);
 			}
+			$('#actor-metadata-form').data('type', type);
+			$('#actor-metadata-form').data('actor', selectedItem);
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'actor');
 		},
 

@@ -152,18 +152,11 @@
 
 		setLanguagesList: function() {
 			if ( this.languages == null) return;
-
-      TIMAAT.UI.clearLastSelection('language');
-
-			$('#timaat-languagelists-language-list-loader').remove();
-			// clear old UI list
-			$('#timaat-languagelists-language-list').empty();
-
-			// set ajax data source
 			if ( this.dataTableLanguages ) {
 				this.dataTableLanguages.ajax.reload(null, false);
+        TIMAAT.UI.clearLastSelection('language');
 			}
-		},
+    },
 
 		setupLanguageDataTable: function() {			
       // console.log("TCL: setupLanguageDataTable");

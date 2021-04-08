@@ -223,6 +223,7 @@ public class EndpointMediumCollection {
 		String sql;
 		List<Medium> mediumList = new ArrayList<>();
 		if (id == 0) { // init datatable is required but calls function with id 0
+			// System.out.println("No collection -> no entries");
 			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, new ArrayList<>())).build();
 		}
 		MediaCollection mediaCollection = entityManager.find(MediaCollection.class, id);
@@ -259,6 +260,7 @@ public class EndpointMediumCollection {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
+			// System.out.println("Collection has #entries: "+ filteredMediumList.size());
 			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = mediaCollectionListQuery+" ORDER BY "+column+" "+direction;
@@ -268,6 +270,7 @@ public class EndpointMediumCollection {
 			// mediumList = castList(Medium.class, query.getResultList());
 			mediaCollectionHasMediumList = castList(MediaCollectionHasMedium.class, query.getResultList());
 		}
+		// System.out.println("Collection has #entries: "+ mediaCollectionHasMediumList.size());
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediaCollectionHasMediumList)).build();
 	}
 
@@ -412,16 +415,15 @@ public class EndpointMediumCollection {
 	@Path("{id}/media")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	public Response getCollectionMedia(
-			@PathParam("id") int id,
-			@QueryParam("draw") Integer draw,
-			@QueryParam("start") Integer start,
-			@QueryParam("length") Integer length,
-			@QueryParam("mediumsubtype") String mediumSubType,
-			@QueryParam("orderby") String orderby,
-			@QueryParam("dir") String direction,
-			@QueryParam("search") String search
-			) {
+	public Response getCollectionMedia(@PathParam("id") int id,
+																		 @QueryParam("draw") Integer draw,
+																		 @QueryParam("start") Integer start,
+																		 @QueryParam("length") Integer length,
+																		 @QueryParam("mediumsubtype") String mediumSubType,
+																		 @QueryParam("orderby") String orderby,
+																		 @QueryParam("dir") String direction,
+																		 @QueryParam("search") String search)
+  {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		if ( draw == null ) draw = 0;

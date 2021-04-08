@@ -650,9 +650,6 @@
 		setLocationTypeList: function(locationTypes) {
 			// console.log("TCL: locationTypes", locationTypes);
 			if ( !locationTypes ) return;
-			$('#timaat-locationtype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-locationtype-list').empty();
 			// setup model
 			var locTypes = Array();
 			locationTypes.forEach(function(locationType) { if ( locationType.id > 0 ) locTypes.push(new TIMAAT.LocationType(locationType)); });
@@ -663,9 +660,6 @@
 		setLocationLists: function(locations) {
 			// console.log("TCL: locations", locations);
 			if ( !locations ) return;
-			$('#timaat-location-list-loader').remove();
-			// clear old UI list
-			$('#timaat-location-list').empty();
 			// setup model
 			var locs = Array();
 			locations.forEach(function(location) { if ( location.id > 0 ) locs.push(new TIMAAT.Location(location)); });
@@ -677,9 +671,6 @@
 			// console.log("TCL: setCountryLists: function(countries)");
 			// console.log("TCL: countries", countries);
 			if ( !countries ) return;
-			$('#timaat-country-list-loader').remove();
-			// clear old UI list
-			$('#timaat-country-list').empty();
 			// setup model
 			var locs = Array();
 			countries.forEach(function(country) { 
@@ -694,9 +685,6 @@
 			// console.log("TCL: setProvinceLists: function(provinces)");
 			// console.log("TCL: provinces", provinces);
 			if ( !provinces ) return;
-			$('#timaat-province-list-loader').remove();
-			// clear old UI list
-			$('#timaat-province-list').empty();
 			// setup model
 			var locs = Array();
 			provinces.forEach(function(province) { 
@@ -711,9 +699,6 @@
 			// console.log("TCL: setCountyLists: function(counties)");
 			// console.log("TCL: counties", counties);
 			if ( !counties ) return;
-			$('#timaat-county-list-loader').remove();
-			// clear old UI list
-			$('#timaat-county-list').empty();
 			// setup model
 			var locs = Array();
 			counties.forEach(function(county) { 
@@ -728,9 +713,6 @@
 			// console.log("TCL: setCityLists: function(cities)");
 			// console.log("TCL: cities", cities);
 			if ( !cities ) return;
-			$('#timaat-city-list-loader').remove();
-			// clear old UI list
-			$('#timaat-city-list').empty();
 			// setup model
 			var locs = Array();
 			cities.forEach(function(city) { 
@@ -745,9 +727,6 @@
 			// console.log("TCL: setStreetLists: function(streets)");
 			// console.log("TCL: streets", streets);
 			if ( !streets ) return;
-			$('#timaat-street-list-loader').remove();
-			// clear old UI list
-			$('#timaat-street-list').empty();
 			// setup model
 			var locs = Array();
 			streets.forEach(function(street) { 

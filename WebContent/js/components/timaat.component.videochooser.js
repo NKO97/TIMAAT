@@ -660,7 +660,7 @@
 		},
 		
 		setCollection: function(collection) {
-    console.log("TCL: collection", collection);
+    	// console.log("TCL: collection", collection);
 			if ( this.collection == collection ) return;
 			
 			$('#timaat-videochooser-list-loading').attr('style','');

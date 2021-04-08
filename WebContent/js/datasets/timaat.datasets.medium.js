@@ -1642,14 +1642,18 @@
 
 		load: function() {
 			this.loadMedia();
+			this.loadMediaTypes();
+			// this.setAudioList();
+			// this.setDocumentList();
+			// this.setImageList();
+			// this.setSoftwareList();
+			// this.setTextList();
+			// this.setVideoList();
+			// this.setVideogameList();
+		},
+
+		loadMediaTypes: function() {
 			TIMAAT.MediumService.listMediumTypes(this.setMediumTypeList);
-			this.setAudioList();
-			this.setDocumentList();
-			this.setImageList();
-			this.setSoftwareList();
-			this.setTextList();
-			this.setVideoList();
-			this.setVideogameList();
 		},
 		
 		loadMedia: function() {
@@ -1672,11 +1676,12 @@
 		},
 
 		loadMediumSubtype: function(type) {
+    	// console.log("TCL: $ -> type", type);
 			$('#medium-metadata-form').data('type', type);
 			$('#videoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			TIMAAT.UI.clearLastSelection(type);
+			// TIMAAT.UI.clearLastSelection(type);
 			switch (type) {
 				case 'audio':
 					this.setAudioList();
@@ -1705,9 +1710,6 @@
 		setMediumTypeList: function(mediaTypes) {
 			// console.log("TCL: mediaTypes", mediaTypes);
 			if ( !mediaTypes ) return;
-			$('#timaat-mediatype-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediatype-list').empty();
 			// setup model
 			var medTypes = Array();
 			mediaTypes.forEach(function(mediaType) { 
@@ -1719,18 +1721,12 @@
 		},
 
 		setMediumList: function() {
-    	console.log("TCL: setMediumList");
 			if ( this.media == null ) return;
 
-			TIMAAT.UI.clearLastSelection('medium');
-			$('#timaat-mediadatasets-medium-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-medium-list').empty();
-			
 			// set ajax data source
 			if ( this.dataTableMedia ) {
-				// this.dataTableMedia.ajax.url('/TIMAAT/api/medium/list');
 				this.dataTableMedia.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('medium');
 			}
 			this.mediaLoaded = true;
 		},
@@ -1738,15 +1734,11 @@
 		setAudioList: function() {
 			// console.log("TCL: setAudioList");
 			if ( this.audios == null ) return;
-			
-			$('#timaat-mediadatasets-audio-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-audio-list').empty();
 
 			// set ajax data source
 			if ( this.dataTableAudio ) {
-				// TIMAAT.MediumDatasets.dataTableAudio.ajax.url('/TIMAAT/api/medium/audio/list');
 				this.dataTableAudio.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('audio');
 			}
 		},
 
@@ -1754,94 +1746,64 @@
 			// console.log("TCL: setDocumentList");
 			if ( this.documents == null ) return;
 
-			$('#timaat-mediadatasets-document-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-document-list').empty();
-
 			// set ajax data source
 			if ( this.dataTableDocument ) {
-				// this.dataTableDocument.ajax.url('/TIMAAT/api/medium/document/list');
 				this.dataTableDocument.ajax.reload(null, false);
-			}
+				TIMAAT.UI.clearLastSelection('document');
+		}
 		},
 
 		setImageList: function() {
 			// console.log("TCL: setImageList");
 			if ( this.images == null ) return;
 
-			$('#timaat-mediadatasets-image-list-loader').remove();
-			// clear old UI list
-
 			// set ajax data source
 			if ( this.dataTableImage ) {
-				// this.dataTableImage.ajax.url('/TIMAAT/api/medium/image/list');
 				this.dataTableImage.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('image');
 			}
-			$('#timaat-mediadatasets-image-list').empty();
 		},
 
 		setSoftwareList: function() {
 			// console.log("TCL: setSoftwareList");
 			if ( this.softwares == null ) return;
 
-			$('#timaat-mediadatasets-software-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-software-list').empty();
-
 			// set ajax data source
 			if ( this.dataTableSoftware ) {
-				// this.dataTableSoftware.ajax.url('/TIMAAT/api/medium/software/list');
 				this.dataTableSoftware.ajax.reload(null, false);
-			}
+				TIMAAT.UI.clearLastSelection('software');
+		}
 		},
 
 		setTextList: function() {
 			// console.log("TCL: setTextList");
 			if ( this.texts == null ) return;
-			$('#timaat-mediadatasets-text-list-loader').remove();
-			// clear old UI list
 
 			// set ajax data source
 			if ( this.dataTableText ) {
-				// this.dataTableText.ajax.url('/TIMAAT/api/medium/text/list');
 				this.dataTableText.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('text');
 			}
-			$('#timaat-mediadatasets-text-list').empty();
 		},
 		
 		setVideoList: function() {
 			// console.log("TCL: setVideoList");
 			if ( this.videos == null ) return;
 
-			$('#timaat-mediadatasets-video-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-video-list').empty();
-
-			// set ajax data source
 			if ( this.dataTableVideo ) {
-				// this.dataTableVideo.ajax.url('/TIMAAT/api/medium/video/list');
 				this.dataTableVideo.ajax.reload(null, false);
-			}
-/*
-			if (TIMAAT.VideoChooser.initialized == false) {
-				TIMAAT.VideoChooser.setMedia();
-				TIMAAT.VideoChooser.setVideoList(this.videos.model);
-				TIMAAT.VideoChooser.initialized = true;
-			}
-*/
+				TIMAAT.UI.clearLastSelection('video');
+		}
 		},
 
 		setVideogameList: function() {
 			// console.log("TCL: setVideogameList");
 			if ( this.videogames == null ) return;
-			$('#timaat-mediadatasets-videogame-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-videogame-list').empty();
 
 			// set ajax data source
 			if ( this.dataTableVideogame ) {
-				// this.dataTableVideogame.ajax.url('/TIMAAT/api/medium/videogame/list');
 				this.dataTableVideogame.ajax.reload(null, false);
+				TIMAAT.UI.clearLastSelection('videogame');
 			}
 		},
 
@@ -1849,9 +1811,6 @@
 		setMediumTitleList: function(medium) {
 			// console.log("TCL: setMediumTitleList -> medium", medium);
 			if ( !medium ) return;
-			$('#timaat-mediadatasets-title-list-loader').remove();
-			// clear old UI list
-			$('#timaat-mediadatasets-title-list').empty();
 			// setup model
 			var mediumTitles = Array();
 			medium.model.titles.forEach(function(title) { 
@@ -1864,9 +1823,6 @@
 		setMediumLanguageTrackList: function(medium) {
 			// console.log("TCL: setMediumLanguageTrackList -> medium", medium);
 			if ( !medium ) return;
-			$('#timaat-languagetrack-list-loader').remove();
-			// clear old UI list
-			$('#timaat-languagetrack-list').empty();
 			// setup model
 			var mediumLanguageTracks = Array();
 			medium.model.mediumHasLanguages.forEach(function(languageTrack) { 
@@ -1902,7 +1858,7 @@
 
 		mediumFormDataSheet: async function(action, type, data) {
 			// console.log("TCL: action, type, data", action, type, data);
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			$('#medium-metadata-form').trigger('reset');
 			this.initFormDataSheetData(type);
 			mediumFormMetadataValidator.resetForm();
@@ -2002,7 +1958,7 @@
 
 		mediumFormPreview: function(type, data) {
 			console.log("TCL: mediumFormPreview - type, data", type, data);
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			$('#medium-preview-form').trigger('reset');
 			// mediumFormMetadataValidator.resetForm();
 			
@@ -2070,7 +2026,7 @@
 
 		mediumFormTitles: function(action, medium) {
 			// console.log("TCL: mediumFormTitles: action, medium", action, medium);
-			TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
 			var node = document.getElementById("dynamic-title-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -2226,7 +2182,7 @@
 
 		mediumFormLanguageTracks: function(action, medium) {
     	// console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
-			TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
 			var node = document.getElementById("dynamic-languagetrack-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -2419,7 +2375,7 @@
 
 		mediumFormActorRoles: async function(action, medium) {
 			// console.log("TCL: mediumFormActorRoles: action, medium", action, medium);
-			TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
 			var node = document.getElementById("dynamic-actorwithrole-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -4639,14 +4595,14 @@
 				break;
 			}
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
-			$('#medium-metadata-form').data('type', type);
-			$('#medium-metadata-form').data('medium', selectedItem);
 			if (type == 'medium') {
 				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + selectedItem.model.id);
 				type = selectedItem.model.mediaType.mediaTypeTranslations[0].type;
 			} else {
 				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + type + '/' + selectedItem.model.id);
 			}
+			$('#medium-metadata-form').data('type', type);
+			$('#medium-metadata-form').data('medium', selectedItem);
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'medium');
 		},
 

@@ -369,7 +369,7 @@
                     <select id="timaat-videochooser-list-action"
                       class="custom-select" style="max-width: 10em">
                       <option value="add">hinzufügen zu</option>
-                      <option id="timaat-videochooser-list-action-remove" value="remove">entfernen</option>
+                      <option id="timaat-videochooser-list-action-remove" value="remove">entfernen aus</option>
                     </select>
                     <div id="timaat-videochooser-list-target"
                       class="input-group-prepend">
@@ -1395,87 +1395,74 @@
                       <div class="card datatables" id="categoryset-datatable">
                         <div class="card-header">Category sets
                           <button type="button" onclick="TIMAAT.CategoryLists.addCategorySet()" class="btn btn-outline btn-success btn-sm float-right add-categoryset-button" title="Add Category Set">
-                            <i class="fas fa-plus"></i></button>
-                          </div>
-                        <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-categorylists-categoryset-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-categorylists-categoryset-table" class="table table-striped table-bordered table-hover timaat-categorylists-categoryset-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <!-- <th id="timaat-categorylists-categoryset-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
-                                  <th>Name</th>
-                                  <!-- <th style="max-width:150px;width:150px">Action</th> -->
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-categorylists-categoryset-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul class="list-group list-group-flush">
-                              <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                                <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
-                              </li>
-                            </ul>
-                            <ul id="timaat-categoryset-list" class="list-group list-group-flush">
-                            </ul> -->
-                          </div>
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-categorylists-categoryset-table" class="table table-striped table-bordered table-hover timaat-categorylists-categoryset-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <!-- <th id="timaat-categorylists-categoryset-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
+                                <th>Name</th>
+                                <!-- <th style="max-width:150px;width:150px">Action</th> -->
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-categorylists-categoryset-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul class="list-group list-group-flush">
+                            <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                            </li>
+                          </ul>
+                          <ul id="timaat-categoryset-list" class="list-group list-group-flush">
+                          </ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="category-datatable">
                         <div class="card-header">Categories
                           <button type="button" onclick="TIMAAT.CategoryLists.addCategory()" class="btn btn-outline btn-success btn-sm float-right add-category-button" title="Add Category">
-                            <i class="fas fa-plus"></i></button>
-                          </div>
-                        <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-categorylists-category-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-categorylists-category-table" class="table table-striped table-bordered table-hover timaat-categorylists-category-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <!-- <th id="timaat-categorylists-category-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
-                                  <th>Name</th>
-                                  <!-- <th style="max-width:150px;width:150px">Action</th> -->
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-categorylists-category-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul class="list-group list-group-flush">
-                              <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                                <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
-                              </li>
-                            </ul>
-                            <ul id="timaat-category-list" class="list-group list-group-flush">
-                            </ul> -->
-                          </div>
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-categorylists-category-table" class="table table-striped table-bordered table-hover timaat-categorylists-category-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <!-- <th id="timaat-categorylists-category-list-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th> -->
+                                <th>Name</th>
+                                <!-- <th style="max-width:150px;width:150px">Action</th> -->
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-categorylists-category-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul class="list-group list-group-flush">
+                            <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                              <i class="fas fa-th"></i>&nbsp;&nbsp;Alle Kategorien
+                            </li>
+                          </ul>
+                          <ul id="timaat-category-list" class="list-group list-group-flush">
+                          </ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="rolegroup-datatable">
                         <div class="card-header">RoleGroups
-                          <button type="button" onclick="TIMAAT.RoleLists.addRoleGroup()" class="btn btn-outline btn-success btn-sm float-right add-role-button" title="Add RoleGroup">
+                          <button type="button" onclick="TIMAAT.RoleLists.addRoleGroup()" class="btn btn-outline btn-success btn-sm float-right add-role-group-button" title="Add RoleGroup">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-rolelists-rolegroup-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-rolelists-rolegroup-table" class="table table-striped table-bordered table-hover timaat-rolelists-rolegroup-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Name</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-rolelists-rolegroup-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-rolelists-rolegroup-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-rolelists-rolegroup-table" class="table table-striped table-bordered table-hover timaat-rolelists-rolegroup-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Name</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-rolelists-rolegroup-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-rolelists-rolegroup-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="role-datatable">
@@ -1484,22 +1471,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-rolelists-role-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-rolelists-role-table" class="table table-striped table-bordered table-hover timaat-rolelists-role-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Name</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-rolelists-role-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-rolelists-role-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-rolelists-role-table" class="table table-striped table-bordered table-hover timaat-rolelists-role-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Name</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-rolelists-role-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-rolelists-role-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="language-datatable">
@@ -1508,22 +1490,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-lists-list-wrapper">
-                          <div id="timaat-languagelists-language-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-languagelists-language-table" class="table table-striped table-bordered table-hover timaat-languagelists-language-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Name</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-languagelists-language-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-languagelists-language-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-languagelists-language-table" class="table table-striped table-bordered table-hover timaat-languagelists-language-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Name</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-languagelists-language-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-languagelists-language-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                     </div>
@@ -1533,24 +1510,6 @@
                           <a class="nav-link content-nav-bar-link" id="list-tab-metadata">Datasheet</a>
                         </li>
                       </ul>
-                      <!-- <div class="card">
-                        <div class="card-header">Kategorien
-                          <button type="button" id="timaat-category-add" class="btn btn-outline btn-success btn-sm float-right"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <div class="timaat-category-list-wrapper" style="max-height: 480px;min-height: 100px">
-                          <table id="timaat-category-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th id="timaat-categorylists-categorylist-selectall" style="width: 1em;"><input type="checkbox" aria-label="Auswahl"></th>
-                                    <th>Name</th>
-                                    <th style="max-width:150px;width:150px">Aktion</th>
-                                  </tr>
-                                </thead>
-                              <tbody id="timaat-category-list">
-                            </tbody>
-                          </table>
-                        </div>
-                      </div> -->
                       <!-- Data tab content -->
                       <!-- category data sheet form -->
                       <form class="form dataset-content" role="form" id="category-metadata-form" name="category-metadata-form" data-type="" method="POST" novalidate>
@@ -1672,8 +1631,8 @@
                         <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
-                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-role-metadata-name">Name*</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-role-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                            <label class="col-form-label col-form-label-sm" for="timaat-role-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-role-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- role data -->
@@ -1705,8 +1664,8 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <div>
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="role-metadata-form-submit-button" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="role-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary form-submit-button" id="role-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="role-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form> 
                       <!-- role group data sheet form -->
@@ -1733,8 +1692,8 @@
                         <!-- name data -->
                         <div class="form-group datasheet-data name-data">
                           <div class="form-row">
-                            <label class="col-form-label col-form-label-sm" for="timaat-rolelists-rolegroup-metadata-name">Name*</label>
-                            <input type="text" class="form-control form-control-sm" id="timaat-rolelists-rolegroup-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
+                            <label class="col-form-label col-form-label-sm" for="timaat-rolegroup-metadata-name">Name*</label>
+                            <input type="text" class="form-control form-control-sm" id="timaat-rolegroup-metadata-name" name="name" placeholder="[Enter name]" aria-describedby="Role name" minlength="3" maxlength="200" required>
                           </div>
                         </div>
                         <!-- role group data -->
@@ -1753,8 +1712,8 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <div>
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="rolegroup-metadata-form-submit-button" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="rolegroup-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary form-submit-button" id="rolegroup-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="rolegroup-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form> 
                       <!-- language data sheet form -->
@@ -1793,8 +1752,8 @@
                         </div>
                         <!-- Save/Cancel buttons -->
                         <div class="category-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary" id="language-metadata-form-submit-button" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary" id="language-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary form-submit-button" id="language-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="language-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>
@@ -2070,21 +2029,16 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediumcollectiondatasets-mediumcollection-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediumcollectiondatasets-mediacollection-list-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediumcollection-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediumcollectiondatasets-mediumcollection-list">
-                              </tbody>
-                            </table>
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediumcollectiondatasets-mediacollection-list-table" class="table table-striped table-bordered table-hover timaat-mediadatasets-mediumcollection-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediumcollectiondatasets-mediumcollection-list">
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                       <div class="card datatables" id="medium-datatable">
@@ -2093,21 +2047,16 @@
                             <i class="fas fa-plus"></i>
                           </button> <!~~ TODO When re-added: open dialogue to ask which medium type to add, then open corresponding form ~~> --> 
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-medium-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-media-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-medium-list">
-                              </tbody>
-                            </table>
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-media-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-medium-list">
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                       <div class="card datatables" id="audio-datatable">
@@ -2116,22 +2065,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-audio-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-audio-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-audio-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-audio-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-audio-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-audio-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-audio-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="document-datatable">
@@ -2140,22 +2084,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-document-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-document-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-document-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-document-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-document-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-document-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-document-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="image-datatable">
@@ -2164,22 +2103,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-image-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-image-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-image-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-image-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-image-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-image-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-image-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="software-datatable">
@@ -2188,22 +2122,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-software-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-software-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-software-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-software-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-software-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-software-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-software-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="text-datatable">
@@ -2212,22 +2141,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-text-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-text-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-text-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-text-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-text-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-text-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-text-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="video-datatable">
@@ -2236,22 +2160,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-video-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-video-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-video-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-video-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-video-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-video-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-video-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="videogame-datatable">
@@ -2260,22 +2179,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-mediadatasets-videogame-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-mediadatasets-videogame-table" class="table table-striped table-bordered table-hover">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-mediadatasets-videogame-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-mediadatasets-videogame-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-mediadatasets-videogame-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-mediadatasets-videogame-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-mediadatasets-videogame-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                     </div>
@@ -2399,22 +2313,17 @@
                                 <div class="card-header">Collection Items
                                   <button type="button" id="timaat-mediumcollectiondatasets-mediacollection-add" class="btn btn-outline btn-success btn-sm float-right">
                                     <i class="fas fa-plus"></i></button>
-                                  </div>
-                                <div class="timaat-datasets-list-wrapper">
-                                  <div id="timaat-mediumcollectiondatasets-mediacollection-list-loader" class="text-center card-body bg-info text-white">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading data...
-                                  </div>
-                                  <div class="card-body">
-                                    <table id="timaat-mediumcollectiondatasets-mediumcollection-table" class="table table-striped table-bordered table-hover">
-                                      <thead class="thead-dark">
-                                        <tr>
-                                          <th>Title</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody id="timaat-mediumcollectiondatasets-mediacollection-list">
-                                      </tbody>
-                                    </table>
-                                  </div>
+                                </div>
+                                <div class="card-body">
+                                  <table id="timaat-mediumcollectiondatasets-mediumcollection-table" class="table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                      <tr>
+                                        <th>Title</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="timaat-mediumcollectiondatasets-mediacollection-list">
+                                    </tbody>
+                                  </table>
                                 </div>
                               </div>
                             </div> -->
@@ -2430,62 +2339,55 @@
                           <div class="card-header">Collection Items
                             <button type="button" id="mediumcollection-items-add-button" class="btn btn-outline btn-success btn-sm float-right">
                               <i class="fas fa-plus"></i></button>
-                            </div>
-                          <div class="timaat-datasets-list-wrapper">
-                            <div id="timaat-mediumcollectiondatasets-mediumcollection-items-loader" class="text-center card-body bg-info text-white">
-                              <i class="fas fa-spinner fa-spin"></i> Loading data...
-                            </div>
-                            <div class="card-body">
-                              <table id="timaat-mediumcollectiondatasets-mediumcollection-items-table" class="table table-striped table-bordered table-hover">
-                                <thead class="thead-dark">
-                                  <tr>
-                                    <th>Order</th>
-                                    <th>Title</th>
-                                    <th>Actions</th>
-                                  </tr>
-                                </thead>
-                                <tbody id="timaat-mediumcollectiondatasets-mediumcollection-items">
-                                </tbody>
-                              </table>
-                            </div>
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumcollectiondatasets-mediumcollection-items-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Order</th>
+                                  <th>Title</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumcollectiondatasets-mediumcollection-items">
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                         <!-- collection publication settings -->
                         <div class="card dataset-content" id="mediumcollection-publication"> <!-- Medium collection publication data -->
                           <div class="card-header">Collection Publication Settings
                             </div>
-                          <div class="timaat-datasets-list-wrapper">
-                            <div class="card-body mediumcollection-publication-wrapper">
-                              <div class="custom-control custom-switch mt-3">
-                                <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
-                                <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Collection publizieren</label>
-                              </div>
-                              <div class="input-group input-group-sm mt-2">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
-                                </div>
-                                <div class="text-muted form-control publicationurl">- Collection nicht publiziert -</div>
-                              </div>
-                              <hr>
-                              <div class="input-group input-group-sm">
-                                <input type="text" class="form-control publicationtitle" placeholder="Publikationstitel" aria-label="Publikationstitel">
-                              </div>
-                              <div class="custom-control custom-switch mt-2 mr-2">
-                                <input type="checkbox" class="custom-control-input" id="timaat-publication-mediacollection-protected-switch">
-                                <label class="custom-control-label" for="timaat-publication-mediacollection-protected-switch">Zugriff beschränken</label>
-                              </div>
-                              <div class="input-group input-group-sm mt-2">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text"><i class="protectedicon fas fa-lock-open"></i></span>
-                                </div>
-                              <input type="text" class="form-control username" placeholder="Username" aria-label="Username">
-                              <input type="password" class="form-control password" placeholder="Passwort" aria-label="Passwort">
-                              <div class="input-group-append">
-                                <span class="input-group-text btn reveal"><i class="fas fa-eye"></i></span>
-                              </div>
+                          <div class="card-body mediumcollection-publication-wrapper">
+                            <div class="custom-control custom-switch mt-3">
+                              <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
+                              <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Collection publizieren</label>
                             </div>
-                              <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediumcollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
+                            <div class="input-group input-group-sm mt-2">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
+                              </div>
+                              <div class="text-muted form-control publicationurl">- Collection nicht publiziert -</div>
                             </div>
+                            <hr>
+                            <div class="input-group input-group-sm">
+                              <input type="text" class="form-control publicationtitle" placeholder="Publikationstitel" aria-label="Publikationstitel">
+                            </div>
+                            <div class="custom-control custom-switch mt-2 mr-2">
+                              <input type="checkbox" class="custom-control-input" id="timaat-publication-mediacollection-protected-switch">
+                              <label class="custom-control-label" for="timaat-publication-mediacollection-protected-switch">Zugriff beschränken</label>
+                            </div>
+                            <div class="input-group input-group-sm mt-2">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="protectedicon fas fa-lock-open"></i></span>
+                              </div>
+                            <input type="text" class="form-control username" placeholder="Username" aria-label="Username">
+                            <input type="password" class="form-control password" placeholder="Passwort" aria-label="Passwort">
+                            <div class="input-group-append">
+                              <span class="input-group-text btn reveal"><i class="fas fa-eye"></i></span>
+                            </div>
+                          </div>
+                            <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediumcollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
                           </div>
                         </div>                        
                         <!-- preview form -->
@@ -2724,8 +2626,8 @@
                           </div>
                           <!-- Save/Cancel buttons -->
                           <div class="medium-datasheet-form-submit">
-                            <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="medium-metadata-form-submit-button" name="submit">Save</button>
-                            <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="medium-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                            <button type="submit" class="btn btn-primary form-submit-button" id="medium-metadata-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary form-dismiss-button" id="medium-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                           </div>
                         </form>
                         <!-- titles form -->
@@ -3007,22 +2909,17 @@
                             <i class="fas fa-plus"></i>
                           </button> <!~~ TODO When re-added: open dialogue to ask which actor type to add, then open corresponding form ~~> --> 
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-actor-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <div class="card-body">
-                            <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-actordatasets-actor-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                          <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-actordatasets-actor-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-actordatasets-actor-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="person-datatable">
@@ -3031,22 +2928,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-person-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-actordatasets-person-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-actordatasets-person-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-actordatasets-person-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-actordatasets-person-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="collective-datatable">
@@ -3054,22 +2946,17 @@
                           <button type="button" onclick="TIMAAT.ActorDatasets.addActor('collective')" class="btn btn-outline btn-success btn-sm float-right add-actor-button" title="Add Collective">                            <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-actordatasets-collective-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-actordatasets-collective-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Title</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-actordatasets-collective-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-actordatasets-collective-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-actordatasets-collective-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-actordatasets-person-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                     </div>
@@ -3402,8 +3289,8 @@
                           </div> -->
                         </div>
                         <div class="actor-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="actor-metadata-form-submit-button" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="actor-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary form-submit-button" id="actor-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="actor-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                       <!-- names form -->
@@ -4125,9 +4012,6 @@
                           </button>
                         </div>
                         <div class="timaat-location-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-location-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-location-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4145,9 +4029,6 @@
                           </button>
                         </div>
                         <div class="timaat-country-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-country-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-country-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4165,9 +4046,6 @@
                           </button>
                         </div>
                         <div class="timaat-province-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-province-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-province-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4185,9 +4063,6 @@
                           </button>
                         </div>
                         <div class="timaat-county-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-county-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-county-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4205,9 +4080,6 @@
                           </button>
                         </div>
                         <div class="timaat-city-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-city-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-city-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4225,9 +4097,6 @@
                           </button>
                         </div>
                         <div class="timaat-street-list-wrapper" style="max-height: 480px">
-                          <div id="timaat-street-list-loader" class="text-center card-body bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
                           <ul id="timaat-street-list" class="list-group list-group-flush"></ul>
                         </div>
                       </div>
@@ -4301,22 +4170,17 @@
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
-                        <div class="timaat-datasets-list-wrapper">
-                          <div id="timaat-eventdatasets-event-list-loader" class="text-center bg-info text-white">
-                            <i class="fas fa-spinner fa-spin"></i> Loading Data...
-                          </div>
-                          <div class="card-body">
-                            <table id="timaat-eventdatasets-event-table" class="table table-striped table-bordered table-hover timaat-eventdatasets-event-table">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th>Titel</th>
-                                </tr>
-                              </thead>
-                              <tbody id="timaat-eventdatasets-event-list">
-                              </tbody>
-                            </table>
-                            <!-- <ul id="timaat-eventdatasets-event-list" class="list-group list-group-flush"></ul> -->
-                          </div>
+                        <div class="card-body">
+                          <table id="timaat-eventdatasets-event-table" class="table table-striped table-bordered table-hover timaat-eventdatasets-event-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Titel</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-eventdatasets-event-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-eventdatasets-event-list" class="list-group list-group-flush"></ul> -->
                         </div>
                       </div>
                     </div>
@@ -4382,8 +4246,8 @@
                           </div>
                         </div>
                         <div class="event-datasheet-form-submit">
-                          <button type="submit" class="btn btn-primary datasheet-form-submit-button" id="event-datasheet-form-submit-button" name="submit">Save</button>
-                          <button type="button" class="btn btn-secondary datasheet-form-dismiss-button" id="event-datasheet-form-dismiss-button" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-primary form-submit-button" id="event-metadata-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary form-dismiss-button" id="event-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>
