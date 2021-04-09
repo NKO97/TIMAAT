@@ -105,6 +105,9 @@
                     TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-actorwithroles', 'medium-actorwithroles-form');
                     TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                   break;
+                  default:
+                    this.redirectToDefaultView();
+                  break;
                 }
               }
             }
@@ -152,6 +155,9 @@
                           TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-actorwithroles', 'medium-actorwithroles-form');
                           TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                         break;
+                        default:
+                          this.redirectToDefaultView();
+                        break;
                       }
                     }
                   }
@@ -159,7 +165,12 @@
                     TIMAAT.UI.clearLastSelection(pathSegments[1]);
                     TIMAAT.MediumDatasets.loadMediumSubtype(pathSegments[1]);
                     TIMAAT.UI.displayComponent('medium', pathSegments[1]+'-tab', pathSegments[1]+'-datatable');
+                  } else {
+                      this.redirectToDefaultView();
                   }
+                break;
+                default:
+                  this.redirectToDefaultView();
                 break;
               }
             }
@@ -201,6 +212,9 @@
                   TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-publication', 'mediumcollection-publication');
                   TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
                   break;
+                  default:
+                    this.redirectToDefaultView();
+                  break;
                 }
               }
             }
@@ -210,6 +224,9 @@
               case 'list': //* #mediumCollection/list
                 TIMAAT.MediumCollectionDatasets.loadMediaCollections();
                 TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
               }
             }
@@ -262,6 +279,9 @@
                   case 'rolesInMedia': //* #actor/:id/languages
                     TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-role-in-medium', 'actor-role-in-medium-form');
                     TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
+                  break;
+                  default:
+                    this.redirectToDefaultView();
                   break;
                 }
               }
@@ -317,6 +337,9 @@
                           TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-role-in-medium', 'actor-role-in-medium-form');
                           TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
                         break;
+                        default:
+                          this.redirectToDefaultView();
+                        break;
                       }
                     }
                   }
@@ -324,7 +347,12 @@
                     TIMAAT.UI.clearLastSelection(pathSegments[1]);
                     TIMAAT.ActorDatasets.loadActorSubtype(pathSegments[1]);
                     TIMAAT.UI.displayComponent('actor', pathSegments[1]+'-tab', pathSegments[1]+'-datatable');
+                  } else {
+                    this.redirectToDefaultView();
                   }
+                break;
+                default:
+                  this.redirectToDefaultView();
                 break;
               }
             }
@@ -353,6 +381,9 @@
             else { // other event form than datasheet
               switch (pathSegments[2]) {
                 //* no further data tabs currently available
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
@@ -362,6 +393,9 @@
               case 'list': //* #event/list
                 TIMAAT.EventDatasets.loadEvents();
                 TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
             }
           }
@@ -389,6 +423,9 @@
             else { // other category form than datasheet
               switch (pathSegments[2]) {
                 //* no further data tabs currently available
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
@@ -398,6 +435,9 @@
               case 'list': //* #category/list
                 TIMAAT.CategoryLists.loadCategories();
                 TIMAAT.UI.displayComponent('category', 'category-tab', 'category-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
             }
           }
@@ -425,6 +465,9 @@
             else { // other category set form than datasheet
               switch (pathSegments[2]) {
                 //* no further data tabs currently available
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
@@ -434,6 +477,9 @@
               case 'list': //* #categorySet/list
                 TIMAAT.CategoryLists.loadCategorySets();
                 TIMAAT.UI.displayComponent('categorySet', 'categoryset-tab', 'categoryset-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
             }
           }
@@ -461,6 +507,9 @@
             else { // other role form than datasheet
               switch (pathSegments[2]) {
                 //* no further data tabs currently available
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
@@ -470,6 +519,9 @@
               case 'list': //* #role/list
                 TIMAAT.RoleLists.loadRoles();
                 TIMAAT.UI.displayComponent('role', 'role-tab', 'role-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
             }
           }
@@ -497,6 +549,9 @@
             else { // other role group form than datasheet
               switch (pathSegments[2]) {
                 //* no further data tabs currently available
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
@@ -506,6 +561,9 @@
               case 'list': //* #roleGroup/list
                 TIMAAT.RoleLists.loadRoleGroups();
                 TIMAAT.UI.displayComponent('roleGroup', 'rolegroup-tab', 'rolegroup-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
               break;
             }
           }
@@ -531,9 +589,10 @@
               TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
             }
             else { // other language form than datasheet
-              switch (pathSegments[2]) {
-                //* no further data tabs currently available
-              }
+              this.redirectToDefaultView();
+              // switch (pathSegments[2]) {
+              //   //* no further data tabs currently available
+              // }
             }
           }
           else {
@@ -543,10 +602,16 @@
                 TIMAAT.LanguageLists.loadLanguages();
                 TIMAAT.UI.displayComponent('language', 'language-tab', 'language-datatable');
               break;
+              default:
+                this.redirectToDefaultView();
+              break;
             }
           }
           break;
           case 'settings': // #settings...
+            if (pathSegments.length > 1) {
+              this.redirectToDefaultView();
+            }
             TIMAAT.UI.showComponent('settings');
             TIMAAT.Settings.loadSettings();
           break;
@@ -570,6 +635,9 @@
               else { // other videochooser form than datatable
                 switch (pathSegments[2]) {
                   //* no further data tabs currently available
+                  default:
+                    this.redirectToDefaultView();
+                  break;
                 }
               }
             }
@@ -580,6 +648,9 @@
                   // $('#timaat-videochooser-collectionlibrary').trigger('click');
                   TIMAAT.VideoChooser.setCollection(null);
 				          TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
+                break;
+                default:
+                  this.redirectToDefaultView();
                 break;
               }
             }
@@ -612,6 +683,8 @@
               if ( pathSegments.length == 2 ) { //* #analysis/:id     (default view, show analysis list)
                 //* no extra steps necessary that are not also required for annotations, segments, etc.
                 // TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+              } else { //* as long as no substructure is accessible via url
+                this.redirectToDefaultView();
               }
               // TODO annotation and segment data accessibility by url
               // else { // element in analysis list selected
@@ -636,9 +709,21 @@
               //   }
               // }
             }
+            else {
+              redirectToDefaultView();
+            }
+          break;
+          default:
+            this.redirectToDefaultView();
           break;
         }
       }
+    },
+
+    redirectToDefaultView: function() {
+      // redirect if invalid url path is entered
+      TIMAAT.URLHistory.setupView('#mediaLibrary/list');
+      TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediaLibrary/list');
     },
 
   }
