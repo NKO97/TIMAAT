@@ -356,6 +356,7 @@
 				$('.add-actor-button').prop('disabled', false);
 				$('.add-actor-button :input').prop('disabled', false);
 				$('.add-actor-button').show();
+				let type = actor.model.actorType.actorTypeTranslations[0].type;
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
