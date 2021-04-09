@@ -1340,7 +1340,7 @@ public class EndpointMedium {
 		if ( updatedMedium == null ) return Response.notModified().build();	
 
 		// update medium
-		// if ( updatedMedium.getMediaType() != null ) medium.setMediaType(updatedMedium.getMediaType()); // Don't change media type. MediumSubType won't match anymore
+		// if ( updatedMedium.getMediaType() != null ) medium.setMediaType(updatedMedium.getMediaType()); //! Don't change media type. MediumSubType won't match anymore
 		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		medium.setRecordingStartDate(updatedMedium.getRecordingStartDate());
 		medium.setRecordingEndDate(updatedMedium.getRecordingEndDate());

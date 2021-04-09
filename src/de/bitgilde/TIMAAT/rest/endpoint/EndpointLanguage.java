@@ -112,8 +112,8 @@ public class EndpointLanguage {
                                         @QueryParam("per_page") Integer per_page,
                                         @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all Languages
-		System.out.println("EndpointLanguage: getLanguageSelectList");
-		System.out.println("EndpointLanguage: getLanguageSelectList - search string: "+ search);
+		// System.out.println("EndpointLanguage: getLanguageSelectList");
+		// System.out.println("EndpointLanguage: getLanguageSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 

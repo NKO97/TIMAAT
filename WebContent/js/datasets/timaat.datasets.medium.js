@@ -271,6 +271,7 @@
 				if (!$('#medium-metadata-form').valid()) return false;
 
 				var medium = $('#medium-metadata-form').data('medium');
+				var type = $('#medium-metadata-form').data('type');	
 
 				// create/edit medium window submitted data
 				var formData = $('#medium-metadata-form').serializeArray();
@@ -294,7 +295,6 @@
         // console.log("TCL: formDataSanitized", formDataSanitized);
 
 				if (medium) { // update medium
-					let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 					// medium data
 					medium.model = await TIMAAT.MediumDatasets.updateMediumModelData(medium.model, formDataSanitized);
 					// medium subtype data
@@ -347,7 +347,6 @@
 				$('.add-medium-button').prop('disabled', false);
 				$('.add-medium-button :input').prop('disabled', false);
 				$('.add-medium-button').show();
-				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
