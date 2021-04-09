@@ -169,9 +169,6 @@
 			});
 			
 			$('#timaat-videochooser-table').on('page.dt', function() {
-				// $('html, body').animate({
-				// 	scrollTop: $(".dataTables_wrapper").offset().top
-				// }, 'slow');
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 

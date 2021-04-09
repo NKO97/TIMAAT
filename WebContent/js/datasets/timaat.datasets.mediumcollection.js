@@ -295,6 +295,15 @@
 				TIMAAT.MediumCollectionDatasets.initFormDataSheetData(type);
 			});
 
+			// data table events
+			$('#timaat-mediumcollectiondatasets-mediumcollection-list-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediumcollectiondatasets-mediumcollection-items-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 		},
 
 		initMediaCollectionItems: function() {
@@ -903,7 +912,7 @@
 
 		setupMediumCollectionListDataTable: function() {			
 			// console.log("TCL: setupMediumCollectionListDataTable");
-			this.dataTableMediaCollectionList = $('#timaat-mediumcollectiondatasets-mediacollection-list-table').DataTable({
+			this.dataTableMediaCollectionList = $('#timaat-mediumcollectiondatasets-mediumcollection-list-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",

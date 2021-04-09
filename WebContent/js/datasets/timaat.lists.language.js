@@ -130,6 +130,12 @@
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
+
+      // data table events
+			$('#timaat-languagelists-language-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 		},
 
 		load: function() {

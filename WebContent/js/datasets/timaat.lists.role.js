@@ -132,6 +132,11 @@
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
+      // data table events
+			$('#timaat-rolelists-role-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
     },
 
     initRoleGroups: function() {
@@ -235,6 +240,11 @@
 				$('.add-rolegroup-button').show();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
+			});
+
+      // data table events
+			$('#timaat-rolelists-rolegroup-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
     },

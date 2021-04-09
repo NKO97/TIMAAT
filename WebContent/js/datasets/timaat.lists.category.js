@@ -141,6 +141,11 @@
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
+      // data table events
+			$('#timaat-categorylists-category-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
       // inspector event handler
       $('#timaat-annotation-category-form-submit-button').on('click', async function(event) {
         event.preventDefault();
@@ -450,6 +455,11 @@
 				$('.add-categoryset-button').show();
         let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
+			});
+
+      // data table events
+			$('#timaat-categorylists-categoryset-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
       // inspector event handler

@@ -743,6 +743,39 @@
 				TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 			});
 			
+			// data table events
+			$('#timaat-mediadatasets-media-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-audio-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-document-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-image-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-software-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-text-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-video-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-mediadatasets-videogame-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 			// Key press events
 			$('#medium-metadata-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
@@ -757,6 +790,7 @@
 					$('#medium-metadata-form-dismiss-button').trigger('click');
 				}
 			});
+			
 
 		},
 		

@@ -479,6 +479,19 @@
 				TIMAAT.ActorDatasets.initFormDataSheetData(type);
 			});
 
+			// data table events
+			$('#timaat-actordatasets-actor-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-actordatasets-person-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
+			$('#timaat-actordatasets-collective-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 			// key press events
 			$('#actor-metadata-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
@@ -5458,7 +5471,6 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(actor) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
-						console.log("TCL: clear last selection 'actor'");
 						TIMAAT.UI.clearLastSelection('actor');
 						$(row).addClass('selected');
 					}

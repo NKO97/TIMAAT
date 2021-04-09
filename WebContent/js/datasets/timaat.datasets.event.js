@@ -265,6 +265,11 @@
 				modal.modal('hide');
 			});
 
+			// data table events
+			$('#timaat-eventdatasets-event-table').on( 'page.dt', function () {
+				$('.dataTables_scrollBody').scrollTop(0);
+			});
+
 			// key press events
 			$('#event-metadata-form-submit-button').keypress(function(event) {
 				event.stopPropagation();
