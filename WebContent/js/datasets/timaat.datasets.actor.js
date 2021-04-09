@@ -271,7 +271,8 @@
 				event.preventDefault();
 				if (!$('#actor-metadata-form').valid()) return false;
 
-				var actor = $('#actor-metadata-form').data('actor');	
+				var actor = $('#actor-metadata-form').data('actor');
+				var type = $('#actor-metadata-form').data('type');	
 
 				// create/Edit actor window submitted data
 				var formData = $('#actor-metadata-form').serializeArray();
@@ -304,7 +305,6 @@
         // console.log("TCL: formDataSanitized", formDataSanitized);
 				
 				if (actor) { // update actor
-					let type = actor.model.actorType.actorTypeTranslations[0].type;
 					// actor data
 					actor.model.isFictional = formDataObject.isFictional;
 					// displayName data
@@ -353,10 +353,7 @@
 					$('#actor-metadata-form').data('actor', actor);
 					$('#actor-tab-metadata').trigger('click');
 				}
-				$('.add-actor-button').prop('disabled', false);
-				$('.add-actor-button :input').prop('disabled', false);
-				$('.add-actor-button').show();
-				let type = actor.model.actorType.actorTypeTranslations[0].type;
+				TIMAAT.ActorDatasets.showAddActorButton();
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
@@ -364,9 +361,7 @@
 
 			// cancel add/edit button in content form functionality
 			$('#actor-metadata-form-dismiss-button').on('click', async function(event) {
-				$('.add-actor-button').prop('disabled', false);
-				$('.add-actor-button :input').prop('disabled', false);
-				$('.add-actor-button').show();
+				TIMAAT.ActorDatasets.showAddActorButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -2661,6 +2656,7 @@
 			$('#actor-metadata-form').data('type', type);
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
+			this.showAddActorButton();
 			// TIMAAT.UI.clearLastSelection(type);
 			switch (type) {
 				case 'person':
@@ -2922,7 +2918,7 @@
 			if (type == 'person') {
 				this.getActorFormDataSheetPersonSexDropdownData();
 				let sexSelect = $('#person-sex-type-select-dropdown');
-				let option = new Option(data.model.actorPerson.sex.sexTranslations[0].type, data.model.actorPerson.sex.sexId, true, true);
+				let option = new Option(data.model.actorPerson.sex.sexTranslations[0].type, data.model.actorPerson.sex.id, true, true);
 				sexSelect.append(option).trigger('change');
 			}
 
@@ -4127,8 +4123,12 @@
 					console.log( "error: ", error);
 				};
 
-				// update data that is part of actor (includes updating last edited by/at)
-				var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
+				try { // update actor
+					// update data that is part of actor (includes updating last edited by/at)
+					var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
+				} catch(error) {
+					console.log( "error: ", error);
+				};
 		},
 
 		updateActorHasMediumImageList: async function(actor, imageIdList) {
@@ -4643,7 +4643,7 @@
 				// actorHasPhoneNumbers: [{}],
 				// actorHasAddresses: [{}],
 				// actorHasEmailAddresses: [{}],
-				profileImages: formDataObject.profileImages,
+				profileImages: formDataObject.profileImages
 			};
 			// var i = 0;
 			// for (; i < profileImageList.length; i++) {
@@ -4663,11 +4663,11 @@
 						title: formDataObject.title,
 						dateOfBirth: formDataObject.dateOfBirth,
 						placeOfBirth: {
-							id: formDataObject.placeOfBirth,
+							id: formDataObject.placeOfBirth
 							},
 						dayOfDeath: formDataObject.dayOfDeath,
 						placeOfDeath: {
-							id: formDataObject.placeOfDeath,
+							id: formDataObject.placeOfDeath
 						},
 						sex: {
 							id: formDataObject.sexId
@@ -5364,6 +5364,12 @@
 			$('.form-buttons :input').prop('disabled', true);
 		},
 
+		showAddActorButton: function() {
+			$('.add-actor-button').prop('disabled', false);
+			$('.add-actor-button :input').prop('disabled', false);
+			$('.add-actor-button').show();
+		},
+
 		getActorFormDataSheetPersonSexDropdownData: function() {
 			$('#person-sex-type-select-dropdown').select2({
 				closeOnSelect: true,
@@ -5382,8 +5388,8 @@
 					data: function(params) {
 						console.log("TCL: data: params", params);
 						return {
-							// search: params.term,
-							// page: params.page
+							search: params.term,
+							page: params.page
 						};          
 					},
 					processResults: function(data, params) {
@@ -5778,6 +5784,7 @@
 			}
 			$('#actor-metadata-form').data('type', type);
 			$('#actor-metadata-form').data('actor', selectedItem);
+			this.showAddActorButton();
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'actor');
 		},
 

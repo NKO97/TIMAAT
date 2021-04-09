@@ -725,9 +725,11 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("sex/selectList")
-	public Response getSexSelectList(@QueryParam("language") String languageCode) {
+	public Response getSexSelectList(@QueryParam("page") Integer page,
+																	 @QueryParam("search") String search,
+																	 @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all Languages
-		System.out.println("EndpointActor: getSexSelectList");
+		// System.out.println("EndpointActor: getSexSelectList");
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 		class SelectElement{ 
@@ -738,8 +740,15 @@ public class EndpointActor {
 			};
 		}
 		// search
-		Query query = TIMAATApp.emf.createEntityManager().createQuery(
-			"SELECT st FROM SexTranslation st WHERE st.language.id = (SELECT l.id FROM Language l WHERE l.code ='"+languageCode+"') ORDER BY st.type ASC");
+		Query query;
+		if (search != null && search.length() > 0) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"Select st FROM SexTranslation st WHERE lower(st.type) LIKE lower(concat('%', :type, '%')) AND st.language.id = (SELECT l.id FROM Language l WHERE l.code ='"+languageCode+"') ORDER BY st.type ASC");
+				query.setParameter("type", search);
+		} else {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT st FROM SexTranslation st WHERE st.language.id = (SELECT l.id FROM Language l WHERE l.code ='"+languageCode+"') ORDER BY st.type ASC");
+		}
 		List<SelectElement> sexSelectList = new ArrayList<>();
 		List<SexTranslation> sexTranslationList = castList(SexTranslation.class, query.getResultList());
 		for (SexTranslation sexTranslation : sexTranslationList) {

@@ -211,7 +211,7 @@ var actorFormMetadataValidator = $('#actor-metadata-form').validate({
     typeId: {
       required: true
     },
-    seIx: {
+    sexId: {
       required: true
     }  
   },
