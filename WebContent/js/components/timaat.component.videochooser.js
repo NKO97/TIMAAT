@@ -422,7 +422,7 @@
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						// $('.timaat-video-card').removeClass('bg-info text-white');
 						// $(this).addClass('bg-info text-white');
-						TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
 					mediumElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {

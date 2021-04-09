@@ -218,6 +218,7 @@
 			// setup analysis lists UI and events
 			$('#timaat-analysislist-chooser').on('change', function(ev) {
 				// console.log("TCL: analysis list change");
+				TIMAAT.VideoPlayer.inspector.reset();
 				var list = TIMAAT.VideoPlayer.model.analysisLists.find(x => x.id === parseInt($(this).val()));
 				if ( list )  {
 					TIMAAT.VideoPlayer.setupAnalysisList(list);
@@ -858,6 +859,10 @@
 			TIMAAT.VideoPlayer.setupVideo(video);
 			// load video annotations from server
 			// TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+			if (TIMAAT.VideoPlayer.curAnalysisList) {
+				TIMAAT.VideoPlayer.clearTimelineSegmentElementStructure();
+				TIMAAT.VideoPlayer.curAnalysisList = null;
+			}
 			let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
 			await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 			// TIMAAT.VideoPlayer.setupMediumAnalysisLists(video.medium.mediumAnalysisLists);
