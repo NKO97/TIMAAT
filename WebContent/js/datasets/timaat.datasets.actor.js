@@ -2930,9 +2930,6 @@
 
 			if ( action == 'show') {
 				$('#actor-metadata-form :input').prop('disabled', true);
-				// $('.form-buttons').prop('disabled', false);
-				// $('.form-buttons :input').prop('disabled', false);
-				// $('.form-buttons').show();
 				this.initFormForShow();
 				$('#actor-datasheet-form-profile-image-selection').hide();
 				$('#actorFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
@@ -3025,7 +3022,7 @@
 				break;
 				case 'collective':
 					if (data.model.actorCollective.founded != null && !(isNaN(data.model.actorCollective.founded)))
-						$('#timaat-actordatasets-metadata-collective-founded').val(moment.utc(data.actorCollective.founded).format('YYYY-MM-DD'));
+						$('#timaat-actordatasets-metadata-collective-founded').val(moment.utc(data.model.actorCollective.founded).format('YYYY-MM-DD'));
 						else $('#timaat-actordatasets-metadata-collective-founded').val('');
 					if (data.model.actorCollective.disbanded != null && !(isNaN(data.model.actorCollective.disbanded)))
 						$('#timaat-actordatasets-metadata-collective-disbanded').val(moment.utc(data.model.actorCollective.disbanded).format('YYYY-MM-DD'));
