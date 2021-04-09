@@ -344,9 +344,7 @@
 					$('#medium-metadata-form').data('medium', medium);
 					$('#medium-tab-metadata').trigger('click');
 				}
-				$('.add-medium-button').prop('disabled', false);
-				$('.add-medium-button :input').prop('disabled', false);
-				$('.add-medium-button').show();
+				TIMAAT.MediumDatasets.showAddMediumButton();
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
@@ -354,9 +352,7 @@
 
 			// cancel add/edit button in content form functionality
 			$('#medium-metadata-form-dismiss-button').on('click', async function(event) {
-				$('.add-medium-button').prop('disabled', false);
-				$('.add-medium-button :input').prop('disabled', false);
-				$('.add-medium-button').show();
+				TIMAAT.MediumDatasets.showAddMediumButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -1680,6 +1676,7 @@
 			$('#videoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
+			this.showAddMediumButton();
 			// TIMAAT.UI.clearLastSelection(type);
 			switch (type) {
 				case 'audio':
@@ -3406,6 +3403,12 @@
 			$('.form-buttons :input').prop('disabled', true);
 		},
 
+		showAddMediumButton: function() {
+			$('.add-medium-button').prop('disabled', false);
+			$('.add-medium-button :input').prop('disabled', false);
+			$('.add-medium-button').show();
+		},
+
 		getMediumFormTitleLanguageDropdownData: function() {
 			$('#medium-title-language-select-dropdown').select2({
 				closeOnSelect: true,
@@ -4602,6 +4605,7 @@
 			}
 			$('#medium-metadata-form').data('type', type);
 			$('#medium-metadata-form').data('medium', selectedItem);
+			this.showAddMediumButton();
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'medium');
 		},
 
