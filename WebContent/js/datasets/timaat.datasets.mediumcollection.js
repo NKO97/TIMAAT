@@ -729,15 +729,15 @@
 						event.stopPropagation();
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
-						TIMAAT.MediumDatasets.initMediaComponent();
-						var type = mediumCollectionHasMedium.medium.mediaType.mediaTypeTranslations[0].type;
-						var selectedMedium = {};
-						selectedMedium.model = mediumCollectionHasMedium.medium;
-            // console.log("TCL: selectedMedium", selectedMedium);
-						TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', selectedMedium.model.id);
-						TIMAAT.MediumDatasets.dataTableMedia.search(selectedMedium.model.displayTitle.name).draw();
-						$('#medium-metadata-form').data('medium', selectedMedium);
-						TIMAAT.MediumDatasets.mediumFormDataSheet('show', type, selectedMedium);
+						TIMAAT.UI.showComponent('media');
+						TIMAAT.MediumDatasets.load();
+						let type = mediumCollectionHasMedium.medium.mediaType.mediaTypeTranslations[0].type;
+						TIMAAT.UI.clearLastSelection(type);
+						let tempMedium = {};
+						tempMedium.model =  mediumCollectionHasMedium.medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+            TIMAAT.UI.displayDataSetContent('dataSheet', tempMedium, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, medium.id);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-remove', async function(ev) {
