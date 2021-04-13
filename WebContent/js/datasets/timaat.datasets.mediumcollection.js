@@ -717,17 +717,12 @@
 						TIMAAT.MediumCollectionDatasets.selectedMediumCollectionItemId = mediumCollectionHasMedium.id.mediumId;
 					});
 
-					mediumCollectionElement.on('click', '.timaat-medium-annotate', function(event) {
+					mediumCollectionElement.on('click', '.timaat-medium-annotate', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if (!mediumCollectionHasMedium.medium.mediumVideo) return; //* allow annotating only for Videos
 						if ( mediumCollectionHasMedium.medium.fileStatus && mediumCollectionHasMedium.medium.fileStatus != 'ready' && mediumCollectionHasMedium.medium.fileStatus != 'transcoding' && mediumCollectionHasMedium.medium.fileStatus != 'waiting' ) return;
-						TIMAAT.UI.showComponent('videoplayer');
-						// setup medium in player
-						console.log("TCL: setupVideo");
-						TIMAAT.VideoPlayer.setupVideo(mediumCollectionHasMedium.medium);
-						// load medium annotations from server
-						TIMAAT.AnalysisListService.getAnalysisLists(mediumCollectionHasMedium.medium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(mediumCollectionHasMedium.medium);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
