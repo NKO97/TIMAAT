@@ -64,9 +64,41 @@
 			TIMAAT.VideoPlayer.viewer.doubleClickZoom.disable();
 			TIMAAT.VideoPlayer.viewer.scrollWheelZoom.disable();
 
-			$(window).resize(function() {
+			// adjust timeline view upon window resize
+			$(window).resize( function() {
 				for (let marker of TIMAAT.VideoPlayer.markerList) marker._updateElementOffset();
 				for (let anno of TIMAAT.VideoPlayer.annotationList) for (let keyframe of anno.svg.keyframes) keyframe._updateOffsetUI();
+				let selected = TIMAAT.VideoPlayer.selectedElementType;
+				TIMAAT.VideoPlayer.clearTimelineSegmentElementStructure();
+				TIMAAT.VideoPlayer.createTimelineSegmentElementStructure();
+				TIMAAT.VideoPlayer.sortTimelineSegmentElementStructure();
+				TIMAAT.VideoPlayer.showTimelineSegmentElementStructure();
+				TIMAAT.VideoPlayer.updateListUI();
+				TIMAAT.VideoPlayer.sortListUI();
+				let index;
+				TIMAAT.VideoPlayer.selectedElementType = selected;
+				switch (TIMAAT.VideoPlayer.selectedElementType) {
+					case 'segment':
+						index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSegment.model.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					break;
+					case 'sequence':
+						index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					break;
+					case 'action':
+						index = TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curAction.model.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					break;
+					case 'scene':
+						index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curScene.model.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					break;
+					case 'take':
+						index = TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curTake.model.id);
+						TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					break;
+				}
 			});
 
 			this.initNotifications();
@@ -945,11 +977,11 @@
 			}
 			this.curFrameRate = 25; // TODO
 			this.model.video = video;
-			this.duration = video.mediumVideo.length;			
+			this.duration = video.mediumVideo.length;
 			// remove all annotations and markers
 			this.annotationList.forEach(function(annotation) {annotation.remove()});
 			this.annotationList = [];
-			this.curAnnotation = null;			
+			this.curAnnotation = null;
 			// remove old video
 			if ( TIMAAT.VideoPlayer.video ) {
 				$(TIMAAT.VideoPlayer.video).off('canplay');
@@ -1448,27 +1480,27 @@
 		},
 
 		clearTimelineSegmentElementStructure: function() {
-			if (TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) {
+			if (TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 					segment.removeUI();
 				});
 			}
-			if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null) {
+			if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
 					sequence.removeUI();
 				});
 			}
-			if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null) {
+			if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
 					take.removeUI();
 				});
 			}
-			if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null) {
+			if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
 					scene.removeUI();
 				});
 			}
-			if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null) {
+			if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
 					action.removeUI();
 				});

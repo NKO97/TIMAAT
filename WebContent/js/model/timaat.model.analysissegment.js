@@ -170,6 +170,7 @@
 			// console.log("TCL: AnalysisSegment -> removeUI -> removeUI()");
 			this.listView.remove();
 			this.timelineView.remove();
+			TIMAAT.VideoPlayer.selectedElementType = null;
 			// console.log("TCL: AnalysisSegment -> removeUI -> this.updateUI()");
 			this.updateUI();
 		}
