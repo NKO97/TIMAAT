@@ -97,40 +97,39 @@ public class EndpointAuthentication {
     private UserAccount authenticate(String username, String password) throws Exception {
 			// Authenticate against the FIP-OP database
 			// Throw an Exception if the credentials are invalid
-    	
-		
-		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
-			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
-			.setParameter("username", username)
-			.getSingleResult();
+
+			UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
+				.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
+				.setParameter("username", username)
+				.getSingleResult();
 				
-		// check if account is suspended
-		if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
-			throw new AccountSuspendedException();
+			// check if account is suspended
+			if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
+				throw new AccountSuspendedException();
 
-		// hash user password hash using server user account salt
-		Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
-		String hash = argon2.hash(
-			8, 		// iterations
-			4096,  // memory usage
-			1, 		// parallel threads
-			password.toCharArray(), 
-			Charset.defaultCharset(),
-			user.getUserPassword().getSalt().getBytes());
+			// hash user password hash using server user account salt
+			Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
+			String hash = argon2.hash(
+				8, 		// iterations
+				4096,  // memory usage
+				1, 		// parallel threads
+				password.toCharArray(),
+				Charset.defaultCharset(),
+				user.getUserPassword().getSalt().getBytes());
 
-		hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
-		
-		String hexhash = toHex(Base64.getDecoder().decode(hash));
-		while (hexhash.length() < 64) hexhash = "0" + hexhash;
+			hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
+			
+			String hexhash = toHex(Base64.getDecoder().decode(hash));
+			while (hexhash.length() < 64) hexhash = "0" + hexhash;
 
-		System.out.println(hexhash);
-		System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
+			System.out.println(hexhash);
+			System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
 
-		// compare calculated server hash with DB stored hash
-		if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
-			throw new CredentialException();
-		
-		return user;
+			// compare calculated server hash with DB stored hash
+			if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
+				throw new CredentialException();
+
+			return user;
 		
     }
 

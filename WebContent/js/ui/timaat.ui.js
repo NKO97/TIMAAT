@@ -317,11 +317,11 @@
 			
 					$.ajax({
 						// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate",
-						url:"api/authenticate",
-						type:"POST",
-						data:JSON.stringify(credentials),
-						contentType:"application/json; charset=utf-8",
-						dataType:"json",
+						url        : "api/authenticate",
+						type       : "POST",
+						data       : JSON.stringify(credentials),
+						contentType: "application/json; charset=utf-8",
+						dataType   : "json",
 					}).done(async function(e) {
 						TIMAAT.UI.setLoginEnabled(true);
 						TIMAAT.Service.session = e;
