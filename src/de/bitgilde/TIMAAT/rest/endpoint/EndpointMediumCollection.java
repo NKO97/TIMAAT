@@ -353,14 +353,14 @@ public class EndpointMediumCollection {
 	@Path("listCard")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@SuppressWarnings("unchecked")
 	public Response getAllCollections(@QueryParam("noContents") String noContents) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		
 		// TODO get all mediacollections no matter the type, display type in frontend instead
-		List<MediaCollection> cols = (List<MediaCollection>) em.createQuery("SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC")
-				.setParameter("type", em.find(MediaCollectionType.class, 2)) // TODO refactor type
-				.getResultList();
+		String sql = "SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC";
+		Query query = em.createQuery(sql)
+										.setParameter("type", em.find(MediaCollectionType.class, 2)); // TODO refactor type
+		List<MediaCollection> cols = castList(MediaCollection.class, query.getResultList());
 		
 		// strip analysislists
 		for ( MediaCollection col : cols ) {
