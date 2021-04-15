@@ -70,12 +70,7 @@
 					for (let marker of TIMAAT.VideoPlayer.markerList) marker._updateElementOffset();
 					for (let anno of TIMAAT.VideoPlayer.annotationList) for (let keyframe of anno.svg.keyframes) keyframe._updateOffsetUI();
 					let selected = TIMAAT.VideoPlayer.selectedElementType;
-					TIMAAT.VideoPlayer.clearTimelineSegmentElementStructure();
-					TIMAAT.VideoPlayer.createTimelineSegmentElementStructure();
-					TIMAAT.VideoPlayer.sortTimelineSegmentElementStructure();
-					TIMAAT.VideoPlayer.showTimelineSegmentElementStructure();
-					TIMAAT.VideoPlayer.updateListUI();
-					TIMAAT.VideoPlayer.sortListUI();
+					TIMAAT.VideoPlayer.refreshSegmentElementStructure();
 					let index;
 					TIMAAT.VideoPlayer.selectedElementType = selected;
 					switch (TIMAAT.VideoPlayer.selectedElementType) {
@@ -678,7 +673,7 @@
 				if ( type ) {
 					await TIMAAT.AnalysisListService.removeSegmentElement(type, model.id);
 					if (TIMAAT.VideoPlayer.curAnalysisList) {
-						TIMAAT.VideoPlayer.refreshTimelineSegmentElementStructure();
+						TIMAAT.VideoPlayer.refreshSegmentElementStructure();
 					}
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
@@ -1475,12 +1470,13 @@
 			// $('.repeatbutton').prop('disabled', TIMAAT.VideoPlayer.curAnnotation == null );
 		},
 
-		refreshTimelineSegmentElementStructure: async function() {
+		refreshSegmentElementStructure: async function() {
 			TIMAAT.VideoPlayer.clearTimelineSegmentElementStructure();
-			TIMAAT.VideoPlayer.curAnalysisList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 			TIMAAT.VideoPlayer.createTimelineSegmentElementStructure();
 			TIMAAT.VideoPlayer.sortTimelineSegmentElementStructure();
 			TIMAAT.VideoPlayer.showTimelineSegmentElementStructure();
+			TIMAAT.VideoPlayer.updateListUI();
+			TIMAAT.VideoPlayer.sortListUI();
 		},
 
 		clearTimelineSegmentElementStructure: function() {
