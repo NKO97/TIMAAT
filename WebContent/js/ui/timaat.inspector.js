@@ -32,6 +32,12 @@
 				position: 'right',
 			}).addTo(viewer);
 			
+			// activate floating inspector
+			$('#timaat-inspector').appendTo('#timaat-component-videoplayer');
+			$('#timaat-inspector').draggable({handle:'.inspector-title', containment:'#wrapper'});
+			$('#timaat-inspector .leaflet-sidebar-tabs ul:not(.inspector-tabs)').remove();
+			// ul#list li:not(.active)
+			
 			// init state system
 			this.state = {
 					item: null,

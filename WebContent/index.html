@@ -45,9 +45,6 @@
     <!-- Leaflet CSS -->
     <link href="vendor/leaflet/leaflet.css" rel="stylesheet" type="text/css">
 
-    <!-- Leaflet Sidebar CSS -->
-    <link href="vendor/leaflet/plugins/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" rel="stylesheet" type="text/css">
-
     <!--Select2 CSS -->
     <link href="vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css">
 
@@ -56,6 +53,9 @@
 
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
+    <!-- TIMAAT Inspector CSS -->
+    <link href="css/timaat-inspector.css" rel="stylesheet" type="text/css">
+
     
     <style type="text/css">
       body { margin:0; padding:0; }
@@ -634,9 +634,10 @@
           </div>
           <div id="timaat-videoplayer-medium-modals-container"></div>
           <div id="timaat-inspector" class="leaflet-sidebar collapsed">
+			<div class="inspector-title border-bottom border-dark">Inspector<div class="inspector-drag float-right"><i class="fas fa-arrows-alt"></i></div></div>
             <!-- Nav tabs -->
             <div class="leaflet-sidebar-tabs">
-              <ul role="tablist"> <!-- top aligned tabs -->
+              <ul role="tablist" class="inspector-tabs"> <!-- top aligned tabs -->
                 <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
                 <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
                 <li><a title="Kategorien und Tags verknüpfen" href="#timaat-inspector-categories-and-tags" role="tab"><i class="fas fa-tags"></i></a></li>
@@ -645,17 +646,14 @@
                 <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
                 <li><a title="Analysen verknüpfen (nur bei Annotationen)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
               </ul>
-              <ul role="tablist"> <!-- bottom aligned tabs -->
-                <li><a href="javascript:TIMAAT.VideoPlayer.inspector.switchPosition()" role="tab"><i class="fas fa-exchange-alt"></i></a></li>
-              </ul>
             </div>
             <!-- Tab panes -->
             <div class="leaflet-sidebar-content">
               <div class="leaflet-sidebar-pane" id="timaat-inspector-metadata">
-                <h1 class="leaflet-sidebar-header">
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">
                   <span id="timaat-inspector-metadata-title">Metadaten</span>
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-metadata-pane" class="timaat-inspector-pane" aria-hidden="true">
@@ -755,9 +753,9 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
-                <h1 class="leaflet-sidebar-header">Animationseinstellungen
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Animationseinstellungen
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
@@ -777,10 +775,10 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-categories-and-tags">
-                <h1 class="leaflet-sidebar-header">
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">
                   <span id="timaat-inspector-categories-and-tags-title">Kategorien-Sets und Tags</span>
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-categories-and-tags-pane" class="timaat-inspector-pane">
@@ -915,9 +913,9 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-actors">
-                <h1 class="leaflet-sidebar-header">Actors
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Actors
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
@@ -950,9 +948,9 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-events">
-                <h1 class="leaflet-sidebar-header">Events
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Events
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
@@ -985,18 +983,18 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-locations">
-                <h1 class="leaflet-sidebar-header">Locations
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Locations
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane"> Locations werden von FIPOP noch nicht unterstützt.
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-analysis">
-                <h1 class="leaflet-sidebar-header">Analysis methods
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Analysis methods
                   <div class="leaflet-sidebar-close">
-                    <i class="fa fa-caret-right"></i>
+                    <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-analysis-pane" class="timaat-inspector-pane">

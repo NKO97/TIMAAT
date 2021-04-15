@@ -137,30 +137,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	padding-bottom: 0.25rem;
 }
 
-#timaat-inspector {
-	z-index: 1000; /* behind modal dialogs */
-}
-.timaat-inspector-pane {
-	margin-top: 1em;
-}
-
-#timaat-inspector-animation-keyframes {
-	max-width: 18em;
-}
-
-#timaat-inspector-meta-opacity {
-	margin-top: 4px;
-	width: 100%;
-}
-
-#timaat-inspector-meta-comment-group, #timaat-inspector-meta-transcript-group textarea {
-	min-height: 6rem;
-}
-
-#timaat-inspector-meta-shortDescription-group textarea {
-	min-height: 3rem;
-}
-
 .note-toolbar {
  background-color:lightgray;
 }
