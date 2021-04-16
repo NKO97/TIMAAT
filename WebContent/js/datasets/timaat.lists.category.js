@@ -1142,7 +1142,7 @@
             };
             console.log("TCL: newCategorySetHasCategory", newCategorySetHasCategory);
             // categorySet.categorySetHasCategories.push(newCategorySetHasCategory);
-            await TIMAAT.CategoryService.createCategorySetHasCategory(newCategorySetHasCategory); // TODO categorySetHasCategory data
+            await TIMAAT.CategorySetService.createCategorySetHasCategory(newCategorySetHasCategory); // TODO categorySetHasCategory data
           }
         } else { //* add/remove entries
           // DELETE removed entries
