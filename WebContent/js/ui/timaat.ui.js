@@ -478,7 +478,7 @@
           switch(form) {
             case 'dataSheet':
               this.setDataSetContentActiveNavTab('list-tab-metadata');
-              TIMAAT.CategoryLists.categoryFormDataSheet(mode, type, data);
+              TIMAAT.CategoryLists.categoryFormDataSheet(mode, data);
             break;
           }
         break;
@@ -486,7 +486,7 @@
           switch(form) {
             case 'dataSheet':
               this.setDataSetContentActiveNavTab('list-tab-metadata');
-              TIMAAT.CategoryLists.categorySetFormDataSheet(mode, type, data);
+              TIMAAT.CategoryLists.categorySetFormDataSheet(mode, data);
             break;
           }
         break;

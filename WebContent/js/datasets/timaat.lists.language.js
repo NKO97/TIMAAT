@@ -31,6 +31,7 @@
       // nav-bar functionality
       $('#language-tab').on('click', function(event) {
         TIMAAT.LanguageLists.loadLanguages();
+        TIMAAT.UI.displayComponent('language', 'language-tab', 'language-datatable');
         TIMAAT.URLHistory.setURL(null, 'Language Datasets', '#language/list');
       });
 
@@ -51,6 +52,7 @@
           }
         }
         modal.modal('hide');
+        TIMAAT.UI.hideDataSetContentContainer();
         TIMAAT.LanguageLists.loadLanguages();
       });
 
@@ -66,8 +68,7 @@
       $('#language-metadata-form-edit-button').on('click', function(event) {
         event.stopPropagation();
         TIMAAT.UI.hidePopups();
-        let data = $('#language-metadata-form').data('language');
-        TIMAAT.UI.displayDataSetContent('dataSheet', data, 'language', 'edit');
+        TIMAAT.UI.displayDataSetContent('dataSheet', $('#language-metadata-form').data('language'), 'language', 'edit');
 			});
 
       // submit content form button functionality
@@ -113,9 +114,7 @@
             $('#list-tab-metadata').data('type', 'language');
 					  $('#list-tab-metadata').trigger('click');
           }
-          $('.add-language-button').prop('disabled', false);
-          $('.add-language-button :input').prop('disabled', false);
-          $('.add-language-button').show();
+          TIMAAT.LanguageLists.showAddLanguageButton();
           await TIMAAT.UI.refreshDataTable('language');
           TIMAAT.UI.addSelectedClassToSelectedItem('language', language.model.id);
           TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
@@ -124,9 +123,7 @@
 			
 			// cancel add/edit button in content form functionality
 			$('#language-metadata-form-dismiss-button').on('click', async function(event) {
-        $('.add-language-button').prop('disabled', false);
-				$('.add-language-button :input').prop('disabled', false);
-				$('.add-language-button').show();
+        TIMAAT.LanguageLists.showAddLanguageButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -139,20 +136,18 @@
 		},
 
 		load: function() {
-      this.setLanguagesList();
+      this.loadLanguages();
 		},
 		
 		loadLanguages: function() {
-      TIMAAT.UI.displayComponent('language', 'language-tab', 'language-datatable');
 			$('#list-tab-metadata').data('type', 'language');
 			TIMAAT.UI.addSelectedClassToSelectedItem('language', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			TIMAAT.UI.clearLastSelection('language');
+      this.showAddLanguageButton();
 			this.setLanguagesList();
 		},
 
 		loadLanguagesDataTables: function() {
-			// console.log("TCL: loadLanguagesDataTables: function()");
       this.setupLanguageDataTable();
 		},
 
@@ -271,10 +266,11 @@
 			let selectedItem;
       index = this.languages.findIndex(({model}) => model.id === selectedItemId);
       selectedItem = this.languages[index];
-      TIMAAT.UI.addSelectedClassToSelectedItem('language', selectedItemId);
       $('#list-tab-metadata').data('type', 'language');
       $('#language-metadata-form').data('language', selectedItem);
+      TIMAAT.UI.addSelectedClassToSelectedItem('language', selectedItemId);
       TIMAAT.URLHistory.setURL(null, selectedItem.model.name + ' · Datasets · Language', '#language/' + selectedItem.model.id);
+      this.showAddLanguageButton();
 			TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'language');
     },
 
@@ -320,10 +316,8 @@
     },
 
     initFormDataSheetForEdit: function() {
-      $('.add-language-button').hide();
-      $('.add-language-button').prop('disabled', true);
-      $('.add-language-button :input').prop('disabled', true);
       this.hideFormButtons();
+      this.hideAddLanguageButton();
       $('#language-metadata-form :input').prop('disabled', false);
       $('#language-metadata-form-submit-button').show();
       $('#language-metadata-form-dismiss-button').show();
@@ -351,6 +345,18 @@
 			$('.form-buttons').prop('disabled', true);
 			$('.form-buttons :input').prop('disabled', true);
 		},
+
+    showAddLanguageButton: function() {
+      $('.add-language-button').prop('disabled', false);
+      $('.add-language-button :input').prop('disabled', false);
+      $('.add-language-button').show();
+    },
+
+    hideAddLanguageButton: function() {
+      $('.add-language-button').hide();
+      $('.add-language-button').prop('disabled', true);
+      $('.add-language-button :input').prop('disabled', true);
+    },
 
     createLanguageModel: async function(formDataObject) {
       // console.log("TCL: formDataObject", formDataObject);

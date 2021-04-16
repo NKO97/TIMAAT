@@ -85,9 +85,7 @@
           $('#list-tab-metadata').data('type', 'role');
 					$('#list-tab-metadata').trigger('click');
         }
-        $('.add-role-button').prop('disabled', false);
-				$('.add-role-button :input').prop('disabled', false);
-				$('.add-role-button').show();
+        TIMAAT.RoleLists.showAddRoleButton();
         await TIMAAT.UI.refreshDataTable('role');
         TIMAAT.UI.addSelectedClassToSelectedItem('role', role.model.id);
         TIMAAT.UI.displayDataSetContent('dataSheet', role, 'role');
@@ -125,9 +123,7 @@
 
       // cancel add/edit button in content form functionality
 			$('#role-metadata-form-dismiss-button').on('click', async function(event) {
-        $('.add-role-button').prop('disabled', false);
-				$('.add-role-button :input').prop('disabled', false);
-				$('.add-role-button').show();
+        TIMAAT.RoleLists.showAddRoleButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -194,9 +190,7 @@
           $('#list-tab-metadata').data('type', 'roleGroup');
 					$('#list-tab-metadata').trigger('click');
         }
-        $('.add-rolegroup-button').prop('disabled', false);
-				$('.add-rolegroup-button :input').prop('disabled', false);
-				$('.add-rolegroup-button').show();
+        TIMAAT.RoleLists.showAddRoleGroupButton();
         await TIMAAT.UI.refreshDataTable('roleGroup');
         TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', roleGroup.model.id);
         TIMAAT.UI.displayDataSetContent('dataSheet', roleGroup, 'roleGroup');
@@ -235,9 +229,7 @@
       
       // cancel add/edit button in content form functionality
 			$('#rolegroup-metadata-form-dismiss-button').on('click', async function(event) {
-        $('.add-rolegroup-button').prop('disabled', false);
-				$('.add-rolegroup-button :input').prop('disabled', false);
-				$('.add-rolegroup-button').show();
+        TIMAAT.RoleLists.showAddRoleGroupButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -258,7 +250,7 @@
 			$('#list-tab-metadata').data('type', 'role');
 			TIMAAT.UI.addSelectedClassToSelectedItem('role', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			// TIMAAT.UI.clearLastSelection('role');
+      this.showAddRoleButton();
       this.setRolesList();
     },
 
@@ -266,7 +258,7 @@
 			$('#list-tab-metadata').data('type', 'roleGroup');
 			TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			// TIMAAT.UI.clearLastSelection('roleGroup');
+      this.showAddRoleGroupButton();
       this.setRoleGroupsList();
     },
 
@@ -493,6 +485,7 @@
       $('#role-metadata-form').data('role', selectedItem);
       TIMAAT.UI.addSelectedClassToSelectedItem('role', selectedItemId);
       TIMAAT.URLHistory.setURL(null, selectedItem.model.roleTranslations[0].name + ' · Datasets · Role', '#role/' + selectedItem.model.id);
+      this.showAddRoleButton();
 			TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'role');
     },
 
@@ -513,15 +506,13 @@
       $('#role-metadata-form').data('roleGroup', selectedItem);
       TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', selectedItemId);
       TIMAAT.URLHistory.setURL(null, selectedItem.model.roleGroupTranslations[0].name + ' · Datasets · Role Group', '#roleGroup/' + selectedItem.model.id);
-			TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'roleGroup');
+			this.showAddRoleGroupButton();
+      TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'roleGroup');
     },
 
     addRole: function() {	
 			console.log("TCL: addRole: function()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'role-metadata-form');
-      $('.add-role-button').hide();
-			$('.add-role-button').prop('disabled', true);
-			$('.add-role-button :input').prop('disabled', true);
       $('#list-tab-metadata').data('type', 'role');
 			$('#role-metadata-form').data('role', null);
       roleFormMetadataValidator.resetForm();
@@ -540,9 +531,6 @@
     addRoleGroup: function() {	
 			console.log("TCL: addRoleGroup: function()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'rolegroup-metadata-form');
-      $('.add-rolegroup-button').hide();
-			$('.add-rolegroup-button').prop('disabled', true);
-			$('.add-rolegroup-button :input').prop('disabled', true);
       $('#list-tab-metadata').data('type', 'roleGroup');
 			$('#rolegroup-metadata-form').data('roleGroup', null);
       roleGroupFormMetadataValidator.resetForm();
@@ -560,7 +548,6 @@
 
     roleFormDataSheet: async function(action, data) {
       console.log("TCL: action, data: ", action, data);
-      TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
       var node = document.getElementById('dynamic-role-ispartof-rolegroup-fields');
       while (node.lastChild) {
         node.removeChild(node.lastChild)
@@ -569,8 +556,10 @@
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
       }
+
+      TIMAAT.UI.addSelectedClassToSelectedItem('role', data.model.id);
       $('#role-metadata-form').trigger('reset');
-      // $('#list-tab-metadata').data('type', 'role');
+      $('#list-tab-metadata').data('type', 'role');
       this.initFormDataSheetData('role');
       roleFormMetadataValidator.resetForm();
 
@@ -689,9 +678,6 @@
       }
       else if (action == 'edit') {
         this.initFormDataSheetForEdit('role');
-        $('.add-role-button').hide();
-				$('.add-role-button').prop('disabled', true);
-				$('.add-role-button :input').prop('disabled', true);
         $('#role-metadata-form-submit-button').html("Save");
         $('#roleFormHeader').html("Edit Role");
       }
@@ -703,11 +689,12 @@
 
     roleGroupFormDataSheet: async function(action, data) {
       console.log("TCL: action, data: ", action, data);
-      TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', data.model.id);
       var node = document.getElementById('dynamic-rolegroup-contains-role-fields');
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
       }
+
+      TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', data.model.id);
       $('#rolegroup-metadata-form').trigger('reset');
       // $('#list-tab-metadata').data('type', 'roleGroup');
       this.initFormDataSheetData('roleGroup');
@@ -774,9 +761,6 @@
       }
       else if (action == 'edit') {
         this.initFormDataSheetForEdit('roleGroup');
-        $('.add-rolegroup-button').hide();
-				$('.add-rolegroup-button').prop('disabled', true);
-				$('.add-rolegroup-button :input').prop('disabled', true);
         $('#rolegroup-metadata-form-submit-button').html("Save");
         $('#roleGroupFormHeader').html("Edit Role Group");
       }
@@ -1165,8 +1149,10 @@
       $('.form-dismiss-button').show();
       if (type == 'role') {
         $('#timaat-role-metadata-name').focus();
+        this.hideAddRoleButton();
       } else {
         $('#timaat-rolegroup-metadata-name').focus();
+        this.hideAddRoleGroupButton();
       }
       
     },
@@ -1194,6 +1180,30 @@
 			$('.form-buttons').prop('disabled', true);
 			$('.form-buttons :input').prop('disabled', true);
 		},
+
+    showAddRoleButton: function() {
+      $('.add-role-button').prop('disabled', false);
+      $('.add-role-button :input').prop('disabled', false);
+      $('.add-role-button').show();
+    },
+
+    hideAddRoleButton: function() {
+      $('.add-role-button').hide();
+      $('.add-role-button').prop('disabled', true);
+      $('.add-role-button :input').prop('disabled', true);
+    },
+
+    showAddRoleGroupButton: function() {
+      $('.add-rolegroup-button').prop('disabled', false);
+      $('.add-rolegroup-button :input').prop('disabled', false);
+      $('.add-rolegroup-button').show();
+    },
+
+    hideAddRoleGroupButton: function() {
+      $('.add-rolegroup-button').hide();
+      $('.add-rolegroup-button').prop('disabled', true);
+      $('.add-rolegroup-button :input').prop('disabled', true);
+    },
 
     appendRoleIsPartOfRoleGroupsDataset: function() {
       var multiSelectFormData =

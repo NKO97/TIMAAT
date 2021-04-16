@@ -183,7 +183,7 @@
 			});
 
 			// confirm delete actor modal functionality
-			$('#timaat-actordatasets-modal-delete-submit').on('click', async function(ev) {
+			$('#timaat-actordatasets-modal-delete-submit-button').on('click', async function(ev) {
 				var modal = $('#timaat-actordatasets-actor-delete');
 				var actor = modal.data('actor');
 				let type = $('#actor-metadata-form').data('type');
@@ -210,11 +210,9 @@
 
 			// edit content form button handler
 			$('.actordatasheet-form-edit-button').on('click', function(event) {
-      	console.log("TCL: $ -> actordatasheet-form-edit-button");
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				let actor = $('#actor-metadata-form').data('actor');
-				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, actor, 'actor', 'edit');
+				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, $('#actor-metadata-form').data('actor'), 'actor', 'edit');
 			});
 			
 			// actor form handlers
@@ -2651,11 +2649,9 @@
 		},
 
 		loadActors: function() {
-    	// console.log("TCL: loadActors: function()");
 			$('#actor-metadata-form').data('type', 'actor');
 			TIMAAT.UI.addSelectedClassToSelectedItem('actor', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			// TIMAAT.UI.clearLastSelection('actor');
 			this.setActorList();
 		},
 
@@ -2670,7 +2666,6 @@
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
 			this.showAddActorButton();
-			// TIMAAT.UI.clearLastSelection(type);
 			switch (type) {
 				case 'person':
 					this.setPersonList();
@@ -2848,9 +2843,7 @@
 			// console.log("TCL: addActor: function()");
 			console.log("TCL: addActor: type", type);
 			TIMAAT.UI.displayDataSetContentContainer('actor-tab-metadata', 'actor-metadata-form');
-			$('.add-actor-button').hide();
-			$('.add-actor-button').prop('disabled', true);
-			$('.add-actor-button :input').prop('disabled', true);
+			this.hideAddActorButton();
 			$('#actor-metadata-form').data('type', type);
 			$('#actor-metadata-form').data('actor', null);
 			actorFormMetadataValidator.resetForm();
@@ -2948,9 +2941,7 @@
 			}
 			else if (action == 'edit') {
 				this.initFormDataSheetForEdit(type);
-				$('.add-actor-button').hide();
-				$('.add-actor-button').prop('disabled', true);
-				$('.add-actor-button :input').prop('disabled', true);
+				this.hideAddActorButton();
 				$('#actor-metadata-form-submit-button').html("Save");
 				$('#actorFormHeader').html("Edit "+type);
 
@@ -5381,6 +5372,12 @@
 			$('.add-actor-button').prop('disabled', false);
 			$('.add-actor-button :input').prop('disabled', false);
 			$('.add-actor-button').show();
+		},
+
+		hideAddActorButton: function() {
+			$('.add-actor-button').hide();
+			$('.add-actor-button').prop('disabled', true);
+			$('.add-actor-button :input').prop('disabled', true);
 		},
 
 		getActorFormDataSheetPersonSexDropdownData: function() {

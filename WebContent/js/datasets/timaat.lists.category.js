@@ -78,7 +78,6 @@
         }
 
         if (category) { // update category
-          console.log("TCL: category", category);
           category.model.name = formDataObject.name;
           let categoryData = category.model;
           delete categoryData.ui;
@@ -89,13 +88,11 @@
           var categoryModel = await TIMAAT.CategoryLists.createCategoryModel(formDataObject);
           var newCategory = await TIMAAT.CategoryLists.createCategory(categoryModel, categoryIdList);
           category = new TIMAAT.Category(newCategory);
-          $('#category-metadata-form').data('category', category);
+          $('#category-metadata-form').data('category', category); 
           $('#list-tab-metadata').data('type', 'category');
           $('#list-tab-metadata').trigger('click');
         }
-        $('.add-category-button').prop('disabled', false);
-        $('.add-category-button :input').prop('disabled', false);
-        $('.add-category-button').show();
+        TIMAAT.CategoryLists.showAddCategoryButton();
         await TIMAAT.UI.refreshDataTable('category');
         TIMAAT.UI.addSelectedClassToSelectedItem('category', category.model.id);
         TIMAAT.UI.displayDataSetContent('dataSheet', category, 'category');
@@ -134,9 +131,7 @@
 
       // cancel add/edit button in content form functionality
 			$('#category-metadata-form-dismiss-button').on('click', async function(event) {
-        $('.add-category-button').prop('disabled', false);
-				$('.add-category-button :input').prop('disabled', false);
-				$('.add-category-button').show();
+        TIMAAT.CategoryLists.showAddCategoryButton();
         let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -394,12 +389,10 @@
           }
 
           if (categorySet) { // update category set
-            console.log("TCL: categorySet", categorySet);
             categorySet.model.name = formDataObject.name;
             let categorySetData = categorySet.model;
             delete categorySetData.ui;
             await TIMAAT.CategoryLists.updateCategorySet(categorySetData, categorySetIdList);
-            // categorySet.updateUI();
           }
           else { // create new category set
             var categorySetModel = await TIMAAT.CategoryLists.createCategorySetModel(formDataObject);
@@ -409,9 +402,7 @@
             $('#list-tab-metadata').data('type', 'categorySet');
             $('#list-tab-metadata').trigger('click');
           }
-          $('.add-categoryset-button').prop('disabled', false);
-          $('.add-categoryset-button :input').prop('disabled', false);
-          $('.add-categoryset-button').show();
+          TIMAAT.CategoryLists.showAddCategorySetButton();
           await TIMAAT.UI.refreshDataTable('categorySet');
           TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', categorySet.model.id);
           TIMAAT.UI.displayDataSetContent('dataSheet', categorySet, 'categorySet');
@@ -450,9 +441,7 @@
 
       // cancel add/edit button in content form functionality
 			$('#categoryset-metadata-form-dismiss-button').on('click', async function(event) {
-        $('.add-categoryset-button').prop('disabled', false);
-				$('.add-categoryset-button :input').prop('disabled', false);
-				$('.add-categoryset-button').show();
+        TIMAAT.CategoryLists.showAddCategorySetButton();
         let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
@@ -591,7 +580,7 @@
       $('#list-tab-metadata').data('type', 'category');
       TIMAAT.UI.addSelectedClassToSelectedItem('category', null);
       TIMAAT.UI.subNavTab = 'dataSheet';
-			// TIMAAT.UI.clearLastSelection('category');
+      this.showAddCategoryButton();
       this.setCategoriesList();
 		},
 		
@@ -599,7 +588,7 @@
       $('#list-tab-metadata').data('type', 'categorySet');
       TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', null);
       TIMAAT.UI.subNavTab = 'dataSheet';
-			// TIMAAT.UI.clearLastSelection('categorySet');
+      this.showAddCategorySetButton();
       this.setCategorySetsList();
 		},
 
@@ -829,11 +818,13 @@
 					index = this.categories.findIndex(({model}) => model.id === selectedItemId);
 					selectedItem = this.categories[index];
           $('#category-metadata-form').data(type, selectedItem);
+          this.showAddCategoryButton();
 				break;
 				case 'categorySet':
 					index = this.categorySets.findIndex(({model}) => model.id === selectedItemId);
 					selectedItem = this.categorySets[index];
           $('#categoryset-metadata-form').data(type, selectedItem);
+          this.showAddCategorySetButton();
 			break;
 			}
       $('#list-tab-metadata').data('type', type);
@@ -845,9 +836,6 @@
 		addCategory: function() {	
 			console.log("TCL: addCategory()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'category-metadata-form');
-      $('.add-category-button').hide();
-			$('.add-category-button').prop('disabled', true);
-			$('.add-category-button :input').prop('disabled', true);
 			$('#list-tab-metadata').data('type', 'category');
       $('#category-metadata-form').data('category', null);
       categoryOrCategorySetFormMetadataValidator.resetForm();
@@ -866,9 +854,6 @@
     addCategorySet: function() {	
 			console.log("TCL: addCategorySet()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'categoryset-metadata-form');
-      $('.add-categoryset-button').hide();
-			$('.add-categoryset-button').prop('disabled', true);
-			$('.add-categoryset-button :input').prop('disabled', true);
 			$('#list-tab-metadata').data('type', 'categorySet');
       $('#categoryset-metadata-form').data('categorySet', null);
       categoryOrCategorySetFormMetadataValidator.resetForm();
@@ -884,16 +869,17 @@
       $('#categorySetFormHeader').html("Add category set");
 		},
 		
-		categoryFormDataSheet: async function(action, type, data) {
-      console.log("TCL: action, type, data: ", action, type, data);
+		categoryFormDataSheet: async function(action, data) {
+      console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-category-ispartof-categoryset-fields');
       while (node.lastChild) {
         node.removeChild(node.lastChild)
       }
-      TIMAAT.UI.addSelectedClassToSelectedItem('category', data.model.id);
+
+      // TIMAAT.UI.addSelectedClassToSelectedItem('category', data.model.id);
       $('#category-metadata-form').trigger('reset');
-      $('#list-tab-metadata').data('type', type);
-      this.initFormDataSheetData(type);
+      $('#list-tab-metadata').data('type', 'category');
+      this.initFormDataSheetData('category');
       categoryOrCategorySetFormMetadataValidator.resetForm();
 
       $('#dynamic-category-ispartof-categoryset-fields').append(this.appendCategoryIsPartOfCategorySetsDataset());
@@ -957,28 +943,26 @@
       }
       else if (action == 'edit') {
         this.initFormDataSheetForEdit(type);
-				$('.add-category-button').hide();
-				$('.add-category-button').prop('disabled', true);
-				$('.add-category-button :input').prop('disabled', true);
         $('#category-metadata-form-submit-button').html("Save");
         $('#categoryFormHeader').html("Edit Category");
       }
       // name data
       $('#timaat-category-metadata-name').val(data.model.name);
 
-      $('#category-metadata-form').data(type, data);
+      $('#category-metadata-form').data('category', data);
     },
 
-    categorySetFormDataSheet: async function(action, type, data) {
-      console.log("TCL: action, type, data: ", action, type, data);
+    categorySetFormDataSheet: async function(action, data) {
+      console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-categoryset-contains-category-fields');
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
       }
-      TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', data.model.id);
+
+      // TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', data.model.id);
       $('#categoryset-metadata-form').trigger('reset');
-      $('#list-tab-metadata').data('type', type);
-      this.initFormDataSheetData(type);
+      $('#list-tab-metadata').data('type', 'categorySet');
+      this.initFormDataSheetData('categorySet');
       categoryOrCategorySetFormMetadataValidator.resetForm();
 
       $('#dynamic-categoryset-contains-category-fields').append(this.appendCategorySetContainsCategoriesDataset());
@@ -1041,17 +1025,14 @@
         $('#categorySetFormHeader').html("Category Set Data Sheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
-        this.initFormDataSheetForEdit(type);
-				$('.add-categoryset-button').hide();
-				$('.add-categoryset-button').prop('disabled', true);
-				$('.add-categoryset-button :input').prop('disabled', true);
+        this.initFormDataSheetForEdit('categorySet');
         $('#categoryset-metadata-form-submit-button').html("Save");
         $('#categorySetFormHeader').html("Edit Category Set");
       }
       // name data
       $('#timaat-categoryset-metadata-name').val(data.model.name);
 
-      $('#categoryset-metadata-form').data(type, data);
+      $('#categoryset-metadata-form').data('categorySet', data);
     },
 
     createCategoryModel: async function(formDataObject) {
@@ -1632,16 +1613,20 @@
       $('.form-dismiss-button').show();
       if (type == 'category') {
         $('#timaat-category-metadata-name').focus();
+        this.hideAddCategoryButton();
       } else {
         $('#timaat-categoryset-metadata-name').focus();
+        this.hideAddCategorySetButton();
       }
     },
 
-    hideFormButtons: function() {
-      $('.form-buttons').hide();
-			$('.form-buttons').prop('disabled', true);
-			$('.form-buttons :input').prop('disabled', true);
-    },
+    initFormsForShow: function() {
+      $('.form-buttons').prop('disabled', false);
+      $('.form-buttons :input').prop('disabled', false);
+      $('.form-buttons').show();
+      $('.form-submit-button').hide();
+      $('.form-dismiss-button').hide();
+		},
 
     initFormDataSheetData: function(type) {
       $('.datasheet-data').hide();
@@ -1653,13 +1638,35 @@
       }
     },
 
-    initFormsForShow: function() {
-      $('.form-buttons').prop('disabled', false);
-      $('.form-buttons :input').prop('disabled', false);
-      $('.form-buttons').show();
-      $('.form-submit-button').hide();
-      $('.form-dismiss-button').hide();
-		},
+    hideFormButtons: function() {
+      $('.form-buttons').hide();
+			$('.form-buttons').prop('disabled', true);
+			$('.form-buttons :input').prop('disabled', true);
+    },
+
+    showAddCategoryButton: function() {
+      $('.add-category-button').prop('disabled', false);
+      $('.add-category-button :input').prop('disabled', false);
+      $('.add-category-button').show();
+    },
+
+    hideAddCategoryButton: function() {
+      $('.add-category-button').hide();
+      $('.add-category-button').prop('disabled', true);
+      $('.add-category-button :input').prop('disabled', true);
+    },
+
+    showAddCategorySetButton: function() {
+      $('.add-categoryset-button').prop('disabled', false);
+      $('.add-categoryset-button :input').prop('disabled', false);
+      $('.add-categoryset-button').show();
+    },
+
+    hideAddCategorySetButton: function() {
+      $('.add-categoryset-button').hide();
+			$('.add-categoryset-button').prop('disabled', true);
+			$('.add-categoryset-button :input').prop('disabled', true);
+    },
 
     appendCategoryIsPartOfCategorySetsDataset: function() {
       var isPartOfCategorySetFormData =
