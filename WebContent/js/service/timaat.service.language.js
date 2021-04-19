@@ -132,11 +132,10 @@
       });
     },
 		
-		async checkForDuplicateName(name) {
-      console.log("TCL: checkForDuplicateName -> name", name);
+		async checkForDuplicateName(name, id) {
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/isDuplicateName",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/isDuplicateName/"+id,
 					type       : "POST",
 					data       : JSON.stringify(name),
 					contentType: "application/json; charset=utf-8",
@@ -145,7 +144,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: checkForDuplicateName -> data", data);
+					// console.log("TCL: checkForDuplicateName -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -157,11 +156,10 @@
 			});	
 		},
 
-		async checkForDuplicateCode(code) {
-      console.log("TCL: checkForDuplicateCode -> code", code);
+		async checkForDuplicateCode(code, id) {
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/isDuplicateCode",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/isDuplicateCode/"+id,
 					type       : "POST",
 					data       : JSON.stringify(code),
 					contentType: "application/json; charset=utf-8",
@@ -170,7 +168,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: checkForDuplicateCode -> data", data);
+					// console.log("TCL: checkForDuplicateCode -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {

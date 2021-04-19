@@ -88,37 +88,48 @@
         $(formDataRaw).each(function(i, field){
 					formDataObject[field.name] = field.value;
         });
-        console.log("TCL: formDataObject", formDataObject);
-        var duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name);
-        var duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code);
+        // console.log("TCL: formDataObject", formDataObject);
+        var duplicateName;
+        var duplicateCode;
         if (duplicateName || duplicateCode) {
           $('#timaat-languagelists-language-duplicate').modal('show');
-        } else {
-          if (language) { // update language
-            if (language.model.id != 1) { //* Do not change 'default' entry
+        } 
+        if (language) { // update language
+          if (language.model.id != 1) { //* Do not change 'default' entry
+            duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, language.model.id);
+            duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code, language.model.id);
+            if (duplicateName || duplicateCode) {
+              $('#timaat-languagelists-language-duplicate').modal('show');
+              return;
+            } else {
               console.log("TCL: language", language);
               language.model.name = formDataObject.name;
               language.model.code = formDataObject.code;
               let languageData = language.model;
               delete languageData.ui;
               await TIMAAT.LanguageLists.updateLanguage(languageData);
-              // language.updateUI();
             }
-          } 
-          else { // create new language 
+          }
+        } 
+        else { // create new language 
+          duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, 0);
+          duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code, 0);
+          if (duplicateName || duplicateCode) {
+            $('#timaat-languagelists-language-duplicate').modal('show');
+            return;
+          } else {
             var languageModel = await TIMAAT.LanguageLists.createLanguageModel(formDataObject);
-            // console.log("TCL: languageModel", languageModel);
             var newLanguage = await TIMAAT.LanguageLists.createLanguage(languageModel);
             language = new TIMAAT.Language(newLanguage);
             $('#language-metadata-form').data('language', language);
             $('#list-tab-metadata').data('type', 'language');
-					  $('#list-tab-metadata').trigger('click');
+            $('#list-tab-metadata').trigger('click');
           }
-          TIMAAT.LanguageLists.showAddLanguageButton();
-          await TIMAAT.UI.refreshDataTable('language');
-          TIMAAT.UI.addSelectedClassToSelectedItem('language', language.model.id);
-          TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
         }
+        TIMAAT.LanguageLists.showAddLanguageButton();
+        await TIMAAT.UI.refreshDataTable('language');
+        TIMAAT.UI.addSelectedClassToSelectedItem('language', language.model.id);
+        TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
 			});
 			
 			// cancel add/edit button in content form functionality
@@ -363,7 +374,8 @@
       var model = {
         id: 0,
         name: formDataObject.name,
-        code: formDataObject.code
+        code: formDataObject.code,
+        isSystemLanguage: false //! TODO
       };
       return model;
     },

@@ -285,12 +285,13 @@ public class EndpointLanguage {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("isDuplicateName")
+	@Path("isDuplicateName/{id}")
 	@Secured
-	public Response languageCheckForDuplicateName(String name) {
+	public Response languageCheckForDuplicateName(@PathParam ("id") int id,
+																							  String name) {
 		System.out.println("EndpointLanguage: languageDuplicateNameCheck - name: "+name);
 
-		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.name = "+name);
+		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.name = "+name+" AND l.id != "+ id);
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
@@ -301,12 +302,13 @@ public class EndpointLanguage {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("isDuplicateCode")
+	@Path("isDuplicateCode/{id}")
 	@Secured
-	public Response languageCheckForDuplicateCode(String code) {
+	public Response languageCheckForDuplicateCode(@PathParam ("id") int id,
+																								String code) {
 		System.out.println("EndpointLanguage: languageDuplicateNameCheck - code: "+code);
 
-		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.code = "+code);
+		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.code = "+code+" AND l.id != "+ id);
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
