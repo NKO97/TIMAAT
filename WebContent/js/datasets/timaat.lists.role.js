@@ -106,6 +106,7 @@
         if (role) {
           try {	
             await TIMAAT.RoleLists._roleRemoved(role.model.id);
+            role.remove();
           } catch(error) {
             console.log("error: ", error);
           }
@@ -208,9 +209,11 @@
       $('#timaat-rolelists-rolegroup-delete-submit-button').on('click', async function(ev) {
         var modal = $('#timaat-rolelists-rolegroup-delete');
         var roleGroup = modal.data('roleGroup');
+        console.log("TCL: $ -> roleGroup", roleGroup);
         if (roleGroup) {
           try {	
             await TIMAAT.RoleLists._roleGroupRemoved(roleGroup.model.id);
+            roleGroup.remove();
           } catch(error) {
             console.log("error: ", error);
           }
@@ -1128,7 +1131,6 @@
       } catch(error) {
         console.log("error: ", error)
       }
-      model.remove();
     },
 
     _roleGroupRemoved: async function(id) {
@@ -1138,7 +1140,6 @@
       } catch(error) {
         console.log("error: ", error)
       }
-      model.remove();
     },
 
     initFormDataSheetForEdit: function(type) {

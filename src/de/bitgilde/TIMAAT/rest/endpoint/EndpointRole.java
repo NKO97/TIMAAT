@@ -78,6 +78,7 @@ public class EndpointRole {
 			if (orderby.equalsIgnoreCase("name")) column = "rt.name";
 		}
 
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// calculate total # of records
 		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(r) FROM Role r");
 		long recordsTotal = (long) countQuery.getSingleResult();
@@ -85,26 +86,42 @@ public class EndpointRole {
 
 		// search
 		Query query;
+		String sql;
+		List<Role> roleList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// calculate search result # of records
-			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT COUNT(r) FROM Role r WHERE lower("+languageQuery+") LIKE lower(concat('%', :name,'%'))");
-			countQuery.setParameter("name", search);
-			recordsFiltered = (long) countQuery.getSingleResult();
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				"SELECT r FROM Role r, RoleTranslation rt WHERE r.id = rt.role.id AND lower("+languageQuery+") LIKE lower(concat('%', :name,'%')) ORDER BY "+column+" "+direction);
-			query.setParameter("name", search);
+			sql = "SELECT DISTINCT r FROM Role r WHERE lower("+languageQuery+") LIKE lower(concat('%', :search, '%')) ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql)
+													 .setParameter("name", search);
+			roleList = castList(Role.class, query.getResultList());
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			if ( length == -1) { // display all results
+				length = roleList.size();
+				query.setMaxResults(length);
+			}
+			recordsFiltered = roleList.size();
+			List<Role> filteredRoleList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for (; i < end; i++) {
+				filteredRoleList.add(roleList.get(i));
+			}
+			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredRoleList)).build();
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-				// "SELECT r FROM Role r ORDER BY "+column+" "+direction);
-				"SELECT r FROM Role r, RoleTranslation rt WHERE r.id = rt.role.id ORDER BY "+column+" "+direction);
+			// "SELECT r FROM Role r ORDER BY "+column+" "+direction);
+			"SELECT r FROM Role r, RoleTranslation rt WHERE r.id = rt.role.id ORDER BY "+column+" "+direction);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			roleList = castList(Role.class, query.getResultList());
 		}	
-		if ( start != null && start > 0 ) query.setFirstResult(start);
-		if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Role> roleList = castList(Role.class, query.getResultList());
-		
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleList)).build();
   }
 
