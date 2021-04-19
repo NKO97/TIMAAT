@@ -141,23 +141,23 @@
 
 		async deleteCategorySet(id) {
 			console.log("TCL: deleteCategorySet -> id", id);
-				return new Promise(resolve => {
-					$.ajax({
-						url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+id,
-						type       : "DELETE",
-						contentType: "application/json; charset=utf-8",
-						beforeSend : function (xhr) {
-							xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-						},
-					}).done(function(data) {
-						resolve(data);
-					}).fail(function(e) {
-						console.log( "error", e.responseText );
-					});
-				}).catch((error) => {
-					console.log( "error: ", error);
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+id,
+					type       : "DELETE",
+					contentType: "application/json; charset=utf-8",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(e) {
+					console.log( "error", e.responseText );
 				});
-			},
+			}).catch((error) => {
+				console.log( "error: ", error);
+			});
+		},
 
 		async createCategorySetHasCategory(categorySetHasCategory) {
       console.log("TCL: createCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);

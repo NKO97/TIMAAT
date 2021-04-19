@@ -111,9 +111,11 @@
       $('#timaat-categorylists-category-delete-submit-button').on('click', async function(ev) {
         var modal = $('#timaat-categorylists-category-delete');
         var category = modal.data('category');
+        console.log("TCL: $ -> category", category);
         if (category) {
           try {	
-            await TIMAAT.CategoryLists._categoryRemoved(category.model.id);
+            await TIMAAT.CategoryService.deleteCategory(category.model.id);
+            category.remove();
           } catch(error) {
             console.log("error: ", error);
           }
@@ -423,7 +425,9 @@
         var categorySet = modal.data('categorySet');
         if (categorySet) {
           try {	
-            await TIMAAT.CategoryLists._categorySetRemoved(categorySet.model.id);
+            // await TIMAAT.CategoryLists._categorySetRemoved(categorySet.model.id);
+            await TIMAAT.CategorySetService.deleteCategorySet(categorySet.model.id);
+            categorySet.remove();
           } catch(error) {
             console.log("error: ", error);
           }
@@ -942,7 +946,7 @@
         $('#categoryFormHeader').html("Category Data Sheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
-        this.initFormDataSheetForEdit(type);
+        this.initFormDataSheetForEdit('category');
         $('#category-metadata-form-submit-button').html("Save");
         $('#categoryFormHeader').html("Edit Category");
       }
@@ -1036,7 +1040,7 @@
     },
 
     createCategoryModel: async function(formDataObject) {
-      // console.log("TCL: type, formDataObject", type, formDataObject);
+      // console.log("TCL: createCategoryModel - formDataObject", formDataObject);
       let model = {
         id: 0,
         name: formDataObject.name
@@ -1045,7 +1049,7 @@
     },
 
     createCategorySetModel: async function(formDataObject) {
-      // console.log("TCL: type, formDataObject", type, formDataObject);
+      // console.log("TCL: createCategorySetModel - formDataObject", formDataObject);
       let model = {
         id: 0,
         name: formDataObject.name,
@@ -1584,26 +1588,6 @@
 			}
 			return model;
 		},
-
-    _categoryRemoved: async function(id) {
-      console.log("TCL: _categoryRemoved: id", id);
-      try {
-        await TIMAAT.CategoryService.deleteCategory(id);
-      } catch(error) {
-        console.log("error: ", error)
-      }
-      category.remove();
-    },
-
-    _categorySetRemoved: async function(id) {
-      console.log("TCL: _categorySetRemoved: id", id);
-      try {
-        await TIMAAT.CategorySetService.deleteCategorySet(id);
-      } catch(error) {
-        console.log("error: ", error)
-      }
-      categorySet.remove();
-    },
 
     initFormDataSheetForEdit: function(type) {
       $('#category-metadata-form :input').prop('disabled', false);
