@@ -105,7 +105,7 @@
         var role = modal.data('role');
         if (role) {
           try {	
-            await TIMAAT.RoleLists._roleRemoved(role.model.id);
+            await TIMAAT.RoleService.deleteRole(role.model.id);
             role.remove();
           } catch(error) {
             console.log("error: ", error);
@@ -212,7 +212,7 @@
         console.log("TCL: $ -> roleGroup", roleGroup);
         if (roleGroup) {
           try {	
-            await TIMAAT.RoleLists._roleGroupRemoved(roleGroup.model.id);
+            await TIMAAT.RoleService.deleteRoleGroup(roleGroup.model.id);
             roleGroup.remove();
           } catch(error) {
             console.log("error: ", error);
@@ -1124,24 +1124,6 @@
       await TIMAAT.UI.refreshDataTable('roleGroup');
     },
 
-    _roleRemoved: async function(id) {
-      console.log("TCL: _roleRemoved: id", id);
-      try {
-        await TIMAAT.RoleService.deleteRole(id);
-      } catch(error) {
-        console.log("error: ", error)
-      }
-    },
-
-    _roleGroupRemoved: async function(id) {
-      console.log("TCL: _roleGroupRemoved: id", id);
-      try {
-        await TIMAAT.RoleService.deleteRoleGroup(id);
-      } catch(error) {
-        console.log("error: ", error)
-      }
-    },
-
     initFormDataSheetForEdit: function(type) {
       $('#role-metadata-form :input').prop('disabled', false);
       $('#rolegroup-metadata-form :input').prop('disabled', false);
@@ -1155,7 +1137,6 @@
         $('#timaat-rolegroup-metadata-name').focus();
         this.hideAddRoleGroupButton();
       }
-      
     },
 
     initFormForShow: function() {

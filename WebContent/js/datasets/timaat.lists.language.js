@@ -41,7 +41,8 @@
         var language = modal.data('language');
         if (language) {
           try {	
-            await TIMAAT.LanguageLists._languageRemoved(language);
+            await TIMAAT.LanguageService.deleteLanguage(language.model.id);
+            language.remove();
           } catch(error) {
             console.log("error: ", error);
           }
@@ -406,16 +407,6 @@
       };
 
       await TIMAAT.UI.refreshDataTable('language');
-    },
-
-    _languageRemoved: async function(language) {
-      console.log("TCL: _languageRemoved: language", language);
-      try {
-        await TIMAAT.LanguageService.deleteLanguage(language.model.id);
-      } catch(error) {
-        console.log("error: ", error)
-      }
-      language.remove();
     },
 		
 	}	
