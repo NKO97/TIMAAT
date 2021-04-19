@@ -75,7 +75,8 @@
 				}
 				modal.modal('hide');
 				TIMAAT.UI.hideDataSetContentContainer();
-				TIMAAT.MediumCollectionDatasets.loadMediaCollections();
+				// TIMAAT.MediumCollectionDatasets.loadMediaCollections();
+				$('#mediumcollection-tab').trigger('click');
 			});
 
 			// edit content form button handler

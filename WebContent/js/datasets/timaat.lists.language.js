@@ -54,7 +54,8 @@
         }
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
-        TIMAAT.LanguageLists.loadLanguages();
+        // TIMAAT.LanguageLists.loadLanguages();
+        $('#language-tab').trigger('click');
       });
 
 			// delete button (in form) handler

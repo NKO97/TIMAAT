@@ -119,7 +119,8 @@
         }
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
-        TIMAAT.RoleLists.loadRoles();
+        // TIMAAT.RoleLists.loadRoles();
+        $('#role-tab').trigger('click');
       });
 
       // cancel add/edit button in content form functionality
@@ -227,7 +228,8 @@
         // $('#list-tab-metadata').data('type', '');
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
-        TIMAAT.RoleLists.loadRoleGroups();
+        // TIMAAT.RoleLists.loadRoleGroups();
+        $('#rolegroup-tab').trigger('click');
       });
       
       // cancel add/edit button in content form functionality

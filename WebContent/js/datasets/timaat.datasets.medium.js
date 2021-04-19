@@ -234,6 +234,7 @@
 				let modal = $('#timaat-mediadatasets-medium-delete');
 				let medium = modal.data('medium');
 				let type = $('#medium-metadata-form').data('type');
+        console.log("TCL: $ -> type", type);
 				if (medium) {
 					try {	
 						await TIMAAT.MediumDatasets._mediumRemoved(medium);
@@ -247,11 +248,10 @@
 					}
 				}
 				modal.modal('hide');
-				TIMAAT.UI.hideDataSetContentContainer();
-				if ( type == 'medium') {
-					TIMAAT.MediumDatasets.loadMedia();
+				if ( $('#medium-tab').hasClass('active') ) {
+					$('#medium-tab').trigger('click');
 				} else {
-					TIMAAT.MediumDatasets.loadMediumSubtype(type);
+					$('#'+type+'-tab').trigger('click');
 				}
 			});
 

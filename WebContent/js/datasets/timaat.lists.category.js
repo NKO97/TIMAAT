@@ -128,7 +128,8 @@
         }
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
-        TIMAAT.CategoryLists.loadCategories();
+        // TIMAAT.CategoryLists.loadCategories();
+        $('#category-tab').trigger('click');
       });
 
       // cancel add/edit button in content form functionality
@@ -440,7 +441,8 @@
         }
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
-        TIMAAT.CategoryLists.loadCategorySets();
+        // TIMAAT.CategoryLists.loadCategorySets();
+        $('#categoryset-tab').trigger('click');
       });
 
       // cancel add/edit button in content form functionality

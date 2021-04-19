@@ -200,11 +200,10 @@
 					}
 				}
 				modal.modal('hide');
-				TIMAAT.UI.hideDataSetContentContainer();
-				if ( type == 'actor') {
-					TIMAAT.ActorDatasets.loadActors();
+				if ( $('#actor-tab').hasClass('active') ) {
+					$('#actor-tab').trigger('click');
 				} else {
-					TIMAAT.ActorDatasets.loadActorSubtype(type);
+					$('#'+type+'-tab').trigger('click');
 				}
 			});
 

@@ -87,7 +87,8 @@
 				modal.modal('hide');
 				TIMAAT.UI.hideDataSetContentContainer();
 				// if ( $('#event-metadata-form').data('type') == 'event') {
-					TIMAAT.EventDatasets.loadEvents();
+					// TIMAAT.EventDatasets.loadEvents();
+					$('#event-tab').trigger('click');
 				// } else {
 				// 	TIMAAT.EventDatasets.loadEventSubtype(type);
 				// }
