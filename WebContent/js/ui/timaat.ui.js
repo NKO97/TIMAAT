@@ -546,7 +546,6 @@
           switch(form) {
             case 'dataSheet':
               this.setDataSetContentActiveNavTab('mediumcollection-tab-metadata');
-              console.log("TCL: type", type);
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormDataSheet(mode, subType, data);
             break;
             case 'items':

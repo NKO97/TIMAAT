@@ -50,7 +50,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getMediumCollection -> data", data);
+					// console.log("TCL: getMediumCollection -> data", data);
 					resolve(data);
 				}).fail(function(e) {
 					console.log(e.responseText);
@@ -62,7 +62,7 @@
 		},
 
 		async getTagList(mediumCollectionId) {
-      console.log("TCL: getTagList -> for mediumCollectionId", mediumCollectionId);
+      // console.log("TCL: getTagList -> for mediumCollectionId", mediumCollectionId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/hasTagList/",
@@ -73,7 +73,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getTagList -> data", data);
+					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
 				.fail(function(e) {
@@ -86,7 +86,7 @@
 		},
 
 		createMediaCollection(title, comment, callback) {
-      console.log("TCL: createMediaCollection (old) -> title, comment, callback", title, comment);
+      // console.log("TCL: createMediaCollection (old) -> title, comment, callback", title, comment);
 			var model = {
 					id: 0,
 					isSystemic: 0,
@@ -112,7 +112,7 @@
 		},
 
 		async createMediumCollection(mediumCollectionModel) {
-      console.log("TCL: createMediumCollection -> mediumCollectionModel", mediumCollectionModel);
+      // console.log("TCL: createMediumCollection -> mediumCollectionModel", mediumCollectionModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/0",
@@ -135,7 +135,7 @@
 		},
 
 		async createMediumCollectionSubtype(type, mediumCollectionModel, subTypeModel) {
-      console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subTypeModel", type, mediumCollectionModel, subTypeModel);
+      // console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subTypeModel", type, mediumCollectionModel, subTypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+type+"/"+mediumCollectionModel.id,
@@ -158,7 +158,7 @@
 		},
 
 		async addCollectionItem(collectionId, mediumId) {
-			console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
+			// console.log("TCL: addCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId,
@@ -181,8 +181,7 @@
 		},
 
 		async updateCollectionItem(collectionId, mediumId, sortOrder) {
-			console.log("TCL: updateCollectionItem -> collectionId, mediumId, sortOrder", collectionId, mediumId, sortOrder);
-			// console.log("TCL: updateCollectionItem -> mediaCollectionHasMedium", mediaCollectionHasMedium);
+			// console.log("TCL: updateCollectionItem -> collectionId, mediumId, sortOrder", collectionId, mediumId, sortOrder);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId+"/order/"+sortOrder,
@@ -229,7 +228,7 @@
 		},
 
 		async updateMediaCollection(collectionModel) {
-			console.log("TCL: updateMediaCollection -> collection", collectionModel);
+			// console.log("TCL: updateMediaCollection -> collection", collectionModel);
 			var tempCollection = {
 					id: collectionModel.id,
 					isSystemic: collectionModel.isSystemic,
@@ -265,7 +264,7 @@
 		},
 
 		async updateMediumCollectionSubtype(type, collection) {
-			console.log("TCL: updateMediaCollectionSubtype -> type, collection", type, collection);
+			// console.log("TCL: updateMediaCollectionSubtype -> type, collection", type, collection);
 			delete collection.ui;
 			return new Promise(resolve => {
 				$.ajax({
@@ -290,7 +289,7 @@
 		},
 
 		async removeMediaCollection(collection) {
-			console.log("TCL: removeMediaCollection -> collection", collection);
+			// console.log("TCL: removeMediaCollection -> collection", collection);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collection.id,
@@ -312,7 +311,7 @@
 		},
 
 		async removeCollectionItem(collectionId, mediumId) {
-      console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
+      // console.log("TCL: removeCollectionItem -> collectionId, mediumId", collectionId, mediumId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+collectionId+"/medium/"+mediumId,

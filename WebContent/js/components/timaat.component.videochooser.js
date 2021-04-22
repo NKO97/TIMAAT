@@ -402,7 +402,7 @@
 					mediumElement.data('medium', medium);
 					mediumElement.find('input:checkbox').prop('checked', false);
 					mediumElement.find('input:checkbox').change(function() {
-						$('#timaat-videochooser-list-action-submit-button').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);				
+						$('#timaat-videochooser-list-action-submit-button').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);
 					});
 
 					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
@@ -481,12 +481,12 @@
 						}
 						else if (medium.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" style="max-height:100%; max-width:100%" alt="Image preview"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						}
 						else {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" style="max-height:100%; max-width:100%" alt="No preview available"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
 										</div>`;
 						}
 						return ui;
@@ -508,7 +508,8 @@
 						}
 					},
 					{ data: 'mediumVideo.length', name: 'duration', className: 'duration', width: '10%', render: function(data, type, medium, meta) {
-							if (medium.mediumVideo) {
+						// console.log("TCL: data, type, medium, meta - ", data, type, medium, meta);
+						if (medium.mediumVideo) {
 								return TIMAAT.Util.formatTime(data);
 							}
 							return "";
@@ -617,7 +618,7 @@
 			
 		},
 		
-		setVideoStatus: function (video) {			
+		setVideoStatus: function (video) {
 			if ( !video || !video.ui ) return;
 			// clear ui status
 			video.ui.find('.timaat-medium-status').hide();
@@ -897,12 +898,12 @@
 		},
 		
 		_getProducer: function(video) {
-			if ( !video || !video.mediumHasActorWithRoles ) return "";
+			if ( !video || !video.mediumHasActorWithRoles ) return "-";
 			var actors = [];
 			video.mediumHasActorWithRoles.forEach(function(role) {
 				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
 			});
-			if ( actors.length == 0 ) return "";
+			if ( actors.length == 0 ) return "no data available";
 			var producer = "";
 			var i = 0;
 			for (; i < actors.length; i++) {

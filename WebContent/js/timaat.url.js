@@ -179,6 +179,7 @@
             // TODO make sure media collections are loaded
             // show media collection component
             TIMAAT.UI.showComponent('media');
+            TIMAAT.UI.refreshDataTable('mediumCollection');
             
             // show corresponding medium collection form
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current medium collection

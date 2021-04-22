@@ -688,7 +688,7 @@
 						// medium.fileStatus = data;
 						
 						// TIMAAT.VideoChooser.setVideoStatus(video);
-						// TIMAAT.MediumDatasets.displayFileStatus(medium);
+						// TIMAAT.MediumDatasets.setMediumStatus(medium);
 						
 						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
 						// 	window.clearInterval(medium.poll);

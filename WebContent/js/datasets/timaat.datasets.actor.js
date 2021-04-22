@@ -5785,10 +5785,18 @@
 			}
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
 			if (type == 'actor') {
-				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + selectedItem.model.id);
+				if (TIMAAT.UI.subNavTab == 'dataSheet') {
+					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + selectedItem.model.id);
+				} else {
+					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + selectedItem.model.id + '/' + TIMAAT.UI.subNavTab);
+				}
 				type = selectedItem.model.actorType.actorTypeTranslations[0].type;
 			} else {
-				TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedItem.model.id);
+				if (TIMAAT.UI.subNavTab == 'dataSheet') {
+					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedItem.model.id);
+				} else {
+					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedItem.model.id + '/' + TIMAAT.UI.subNavTab);
+				}
 			}
 			$('#actor-metadata-form').data('type', type);
 			$('#actor-metadata-form').data('actor', selectedItem);

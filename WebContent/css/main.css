@@ -112,9 +112,10 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	padding:0;
 }
 
+/* #timaat-mediumcollectiondatasets-mediumcollection-items td.actions,
 #timaat-videochooser-list td.actions {
 	padding: 5px 5px;
-}
+} */
 
 #timaat-component-videochooser {
 	max-height: initial !important;

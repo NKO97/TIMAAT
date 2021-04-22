@@ -3346,21 +3346,21 @@ public class EndpointMedium {
 	 */
 	@GET
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("{id}/analysislists")
+	@Path("{id}/analysisLists")
 	@Secured
-	public Response getAnnotationLists(@PathParam("id") int id) {
+	public Response getAnalysisLists(@PathParam("id") int id) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// find medium
-		Medium m = entityManager.find(Medium.class, id);
-		if ( m == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = entityManager.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		
-		entityManager.refresh(m);
+		entityManager.refresh(medium);
 		
-		return Response.ok(m.getMediumAnalysisLists()).build();    	
+		return Response.ok(medium.getMediumAnalysisLists()).build();    	
 	}
-	
+
 	@POST
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/tag/{tagId}")
