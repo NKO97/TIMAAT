@@ -711,7 +711,7 @@
               // }
             }
             else {
-              redirectToDefaultView();
+              this.redirectToDefaultView();
             }
           break;
           default:
