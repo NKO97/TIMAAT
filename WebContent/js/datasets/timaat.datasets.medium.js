@@ -3662,7 +3662,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('medium', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('medium', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -3808,7 +3810,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('audio', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('audio', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -3927,7 +3931,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('document', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('document', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -4045,7 +4051,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('image', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('image', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -4163,7 +4171,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('software', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('software', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -4281,7 +4291,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', mediumModel.id);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -4397,7 +4409,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('video', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('video', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" ) {
@@ -4518,7 +4532,9 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('videogame', medium.id);
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('videogame', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -4567,8 +4583,8 @@
 			});				
 		},
 
-		setDataTableOnItemSelect: function(type, selectedItemId) {
-    	console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItemId", type, selectedItemId);
+		setDataTableOnItemSelect: function(type, selectedItem) {
+    	console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
@@ -4593,43 +4609,7 @@
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);
-			let index;
-			let selectedItem;
-			switch (type) {
-				case 'medium':
-					index = this.media.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.media[index];
-				break;
-				case 'audio':
-					index = this.audios.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.audios[index];
-				break;
-				case 'document':
-					index = this.documents.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.documents[index];
-				break;
-				case 'image':
-					index = this.images.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.images[index];
-				break;
-				case 'software':
-					index = this.softwares.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.softwares[index];
-				break;
-				case 'text':
-					index = this.texts.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.texts[index];
-				break;
-				case 'video':
-					index = this.videos.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.videos[index];
-				break;
-				case 'videogame':
-					index = this.videogames.findIndex(({model}) => model.id === selectedItemId);
-					selectedItem = this.videogames[index];
-				break;
-			}
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
+			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItem.model.id);
 			if (type == 'medium') {
 				if (TIMAAT.UI.subNavTab == 'dataSheet') {
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + selectedItem.model.id);

@@ -737,7 +737,7 @@
 						mediumModel.model = medium;
 						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
             TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, medium.id);
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-remove', async function(ev) {
@@ -922,9 +922,9 @@
 							let languageDisplay = '';
 							for (; i < data.length; i++) {
 								if (data[i].mediumLanguageType.id == 1) {
-									languageDisplay += `<p>(STT) ` + data[i].language.name + `</p>`;
+									languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
 								} else if (data[i].mediumLanguageType.id == 2) {
-									languageDisplay += `<p>(AT) ` + data[i].language.name + `</p>`;
+									languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
 								}
 							}
 							return languageDisplay;
