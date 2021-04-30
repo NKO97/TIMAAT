@@ -85,6 +85,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarking</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.EditingMontage</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.EditingRhythm</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.EditingRhythmTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddress</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddressType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EmailAddressTypeTranslation</class>
@@ -99,6 +102,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditing</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageGallery</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Instrument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentSubtype</class>
@@ -159,6 +164,10 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumVideoHasMediumImagePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MembershipDetail</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacro</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacroTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicro</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicroTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKey</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
@@ -166,6 +175,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Platform</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeed</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeedTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Province</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Publication</class>
@@ -192,6 +203,11 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.SvgShapeTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Tag</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TakeJunction</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TakeJunctionTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TakeLength</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TakeTypeProgression</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TakeTypeProgressionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarking</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Territory</class>

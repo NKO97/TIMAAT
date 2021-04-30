@@ -12,7 +12,6 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -38,23 +37,28 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSpeech;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
-import de.bitgilde.TIMAAT.model.FIPOP.Articulation;
 import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraShotTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.EditingMontage;
+import de.bitgilde.TIMAAT.model.FIPOP.EditingRhythmTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
-import de.bitgilde.TIMAAT.model.FIPOP.LineupMember;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
-import de.bitgilde.TIMAAT.model.FIPOP.MaqamSubtypeTranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.MaqamTypeTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacroTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicroTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation;
+import de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeedTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Rhythm;
 import de.bitgilde.TIMAAT.model.FIPOP.SoundEffectDescriptive;
+import de.bitgilde.TIMAAT.model.FIPOP.TakeJunctionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.TakeLength;
+import de.bitgilde.TIMAAT.model.FIPOP.TakeTypeProgressionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Timbre;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -166,19 +170,14 @@ public class EndpointAnalysis {
 			}
 			break;
 			case 2: // Greimas Actantial Model //* won't be implemented
-
 			break;
 			case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
-
 			break;
 			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
-
 			break;
 			case 5: // Genette Narrative Discourse //* won't be implemented
-
 			break;
 			case 6: // Stanzel Narrative Situations //* won't be implemented
-
 			break;
 			case 7: // Color temperature
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
@@ -186,7 +185,6 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 8: // Concept Camera Movement and Direction
-			
 			break;
 			case 9: // Camera Elevation
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
@@ -219,10 +217,8 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 15: // Concept Camera Movement and Handling
-
 			break;
 			case 16: // Camera Movement
-
 			break;
 			case 17: // Camera Handling
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
@@ -232,7 +228,6 @@ public class EndpointAnalysis {
 			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
 			break;
 			case 19: // Barthes Rhetoric of the Image //* won't be implemented
-
 			break;
 			case 20: // Sound Effect Descriptive
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
@@ -240,21 +235,60 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 21: // Analysis Ambient Sound
-				
 			break;
 			case 22: // Analysis Music
-
 			break;
 			case 23: // Analysis Speech
-
 			break;
 			case 24: // Analysis Voice
-
 			break;
 			case 25: // Lighting type
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
 					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLighting().getLightingTranslations().get(0).getName()));
 				}
+			break;
+			case 26: // Montage Figure Macro - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
+				}
+			break;
+			case 27: // Montage Figure Micro - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMicro().getMontageFigureMicroTranslations().get(0).getName()));
+				}
+			break;
+			case 28: // Take Junction - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeJunction().getTakeJunctionTranslations().get(0).getName()));
+				}
+			break;
+			case 29: // Editing Rhythm - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
+				}
+			break;
+			case 30: // Take Length - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeLength().getText()));
+				}
+			break;
+			case 31: // Take Type Progression - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeTypeProgression().getTakeTypeProgressionTranslations().get(0).getName()));
+				}
+			break;
+			case 32: // Playback Speed - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPlaybackSpeed().getPlaybackSpeedTranslations().get(0).getName()));
+				}
+			break;
+			case 33: // Image Cadre Editing - Part of 34: Editing / Montage
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getImageCadreEditing().getImageCadreEditingTranslations().get(0).getName()));
+				}
+			break;
+			case 34: // Editing / Montage
+
 			break;
 		}
 
@@ -318,24 +352,18 @@ public class EndpointAnalysis {
 			case 1: // Martinez Scheffel Unreliable Narration
 			break;
 			case 2: // Greimas Actantial Model //* won't be implemented
-
 			break;
 			case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
-
 			break;
 			case 4: // Lotman Renner Spacial Semantics //* won't be implemented
-
 			break;
 			case 5: // Genette Narrative Discourse //* won't be implemented
-
 			break;
 			case 6: // Stanzel Narrative Situations //* won't be implemented
-
 			break;
 			case 7: // Color temperature
 			break;
 			case 8: // Concept Camera Movement and Direction
-			
 			break;
 			case 9: // Camera Elevation
 			break;
@@ -350,28 +378,24 @@ public class EndpointAnalysis {
 			case 14: // Camera Distance
 			break;
 			case 15: // Concept Camera Movement and Handling
-
 			break;
 			case 16: // Camera Movement
-
 			break;
 			case 17: // Camera Handling
 			break;
 			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
 			break;
 			case 19: // Barthes Rhetoric of the Image //* won't be implemented
-
 			break;
 			case 20: // Sound Effect Descriptive
 			break;
 			case 21: // Analysis Ambient Sound
-				
 			break;
 			case 22: // Analysis Music
 				switch(element) {
 					case "articulation":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT at FROM ArticulationTranslation at WHERE at.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY at.type ASC");
+							"SELECT at FROM ArticulationTranslation at WHERE at.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY at.id ASC");
 						List<ArticulationTranslation> articulationTranslationList = castList(ArticulationTranslation.class, query.getResultList());
 						List<SelectElement> articulationSelectList = new ArrayList<>();
 						for (ArticulationTranslation articulationTranslation : articulationTranslationList) {
@@ -381,7 +405,7 @@ public class EndpointAnalysis {
 					break;
 					case "dynamicMarking":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT dmt FROM DynamicMarkingTranslation dmt WHERE dmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY dmt.type ASC");
+							"SELECT dmt FROM DynamicMarkingTranslation dmt WHERE dmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY dmt.id ASC");
 						List<DynamicMarkingTranslation> dynamicMarkingTranslationList = castList(DynamicMarkingTranslation.class, query.getResultList());
 						List<SelectElement> dynamicMarkingSelectList = new ArrayList<>();
 						for (DynamicMarkingTranslation dynamicMarkingTranslation : dynamicMarkingTranslationList) {
@@ -391,7 +415,7 @@ public class EndpointAnalysis {
 					break;
 					case "changeInDynamics":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT cidt FROM ChangeInDynamicsTranslation cidt WHERE cidt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cidt.type ASC");
+							"SELECT cidt FROM ChangeInDynamicsTranslation cidt WHERE cidt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cidt.id ASC");
 						List<ChangeInDynamicsTranslation> changeInDynamicsTranslationList = castList(ChangeInDynamicsTranslation.class, query.getResultList());
 						List<SelectElement> changeInDynamicsSelectList = new ArrayList<>();
 						for (ChangeInDynamicsTranslation changeInDynamicsTranslation : changeInDynamicsTranslationList) {
@@ -401,7 +425,7 @@ public class EndpointAnalysis {
 					break;
 					case "changeInTempo":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT citt FROM ChangeInTempoTranslation citt WHERE citt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY citt.type ASC");
+							"SELECT citt FROM ChangeInTempoTranslation citt WHERE citt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY citt.id ASC");
 						List<ChangeInTempoTranslation> changeInTempoTranslationList = castList(ChangeInTempoTranslation.class, query.getResultList());
 						List<SelectElement> changeInTempoSelectList = new ArrayList<>();
 						for (ChangeInTempoTranslation changeInTempoTranslation : changeInTempoTranslationList) {
@@ -411,7 +435,7 @@ public class EndpointAnalysis {
 					break;
 					case "tempoMarking":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT tmt FROM TempoMarkingTranslation tmt WHERE tmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY tmt.type ASC");
+							"SELECT tmt FROM TempoMarkingTranslation tmt WHERE tmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY tmt.id ASC");
 						List<TempoMarkingTranslation> tempoMarkingTranslationList = castList(TempoMarkingTranslation.class, query.getResultList());
 						List<SelectElement> tempoMarkingSelectList = new ArrayList<>();
 						for (TempoMarkingTranslation tempoMarkingTranslation : tempoMarkingTranslationList) {
@@ -421,7 +445,7 @@ public class EndpointAnalysis {
 					break;
 					case "musicalKey":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT mkt FROM MusicalKeyTranslation mkt WHERE mkt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY mkt.type ASC");
+							"SELECT mkt FROM MusicalKeyTranslation mkt WHERE mkt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY mkt.id ASC");
 						List<MusicalKeyTranslation> musicalKeyTranslationList = castList(MusicalKeyTranslation.class, query.getResultList());
 						List<SelectElement> musicalKeySelectList = new ArrayList<>();
 						for (MusicalKeyTranslation musicalKeyTranslation : musicalKeyTranslationList) {
@@ -431,7 +455,7 @@ public class EndpointAnalysis {
 					break;
 					case "rhythm":
 						query = TIMAATApp.emf.createEntityManager().createQuery(
-							"SELECT r FROM Rhythm r ORDER BY r.type ASC");
+							"SELECT r FROM Rhythm r ORDER BY r.id ASC");
 						List<Rhythm> rhythmList = castList(Rhythm.class, query.getResultList());
 						List<SelectElement> rhythmSelectList = new ArrayList<>();
 						for (Rhythm rhythm : rhythmList) {
@@ -488,13 +512,110 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 23: // Analysis Speech
-
 			break;
 			case 24: // Analysis Voice
-
 			break;
-			case 25: //? Lighting type
-
+			case 25: // Lighting type
+			break;
+			case 26: // Montage Figure Macro - Part of 34: Editing / Montage
+			break;
+			case 27: // Montage Figure Micro - Part of 34: Editing / Montage
+			break;
+			case 28: // Take Junction - Part of 34: Editing / Montage
+			break;
+			case 29: // Editing Rhythm - Part of 34: Editing / Montage
+			break;
+			case 30: // Take Length - Part of 34: Editing / Montage
+			break;
+			case 31: // Take Type Progression - Part of 34: Editing / Montage
+			break;
+			case 32: // Playback Speed - Part of 34: Editing / Montage
+			break;
+			case 33: // Image Cadre Editing - Part of 34: Editing / Montage
+			break;
+			case 34: // Editing / Montage
+			switch(element) {
+				case "montageFigureMacro":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT mfmt FROM MontageFigureMacroTranslation mfmt WHERE mfmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY mfmt.id ASC");
+					List<MontageFigureMacroTranslation> montageFigureMacroTranslationList = castList(MontageFigureMacroTranslation.class, query.getResultList());
+					List<SelectElement> montageFigureMacroSelectList = new ArrayList<>();
+					for (MontageFigureMacroTranslation montageFigureMacroTranslation : montageFigureMacroTranslationList) {
+						montageFigureMacroSelectList.add(new SelectElement(montageFigureMacroTranslation.getMontageFigureMacro().getAnalysisMethodId(), montageFigureMacroTranslation.getName()));
+					}
+					selectElementList = montageFigureMacroSelectList;
+				break;
+				case "montageFigureMicro":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT mfmt FROM MontageFigureMicroTranslation mfmt WHERE mfmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY mfmt.id ASC");
+					List<MontageFigureMicroTranslation> montageFigureMicroTranslationList = castList(MontageFigureMicroTranslation.class, query.getResultList());
+					List<SelectElement> montageFigureMicroSelectList = new ArrayList<>();
+					for (MontageFigureMicroTranslation montageFigureMicroTranslation : montageFigureMicroTranslationList) {
+						montageFigureMicroSelectList.add(new SelectElement(montageFigureMicroTranslation.getMontageFigureMicro().getAnalysisMethodId(), montageFigureMicroTranslation.getName()));
+					}
+					selectElementList = montageFigureMicroSelectList;
+				break;
+				case "takeJunction":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT tjt FROM TakeJunctionTranslation tjt WHERE tjt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY tjt.id ASC");
+					List<TakeJunctionTranslation> takeJunctionTranslationList = castList(TakeJunctionTranslation.class, query.getResultList());
+					List<SelectElement> takeJunctionSelectList = new ArrayList<>();
+					for (TakeJunctionTranslation takeJunctionTranslation : takeJunctionTranslationList) {
+						takeJunctionSelectList.add(new SelectElement(takeJunctionTranslation.getTakeJunction().getAnalysisMethodId(), takeJunctionTranslation.getName()));
+					}
+					selectElementList = takeJunctionSelectList;
+				break;
+				case "editingRhythm":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT ert FROM EditingRhythmTranslation ert WHERE ert.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY ert.id ASC");
+					List<EditingRhythmTranslation> editingRhythmTranslationList = castList(EditingRhythmTranslation.class, query.getResultList());
+					List<SelectElement> editingRhythmSelectList = new ArrayList<>();
+					for (EditingRhythmTranslation editingRhythmTranslation : editingRhythmTranslationList) {
+						editingRhythmSelectList.add(new SelectElement(editingRhythmTranslation.getEditingRhythm().getAnalysisMethodId(), editingRhythmTranslation.getName()));
+					}
+					selectElementList = editingRhythmSelectList;
+				break;
+				case "takeTypeProgression":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT ttpt FROM TakeTypeProgressionTranslation ttpt WHERE ttpt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY ttpt.id ASC");
+					List<TakeTypeProgressionTranslation> takeTypeProgressionTranslationList = castList(TakeTypeProgressionTranslation.class, query.getResultList());
+					List<SelectElement> takeTypeProgressionSelectList = new ArrayList<>();
+					for (TakeTypeProgressionTranslation takeTypeProgressionTranslation : takeTypeProgressionTranslationList) {
+						takeTypeProgressionSelectList.add(new SelectElement(takeTypeProgressionTranslation.getTakeTypeProgression().getAnalysisMethodId(), takeTypeProgressionTranslation.getName()));
+					}
+					selectElementList = takeTypeProgressionSelectList;
+				break;
+				case "cameraShotType":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT cstt FROM CameraShotTypeTranslation cstt WHERE cstt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cstt.id ASC");
+					List<CameraShotTypeTranslation> cameraShotTypeTranslationList = castList(CameraShotTypeTranslation.class, query.getResultList());
+					List<SelectElement> cameraShotTypeSelectList = new ArrayList<>();
+					for (CameraShotTypeTranslation cameraShotTypeTranslation : cameraShotTypeTranslationList) {
+						cameraShotTypeSelectList.add(new SelectElement(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
+					}
+					selectElementList = cameraShotTypeSelectList;
+				break;
+				case "playbackSpeed":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT pst FROM PlaybackSpeedTranslation pst WHERE pst.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY pst.id ASC");
+					List<PlaybackSpeedTranslation> playbackSpeedTranslationList = castList(PlaybackSpeedTranslation.class, query.getResultList());
+					List<SelectElement> playbackSpeedSelectList = new ArrayList<>();
+					for (PlaybackSpeedTranslation playbackSpeedTranslation : playbackSpeedTranslationList) {
+						playbackSpeedSelectList.add(new SelectElement(playbackSpeedTranslation.getPlaybackSpeed().getAnalysisMethodId(), playbackSpeedTranslation.getName()));
+					}
+					selectElementList = playbackSpeedSelectList;
+				break;
+				case "imageCadreEditing":
+					query = TIMAATApp.emf.createEntityManager().createQuery(
+						"SELECT icet FROM ImageCadreEditingTranslation icet WHERE icet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY icet.id ASC");
+					List<ImageCadreEditingTranslation> imageCadreEditingTranslationList = castList(ImageCadreEditingTranslation.class, query.getResultList());
+					List<SelectElement> imageCadreEditingSelectList = new ArrayList<>();
+					for (ImageCadreEditingTranslation imageCadreEditingTranslation : imageCadreEditingTranslationList) {
+						imageCadreEditingSelectList.add(new SelectElement(imageCadreEditingTranslation.getImageCadreEditing().getAnalysisMethodId(), imageCadreEditingTranslation.getName()));
+					}
+					selectElementList = imageCadreEditingSelectList;
+				break;
+			}
 			break;
 		}
 
@@ -620,10 +741,11 @@ public class EndpointAnalysis {
 		Annotation annotation = analysis.getAnnotation();
 		if ( annotation.getAnalysis().contains(analysis) == false) return Response.ok().entity(false).build();
 
-		// annotation.getAnalysis().remove(analysisMethodId);
-
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
+		if (analysisMethod.getAnalysisMethodType().getId() == 34) { // 34 = EditingMontage -> remove TakeLength
+			entityManager.remove(analysisMethod.getEditingMontage().getTakeLength().getAnalysisMethod());
+		}
 		entityManager.remove(analysisMethod);
 		entityTransaction.commit();
 		entityManager.refresh(annotation);
@@ -928,7 +1050,101 @@ public class EndpointAnalysis {
 		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive - done");
 		return Response.ok().entity(soundEffectDescriptive).build();
 	}
-	
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("takeLength/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodTakeLength(@PathParam("analysisMethodId") int analysisMethodId, 
+																								 String jsonData) {
+		System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		TakeLength takeLength = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisMethod analysisMethod = new AnalysisMethod();
+		// parse JSON data
+		try {
+			takeLength = mapper.readValue(jsonData, TakeLength.class);
+		} catch (IOException e) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( takeLength == null ) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: takeLength == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		analysisMethod.setId(0);
+		AnalysisMethodType analysisMethodType = entityManager.find(AnalysisMethodType.class, 30); // 30 is 'takeLength'
+		analysisMethod.setAnalysisMethodType(analysisMethodType);
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(analysisMethod);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(analysisMethod);
+
+		takeLength.setAnalysisMethodId(analysisMethod.getId());
+
+		entityTransaction.begin();
+		entityManager.persist(takeLength);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(takeLength);
+		// entityManager.refresh(takeLength.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength - done");
+		return Response.ok().entity(takeLength).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("editingMontage/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodEditingMontage(@PathParam("analysisMethodId") int analysisMethodId, 
+																										 String jsonData) {
+		System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		EditingMontage editingMontage = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			editingMontage = mapper.readValue(jsonData, EditingMontage.class);
+		} catch (IOException e) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( editingMontage == null ) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: editingMontage == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(editingMontage);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(editingMontage);
+		entityManager.refresh(editingMontage.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage - done");
+		return Response.ok().entity(editingMontage).build();
+	}
+
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
     for(Object o: c)

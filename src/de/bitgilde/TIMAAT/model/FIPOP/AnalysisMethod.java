@@ -108,6 +108,41 @@ public class AnalysisMethod implements Serializable {
 	@OneToOne(mappedBy="analysisMethod")
 	private SoundEffectDescriptive soundEffectDescriptive;
 
+	//bi-directional one-to-one association to EditingMontage
+	@OneToOne(mappedBy="analysisMethod")
+	private EditingMontage editingMontage;
+
+	//bi-directional one-to-one association to MontageFigureMacro
+	@OneToOne(mappedBy="analysisMethod")
+	private MontageFigureMacro montageFigureMacro;
+
+	//bi-directional one-to-one association to MontageFigureMicro
+	@OneToOne(mappedBy="analysisMethod")
+	private MontageFigureMicro montageFigureMicro;
+	
+	//bi-directional one-to-one association to TakeJunction
+	@OneToOne(mappedBy="analysisMethod")
+	private TakeJunction takeJunction;
+
+	//bi-directional one-to-one association to EditingRhythm
+	@OneToOne(mappedBy="analysisMethod")
+	private EditingRhythm editingRhythm;
+
+	//bi-directional one-to-one association to TakeLength
+	@OneToOne(mappedBy="analysisMethod")
+	private TakeLength takeLength;
+
+	//bi-directional one-to-one association to TakeTypeProgression
+	@OneToOne(mappedBy="analysisMethod")
+	private TakeTypeProgression takeTypeProgression;
+
+	//bi-directional one-to-one association to PlaybackSpeed
+	@OneToOne(mappedBy="analysisMethod")
+	private PlaybackSpeed playbackSpeed;
+	
+	//bi-directional one-to-one association to ImageCadreEditing
+	@OneToOne(mappedBy="analysisMethod")
+	private ImageCadreEditing imageCadreEditing;	
 
 	public AnalysisMethod() {
 	}
@@ -300,6 +335,78 @@ public class AnalysisMethod implements Serializable {
 
 	public void setSoundEffectDescriptive(SoundEffectDescriptive soundEffectDescriptive) {
 		this.soundEffectDescriptive = soundEffectDescriptive;
+	}
+
+	public EditingMontage getEditingMontage() {
+		return this.editingMontage;
+	}
+
+	public void setEditingMontage(EditingMontage editingMontage) {
+		this.editingMontage = editingMontage;
+	}
+
+	public MontageFigureMacro getMontageFigureMacro() {
+		return this.montageFigureMacro;
+	}
+
+	public void setMontageFigureMacro(MontageFigureMacro montageFigureMacro) {
+		this.montageFigureMacro = montageFigureMacro;
+	}
+
+	public MontageFigureMicro getMontageFigureMicro() {
+		return this.montageFigureMicro;
+	}
+
+	public void setMontageFigureMicro(MontageFigureMicro montageFigureMicro) {
+		this.montageFigureMicro = montageFigureMicro;
+	}
+
+	public TakeJunction getTakeJunction() {
+		return this.takeJunction;
+	}
+
+	public void setTakeJunction(TakeJunction takeJunction) {
+		this.takeJunction = takeJunction;
+	}
+
+	public EditingRhythm getEditingRhythm() {
+		return this.editingRhythm;
+	}
+
+	public void setEditingRhythm(EditingRhythm editingRhythm) {
+		this.editingRhythm = editingRhythm;
+	}
+
+	public TakeLength getTakeLength() {
+		return this.takeLength;
+	}
+
+	public void setTakeLength(TakeLength takeLength) {
+		this.takeLength = takeLength;
+	}
+
+	public TakeTypeProgression getTakeTypeProgression() {
+		return this.takeTypeProgression;
+	}
+
+	public void setTakeTypeProgression(TakeTypeProgression takeTypeProgression) {
+		this.takeTypeProgression = takeTypeProgression;
+	}
+
+	public PlaybackSpeed getPlaybackSpeed() {
+		return this.playbackSpeed;
+	}
+
+	public void setPlaybackSpeed(PlaybackSpeed playbackSpeed) {
+		this.playbackSpeed = playbackSpeed;
+	}
+
+	public ImageCadreEditing getImageCadreEditing() {
+		return this.imageCadreEditing;
+	}
+
+	public void setImageCadreEditing(ImageCadreEditing imageCadreEditing) {
+		this.imageCadreEditing = imageCadreEditing;
 	}
 
 }

@@ -43,17 +43,6 @@
             analysisMethodType: {
               id: analysisMethodTypeId,
             },
-            analysisMusic: null,
-            analysisSpeech: null,
-            cameraAxisOfAction: null,
-            cameraDistance: null,
-            cameraElevation: null,
-            cameraHandling: null,
-            cameraHorizontalAngle: null,
-            cameraShotType: null,
-            cameraVerticalAngle: null,
-            colorTemperature: null,
-            soundEffectDescriptive: null,
           },
           preproduction: "",
           remark: remark
@@ -71,19 +60,14 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 2: // Greimas Actantial Model //* won't be implemented
-
           break;
           case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
-
           break;
           case 4: // Lotman Renner Spacial Semantics //* won't be implemented
-
           break;
           case 5: // Genette Narrative Discourse //* won't be implemented
-
           break;
           case 6: // Stanzel Narrative Situations //* won't be implemented
-
           break;
           case 7: // Color Temperature
             analysisMethodId = Number($('#color-temperature-select-dropdown').val());
@@ -91,7 +75,6 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 8: // Concept Camera Movement and Direction
-
           break;
           case 9: // Camera Elevation
             analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
@@ -124,10 +107,8 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 15: // Concept Camera Movement and Handling
-
           break;
           case 16: // Camera Movement
-
           break;
           case 17: // Camera Handling
             analysisMethodId = Number($('#camera-handling-select-dropdown').val());
@@ -135,10 +116,8 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-
           break;
           case 19: // Barthes Rhetoric of the Image //* won't be implemented
-
           break;
           case 20: // Sound Effect Descriptive
             analysisMethodVariantModel = {
@@ -151,13 +130,10 @@
               answerQ6: $('#sound-effect-descriptive-answer-q6').val()
             };
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
-            console.log("TCL: analysis", analysis);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
-            analysisMethodVariantModel = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "soundEffectDescriptive");
-            analysis.analysisMethod.soundEffectDescriptive = analysisMethodVariantModel;
+            analysis.analysisMethod.soundEffectDescriptive = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "soundEffectDescriptive");
           break;
           case 21: // Analysis Ambient Sound
-            
           break;
           case 22: // Analysis Music
             analysisMethodVariantModel = {
@@ -186,19 +162,19 @@
               lineupMembers: null,
               musicalNotations: null,
             };            
-            (Number($('#analysis-music-articulation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysis-music-articulation-select-dropdown').val()) },
-            (Number($('#analysis-music-dynamicMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysis-music-dynamicMarking-select-dropdown').val())},
-            (Number($('#analysis-music-changeInDynamics-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysis-music-changeInDynamics-select-dropdown').val())},
-            (Number($('#analysis-music-changeInTempo-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInTempo = { id: Number($('#analysis-music-changeInTempo-select-dropdown').val())},
-            (Number($('#analysis-music-tempoMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.tempoMarking = { id: Number($('#analysis-music-tempoMarking-select-dropdown').val())},
-            (Number($('#analysis-music-musicalKey-select-dropdown').val()) == 0 ) ? null : analysisMethodVariantModel.musicalKey = { id: Number($('#analysis-music-musicalKey-select-dropdown').val())},
-            (Number($('#analysis-music-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.rhythm = { id: Number($('#analysis-music-rhythm-select-dropdown').val())},
-            (Number($('#analysis-music-timbre-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.timbre = { id: Number($('#analysis-music-timbre-select-dropdown').val())},
-            (Number($('#analysis-music-jins-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.jins = { id: Number($('#analysis-music-jins-select-dropdown').val())},
-            (Number($('#analysis-music-maqam-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.maqam = { id: Number($('#analysis-music-maqam-select-dropdown').val())},
-            (Number($('#analysis-music-songStructure-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.songStructure = { id: Number($('#analysis-music-songStructure-select-dropdown').val())},
-            (Number($('#analysis-music-lineupMembers-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lineupMembers = [{ id: Number($('#analysis-music-lineupMembers-select-dropdown').val())}],
-            (Number($('#analysis-music-musicalNotations-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.musicalNotations = [{ id: Number($('#analysis-music-musicalNotations-select-dropdown').val())}],
+            (Number($('#analysis-music-articulation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysis-music-articulation-select-dropdown').val()) };
+            (Number($('#analysis-music-dynamicMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysis-music-dynamicMarking-select-dropdown').val())};
+            (Number($('#analysis-music-changeInDynamics-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysis-music-changeInDynamics-select-dropdown').val())};
+            (Number($('#analysis-music-changeInTempo-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInTempo = { id: Number($('#analysis-music-changeInTempo-select-dropdown').val())};
+            (Number($('#analysis-music-tempoMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.tempoMarking = { id: Number($('#analysis-music-tempoMarking-select-dropdown').val())};
+            (Number($('#analysis-music-musicalKey-select-dropdown').val()) == 0 ) ? null : analysisMethodVariantModel.musicalKey = { id: Number($('#analysis-music-musicalKey-select-dropdown').val())};
+            (Number($('#analysis-music-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.rhythm = { id: Number($('#analysis-music-rhythm-select-dropdown').val())};
+            (Number($('#analysis-music-timbre-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.timbre = { id: Number($('#analysis-music-timbre-select-dropdown').val())};
+            (Number($('#analysis-music-jins-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.jins = { id: Number($('#analysis-music-jins-select-dropdown').val())};
+            (Number($('#analysis-music-maqam-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.maqam = { id: Number($('#analysis-music-maqam-select-dropdown').val())};
+            (Number($('#analysis-music-songStructure-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.songStructure = { id: Number($('#analysis-music-songStructure-select-dropdown').val())};
+            (Number($('#analysis-music-lineupMembers-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lineupMembers = [{ id: Number($('#analysis-music-lineupMembers-select-dropdown').val())}];
+            (Number($('#analysis-music-musicalNotations-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.musicalNotations = [{ id: Number($('#analysis-music-musicalNotations-select-dropdown').val())}];
             audioPostProductionTranslationModel = {
               id: 0,
               audioPostProduction: {
@@ -221,8 +197,7 @@
             analysisMethodVariantModel.audioPostProduction = audioPostProductionModel;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
-            analysisMethodVariantModel = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisMusic");
-            analysis.analysisMethod.analysisMusic = analysisMethodVariantModel;
+            analysis.analysisMethod.analysisMusic = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisMusic");
           break;
           case 23: // Analysis Speech
             analysisMethodVariantModel = {
@@ -267,19 +242,75 @@
             analysis.analysisMethod.analysisSpeech = analysisMethodVariantModel;
           break;
           case 24: // Analysis Voice
-
           break;
           case 25: // Lighting type
             analysisMethodId = Number($('#lighting-select-dropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
+          case 26: // Montage Figure Macro - Part of 34: Editing / Montage
+          break;
+          case 27: // Montage Figure Micro - Part of 34: Editing / Montage
+          break;
+          case 28: // Take Junction - Part of 34: Editing / Montage
+          break;
+          case 29: // Editing Rhythm - Part of 34: Editing / Montage
+          break;
+          case 30: // Take Length - Part of 34: Editing / Montage
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              text: $('#takeLength').val(),
+            };
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysis.analysisMethod.soundEffectDescriptive = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "takeLength");
+          break;
+          case 31: // Take Type Progression - Part of 34: Editing / Montage
+          break;
+          case 32: // Playback Speed - Part of 34: Editing / Montage
+          break;
+          case 33: // Image Cadre Editing - Part of 34: Editing / Montage
+          break;
+          case 34: // Editing / Montage
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              montageFigureMacro: null,
+              montageFigureMicro: null,
+              takeJunction: null,
+              editingRhythm: null,
+              takeLength: {
+                analysisMethodId: null,
+                text: ''
+              },
+              takeTypeProgression: null,
+              cameraShotType: null,
+              playbackSpeed: null,
+              imageCadreEditing: null
+            };
+            (Number($('#montage-figure-macro-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMacro = { analysisMethodId: Number($('#montage-figure-macro-select-dropdown').val()) };
+            (Number($('#montage-figure-micro-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMicro = { analysisMethodId: Number($('#montage-figure-micro-select-dropdown').val()) };
+            (Number($('#take-junction-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.takeJunction = { analysisMethodId: Number($('#take-junction-select-dropdown').val()) };
+            (Number($('#editing-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.editingRhythm = { analysisMethodId: Number($('#editing-rhythm-select-dropdown').val()) };
+            (Number($('#take-type-progression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.takeTypeProgression = { analysisMethodId: Number($('#take-type-progression-select-dropdown').val()) };
+            (Number($('#camera-shot-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#camera-shot-type-select-dropdown').val()) };
+            (Number($('#playback-speed-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.playbackSpeed = { analysisMethodId: Number($('#playback-speed-select-dropdown').val()) };
+            (Number($('#image-cadre-editing-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.imageCadreEditing = { analysisMethodId: Number($('#image-cadre-editing-select-dropdown').val()) };
+            let takeLengthModel = {
+              analysisMethodId: 0,
+              text: $('#takeLength').val()
+            };
+            let takeLength = await TIMAAT.AnalysisService.createAnalysisMethodVariant(takeLengthModel, 'takeLength');
+            analysisMethodVariantModel.takeLength.analysisMethodId = takeLength.analysisMethodId;
+
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysis.analysisMethod.editingMontage = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "editingMontage");
+          break;
         }
         modal.modal('hide');
         TIMAAT.VideoPlayer.curAnnotation.model.analysis.push(analysis);
         TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload(null, false);
         TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload(null, false);
-        console.log("TCL: TIMAAT.VideoPlayer.curAnnotation", TIMAAT.VideoPlayer.curAnnotation);
       });
 
       $('#timaat-analysis-delete-submit').on('click', async function(event) {
@@ -290,7 +321,6 @@
         var audioPostProductionId = modal.data('audioPostProductionId');
         var isStatic = modal.data('isStatic');
         if (isStatic) {
-          // console.log("TCL: isStatic", isStatic);
           await TIMAAT.AnalysisService.deleteStaticAnalysis(analysisId);
         } else {
           await TIMAAT.AnalysisService.deleteDynamicAnalysis(analysisMethodId);
@@ -358,13 +388,11 @@
     },
 
     loadAnalysisDataTables: async function() {
-      // console.log("TCL: loadAnalysisDataTables: async function()");
       TIMAAT.AnalysisDatasets.setupAnalysisMethodsDataTable();
       TIMAAT.AnalysisDatasets.setupAnnotationAnalysisDataTable();
     },
 
     annotationAnalysisMethodAddModal: function(annotationId, analysisMethodType) {
-      // console.log("TCL: annotationId, analysisMethodType", annotationId, analysisMethodType);
       let modal = $('#timaat-videoplayer-analysis-add');
       modal.data('analysisMethodTypeId', analysisMethodType.id);
       modal.data('annotationId', annotationId);
@@ -501,19 +529,14 @@
           $('#martinez-scheffel-unreliable-narration-select-dropdown').select2(select2Options);
         break;
         case 2: // Greimas Actantial Model //* won't be implemented
-
         break;
         case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
-
         break;
         case 4: // Lotman Renner Spacial Semantics //* won't be implemented
-
         break;
         case 5: // Genette Narrative Discourse //* won't be implemented
-
         break;
         case 6: // Stanzel Narrative Situations //* won't be implemented
-
         break;
         case 7: // Color Temperature
           $('#analysisAddLabel').text('Choose color temperature');
@@ -537,7 +560,6 @@
           $('#color-temperature-select-dropdown').select2(select2Options);
         break;
         case 8: // Concept Camera Movement and Direction
-
         break;
         case 9: // Camera Elevation
           $('#analysisAddLabel').text('Choose camera elevation');
@@ -623,7 +645,7 @@
             `</form>`);
           $('#camera-vertical-angle-select-dropdown').select2(select2Options);
         break;
-        case 13: // Camera Shot Type
+        case 13: // Camera Shot Type - part of 34: Editing / Montage
           $('#analysisAddLabel').text('Choose camera shot type');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
@@ -666,10 +688,8 @@
           $('#camera-distance-select-dropdown').select2(select2Options);
         break;
         case 15: // Concept Camera Movement and Handling
-
         break;
         case 16: // Camera Movement
-
         break;
         case 17: // Camera Handling
           $('#analysisAddLabel').text('Choose camera handling');
@@ -693,10 +713,8 @@
           $('#camera-handling-select-dropdown').select2(select2Options);
         break;
         case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-
         break;
         case 19: // Barthes Rhetoric of the Image //* won't be implemented
-
         break;
         case 20: // Sound Effect Descriptive
           $('#analysisAddLabel').text('Describe sound effect');
@@ -766,7 +784,6 @@
             `</form>`);
         break;
         case 21: // Analysis Ambient Sound
-          
         break;
         case 22: // Analysis Music
           $('#analysisAddLabel').text('Describe music');
@@ -1083,7 +1100,6 @@
           `</form>`);
         break;
         case 24: // Analysis Voice
-
         break;
         case 25: // Lighting type
           $('#analysisAddLabel').text('Choose lighting');
@@ -1106,13 +1122,172 @@
             `</form>`);
           $('#lighting-select-dropdown').select2(select2Options);
         break;
+        case 26: // Montage Figure Macro - Part of 34: Editing / Montage
+        break;
+        case 27: // Montage Figure Micro - Part of 34: Editing / Montage
+        break;
+        case 28: // Take Junction - Part of 34: Editing / Montage
+        break;
+        case 29: // Editing Rhythm - Part of 34: Editing / Montage
+        break;
+        case 30: // Take Length - Part of 34: Editing / Montage
+        $('#analysisAddLabel').text('Describe take length');
+        modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <div class="form-group">
+              <label for="takeLength">Take length</label>
+              <div class="col-md-12">
+                <textarea class="form-control form-control-sm"
+                          id="takeLength"
+                          aria-label="Take length"
+                          name="takeLength"
+                          placeholder="Describe take length"></textarea>
+              </div>
+            </div>`+
+            remarkHtml +
+          `</form>`);
+        break;
+        case 31: // Take Type Progression - Part of 34: Editing / Montage
+        break;
+        case 32: // Playback Speed - Part of 34: Editing / Montage
+        break;
+        case 33: // Image Cadre Editing - Part of 34: Editing / Montage
+        break;
+        case 34: // Editing / Montage
+          $('#analysisAddLabel').text('Describe editing/montage');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <h5 class="modal-title">Editing / Montage</h5>
+              <div class="form-group">
+              <label for="montage-figure-macro-select-dropdown">Montage figure macro</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="montage-figure-macro-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select montage figure macro">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="montage-figure-macro-select-dropdown">Montage figure micro</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="montage-figure-micro-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select montage figure micro">
+                  </select>
+                </div>
+              </div><div class="form-group">
+              <label for="take-junction-select-dropdown">Take junction</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="take-junction-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select take junction">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="editing-rhythm-select-dropdown">Editing rhythm</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="editing-rhythm-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select editing rhythm">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="take-length">Take length</label>
+                <div class="col-md-12">
+                  <textarea class="form-control form-control-sm"
+                            id="takeLength"
+                            aria-label="Take length"
+                            name="takeLength"
+                            placeholder="Take length"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="take-type-progression-select-dropdown">Take type progression</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="take-type-progression-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select take type progression">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="camera-shot-type-select-dropdown">Camera shot type</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-shot-type-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera shot type">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="playback-speed-select-dropdown">Playback speed</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="playback-speed-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select playback speed">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="image-cadre-editing-select-dropdown">Image cadre editing</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="image-cadre-editing-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select image cadre editing">
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/montageFigureMacro/selectList/';
+          $('#montage-figure-macro-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/montageFigureMicro/selectList/';
+          $('#montage-figure-micro-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/takeJunction/selectList/';
+          $('#take-junction-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/editingRhythm/selectList/';
+          $('#editing-rhythm-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/takeTypeProgression/selectList/';
+          $('#take-type-progression-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
+          $('#camera-shot-type-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/playbackSpeed/selectList/';
+          $('#playback-speed-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/imageCadreEditing/selectList/';
+          $('#image-cadre-editing-select-dropdown').select2(select2Options);
+        break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
       modal.modal('show');
     },
 
     annotationAnalysisMethodDeleteModal: function(analysis) {
-      // console.log("TCL: analysis", analysis);
       let modal = $('#timaat-videoplayer-analysis-delete');
       modal.data('analysisId', analysis.id);
       modal.data('isStatic', analysis.analysisMethod.analysisMethodType.isStatic);
@@ -1129,7 +1304,6 @@
     },
 
     displayAnalysisDetails: function( data ) {
-      console.log("TCL: displayAnalysisDetails -> data", data);
       var details = 
         `<div>
           <table>
@@ -1148,19 +1322,14 @@
             </tr>`;
         break;
         case 2: // Greimas Actantial Model //* won't be implemented
-
         break;
         case 3: // Van Sijll Cinematic Storytelling //* won't be implemented
-
         break;
         case 4: // Lotman Renner Spacial Semantics //* won't be implemented
-
         break;
         case 5: // Genette Narrative Discourse //* won't be implemented
-
         break;
         case 6: // Stanzel Narrative Situations //* won't be implemented
-
         break;
         case 7: // Color Temperature
           details +=
@@ -1170,7 +1339,6 @@
             </tr>`;
         break;
         case 8: // Concept Camera Movement and Direction
-
         break;
         case 9: // Camera Elevation
           details +=
@@ -1219,10 +1387,8 @@
             </tr>`;
         break;
         case 15: // Concept Camera Movement and Handling
-
         break;
         case 16: // Camera Movement
-
         break;
         case 17: // Camera Handling
           details +=
@@ -1232,10 +1398,8 @@
             </tr>`;
         break;
         case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
-
         break;
         case 19: // Barthes Rhetoric of the Image //* won't be implemented
-
         break;
         case 20: // Sound Effect Descriptive
           details +=
@@ -1265,7 +1429,6 @@
             </tr>`;
         break;
         case 21: // Analysis Ambient Sound
-          
         break;
         case 22: // Analysis Music
           let articulation = (data.analysisMethod.analysisMusic.articulation == null) ? '' : data.analysisMethod.analysisMusic.articulation.articulationTranslations[0].type;
@@ -1450,13 +1613,81 @@
             </tr>`;
         break;
         case 24: // Analysis Voice
-
         break;
         case 25: // Lighting type
           details +=
           `<tr>
             <td>Camera handling:</td>
             <td>`+data.analysisMethod.lighting.lightingTranslations[0].name+`</td>
+          </tr>`;
+        break;
+        case 26: // Montage Figure Macro - Part of 34: Editing / Montage
+        break;
+        case 27: // Montage Figure Micro - Part of 34: Editing / Montage
+        break;
+        case 28: // Take Junction - Part of 34: Editing / Montage
+        break;
+        case 29: // Editing Rhythm - Part of 34: Editing / Montage
+        break;
+        case 30: // Take Length - Part of 34: Editing / Montage
+        details +=
+            `<tr>
+              <td>Take length</td>
+              <td>`+data.analysisMethod.takeLength.text+`</td>
+            </tr>`;
+        break;
+        case 31: // Take Type Progression - Part of 34: Editing / Montage
+        break;
+        case 32: // Playback Speed - Part of 34: Editing / Montage
+        break;
+        case 33: // Image Cadre Editing - Part of 34: Editing / Montage
+        break;
+        case 34: // Editing / Montage
+          let montageFigureMacro = (data.analysisMethod.editingMontage.montageFigureMacro == null) ? '' : data.analysisMethod.editingMontage.montageFigureMacro.montageFigureMacroTranslations[0].name;
+          let montageFigureMicro = (data.analysisMethod.editingMontage.montageFigureMicro == null) ? '' : data.analysisMethod.editingMontage.montageFigureMicro.montageFigureMicroTranslations[0].name;
+          let takeJunction = (data.analysisMethod.editingMontage.takeJunction == null) ? '' : data.analysisMethod.editingMontage.takeJunction.takeJunctionTranslations[0].name;
+          let editingRhythm = (data.analysisMethod.editingMontage.editingRhythm == null) ? '' : data.analysisMethod.editingMontage.editingRhythm.editingRhythmTranslations[0].name;
+          let takeLength = (data.analysisMethod.editingMontage.takeLength == null) ? '' : data.analysisMethod.editingMontage.takeLength.text;
+          let takeTypeProgression = (data.analysisMethod.editingMontage.takeTypeProgression == null) ? '' : data.analysisMethod.editingMontage.takeTypeProgression.takeTypeProgressionTranslations[0].name;
+          let cameraShotType = (data.analysisMethod.editingMontage.cameraShotType == null) ? '' : data.analysisMethod.editingMontage.cameraShotType.cameraShotTypeTranslations[0].name;
+          let playbackSpeed = (data.analysisMethod.editingMontage.playbackSpeed == null) ? '' : data.analysisMethod.editingMontage.playbackSpeed.playbackSpeedTranslations[0].name;
+          let imageCadreEditing = (data.analysisMethod.editingMontage.imageCadreEditing == null) ? '' : data.analysisMethod.editingMontage.imageCadreEditing.imageCadreEditingTranslations[0].name;
+          details +=
+          `<tr>
+            <td>Montage figure macro</td>
+            <td>`+montageFigureMacro+`</td>
+          </tr>
+          <tr>
+            <td>Montage figure micro</td>
+            <td>`+montageFigureMicro+`</td>
+          </tr>
+          <tr>
+            <td>Take junction</td>
+            <td>`+takeJunction+`</td>
+          </tr>
+          <tr>
+            <td>Editing Rhythm</td>
+            <td>`+editingRhythm+`</td>
+          </tr>
+          <tr>
+            <td>Take length</td>
+            <td>`+takeLength+`</td>
+          </tr>
+          <tr>
+            <td>Take type progression</td>
+            <td>`+takeTypeProgression+`</td>
+          </tr>
+          <tr>
+            <td>Camera shot type:</td>
+            <td>`+cameraShotType+`</td>
+          </tr>
+          <tr>
+            <td>Playback speed</td>
+            <td>`+playbackSpeed+`</td>
+          </tr>
+          <tr>
+            <td>Image cadre editing</td>
+            <td>`+imageCadreEditing+`</td>
           </tr>`;
         break;
       }
@@ -1514,13 +1745,11 @@
 					"dataSrc": function(data) { return data.data; }
 				},
 				"createdRow": function(row, data, dataIndex) {
-        	// console.log("TCL: Inspector -> constructor -> data", data);
 					let analysisMethodTypeElement = $(row);
 					let analysisMethodType = data;
 					analysisMethodTypeElement.data('analysisMethodType', analysisMethodType);
 
 					analysisMethodTypeElement.find('.add-analysisMethod').on('click', analysisMethodType, async function(ev) {
-          	// console.log("TCL: Inspector -> constructor -> analysisMethodType", analysisMethodType);
 						ev.stopPropagation();
 						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						// $(this).remove();
@@ -1529,13 +1758,11 @@
 						// 	// inspector.ui.dataTableAnalysisMethods.ajax.reload();
 							// TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
 						// }).catch((error)=>{
-						// 	console.log("ERROR:", error);
 						// });
 					});
 				},
 				"columns": [{
 					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysisMethodType, meta) {
-						// console.log("TCL: analysisMethodType", analysisMethodType);
 						// let displayAnalysisTypeIcon = '';
 						// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
 						// 	case 'person': 
@@ -1547,7 +1774,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,9,10,11,12,13,14,17,20,22,23,25].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,9,10,11,12,14,17,20,22,23,25,34].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {
@@ -1632,7 +1859,6 @@
 							// inspector.ui.dataTableAnalysisMethods.ajax.reload();
 							// TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
 						// }).catch((error)=>{
-						// 	console.log("ERROR:", error);
 						// });
 					});
 				},
@@ -1648,7 +1874,6 @@
 						// width:"15px"
 					},
 					{	data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysis, meta) {
-							// console.log("TCL: analysis", analysis);
 							// let displayAnalysisTypeIcon = '';
 							// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
 							// 	case 'person': 
