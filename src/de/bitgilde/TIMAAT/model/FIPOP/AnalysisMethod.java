@@ -92,9 +92,9 @@ public class AnalysisMethod implements Serializable {
 	// @OneToOne(mappedBy="analysisMethod")
 	// private ConceptCameraMovementAndHandling conceptCameraMovementAndHandling;
 
-	// //bi-directional one-to-one association to ConceptCameraPositionAndPerspective
-	// @OneToOne(mappedBy="analysisMethod")
-	// private ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective;
+	//bi-directional one-to-one association to ConceptCameraPositionAndPerspective
+	@OneToOne(mappedBy="analysisMethod")
+	private ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective;
 
 	//bi-directional one-to-one association to ColorTemperature
 	@OneToOne(mappedBy="analysisMethod")
@@ -305,13 +305,13 @@ public class AnalysisMethod implements Serializable {
 	// 	this.conceptCameraMovementAndHandling = conceptCameraMovementAndHandling;
 	// }
 
-	// public ConceptCameraPositionAndPerspective getConceptCameraPositionAndPerspective() {
-	// 	return this.conceptCameraPositionAndPerspective;
-	// }
+	public ConceptCameraPositionAndPerspective getConceptCameraPositionAndPerspective() {
+		return this.conceptCameraPositionAndPerspective;
+	}
 
-	// public void setConceptCameraPositionAndPerspective(ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective) {
-	// 	this.conceptCameraPositionAndPerspective = conceptCameraPositionAndPerspective;
-	// }
+	public void setConceptCameraPositionAndPerspective(ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective) {
+		this.conceptCameraPositionAndPerspective = conceptCameraPositionAndPerspective;
+	}
 
 	public Lighting getLighting() {
 		return this.lighting;

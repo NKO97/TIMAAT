@@ -81,6 +81,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.City</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ColorTemperature</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ColorTemperatureTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ConceptCameraPositionAndPerspective</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Country</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarking</class>
