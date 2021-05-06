@@ -72,9 +72,17 @@ public class AnalysisMethod implements Serializable {
 	@OneToOne(mappedBy="analysisMethod")
 	private CameraHorizontalAngle cameraHorizontalAngle;
 
-	// //bi-directional one-to-one association to CameraMovement
-	// @OneToOne(mappedBy="analysisMethod")
-	// private CameraMovement cameraMovement;
+	//bi-directional one-to-one association to CameraMovement
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraMovement cameraMovement;
+
+	//bi-directional one-to-one association to CameraMovementType
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraMovementType cameraMovementType;
+
+	//bi-directional one-to-one association to CameraMovementCharacteristic
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraMovementCharacteristic cameraMovementCharacteristic;
 
 	//bi-directional one-to-one association to CameraShotType
 	@OneToOne(mappedBy="analysisMethod")
@@ -83,6 +91,10 @@ public class AnalysisMethod implements Serializable {
 	//bi-directional one-to-one association to CameraVerticalAngle
 	@OneToOne(mappedBy="analysisMethod")
 	private CameraVerticalAngle cameraVerticalAngle;
+
+	//bi-directional one-to-one association to ConceptDirection
+	@OneToOne(mappedBy="analysisMethod")
+	private ConceptDirection conceptDirection;
 
 	//bi-directional one-to-one association to ColorTemperature
 	@OneToOne(mappedBy="analysisMethod")
@@ -265,13 +277,29 @@ public class AnalysisMethod implements Serializable {
 		this.cameraHorizontalAngle = cameraHorizontalAngle;
 	}
 
-	// public CameraMovement getCameraMovement() {
-	// 	return this.cameraMovement;
-	// }
+	public CameraMovement getCameraMovement() {
+		return this.cameraMovement;
+	}
 
-	// public void setCameraMovement(CameraMovement cameraMovement) {
-	// 	this.cameraMovement = cameraMovement;
-	// }
+	public void setCameraMovement(CameraMovement cameraMovement) {
+		this.cameraMovement = cameraMovement;
+	}
+
+	public CameraMovementType getCameraMovementType() {
+		return this.cameraMovementType;
+	}
+
+	public void setCameraMovementType(CameraMovementType cameraMovementType) {
+		this.cameraMovementType = cameraMovementType;
+	}
+
+	public CameraMovementCharacteristic getCameraMovementCharacteristic() {
+		return this.cameraMovementCharacteristic;
+	}
+
+	public void setCameraMovementCharacteristic(CameraMovementCharacteristic cameraMovementCharacteristic) {
+		this.cameraMovementCharacteristic = cameraMovementCharacteristic;
+	}
 
 	public CameraShotType getCameraShotType() {
 		return this.cameraShotType;
@@ -287,6 +315,14 @@ public class AnalysisMethod implements Serializable {
 
 	public void setCameraVerticalAngle(CameraVerticalAngle cameraVerticalAngle) {
 		this.cameraVerticalAngle = cameraVerticalAngle;
+	}
+
+	public ConceptDirection getConceptDirection() {
+		return this.conceptDirection;
+	}
+
+	public void setConceptDirection(ConceptDirection conceptDirection) {
+		this.conceptDirection = conceptDirection;
 	}
 
 	public ColorTemperature getColorTemperature() {

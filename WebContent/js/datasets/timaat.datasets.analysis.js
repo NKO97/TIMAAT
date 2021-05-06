@@ -94,7 +94,6 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
             analysis.analysisMethod.conceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "conceptCameraPositionAndPerspective");
-            console.log("TCL: $ -> analysis", analysis);
           break;
           case 9: // Camera Elevation
             analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
@@ -130,6 +129,58 @@
 
           break;
           case 16: // Camera Movement
+          analysisMethodVariantModel = {
+            analysisMethodId: 0,
+            cameraMovementType: null,
+            cameraMovementCharacteristic: null, 
+            conceptDirection: null,
+            startConceptCameraPositionAndPerspective: {
+              analysisMethodId: 0
+            },
+            endConceptCameraPositionAndPerspective: {
+              analysisMethodId: 0
+            },           
+          };
+          let startConceptCameraPositionAndPerspectiveModel = {
+            analysisMethodId: 0,
+            cameraDistance: null,
+            cameraShotType: null,
+            cameraVerticalAngle: null,
+            cameraHorizontalAngle: null,
+            cameraAxisOfAction: null,
+            cameraElevation: null
+          };
+          let endConceptCameraPositionAndPerspectiveModel = {
+            analysisMethodId: 0,
+            cameraDistance: null,
+            cameraShotType: null,
+            cameraVerticalAngle: null,
+            cameraHorizontalAngle: null,
+            cameraAxisOfAction: null,
+            cameraElevation: null
+          };
+          (Number($('#camera-movement-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementType = { analysisMethodId: Number($('#camera-movement-type-select-dropdown').val()) };
+          (Number($('#camera-movement-characteristic-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementCharacteristic = { analysisMethodId: Number($('#camera-movement-characteristic-select-dropdown').val()) };
+          (Number($('#concept-direction-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.conceptDirection = { analysisMethodId: Number($('#concept-direction-select-dropdown').val()) };
+          (Number($('#start-camera-distance-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#start-camera-distance-select-dropdown').val()) };
+          (Number($('#start-camera-shot-type-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#start-camera-shot-type-select-dropdown').val()) };
+          (Number($('#start-camera-vertical-angle-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#start-camera-vertical-angle-select-dropdown').val()) };
+          (Number($('#start-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#start-camera-horizontal-angle-select-dropdown').val()) };
+          (Number($('#start-camera-axis-of-action-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#start-camera-axis-of-action-select-dropdown').val()) };
+          (Number($('#start-camera-elevation-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#start-camera-elevation-select-dropdown').val()) };
+          (Number($('#end-camera-distance-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#end-camera-distance-select-dropdown').val()) };
+          (Number($('#end-camera-shot-type-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#end-camera-shot-type-select-dropdown').val()) };
+          (Number($('#end-camera-vertical-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#end-camera-vertical-angle-select-dropdown').val()) };
+          (Number($('#end-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#end-camera-horizontal-angle-select-dropdown').val()) };
+          (Number($('#end-camera-axis-of-action-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#end-camera-axis-of-action-select-dropdown').val()) };
+          (Number($('#end-camera-elevation-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#end-camera-elevation-select-dropdown').val()) };
+          let startConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(startConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
+          analysisMethodVariantModel.startConceptCameraPositionAndPerspective.analysisMethodId = startConceptCameraPositionAndPerspective.analysisMethodId;
+          let endConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(endConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
+          analysisMethodVariantModel.endConceptCameraPositionAndPerspective.analysisMethodId = endConceptCameraPositionAndPerspective.analysisMethodId;
+          analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+          analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+          analysis.analysisMethod.conceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "cameraMovement");
           break;
           case 17: // Camera Handling
             analysisMethodId = Number($('#camera-handling-select-dropdown').val());
@@ -800,6 +851,221 @@
         case 15: // Concept Camera Movement and Handling
         break;
         case 16: // Camera Movement
+        $('#analysisAddLabel').text('Describe camera movement');
+        modal.find('.modal-body').html(`
+          <form role="form" id="newAnalysisMethodModalForm">
+            <div class="form-group">
+            <label for="camera-movement-type-select-dropdown">Camera movement type</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-movement-type-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera movement type">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="camera-movement-characteristic-select-dropdown">Camera movement characteristic</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-movement-characteristic-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera movement characteristic">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="concept-direction-select-dropdown">Concept direction</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="concept-direction-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select concept direction">
+                </select>
+              </div>
+            </div>
+            <h5 class="modal-title">Start camera position and perspective</h5>
+            <div class="form-group">
+            <label for="start-camera-distance-select-dropdown">Camera distance</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-distance-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera distance">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="start-camera-shot-type-select-dropdown">Camera shot type</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-shot-type-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera shot type">
+                </select>
+              </div>
+            </div><div class="form-group">
+            <label for="start-camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-vertical-angle-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera vertical angle">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="start-camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-horizontal-angle-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera horizontal angle">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="start-camera-axis-of-action-select-dropdown">Camera axis of action</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-axis-of-action-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera axis of action">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="start-camera-elevation-select-dropdown">Camera elevation</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-elevation-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera elevation">
+                </select>
+              </div>
+            </div>
+            <h5 class="modal-title">End camera position and perspective</h5>
+            <div class="form-group">
+            <label for="end-camera-distance-select-dropdown">Camera distance</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-distance-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera distance">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="end-camera-shot-type-select-dropdown">Camera shot type</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-shot-type-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera shot type">
+                </select>
+              </div>
+            </div><div class="form-group">
+            <label for="end-camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-vertical-angle-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera vertical angle">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="end-camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-horizontal-angle-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera horizontal angle">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="end-camera-axis-of-action-select-dropdown">Camera axis of action</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-axis-of-action-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera axis of action">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="end-camera-elevation-select-dropdown">Camera elevation</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-elevation-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera elevation">
+                </select>
+              </div>
+            </div>`+
+            remarkHtml +
+          `</form>`);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraMovementType/selectList/';
+          $('#camera-movement-type-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraMovementCharacteristic/selectList/';
+          $('#camera-movement-characteristic-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/conceptDirection/selectList/';
+          $('#concept-direction-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
+          $('#start-camera-distance-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
+          $('#start-camera-shot-type-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraVerticalAngle/selectList/';
+          $('#start-camera-vertical-angle-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHorizontalAngle/selectList/';
+          $('#start-camera-horizontal-angle-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraAxisOfAction/selectList/';
+          $('#start-camera-axis-of-action-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
+          $('#start-camera-elevation-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
+          $('#end-camera-distance-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
+          $('#end-camera-shot-type-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraVerticalAngle/selectList/';
+          $('#end-camera-vertical-angle-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHorizontalAngle/selectList/';
+          $('#end-camera-horizontal-angle-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraAxisOfAction/selectList/';
+          $('#end-camera-axis-of-action-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
+          $('#end-camera-elevation-select-dropdown').select2(select2Options);
         break;
         case 17: // Camera Handling
           $('#analysisAddLabel').text('Choose camera handling');
@@ -1451,37 +1717,37 @@
             </tr>`;
         break;
         case 8: // Concept Camera Position and Perspective
-        let cameraDistance = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
-        cameraShotType = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
-        let cameraVerticalAngle = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraVerticalAngle == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name;
-        let cameraHorizontalAngle = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
-        let cameraAxisOfAction = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
-        let cameraElevation = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
-        details +=
-        `<tr>
-          <td>Camera distance</td>
-          <td>`+cameraDistance+`</td>
-        </tr>
-        <tr>
-          <td>Camera shot type</td>
-          <td>`+cameraShotType+`</td>
-        </tr>
-        <tr>
-          <td>Camera vertical angle</td>
-          <td>`+cameraVerticalAngle+`</td>
-        </tr>
-        <tr>
-          <td>Camera horizontal angle</td>
-          <td>`+cameraHorizontalAngle+`</td>
-        </tr>
-        <tr>
-          <td>Camera axis of action</td>
-          <td>`+cameraAxisOfAction+`</td>
-        </tr>
-        <tr>
-          <td>Camera elevation</td>
-          <td>`+cameraElevation+`</td>
-        </tr>`;
+          let cameraDistance = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
+          cameraShotType = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
+          let cameraVerticalAngle = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraVerticalAngle == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name;
+          let cameraHorizontalAngle = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
+          let cameraAxisOfAction = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
+          let cameraElevation = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          details +=
+          `<tr>
+            <td>Camera distance</td>
+            <td>`+cameraDistance+`</td>
+          </tr>
+          <tr>
+            <td>Camera shot type</td>
+            <td>`+cameraShotType+`</td>
+          </tr>
+          <tr>
+            <td>Camera vertical angle</td>
+            <td>`+cameraVerticalAngle+`</td>
+          </tr>
+          <tr>
+            <td>Camera horizontal angle</td>
+            <td>`+cameraHorizontalAngle+`</td>
+          </tr>
+          <tr>
+            <td>Camera axis of action</td>
+            <td>`+cameraAxisOfAction+`</td>
+          </tr>
+          <tr>
+            <td>Camera elevation</td>
+            <td>`+cameraElevation+`</td>
+          </tr>`;
         break;
         case 9: // Camera Elevation
           details +=
@@ -1532,6 +1798,102 @@
         case 15: // Concept Camera Movement and Handling
         break;
         case 16: // Camera Movement
+          let cameraMovementType = (data.analysisMethod.cameraMovement.cameraMovementType == null) ? '' : data.analysisMethod.cameraMovement.cameraMovementType.cameraMovementTypeTranslations[0].type;
+          let cameraMovementCharacteristic = (data.analysisMethod.cameraMovement.cameraMovementCharacteristic == null) ? '' : data.analysisMethod.cameraMovement.cameraMovementCharacteristic.cameraMovementCharacteristicTranslations[0].type;
+          let conceptDirection = (data.analysisMethod.cameraMovement.conceptDirection == null) ? '' : data.analysisMethod.cameraMovement.conceptDirection.conceptDirectionTranslations[0].type;
+          let startCameraDistance = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
+          let startCameraShotType = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
+          let startCameraVerticalAngle = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraVerticalAngle == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name;
+          let startCameraHorizontalAngle = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
+          let startCameraAxisOfAction = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
+          let startCameraElevation = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          let endCameraDistance = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
+          let endCameraShotType = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
+          let endCameraVerticalAngle = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraVerticalAngle == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name;
+          let endCameraHorizontalAngle = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
+          let endCameraAxisOfAction = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
+          let endCameraElevation = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          details +=
+                `<tr>
+                  <td>Camera movement type</td>
+                  <td>`+cameraMovementType+`</td>
+                </tr>
+                <tr>
+                  <td>Camera movement characteristic</td>
+                  <td>`+cameraMovementCharacteristic+`</td>
+                </tr>
+                <tr>
+                  <td>Concept direction</td>
+                  <td>`+conceptDirection+`</td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <table>
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Start camera Position and Perspective</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tr>
+                  <td>Camera distance</td>
+                  <td>`+startCameraDistance+`</td>
+                </tr>
+                <tr>
+                  <td>Camera shot type</td>
+                  <td>`+startCameraShotType+`</td>
+                </tr>
+                <tr>
+                  <td>Camera vertical angle</td>
+                  <td>`+startCameraVerticalAngle+`</td>
+                </tr>
+                <tr>
+                  <td>Camera horizontal angle</td>
+                  <td>`+startCameraHorizontalAngle+`</td>
+                </tr>
+                <tr>
+                  <td>Camera axis of action</td>
+                  <td>`+startCameraAxisOfAction+`</td>
+                </tr>
+                <tr>
+                  <td>Camera elevation</td>
+                  <td>`+startCameraElevation+`</td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <table>
+                <thead class="thead-dark">
+                  <tr>
+                    <th>End camera Position and Perspective</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tr>
+                  <td>Camera distance</td>
+                  <td>`+endCameraDistance+`</td>
+                </tr>
+                <tr>
+                  <td>Camera shot type</td>
+                  <td>`+endCameraShotType+`</td>
+                </tr>
+                <tr>
+                  <td>Camera vertical angle</td>
+                  <td>`+endCameraVerticalAngle+`</td>
+                </tr>
+                <tr>
+                  <td>Camera horizontal angle</td>
+                  <td>`+endCameraHorizontalAngle+`</td>
+                </tr>
+                <tr>
+                  <td>Camera axis of action</td>
+                  <td>`+endCameraAxisOfAction+`</td>
+                </tr>
+                <tr>
+                  <td>Camera elevation</td>
+                  <td>`+endCameraElevation+`</td>
+                </tr>`;
         break;
         case 17: // Camera Handling
           details +=
@@ -1917,7 +2279,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,8,9,10,11,12,14,17,20,22,23,25,34].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,8,9,10,11,12,14,16,17,20,22,23,25,34].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

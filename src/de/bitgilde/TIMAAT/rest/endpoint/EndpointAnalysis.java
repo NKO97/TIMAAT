@@ -44,11 +44,15 @@ import de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraDistanceTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraElevationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngleTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraMovement;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraMovementCharacteristicTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraMovementTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraShotTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraVerticalAngleTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ConceptCameraPositionAndPerspective;
+import de.bitgilde.TIMAAT.model.FIPOP.ConceptDirectionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EditingMontage;
 import de.bitgilde.TIMAAT.model.FIPOP.EditingRhythmTranslation;
@@ -148,6 +152,7 @@ public class EndpointAnalysis {
 																							// @QueryParam("orderby") String orderby,
 																							// @QueryParam("search") String search)
 	{
+		//* use if only one select list has to be returned for a method type
 		// System.out.println("EndpointAnalysis: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		String column = "a.id";
@@ -294,6 +299,15 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 34: // Editing / Montage
+
+			break;
+			case 35: // Concept Direction
+
+			break;
+			case 36: // Camera Movement Characteristic
+
+			break;
+			case 37: // Camera Movement Type
 
 			break;
 		}
@@ -448,6 +462,98 @@ public class EndpointAnalysis {
 			case 15: // Concept Camera Movement and Handling
 			break;
 			case 16: // Camera Movement
+				switch(element) {
+					case "cameraMovementType":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cmtt FROM CameraMovementTypeTranslation cmtt WHERE cmtt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cmtt.id ASC");
+						List<CameraMovementTypeTranslation> cameraMovementTypeTranslationList = castList(CameraMovementTypeTranslation.class, query.getResultList());
+						List<SelectElement> cameraMovementTypeSelectList = new ArrayList<>();
+						for (CameraMovementTypeTranslation cameraMovementTypeTranslation : cameraMovementTypeTranslationList) {
+							cameraMovementTypeSelectList.add(new SelectElement(cameraMovementTypeTranslation.getCameraMovementType().getAnalysisMethodId(), cameraMovementTypeTranslation.getType()));
+						}
+						selectElementList = cameraMovementTypeSelectList;
+					break;
+					case "cameraMovementCharacteristic":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cmct FROM CameraMovementCharacteristicTranslation cmct WHERE cmct.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cmct.id ASC");
+						List<CameraMovementCharacteristicTranslation> cameraMovementCharacteristicTranslationList = castList(CameraMovementCharacteristicTranslation.class, query.getResultList());
+						List<SelectElement> cameraMovementCharacteristicSelectList = new ArrayList<>();
+						for (CameraMovementCharacteristicTranslation cameraMovementCharacteristicTranslation : cameraMovementCharacteristicTranslationList) {
+							cameraMovementCharacteristicSelectList.add(new SelectElement(cameraMovementCharacteristicTranslation.getCameraMovementCharacteristic().getAnalysisMethodId(), cameraMovementCharacteristicTranslation.getType()));
+						}
+						selectElementList = cameraMovementCharacteristicSelectList;
+					break;
+					case "conceptDirection":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cdt FROM ConceptDirectionTranslation cdt WHERE cdt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cdt.id ASC");
+						List<ConceptDirectionTranslation> conceptDirectionTranslationList = castList(ConceptDirectionTranslation.class, query.getResultList());
+						List<SelectElement> conceptDirectionSelectList = new ArrayList<>();
+						for (ConceptDirectionTranslation conceptDirectionTranslation : conceptDirectionTranslationList) {
+							conceptDirectionSelectList.add(new SelectElement(conceptDirectionTranslation.getConceptDirection().getAnalysisMethodId(), conceptDirectionTranslation.getType()));
+						}
+						selectElementList = conceptDirectionSelectList;
+					break;
+					case "cameraDistance":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cdt FROM CameraDistanceTranslation cdt WHERE cdt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cdt.id ASC");
+						List<CameraDistanceTranslation> cameraDistanceTranslationList = castList(CameraDistanceTranslation.class, query.getResultList());
+						List<SelectElement> cameraDistanceSelectList = new ArrayList<>();
+						for (CameraDistanceTranslation cameraDistanceTranslation : cameraDistanceTranslationList) {
+							cameraDistanceSelectList.add(new SelectElement(cameraDistanceTranslation.getCameraDistance().getAnalysisMethodId(), cameraDistanceTranslation.getName()));
+						}
+						selectElementList = cameraDistanceSelectList;
+					break;
+					case "cameraShotType":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cstt FROM CameraShotTypeTranslation cstt WHERE cstt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cstt.id ASC");
+						List<CameraShotTypeTranslation> cameraShotTypeTranslationList = castList(CameraShotTypeTranslation.class, query.getResultList());
+						List<SelectElement> cameraShotTypeSelectList = new ArrayList<>();
+						for (CameraShotTypeTranslation cameraShotTypeTranslation : cameraShotTypeTranslationList) {
+							cameraShotTypeSelectList.add(new SelectElement(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
+						}
+						selectElementList = cameraShotTypeSelectList;
+					break;
+					case "cameraVerticalAngle":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cvat FROM CameraVerticalAngleTranslation cvat WHERE cvat.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cvat.id ASC");
+						List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslationList = castList(CameraVerticalAngleTranslation.class, query.getResultList());
+						List<SelectElement> cameraVerticalAngleSelectList = new ArrayList<>();
+						for (CameraVerticalAngleTranslation cameraVerticalAngleTranslation : cameraVerticalAngleTranslationList) {
+							cameraVerticalAngleSelectList.add(new SelectElement(cameraVerticalAngleTranslation.getCameraVerticalAngle().getAnalysisMethodId(), cameraVerticalAngleTranslation.getName()));
+						}
+						selectElementList = cameraVerticalAngleSelectList;
+					break;
+					case "cameraHorizontalAngle":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT chat FROM CameraHorizontalAngleTranslation chat WHERE chat.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY chat.id ASC");
+						List<CameraHorizontalAngleTranslation> cameraHorizontalAngleTranslationList = castList(CameraHorizontalAngleTranslation.class, query.getResultList());
+						List<SelectElement> cameraHorizontalAngleSelectList = new ArrayList<>();
+						for (CameraHorizontalAngleTranslation cameraHorizontalAngleTranslation : cameraHorizontalAngleTranslationList) {
+							cameraHorizontalAngleSelectList.add(new SelectElement(cameraHorizontalAngleTranslation.getCameraHorizontalAngle().getAnalysisMethodId(), cameraHorizontalAngleTranslation.getName()));
+						}
+						selectElementList = cameraHorizontalAngleSelectList;
+					break;
+					case "cameraAxisOfAction":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT caoat FROM CameraAxisOfActionTranslation caoat WHERE caoat.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY caoat.id ASC");
+						List<CameraAxisOfActionTranslation> cameraAxisOfActionTranslationList = castList(CameraAxisOfActionTranslation.class, query.getResultList());
+						List<SelectElement> cameraAxisOfActionSelectList = new ArrayList<>();
+						for (CameraAxisOfActionTranslation cameraAxisOfActionTranslation : cameraAxisOfActionTranslationList) {
+							cameraAxisOfActionSelectList.add(new SelectElement(cameraAxisOfActionTranslation.getCameraAxisOfAction().getAnalysisMethodId(), cameraAxisOfActionTranslation.getName()));
+						}
+						selectElementList = cameraAxisOfActionSelectList;
+					break;
+					case "cameraElevation":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cet FROM CameraElevationTranslation cet WHERE cet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cet.id ASC");
+						List<CameraElevationTranslation> cameraElevationTranslationList = castList(CameraElevationTranslation.class, query.getResultList());
+						List<SelectElement> cameraElevationSelectList = new ArrayList<>();
+						for (CameraElevationTranslation cameraElevationTranslation : cameraElevationTranslationList) {
+							cameraElevationSelectList.add(new SelectElement(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
+						}
+						selectElementList = cameraElevationSelectList;
+					break;
+				}
 			break;
 			case 17: // Camera Handling
 			break;
@@ -684,6 +790,15 @@ public class EndpointAnalysis {
 					selectElementList = imageCadreEditingSelectList;
 				break;
 			}
+			break;
+			case 35: // Concept Direction
+
+			break;
+			case 36: // Camera Movement Characteristic
+
+			break;
+			case 37: // Camera Movement Type
+
 			break;
 		}
 
@@ -1122,6 +1237,47 @@ public class EndpointAnalysis {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("cameraMovement/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodCameraMovement(@PathParam("analysisMethodId") int analysisMethodId, 
+																										 String jsonData) {
+		System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		CameraMovement cameraMovement = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			cameraMovement = mapper.readValue(jsonData, CameraMovement.class);
+		} catch (IOException e) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( cameraMovement == null ) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: cameraMovement == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(cameraMovement);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(cameraMovement);
+		entityManager.refresh(cameraMovement.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement - done");
+		return Response.ok().entity(cameraMovement).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("takeLength/{analysisMethodId}")
 	@Secured
 	public Response createAnalysisMethodTakeLength(@PathParam("analysisMethodId") int analysisMethodId, 
@@ -1239,8 +1395,22 @@ public class EndpointAnalysis {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
-		// persist analysis method
 		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		if ( analysisMethodId == 0) { // conceptCameraPositionAndPerspective is not created on its own ( but as part of CameraMovement)
+			AnalysisMethod analysisMethod = new AnalysisMethod();
+			analysisMethod.setId(0);
+			AnalysisMethodType analysisMethodType = entityManager.find(AnalysisMethodType.class, 8); // 8 is conceptCameraPositionAndPerspective
+			analysisMethod.setAnalysisMethodType(analysisMethodType);
+			entityTransaction.begin();
+			entityManager.persist(analysisMethod);
+			entityManager.flush();
+			entityTransaction.commit();
+			entityManager.refresh(analysisMethod);
+			conceptCameraPositionAndPerspective.setAnalysisMethodId(analysisMethod.getId());
+		}
+
+		// persist analysis method
 		entityTransaction.begin();
 		entityManager.persist(conceptCameraPositionAndPerspective);
 		entityManager.flush();

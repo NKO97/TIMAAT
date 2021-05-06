@@ -64,6 +64,11 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHandlingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngle</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngleTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraMovement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraMovementCharacteristic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraMovementCharacteristicTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraMovementType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraMovementTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraShotType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraShotTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraVerticalAngle</class>
@@ -82,6 +87,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ColorTemperature</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ColorTemperatureTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ConceptCameraPositionAndPerspective</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ConceptDirection</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ConceptDirectionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Country</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.County</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.DynamicMarking</class>
