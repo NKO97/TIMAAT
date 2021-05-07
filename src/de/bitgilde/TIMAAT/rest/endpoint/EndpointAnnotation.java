@@ -422,6 +422,7 @@ public class EndpointAnnotation {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}

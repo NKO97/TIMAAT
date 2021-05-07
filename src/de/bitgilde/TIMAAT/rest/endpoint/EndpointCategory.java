@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -172,12 +174,10 @@ public class EndpointCategory {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("EndpointCategorySet: getCategorySelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT c FROM Category c WHERE lower(c.name) LIKE lower(concat('%', :name,'%')) ORDER BY c.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("EndpointCategorySet: getCategorySelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT c FROM Category c ORDER BY c.name ASC");
 		}
@@ -187,9 +187,11 @@ public class EndpointCategory {
 		}
 		List<SelectElement> categorySelectList = new ArrayList<>();
 		List<Category> categoryList = castList(Category.class, query.getResultList());
+		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 		for (Category category : categoryList) {
 			categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 		}
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 

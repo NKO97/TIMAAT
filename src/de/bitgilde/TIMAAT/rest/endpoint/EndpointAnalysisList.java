@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -128,6 +130,8 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
 		List<Category> categoryList = segment.getCategories();
+		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+
 		// System.out.println("EndPointAnalysisList: getSegmentSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
@@ -187,6 +191,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -264,6 +269,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -341,6 +347,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -471,6 +478,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -548,6 +556,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
