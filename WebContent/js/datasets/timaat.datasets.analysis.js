@@ -125,14 +125,14 @@
             analysisModel.analysisMethod.id = analysisMethodId; 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
-          case 15: // Concept Camera Movement and Handling
-
+          case 15: // Concept Camera Movement and Handling //* won't be implemented
           break;
           case 16: // Camera Movement
           analysisMethodVariantModel = {
             analysisMethodId: 0,
             cameraMovementType: null,
-            cameraMovementCharacteristic: null, 
+            cameraMovementCharacteristic: null,
+            cameraHandling: null,
             conceptDirection: null,
             startConceptCameraPositionAndPerspective: {
               analysisMethodId: 0
@@ -161,6 +161,7 @@
           };
           (Number($('#camera-movement-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementType = { analysisMethodId: Number($('#camera-movement-type-select-dropdown').val()) };
           (Number($('#camera-movement-characteristic-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementCharacteristic = { analysisMethodId: Number($('#camera-movement-characteristic-select-dropdown').val()) };
+          (Number($('#camera-handling-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraHandling = { analysisMethodId: Number($('#camera-handling-select-dropdown').val()) };
           (Number($('#concept-direction-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.conceptDirection = { analysisMethodId: Number($('#concept-direction-select-dropdown').val()) };
           (Number($('#start-camera-distance-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#start-camera-distance-select-dropdown').val()) };
           (Number($('#start-camera-shot-type-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#start-camera-shot-type-select-dropdown').val()) };
@@ -848,7 +849,7 @@
             `</form>`);
           $('#camera-distance-select-dropdown').select2(select2Options);
         break;
-        case 15: // Concept Camera Movement and Handling
+        case 15: // Concept Camera Movement and Handling //* won't be implemented
         break;
         case 16: // Camera Movement
         $('#analysisAddLabel').text('Describe camera movement');
@@ -875,6 +876,18 @@
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera movement characteristic">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+            <label for="camera-handling-select-dropdown">Camera handling</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-handling-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera handling">
                 </select>
               </div>
             </div>
@@ -1040,6 +1053,8 @@
           $('#camera-movement-type-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraMovementCharacteristic/selectList/';
           $('#camera-movement-characteristic-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHandling/selectList/';
+          $('#camera-handling-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/conceptDirection/selectList/';
           $('#concept-direction-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
@@ -1795,11 +1810,12 @@
               <td>`+data.analysisMethod.cameraDistance.cameraDistanceTranslations[0].name+`</td>
             </tr>`;
         break;
-        case 15: // Concept Camera Movement and Handling
+        case 15: // Concept Camera Movement and Handling //* won't be implemented
         break;
         case 16: // Camera Movement
           let cameraMovementType = (data.analysisMethod.cameraMovement.cameraMovementType == null) ? '' : data.analysisMethod.cameraMovement.cameraMovementType.cameraMovementTypeTranslations[0].type;
           let cameraMovementCharacteristic = (data.analysisMethod.cameraMovement.cameraMovementCharacteristic == null) ? '' : data.analysisMethod.cameraMovement.cameraMovementCharacteristic.cameraMovementCharacteristicTranslations[0].type;
+          let cameraHandling = (data.analysisMethod.cameraMovement.cameraHandling == null) ? '' : data.analysisMethod.cameraMovement.cameraHandling.cameraHandlingTranslations[0].type;
           let conceptDirection = (data.analysisMethod.cameraMovement.conceptDirection == null) ? '' : data.analysisMethod.cameraMovement.conceptDirection.conceptDirectionTranslations[0].type;
           let startCameraDistance = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
           let startCameraShotType = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
@@ -1821,6 +1837,10 @@
                 <tr>
                   <td>Camera movement characteristic</td>
                   <td>`+cameraMovementCharacteristic+`</td>
+                </tr>
+                <tr>
+                  <td>Camera handling</td>
+                  <td>`+cameraHandling+`</td>
                 </tr>
                 <tr>
                   <td>Concept direction</td>

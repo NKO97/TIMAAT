@@ -43,6 +43,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraDistanceTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraElevationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraHandlingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraHorizontalAngleTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraMovement;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraMovementCharacteristicTranslation;
@@ -482,6 +483,16 @@ public class EndpointAnalysis {
 							cameraMovementCharacteristicSelectList.add(new SelectElement(cameraMovementCharacteristicTranslation.getCameraMovementCharacteristic().getAnalysisMethodId(), cameraMovementCharacteristicTranslation.getType()));
 						}
 						selectElementList = cameraMovementCharacteristicSelectList;
+					break;
+					case "cameraHandling":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cht FROM CameraHandlingTranslation cht WHERE cht.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cht.id ASC");
+						List<CameraHandlingTranslation> cameraHandlingTranslationList = castList(CameraHandlingTranslation.class, query.getResultList());
+						List<SelectElement> cameraHandlingSelectList = new ArrayList<>();
+						for (CameraHandlingTranslation cameraHandlingTranslation : cameraHandlingTranslationList) {
+							cameraHandlingSelectList.add(new SelectElement(cameraHandlingTranslation.getCameraHandling().getAnalysisMethodId(), cameraHandlingTranslation.getType()));
+						}
+						selectElementList = cameraHandlingSelectList;
 					break;
 					case "conceptDirection":
 						query = TIMAATApp.emf.createEntityManager().createQuery(

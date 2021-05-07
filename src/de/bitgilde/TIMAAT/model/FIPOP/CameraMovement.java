@@ -31,6 +31,11 @@ public class CameraMovement implements Serializable {
 	@JoinColumn(name="camera_movement_type_analysis_method_id")
 	private CameraMovementType cameraMovementType;
 
+	//bi-directional many-to-one association to CameraHandling
+	@OneToOne
+	@JoinColumn(name="camera_handling_analysis_method_id")
+	private CameraHandling cameraHandling;
+
 	//bi-directional many-to-one association to CameraMovementCharacteristic
 	@OneToOne
 	@JoinColumn(name="camera_movement_characteristic_analysis_method_id")
@@ -77,6 +82,15 @@ public class CameraMovement implements Serializable {
 
 	public void setCameraMovementType(CameraMovementType cameraMovementType) {
 		this.cameraMovementType = cameraMovementType;
+	}
+
+	public CameraHandling getCameraHandling() 
+	{
+		return this.cameraHandling;
+	}
+
+	public void setCameraHandling(CameraHandling cameraHandling) {
+		this.cameraHandling = cameraHandling;
 	}
 
 	public CameraMovementCharacteristic getCameraMovementCharacteristic() 
