@@ -107,13 +107,16 @@ public class EndpointAnalysis {
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "amtt.name";
 		}
-		
+
+		// exclude method type entries that are not standalone
+		String excludedMethodTypeIds = "amt.id NOT IN (9,10,11,12,13,14,17,21,24,26,27,28,29,30,31,32,33,35,36,37)";
+
 		// define default query strings
-		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE amt.id = amtt.id ORDER BY ";
+		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE "+excludedMethodTypeIds+" AND amt.id = amtt.id ORDER BY ";
 
 		// calculate total # of records
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt");
+		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE  "+excludedMethodTypeIds);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		// System.out.println("records total: " + recordsTotal);
@@ -124,7 +127,7 @@ public class EndpointAnalysis {
 		List<AnalysisMethodType> analysisMethodTypeList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE "+excludedMethodTypeIds+" AND amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all analysisMethodTypeTranslations
