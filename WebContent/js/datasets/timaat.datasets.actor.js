@@ -490,14 +490,14 @@
 			});
 
 			// key press events
-			$('#actor-metadata-form-submit-button').keypress(function(event) {
+			$('#actor-metadata-form-submit-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-metadata-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#actor-metadata-form-dismiss-button').keypress(function(event) {
+			$('#actor-metadata-form-dismiss-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-metadata-form-dismiss-button').trigger('click');
@@ -886,28 +886,28 @@
 			});
 
 			// Key press events
-			$('#actor-names-form-submit').keypress(function(event) {
+			$('#actor-names-form-submit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-names-form-submit').trigger('click');
 				}
 			});
 
-			$('#actor-names-form-dismiss').keypress(function(event) {
+			$('#actor-names-form-dismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-names-form-dismiss').trigger('click');
 				}
 			});
 
-			$('#dynamic-name-fields').keypress(function(event) {
+			$('#dynamic-name-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-name-fields').keypress(function(event) {
+			$('#new-name-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
@@ -1277,28 +1277,28 @@
 			});
 
 			// Key press events
-			$('#actor-addresses-form-submit').keypress(function(event) {
+			$('#actor-addresses-form-submit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-addresses-form-submit').trigger('click');
 				}
 			});
 
-			$('#actor-addresses-form-dismiss').keypress(function(event) {
+			$('#actor-addresses-form-dismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-addresses-form-dismiss').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasaddress-fields').keypress(function(event) {
+			$('#dynamic-actorhasaddress-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasaddress-fields').keypress(function(event) {
+			$('#new-actorhasaddress-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
@@ -1629,28 +1629,28 @@
 			});
 
 			// Key press events
-			$('#actor-emailaddresses-form-submit').keypress(function(event) {
+			$('#actor-emailaddresses-form-submit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-emailaddresses-form-submit').trigger('click');
 				}
 			});
 
-			$('#actor-emailaddresses-form-dismiss').keypress(function(event) {
+			$('#actor-emailaddresses-form-dismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-emailaddresses-form-dismiss').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasemailaddress-fields').keypress(function(event) {
+			$('#dynamic-actorhasemailaddress-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasemailaddress-fields').keypress(function(event) {
+			$('#new-actorhasemailaddress-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
@@ -1981,28 +1981,28 @@
 			});
 
 			// Key press events
-			$('#actor-phonenumbers-form-submit').keypress(function(event) {
+			$('#actor-phonenumbers-form-submit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-phonenumbers-form-submit').trigger('click');
 				}
 			});
 
-			$('#actor-phonenumbers-form-dismiss').keypress(function(event) {
+			$('#actor-phonenumbers-form-dismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#actor-phonenumbers-form-dismiss').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasphonenumber-fields').keypress(function(event) {
+			$('#dynamic-actorhasphonenumber-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasphonenumber-fields').keypress(function(event) {
+			$('#new-actorhasphonenumber-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();

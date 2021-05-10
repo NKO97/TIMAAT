@@ -272,14 +272,14 @@
 			});
 
 			// key press events
-			$('#event-metadata-form-submit-button').keypress(function(event) {
+			$('#event-metadata-form-submit-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#event-metadata-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#event-metadata-form-dismiss-button').keypress(function(event) {
+			$('#event-metadata-form-dismiss-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#event-metadata-form-dismiss-button').trigger('click');

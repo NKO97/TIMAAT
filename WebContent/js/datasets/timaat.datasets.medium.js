@@ -777,14 +777,14 @@
 			});
 
 			// Key press events
-			$('#medium-metadata-form-submit-button').keypress(function(event) {
+			$('#medium-metadata-form-submit-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#medium-metadata-form-submit-button').trigger('click');
 				}
 			});
 
-			$('#medium-metadata-form-dismiss-button').keypress(function(event) {
+			$('#medium-metadata-form-dismiss-button').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#medium-metadata-form-dismiss-button').trigger('click');
@@ -1184,28 +1184,28 @@
 			});
 
 			// Key press events
-			$('#medium-titles-form-submit').keypress(function(event) {
+			$('#medium-titles-form-submit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#medium-titles-form-submit').trigger('click');
 				}
 			});
 
-			$('#medium-titles-form-dismiss').keypress(function(event) {
+			$('#medium-titles-form-dismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					$('#medium-titles-form-dismiss').trigger('click');
 				}
 			});
 
-			$('#dynamic-title-fields').keypress(function(event) {
+			$('#dynamic-title-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-title-fields').keypress(function(event) {
+			$('#new-title-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
