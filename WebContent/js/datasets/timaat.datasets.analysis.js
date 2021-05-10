@@ -2336,7 +2336,7 @@
           },
         },
 			});
-			// $(this.ui.dataTableAnalysisMethod.table().container()).find('.table-title').text('Verfügbare Analysen');
+			// $(this.ui.dataTableAnalysisMethod.table().container()).find('.table-title').text('Available Analyses');
     },
 
     setupAnnotationAnalysisDataTable: function() {
