@@ -125,9 +125,9 @@
 				},
 				"columns": [{
 					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
-						// console.log("TCL: actor", actor);
 						let displayActorTypeIcon = '';
-						switch (actor.actorType.actorTypeTranslations[0].type) {
+						let actorType = actor.actorType.actorTypeTranslations[0].type;
+						switch (actorType) {
 							case 'person': 
 								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
 							break;
@@ -139,7 +139,11 @@
 								<span class="add-actor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
 							</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
-							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							if (actorType == 'person') {
+								nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							} else {
+								nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
+							}
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
@@ -202,9 +206,9 @@
 				},
 				"columns": [{
 					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
-						// console.log("TCL: actor", actor);
 						let displayActorTypeIcon = '';
-						switch (actor.actorType.actorTypeTranslations[0].type) {
+						let actorType = actor.actorType.actorTypeTranslations[0].type
+						switch (actorType) {
 							case 'person': 
 								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
 							break;
@@ -216,7 +220,11 @@
 						<span class="remove-actor badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>
 						</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
-							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							if (actorType == 'person') {
+								nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							} else {
+								nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
+							}
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {

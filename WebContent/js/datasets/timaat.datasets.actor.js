@@ -5485,9 +5485,9 @@
 				},
 				"columns": [{
 					data: 'id', name: 'name', className: 'name', render: function(data, type, actor, meta) {
-						// console.log("TCL: actor", actor);
 						let displayActorTypeIcon = '';
-						switch (actor.actorType.actorTypeTranslations[0].type) {
+						let actorType = actor.actorType.actorTypeTranslations[0].type;
+						switch (actorType) {
 							case 'person': 
 								displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
 							break;
@@ -5497,7 +5497,11 @@
 						}
 						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
-							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							if (actorType == 'person') {
+								nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							} else {
+								nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
+							}
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
@@ -5707,7 +5711,7 @@
 						// console.log("TCL: actor", actor);
 						let nameDisplay = `<p>` + actor.displayName.name +`</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
-							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
+							nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
