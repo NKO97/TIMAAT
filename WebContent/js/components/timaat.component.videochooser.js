@@ -520,11 +520,8 @@
 						}
 					},
 					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, medium, meta) {
-							if (medium.mediumVideo) {
-								if (data == null) return "";
-								return moment.utc(data).format('YYYY-MM-DD');
-							}
-							return "";
+							if (data == null) return "";
+							return moment.utc(data).format('YYYY-MM-DD');
 						}
 					},
 					{ data: null, className: 'actions', orderable: false, width: '7%', render: function(data, type, medium, meta) {
