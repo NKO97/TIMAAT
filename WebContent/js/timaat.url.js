@@ -209,10 +209,10 @@
                     TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-items', 'mediumcollection-mediaItems');
                     TIMAAT.UI.displayDataSetContent('items', mediumCollection, 'mediumCollection');
                   break;
-                  case 'publication': //* #mediumCollection/:id/publication
-                  TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-publication', 'mediumcollection-publication');
-                  TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
-                  break;
+                  // case 'publication': //* #mediumCollection/:id/publication
+                  // TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-publication', 'mediumcollection-publication');
+                  // TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
+                  // break;
                   default:
                     this.redirectToDefaultView();
                   break;

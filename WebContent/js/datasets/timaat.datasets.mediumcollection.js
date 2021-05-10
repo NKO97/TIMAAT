@@ -28,7 +28,7 @@
 		init: function() {
 			this.initMediaCollections();
 			this.initMediaCollectionItems();
-			this.initMediaCollectionPublication();
+			// this.initMediaCollectionPublication();
 		},
 
 		initMediaCollections: function() {
@@ -1592,22 +1592,6 @@
 			$('#mediumcollection-metadata-form :input').prop('disabled', false);
 			$('#timaat-mediumcollectiondatasets-metadata-title').focus();
 		},
-
-		// selectLastItemSelection: function(id) {
-    //   if (this.selectedMediumCollectionItemId && this.selectedMediumCollectionItemId != id) {
-    //     $(this.dataTableMediaCollectionItemList.row('#'+this.selectedMediumCollectionItemId).node()).removeClass('selected');
-    //   }
-		// 	$(this.dataTableMediaCollectionItemList.row('#'+id).node()).addClass('selected');
-		// 	this.selectedMediumCollectionItemId = id;
-		// },
-
-		// clearLastItemSelection: function () {
-		// 	let i = 0;
-		// 	for (; i < this.mediaCollectionItemList.length; i++) {
-    //     $(this.dataTableMediaCollectionItemList.row('#'+this.mediaCollectionItemList[i].id.mediumId).node()).removeClass('selected');
-		// 	}
-		// 	this.selectedMediumCollectionItemId = null;
-		// },
 
 	}
 	
