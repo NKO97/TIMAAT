@@ -2309,7 +2309,7 @@
                 }
               }
               if (!methodIsStaticAndExists) { //* static analyses may only be assigned once, others can occur multiple times
-                nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis method"></i></span>`;
+                nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis guideline"></i></span>`;
               }
             }
 						nameDisplay += `</p>`;
@@ -2321,13 +2321,13 @@
           "decimal"          : ",",
           "thousands"        : ".",
           "search"           : "Search",
-          "searchPlaceholder": "Search analysis methods",
+          "searchPlaceholder": "Search analysis guidelines",
           "processing"       : '<i class="fas fa-spinner fa-spin"></i> Loading Data...',
           "lengthMenu"       : "Show _MENU_ entries",
-          "zeroRecords"      : "No analysis methods found.",
-          "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis methods total)",
-          "infoEmpty"        : "No analysis methods available.",
-          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis methods)',
+          "zeroRecords"      : "No analysis guidelines found.",
+          "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis guidelines total)",
+          "infoEmpty"        : "No analysis guidelines available.",
+          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis guildelines)',
           "paginate"         : {
             "first"   : "<<",
             "previous": "<",
@@ -2410,7 +2410,7 @@
 							// }
 							// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name+`
 							let nameDisplay = `<p>` + `  ` + analysis.analysisMethod.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-							<span class="remove-analysis badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis method"></i></span>
+							<span class="remove-analysis badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis guideline"></i></span>
 							</p>`;
 							return nameDisplay;
 						}
@@ -2420,13 +2420,13 @@
           "decimal"          : ",",
           "thousands"        : ".",
           "search"           : "Search",
-          "searchPlaceholder": "Search analysis methods",
+          "searchPlaceholder": "Search analysis guidelines",
           "processing"       : '<i class="fas fa-spinner fa-spin"></i> Loading Data...',
           "lengthMenu"       : "Show _MENU_ entries",
-          "zeroRecords"      : "No analysis methods found.",
-          "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis methods total)",
-          "infoEmpty"        : "No analysis methods available.",
-          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis methods)',
+          "zeroRecords"      : "No analysis guidelines found.",
+          "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis guidelines total)",
+          "infoEmpty"        : "No analysis guidelines available.",
+          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis guidelines)',
           "paginate"         : {
             "first"   : "<<",
             "previous": "<",
