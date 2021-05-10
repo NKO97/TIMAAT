@@ -429,11 +429,11 @@
 						TIMAAT.UI.showComponent('media');
 						TIMAAT.MediumDatasets.load();
 						TIMAAT.UI.clearLastSelection(type);
-						let tempMedium = {};
-						tempMedium.model = medium;
+						let mediumModel = {};
+						mediumModel.model = medium;
 						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
-            TIMAAT.UI.displayDataSetContent('dataSheet', tempMedium, 'medium');
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, medium.id);
+            TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
 
 					mediumElement.on('click', '.timaat-video-collectionitemremove', function(ev) {
