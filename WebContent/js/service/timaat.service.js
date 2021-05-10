@@ -38,11 +38,11 @@
 		async getSinglePublication(mediumID) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
-					type:"GET",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -61,12 +61,12 @@
 		async updateSinglePublication(publication) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+publication.startMediumId,
-					type:"POST",
-					data: JSON.stringify(publication),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+publication.startMediumId,
+					type       : "POST",
+					data       : JSON.stringify(publication),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -83,11 +83,11 @@
 		async deleteSinglePublication(mediumID) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
-					type:"DELETE",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
+					type       : "DELETE",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -104,18 +104,20 @@
 		async getCollectionPublication(colID) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
-					type:"GET",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
 					console.log("TCL: getCollectionPublication -> data", data);
 					resolve(data);
 				}).fail(function(e) {
-					resolve(null);
+					// resolve(null);
+					console.log(e.responseText);
+					console.log( "error", e );
 				});	
 			}).catch((error) => {
 				console.log( "error: ", error );
@@ -125,12 +127,12 @@
 		async updateCollectionPublication(publication) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+publication.collectionId,
-					type:"POST",
-					data: JSON.stringify(publication),
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+publication.collectionId,
+					type       : "POST",
+					data       : JSON.stringify(publication),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -147,11 +149,11 @@
 		async deleteCollectionPublication(colID) {
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
-					type:"DELETE",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/collection/"+colID,
+					type       : "DELETE",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -169,11 +171,11 @@
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/all",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/all",
+				type       : "GET",
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -188,11 +190,11 @@
       // console.log("TCL: getUserName: function(id, callback)");
 			// console.log("TCL: id, callback", id, callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/name",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"text",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/name",
+				type       : "GET",
+				contentType: "application/json; charset=utf-8",
+				dataType   : "text",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -207,11 +209,11 @@
     // console.log("TCL: getUserLog: function(id, limit, callback)");
     // console.log("TCL: id, limit, callback", id, limit, callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/log/user/"+id+"",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/log/user/"+id+"",
+				type       : "GET",
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -226,11 +228,11 @@
       // console.log("TCL: listVideos -> listVideos(callback)");
       // console.log("TCL: listVideos -> callback", callback);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/list",
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/list",
+				type       : "GET",
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -255,11 +257,11 @@
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
 			else if ( set.constructor === TIMAAT.Event ) serviceEndpoint = "event";
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/"+set.model.id+"/tag/"+tagname,
-				type:"POST",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/"+set.model.id+"/tag/"+tagname,
+				type       : "POST",
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -276,11 +278,11 @@
 			// console.log("TCL: createTag -> tagName", tagName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/"+tagName,
-					type:"POST",
-					contentType:"application/json; charset=utf-8",
-					dataType:"json",
-					beforeSend: function (xhr) {
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/tag/"+tagName,
+					type       : "POST",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
@@ -308,8 +310,8 @@
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
 			else if ( set.constructor === TIMAAT.Event ) serviceEndpoint = "event";
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/"+set.model.id+"/tag/"+tagname,
-				type:"DELETE",
+				url       : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/"+set.model.id+"/tag/"+tagname,
+				type      : "DELETE",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
@@ -347,8 +349,8 @@
 		removeCategory(set, catname, callback) {
 			var serviceEndpoint = "category"; // set/{id}/category/{name}
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
-				type:"DELETE",
+				url       : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+				type      : "DELETE",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
@@ -378,12 +380,12 @@
 					"categorySetHasCategories": [],
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/",
-				type:"POST",
-				data: JSON.stringify(model),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/",
+				type       : "POST",
+				data       : JSON.stringify(model),
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -403,12 +405,12 @@
 					categorySetHasCategories: []
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+set.id,
-				type:"PATCH",
-				data: JSON.stringify(set),
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+set.id,
+				type       : "PATCH",
+				data       : JSON.stringify(set),
+				contentType: "application/json; charset=utf-8",
+				dataType   : "json",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
@@ -445,10 +447,10 @@
 		deleteCategory(id) {
 			// console.log("TCL: removeCategory -> id", id);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
-				type:"DELETE",
-				contentType:"application/json; charset=utf-8",
-				beforeSend: function (xhr) {
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/category/"+id,
+				type       : "DELETE",
+				contentType: "application/json; charset=utf-8",
+				beforeSend : function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
