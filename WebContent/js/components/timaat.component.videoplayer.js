@@ -428,7 +428,7 @@
 			TIMAAT.VideoPlayer.editShapesCtrl = L.control.custom({
 					position: 'topleft',
 					enabled: true,
-					content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('rectangle)" class="rectangle btn btn-sm btn-light">
+					content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('rectangle')" class="rectangle btn btn-sm btn-light">
 									<i class="fas fa-vector-square"></i>
 								</button>
 								<button data-type="polygon" type="button" title="Polygon-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('polygon')" class="polygon ml-0 btn btn-sm btn-light">
@@ -437,7 +437,7 @@
 								<button data-type="line" type="button" title="Linien-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('line')" class="line ml-0 btn btn-sm btn-light">
 									<i class="fas fa-slash"></i>
 								</button>
-								<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createshape('circle')" class="circle ml-0 btn btn-sm btn-light">
+								<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('circle')" class="circle ml-0 btn btn-sm btn-light">
 									<i class="far fa-circle"></i>
 								</button>`,
 					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
@@ -782,10 +782,12 @@
 					break;
 				case "ArrowLeft":
 					ev.preventDefault();
+					console.log("Press left");
 					$('.stepbckbutton').click();
 					break;
 				case "ArrowRight":
 					ev.preventDefault();
+					console.log("Press right");
 					$('.stepfwdbutton').click();
 					break;
 				case "r":
@@ -809,7 +811,18 @@
 				ev.preventDefault();
 				$(this).toggleClass('active');
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
-			});		
+			});
+
+			$('#timaat-component-videoplayer').on('keypress', function(event) {
+				event.stopPropagation();
+				if (event.which == '37') { // == left
+					console.log("Press left");
+					$('.stepbckbutton').trigger('click');
+				} else if (event.which == '39') { // == right
+					console.log("Press right");
+					$('.stepfwdbutton').trigger('click');
+				}
+			});
 
 			$('.stepbckbutton').on('click dblclick', function(ev) {
 				ev.preventDefault();
@@ -1603,7 +1616,7 @@
 			// console.log("TCL: play: function()");
 			if ( !this.video ) return;
 			this.video.play();
-			$('.playbutton').addClass('active');			
+			$('.playbutton').addClass('active');
 		},
 		
 		jumpTo: function(time) {
