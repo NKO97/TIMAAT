@@ -813,13 +813,11 @@
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
 			});
 
-			$('#timaat-component-videoplayer').on('keypress', function(event) {
+			$('#timaat-component-videoplayer').on('keydown', function(event) {
 				event.stopPropagation();
 				if (event.which == '37') { // == left
-					console.log("Press left");
 					$('.stepbckbutton').trigger('click');
 				} else if (event.which == '39') { // == right
-					console.log("Press right");
 					$('.stepfwdbutton').trigger('click');
 				}
 			});
