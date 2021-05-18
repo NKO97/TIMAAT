@@ -494,7 +494,7 @@
 							segment.model.endTime = endTime;
 
 							// update segment UI
-							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, segment);
+							await TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, segment);
 						} else {
 							var model = {
 								id: 0,
@@ -587,7 +587,7 @@
 							sequence.model.segmentId = TIMAAT.VideoPlayer.curSegment.model.id;
 
 							// update sequence UI
-							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, sequence);
+							await TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, sequence);
 						} else {
 							var model = {
 								id: 0,
@@ -667,7 +667,7 @@
 							take.model.endTime = endTime;
 
 							// update take UI
-							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, take);
+							await TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, take);
 						} else {
 							var model = {
 								id: 0,
@@ -760,7 +760,7 @@
 							scene.model.endTime = endTime;
 
 							// update scene UI
-							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, scene);
+							await TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, scene);
 						} else {
 							var model = {
 								id: 0,
@@ -840,7 +840,7 @@
 							action.model.endTime = endTime;
 
 							// update action UI
-							TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, action);
+							await TIMAAT.VideoPlayer.updateAnalysisSegmentElement(inspector.state.type, action);
 						} else {
 							var model = {
 								id: 0,
