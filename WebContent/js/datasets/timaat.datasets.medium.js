@@ -692,7 +692,9 @@
 			$('.datasheet-form-upload-button').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var medium = $('#medium-metadata-form').data('medium');
+				let medium = $('#medium-metadata-form').data('medium');
+				let type = $('#medium-metadata-form').data('type');
+				medium = new TIMAAT.Medium(medium.model, type);
 				medium.listView.find('.timaat-medium-upload-file').click();
 			});
 
