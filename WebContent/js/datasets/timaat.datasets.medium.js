@@ -274,7 +274,9 @@
 				var type = $('#medium-metadata-form').data('type');	
 
 				// create/edit medium window submitted data
+				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
 				var formData = $('#medium-metadata-form').serializeArray();
+				TIMAAT.MediumDatasets.disableReadOnlyDataFields(true);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -1912,6 +1914,7 @@
 			}
 			else if ( action == 'edit' ) {
 				this.initFormDataSheetForEdit();
+				this.disableReadOnlyDataFields(true);
 				$('.add-medium-button').hide();
 				$('.add-medium-button').prop('disabled', true);
 				$('.add-medium-button :input').prop('disabled', true);
@@ -3434,6 +3437,21 @@
 			$('.form-buttons').hide();
 			$('.form-buttons').prop('disabled', true);
 			$('.form-buttons :input').prop('disabled', true);
+		},
+
+		disableReadOnlyDataFields: function(disabled) {
+				$('#timaat-mediadatasets-metadata-audio-length').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-audio-audiocodec').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-image-width').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-image-height').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-image-bitdepth').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-length').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-videocodec').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-width').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-height').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-framerate').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-datarate').prop('disabled', disabled);
+				$('#timaat-mediadatasets-metadata-video-totalbitrate').prop('disabled', disabled);
 		},
 
 		showAddMediumButton: function() {
