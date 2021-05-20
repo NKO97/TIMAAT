@@ -3787,11 +3787,15 @@ public class EndpointMedium {
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 
 		for (Medium medium : mediumList) {
-			if (medium.getMediumAudio() != null || medium.getMediumVideo() != null) {
+			if (!(medium.getFilePath().contains("medium"))) {
+				medium.setFilePath(null);
+			}
+			if ((medium.getMediumAudio() != null || medium.getMediumVideo() != null) && medium.getFilePath() != null){
 				filename = medium.getFilePath();
 				System.out.println("filename: "+ filename);
 				String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 				"-v", "error", "-select_streams", "v:0",
+				"-show_entries", "stream=width,height,r_frame_rate,codec_name",
 				"-show_entries", "format=duration", "-sexagesimal",
 				"-of", "json", filename };
 				try {
