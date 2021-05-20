@@ -348,6 +348,7 @@
 					var newActor = await TIMAAT.ActorDatasets.createActor(type, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
 					actor = new TIMAAT.Actor(newActor, type);
 					$('#actor-metadata-form').data('actor', actor);
+					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-metadata-form', 'actor');
 					$('#actor-tab-metadata').trigger('click');
 				}
 				TIMAAT.ActorDatasets.showAddActorButton();

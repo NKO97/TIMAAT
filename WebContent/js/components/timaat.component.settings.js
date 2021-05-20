@@ -37,13 +37,38 @@
 				TIMAAT.Settings.loadSettings();
 				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings');
 			});
-    },
+
+      $('#length-fix-button').on('click', function(event) {
+        TIMAAT.Settings.fixLength();
+      });
+    },    
 
     loadSettings: function() {
 			TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
 			// TIMAAT.UI.addSelectedClassToSelectedItem('settings', null);
 			// TIMAAT.UI.subNavTab = 'dataSheet';
 		},
+
+    fixLength: async function() {
+      return new Promise(resolve => {
+        $.ajax({
+          url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/fileLengthFix",
+          type:"PATCH",
+          contentType:"application/json; charset=utf-8",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+          },
+        }).done(function(data) {
+          resolve(data);
+        }).fail(function(e) {
+          console.log( "error", e );
+          console.log( e.responseText );
+        });
+      }).catch((error) => {
+        console.log( "error: ", error );
+      });
+    },
+
 		
 	}
 	

@@ -346,8 +346,8 @@
 				if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 				TIMAAT.VideoPlayer.pause();
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-				anno.addKeyframeAt(TIMAAT.VideoPlayer.video.currentTime);				
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+				anno.addKeyframeAt(TIMAAT.VideoPlayer.video.currentTime*1000);				
 			});
 
 			$('#timaat-videoplayer-keyframe-remove-button').on('click', function(ev) {
@@ -355,7 +355,7 @@
 				if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 				TIMAAT.VideoPlayer.pause();
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 				anno.removeCurrentKeyframe();
 			});
 
@@ -364,12 +364,12 @@
 				if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 				TIMAAT.VideoPlayer.pause();
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-				if ( !anno.isOnKeyframe() ) TIMAAT.VideoPlayer.jumpTo(anno.startTime+anno.currentKeyframe.time);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+				if ( !anno.isOnKeyframe() ) TIMAAT.VideoPlayer.jumpTo(anno.startTime/1000+anno.currentKeyframe.time);
 				else {
 					let index = anno.getKeyframeIndex(anno.currentKeyframe)-1;
 					if ( index < 0 ) index = 0;
-					TIMAAT.VideoPlayer.jumpTo(anno.startTime+anno.svg.keyframes[index].time);
+					TIMAAT.VideoPlayer.jumpTo(anno.startTime/1000+anno.svg.keyframes[index].time);
 				}
 			});
 
@@ -378,8 +378,8 @@
 				if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 				TIMAAT.VideoPlayer.pause();
 				let anno = TIMAAT.VideoPlayer.curAnnotation;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
-				TIMAAT.VideoPlayer.jumpTo(anno.startTime+anno.nextKeyframe.time);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+				TIMAAT.VideoPlayer.jumpTo(anno.startTime/1000+anno.nextKeyframe.time);
 			});
 
 			// bookmark / add / remove annotation control
@@ -546,21 +546,21 @@
 			// Animation Events
 			$(document).on('keyframeadded.annotation.TIMAAT', function(event, anno) {
 				if ( !anno ) return;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 				TIMAAT.VideoPlayer.updateUI();
 				TIMAAT.VideoPlayer.inspector.updateItem();
 			});
 
 			$(document).on('keyframeremoved.annotation.TIMAAT', function(event, anno) {
 				if ( !anno ) return;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 				TIMAAT.VideoPlayer.updateUI();
 				TIMAAT.VideoPlayer.inspector.updateItem();
 			});
 
 			$(document).on('keyframechanged.annotation.TIMAAT', function(event, anno) {
 				if ( !anno ) return;
-				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 				TIMAAT.VideoPlayer.updateUI();
 				TIMAAT.VideoPlayer.inspector.updateItem();
 			});
@@ -725,7 +725,7 @@
 			preview.hide();
 
 			$('#timaat-video-seek-bar').change(function(ev) {
-			  var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
+				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});
 
@@ -828,7 +828,7 @@
 				TIMAAT.VideoPlayer.pause();
 				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo(
-					Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime)*frameTime) - frameTime)
+					Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) - frameTime)
 				);
 			});
 
@@ -838,7 +838,7 @@
 				TIMAAT.VideoPlayer.pause();
 				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo(
-					Math.min(TIMAAT.VideoPlayer.video.duration, (Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime)*frameTime) + frameTime)
+					Math.min(TIMAAT.VideoPlayer.video.duration, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) + frameTime)
 				);
 			});
 
@@ -1043,7 +1043,7 @@
 			$('.datasheet-form-annotate-button').prop('disabled', true);
 
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length));
+			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length,true));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 			// this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
@@ -1062,7 +1062,7 @@
 				$(curVideo).off('canplay');
 			});
 			$(this.video).on('timeupdate', function(ev) {
-				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true));		
+				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));		
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
 				$('#timaat-video-seek-bar').val(value);
 				$('#timaat-video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
@@ -1232,10 +1232,10 @@
 			TIMAAT.VideoPlayer.pause();
 			let layerVisual = (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 			TIMAAT.AnnotationService.createAnnotation(
-					"Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime), 
+					"Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000,true), 
 					"Lesezeichen, noch zu bearbeiten",
-					TIMAAT.VideoPlayer.video.currentTime*1000.0,
-					TIMAAT.VideoPlayer.video.currentTime*1000.0,
+					TIMAAT.VideoPlayer.video.currentTime*1000,
+					TIMAAT.VideoPlayer.video.currentTime*1000,
 					"5555554C", 
 					1,
 					layerVisual,
@@ -1449,25 +1449,25 @@
 			// console.log("TCL: updateListUI: function()");
 			if ( TIMAAT.VideoPlayer.curAnalysisList != null && TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI != null) 
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
-					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
+					segment.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000, viaTimeUpdate);
 					if (TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI != null)
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
-							sequence.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
+							sequence.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000, viaTimeUpdate);
 							if (TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI != null)
 								TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.forEach(function(take) {
-									take.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
+									take.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000, viaTimeUpdate);
 								});
 						});
 					if (TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI != null)
 						TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.forEach(function(scene) {
-							scene.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
+							scene.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000, viaTimeUpdate);
 							if (TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI != null)
 								TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.forEach(function(action) {
-									action.updateStatus(TIMAAT.VideoPlayer.video.currentTime, viaTimeUpdate);
+									action.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000, viaTimeUpdate);
 								});
 						});
 				});
-			if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+			if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 		},
 		
 		updateUI: function() {
@@ -1603,9 +1603,9 @@
 			// console.log("TCL: pause: function()");
 			if ( !this.video ) return;
 			this.video.pause();
-			let frameTime = 1.0 / TIMAAT.VideoPlayer.curFrameRate;
-			let videoTime = TIMAAT.VideoPlayer.video.currentTime;
-			let time = Math.round(TIMAAT.VideoPlayer.video.currentTime/frameTime) * frameTime;
+			// let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
+			// let videoTime = TIMAAT.VideoPlayer.video.currentTime;
+			// let time = Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime;
 //			if ( videoTime != time ) TIMAAT.VideoPlayer.jumpTo(time);
 			$('.playbutton').removeClass('active');
 		},
@@ -1617,18 +1617,18 @@
 			$('.playbutton').addClass('active');
 		},
 		
-		jumpTo: function(time) {
-			// console.log("TCL: jumpTo: function(time)", time);
+		jumpTo: function(timeInSeconds) {
 			if ( !this.video ) return;
-			this.video.currentTime = time;
+			// console.log("TCL: jumpTo: function(timeInSeconds)", timeInSeconds);
+			this.video.currentTime = timeInSeconds;
 			// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
 		},
 		
-		jumpVisible: function(start, end) {
-			// console.log("TCL: jumpVisible: function(start, end)", start, end);
+		jumpVisible: function(startInSeconds, endInSeconds) {
+			// console.log("TCL: jumpVisible: function(startInSeconds, endInSeconds)", startInSeconds, endInSeconds);
 			if ( !this.video ) return;
 			var curTime = this.video.currentTime;
-			if ( curTime < start || curTime >= end ) this.video.currentTime = start;
+			if ( curTime < startInSeconds || curTime >= endInSeconds ) this.video.currentTime = startInSeconds;
 			// this.updateListUI(); // obsolete as on timeupdate is called afterward
 		},
 
@@ -1758,9 +1758,9 @@
 			if ( TIMAAT.VideoPlayer.repeatSection ) {
 				if ( TIMAAT.VideoPlayer.curAnnotation ) {
 					// repeat annotation
-					if ( TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime
-							|| TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curAnnotation.endTime )
-							TIMAAT.VideoPlayer.jumpTo(TIMAAT.VideoPlayer.curAnnotation.startTime);
+					if ( TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime/1000
+							|| TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curAnnotation.endTime/1000 )
+							TIMAAT.VideoPlayer.jumpTo(TIMAAT.VideoPlayer.curAnnotation.startTime/1000);
 				} else {
 					// repeat segment
 					let curSegment = null;
@@ -1770,15 +1770,15 @@
 					}
 
 					if ( curSegment ) {
-						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime/1000.0
-								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.endTime/1000.0 )
-								TIMAAT.VideoPlayer.jumpTo(curSegment.model.startTime/1000.0);
+						if ( TIMAAT.VideoPlayer.video.currentTime < curSegment.model.startTime/1000
+								|| TIMAAT.VideoPlayer.video.currentTime > curSegment.model.endTime/1000 )
+								TIMAAT.VideoPlayer.jumpTo(curSegment.model.startTime/1000);
 					}
 				}
 			} 
 				
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
-				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+				annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 		},
 		
 		_analysislistAdded: function(analysislist) {
@@ -1829,7 +1829,7 @@
 			TIMAAT.VideoPlayer.curAnalysisList.annotations.push(annotation.model);
 			annotation.updateUI();
 			console.log("TCL: annotation.updateUI()");
-			annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime);
+			annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
@@ -1863,7 +1863,7 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.push(segment);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI);
-			TIMAAT.VideoPlayer.jumpTo(segment.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.jumpTo(segment.model.startTime/1000);
 			TIMAAT.VideoPlayer.selectedElementType = 'segment';
 			segment.addUI();
 			TIMAAT.VideoPlayer.curSegment = segment;
@@ -1890,7 +1890,7 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.push(sequence);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI);
-			TIMAAT.VideoPlayer.jumpTo(sequence.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.jumpTo(sequence.model.startTime/1000);
 			TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 			sequence.addUI();
 			TIMAAT.VideoPlayer.curSequence = sequence;
@@ -1917,7 +1917,7 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.push(take);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI);
-			TIMAAT.VideoPlayer.jumpTo(take.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.jumpTo(take.model.startTime/1000);
 			TIMAAT.VideoPlayer.selectedElementType = 'take';
 			take.addUI();
 			TIMAAT.VideoPlayer.curTake = take;
@@ -1945,7 +1945,7 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.push(scene);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI);
-			TIMAAT.VideoPlayer.jumpTo(scene.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.jumpTo(scene.model.startTime/1000);
 			TIMAAT.VideoPlayer.selectedElementType = 'scene';
 			scene.addUI();
 			TIMAAT.VideoPlayer.curScene = scene;
@@ -1972,7 +1972,7 @@
 			}
 			TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.push(action);
 			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI);
-			TIMAAT.VideoPlayer.jumpTo(action.model.startTime/1000.0);
+			TIMAAT.VideoPlayer.jumpTo(action.model.startTime/1000);
 			TIMAAT.VideoPlayer.selectedElementType = 'action';
 			action.addUI();
 			TIMAAT.VideoPlayer.curAction = action;

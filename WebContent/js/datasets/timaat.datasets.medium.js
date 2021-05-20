@@ -344,6 +344,7 @@
 					medium = new TIMAAT.Medium(newMedium, type);
 					medium.model.fileStatus = 'noFile';
 					$('#medium-metadata-form').data('medium', medium);
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
 					$('#medium-tab-metadata').trigger('click');
 				}
 				TIMAAT.MediumDatasets.showAddMediumButton();
@@ -1955,7 +1956,7 @@
 			// medium subtype specific data
 			switch (type) {
 				case 'audio':
-					$('#timaat-mediadatasets-metadata-audio-length').val(data.model.mediumAudio.length);
+					$('#timaat-mediadatasets-metadata-audio-length').val(TIMAAT.Util.formatTime(data.model.mediumAudio.length));
 				break;
 				case "mediumDocument":
 				break;
@@ -1971,7 +1972,7 @@
 					$('#timaat-mediadatasets-metadata-text-content').val(data.model.mediumText.content);
 				break;
 				case 'video':
-					$('#timaat-mediadatasets-metadata-video-length').val(data.model.mediumVideo.length);
+					$('#timaat-mediadatasets-metadata-video-length').val(TIMAAT.Util.formatTime(data.model.mediumVideo.length));
 					$('#timaat-mediadatasets-metadata-video-videocodec').val(data.model.mediumVideo.videoCodec);
 					$('#timaat-mediadatasets-metadata-video-width').val(data.model.mediumVideo.width);
 					$('#timaat-mediadatasets-metadata-video-height').val(data.model.mediumVideo.height);

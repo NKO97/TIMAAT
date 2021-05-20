@@ -53,8 +53,8 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'segment-'+this.model.id);
 			this.listView.attr('data-type', 'segment');
-			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
+			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			this.listView.find('.timaat-annotation-segment-name').html(this.model.analysisSegmentTranslations[0].name);
 			this.listView.find('.timaat-annotation-segment-shortDescription').html(this.model.analysisSegmentTranslations[0].shortDescription);
 			this.listView.find('.timaat-annotation-segment-comment').html(this.model.analysisSegmentTranslations[0].comment);
@@ -70,9 +70,9 @@
 			// update timeline position
 			let magicoffset = 0; // TODO replace input slider
 			let width =  $('#timaat-video-seek-bar').width();
-			let length = (this.model.endTime - this.model.startTime) / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
-			length -= 2; // TODO magic number - replace input slider
-			let offset = this.model.startTime / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
+			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * width;
+			// length -= 2; // TODO magic number - replace input slider
+			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * width;
 			this.timelineView.css('width', length+'px');
 			this.timelineView.css('margin-left', (offset+magicoffset)+'px');
 
@@ -97,7 +97,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -116,7 +116,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -133,7 +133,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -151,7 +151,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -178,7 +178,7 @@
 		updateStatus(time, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			var highlight = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
+			if ( time >= this.model.startTime && time < this.model.endTime) highlight = true;
 
 			if ( highlight != this.highlighted ) { // highlight changed?
 				this.highlighted = highlight;

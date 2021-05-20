@@ -5,10 +5,10 @@ public class VideoInformation {
 	private int width;
 	private int height;
 	private int framerate;
-	private float duration;
+	private long duration;
 	private String codec;
 
-	public VideoInformation(int width, int height, int framerate, float duration, String codec) {
+	public VideoInformation(int width, int height, int framerate, long duration, String codec) {
 		this.width = width;
 		this.height = height;
 		this.framerate = framerate;
@@ -34,10 +34,10 @@ public class VideoInformation {
 	public void setFramerate(int framerate) {
 		this.framerate = framerate;
 	}
-	public float getDuration() {
+	public long getDuration() {
 		return duration;
 	}
-	public void setDuration(float duration) {
+	public void setDuration(long duration) {
 		this.duration = duration;
 	}
 	public String getCodec() {

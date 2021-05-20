@@ -3,8 +3,8 @@ class AnalysisSegment {
 					// setup model
 					this.model = model;
 					this.active = false;
-					this._startTime = this.model.startTime/1000.0;
-					this._endTime = this.model.endTime/1000.0;
+					this._startTime = this.model.startTime;
+					this._endTime = this.model.endTime;
 					
 					// create and style list view element
 					this.listView = $(`
@@ -28,16 +28,16 @@ class AnalysisSegment {
 				
 				updateUI() {
 					this.listView.attr('data-starttime', this.model.startTime);
-					let timeString = " "+TIMAATPub.formatTime(this.model.startTime/1000.0, true);
+					let timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
 					let name = this.model.analysisSegmentTranslations[0].name;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
 					let comment = this.model.analysisSegmentTranslations[0].comment;
-					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true);
+					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
 					this.listView.find('.timaat-annotation-segment-name').html(name);
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
 					this.timelineView.find('.timaat-timeline-segment-name ').html(name);
-					this.timelineView.attr('title', '<strong>'+name+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime/1000.0, true)+' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true)+'</div>'+desc);
+					this.timelineView.attr('title', '<strong>'+name+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime, true)+' - '+TIMAATPub.formatTime(this.model.endTime, true)+'</div>'+desc);
 					// comment
 					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
 						this.listView.find('.timaat-annotation-segment-comment-icon').show();
@@ -47,8 +47,8 @@ class AnalysisSegment {
 					// update timeline position
 					let magicoffset = 0;
 					let width =  100;
-					let length = ((this.model.endTime - this.model.startTime)/1000.0) / TIMAATPub.duration * width;
-					let offset = (this.model.startTime/1000.0) / TIMAATPub.duration * width;
+					let length = ((this.model.endTime - this.model.startTime)) / TIMAATPub.duration * width;
+					let offset = (this.model.startTime) / TIMAATPub.duration * width;
 					this.timelineView.css('width', length+'%');
 					this.timelineView.css('margin-left', (offset+magicoffset)+'%');
 
@@ -61,25 +61,25 @@ class AnalysisSegment {
 					var segment = this; // save annotation for events
 					// attach event handlers
 					this.listView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.listView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.timelineView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000.0, segment.model.endTime/1000.0);
+						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
 						TIMAATPub.setSegmentMetadata(segment);
@@ -97,7 +97,7 @@ class AnalysisSegment {
 					
 				updateStatus(time) {
 					var status = false;
-					if ( time >= this.model.startTime/1000.0 && time <= this.model.endTime/1000.0) status = true;
+					if ( time >= this.model.startTime && time <= this.model.endTime) status = true;
 
 					if ( status != this.active ) {
 						this.active = status;
@@ -117,7 +117,7 @@ class Marker {
 			  this.annotation = annotation;
 			  // this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
-			  this._to = Math.max(annotation.startTime, annotation.model.endTime/1000.0);
+			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
 			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
 			  
 			  // construct marker element
@@ -296,7 +296,7 @@ class Keyframe {
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAATPub.pause();
-				TIMAATPub.jumpTo(ev.data.parent.startTime + ev.data.time);
+				TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;
@@ -482,8 +482,8 @@ class Annotation {
 			this.model.selectorSvgs[0].svgData = JSON.stringify(this.svg.model);
 		}
 
-		this._startTime = this.model.startTime/1000.0;
-		this._endTime = this.model.endTime/1000.0;
+		this._startTime = this.model.startTime;
+		this._endTime = this.model.endTime;
 		this._layerVisual = this.model.layerVisual;
 		// create keyframes
 		for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new Keyframe(keyframe, this));
@@ -528,13 +528,13 @@ class Annotation {
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
-				TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
+				TIMAATPub.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				if ( TIMAATPub.curAnnotation != ev.data ) TIMAATPub.selectAnnotation(ev.data);
 				else TIMAATPub.selectAnnotation(null);
 				TIMAATPub.pause();
 			});
 			$(this.listView).on('dblclick', this, function(ev) {
-				TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
+				TIMAATPub.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				TIMAATPub.selectAnnotation(ev.data);
 				TIMAATPub.pause();
 				TIMAATPub.openSidebar('right');
@@ -616,8 +616,8 @@ class Annotation {
 		updateUI() {
 			this.listView.attr('data-starttime', this.model.startTime);
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-			var timeString = " "+TIMAATPub.formatTime(this.model.startTime/1000.0, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime/1000.0, true);
+			var timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// categories
@@ -921,7 +921,6 @@ class TIMAATPublication {
 		} else {
 			this.collection = null;
 			this.video = TIMAATData;
-			if ( this.video.mediumVideo.length < 0 ) this.video.mediumVideo.length += 3600; // temp fix for DB problems
 			this.duration = this.video.mediumVideo.length;
 		}
 		this.frameRate = 25;
@@ -957,9 +956,9 @@ class TIMAATPublication {
 	
 	pause() {
 		this.ui.video.pause();
-		let frameTime = 1.0 / this.frameRate;
-		let videoTime = this.ui.video.currentTime;
-		let time = Math.round(this.ui.video.currentTime/frameTime) * frameTime;
+		// let frameTime = 1000 / this.frameRate;
+		// let videoTime = this.ui.video.currentTime*1000;
+		// let time = Math.round(this.ui.video.currentTime*1000/frameTime) * frameTime;
 		$('.toggle-play-pause').removeClass('pause').addClass('play');
 	}
 
@@ -968,14 +967,14 @@ class TIMAATPublication {
 		$('.toggle-play-pause').removeClass('play').addClass('pause');
 	}
 
-	jumpTo(time) {
-		this.ui.video.currentTime = time;
+	jumpTo(timeInSeconds) {
+		this.ui.video.currentTime = timeInSeconds;
 		this.updateListUI();
 	}
 	
-	jumpVisible(start, end) {
+	jumpVisible(startInSeconds, endInSeconds) {
 		let curTime = this.ui.video.currentTime;
-		if ( curTime < start || curTime > end ) this.ui.video.currentTime = start;
+		if ( curTime < startInSeconds || curTime > endInSeconds ) this.ui.video.currentTime = startInSeconds;
 		this.updateListUI();
 	}
 	
@@ -1027,7 +1026,7 @@ class TIMAATPublication {
 	}
 	
 	updateTimeInfo() {
-		this.ui.timeLabel.text(this.formatTime(this.ui.video.currentTime, true));
+		this.ui.timeLabel.text(this.formatTime(this.ui.video.currentTime*1000, true));
 	}
 	
 	_updateAnimations() {
@@ -1035,7 +1034,7 @@ class TIMAATPublication {
 		
 		for (let annotation of TIMAATPub.annotationList) {
 			let wasActive = annotation.isActive();
-			annotation.updateStatus(TIMAATPub.ui.video.currentTime);
+			annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
 			if ( annotation.isActive() && !wasActive ) {
 				if ( TIMAATSettings.stopImage && annotation.type == 0 ) TIMAATPub.pause();
 				if ( TIMAATSettings.stopPolygon && annotation.type == 1 ) TIMAATPub.pause();
@@ -1384,7 +1383,7 @@ class TIMAATPublication {
 	}
 	
 	updateListUI() {
-		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime);
+		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
 	}
 	
 	sortListUI() {
@@ -1511,14 +1510,12 @@ class TIMAATPublication {
 				medium = medium.medium;
 				let title = medium.displayTitle.name+' ('+medium.displayTitle.language.code+')';
 				if ( medium.originalTitle ) title += ' - OT: '+medium.originalTitle.name+' ('+medium.originalTitle.language.code+')';
-				if ( medium.mediumVideo.length < 0 ) medium.mediumVideo.length += 3600; // temp fix for DB problems
-				
 				let item = $(this.ui.videoTemplate);
 				item.find('a').attr('href', medium.id);
 				item.find('.preview').attr('src', 'item-'+medium.id+'/preview.jpg');
 				item.find('.preview').attr('alt', title);
 				item.find('.title').text(title);
-				item.find('.duration').html(this.formatTime(medium.mediumVideo.length));
+				item.find('.duration').html(this.formatTime(medium.mediumVideo.length,true));
 				list.append(item);
 			}
 			console.log(list);
@@ -1581,7 +1578,7 @@ class TIMAATPublication {
 			TIMAATPub.pause();
 			let frameTime = 1 / TIMAATPub.frameRate;
 			TIMAATPub.jumpTo(
-				Math.max(0, (Math.round(TIMAATPub.ui.video.currentTime/frameTime)*frameTime) - frameTime)
+				Math.max(0, (Math.round(TIMAATPub.ui.video.currentTime / frameTime) * frameTime) - frameTime)
 			);
 		});
 		$('.stepfwdbutton').on('click dblclick', ev => {
@@ -1590,7 +1587,7 @@ class TIMAATPublication {
 			TIMAATPub.pause();
 			let frameTime = 1 / TIMAATPub.frameRate;
 			TIMAATPub.jumpTo(
-				Math.min(TIMAATPub.ui.video.duration, (Math.round(TIMAATPub.ui.video.currentTime/frameTime)*frameTime) + frameTime)
+				Math.min(TIMAATPub.ui.video.duration, (Math.round(TIMAATPub.ui.video.currentTime / frameTime) * frameTime) + frameTime)
 			);
 		});
 		$('.video-speed').on('click', function() {
@@ -1700,14 +1697,14 @@ class TIMAATPublication {
 			if ( !TIMAATPub.curAnnotation || TIMAATPub.curAnnotation.model.uuid.uuid != id ) for ( let anno of TIMAATPub.annotationList ) if ( anno.model.uuid.uuid == id ) {
 				TIMAATPub.selectAnnotation(anno);
 				TIMAATPub.pause();
-				TIMAATPub.jumpVisible(anno.startTime, anno.endTime);
+				TIMAATPub.jumpVisible(anno.startTime/1000, anno.endTime/1000);
 			}
 		});
 		
 		// text
 		if ( this.video ) {
 			$('.video-title').text(this.video.displayTitle.name);
-			this.ui.durationLabel.html(this.formatTime(this.duration));
+			this.ui.video.durationLabel.html(this.formatTime(this.duration));
 		} else {
 			$('.video-title').text(this.collection.title);
 		}

@@ -22,25 +22,22 @@
 	TIMAAT.Util = {
 		serverprefix: "",
 		
-		formatTime: function(seconds, withFraction = false) {
-    // console.log("TCL: formatTime: function(seconds, withFraction = false)");
-    // console.log("TCL:   -> seconds", seconds);
-    // console.log("TCL:   -> withFraction = false", withFraction);
-			var hours = Math.floor(seconds / 60 / 60);
-			var mins = Math.floor((seconds-(hours*60*60)) / 60);
-			var secs = seconds - ((hours*60*60)+(mins*60));
-			secs = Math.floor(secs);
+		formatTime: function(timeInMilliseconds, withFraction = false) {
+			let timeInSeconds = timeInMilliseconds / 1000;
+			var hours         = Math.floor(timeInSeconds / 3600);
+			var minutes       = Math.floor((timeInSeconds - (hours * 3600)) / 60);
+			var seconds       = timeInSeconds - ((hours * 3600) + (minutes * 60));
+			var fraction      = seconds - Math.floor(seconds);
+			seconds       		= Math.floor(seconds);
 			
 			var time = "";
-			if ( hours >0  ) time += hours+":";
-			if (mins < 10 ) time += "0";
-			time += mins+":";
-			if (secs < 10 ) time += "0";
-			time += secs;
-						
-			var fraction = seconds - ((hours*60*60) + (mins * 60) + secs);
-
-			if ( withFraction ) time += "."+fraction.toFixed(3).substring(2);
+			if ( hours < 10) time += "0";
+			time += hours + ":";
+			if ( minutes < 10 ) time += "0";
+			time += minutes + ":";
+			if ( seconds < 10 ) time += "0";
+			time += seconds;
+			if ( withFraction ) time += fraction.toFixed(3).substring(1);
 
 			return time;
 		},
@@ -96,43 +93,15 @@
 		},
 		
 		parseTime: function(timecode) {
-    // console.log("TCL: parseTime: function(timecode) ");
-    // console.log("TCL:   -> timecode", timecode);
-			var time = 0;
-			var hours = 0;
-			var mins = 0;
-			var secs = 0;
-			var fraction = 0;
-			
-			// parse fraction
-			if ( timecode.indexOf('.') > -1 ) {
-				var temp = timecode.substring(timecode.indexOf('.'));
-				fraction = parseFloat(temp);
-				if ( isNaN(fraction) ) fraction = 0;
-				timecode = timecode.substring(0,timecode.indexOf('.'));
+    	// console.log("TCL: parseTime timecode ", timecode);
+			if (!timecode || timecode == "") {
+				timecode = "00:00:00.000";
 			}
-			// parse hours
-			if ( (timecode.match(/:/g) || []).length  > 1 ) {
-				var temp = timecode.substring(0,timecode.indexOf(':'));
-				timecode = timecode.substring(timecode.indexOf(':')+1);
-				hours = parseInt(temp);
-				if ( isNaN(hours) ) hours = 0;
-				
-			}
-			// parse minutes
-			if ( (timecode.match(/:/g) || []).length  > 0 ) {
-				var temp = timecode.substring(0,timecode.indexOf(':'));
-				timecode = timecode.substring(timecode.indexOf(':')+1);
-				mins = parseInt(temp);
-				if ( isNaN(mins) ) mins = 0;
-			}
-			// parse seconds
-			secs = parseInt(timecode);
-			if ( isNaN(secs) ) secs = 0;
-			
-			time = (hours*60*60)+(mins*60)+secs+fraction;
-						
-			return time;
+			let hms = timecode.split(":");
+
+			let seconds = hms[0] * 3600 + hms[1] * 60 + hms[2];
+			let milliseconds = Math.floor(seconds * 1000);
+			return milliseconds;
 		},
 		
 		resolveUserID: function(idElement, myself) {

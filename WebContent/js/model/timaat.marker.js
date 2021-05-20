@@ -26,7 +26,7 @@
 			  this.annotation = annotation;
 			  this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
-			  this._to = Math.max(annotation.startTime, annotation.model.endTime/1000.0);
+			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
 			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
 			  
 			  // construct marker element
@@ -116,6 +116,7 @@
 			  // add events
 			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				  TIMAAT.VideoPlayer.pause();
+					console.log("TCL: Marker -> this.ui.element.find -> ev.data.from", ev.data.from);
 				  TIMAAT.VideoPlayer.jumpTo(ev.data.from);
 				  TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);
 			  });

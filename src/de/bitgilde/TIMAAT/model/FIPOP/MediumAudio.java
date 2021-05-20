@@ -6,9 +6,6 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.sql.Time;
-
-
 /**
  * The persistent class for the medium_audio database table.
  * 
@@ -23,7 +20,8 @@ public class MediumAudio implements Serializable {
 	@Column(name="medium_id")
 	private int mediumId;
 
-	private Time length;
+	@Column(columnDefinition = "INT")
+	private long length;
 
 	//bi-directional many-to-one association to MediaCollectionAlbumHasMediumAudio
 	// @OneToMany(mappedBy="mediumAudio")
@@ -51,12 +49,12 @@ public class MediumAudio implements Serializable {
 		this.mediumId = mediumId;
 	}
 
-	public float getLength() { // TODO why float?
-		return this.length.getTime()/1000f;
+	public long getLength() {
+		return this.length;
 	}
 
-	public void setLength(float length) { // TODO why float?
-		this.length = new Time((long)(length*1000f));
+	public void setLength(long length) {
+		this.length = length;
 	}
 
 	// public Set<MediaCollectionAlbumHasMediumAudio> getMediaCollectionAlbumHasMediumAudios() {

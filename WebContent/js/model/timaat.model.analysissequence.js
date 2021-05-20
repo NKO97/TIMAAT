@@ -51,8 +51,8 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'sequence-'+this.model.id);
 			this.listView.attr('data-type', 'sequence');
-			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
+			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			this.listView.find('.timaat-annotation-sequence-name').html(this.model.analysisSequenceTranslations[0].name);
 			this.listView.find('.timaat-annotation-sequence-shortDescription').html(this.model.analysisSequenceTranslations[0].shortDescription);
 			this.listView.find('.timaat-annotation-sequence-comment').html(this.model.analysisSequenceTranslations[0].comment);
@@ -68,9 +68,9 @@
 			// update timeline position
 			let magicoffset = 0; // TODO replace input slider
 			let width =  $('#timaat-video-seek-bar').width();
-			let length = (this.model.endTime - this.model.startTime) / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
-			length -= 2; // TODO magic number - replace input slider
-			let offset = this.model.startTime / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
+			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * width;
+			// length -= 2; // TODO magic number - replace input slider
+			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * width;
 			this.timelineView.css('width', length+'px');
 			this.timelineView.css('margin-left', (offset+magicoffset)+'px');
 		}
@@ -85,7 +85,7 @@
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
-			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
+			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000, sequence.model.endTime/1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
@@ -98,7 +98,7 @@
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000, sequence.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -110,7 +110,7 @@
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
-			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
+			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000, sequence.model.endTime/1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
@@ -124,7 +124,7 @@
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000.0, sequence.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime/1000, sequence.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -151,7 +151,7 @@
 		updateStatus(time, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			var highlight = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
+			if ( time >= this.model.startTime && time < this.model.endTime) highlight = true;
 
 			if ( highlight != this.highlighted ) { // highlight changed?
 				this.highlighted = highlight;

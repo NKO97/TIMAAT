@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.sql.Timestamp;
 
 
 /**
@@ -36,7 +35,8 @@ public class MediumVideo implements Serializable {
 	@Column(name="is_episode", columnDefinition = "BOOLEAN")
 	private Boolean isEpisode;
 
-	private Timestamp length;
+	@Column(columnDefinition = "INT")
+	private long length;
 
 	@Column(name="total_bitrate")
 	private int totalBitrate;
@@ -108,12 +108,12 @@ public class MediumVideo implements Serializable {
 		this.isEpisode = isEpisode;
 	}
 
-	public float getLength() { // TODO why float?
-		return this.length.getTime()/1000f;
+	public long getLength() {
+		return this.length;
 	}
 
-	public void setLength(float length) { // TODO why float?
-		this.length = new Timestamp((long)(length*1000f));
+	public void setLength(long length) {
+		this.length = length;
 	}
 
 	public int getTotalBitrate() {

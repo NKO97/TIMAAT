@@ -51,8 +51,8 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'take-'+this.model.id);
 			this.listView.attr('data-type', 'take');
-			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
+			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			this.listView.find('.timaat-annotation-take-name').html(this.model.analysisTakeTranslations[0].name);
 			this.listView.find('.timaat-annotation-take-shortDescription').html(this.model.analysisTakeTranslations[0].shortDescription);
 			this.listView.find('.timaat-annotation-take-comment').html(this.model.analysisTakeTranslations[0].comment);
@@ -68,9 +68,9 @@
 			// update timeline position
 			let magicoffset = 0; // TODO replace input slider
 			let width =  $('#timaat-video-seek-bar').width();
-			let length = (this.model.endTime - this.model.startTime) / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
-			length -= 2; // TODO magic number - replace input slider
-			let offset = this.model.startTime / (1000.0 * TIMAAT.VideoPlayer.duration) * width;
+			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * width;
+			// length -= 2; // TODO magic number - replace input slider
+			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * width;
 			this.timelineView.css('width', length+'px');
 			this.timelineView.css('margin-left', (offset+magicoffset)+'px');
 
@@ -85,7 +85,7 @@
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curTake = take;
-			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
+			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
@@ -99,7 +99,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -111,7 +111,7 @@
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curTake = take;
-			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
+			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
@@ -126,7 +126,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000.0, take.model.endTime/1000.0);
+				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -153,7 +153,7 @@
 		updateStatus(time, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			var highlight = false;
-			if ( time >= this.model.startTime/1000.0 && time < this.model.endTime/1000.0) highlight = true;
+			if ( time >= this.model.startTime && time < this.model.endTime) highlight = true;
 
 			if ( highlight != this.highlighted ) { // highlight changed?
 				this.highlighted = highlight;

@@ -3295,7 +3295,7 @@ public class EndpointMedium {
 	public Response getVideoThumbnail(
 			@PathParam("id") int id,
 			@QueryParam("token") String fileToken,
-			@QueryParam("time") String time) {
+			@QueryParam("time") String milliseconds) {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -3308,8 +3308,8 @@ public class EndpointMedium {
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
 		int seks = -1;
-		if ( time != null ) try {
-			seks = Integer.parseInt(time);
+		if ( milliseconds != null ) try {
+			seks = (int) (Integer.parseInt(milliseconds) / 1000);
 		} catch (NumberFormatException e) { seks = -1; };		
 		if ( seks >= 0 ) seks++;
 		
@@ -3730,7 +3730,7 @@ public class EndpointMedium {
 	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 	    "-v", "error", "-select_streams", "v:0",
 	    "-show_entries", "stream=width,height,r_frame_rate,codec_name",
-	    "-show_entries", "format=duration",
+	    "-show_entries", "format=duration", "-sexagesimal",
 	    "-of", "json", filename };
 	    VideoInformation videoInfo = new VideoInformation(0, 0, 25, 0, "");
 
@@ -3752,10 +3752,14 @@ public class EndpointMedium {
 	    	videoInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getInt("width"));
 	    	videoInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getInt("height"));
 	    	videoInfo.setFramerate(framerate);
-	    	videoInfo.setDuration(Float.parseFloat(json.getJSONObject("format").getString("duration")));
+				String sDuration = json.getJSONObject("format").getString("duration");
+				String[] hms = sDuration.split(":");
+        double dTotalSecs = Integer.parseInt(hms[0]) * 3600
+                          + Integer.parseInt(hms[1]) *   60
+                          + Double.parseDouble(hms[2]);
+				long lDuration = (long) (dTotalSecs*1000);
+	    	videoInfo.setDuration(lDuration);
 	    	videoInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
-
-
 	    } catch (IOException e1) {
 	    	// TODO Auto-generated catch block
 	    	e1.printStackTrace();
@@ -3763,6 +3767,76 @@ public class EndpointMedium {
 
 	    return videoInfo;
 	}
+
+	@PATCH
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("fileLengthFix")
+	@Secured
+	public Response updateAllFileLengths() {
+		Runtime r = Runtime.getRuntime();
+		Process p;     // Process tracks one external native process
+		BufferedReader is;  // reader for output of process
+		String line;
+		String filename;
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT m FROM Medium m WHERE m.filePath IS NOT NULL";
+		Query query = entityManager.createQuery(sql);		
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		for (Medium medium : mediumList) {
+			if (medium.getMediumAudio() != null || medium.getMediumVideo() != null) {
+				filename = medium.getFilePath();
+				System.out.println("filename: "+ filename);
+				String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
+				"-v", "error", "-select_streams", "v:0",
+				"-show_entries", "format=duration", "-sexagesimal",
+				"-of", "json", filename };
+				try {
+					p = r.exec(commandLine);
+					is = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+					try {
+						p.waitFor();  // wait for process to complete
+					} catch (InterruptedException e) {
+						System.err.println(e);  // "can't happen"
+					}
+
+					String jsonString = "";
+					while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+
+					JSONObject json = new JSONObject(jsonString);
+					String sDuration = json.getJSONObject("format").getString("duration");
+					String[] hms = sDuration.split(":");
+					double dTotalSecs = Integer.parseInt(hms[0]) * 3600
+														+ Integer.parseInt(hms[1]) *   60
+														+ Double.parseDouble(hms[2]);
+					long lDuration = (long) (dTotalSecs*1000);
+
+					if (medium.getMediumAudio() != null) {
+						medium.getMediumAudio().setLength(lDuration);
+					} else if (medium.getMediumVideo() != null) {
+						medium.getMediumVideo().setLength(lDuration);
+					}
+					System.out.println("updated Medium "+ medium.getId() + " file length to "+ lDuration);
+
+					entityTransaction.begin();
+					entityManager.merge(medium);
+					entityManager.persist(medium);
+					entityTransaction.commit();
+					entityManager.refresh(medium);
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		System.out.println("Completed updating all file lengths.");
+		return Response.ok().build();
+}
 	
 	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException
 	{

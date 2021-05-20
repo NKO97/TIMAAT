@@ -62,7 +62,8 @@
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime + ev.data.time);
+				console.log("TCL: ev.data.time ",ev.data.time);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;

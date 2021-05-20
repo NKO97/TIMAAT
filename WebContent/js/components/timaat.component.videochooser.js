@@ -192,7 +192,7 @@
 				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
 				myvideo.ui.find('.timaat-video-annotate').show();
 				myvideo.ui.find('.timaat-medium-status').show();
-				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length));
+				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length,true));
 				TIMAAT.VideoChooser.updateVideoStatus(myvideo);
 				TIMAAT.VideoChooser.dt.ajax.reload(null, false);
 			});
@@ -446,7 +446,6 @@
 						if (!medium.mediumVideo) return;
 						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
 						let length = medium.mediumVideo.length;
-						if ( length < 0 ) length += 3600;
 						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
 						timeCode = Math.min(Math.max(0, timeCode),length);
 						mediumElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);

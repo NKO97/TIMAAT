@@ -705,7 +705,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text">Start</span>
                       </div>
-                      <input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00" aria-label="Start Timecode" />
+                      <input type="text" class="form-control form-control-sm"  id="timaat-inspector-meta-start" placeholder="00:00:00.000" aria-label="Start Timecode" />
                       <div class="input-group-append">
                         <button class="btn btn-secondary" id="timaat-inspector-meta-setstart" type="button" title="Set current time frame as start time">
                           <i class="fas fa-clock"></i>
@@ -717,14 +717,14 @@
                         <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
                         <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
                           <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1)">Start +1 sek</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5)">Start +5 sek</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15)">Start +15 sek</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30)">Start +30 sek</a>
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60)">Start +1 min</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1000)">Start +1 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5000)">Start +5 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15000)">Start +15 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(30000)">Start +30 sek</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(60000)">Start +1 min</a>
                           <div role="separator" class="dropdown-divider"></div>
                           <a class="dropdown-item">
-                            <input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Sekunden" aria-label="Sekunden">
+                            <input type="text" id="timaat-inspector-meta-duration" class="form-control form-control-sm" placeholder="Milliseconds" aria-label="Milliseconds">
                           </a>
                         </div>
                       </div>
@@ -1135,7 +1135,7 @@
                     </span>
                     <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
                   </a>
-                  <span class="videotime" style="padding-left:20px">00:00.000</span>
+                  <span class="videotime" style="padding-left:20px">00:00:00.000</span>
                   <!-- Playback Speed Control -->
                   <div class="btn-group btn-group-sm float-right">
                     <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
@@ -2553,15 +2553,15 @@
                               <div class="form-row">
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Bildbreite</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[Enter image width]" aria-describedby="Image Width">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[upload image]" aria-describedby="Image Width">
                                 </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Bildhöhe</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[Enter image height]" aria-describedby="Image Height">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[upload image]" aria-describedby="Image Height">
                                 </div>
                                 <div class="col-md-4">                                
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bittiefe</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[Enter image bit depth]" aria-describedby="Bit Depth">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[upload image]" aria-describedby="Bit Depth">
                                 </div>
                               </div>
                             </div>
@@ -2577,7 +2577,7 @@
                               <div class="form-row">
                                 <div class="col-md-9">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Länge</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[Enter length]" aria-describedby="Length">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[upload video]" aria-describedby="Length">
                                 </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-isepisode">Episode?</label>
@@ -2587,17 +2587,17 @@
                             </div>
                             <div class="form-group datasheet-data video-data">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-videocodec">Video codec</label>
-                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-videocodec" name="videoCodec" placeholder="[Enter videocodec information]" aria-describedby="Video Codec">
+                              <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-videocodec" name="videoCodec" placeholder="[upload video]" aria-describedby="Video Codec">
                             </div>
                             <div class="form-group datasheet-data video-data">
                               <div class="form-row">
                                 <div class="col-md-6">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Videobreite</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[Enter width]" aria-describedby="Width">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[upload video]" aria-describedby="Width">
                                 </div>
                                 <div class="col-md-6">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Videohöhe</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[Enter height]" aria-describedby="Height">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[upload video]" aria-describedby="Height">
                                 </div>  
                               </div>
                             </div>
@@ -2605,15 +2605,15 @@
                               <div class="form-row">
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-framerate">Frame rate</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-framerate" name="frameRate" max="65535" placeholder="[Enter framerate]" aria-describedby="Frame Rate">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-framerate" name="frameRate" max="65535" placeholder="[upload video]" aria-describedby="Frame Rate">
                                 </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-datarate">Data rate</label>
-                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-datarate" name="dataRate" max="65535" placeholder="[Enter data rate]" aria-describedby="Data Rate">
+                                  <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-datarate" name="dataRate" max="65535" placeholder="[upload video]" aria-describedby="Data Rate">
                               </div>
                               <div class="col-md-4">
                                 <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-totalbitrate">Total bitrate</label>
-                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-totalbitrate" name="totalBitrate" max="65535" placeholder="[Enter totalbitrate]" aria-describedby="Total Bitrate">
+                                <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-totalbitrate" name="totalBitrate" max="65535" placeholder="[upload video]" aria-describedby="Total Bitrate">
                                 </div>
                               </div>
                             </div>
@@ -4274,6 +4274,8 @@
                   <a class="nav-link top-nav-bar-link active"  id="settings-general-tab" data-toggle="tab" role="tab" aria-controls="settings-general-tab" aria-selected="false">
                     <i class="fas fa-cogs"></i> Allgemein
                   </a>
+                  <button type="button" class="btn btn-sm btn-primary" id="length-fix-button">Fix length
+                  </button>
                 </li>
               </ul>
               <div class="tab-content" id="settingsTabsContent">

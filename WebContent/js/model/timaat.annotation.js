@@ -38,8 +38,8 @@
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
 
-			this._startTime = this.model.startTime/1000.0;
-			this._endTime = this.model.endTime/1000.0;
+			this._startTime = this.model.startTime;
+			this._endTime = this.model.endTime;
 			this._layerVisual = this.model.layerVisual;
 			// create keyframes
 			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
@@ -116,7 +116,7 @@
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				else {
 					TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -127,7 +127,7 @@
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();
@@ -315,8 +315,7 @@
 		}
 			
 		set startTime(startTime) {
-			this._startTime = Math.min(startTime, TIMAAT.VideoPlayer.duration);
-			this._startTime = Math.max(0, this._startTime);
+			this._startTime = Math.max(0, (Math.min(startTime, TIMAAT.VideoPlayer.duration)));
 			this._endTime = Math.max(startTime, this._endTime);
 			if ( this._startTime != this.model.startTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
 			if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
@@ -348,8 +347,8 @@
 			this.listView.attr('id', 'annotation-'+this.model.id);
 			this.listView.attr('data-type', 'annotation');
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
-			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime/1000.0, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime/1000.0, true);
+			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
+			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// categories
@@ -482,8 +481,8 @@
 			this.svg.layer.clearLayers();
 			this.svg.items = Array();
 			this._layerVisual = this.model.layerVisual;
-			this._startTime = this.model.startTime/1000.0;
-			this._endTime = this.model.endTime/1000.0;
+			this._startTime = this.model.startTime;
+			this._endTime = this.model.endTime;
 			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
 			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
 			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
@@ -575,8 +574,7 @@
 		}
 				
 		setSelected(selected) {
-			if (this._destroyed) return;
-//					console.log("TCL: Annotation -> setSelected -> selected", selected);
+			if ( this._destroyed ) return;
 			if ( this.selected == selected ) return;			
 			this.selected = selected;
 			if ( selected ) {
@@ -744,8 +742,8 @@
 		_syncToModel() {
 			// console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 			let jsonData = { keyframes: [] };
-			this.model.startTime = this._startTime*1000.0;
-			this.model.endTime = this._endTime*1000.0;
+			this.model.startTime = this._startTime;
+			this.model.endTime = this._endTime;
 			this.model.layerVisual = this._layerVisual;
 
 			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
