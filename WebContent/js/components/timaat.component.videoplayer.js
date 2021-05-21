@@ -852,8 +852,7 @@
 			
 			$('#timaat-volume-slider').on('input change', function() {
 				if ( !TIMAAT.VideoPlayer.video ) return;
-				TIMAAT.VideoPlayer.video.volume = $(this).val() / 100; 
-
+				TIMAAT.VideoPlayer.video.volume = $(this).val() / 100;
 				if ( TIMAAT.VideoPlayer.video.volume > 0 ) {
 					$('#timaat-volumeicon').find('.volume').show();
 					$('#timaat-volumeicon').find('.mute').hide();
@@ -1024,24 +1023,12 @@
 			
 			// setup video overlay and UI
 			$('.timaat-videoplayer-novideo').hide();
-			$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');			
+			$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');
 			$('.timaat-videoplayer-ui').show();
 			var medium = new TIMAAT.Medium(video, 'video');
 			TIMAAT.VideoPlayer.selectedVideo = medium;
 			$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedVideo.model);');
 			$('.timaat-sidebar-tab-videoplayer').attr('title', 'Annotate video');
-			TIMAAT.UI.clearLastSelection('medium');
-			$('#medium-metadata-form').data('medium', medium);
-			$('#previewTab').addClass('annotationView');
-			$('#timaat-mediadatasets-medium-tabs').show();
-			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
-			TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');			
-			$('#timaat-videoplayer-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
-			$('#timaat-videoplayer-medium-modals-container').append($('#timaat-medium-modals'));
-			TIMAAT.MediumDatasets.container = 'videoplayer';
-			$('.datasheet-form-annotate-button').hide();
-			$('.datasheet-form-annotate-button').prop('disabled', true);
-
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
 			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length,true));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
@@ -1051,6 +1038,20 @@
 			TIMAAT.VideoPlayer.viewer.fitBounds(this.videoBounds);
 			this.overlay = L.videoOverlay(videoUrl, this.videoBounds, { autoplay: false, loop: false} ).addTo(TIMAAT.VideoPlayer.viewer);
 			this.video = this.overlay.getElement();
+			$('#timaat-volume-slider').change();
+
+			// setup medium data sheet
+			TIMAAT.UI.clearLastSelection('medium');
+			$('#medium-metadata-form').data('medium', medium);
+			$('#previewTab').addClass('annotationView');
+			$('#timaat-mediadatasets-medium-tabs').show();
+			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
+			TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
+			$('#timaat-videoplayer-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
+			$('#timaat-videoplayer-medium-modals-container').append($('#timaat-medium-modals'));
+			TIMAAT.MediumDatasets.container = 'videoplayer';
+			$('.datasheet-form-annotate-button').hide();
+			$('.datasheet-form-annotate-button').prop('disabled', true);
 
 			// attach event handlers for UI elements
 			let curVideo = this.video;
