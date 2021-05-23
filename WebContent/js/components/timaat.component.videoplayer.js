@@ -1120,6 +1120,7 @@
 			let minZoom = TIMAAT.VideoPlayer.viewer.getBoundsZoom(TIMAAT.VideoPlayer.videoBounds);
 			TIMAAT.VideoPlayer.viewer.setMinZoom( minZoom );
 			TIMAAT.VideoPlayer.viewer.fitBounds(this.videoBounds);
+			TIMAAT.VideoPlayer.viewer.setMaxZoom( 1 );
 			this.overlay = L.imageOverlay(imageUrl, this.videoBounds, { interactive: false} ).addTo(TIMAAT.VideoPlayer.viewer);
 			this.video = null;
 			// setup viewer controls
@@ -1201,6 +1202,7 @@
 			TIMAAT.VideoPlayer.viewer.setMaxBounds(this.videoBounds);
 			TIMAAT.VideoPlayer.viewer.setMinZoom( 0.0 );
 			TIMAAT.VideoPlayer.viewer.fitBounds(this.videoBounds);
+			TIMAAT.VideoPlayer.viewer.setMaxZoom( 0 );
 			this.overlay = L.videoOverlay(videoUrl, this.videoBounds, { autoplay: false, loop: false} ).addTo(TIMAAT.VideoPlayer.viewer);
 			this.video = this.overlay.getElement();
 			// setup viewer controls
