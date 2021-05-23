@@ -156,9 +156,11 @@
 		}
 		
 		_syncToModel(shapes) {
-			let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-			let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+
+			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
+			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+				
 			let model = {
 					time: this._time,
 					shapes: []
@@ -174,7 +176,7 @@
 				if ( shape.type == 'rectangle' ) {
 					jsonItem.type = 'rectangle';
 					jsonItem.x = parseFloat( (Math.abs(shape.bounds[0][1]/factor) / width).toFixed(5) );
-					jsonItem.y = parseFloat( (Math.abs((450-shape.bounds[1][0])/factor) / height).toFixed(5) );
+					jsonItem.y = parseFloat( (Math.abs((TIMAAT.VideoPlayer.videoBounds.getNorth()-shape.bounds[1][0])/factor) / height).toFixed(5) );
 					jsonItem.width = parseFloat( (Math.abs((shape.bounds[1][1]-shape.bounds[0][1])/factor) / width).toFixed(5) );
 					jsonItem.height = parseFloat( (Math.abs((shape.bounds[1][0]-shape.bounds[0][0])/factor) / height).toFixed(5) );
 					// sanitize data
@@ -186,7 +188,7 @@
 					jsonItem.points = [];
 					for (let point of shape.points) {
 						let x = parseFloat( Math.abs(point[1]/width/factor).toFixed(5) );
-						var y = parseFloat( Math.abs((450-point[0])/factor/height).toFixed(5) );
+						var y = parseFloat( Math.abs((TIMAAT.VideoPlayer.videoBounds.getNorth()-point[0])/factor/height).toFixed(5) );
 						// sanitize data
 						x = Math.max(0.0, Math.min(1.0,x));
 						y = Math.max(0.0, Math.min(1.0,y));
@@ -198,7 +200,7 @@
 					jsonItem.points = [];
 					for (let point of shape.points) {
 						let x = parseFloat( Math.abs(point[1]/width/factor).toFixed(5) );
-						var y = parseFloat( Math.abs((450-point[0])/factor/height).toFixed(5) );
+						var y = parseFloat( Math.abs((TIMAAT.VideoPlayer.videoBounds.getNorth()-point[0])/factor/height).toFixed(5) );
 						// sanitize data
 						x = Math.max(0.0, Math.min(1.0,x));
 						y = Math.max(0.0, Math.min(1.0,y));
@@ -208,7 +210,7 @@
 				} else if ( shape.type == 'circle' ) {
 					jsonItem.type = 'circle';
 					jsonItem.x = parseFloat( (Math.abs(shape.point[1]/factor) / width).toFixed(5) );
-					jsonItem.y = parseFloat( (Math.abs((450-shape.point[0])/factor) / height).toFixed(5) );
+					jsonItem.y = parseFloat( (Math.abs((TIMAAT.VideoPlayer.videoBounds.getNorth()-shape.point[0])/factor) / height).toFixed(5) );
 					jsonItem.radius = parseFloat( (Math.abs(shape.radius/factor) ).toFixed(5) );
 					// sanitize data
 					jsonItem.x = Math.max(0.0, Math.min(1.0,jsonItem.x));
@@ -225,9 +227,9 @@
 			let shape = {
 					type: svgitem.type,
 			}
-			let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-			let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
+			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
@@ -236,15 +238,15 @@
 			shape.id = id;
 			switch (svgitem.type) {
 				case "rectangle":
-					shape.bounds = [ [Math.round(450-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(450-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-//					shape.bounds = L.latLngBounds( L.latLng(Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+					shape.bounds = [ [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
+//					shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
 					return shape;
 					
 				case "polygon":
 				case "line":
 					let points = new Array();
 					for (let point of svgitem.points) {
-						let lat = 450-(point[1]*factor*height);
+						let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						let lng = point[0]*factor*width;
 						points.push([lat, lng]);
 //						points.push(L.latLng(lat, lng));
@@ -253,7 +255,7 @@
 					return shape;
 
 				case "circle":
-					let lat = 450-(svgitem.y*factor*height);
+					let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
 					let lng = svgitem.x*factor*width;
 					shape.point = [lat, lng];
 //					shape.point = L.latLng(lat,lng);

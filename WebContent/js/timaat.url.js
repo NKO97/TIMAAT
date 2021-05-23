@@ -671,7 +671,7 @@
               let analysisList = await TIMAAT.AnalysisListService.getAnalysisList(pathSegments[1]);
               let video = await TIMAAT.MediumService.getMedium(analysisList.mediumID);
               //* load necessary data to display UI
-              TIMAAT.VideoPlayer.setupVideo(video);
+              TIMAAT.VideoPlayer.setupMedium(video);
               let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
               //* setup UI
 						  await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);

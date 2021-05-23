@@ -3237,6 +3237,7 @@ public class EndpointMedium {
 			return Response.ok().entity(thumbnail).build();
 	}
 	
+	
 	@GET
 	@Path("image/{id}/preview")
 	@Produces("image/png")
@@ -3289,6 +3290,37 @@ public class EndpointMedium {
 		return Response.ok().entity(image).build();
 	}
 
+	@GET
+	@Path("image/{id}/download")
+	public Response getImageFile(@PathParam("id") int id, @QueryParam("token") String fileToken) {
+		System.out.println("triggered getImageOriginalFile");
+		// verify token
+		if (fileToken == null) {
+			return Response.status(401).build();
+		}
+		int tokenMediumId = 0;
+		try {
+			tokenMediumId = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}
+		if (tokenMediumId != id) {
+			return Response.status(401).build();
+		}
+
+		String mediaType = "image/png";
+		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/image/" + id + "-image-original.png");
+		if ( !image.exists() ) {
+			image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/image/" + id + "-image-original.jpg");
+			mediaType = "image/jpeg";
+		}
+		if ( !image.exists() || !image.canRead() ) return Response.status(404).build();
+
+		return Response.ok().entity(image).type(mediaType).build();
+	}	
+	
 	@GET
 	@Path("video/{id}/thumbnail")
 	@Produces("image/jpg")

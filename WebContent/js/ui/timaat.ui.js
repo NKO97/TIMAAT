@@ -158,7 +158,7 @@
 			$('#timaat-component-'+component).show();
 			if (component == 'videoplayer' && TIMAAT.VideoPlayer.selectedVideo) {
 				if ( !TIMAAT.VideoPlayer.video || TIMAAT.VideoPlayer.model.video.id != TIMAAT.VideoPlayer.selectedVideo.model.id )
-					TIMAAT.VideoPlayer.setupVideo(TIMAAT.VideoPlayer.selectedVideo.model);
+					TIMAAT.VideoPlayer.setupMedium(TIMAAT.VideoPlayer.selectedVideo.model);
 				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 			}
 			if (component == 'media') {
