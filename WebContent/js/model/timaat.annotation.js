@@ -60,6 +60,7 @@
 					</div>
 				</li>`
 			);
+			if (TIMAAT.VideoPlayer.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
 			
 			// console.log("TCL: Annotation -> constructor -> this.updateUI()");
 			this.updateUI();
@@ -140,6 +141,8 @@
 			this.marker.updateView();
 
 			this.changed = false;
+			
+			if ( TIMAAT.VideoPlayer.duration == 0 ) this.updateStatus(0);
 		}
 		
 		_upgradeModel() {
@@ -349,6 +352,7 @@
 			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
+			if ( TIMAAT.VideoPlayer.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
 			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
 			// categories
@@ -520,7 +524,7 @@
 			let animTime = time - this._startTime;
 			animTime = parseFloat(animTime.toFixed(3));
 			var active = false;
-			if ( time >= this.startTime && time <= this.endTime ) active = true;
+			if (  TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time <= this.endTime)  ) active = true;
 			this.setActive(active);
 			if ( animTime == this._animTime ) return;
 			this._animTime = animTime;
@@ -701,9 +705,9 @@
 		
 		_parseSVG(svgitem) {
 			// console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
-			let factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height;
-			let width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			let height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
+			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
@@ -712,12 +716,12 @@
 			switch (svgitem.type) {
 				case "rectangle":
 					// [[ height, x], [ y, width]]
-					var bounds = [[ Math.round(450-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(450-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+					var bounds = [[ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
 					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
 				case "polygon":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
-						var lat = 450-(point[1]*factor*height);
+						var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
@@ -725,13 +729,13 @@
 				case "line":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
-						var lat = 450-(point[1]*factor*height);
+						var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
 					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
 				case "circle":
-					var lat = 450-(svgitem.y*factor*height);
+					var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
 					var lng = svgitem.x*factor*width;
 					var radius = svgitem.radius * factor;
 
@@ -746,9 +750,9 @@
 			this.model.endTime = this._endTime;
 			this.model.layerVisual = this._layerVisual;
 
-			var factor = 450 / TIMAAT.VideoPlayer.model.video.mediumVideo.height; // TODO get from videobounds
-			var width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
-			var height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
+			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 			this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
 			this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
 			

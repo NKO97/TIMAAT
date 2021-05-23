@@ -1117,7 +1117,8 @@
 				case 'annotation':
 					this.enablePanel('timaat-inspector-metadata');
 					// animation panel
-					this.enablePanel('timaat-inspector-animation');
+					if ( TIMAAT.VideoPlayer.duration > 0 ) this.enablePanel('timaat-inspector-animation');
+					else this.disablePanel('timaat-inspector-animation');
 					if ( item != null ) {
 						this.enablePanel('timaat-inspector-actors');
 						this.enablePanel('timaat-inspector-events');
@@ -1128,8 +1129,10 @@
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
 					$('#timaat-inspector-meta-opacity-group').show();
-					$('#timaat-inspector-meta-type-group').show();
-					$('#timaat-inspector-meta-timecode-group').show();
+					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#timaat-inspector-meta-type-group').show();
+					else $('#timaat-inspector-meta-type-group').hide();
+					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#timaat-inspector-meta-timecode-group').show();
+					else $('#timaat-inspector-meta-timecode-group').hide();
 					if (item) {
 						$('#timaat-inspector-meta-start').prop('disabled', item.isAnimation());
 						$('#timaat-inspector-meta-setstart').prop('disabled', item.isAnimation());
@@ -1150,8 +1153,13 @@
 					var stroke = (anno) ? anno.stroke : 2;
 					var layerVisual = (anno) ? anno.layerVisual : (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
 					var comment = (anno) ? anno.model.comment : "";
+
 					var start = (anno) ? TIMAAT.Util.formatTime(anno.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true);
 					var end = (anno) ? TIMAAT.Util.formatTime(anno.model.endTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true);
+					// 23-05
+					// var start = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.startTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					// var end = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) :(anno) ? TIMAAT.Util.formatTime(anno.model.endTime/1000.0, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime, true);
+					
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);

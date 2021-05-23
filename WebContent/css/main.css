@@ -408,6 +408,14 @@ a.dropdown-item {
 	text-indent: 20%;
 }
 
+.timaat-videoplayer-video-viewer {
+	height: 450px;
+}
+
+.timaat-videoplayer-image-viewer {
+	height: 492px;
+}
+
 #timaat-videoplayer-viewer-overlay {
 	display: none;
 	z-index: 1000;
