@@ -3617,7 +3617,7 @@
 		},
 
 		setupMediaDataTable: function() {			
-			console.log("TCL: setupDataTable");
+			// console.log("TCL: setupDataTable");
 			// setup datatable
 			this.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],

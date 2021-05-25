@@ -612,7 +612,6 @@
 				if ( TIMAAT.VideoPlayer.curAnnotation ) {
 					TIMAAT.VideoPlayer.curAnnotation.addSVGItem(ev.layer);
 					TIMAAT.VideoPlayer.updateUI();
-					console.log("TCL: TIMAAT.VideoPlayer.updateUI() - if ( TIMAAT.VideoPlayer.curAnnotation )");
 					ev.layer.dragging._draggable = null;
 					ev.layer.dragging.addHooks();
 					ev.layer.enableEdit();
@@ -1138,7 +1137,7 @@
 		},
 		
 		setupVideo: function(video) {
-			console.log("TCL: setupVideo: function(video) ", video);
+			// console.log("TCL: setupVideo: function(video) ", video);
 			let type = video.mediaType.mediaTypeTranslations[0].type;
 			this.mediaType = type;
 

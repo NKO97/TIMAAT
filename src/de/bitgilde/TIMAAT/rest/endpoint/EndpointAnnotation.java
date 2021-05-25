@@ -453,13 +453,12 @@ public class EndpointAnnotation {
 	public Response createAnnotation(@PathParam("id") int id, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation newAnno = null;
-
     	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Medium medium = entityManager.find(Medium.class, id);
-    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
-		
-    	// parse JSON data
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+	
+		// parse JSON data
 		try {
 			newAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {

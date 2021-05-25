@@ -23,14 +23,14 @@
     tags: null,
 		
 		init: function() {
-    console.log("TCL: init: function()");
+      // console.log("TCL: init: function()");
 			TIMAAT.TagLists.initTags();
 			// $('.datatables').hide();
 			// $('.tag-datatable').show();
     },
 
 		initTags: function() {
-      console.log("TCL: initTags: function()");
+      // console.log("TCL: initTags: function()");
       // nav-bar functionality
       $('#tag-tab-tag-metadata-form').on('click',function(event) {
         // $('.tags-data-tabs').show();

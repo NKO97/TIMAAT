@@ -302,7 +302,7 @@
 		},
 		
 		processLogin: function() {
-			console.log("TCL: processLogin: function()");
+			// console.log("TCL: processLogin: function()");
 			var user = jQuery('#timaat-login-user').val();
 			var pass = jQuery('#timaat-login-pass').val();
 			if ( user.length > 0 && pass.length > 0 ) {

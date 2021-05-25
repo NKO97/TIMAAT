@@ -86,7 +86,7 @@
     },
 
     load: function() {
-      console.log("TCL: load: function()");
+      // console.log("TCL: load: function()");
       // this.loadLists();
       TIMAAT.CategoryLists.load();
       TIMAAT.RoleLists.load();
@@ -95,7 +95,7 @@
     },
 
     loadLists: function() {
-      console.log("TCL: loadLists: function()");
+      // console.log("TCL: loadLists: function()");
       // TIMAAT.UI.displayComponent(null, null, null);
       // TIMAAT.UI.addSelectedClassToSelectedItem(null);
       // TIMAAT.UI.subNavTab = 'dataSheet';

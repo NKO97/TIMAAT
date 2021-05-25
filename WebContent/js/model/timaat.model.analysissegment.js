@@ -89,9 +89,7 @@
 			
 			// attach event handlers
 			this.listView.on('click', this, function(ev) {
-				console.log("TCL: click");
 				TIMAAT.VideoPlayer.curSegment = segment;
-        console.log("TCL: AnalysisSegment -> this.listView.on -> segment", segment);
 				TIMAAT.VideoPlayer.curSegment.timelineView[0].classList.replace('bg-info', 'bg-primary');
 				TIMAAT.VideoPlayer.curSegment.timelineView[0].classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
@@ -108,9 +106,7 @@
 				// TIMAAT.URLHistory.setURL(null, 'Segment · '+segment.model.analysisSegmentTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/segment/'+segment.model.id);
 			});
 			this.timelineView.on('click', this, function(ev) {
-				console.log("TCL: click");
 				TIMAAT.VideoPlayer.curSegment = segment;
-        console.log("TCL: AnalysisSegment -> this.timelineView.on -> segment", segment);
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
