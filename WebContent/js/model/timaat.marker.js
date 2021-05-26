@@ -27,7 +27,7 @@
 			  this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAAT.VideoPlayer.duration);
 			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
-			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
+			  this._colorHex = annotation.model.selectorSvgs[0].colorHex;
 			  
 			  // construct marker element
 			  this.ui = {
@@ -107,7 +107,6 @@
 				  },
 			  });
 
-			    
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  $('#timaat-timeline-marker-pane').append(this.ui.element);
@@ -168,7 +167,7 @@
 			  
 		  get color() {
 //			  console.log("TCL: Marker -> getcolor -> color()");
-			  return this._color;
+			  return this._colorHex;
 		  }
 			  
 		  remove() {
@@ -180,7 +179,8 @@
 //			  console.log("TCL: Marker -> updateView -> updateView()");
 			  this._from = this.parent.startTime;
 			  this._to = this.parent.endTime;
-			  this._color = '#'+this.parent.svg.color;
+			  this._colorHex = this.parent.svg.colorHex;
+				// console.log("updateElementColor");
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  this._updateElementStyle();
@@ -200,12 +200,12 @@
 		  }
 
 		  _updateElementColor() {
-//			  console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
-			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._color,0.3));
-			  this.ui.element.css('border-left-color', this._color);
-			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', this._color);
+			  // console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
+			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._colorHex, 0.3));
+				this.ui.element.css('border-left-color', '#'+this._colorHex);
+			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', '#'+this._colorHex);
 			  this.ui.element.removeClass('timaat-timeline-marker-white');
-			  if ( this._color.toLowerCase() == '#ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
+			  if ( this._colorHex.toLowerCase() == 'ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
 		  }
 			  
 		  _updateElementOffset() {
@@ -236,20 +236,26 @@
 			  else this.ui.element.addClass('timaat-timeline-marker-audio');
 		  }
 		  
-		  hexToRgbA(hex, opacity) {
-//			  console.log("TCL: Marker -> hexToRgbA -> hex", hex);
-//			  console.log("TCL: Marker -> hexToRgbA -> opacity", opacity);
-			  var c;
-			  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-				  c = hex.substring(1).split('');
-				  if ( c.length == 3 ) {
-					  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-				  }
-				  c = '0x'+c.join('');
-				  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
-			  }
-			  throw new Error('Bad Hex');
-		  }
+			hexToRgbA(hex, alpha) {
+				var r = parseInt(hex.slice(0, 2), 16);
+				var	g = parseInt(hex.slice(2, 4), 16);
+				var b = parseInt(hex.slice(4, 6), 16);
+				return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+			}
+
+		  // hexToRgbA(hex, opacity) {
+			// 	console.log("TCL: Marker -> hexToRgbA -> hex, opacity", hex, opacity);
+			//   var c;
+			//   if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+			// 	  c = hex.substring(1).split('');
+			// 	  if ( c.length == 3 ) {
+			// 		  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+			// 	  }
+			// 	  c = '0x'+c.join('');
+			// 	  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
+			//   }
+			//   throw new Error('Bad Hex');
+		  // }
 	}
 	
 }, window));

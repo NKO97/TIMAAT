@@ -603,8 +603,10 @@ public class EndpointAnnotation {
 		annotation.setEndTime(updatedAnno.getEndTime());
 		annotation.setLayerVisual(updatedAnno.getLayerVisual());
 
-		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorRgba() != null )
-			 annotation.getSelectorSvgs().get(0).setColorRgba(updatedAnno.getSelectorSvgs().get(0).getColorRgba());
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorHex() != null )
+			annotation.getSelectorSvgs().get(0).setColorHex(updatedAnno.getSelectorSvgs().get(0).getColorHex());
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getOpacity() != null )
+			annotation.getSelectorSvgs().get(0).setOpacity(updatedAnno.getSelectorSvgs().get(0).getOpacity());
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0)) 
 			annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getSvgData() != null )

@@ -487,7 +487,7 @@
 			});
 
 			TIMAAT.VideoPlayer.viewer.on('editable:editing', function (e) {
-					e.layer.setStyle({weight: 1, fillOpacity: 0.2});
+				e.layer.setStyle({weight: 1, fillOpacity: 0.2});
 			});
 
 			TIMAAT.VideoPlayer.viewer.on('editable:drawing:start', function(x) {
@@ -498,7 +498,7 @@
 					return;
 				}		    	
 				TIMAAT.VideoPlayer.pause();		    	
-				x.layer.setStyle({color: '#'+TIMAAT.VideoPlayer.curAnnotation.svg.color, weight: TIMAAT.VideoPlayer.curAnnotation.svg.strokeWidth});
+				x.layer.setStyle({color: '#'+TIMAAT.VideoPlayer.curAnnotation.svg.colorHex, weight: TIMAAT.VideoPlayer.curAnnotation.svg.strokeWidth});
 			});
 
 			TIMAAT.VideoPlayer.viewer.on('editable:vertex:dragend', function(ev) {
@@ -1410,7 +1410,8 @@
 					"Lesezeichen, noch zu bearbeiten",
 					TIMAAT.VideoPlayer.video.currentTime*1000,
 					TIMAAT.VideoPlayer.video.currentTime*1000,
-					"5555554C", 
+					"555555",
+					0.3,
 					1,
 					layerVisual,
 					TIMAAT.VideoPlayer.curAnalysisList.id, 

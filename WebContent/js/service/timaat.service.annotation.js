@@ -89,7 +89,7 @@
 			});	
 		},
 
-		createAnnotation(title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback) {
+		createAnnotation(title, comment, startTime, endTime, color, opacity, strokeWidth, layerVisual, list, callback) {
 			// console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
 			var model = { 	
 				id: 0, 
@@ -111,7 +111,8 @@
 				}],
 				selectorSvgs: [{
 					id: 0,
-					colorRgba: color,
+					colorHex: color,
+					opacity: opacity * 100, //* 0..1 is stored as 0..100 (Byte)
 					svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
 					strokeWidth: strokeWidth,
 					svgShapeType: {
@@ -160,21 +161,6 @@
     
     async updateAnnotation(model) {
 			console.log("TCL: updateAnnotation -> model", model);
-			// var annotation = {
-			// 		id: model.id,
-			// 		annotationTranslations: model.annotationTranslations,
-			// 		categories: model.categories,
-			// 		comment: model.comment,
-			// 		endTime: model.endTime,
-			// 		startTime: model.startTime,
-			// 		selectorSvgs: model.selectorSvgs,
-			// 		layerVisual: model.layerVisual,
-			// 		tags: model.tags,
-			// 		title: model.title,
-			// 		// mediumID: model.mediumID,
-			// };
-      // console.log("TCL: updateAnnotation -> annotation", annotation);
-			// delete model.ui;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id,

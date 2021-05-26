@@ -20,8 +20,10 @@ public class SelectorSvg implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="color_rgba")
-	private String colorRgba;
+	@Column(name="color_hex")
+	private String colorHex;
+
+	private Byte opacity;
 
 	@Column(name="stroke_width")
 	private int strokeWidth;
@@ -52,13 +54,22 @@ public class SelectorSvg implements Serializable {
 		this.id = id;
 	}
 
-	public String getColorRgba() {
-		return this.colorRgba;
+	public String getColorHex() {
+		return this.colorHex;
 	}
 
-	public void setColorRgba(String colorRgba) {
-		this.colorRgba = colorRgba;
+	public void setColorHex(String colorHex) {
+		this.colorHex = colorHex;
 	}
+
+	public Byte getOpacity() {
+		return this.opacity;
+	}
+
+	public void setOpacity(Byte opacity) {
+		this.opacity = opacity;
+	}
+
 
 	public int getStrokeWidth() {
 		return this.strokeWidth;

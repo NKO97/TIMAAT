@@ -388,7 +388,7 @@
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					var title = $('#timaat-inspector-meta-name').val();
-					var opacity = $('#timaat-inspector-meta-opacity').val();
+					var opacity = Number($('#timaat-inspector-meta-opacity').val());
 					var layerVisual = 1;
 					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
 					var comment = $('#timaat-inspector-meta-comment').summernote('code');
@@ -400,13 +400,13 @@
 						anno.model.comment = comment;
 						anno.model.startTime = startTime;
 						anno.model.endTime = endTime;
-						anno.svg.color = color;
-						anno.opacity = opacity;
+						anno.svg.colorHex = color;
+						anno.svg.opacity = opacity;
 						anno.layerVisual = layerVisual;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
-						TIMAAT.AnnotationService.createAnnotation(title, comment, startTime, endTime, color, 1, layerVisual, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
+						TIMAAT.AnnotationService.createAnnotation(title, comment, startTime, endTime, color, opacity, 1, layerVisual, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
 				}
 				// analysis lists
@@ -907,11 +907,26 @@
 				}
 			});
 
+			// $('#timaat-inspector-meta-colorPicker').on('change', function(event) {
+      //   if ( inspector.state.type == 'annotation' ) {
+			// 		console.log("TCL: Inspector -> timaat-inspector-meta-colorPicker -> on change");
+			// 		let anno = inspector.state.item;
+      //     console.log("TCL: Inspector -> $ -> anno", anno);
+			// 		if (!anno) return;
+			// 		let color = $('#timaat-inspector-meta-colorPicker').data("plugin_tinycolorpicker").colorHex;
+      //     console.log("TCL: Inspector -> $ -> color", color);
+			// 		for (let item of anno.svg.items) {
+			// 			item.setStyle({color: + color });
+			// 		};
+			// 		// inspector.state.item = anno; // needed?
+			// 	}
+			// })
+
 			$('#timaat-inspector-meta-opacity').on('change input', function(ev) {
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					if ( !anno ) return;
-					var opacity = $('#timaat-inspector-meta-opacity').val();
+					let opacity = Number($('#timaat-inspector-meta-opacity').val());
 					anno.opacity = opacity;
 					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
 				}
@@ -1146,8 +1161,7 @@
 					var anno = item;
 					var heading = (anno) ? "Annotation bearbeiten" : "Annotation hinzufügen";
 					var submit = (anno) ? "Speichern" : "Hinzufügen";
-					var color = (anno) ? anno.svg.color : this.cp.colorHex.substring(1);
-					color = color.substring(0,6);
+					var colorHex = (anno) ? anno.svg.colorHex : this.cp.colorHex.substring(1);
 					var title = (anno) ? anno.model.title : "";
 					var opacity = (anno) ? anno.opacity : 0.3;
 					var stroke = (anno) ? anno.stroke : 2;
@@ -1160,7 +1174,7 @@
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
-					this.cp.setColor('#'+color);
+					this.cp.setColor('#'+colorHex);
 					$('#timaat-inspector-meta-name').val(title).trigger('input');
 					$('#timaat-inspector-meta-opacity').val(opacity);
 					this._setInspectorStroke(stroke);

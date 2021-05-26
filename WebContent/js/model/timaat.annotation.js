@@ -32,15 +32,15 @@
 			this.svg.items = Array();
 			this.svg.keyframes = Array();
 			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
-			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
-			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
-			if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
+			this.svg.colorHex = this.model.selectorSvgs[0].colorHex;
+			this.svg.opacity = this.model.selectorSvgs[0].opacity/100; //* DB value is stored as Byte 0..100 range is converted to 0..1 range
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
 
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
 			this._layerVisual = this.model.layerVisual;
+
 			// create keyframes
 			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
 
@@ -61,6 +61,13 @@
 				</li>`
 			);
 			if (TIMAAT.VideoPlayer.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
+			
+			// convert SVG data
+			for (let svgitem of this.svg.model.keyframes[0].shapes) {
+				let item = this._parseSVG(svgitem);
+				this.addSVGItem(item);
+				item.dragging.disable();
+			};
 			
 			// console.log("TCL: Annotation -> constructor -> this.updateUI()");
 			this.updateUI();
@@ -107,13 +114,6 @@
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
-
-			// convert SVG data
-			for (let svgitem of this.svg.model.keyframes[0].shapes) {
-				let item = this._parseSVG(svgitem);
-				this.addSVGItem(item);
-				item.dragging.disable();
-			};
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
@@ -278,11 +278,11 @@
 		}
 		
 		get opacity() {
-			return this._opacity;
+			return this.svg.opacity;
 		}
 			
 		set opacity(opacity) {
-			this._opacity = Math.min(1.0, Math.max(0.0,opacity));
+			this.svg.opacity = Math.min(1.0, Math.max(0.0, opacity));
 			this.setChanged();
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
@@ -349,7 +349,7 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'annotation-'+this.model.id);
 			this.listView.attr('data-type', 'annotation');
-			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
+			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			if ( TIMAAT.VideoPlayer.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
@@ -371,7 +371,7 @@
 				
 			// update svg
 			for (let item of this.svg.items) {
-				item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.opacity});
+				item.setStyle({color:'#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 			};
 			
 			// update marker
@@ -487,8 +487,8 @@
 			this._layerVisual = this.model.layerVisual;
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
-			this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
-			this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
+			this.svg.colorHex = this.model.selectorSvgs[0].colorHex;
+			this.svg.opacity = this.model.selectorSvgs[0].opacity/100;
 			this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
 
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
@@ -717,7 +717,7 @@
 				case "rectangle":
 					// [[ height, x], [ y, width]]
 					var bounds = [[ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
-					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 				case "polygon":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
@@ -725,7 +725,7 @@
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 				case "line":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
@@ -733,13 +733,13 @@
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 				case "circle":
 					var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
 					var lng = svgitem.x*factor*width;
 					var radius = svgitem.radius * factor;
 
-					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 			}
 		}
 		
@@ -753,7 +753,8 @@
 			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
 			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
-			this.model.selectorSvgs[0].colorRgba = this.svg.color + ("00" + this._opacity.toString(16)).substr(-2).toUpperCase();
+			this.model.selectorSvgs[0].colorHex = this.svg.colorHex;
+			this.model.selectorSvgs[0].opacity = this.svg.opacity * 100;
 			this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
 			
 			this.svg.keyframes[0].time = 0;

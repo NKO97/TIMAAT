@@ -118,7 +118,7 @@ class Marker {
 			  // this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
 			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
-			  this._color = '#'+annotation.model.selectorSvgs[0].colorRgba.substring(0,6);
+			  this._color = '#'+annotation.model.selectorSvgs[0].colorHex;
 			  
 			  // construct marker element
 			  this.ui = {
@@ -465,9 +465,9 @@ class Annotation {
 		this.svg.items = Array();
 		this.svg.keyframes = Array();
 		this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
-		this.svg.color = this.model.selectorSvgs[0].colorRgba.substring(0,6);
-		this._opacity = parseInt(this.model.selectorSvgs[0].colorRgba.substring(6,8), 16)/255;
-		if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
+		this.svg.color = this.model.selectorSvgs[0].colorHex;
+		this.svg.opacity = this.model.selectorSvgs[0].opacity/100;
+		// if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
 		this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 		if ( Array.isArray(this.svg.model) ) {
 			// upgrade old DB model
@@ -580,7 +580,7 @@ class Annotation {
 		}
 		
 		get opacity() {
-			return this._opacity;
+			return this.svg.opacity;
 		}
 			
 		get layerVisual() {
@@ -636,7 +636,7 @@ class Annotation {
 				
 			// update svg
 			for (let item of this.svg.items) {
-				item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.opacity});
+				item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 			};
 			
 			// update marker
