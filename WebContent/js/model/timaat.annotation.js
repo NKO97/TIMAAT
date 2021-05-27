@@ -754,7 +754,7 @@
 			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 			this.model.selectorSvgs[0].colorHex = this.svg.colorHex;
-			this.model.selectorSvgs[0].opacity = this.svg.opacity * 100;
+			this.model.selectorSvgs[0].opacity = this.svg.opacity * 100; // 0..1 is stored as 0..100 in DB (Byte)
 			this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;
 			
 			this.svg.keyframes[0].time = 0;

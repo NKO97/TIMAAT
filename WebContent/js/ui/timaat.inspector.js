@@ -1032,6 +1032,7 @@
 				if ( ! isNaN(time) ) inspector.setMetaEnd(time);
 				$(this).parent().click();
 			});
+
 			// animation panel listeners
 			this.ui.addAnimButton.on('click', function(ev) {
 				if ( TIMAAT.VideoPlayer.curAnnotation && !TIMAAT.VideoPlayer.curAnnotation.isAnimation() ) {
@@ -1206,13 +1207,13 @@
 
 						// category and tag panel
 						$('#annotation-categories-multi-select-dropdown').val(null).trigger('change');
-						if ($('#annotation-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+						if ($('#annotation-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
 							$('#annotation-categories-multi-select-dropdown').select2('destroy');
 						}
 						$('#annotation-categories-multi-select-dropdown').find('option').remove();
 
 						$('#annotation-tags-multi-select-dropdown').val(null).trigger('change');
-						if ($('#annotation-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+						if ($('#annotation-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
 							$('#annotation-tags-multi-select-dropdown').select2('destroy');
 						}
 						$('#annotation-tags-multi-select-dropdown').find('option').remove();
