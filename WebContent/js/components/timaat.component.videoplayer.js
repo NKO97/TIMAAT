@@ -1101,6 +1101,8 @@
 			
 			// setup annotation UI
 			$('#timaat-annotation-list-loader').show();
+			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
+			$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
 			$('#timaat-videoplayer-annotation-add-button').prop('disabled', true);
 			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
 
@@ -1197,6 +1199,8 @@
 			$('#timaat-annotation-list-loader').show();
 			$('#timaat-videoplayer-annotation-add-button').prop('disabled', true);
 			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
+			$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
+			$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
 
 			// setup timeline UI
 			$('.timaat-videoplayer-timeline-area').show();

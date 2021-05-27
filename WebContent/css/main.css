@@ -383,7 +383,8 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 }
 
 #timaat-videoplayer-annotation-add-button:disabled,
-#timaat-videoplayer-annotation-remove-button:disabled {
+#timaat-videoplayer-annotation-remove-button:disabled,
+#timaat-videoplayer-annotation-quickadd-button:disabled {
 	color: #bbb;
 }
 
