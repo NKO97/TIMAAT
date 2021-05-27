@@ -501,7 +501,7 @@
 		},
 
 		setMediumCollectionItemList: function() {
-    	console.log("TCL: setMediumCollectionItemList");
+    	// console.log("TCL: setMediumCollectionItemList");
 			if ( this.mediaCollectionItemList == null ) return;
 
 			if ( this.dataTableMediaCollectionItemList ) {
@@ -726,7 +726,7 @@
 					mediumCollectionElement.on('click', '.collectionItem-annotate-button', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
-						if ( !medium.mediumVideo ) return; //* allow annotating only for Videos
+						if ( !medium.mediumVideo && !medium.mediumImage ) return; //* allow annotating only for videos and images
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
@@ -952,13 +952,12 @@
 								// 				<button type="submit" title="Upload image" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								// 			</form>`;
 								// }
-								}
-							// TODO: activate once images can be annotated
-							// } else {
-							// 	ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
 						}
-						ui += `<button type="button" title="Datenblatt editieren" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
-									 <button type="button" title="Aus Mediensammlung entfernen"class="btn btn-outline-secondary btn-sm btn-block timaat-mediumcollectiondatasets-collectionitem-remove"><i class="fas fa-folder-minus"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									 <button type="button" title="Remove from collection"class="btn btn-outline-secondary btn-sm btn-block timaat-mediumcollectiondatasets-collectionitem-remove"><i class="fas fa-folder-minus"></i></button>
 								 </div>`;
 						return ui;
 						},

@@ -190,7 +190,7 @@
 				myvideo.mediumVideo.frameRate = video.mediumVideo.frameRate;
 
 				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
-				myvideo.ui.find('.timaat-video-annotate').show();
+				myvideo.ui.find('.videochooser-annotate-button').show();
 				myvideo.ui.find('.timaat-medium-status').show();
 				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length,true));
 				TIMAAT.VideoChooser.updateVideoStatus(myvideo);
@@ -410,12 +410,12 @@
 					
 					// set up events
 					mediumElement.on('click', '.timaat-medium-thumbnail', function(ev) {
-						mediumElement.find('.timaat-video-annotate').click();
+						mediumElement.find('.videochooser-annotate-button').click();
 					});
 
-					mediumElement.on('click', '.timaat-video-annotate', async function(ev) {
-						//* only videos can be annotated
-						if (!medium.mediumVideo) return;
+					mediumElement.on('click', '.videochooser-annotate-button', async function(ev) {
+						//* only videos and images can be annotated
+						if (!medium.mediumVideo && !medium.mediumImage) return;
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						// $('.timaat-video-card').removeClass('bg-info text-white');
 						// $(this).addClass('bg-info text-white');
@@ -531,14 +531,14 @@
 									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
 									<button type="submit" title="Datei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
-								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate"><i class="fas fa-draw-polygon"></i></button>`;
+								<button type="button" title="Annotate video" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 						} else if (medium.mediumImage) {
 							ui = `<div>
 								<form action="/TIMAAT/api/medium/image/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
 									<input name="file" accept=".png" class="timaat-medium-upload-file d-none" type="file" />
 									<button type="submit" title="Datei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
-								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-video-annotate" style="display:none"><i class="fas fa-draw-polygon"></i></button>`;
+								<button type="button" title="Annotate image" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 						} else {
 							ui = `<div>`;
 						}
@@ -635,7 +635,7 @@
 			if ( video.fileStatus == 'waiting' ) video.ui.find('.timaat-medium-status i').removeClass('fa-cog').addClass('fa-hourglass-half');
 			if ( video.fileStatus == 'noFile'  ) {
 				video.ui.find('.timaat-medium-upload').css('display', 'block');
-				video.ui.find('.timaat-video-annotate').hide();
+				video.ui.find('.videochooser-annotate-button').hide();
 				
 				// upload button click triggers file selection
 				video.ui.find('.timaat-medium-upload').off('click').on('click', function(ev) {
@@ -735,7 +735,7 @@
 				 			if ( video.ui ) {
 								// remove event listeners
 								if ( video.poll ) window.clearInterval(video.poll);
-								video.ui.find('.timaat-video-annotate').off();
+								video.ui.find('.videochooser-annotate-button').off();
 								video.ui.find('.card-img-top').off();
 								// TODO remove video upload listener
 								videoelement = video.ui;

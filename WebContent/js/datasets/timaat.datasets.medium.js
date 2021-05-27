@@ -4605,7 +4605,7 @@
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItem) {
-    	console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
+    	// console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
