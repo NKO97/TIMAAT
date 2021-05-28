@@ -96,8 +96,7 @@
 				timecode = "00:00:00.000";
 			}
 			let hms = timecode.split(":");
-
-			let seconds = hms[0] * 3600 + hms[1] * 60 + hms[2];
+			let seconds = Number(hms[0]) * 3600 + Number(hms[1]) * 60 + Number(hms[2]);
 			let milliseconds = Math.floor(seconds * 1000);
 			return milliseconds;
 		},

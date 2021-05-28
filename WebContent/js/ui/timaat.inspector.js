@@ -1194,7 +1194,7 @@
 					$('#timaat-inspector-meta-opacity').val(opacity);
 					this._setInspectorStroke(stroke);
 					this._setInspectorAnnotationType(layerVisual);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);	
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);	
 					$('#timaat-inspector-categories-and-tags-title').html('Kategorien und Tags');
@@ -1792,7 +1792,7 @@
 		}
 		
 		setMetaEnd(milliseconds) {
-			// console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
+			console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
 			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 			var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 			if ( milliseconds == 0 ) {
