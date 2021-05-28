@@ -392,6 +392,8 @@
 					var layerVisual = 1;
 					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
 					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					var color = inspector.cp.colorHex.substring(1);
@@ -413,7 +415,9 @@
 				if ( inspector.state.type == 'analysislist' ) {
 					var list = inspector.state.item;
 					var title = $('#timaat-inspector-meta-name').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');				
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);		
 					if (list) {
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'text', comment);
@@ -428,8 +432,10 @@
 					var segment = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					let i = 0;
@@ -522,8 +528,10 @@
           // console.log("TCL: Inspector -> $ -> sequence", sequence);
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					let i = 0;
@@ -616,8 +624,10 @@
 					var take = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 
@@ -696,8 +706,10 @@
 					var scene = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					let i = 0;
@@ -789,8 +801,10 @@
 					var action = inspector.state.item;
 					var name = $('#timaat-inspector-meta-name').val();
 					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');	
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');	
+					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					comment = comment.substring(0,4096);
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 
