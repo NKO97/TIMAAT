@@ -131,7 +131,7 @@
 						// TIMAAT.VideoPlayer.sortSegments();
 						// update UI list view
 						localSegment.updateUI();
-						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+						// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						TIMAAT.VideoPlayer.inspector.updateItem();
@@ -164,15 +164,15 @@
 
 			// annotation edited remotely
 			$(document).on('edit-annotation.notification.TIMAAT', function(ev, notification) {
-				console.log("trigger edit annotation");
+				// console.log("trigger edit annotation");
 				let annotation = notification.data;
-				console.log("remote annotation", annotation);
+				// console.log("remote annotation", annotation);
 				if ( annotation && TIMAAT.VideoPlayer.curAnalysisList &&  TIMAAT.VideoPlayer.curAnalysisList.id == notification.dataID ) {
-					console.log("in local list");
+					// console.log("in local list");
 					let localAnno = null;
 					for ( let anno of TIMAAT.VideoPlayer.annotationList ) if ( anno.model.id == annotation.id ) localAnno = anno;
 					if (localAnno) {
-						console.log("local annotation found", localAnno);
+						// console.log("local annotation found", localAnno);
 						// update local annotation
 						localAnno.model = annotation;
 						localAnno.setChanged();
@@ -180,7 +180,7 @@
 						// update UI list view
 						localAnno.updateUI();
 						TIMAAT.VideoPlayer.updateUI();
-						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+						// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						if ( TIMAAT.VideoPlayer.inspector.state.item == localAnno )  TIMAAT.VideoPlayer.inspector.setItem(localAnno, 'annotation');
@@ -204,7 +204,7 @@
 
 						// update UI list view
 						localAnno.remove();
-						console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+						// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						if ( TIMAAT.VideoPlayer.inspector.state.item == localAnno ) TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -506,7 +506,7 @@
 					TIMAAT.VideoPlayer.curAnnotation.setChanged();
 					// sync keyframe
 					if ( ev.layer ) TIMAAT.VideoPlayer.curAnnotation.syncShape(ev.layer);
-					console.log("TIMAAT.VideoPLayer.updateUI() - editable:vertex:dragend");
+					// console.log("TIMAAT.VideoPLayer.updateUI() - editable:vertex:dragend");
 					TIMAAT.VideoPlayer.updateUI();		    		
 				}
 			});
@@ -598,7 +598,7 @@
 					var radius = TIMAAT.VideoPlayer.viewer.distance(ev.vertex.editor.feature.getLatLng(),ev.vertex.latlng);
 					radius = Math.max(5,radius);
 					ev.vertex.editor.feature.setRadius( radius );
-			//					console.log(ev.vertex, ev.vertex.editor.feature, ev.vertex.editor.feature.getRadius());
+					// console.log(ev.vertex, ev.vertex.editor.feature, ev.vertex.editor.feature.getRadius());
 				}
 								
 				
@@ -712,9 +712,9 @@
 			$('#timaat-segment-element-delete-commit-submit-button').on('click', async function(ev) {
 				var modal = $('#timaat-videoplayer-segment-element-delete');
 				var type = $('#timaat-videoplayer-segment-element-delete').data('type');
-        console.log("TCL: $ -> type", type);
+        // console.log("TCL: $ -> type", type);
 				var model = $('#timaat-videoplayer-segment-element-delete').data('model');
-        console.log("TCL: $ -> model", model);
+        // console.log("TCL: $ -> model", model);
 				// if ( TIMAAT.VideoPlayer.inspector.state.type != 'segment' ) return;
 				if ( type ) {
 					await TIMAAT.AnalysisListService.removeSegmentElement(type, model.id);
@@ -857,12 +857,10 @@
 					break;
 				case "ArrowLeft":
 					ev.preventDefault();
-					console.log("Press left");
 					$('.stepbckbutton').click();
 					break;
 				case "ArrowRight":
 					ev.preventDefault();
-					console.log("Press right");
 					$('.stepfwdbutton').click();
 					break;
 				case "r":
@@ -967,7 +965,7 @@
 				if ( TIMAAT.VideoPlayer.video.playbackRate != 1 ) $(this).addClass('active'); else $(this).removeClass('active');
 				
 			});
-			
+
 			$('#timaat-videoplayer-viewer').on('contextmenu', function(event){
 				event.stopPropagation();
 				event.preventDefault();
@@ -1008,8 +1006,8 @@
 		},
 		
 		createShape: function(type) {
-			console.log("TCL: createShape: function(type)");
-			console.log("TCL: type", type);
+			// console.log("TCL: createShape: function(type)");
+			// console.log("TCL: type", type);
 			
 			if ( TIMAAT.VideoPlayer.viewer.editTools.drawing() ) {
 				let oldTool = TIMAAT.VideoPlayer.curTool;
@@ -1063,7 +1061,7 @@
 		
 		setupMedium: function(medium) {
 			let type = medium.mediaType.mediaTypeTranslations[0].type;
-			console.log("TCL: setupMedium: function(medium) of type ", medium, type);
+			// console.log("TCL: setupMedium: function(medium) of type ", medium, type);
 
 			switch (type) {
 				case 'image':
@@ -1075,7 +1073,7 @@
 					break;
 				
 				default:
-					console.log("TCL: setupMedium: ERROR: Don't know how to handle media of type >"+type+"<", medium);
+					console.error("TCL: setupMedium: ERROR: Don't know how to handle media of type >"+type+"<", medium);
 					alert("setupMedium: ERROR: Don't know how to handle media of type >"+type+"<");
 					throw "setupMedium: ERROR: Don't know how to handle media of type >"+type+"<";
 					break;
@@ -1180,10 +1178,6 @@
 			this.mediaType = type;
 
 			// setup model
-			if ( video.mediumVideo.length < 0 ) {
-				console.log("TCL: TEMP FIX STILL NECESSARY");
-				video.mediumVideo.length += 3600; // temp fix for DB problems
-			}
 			this.curFrameRate = 25; // TODO
 			this.model.video = video;
 			this.duration = video.mediumVideo.length;
@@ -1404,28 +1398,28 @@
 		},
 		
 		userLogForList: function() {
-			console.log("TCL: userLogForList: function()");
+			// console.log("TCL: userLogForList: function()");
 			$('#timaat-user-log-analysislist').popover('show');
 		},
 		
 		addAnalysisList: function() {
-			console.log("TCL: addAnalysisList: function()");
+			// console.log("TCL: addAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(null, 'analysislist');			
 		},
 		
 		updateAnalysisList: async function(analysislist) {
-			console.log("TCL: updateAnalysisList - analysislist", analysislist);
+			// console.log("TCL: updateAnalysisList - analysislist", analysislist);
 			// sync to server
 			await TIMAAT.AnalysisListService.updateMediumAnalysisList(analysislist);
-			console.log("TCL: updateAnalysisList - analysislist", analysislist);
+			// console.log("TCL: updateAnalysisList - analysislist", analysislist);
 			// TODO update UI list view
 			TIMAAT.VideoPlayer.curAnalysisList.ui.html(TIMAAT.Util.getDefTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title'));
 		},
 
 		editAnalysisList: function() {
-			console.log("TCL: editAnalysisList: function()");
+			// console.log("TCL: editAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysislist');
@@ -1433,7 +1427,7 @@
 		},
 		
 		removeAnalysisList: function() {
-			console.log("TCL: removeAnalysisList: function()");
+			// console.log("TCL: removeAnalysisList: function()");
 			if ( !this.curAnalysisList ) return;
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-analysislist-delete').data('analysislist', this.curAnalysisList);
@@ -1441,7 +1435,7 @@
 		},
 		
 		addQuickAnnotation: function() {
-			console.log("TCL: addQuickAnnotation: function()");
+			// console.log("TCL: addQuickAnnotation: function()");
 			if ( !TIMAAT.VideoPlayer.curAnalysisList ) return;
 			TIMAAT.VideoPlayer.pause();
 			let layerVisual = (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
@@ -1460,13 +1454,13 @@
 		},
 		
 		addAnnotation: function() {
-			console.log("TCL: addAnnotation: function()");
+			// console.log("TCL: addAnnotation: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.inspector.setItem(null, 'annotation');
 		},
 		
 		updateAnnotation: function(annotation) {
-			console.log("TCL: updateAnnotation: annotation", annotation);
+			// console.log("TCL: updateAnnotation: annotation", annotation);
 			// sync to server
 			TIMAAT.AnnotationService.updateAnnotation(annotation.model);
 			// update UI list view
@@ -1477,7 +1471,7 @@
 		},
 		
 		updateAnnotations: function() {
-			console.log("TCL: updateAnnotations: function()");
+			// console.log("TCL: updateAnnotations: function()");
 			if ( this.annotationList == null ) return;
 			this.annotationList.forEach(function(annotation) {
 				if ( annotation.isSelected() && annotation.hasChanges() ) {
@@ -1485,7 +1479,7 @@
 					TIMAAT.AnnotationService.updateAnnotation(annotation.model);
 					// update UI
 					annotation.updateUI();
-					console.log("TCL: annotation.updateUI()");
+					// console.log("TCL: annotation.updateUI()");
 				}
 			});
 
@@ -1496,7 +1490,7 @@
 		},
 		
 		removeAnnotation: function() {
-			console.log("TCL: removeAnnotation: function()");
+			// console.log("TCL: removeAnnotation: function()");
 			if ( !this.curAnnotation ) return;
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-annotation-delete').data('annotation', this.curAnnotation);
@@ -1538,8 +1532,8 @@
 		},
 
 		setCategorySet: function(categorySet) {
-			console.log("TCL: setCategorySet: function(categorySet)");
-			console.log("TCL: categorySet", categorySet);
+			// console.log("TCL: setCategorySet: function(categorySet)");
+			// console.log("TCL: categorySet", categorySet);
 			TIMAAT.VideoPlayer.curCategorySet = categorySet;
 			TIMAAT.VideoPlayer.categoryAutocomplete.length = 0;
 			if ( categorySet ) {
@@ -1550,13 +1544,13 @@
 		},
 
 		addAnalysisSegmentElement: function(type) {
-			console.log("TCL: addAnalysisSegmentElement: function("+type+")");
+			// console.log("TCL: addAnalysisSegmentElement: function("+type+")");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.inspector.setItem(null, type);
 		},
 		
 		removeAnalysisSegmentElement: function(type, data) {
-			console.log("TCL: removeAnalysisSegmentElement: type, data", type, data);
+			// console.log("TCL: removeAnalysisSegmentElement: type, data", type, data);
 			if (!data) return;
 			TIMAAT.VideoPlayer.pause();
 			$('#timaat-videoplayer-segment-element-delete').data('type', type);
@@ -1567,7 +1561,7 @@
 		},
 
 		updateAnalysisSegmentElement: async function(type, element) {
-			console.log("TCL: updateAnalysisSegmentElement:function -> element", element);
+			// console.log("TCL: updateAnalysisSegmentElement:function -> element", element);
 			// sync to server
 			await TIMAAT.AnalysisListService.updateSegmentElement(type, element.model);
 			switch (type) {
@@ -1616,7 +1610,7 @@
 				modal.modal('show');
 			}).catch(publication => {
 				let modal = $('#timaat-videoplayer-publication');
-				console.log("managePublication:fail", publication);
+				// console.log("managePublication:fail", publication);
 				TIMAAT.VideoPlayer.publication = publication;
 				TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
 				modal.find('.saveinfo').hide();
@@ -1999,8 +1993,8 @@
 		},
 		
 		_analysislistAdded: function(analysislist) {
-			console.log("TCL: _analysislistAdded: function(analysislist) - analysislist", analysislist);
-			console.log("TCL ~ TIMAAT.VideoPlayer.model", TIMAAT.VideoPlayer.model);
+			// console.log("TCL: _analysislistAdded: function(analysislist) - analysislist", analysislist);
+			// console.log("TCL ~ TIMAAT.VideoPlayer.model", TIMAAT.VideoPlayer.model);
 			var wasEmpty = TIMAAT.VideoPlayer.model.analysisLists.length == 0;
 			TIMAAT.VideoPlayer.model.analysisLists.push(analysislist);
 			
@@ -2019,8 +2013,8 @@
 		},
 		
 		_analysislistRemoved: function(analysislist) {
-			console.log("TCL: _analysislistRemoved: function(analysislist)");
-			console.log("TCL: analysislist", analysislist);
+			// console.log("TCL: _analysislistRemoved: function(analysislist)");
+			// console.log("TCL: analysislist", analysislist);
 			// sync to server
 			TIMAAT.AnalysisListService.removeAnalysisList(analysislist);
 
@@ -2040,22 +2034,22 @@
 		},
 		
 		_annotationAdded: function(annotation, openInspector=true) {
-			console.log("TCL: _annotationAdded: function(annotation)");
-			console.log("TCL: annotation", annotation);
+			// console.log("TCL: _annotationAdded: function(annotation)");
+			// console.log("TCL: annotation", annotation);
 			TIMAAT.VideoPlayer.annotationList.push(annotation);
 			TIMAAT.VideoPlayer.curAnalysisList.annotations.push(annotation.model);
 			annotation.updateUI();
-			console.log("TCL: annotation.updateUI()");
+			// console.log("TCL: annotation.updateUI()");
 			if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			if ( openInspector ) TIMAAT.VideoPlayer.selectAnnotation(annotation);
 		},
 		
 		_annotationRemoved: function(annotation) {
-			console.log("TCL: _annotationRemoved: function(annotation)");
-			console.log("TCL: annotation", annotation);
+			// console.log("TCL: _annotationRemoved: function(annotation)");
+			// console.log("TCL: annotation", annotation);
 			// sync to server
 			TIMAAT.AnnotationService.removeAnnotation(annotation);
 			var index = TIMAAT.VideoPlayer.annotationList.indexOf(annotation);
@@ -2067,14 +2061,14 @@
 
 			// update UI list view
 			annotation.remove();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
 		},
 		
 		_segmentAdded: function(segment, openInspector=true) {
-			console.log("TCL: _segmentAdded: function(segment)", segment);
+			// console.log("TCL: _segmentAdded: function(segment)", segment);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI = [];
 			}
@@ -2095,13 +2089,13 @@
 
 			// update UI
 			$('#timaat-timeline-segment-pane').show();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 		},
 
 		_sequenceAdded: function(sequence, openInspector=true) {
-			console.log("TCL: _sequenceAdded: function(sequence)", sequence);
+			// console.log("TCL: _sequenceAdded: function(sequence)", sequence);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI = [];
 			}
@@ -2122,13 +2116,13 @@
 
 			// update UI
 			$('#timaat-timeline-sequence-pane').show();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
 
 		_takeAdded: function(take, openInspector=true) {
-			console.log("TCL: _takeAdded: function(take)", take);
+			// console.log("TCL: _takeAdded: function(take)", take);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI = [];
 			}
@@ -2150,13 +2144,13 @@
 
 			// update UI
 			$('#timaat-timeline-take-pane').show();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
 
 		_sceneAdded: function(scene, openInspector=true) {
-			console.log("TCL: _sceneAdded: function(scene)", scene);
+			// console.log("TCL: _sceneAdded: function(scene)", scene);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI = [];
 			}
@@ -2177,13 +2171,13 @@
 
 			// update UI
 			$('#timaat-timeline-scene-pane').show();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},
 
 		_actionAdded: function(action, openInspector=true) {
-			console.log("TCL: _actionAdded: function(action)", action);
+			// console.log("TCL: _actionAdded: function(action)", action);
 			if (!TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI) {
 				TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI = [];
 			}
@@ -2204,7 +2198,7 @@
 
 			// update UI
 			$('#timaat-timeline-action-pane').show();
-			console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			// TIMAAT.VideoPlayer.sortListUI();
 		},

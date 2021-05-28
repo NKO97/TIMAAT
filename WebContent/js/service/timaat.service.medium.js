@@ -33,9 +33,9 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -51,9 +51,9 @@
 		// 	}).done(function(data) {
 		// 		// console.log("TCL: listMedia -> data", data);
 		// 		callback(data);
-		// 	}).fail(function(e) {
-		// 		console.log(e.responseText);
-		// 		console.log( "error", e );
+		// 	}).fail(function(error) {
+		// 		console.error("ERROR responseText: ", e.responseText);
+		// 		console.error("ERROR: ", error);
 		// 	});			
 		// },
 
@@ -68,14 +68,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getMediaDatasetsTotal -> data", data);
+					// console.log("TCL: getMediaDatasetsTotal -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -94,14 +94,14 @@
       	// console.log("TCL: listMediumSubtype -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
 		async getActorList(mediumId) {
-      console.log("TCL: getActorHasRoleList -> mediumId", mediumId);
+      // console.log("TCL: getActorHasRoleList -> mediumId", mediumId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActorList/",
@@ -112,20 +112,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorRolesList -> data", data);
+					// console.log("TCL: getActorRolesList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getActorHasRoleList(mediumId, actorId) {
-      console.log("TCL: getActorHasRoleList -> mediumId, actorId", mediumId, actorId);
+      // console.log("TCL: getActorHasRoleList -> mediumId, actorId", mediumId, actorId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRoleList/",
@@ -139,12 +139,12 @@
 					// console.log("TCL: getActorHasRoleList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -161,12 +161,12 @@
 				}).done(function(data) {
 					// console.log("TCL: getMedium -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -183,17 +183,17 @@
 				}).done(function(data) {
 					// console.log("TCL: getViewToken -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
 		async getCategorySetList(mediumId) {
-      console.log("TCL: getCategorySetList -> mediumId", mediumId);
+      // console.log("TCL: getCategorySetList -> mediumId", mediumId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/categorySet/list/",
@@ -207,12 +207,12 @@
 					// console.log("TCL: getCategorySetList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -231,17 +231,17 @@
 					// console.log("TCL: getSelectedCategories -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getTagList(mediumId) {
-      console.log("TCL: getTagList -> for mediumId", mediumId);
+      // console.log("TCL: getTagList -> for mediumId", mediumId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasTagList/",
@@ -252,15 +252,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getTagList -> data", data);
+					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -297,11 +297,11 @@
 				}).done(function(mediumData) {
 					// console.log("TCL: createMedium -> returning mediumData", mediumData);
 					resolve(mediumData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -321,11 +321,11 @@
 		// 		}).done(function(translationData) {
 		// 			// console.log("TCL: createMediumTranslation -> translationData", translationData);
 		// 			resolve(translationData);
-		// 		}).fail(function(e) {
-		// 			console.log( "error: ", e.responseText );
+		// 		}).fail(function(error) {
+		// 			console.error("ERROR responseText:", error.responseText);
 		// 		});
 		// 	}).catch((error) => {
-		// 		console.log( "error: ", error );
+		// 		console.error("ERROR: ", error);
 		// 	});
 		// },
 
@@ -344,11 +344,11 @@
 				}).done(function(subtypeData) {
 					// console.log("TCL: createMediumSubtype - returning subtypeData", subtypeData);
 					resolve(subtypeData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -367,11 +367,11 @@
 				}).done(function(titleData) {
 					// console.log("TCL: createTitle -> titleData", titleData);
 					resolve(titleData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -390,11 +390,11 @@
 				}).done(function(titleData) {
 					// console.log("TCL: addTitle -> titleData", titleData);
 					resolve(titleData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -414,11 +414,11 @@
 					// console.log("TCL: addTrack -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.log( "error: ", error );
+					console.error("ERROR: ", error);
 					console.log( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -438,11 +438,11 @@
           // console.log("TCL: addMediumHasActorWithRoles - done -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.log( "error: ", error );
+					console.error("ERROR: ", error);
 					console.log( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -460,12 +460,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 		});		
 		},
 
@@ -482,12 +482,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -505,12 +505,12 @@
         	console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -527,12 +527,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -549,12 +549,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -573,11 +573,11 @@
 				}).done(function(sourceData) {
 					// console.log("TCL: createSource -> sourceData", sourceData);
 					resolve(sourceData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -609,12 +609,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateMedium -> returning updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -638,12 +638,12 @@
 		// 		}).done(function(translationData) {
 		// 		// console.log("TCL: updateMediumTranslation -> translationData", translationData);
 		// 			resolve(translationData);
-		// 		}).fail(function(e) {
-		// 			console.log( "error", e );
-		// 			console.log( e.responseText );
+		// 		}).fail(function(error) {
+		// 			console.error("ERROR: ", error);
+		// 			console.error("ERROR responseText:", error.responseText);
 		// 		});
 		// 	}).catch((error) => {
-		// 		console.log( "error: ", error );
+		// 		console.error("ERROR: ", error);
 		// 	});
 		// },
 
@@ -662,12 +662,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateMediumSubtype -> returning updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -694,15 +694,15 @@
 						// 	window.clearInterval(medium.poll);
 						// return(data);
 						resolve(data);					
-					}).fail(function(e) {
+					}).fail(function(error) {
 						// TODO handle error
 						// window.clearInterval(medium.poll);
 						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
-						console.log( "error", e );
-						console.log(e.responseText);
+						console.error("ERROR: ", error);
+						console.error("ERROR responseText: ", e.responseText);
 					});
 				}).catch((error) => {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 					console.log(error.responseText);
 				});
 			// }, Math.round(30000+(Math.random()*15000)));
@@ -720,12 +720,12 @@
 					}).done(function(data) {
           	// console.log("TCL: updateViewToken -> data: ", data);
 						resolve(data);					
-					}).fail(function(e) {
-						console.log( "error", e );
-						console.log(e.responseText);
+					}).fail(function(error) {
+						console.error("ERROR: ", error);
+						console.error("ERROR responseText: ", e.responseText);
 					});
 				}).catch((error) => {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 					console.log(error.responseText);
 				});
 		},
@@ -745,12 +745,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateTitle -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -769,12 +769,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateSource -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -791,12 +791,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -811,9 +811,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -830,12 +830,12 @@
 				}).done(function(data) {
 					// console.log("TCL: removed language track from medium_has_language.");
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -851,12 +851,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -872,12 +872,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -894,12 +894,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 

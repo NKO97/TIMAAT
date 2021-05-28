@@ -107,7 +107,7 @@
 		}
 
 		remove() {
-			console.log("TCL: ActorType -> remove -> remove()");
+			// console.log("TCL: ActorType -> remove -> remove()");
 			// remove ActorType from UI
 			this.listView.remove(); // TODO remove tags from medium_type_has_tags
 			// remove from ActorType list

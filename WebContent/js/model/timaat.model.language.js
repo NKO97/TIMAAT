@@ -75,7 +75,7 @@
 		remove() {
 			// remove language from UI
 			this.listView.remove();
-      console.log("TCL: Language -> remove -> this", this);
+      // console.log("TCL: Language -> remove -> this", this);
 			$('#language-metadata-form').data('language', null);
 			// remove from languageset lists
 			var index;

@@ -107,7 +107,7 @@
 		}
 
 		remove() {
-			console.log("TCL: AddressType -> remove -> remove()");
+			// console.log("TCL: AddressType -> remove -> remove()");
 			// remove AddressType from UI
 			this.listView.remove();
 			// remove from AddressType list

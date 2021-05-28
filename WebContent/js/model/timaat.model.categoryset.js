@@ -61,7 +61,7 @@
 				$('.categorysets-data-tabs').hide();
 				$('.nav-tabs a[href="#categorySetDatasheet"]').tab('show');
 				$('#category-metadata-form').data('categorySet', categorySet);
-        console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
+        // console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
 				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'categorySet', categorySet);
 			});
     }
@@ -76,7 +76,7 @@
 		remove() {
 			// remove categoryset from UI
 			this.listView.remove();
-      console.log("TCL: CategorySet -> remove -> this", this);
+      // console.log("TCL: CategorySet -> remove -> this", this);
 			$('#category-metadata-form').data('categorySet', null);
 			// remove from categoryset lists
 			var index;

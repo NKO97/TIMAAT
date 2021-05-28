@@ -26,7 +26,7 @@
 		idCache: new Map(),
 		
 		logout: function() {
-			console.log("TCL: logout: function()");
+			// console.log("TCL: logout: function()");
 			TIMAAT.Service.state = 2;
 			TIMAAT.Service.token = null;
 			TIMAAT.Service.session = null;
@@ -46,15 +46,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getSinglePublication -> data", data);
+					// console.log("TCL: getSinglePublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					// resolve(null);
-					console.log(e.responseText);
-					console.log( "error", e );
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 		
@@ -70,13 +70,13 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: updateSinglePublication -> data", data);
+					// console.log("TCL: updateSinglePublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					resolve(null);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -91,13 +91,13 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getSinglePublication -> data", data);
+					// console.log("TCL: getSinglePublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					resolve(null);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -112,15 +112,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCollectionPublication -> data", data);
+					// console.log("TCL: getCollectionPublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					// resolve(null);
-					console.log(e.responseText);
-					console.log( "error", e );
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 		
@@ -136,13 +136,13 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: updateCollectionPublication -> data", data);
+					// console.log("TCL: updateCollectionPublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					resolve(null);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -157,13 +157,13 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: deleteCollectionPublication -> data", data);
+					// console.log("TCL: deleteCollectionPublication -> data", data);
 					resolve(data);
-				}).fail(function(e) {
+				}).fail(function(error) {
 					resolve(null);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 		
@@ -181,8 +181,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -200,8 +200,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -219,8 +219,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -238,8 +238,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 			
 		},
@@ -268,9 +268,9 @@
 				TIMAAT.Service.updateCategorySets(tagname);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
@@ -288,12 +288,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 		});		
 		},
 
@@ -319,9 +319,9 @@
 				TIMAAT.Service.updateCategorySets(tagname);
 				callback(tagname);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
@@ -340,9 +340,9 @@
 		// 		TIMAAT.Service.updateCategorySets(catname);
 		// 		callback(data);
 		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
+		// 	.fail(function(error) {
+		// 		console.error("ERROR: ", error);
+		// 		console.error("ERROR responseText:", error.responseText);
 		// 	});			
 		// },
 
@@ -358,9 +358,9 @@
 				TIMAAT.Service.updateCategorySets(catname);
 				callback(catname);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
@@ -391,9 +391,9 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
@@ -418,12 +418,12 @@
 				categoryset.model.id = data.id;
 				categoryset.model.name = data.name;
 				categoryset.model.categories = data.categories;
-				console.log("TCL: updateCategorySet -> categoryset.updateUI()");
+				// console.log("TCL: updateCategorySet -> categoryset.updateUI()");
 				categoryset.updateUI();        
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -438,9 +438,9 @@
 		// 		},
 		// 	}).done(function(data) {
 		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
+		// 	.fail(function(error) {
+		// 		console.error("ERROR: ", error);
+		// 		console.error("ERROR responseText:", error.responseText);
 		// 	});
 		// },	
 
@@ -455,9 +455,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},	
 

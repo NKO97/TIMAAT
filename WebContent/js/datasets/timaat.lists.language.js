@@ -44,12 +44,12 @@
             await TIMAAT.LanguageService.deleteLanguage(language.model.id);
             language.remove();
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
           try {
             await TIMAAT.UI.refreshDataTable('language');
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
         }
         modal.modal('hide');
@@ -104,7 +104,7 @@
               $('#timaat-languagelists-language-duplicate').modal('show');
               return;
             } else {
-              console.log("TCL: language", language);
+              // console.log("TCL: language", language);
               language.model.name = formDataObject.name;
               language.model.code = formDataObject.code;
               let languageData = language.model;
@@ -383,28 +383,27 @@
     },
   
     createLanguage: async function(model) {
-      console.log("TCL: createLanguage: model: ", model);
+      // console.log("TCL: createLanguage: model: ", model);
       try {				
         // create language
         var newModel = await TIMAAT.LanguageService.createLanguage(model);
-        console.log("TCL: newModel", newModel);
+        // console.log("TCL: newModel", newModel);
         model.id = newModel.id;		
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
-      console.log("TCL: model", model);
+      // console.log("TCL: model", model);
       return (model);
     },
 
     // TODO update languages
     updateLanguage: async function(language) {
-      console.log("TCL: updateLanguage: async function -> beginning of update: language ", language);
-
+      // console.log("TCL: updateLanguage: async function -> beginning of update: language ", language);
       try { // update translation
         var tempModel = await TIMAAT.LanguageService.updateLanguage(language);
         language = tempModel;
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
 
       await TIMAAT.UI.refreshDataTable('language');

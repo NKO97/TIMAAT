@@ -107,7 +107,7 @@
 		}
 
 		remove() {
-			console.log("TCL: PhoneNumberType -> remove -> remove()");
+			// console.log("TCL: PhoneNumberType -> remove -> remove()");
 			// remove PhoneNumberType from UI
 			this.listView.remove();
 			// remove from PhoneNumberType list

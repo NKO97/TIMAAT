@@ -22,7 +22,7 @@
 	TIMAAT.AnalysisService = {
 
 	async addAnalysisMethodToAnalysis(model) {
-	  console.log("TCL: addAnalysisMethodToAnalysis -> model", model);
+	  // console.log("TCL: addAnalysisMethodToAnalysis -> model", model);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+model.annotation.id+"/"+model.analysisMethod.id,
@@ -36,17 +36,17 @@
 			}).done(function(data) {
       	// console.log("TCL: addAnalysisMethodToAnalysis -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	// removes analysis with link to reusable analysis method
 	async deleteStaticAnalysis(analysisId) {
-	  console.log("TCL: deleteStaticAnalysis -> analysisId", analysisId);
+	  // console.log("TCL: deleteStaticAnalysis -> analysisId", analysisId);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisId,
@@ -57,16 +57,16 @@
 				},
 			}).done(function(data) {
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	async createAnalysisMethodVariant(model, variantType) {
-  	console.log("TCL: createAnalysisMethodVariant -> model, variantType", model, variantType);
+  	// console.log("TCL: createAnalysisMethodVariant -> model, variantType", model, variantType);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+variantType+"/"+model.analysisMethodId,
@@ -80,17 +80,17 @@
 			}).done(function(data) {
       	// console.log("TCL: createAnalysisMethodVariant -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	// removes analysis and corresponding analysis method and method variant data as it is unique to this analysis
 	async deleteDynamicAnalysis(analysisMethodId) {
-		console.log("TCL: deleteDynamicAnalysis -> analysisMethodId", analysisMethodId);
+		// console.log("TCL: deleteDynamicAnalysis -> analysisMethodId", analysisMethodId);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/analysisAndMethod/"+analysisMethodId,
@@ -102,16 +102,16 @@
 			}).done(function(data) {
       	// console.log("TCL: createAnalysisMethodVariant -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	async createAudioPostProduction() {
-  	console.log("TCL: createAudioPostProduction");
+  	// console.log("TCL: createAudioPostProduction");
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/0",
@@ -124,16 +124,16 @@
 			}).done(function(data) {
       	// console.log("TCL: createAudioPostProduction -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	async deleteAudioPostProduction(id) {
-		console.log("TCL: deleteAudioPostProduction -> id", id);
+		// console.log("TCL: deleteAudioPostProduction -> id", id);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/"+id,
@@ -145,16 +145,16 @@
 			}).done(function(data) {
       	// console.log("TCL: deleteAudioPostProduction -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 
 	async createAudioPostProductionTranslation(model) {
-  	console.log("TCL: createAudioPostProductionTranslation -> model", model);
+  	// console.log("TCL: createAudioPostProductionTranslation -> model", model);
 		return new Promise(resolve => {
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/audioPostProduction/"+model.audioPostProduction.id+"/translation",
@@ -168,11 +168,11 @@
 			}).done(function(data) {
       	// console.log("TCL: createAudioPostProductionTranslation -> data", data);
 				resolve(data);
-			}).fail(function(e) {
-				console.log( "error: ", e.responseText);
+			}).fail(function(error) {
+				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
-			console.log( "error: ", error );
+			console.error("ERROR: ", error);
 		});
 	},
 

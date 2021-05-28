@@ -111,19 +111,19 @@
       $('#timaat-categorylists-category-delete-submit-button').on('click', async function(ev) {
         var modal = $('#timaat-categorylists-category-delete');
         var category = modal.data('category');
-        console.log("TCL: $ -> category", category);
+        // console.log("TCL: $ -> category", category);
         if (category) {
           try {	
             await TIMAAT.CategoryService.deleteCategory(category.model.id);
             category.remove();
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
           try {
             await TIMAAT.UI.refreshDataTable('categorySet');
             await TIMAAT.UI.refreshDataTable('category');
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
         }
         modal.modal('hide');
@@ -147,20 +147,20 @@
       // inspector event handler
       $('#timaat-annotation-category-form-submit-button').on('click', async function(event) {
         event.preventDefault();
-        console.log("TCL: Submit Categories for analysis list");
+        // console.log("TCL: Submit Categories for analysis list");
         // var modal = $('#timaat-annotationdatasets-annotation-categories');
         if (!$('#annotationCategoriesForm').valid()) 
           return false;
         var annotation = TIMAAT.VideoPlayer.curAnnotation;
-        console.log("TCL: Inspector -> constructor -> annotation", annotation);
+        // console.log("TCL: Inspector -> constructor -> annotation", annotation);
         var formDataRaw = $('#annotationCategoriesForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
         var i = 0;
         var categoryIdList = [];
         for (; i < formDataRaw.length; i++) {
           categoryIdList.push( {id: formDataRaw[i].value} );
         }
-        console.log("TCL: categoryIdList", categoryIdList);
+        // console.log("TCL: categoryIdList", categoryIdList);
         annotation.model = await TIMAAT.CategoryLists.updateElementHasCategoriesList(annotation.model, categoryIdList, 'annotation');
         // $('#medium-metadata-form').data('annotation', annotation);
       });
@@ -248,17 +248,17 @@
             segmentElement= TIMAAT.VideoPlayer.curAction;
           break;
         }
-        console.log("TCL: Inspector -> constructor -> segmentElement", segmentElement);
+        // console.log("TCL: Inspector -> constructor -> segmentElement", segmentElement);
         var formDataRaw = $('#segmentElementCategoriesForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
         var i = 0;
         var categoryIdList = [];
         for (; i < formDataRaw.length; i++) {
           categoryIdList.push( {id: formDataRaw[i].value} );
         }
-        console.log("TCL: categoryIdList", categoryIdList);
+        // console.log("TCL: categoryIdList", categoryIdList);
         segmentElement.model = await TIMAAT.CategoryLists.updateElementHasCategoriesList(segmentElement.model, categoryIdList, type);
-        console.log("TCL: $ -> segmentElement", segmentElement);
+        // console.log("TCL: $ -> segmentElement", segmentElement);
         // $('#medium-metadata-form').data('segment', segment);
       });
 
@@ -319,7 +319,7 @@
           minimumInputLength: 0,
         });
         TIMAAT.AnalysisListService.getSelectedCategories(segmentElementId, type).then(function(data) {
-          console.log("TCL: then: data", data);
+          // console.log("TCL: then: data", data);
           var categorySelect = $('#segment-element-categories-multi-select-dropdown');
           if (data.length > 0) {
             data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -430,13 +430,13 @@
             await TIMAAT.CategorySetService.deleteCategorySet(categorySet.model.id);
             categorySet.remove();
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
           try {
             await TIMAAT.UI.refreshDataTable('categorySet');
             await TIMAAT.UI.refreshDataTable('category');
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
         }
         modal.modal('hide');
@@ -460,26 +460,26 @@
       // inspector event handler
       $('#timaat-mediumAnalysisList-categorySet-form-submit-button').on('click', async function(event) {
         event.preventDefault();
-        console.log("TCL: Submit category sets for analysis list");
+        // console.log("TCL: Submit category sets for analysis list");
         if (!$('#mediumAnalysisListCategorySetsForm').valid()) 
           return false;
         var mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
-        console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
+        // console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
         var formDataRaw = $('#mediumAnalysisListCategorySetsForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
         var i = 0;
         var categorySetIdList = [];
 
         for (; i < formDataRaw.length; i++) {
             categorySetIdList.push( {id: Number(formDataRaw[i].value)} );
         }
-        console.log("TCL: categorySetIdList", categorySetIdList);
+        // console.log("TCL: categorySetIdList", categorySetIdList);
         // TODO check if any annotation is using categories from category sets that will be removed with this operation
         var annosUseCategorySet = false;
         var annoInBothLists = false;
         if (categorySetIdList.length < mediumAnalysisList.categorySets.length) {
           annosUseCategorySet = true;
-          console.log("TCL: list contains less sets than before.");
+          // console.log("TCL: list contains less sets than before.");
         } else {
           i = 0;
           var j = 0;
@@ -488,12 +488,12 @@
             for (; j < categorySetIdList.length; j++) {
               if (mediumAnalysisList.categorySets[i].id == categorySetIdList[j].id) {
                 annoInBothLists = true;
-                console.log("TCL: match found!");
+                // console.log("TCL: match found!");
                 break;
               }
             }
             if (!annoInBothLists) {
-              console.log("TCL mediumAnalysisList.categorySets[i].id not available anymore", mediumAnalysisList.categorySets[i].id);
+              // console.log("TCL mediumAnalysisList.categorySets[i].id not available anymore", mediumAnalysisList.categorySets[i].id);
               annosUseCategorySet = true;
               break;
             }
@@ -554,7 +554,7 @@
           minimumInputLength: 0,
         });
         TIMAAT.AnalysisListService.getCategorySetList(TIMAAT.VideoPlayer.curAnalysisList.id).then(function(data) {
-          console.log("TCL: then: data", data);
+          // console.log("TCL: then: data", data);
           var categorySetSelect = $('#mediumAnalysisList-categorySets-multi-select-dropdown');
           if (data.length > 0) {
             data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -804,7 +804,7 @@
     },
 
     setDataTableOnItemSelect: function(type, selectedItemId) {
-      console.log("TCL: type, selectedItemId", type, selectedItemId);
+      // console.log("TCL: type, selectedItemId", type, selectedItemId);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			// switch (this.subNavTab) {
@@ -840,7 +840,7 @@
 		},
 
 		addCategory: function() {	
-			console.log("TCL: addCategory()");
+			// console.log("TCL: addCategory()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'category-metadata-form');
 			$('#list-tab-metadata').data('type', 'category');
       $('#category-metadata-form').data('category', null);
@@ -858,7 +858,7 @@
 		},
 
     addCategorySet: function() {	
-			console.log("TCL: addCategorySet()");
+			// console.log("TCL: addCategorySet()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'categoryset-metadata-form');
 			$('#list-tab-metadata').data('type', 'categorySet');
       $('#categoryset-metadata-form').data('categorySet', null);
@@ -876,7 +876,7 @@
 		},
 		
 		categoryFormDataSheet: async function(action, data) {
-      console.log("TCL: action, data: ", action, data);
+      // console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-category-ispartof-categoryset-fields');
       while (node.lastChild) {
         node.removeChild(node.lastChild)
@@ -923,7 +923,7 @@
       });
       var categorySetSelect = $('#categorysets-multi-select-dropdown');
       await TIMAAT.CategoryService.getCategoryHasCategorySetList(data.model.id).then(function (data) {
-        console.log("TCL: then: data", data);
+        // console.log("TCL: then: data", data);
         if (data.length > 0) {
           data.sort((a, b) => (a.name > b.name)? 1 : -1);
           // create the options and append to Select2
@@ -959,7 +959,7 @@
     },
 
     categorySetFormDataSheet: async function(action, data) {
-      console.log("TCL: action, data: ", action, data);
+      // console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-categoryset-contains-category-fields');
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -1006,7 +1006,7 @@
       });          
       var categorySelect = $('#categories-multi-select-dropdown');
       await TIMAAT.CategorySetService.getCategorySetHasCategoryList(data.model.id).then(function (data) {
-        console.log("TCL: then: data", data);
+        // console.log("TCL: then: data", data);
         if (data.length > 0) {
           data.sort((a, b) => (a.name > b.name)? 1 : -1);
           // create the options and append to Select2
@@ -1061,53 +1061,53 @@
     },
   
     createCategory: async function(model, categoryIdList) {
-      console.log("TCL: createCategory: model, categoryIdList: ", model, categoryIdList);
+      // console.log("TCL: createCategory: model, categoryIdList: ", model, categoryIdList);
       try {				
         // create category or category set
         var newModel = await TIMAAT.CategoryService.createCategory(model);
-        console.log("TCL: newModel", newModel);
+        // console.log("TCL: newModel", newModel);
         model.id = newModel.id;
 
         // if (categoryIdList != null) {
         //   await this.updateCategory(model, categoryIdList); // TODO may have to be adjusted once list can be created upon category/categoryset creation
         // }				
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       return (model);
     },
 
     createCategorySet: async function(model, categorySetIdList) {
-      console.log("TCL: createCategorySet: model, categorySetIdList: ", model, categorySetIdList);
+      // console.log("TCL: createCategorySet: model, categorySetIdList: ", model, categorySetIdList);
       try {				
         // create category or category set
         var newModel = await TIMAAT.CategorySetService.createCategorySet(model);
-        console.log("TCL: newModel", newModel);
+        // console.log("TCL: newModel", newModel);
         model.id = newModel.id;
         // if (categorySetIdList != null) {
         //   await this.updateCategorySet(model, categorySetIdList); // TODO may have to be adjusted once list can be created upon category/categoryset creation
         // }				
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       return (model);
     },
 
     // TODO update categorySetHasCategories
     updateCategory: async function(category, categoryIdList) {
-      console.log("TCL: updateCategory: async function -> beginning of update: category, categoryIdList ", category, categoryIdList);
+      // console.log("TCL: updateCategory: async function -> beginning of update: category, categoryIdList ", category, categoryIdList);
 
       try { // update translation
         var tempModel = await TIMAAT.CategoryService.updateCategory(category);
         category = tempModel;
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
 
       try { // update category_set_has_category table entries via category or category set
         var existingEntries = await TIMAAT.CategoryService.getCategoryHasCategorySetList(category.id);
-        console.log("TCL: existingEntries", existingEntries);
-        console.log("TCL: categoryIdList", categoryIdList);
+        // console.log("TCL: existingEntries", existingEntries);
+        // console.log("TCL: categoryIdList", categoryIdList);
         if (categoryIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all existingEntries: ", existingEntries);
           var i = 0;
@@ -1127,7 +1127,7 @@
                 categoryId: category.id
               }
             };
-            console.log("TCL: newCategorySetHasCategory", newCategorySetHasCategory);
+            // console.log("TCL: newCategorySetHasCategory", newCategorySetHasCategory);
             // categorySet.categorySetHasCategories.push(newCategorySetHasCategory);
             await TIMAAT.CategorySetService.createCategorySetHasCategory(newCategorySetHasCategory); // TODO categorySetHasCategory data
           }
@@ -1162,11 +1162,11 @@
           var idsToCreate = [];
           i = 0;
           for (; i < categoryIdList.length; i++) {
-            console.log("TCL: categoryIdList", categoryIdList);
+            // console.log("TCL: categoryIdList", categoryIdList);
             var idExists = false;
             var j = 0;
             for (; j < existingEntries.length; j++) {
-              console.log("TCL: existingEntries", existingEntries);
+              // console.log("TCL: existingEntries", existingEntries);
               if (categoryIdList[i].id == existingEntries[j].id) {
                 idExists = true;
                 break; // no need to check further if match was found
@@ -1180,7 +1180,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
             var i = 0;
             for (; i < idsToCreate.length; i++ ) {
               // console.log("TCL: idsToCreate[i]", idsToCreate[i]);
@@ -1213,7 +1213,7 @@
           // }
         }
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       
       await TIMAAT.UI.refreshDataTable('category');
@@ -1221,17 +1221,17 @@
     },
 
     updateCategorySet: async function(categorySet, categorySetIdList) {
-      console.log("TCL: updateCategorySet:function -> categorySet, categorySetIdList", categorySet, categorySetIdList);
+      // console.log("TCL: updateCategorySet:function -> categorySet, categorySetIdList", categorySet, categorySetIdList);
       try { // update translation
         let tempModel = await TIMAAT.CategorySetService.updateCategorySet(categorySet);
         categorySet = tempModel;
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       try { // update category_set_has_category table entries via category or category set
         var existingEntries = await TIMAAT.CategorySetService.getCategorySetHasCategoryList(categorySet.id);
-        console.log("TCL: existingEntries", existingEntries);
-        console.log("TCL: categorySetIdList", categorySetIdList);
+        // console.log("TCL: existingEntries", existingEntries);
+        // console.log("TCL: categorySetIdList", categorySetIdList);
         if (categorySetIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all existingEntries: ", existingEntries);
           categorySet.categorySetHasCategories = [];
@@ -1287,11 +1287,11 @@
           var idsToCreate = [];
           i = 0;
           for (; i < categorySetIdList.length; i++) {
-            console.log("TCL: categorySetIdList", categorySetIdList);
+            // console.log("TCL: categorySetIdList", categorySetIdList);
             var idExists = false;
             var j = 0;
             for (; j < existingEntries.length; j++) {
-              console.log("TCL: existingEntries", existingEntries);
+              // console.log("TCL: existingEntries", existingEntries);
               if (categorySetIdList[i].id == existingEntries[j].id) {
                 idExists = true;
                 break; // no need to check further if match was found
@@ -1305,7 +1305,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
             var i = 0;
             for (; i < idsToCreate.length; i++) {
               var newCategorySetHasCategory = {
@@ -1317,7 +1317,7 @@
                 }
               };
               // categorySet.categorySetHasCategories.push({id: {categorySetId: categorySet.id, categoryId: idsToCreate[i]}});
-              console.log("TCL: newCategorySetHasCategory", newCategorySetHasCategory);
+              // console.log("TCL: newCategorySetHasCategory", newCategorySetHasCategory);
               await TIMAAT.CategorySetService.createCategorySetHasCategory(newCategorySetHasCategory); // TODO categorySetHasCategory data
             }
           }
@@ -1338,7 +1338,7 @@
           // }
         }
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       
       await TIMAAT.UI.refreshDataTable('category');
@@ -1346,12 +1346,12 @@
     },
 
     updateMediumAnalysisListHasCategorySetsList: async function(mediumAnalysisListModel, categorySetIdList) {
-    	console.log("TCL: mediumAnalysisListModel, categorySetIdList", mediumAnalysisListModel, categorySetIdList);
+    	// console.log("TCL: mediumAnalysisListModel, categorySetIdList", mediumAnalysisListModel, categorySetIdList);
 			try {
 				var existingMediumAnalysisListHasCategorySetsEntries = await TIMAAT.AnalysisListService.getCategorySetList(mediumAnalysisListModel.id);
-        console.log("TCL: existingMediumAnalysisListHasCategorySetsEntries", existingMediumAnalysisListHasCategorySetsEntries);
+        // console.log("TCL: existingMediumAnalysisListHasCategorySetsEntries", existingMediumAnalysisListHasCategorySetsEntries);
         if (categorySetIdList == null || categorySetIdList.length == 0) { //* all entries will be deleted
-          console.log("TCL: delete all entries");
+          // console.log("TCL: delete all entries");
 					mediumAnalysisListModel.categorySets = [];
           await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
           // remove categories from annotations that belong to those category sets (= all)
@@ -1360,11 +1360,11 @@
             await this.updateElementHasCategoriesList(mediumAnalysisListModel.annotations[i], null, 'annotation');
           }
         } else if (existingMediumAnalysisListHasCategorySetsEntries.length == 0) { //* all entries will be added
-          console.log("TCL: add  all entries");
+          // console.log("TCL: add  all entries");
 					mediumAnalysisListModel.categorySets = categorySetIdList;
 					await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
         } else { //* delete removed entries
-          console.log("TCL: add/delete entries");
+          // console.log("TCL: add/delete entries");
 					var entriesToDelete = [];
 					var i = 0;
 					for (; i < existingMediumAnalysisListHasCategorySetsEntries.length; i++) {
@@ -1377,7 +1377,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingMediumAnalysisListHasCategorySetEntries but not in categorySetIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingMediumAnalysisListHasCategorySetsEntries[i]);
 							existingMediumAnalysisListHasCategorySetsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -1416,7 +1416,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							mediumAnalysisListModel.categorySets.push(idsToCreate[i]);
@@ -1425,7 +1425,7 @@
           }
           await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
           //! TODO check if annotationList or curAnalysisList.annotations should be checked here
-          console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.annotationList);
+          // console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.annotationList);
           var i = 0;
           for (; i < TIMAAT.VideoPlayer.annotationList.length; i++) {
             TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.annotationList[i]);
@@ -1434,13 +1434,13 @@
           TIMAAT.VideoPlayer.curAnnotation = null;
         }
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumAnalysisListModel;
     },
     
     updateElementHasCategoriesList: async function(model, categoryIdList, type) {
-    	console.log("TCL: model, categoryIdList, type", model, categoryIdList, type);
+    	// console.log("TCL: model, categoryIdList, type", model, categoryIdList, type);
       var existingEntries;
 			try {
         switch(type) {
@@ -1456,9 +1456,9 @@
           break;
         }
 				
-        console.log("TCL: existingEntries", existingEntries);
+        // console.log("TCL: existingEntries", existingEntries);
         if (categoryIdList == null) { //* all entries will be deleted
-          console.log("TCL: delete all categories");
+          // console.log("TCL: delete all categories");
 					model.categories = [];
           switch(type) {
             case 'annotation':
@@ -1473,7 +1473,7 @@
             break;
           }
         } else if (existingEntries.length == 0) { //* all entries will be added
-          console.log("TCL: add all categories");
+          // console.log("TCL: add all categories");
 					model.categories = categoryIdList;
           switch(type) {
             case 'annotation':
@@ -1488,7 +1488,7 @@
             break;
           }
         } else { //* delete removed entries
-          console.log("TCL: add/delete categories");
+          // console.log("TCL: add/delete categories");
 					var entriesToDelete = [];
 					var i = 0;
 					for (; i < existingEntries.length; i++) {
@@ -1546,7 +1546,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							model.categories.push(idsToCreate[i]);
@@ -1586,7 +1586,7 @@
           break;
         }
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return model;
 		},

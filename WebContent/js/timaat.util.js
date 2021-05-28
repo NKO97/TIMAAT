@@ -44,7 +44,6 @@
 		
 		formatDate: function (timestamp) {
     // console.log("TCL: formatDate: function (timestamp)");
-    // console.log("TCL:   -> timestamp", timestamp);
 			  var a = new Date(timestamp);
 //			  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 			  var year = a.getFullYear();
@@ -59,7 +58,6 @@
 		
 		formatLogType: function(type) {
     // console.log("TCL: formatLogType: function(type)");
-    // console.log("TCL:   -> type", type);
 			var display = '['+type+']';
 			
 			switch (type) {
@@ -105,7 +103,7 @@
 		},
 		
 		resolveUserID: function(idElement, myself) {
-    	console.log("TCL: resolveUserID: function(idElement, myself)");
+    	// console.log("TCL: resolveUserID: function(idElement, myself)");
     // console.log("TCL:   -> idElement", idElement);
     // console.log("TCL:   -> myself", myself);
 			if ( !myself ) myself = "mir";

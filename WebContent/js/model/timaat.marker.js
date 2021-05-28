@@ -78,11 +78,11 @@
 				  start: function(ev,ui) {
 					  TIMAAT.VideoPlayer.pause();
 					  _markerlength = -Math.max(0.0, $(this).position().left);
-					  console.log(_markerlength);
+					  // console.log(_markerlength);
 					  if (_markerlength < 0 ) _markerlength -= 1;
 				  },
 				  drag: function(ev,ui) {
-					  console.log(ui.position.left, _markerlength);
+					  // console.log(ui.position.left, _markerlength);
 					  if ( ui.position.left < -2 ) ui.position.left = -2;
 
 					  var width = $('#timaat-video-seek-bar').width();
@@ -115,7 +115,7 @@
 			  // add events
 			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				  TIMAAT.VideoPlayer.pause();
-					console.log("TCL: Marker -> this.ui.element.find -> ev.data.from", ev.data.from);
+					// console.log("TCL: Marker -> this.ui.element.find -> ev.data.from", ev.data.from);
 				  TIMAAT.VideoPlayer.jumpTo(ev.data.from);
 				  TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);
 			  });

@@ -28,7 +28,7 @@
 		},
 
 		initEventComponent: function() {
-			console.log("TCL: initEventComponent");
+			// console.log("TCL: initEventComponent");
 			if (!this.eventsLoaded) {
 				this.setEventList();
 			}
@@ -76,12 +76,12 @@
 					try {
 						await TIMAAT.EventDatasets._eventRemoved(event);
 					} catch (error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 					try {
 						await TIMAAT.UI.refreshDataTable('event');
 					} catch (error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 				}
 				modal.modal('hide');
@@ -215,7 +215,7 @@
 					minimumInputLength: 0,
 				});
 				await TIMAAT.EventService.getTagList(event.model.id).then(function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var tagSelect = $('#event-tags-multi-select-dropdown');
 					if (data.length > 0) {
 						// create the options and append to Select2
@@ -243,9 +243,9 @@
 				if (!$('#eventTagsModalForm').valid()) 
 					return false;
 				var event = modal.data('event');
-        console.log("TCL: event", event);
+        // console.log("TCL: event", event);
 				var formDataRaw = $('#eventTagsModalForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var tagIdList = [];
 				var newTagList = [];
@@ -259,7 +259,7 @@
 				event.model = await TIMAAT.EventDatasets.updateEventHasTagsList(event.model, tagIdList);
 				if (newTagList.length > 0) {
 					var updatedEventModel = await TIMAAT.EventDatasets.createNewTagsAndAddToEvent(event.model, newTagList);
-					console.log("TCL: updatedEventModel", updatedEventModel);
+					// console.log("TCL: updatedEventModel", updatedEventModel);
 					event.model.tags = updatedEventModel.tags;
 				}
 				$('#event-metadata-form').data('event', event);
@@ -336,7 +336,7 @@
 		},
 
 		eventFormDataSheet: async function(action, data) {
-			console.log("TCL: action, data", action, data);
+			// console.log("TCL: action, data", action, data);
 			TIMAAT.UI.addSelectedClassToSelectedItem('event', data.model.id);
 			$('#event-metadata-form').trigger('reset');
 			this.initFormDataSheetData();
@@ -375,13 +375,13 @@
 		},
 
 		createEvent: async function(eventModel, eventTranslationModel) {
-			console.log("TCL: createEvent: async function(eventModel)", eventModel);
+			// console.log("TCL: createEvent: async function(eventModel)", eventModel);
 			try {
 				// create event
 				var newEventModel = await TIMAAT.EventService.createEvent(eventModel);
-        console.log("TCL: newEventModel", newEventModel);
+        // console.log("TCL: newEventModel", newEventModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
@@ -389,31 +389,31 @@
 					var newEventModelTranslation = await TIMAAT.EventService.createEventTranslation(newEventModel, eventTranslationModel[0]); // TODO more than one translation?
 					newEventModel.eventTranslations[0] = newEventModelTranslation;
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			return (newEventModel);
 		},
 
 		updateEvent: async function(event) {
-			console.log("TCL: updateEvent: async function: ", event);
+			// console.log("TCL: updateEvent: async function: ", event);
 				try {
 					// update data that is part of event (includes updating last edited by/at)
 					var tempEventModel = await TIMAAT.EventService.updateEvent(event.model);
 					// event.model.displayName = tempDisplayName;
 					var tempEventTranslationModel = await TIMAAT.EventService.updateEventTranslation(event.model);
 
-					console.log("TCL: tempEventModel", tempEventModel);
+					// console.log("TCL: tempEventModel", tempEventModel);
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				}
 		},
 
 		updateEventHasTagsList: async function(eventModel, tagIdList) {
-    	console.log("TCL: eventModel, tagIdList", eventModel, tagIdList);
+    	// console.log("TCL: eventModel, tagIdList", eventModel, tagIdList);
 			try {
 				var existingEventHasTagsEntries = await TIMAAT.EventService.getTagList(eventModel.id);
-        console.log("TCL: existingEventHasTagsEntries", existingEventHasTagsEntries);
+        // console.log("TCL: existingEventHasTagsEntries", existingEventHasTagsEntries);
 				if (tagIdList == null) { //* all entries will be deleted
 					eventModel.tags = [];
 					await TIMAAT.EventService.updateEvent(eventModel);
@@ -433,7 +433,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingEventHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingEventHasTagsEntries[i]);
 							existingEventHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -467,7 +467,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							eventModel.tags.push(idsToCreate[i]);
@@ -476,7 +476,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return eventModel;
 		},
@@ -492,12 +492,12 @@
 		},
 
 		_eventRemoved: async function(event) {
-			console.log("TCL: event", event);
+			// console.log("TCL: event", event);
 			// sync to server
 			try {
 				await TIMAAT.EventService.removeEvent(event);
 			} catch (error) {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			}
 			event.remove();
 		},
@@ -509,7 +509,7 @@
 			eventModel.eventTranslations[0].description = formDataObject.description;
 			eventModel.beganAt = formDataObject.beganAt;
 			eventModel.endedAt = formDataObject.endedAt;
-			console.log("TCL: eventModel", eventModel);
+			// console.log("TCL: eventModel", eventModel);
 			return eventModel;
 		},
 

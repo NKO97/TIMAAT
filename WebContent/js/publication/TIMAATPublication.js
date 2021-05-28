@@ -112,7 +112,7 @@ class AnalysisSegment {
 
 class Marker {
 		  constructor(annotation) {
-     		console.log("TCL: Marker -> constructor -> annotation", annotation);
+     		// console.log("TCL: Marker -> constructor -> annotation", annotation);
 			  this.parent = annotation;
 			  this.annotation = annotation;
 			  // this.annotationID = annotation.model.id;
@@ -368,7 +368,7 @@ class Keyframe {
 			let id = svgitem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
-				console.log("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
 			}
 			shape.id = id;
 			switch (svgitem.type) {
@@ -706,7 +706,7 @@ class Annotation {
 		}
 				
 		removeSVGItem (item) {
-			console.log("TCL: Annotation -> removeSVGItem -> item", item);
+			// console.log("TCL: Annotation -> removeSVGItem -> item", item);
 			if ( !item || !this.svg.items.includes(item) ) return;
 			this.svg.layer.removeLayer(item);
 			var index = this.svg.items.indexOf(item);
@@ -870,7 +870,7 @@ class Annotation {
 			let id = svgitem.id;
 			if ( !id ) {
 				id = '-----';
-				console.log("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
 			}
 			switch (svgitem.type) {
 				case "rectangle":
@@ -939,7 +939,7 @@ class TIMAATPublication {
 		let animFrameRate = 20;
 		if ( this.video ) this.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
 		
-		console.log("TIMAAT::Publication:"+this.version+" ready");
+		console.info("TIMAAT::Publication:"+this.version+" ready");
 	}
 	
 	run() {
@@ -947,7 +947,7 @@ class TIMAATPublication {
 		let startList = (this.video) ? TIMAATPub.video.mediumAnalysisLists[0] : null;
 		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.video ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-    console.log("TCL ~ TIMAATPublication ~ run ~ startList", startList);
+    // console.log("TCL ~ TIMAATPublication ~ run ~ startList", startList);
 		if ( this.video ) this.setupAnalysisList(startList);
 
 		// restore session
@@ -1518,7 +1518,7 @@ class TIMAATPublication {
 				item.find('.duration').html(this.formatTime(medium.mediumVideo.length,true));
 				list.append(item);
 			}
-			console.log(list);
+			// console.log(list);
 		}
 		
 

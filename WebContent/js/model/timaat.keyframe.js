@@ -62,7 +62,7 @@
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				console.log("TCL: ev.data.time ",ev.data.time);
+				// console.log("TCL: ev.data.time ",ev.data.time);
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
@@ -169,7 +169,7 @@
 			for (let shape of shapes) {
 				let id = shape.id;
 				if ( !id ) {
-					console.log("WARNING: Keyframe -> saveChanges(): Required attribute ID missing from svg shape", shape);
+					console.warn("WARNING: Keyframe -> saveChanges(): Required attribute ID missing from svg shape", shape);
 					id = TIMAAT.Util.createUUIDv4();
 				}
 				let jsonItem = { id: id };
@@ -234,7 +234,7 @@
 			let id = svgitem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
-				console.log("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
 			}
 			shape.id = id;
 			switch (svgitem.type) {

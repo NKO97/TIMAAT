@@ -603,11 +603,11 @@
 						window.clearInterval(video.poll);
 						// console.log("TCL: video.fileStatus", video.fileStatus);
 				})
-				.fail(function(e) {
+				.fail(function(error) {
 					// TODO handle error
 					window.clearInterval(video.poll);
 					video.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
-					console.log( "error", e );
+					console.error("ERROR: ", error);
 				});
 
 			}, Math.round(30000+(Math.random()*15000)));
@@ -789,8 +789,8 @@
 		},
 		
 		updateMediaCollection: function(collection) {
-			console.log("TCL: updateMediaCollection: function(collection)");
-			console.log("TCL: collection", collection);
+			// console.log("TCL: updateMediaCollection: function(collection)");
+			// console.log("TCL: collection", collection);
 			// sync to server
 			TIMAAT.MediumCollectionService.updateMediaCollection(collection);
 			// update UI collection view
@@ -801,7 +801,7 @@
 		},
 		
 		removeMediaCollection: function() {
-			console.log("TCL: removeMediaCollection: function()");
+			// console.log("TCL: removeMediaCollection: function()");
 			if ( !this.collection ) return;
 			$('#timaat-videochooser-mediacollection-delete').data('mediacollection', this.collection);
 			$('#timaat-videochooser-mediacollection-delete').modal('show');
@@ -815,8 +815,8 @@
 		},
 		
 		_mediaCollectionRemoved: async function(col) {
-			console.log("TCL: _mediaCollectionRemoved: function(col)");
-			console.log("TCL: col", col);
+			// console.log("TCL: _mediaCollectionRemoved: function(col)");
+			// console.log("TCL: col", col);
 			// sync to server
 			TIMAAT.MediumCollectionService.removeMediaCollection(col);
 			await TIMAAT.UI.refreshDataTable('mediumCollection');
@@ -841,7 +841,7 @@
 		_removeCollectionItemRow: function(row) {
 			if ( row == null ) return;
 			var video = $(row).data('medium');
-			console.log(row, video);
+			// console.log(row, video);
 			
 			// remove from server
 			TIMAAT.MediumCollectionService.removeCollectionItem(this.collection.id, video.id).then((success) => {

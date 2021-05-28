@@ -22,7 +22,7 @@
 	TIMAAT.LanguageService = {
 
 		async createLanguage(model) {
-			console.log("TCL: async createLanguage -> model", model);
+			// console.log("TCL: async createLanguage -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/0",
@@ -36,16 +36,16 @@
 				}).done(function(data) {
 					// console.log("TCL: createLanguage -> returning data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async getLanguage(id) {
-			console.log("TCL: getLanguage -> id", id);
+			// console.log("TCL: getLanguage -> id", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/"+id,
@@ -56,20 +56,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getLanguage -> data", data);
+					// console.log("TCL: getLanguage -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
     
 		async updateLanguage(language) {
-      console.log("TCL: updateLanguage -> language data: ", language);
+      // console.log("TCL: updateLanguage -> language data: ", language);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/"+language.id,
@@ -82,16 +82,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateLanguage(language) {
-      console.log("TCL: updateLanguage -> language", language);
+      // console.log("TCL: updateLanguage -> language", language);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/"+language.id,
@@ -104,16 +104,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async deleteLanguage(id) {
-			console.log("TCL: deleteLanguage -> id", id);
+			// console.log("TCL: deleteLanguage -> id", id);
       return new Promise(resolve => {
         $.ajax({
           url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/language/"+id,
@@ -124,11 +124,11 @@
           },
         }).done(function(data) {
           resolve(data);
-        }).fail(function(e) {
-          console.log( "error", e.responseText );
+        }).fail(function(error) {
+          console.error("ERROR responseText:", error.responseText);
         });
       }).catch((error) => {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       });
     },
 		
@@ -147,12 +147,12 @@
 					// console.log("TCL: checkForDuplicateName -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -171,12 +171,12 @@
 					// console.log("TCL: checkForDuplicateCode -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 

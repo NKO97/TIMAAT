@@ -22,7 +22,7 @@
 	TIMAAT.CategorySetService = {
 
 		async createCategorySet(model) {
-			console.log("TCL: async createCategorySet -> model", model);
+			// console.log("TCL: async createCategorySet -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/0",
@@ -36,16 +36,16 @@
 				}).done(function(data) {
 					// console.log("TCL: createCategorySet -> returning data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 		
 		async getCategorySetHasCategoryList(id) {
-			console.log("TCL: getCategorySetHasCategoryList -> id: ", id);
+			// console.log("TCL: getCategorySetHasCategoryList -> id: ", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+id+"/hasList/",
@@ -56,20 +56,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCategorySetHasCategoryList -> data", data);
+					// console.log("TCL: getCategorySetHasCategoryList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getCategorySet(id) {
-			console.log("TCL: getCategorySet -> id", id);
+			// console.log("TCL: getCategorySet -> id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+id,
@@ -80,21 +80,21 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCategorySet -> data", data);
+					// console.log("TCL: getCategorySet -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		/** updates categories belonging to categorysets */
 		async updateCategorySet(categorySet) {
-      console.log("TCL: updateCategorySet -> categorySet data: ", categorySet);
+      // console.log("TCL: updateCategorySet -> categorySet data: ", categorySet);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySet.id,
@@ -107,16 +107,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateCategorySet(categorySet) {
-			console.log("TCL: updateCategorySet -> categorySet", categorySet);
+			// console.log("TCL: updateCategorySet -> categorySet", categorySet);
 			// var tempCategorySet = categorySet.model;
 			// if (tempCategorySet.ui != undefined) {	tempCategorySet.ui = {};}
 			return new Promise(resolve => {
@@ -131,16 +131,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async deleteCategorySet(id) {
-			console.log("TCL: deleteCategorySet -> id", id);
+			// console.log("TCL: deleteCategorySet -> id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+id,
@@ -151,16 +151,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async createCategorySetHasCategory(categorySetHasCategory) {
-      console.log("TCL: createCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
+      // console.log("TCL: createCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hascategory/"+categorySetHasCategory.id.categoryId,
@@ -173,16 +173,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateCategorySetHasCategory(categorySetHasCategory) {
-      console.log("TCL: updateCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
+      // console.log("TCL: updateCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hascategory/"+categorySetHasCategory.id.categoryId,
@@ -195,16 +195,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 		
     async deleteCategorySetHasCategory(categorySetId, categoryId) {
-    console.log("TCL: deleteCategorySetHasCategory -> categorySetId, categoryId", categorySetId, categoryId);
+    // console.log("TCL: deleteCategorySetHasCategory -> categorySetId, categoryId", categorySetId, categoryId);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetId+"/hascategory/"+categoryId,
@@ -215,16 +215,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 		
 		async checkForDuplicate(name) {
-      console.log("TCL: checkForDuplicate -> name", name);
+      // console.log("TCL: checkForDuplicate -> name", name);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/isduplicate",
@@ -236,15 +236,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getCategorySet -> data", data);
+					// console.log("TCL: getCategorySet -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 

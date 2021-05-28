@@ -1696,7 +1696,7 @@
 
     displayAnalysisDetails: function( data ) {
       let cameraShotType;
-      console.log("TCL: data", data);
+      // console.log("TCL: data", data);
       var details = 
         `<div>
           <table>

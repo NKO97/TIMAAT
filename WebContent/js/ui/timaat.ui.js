@@ -173,19 +173,19 @@
 		
 		receiveNotification(notificationEvent) {
 			try {
-				console.log("notification event", notificationEvent);
+				// console.log("notification event", notificationEvent);
 				let notification = JSON.parse(notificationEvent.data);
-				console.log("notification data", notification);
+				// console.log("notification data", notification);
 				// TODO refactor
 				// only show if notification is for current list
 				if ( TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.curAnalysisList.id == notification.dataID ) {
 					TIMAAT.UI.showNotification( notification );
 					// trigger local event and action
-					console.log("trigger ",notification.message+'.notification.TIMAAT');
+					// console.log("trigger ",notification.message+'.notification.TIMAAT');
 					$(document).trigger(notification.message+'.notification.TIMAAT', notification);
 				}
-			} catch(e) {
-				console.log("notification error", e);
+			} catch(error) {
+				console.error("ERROR: ", error);
 			}
 		},
 		
@@ -345,10 +345,10 @@
 						} else {
 							TIMAAT.VideoChooser.initVideoChooserComponent();
 						}
-					}).fail(function(e) {
+					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
-						console.log("TCL: processLogin fail: e", e);
-						console.log( "error",e );
+						console.error("TCL: processLogin fail: e", e);
+						console.error("ERROR: ", error);
 						jQuery('#timaat-login-message').fadeIn();
 					});
 				}, 50);

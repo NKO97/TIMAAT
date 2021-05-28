@@ -22,8 +22,8 @@
 	TIMAAT.AnnotationService = {
 
 		getAnnotations(videoId, callback) {
-			console.log("TCL: getAnnotations -> getAnnotations(videoId, callback) ");
-			console.log("TCL: getAnnotations -> videoId", videoId);
+			// console.log("TCL: getAnnotations -> getAnnotations(videoId, callback) ");
+			// console.log("TCL: getAnnotations -> videoId", videoId);
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+videoId+"/annotations",
 				type:"GET",
@@ -35,8 +35,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 			
 		},
@@ -56,12 +56,12 @@
 					// console.log("TCL: getSelectedCategories -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -80,12 +80,12 @@
 					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -132,9 +132,9 @@
 			}).done(function(data) {
 				callback(new TIMAAT.Annotation(data));
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
@@ -153,14 +153,14 @@
 		// 	}).done(function(data) {
 		// 		anno.model = data;
 		// 	})
-		// 	.fail(function(e) {
-		// 		console.log( "error", e );
-		// 		console.log( e.responseText );
+		// 	.fail(function(error) {
+		// 		console.error("ERROR: ", error);
+		// 		console.error("ERROR responseText:", error.responseText);
 		// 	});
     // },
     
     async updateAnnotation(model) {
-			console.log("TCL: updateAnnotation -> model", model);
+			// console.log("TCL: updateAnnotation -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id,
@@ -172,14 +172,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: updateAnnotation -> data", data);
+        	// console.log("TCL: updateAnnotation -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 				}).catch((error) => {
-					console.log( "error: ", error );
+					console.error("ERROR: ", error);
 			});	
 		},
 
@@ -195,9 +195,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 		
@@ -214,9 +214,9 @@
       	// console.log("TCL: addAnnotationActor -> data", data);
 				return data;
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 				return false;
 			});
 		},
@@ -233,9 +233,9 @@
 			}).done(function(data) {
 				return data;
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 				return false;
 			});
 		},
@@ -253,9 +253,9 @@
       	// console.log("TCL: addAnnotationEvent -> data", data);
 				return data;
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 				return false;
 			});
 		},
@@ -272,15 +272,15 @@
 			}).done(function(data) {
 				return data;
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 				return false;
 			});
 		},
 
 		async addCategory(annotationId, categoryId) {
-			console.log("TCL: addCategory -> annotationId, categoryId", annotationId, categoryId);
+			// console.log("TCL: addCategory -> annotationId, categoryId", annotationId, categoryId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId,
@@ -292,12 +292,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -314,17 +314,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async addTag(annotationId, tagId) {
-			console.log("TCL: addTag -> annotationId, tagId", annotationId, tagId);
+			// console.log("TCL: addTag -> annotationId, tagId", annotationId, tagId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/tag/"+tagId,
@@ -336,12 +336,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -358,12 +358,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 

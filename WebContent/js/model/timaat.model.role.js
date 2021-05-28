@@ -76,7 +76,7 @@
 		remove() {
 			// remove role from UI
 			this.listView.remove();
-      console.log("TCL: Role -> remove -> this", this);
+      // console.log("TCL: Role -> remove -> this", this);
 			$('#role-metadata-form').data('role', null);
 			// remove from roles list
 			var index;

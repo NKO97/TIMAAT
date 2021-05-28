@@ -234,17 +234,17 @@
 				let modal = $('#timaat-mediadatasets-medium-delete');
 				let medium = modal.data('medium');
 				let type = $('#medium-metadata-form').data('type');
-        console.log("TCL: $ -> type", type);
+        // console.log("TCL: $ -> type", type);
 				if (medium) {
 					try {	
 						await TIMAAT.MediumDatasets._mediumRemoved(medium);
 					} catch(error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 					try {
 						await TIMAAT.UI.refreshDataTable(type);
 					} catch(error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 				}
 				modal.modal('hide');
@@ -334,7 +334,7 @@
 					await TIMAAT.MediumDatasets.updateMedium(type, medium);
 					// medium.updateUI();
 				} else { // create new medium
-					console.log("TCL: $ -> type", type);
+					// console.log("TCL: $ -> type", type);
 					var mediumModel = await TIMAAT.MediumDatasets.createMediumModel(formDataSanitized, type);
 					var displayTitleModel = await TIMAAT.MediumDatasets.createDisplayTitleModel(formDataSanitized);
 					var sourceModel = await TIMAAT.MediumDatasets.createSourceModel(formDataSanitized);
@@ -633,7 +633,7 @@
 					minimumInputLength: 0,
 				});
 				await TIMAAT.MediumService.getTagList(medium.model.id).then(function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var tagSelect = $('#medium-tags-multi-select-dropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -676,7 +676,7 @@
 				medium.model = await TIMAAT.MediumDatasets.updateMediumHasTagsList(medium.model, tagIdList);
 				if (newTagList.length > 0) {
 					var updatedMediumModel = await TIMAAT.MediumDatasets.createNewTagsAndAddToMedium(medium.model, newTagList);
-					console.log("TCL: updatedMediumModel", updatedMediumModel);
+					// console.log("TCL: updatedMediumModel", updatedMediumModel);
 					medium.model.tags = updatedMediumModel.tags;
 				}
 				$('#medium-metadata-form').data('medium', medium);
@@ -701,7 +701,7 @@
 
 			// file upload success event handler
 			$(document).on('success.upload.medium.TIMAAT', async function(event, uploadedMedium) {
-      	console.log("TCL: Medium -> constructor -> event, uploadedMedium", event, uploadedMedium);
+      	// console.log("TCL: Medium -> constructor -> event, uploadedMedium", event, uploadedMedium);
 				if ( !uploadedMedium ) return;
 				var medium = $('#medium-metadata-form').data('medium');
 				if ( medium == undefined || medium.model.id != uploadedMedium.id ) return;
@@ -953,7 +953,7 @@
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
 					// TODO modal informing that display title entry cannot be deleted					
-					console.log("CANNOT DELETE DISPLAY TITLE");
+					console.info("CANNOT DELETE DISPLAY TITLE");
 				}
 				else {
 					// TODO consider undo function or popup asking if user really wants to delete a title
@@ -1038,7 +1038,7 @@
 							},
 							name: formTitleList[i].title,
 						};
-						console.log("TCL: update existing titles");
+						// console.log("TCL: update existing titles");
 						// only update if anything changed
 						if (title != medium.model.titles[i]) {
 							await TIMAAT.MediumDatasets.updateTitle(title, medium);
@@ -1084,7 +1084,7 @@
 						};
 						// only update if anything changed
 						if (title != medium.model.titles[i]) {
-							console.log("TCL: update existing titles (and add new ones)");
+							// console.log("TCL: update existing titles (and add new ones)");
 							await TIMAAT.MediumDatasets.updateTitle(title, medium);
 						}
 					};
@@ -1100,7 +1100,7 @@
 						};
 						newTitles.push(title);
 					}
-					console.log("TCL: (update existing titles and) add new ones");
+					// console.log("TCL: (update existing titles and) add new ones");
 					await TIMAAT.MediumDatasets.addTitles(medium, newTitles);
 					i = 0;
 					for (; i < formTitleList.length; i++) {
@@ -1139,7 +1139,7 @@
 							name: formTitleList[i].title,
 						};
 						if (title != medium.model.titles[i]) {
-							console.log("TCL: update existing titles (and delete obsolete ones)");
+							// console.log("TCL: update existing titles (and delete obsolete ones)");
 							await TIMAAT.MediumDatasets.updateTitle(title, medium);
 						}
 						// update display title
@@ -1168,15 +1168,15 @@
 					for (; i >= formTitleList.length; i-- ) { // remove obsolete titles
 						if (medium.model.originalTitle != null && medium.model.originalTitle.id == medium.model.titles[i].id) {
 							medium.model.originalTitle = null;
-							console.log("TCL: remove originalTitle before deleting title");		
+							// console.log("TCL: remove originalTitle before deleting title");		
 							await TIMAAT.MediumDatasets.updateMedium(type, medium);
 						}
-						console.log("TCL: (update existing titles and) delete obsolete ones");		
+						// console.log("TCL: (update existing titles and) delete obsolete ones");		
 						TIMAAT.MediumService.removeTitle(medium.model.titles[i]);
 						medium.model.titles.pop();		
 					}
 				}
-				console.log("TCL: show medium title form");
+				// console.log("TCL: show medium title form");
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
 				TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
@@ -1392,7 +1392,7 @@
 
 			// add actorwithroles button click
 			$(document).on('click','[data-role="new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
-				console.log("TCL: add new actor with role(s)");
+				// console.log("TCL: add new actor with role(s)");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-actorwithrole-fields"]');
 				var newFormEntry = [];
@@ -1400,7 +1400,7 @@
 					newFormEntry.push($(this).val());
 				}));
 				// var newEntryId = newFormEntry[0];
-				console.log("TCL: newFormEntry", newFormEntry);
+				// console.log("TCL: newFormEntry", newFormEntry);
 
 				if (!$('#medium-actorwithroles-form').valid() || newFormEntry[1].length == 0) //! temp solution to prevent adding actors without roles
 				// if (!$('#medium-actorwithroles-form').valid())	
@@ -1411,7 +1411,7 @@
 				var existingEntriesInForm = $('#medium-actorwithroles-form').serializeArray();
 				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
 				$('.disable-on-submit').prop('disabled', false);
-				console.log("TCL: existingEntriesInForm", existingEntriesInForm);
+				// console.log("TCL: existingEntriesInForm", existingEntriesInForm);
 
 				// create list of actorIds that the medium is already connected with
 				var existingEntriesIdList = [];
@@ -1429,11 +1429,11 @@
 				while (i < existingEntriesIdList.length) {
 					if (newFormEntry[0] == existingEntriesIdList[i]) {
 						duplicate = true;
-						console.log("TCL: duplicate entry found");
+						// console.log("TCL: duplicate entry found");
 						break;
 					}
 					// console.log("TCL: newEntryId", newEntryId);
-					console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
+					// console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
 					i++;
 				}
 
@@ -1449,7 +1449,7 @@
 					await TIMAAT.ActorService.getActor(newActorId).then(function (data) {
 						var actorSelect = $('#mediumhasactorwithrole-actorid-'+newActorId);
 						// console.log("TCL: actorSelect", actorSelect);
-						console.log("TCL: then: data", data);
+						// console.log("TCL: then: data", data);
 						var option = new Option(data.displayName.name, data.id, true, true);
 						actorSelect.append(option).trigger('change');
 						// manually trigger the 'select2:select' event
@@ -1491,14 +1491,14 @@
 
 			// remove actorwithroles button click
 			$(document).on('click','[data-role="dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
-				console.log("TCL: remove actor with role(s)");
+				// console.log("TCL: remove actor with role(s)");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
 			// submit actorwithroles button functionality
 			$('#medium-actorwithroles-form-submit').on('click', async function(event) {
-				console.log("TCL: ActorWithRole form: submit");
+				// console.log("TCL: ActorWithRole form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
 				var node = document.getElementById("new-actorwithrole-fields");
@@ -1523,7 +1523,7 @@
 				var formDataRaw = $('#medium-actorwithroles-form').serializeArray();
 				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
 				$('.disable-on-submit').prop('disabled', false);
-				console.log("TCL: formDataRaw", formDataRaw);
+				// console.log("TCL: formDataRaw", formDataRaw);
 				
 				var formDataObject = {};
         $(formDataRaw).each(function(i, field){
@@ -1537,11 +1537,11 @@
 						formEntryIds.push(Number(formDataRaw[i].value));
 					}
 				}
-				console.log("TCL: Actor Ids in form", formEntryIds);
+				// console.log("TCL: Actor Ids in form", formEntryIds);
 				// create actor id list for all already existing roles
 				i = 0;
 				var actorList = await TIMAAT.MediumService.getActorList(medium.model.id);
-        console.log("TCL: Actors of current Medium", actorList);
+        // console.log("TCL: Actors of current Medium", actorList);
 				var existingEntriesIdList = [];
 				for (; i < actorList.length; i++) {
 					existingEntriesIdList.push(actorList[i].id);
@@ -1560,7 +1560,7 @@
 					}
 					if (deleteDataset) {
 						// console.log("TCL: REMOVE actor entries with Id: ", formEntryIds[j]);
-						console.log("TCL: Actor removed: REMOVE medium has actor (with all roles) datasets:", medium.model.id, existingEntriesIdList[i]);
+						// console.log("TCL: Actor removed: REMOVE medium has actor (with all roles) datasets:", medium.model.id, existingEntriesIdList[i]);
 						await TIMAAT.MediumService.removeActorFromMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i]);
 						existingEntriesIdList.splice(i,1);
 						i--; // so the next list item is not jumped over due to the splicing
@@ -1582,10 +1582,10 @@
 					if (!datasetExists) {
 						// console.log("TCL: ADD actor entries with id: ", formEntryIds[i]);
 						var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+formEntryIds[i]).select2('data');
-						console.log("TCL: roleSelectData", roleSelectData);
+						// console.log("TCL: roleSelectData", roleSelectData);
 						var k = 0;
 						for (; k < roleSelectData.length; k++) {
-							console.log("TCL: New Actor: ADD medium has actor with role dataset: ", medium.model.id, formEntryIds[i], Number(roleSelectData[k].id));
+							// console.log("TCL: New Actor: ADD medium has actor with role dataset: ", medium.model.id, formEntryIds[i], Number(roleSelectData[k].id));
 							await TIMAAT.MediumService.addMediumHasActorWithRoles(medium.model.id, formEntryIds[i], Number(roleSelectData[k].id));
 						}
 						formEntryIds.splice(i,1);
@@ -1600,15 +1600,15 @@
 				for (; i < existingEntriesIdList.length; i++) {
 					// console.log("TCL: check for UPDATE ACTOR: ", existingEntriesIdList[i]);
 					var existingRoles = await TIMAAT.MediumService.getActorHasRoleList(medium.model.id, existingEntriesIdList[i]);
-          console.log("TCL: existingRoles", existingRoles);
+          // console.log("TCL: existingRoles", existingRoles);
 					var existingRoleIds = [];
 					var j = 0;
 					for (; j < existingRoles.length; j++) {
 						existingRoleIds.push(existingRoles[j].id);
 					}
-					console.log("TCL: existing role ids for the current actor", existingRoleIds);
+					// console.log("TCL: existing role ids for the current actor", existingRoleIds);
 					var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+existingEntriesIdList[i]).select2('data');
-					console.log("TCL: roleSelectData", roleSelectData);
+					// console.log("TCL: roleSelectData", roleSelectData);
 					if (roleSelectData == undefined) {
 						roleSelectData = [];
 					}
@@ -1617,7 +1617,7 @@
 					for (; j < roleSelectData.length; j++) {
 						roleSelectIds.push(Number(roleSelectData[j].id));
 					}
-					console.log("TCL: form role ids for the current actor: ", roleSelectIds);
+					// console.log("TCL: form role ids for the current actor: ", roleSelectIds);
 					// DELETE role entry if id is in existingRoleIds but not in roleSelectIds
 					j = 0;
 					for (; j < existingRoleIds.length; j++) {
@@ -1632,7 +1632,7 @@
 						}
 						if (deleteDataset) {
 							// console.log("TCL: REMOVE role entry with Id: ", existingRoleIds[j]);
-							console.log("TCL: role removed: REMOVE medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], existingRoleIds[j]);
+							// console.log("TCL: role removed: REMOVE medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], existingRoleIds[j]);
 							await TIMAAT.MediumService.removeRoleFromMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i], existingRoleIds[j]);
 							existingRoleIds.splice(j,1);
 							j--; // so the next list item is not jumped over due to the splicing
@@ -1652,7 +1652,7 @@
 						}
 						if (!datasetExists) {
 							// console.log("TCL: ADD actor entries with id: ", roleSelectIds[j]);
-							console.log("TCL: role added: ADD medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], roleSelectIds[j]);
+							// console.log("TCL: role added: ADD medium has actor with role dataset: ", medium.model.id, existingEntriesIdList[i], roleSelectIds[j]);
 							await TIMAAT.MediumService.addMediumHasActorWithRoles(medium.model.id, existingEntriesIdList[i], roleSelectIds[j]);
 							roleSelectIds.splice(j,1);
 							// console.log("TCL: roleSelectIds", roleSelectIds);
@@ -1993,7 +1993,7 @@
 		},
 
 		mediumFormPreview: function(type, data) {
-			console.log("TCL: mediumFormPreview - type, data", type, data);
+			// console.log("TCL: mediumFormPreview - type, data", type, data);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			$('#medium-preview-form').trigger('reset');
 			// mediumFormMetadataValidator.resetForm();
@@ -2234,7 +2234,7 @@
 			// setup UI
 			// languageTrack data
 			var i = 0;
-			console.log("TCL: medium", medium);
+			// console.log("TCL: medium", medium);
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
 			for (; i < numLanguageTracks; i++) {
 				$('[data-role="dynamic-languagetrack-fields"]').append(
@@ -2433,7 +2433,7 @@
 					actorIdList.push(medium.model.mediumHasActorWithRoles[i].actor.id);
 				}
 			}
-			console.log("TCL: actorIdList", actorIdList);
+			// console.log("TCL: actorIdList", actorIdList);
 
 			// set up form content structure
 			i = 0;
@@ -2447,7 +2447,7 @@
 				await TIMAAT.ActorService.getActor(actorIdList[i]).then(function (data) {
 					var actorSelect = $('#mediumhasactorwithrole-actorid-'+actorIdList[i]);
 					// console.log("TCL: actorSelect", actorSelect);
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var option = new Option(data.displayName.name, data.id, true, true);
 					actorSelect.append(option).trigger('change');
 					// manually trigger the 'select2:select' event
@@ -2466,7 +2466,7 @@
 				var roleSelect = $('#actorwithroles-multi-select-dropdown-'+actorIdList[i]);
 				// console.log("TCL: roleSelect", roleSelect);
 				await TIMAAT.MediumService.getActorHasRoleList(medium.model.id, actorIdList[i]).then(function (data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
 						data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
 						// create the options and append to Select2
@@ -2548,8 +2548,8 @@
 
 				// url for role fetch needs to chance on actor change
 				$('#mediumhasactorwithrole-actorid').on('change', function (event) {
-					console.log("TCL: actor selection changed");
-					console.log("TCL: selected Actor Id", $(this).val());
+					// console.log("TCL: actor selection changed");
+					// console.log("TCL: selected Actor Id", $(this).val());
 					if (!($(this).val() == null)) {
 						$('#actorwithroles-multi-select-dropdown').val(null).trigger('change');
 						// provide roles list for new selected actor
@@ -2593,12 +2593,12 @@
 		},
 
 		createMedium: async function(mediumSubtype, mediumModel, mediumSubtypeModel, title, source) {
-    	console.log("TCL: createMedium: mediumSubtype, mediumModel, mediumSubtypeModel, title, source", mediumSubtype, mediumModel, mediumSubtypeModel, title, source);
+    	// console.log("TCL: createMedium: mediumSubtype, mediumModel, mediumSubtypeModel, title, source", mediumSubtype, mediumModel, mediumSubtypeModel, title, source);
 			try { // TODO needs to be called after createMedium once m-n-table is refactored to 1-n table (sure?)
 				// create display title
 				var newDisplayTitle = await TIMAAT.MediumService.createTitle(title);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {				
@@ -2609,7 +2609,7 @@
 				tempMediumModel.source = source;
 				var newMediumModel = await TIMAAT.MediumService.createMedium(tempMediumModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
@@ -2618,7 +2618,7 @@
 				var updatedSource = await TIMAAT.MediumService.updateSource(source);
 				newMediumModel.sources[0] = updatedSource; // TODO refactor once several sources can be added				
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
@@ -2627,7 +2627,7 @@
 				var newMediumSubtypeModel = await TIMAAT.MediumService.createMediumSubtype(mediumSubtype, newMediumModel, mediumSubtypeModel);
         // console.log("TCL: newMediumSubtypeModel", newMediumSubtypeModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
@@ -2658,7 +2658,7 @@
 				};
 				// console.log("TCL: newMediumModel", newMediumModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			return (newMediumModel);
 		},
@@ -2670,7 +2670,7 @@
 				var newTitleModel = await TIMAAT.MediumService.createTitle(titleModel.model);
         // console.log("TCL: newTitleModel", newTitleModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 
@@ -2686,7 +2686,7 @@
 				}
 				// await this.updateMedium(type, medium);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 
@@ -2697,7 +2697,7 @@
 				addedLanguageTrackModel.id = newLanguageTrack;
 				medium.model.mediumHasLanguages.push(addedLanguageTrackModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 
@@ -2741,13 +2741,13 @@
 		},
 
 		updateMedium: async function(mediumSubtype, medium) {
-		console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
+			// console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
 			try { // update display title
 				var tempDisplayTitle = await TIMAAT.MediumService.updateTitle(medium.model.displayTitle);
         // console.log("tempDisplayTitle", tempDisplayTitle);
 				medium.model.displayTitle = tempDisplayTitle;
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try { // update original title
@@ -2761,14 +2761,14 @@
 					medium.model.originalTitle = tempOriginalTitle;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			
 			try { // update source
 				var tempSource = await TIMAAT.MediumService.updateSource(medium.model.sources[0]);
 				medium.model.sources[0] = tempSource;
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			
 			try { // update subtype
@@ -2798,19 +2798,19 @@
 				}
 				var tempMediumSubtypeModel = await TIMAAT.MediumService.updateMediumSubtype(mediumSubtype, tempSubtypeModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			
 			try { // update medium
 				var tempMediumModel = await TIMAAT.MediumService.updateMedium(medium.model);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			// try { // update media lists
 			// 	await this._mediumUpdated(mediumSubtype, medium);
 			// } catch(error) {
-			// 	console.log( "error: ", error);
+			// 	console.error("ERROR: ", error);
 			// };
 			
 			// medium.updateUI();
@@ -2831,7 +2831,7 @@
 				// console.log("TCL: updateMedium: async function - medium.model", medium.model);
 				// var tempMediumModel = await TIMAAT.MediumService.updateMedium(medium.model);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 
@@ -2902,7 +2902,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumModel;
 		},
@@ -2984,7 +2984,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumModel;
 		},
@@ -3000,10 +3000,10 @@
 		},
 
 		updateMediumHasTagsList: async function(mediumModel, tagIdList) {
-    	console.log("TCL: mediumModel, tagIdList", mediumModel, tagIdList);
+    	// console.log("TCL: mediumModel, tagIdList", mediumModel, tagIdList);
 			try {
 				var existingMediumHasTagsEntries = await TIMAAT.MediumService.getTagList(mediumModel.id);
-        console.log("TCL: existingMediumHasTagsEntries", existingMediumHasTagsEntries);
+        // console.log("TCL: existingMediumHasTagsEntries", existingMediumHasTagsEntries);
 				if (tagIdList == null) { //* all entries will be deleted
 					mediumModel.tags = [];
 					await TIMAAT.MediumService.updateMedium(mediumModel);
@@ -3023,7 +3023,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingMediumHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingMediumHasTagsEntries[i]);
 							existingMediumHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -3057,7 +3057,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							mediumModel.tags.push(idsToCreate[i]);
@@ -3066,7 +3066,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumModel;
 		},
@@ -3088,7 +3088,7 @@
 			try {
 				await TIMAAT.MediumService.removeMedium(medium);
 			} catch(error) {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			// remove all titles from medium
@@ -3307,7 +3307,7 @@
 		},
 
 		appendActorWithRolesDataset: function(i, actorId) {
-    	console.log("TCL: i, actorId", i, actorId);
+    	// console.log("TCL: i, actorId", i, actorId);
 			var entryToAppend = 
 				`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="`+i+`" data-actor-id=`+actorId+`>
 					<div class="form-row">
@@ -4536,7 +4536,7 @@
 					}
 				},
 				"rowCallback": function( row, data ) {
-					console.log("TCL: row, data", row, data);
+					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('videogame');
 						$(row).addClass('selected');

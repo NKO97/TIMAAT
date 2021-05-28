@@ -33,9 +33,9 @@
       }).done(function(data) {
         // console.log("TCL: listRoles -> data", data);
         callback(data);
-      }).fail(function(e) {
-        console.log(e.responseText);
-        console.log( "error", e );
+      }).fail(function(error) {
+        console.error("ERROR responseText: ", e.responseText);
+        console.error("ERROR: ", error);
       });			
     },
 
@@ -51,14 +51,14 @@
       }).done(function(data) {
         // console.log("TCL: listRoleGroups -> data", data);
         callback(data);
-      }).fail(function(e) {
-        console.log(e.responseText);
-        console.log( "error", e );
+      }).fail(function(error) {
+        console.error("ERROR responseText: ", e.responseText);
+        console.error("ERROR: ", error);
       });			
     },
 
     async createRole() {
-			console.log("TCL: async createRole()");
+			// console.log("TCL: async createRole()");
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/0",
@@ -71,16 +71,16 @@
 				}).done(function(data) {
 					// console.log("TCL: createRol -> returning data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async createRoleGroup() {
-			console.log("TCL: async createRoleGroup()");
+			// console.log("TCL: async createRoleGroup()");
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/0",
@@ -93,16 +93,16 @@
 				}).done(function(data) {
 					// console.log("TCL: createRoleGroup -> returning data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 		
 		async getRoleHasRoleGroupList(id) {
-			console.log("TCL: getRoleHasRoleGroupList -> id: ", id);
+			// console.log("TCL: getRoleHasRoleGroupList -> id: ", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+id+"/hasList/",
@@ -113,20 +113,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRoleGroupHasRoleList -> data", data);
+					// console.log("TCL: getRoleGroupHasRoleList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getRoleGroupHasRoleList(id) {
-			console.log("TCL: getRoleGroupHasRoleList -> id: ", id);
+			// console.log("TCL: getRoleGroupHasRoleList -> id: ", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/"+id+"/hasList/",
@@ -137,20 +137,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRoleGroupHasRoleList -> data", data);
+					// console.log("TCL: getRoleGroupHasRoleList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getRole(id) {
-			console.log("TCL: getRole -> id", id);
+			// console.log("TCL: getRole -> id", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+id,
@@ -161,20 +161,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRole -> data", data);
+					// console.log("TCL: getRole -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getRoleGroup(id) {
-			console.log("TCL: getRoleGroup -> id", id);
+			// console.log("TCL: getRoleGroup -> id", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/"+id,
@@ -185,20 +185,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRoleGroup -> data", data);
+					// console.log("TCL: getRoleGroup -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
     async addRoleTranslation(model) {
-      console.log("TCL: async createTranslation -> model", model);
+      // console.log("TCL: async createTranslation -> model", model);
       var translation = model.roleTranslations[0];
 			return new Promise(resolve => {
 				$.ajax({
@@ -213,16 +213,16 @@
 				}).done(function(data) {
 					// console.log("TCL: createTranslation -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async addRoleGroupTranslation(model) {
-      console.log("TCL: async createTranslation -> model", model);
+      // console.log("TCL: async createTranslation -> model", model);
       var translation = model.roleGroupTranslations[0];
 			return new Promise(resolve => {
 				$.ajax({
@@ -237,17 +237,17 @@
 				}).done(function(data) {
 					// console.log("TCL: createTranslation -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		/** updates role groups belonging to role  */
 		async updateRole(id) {
-			console.log("TCL: updateRole -> role id", id);
+			// console.log("TCL: updateRole -> role id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+id,
@@ -259,17 +259,17 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		/** updates roles belonging to role groups*/
 		async updateRoleGroup(model) {
-			console.log("TCL: updateRoleGroup -> model", model);
+			// console.log("TCL: updateRoleGroup -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/"+model.id,
@@ -282,16 +282,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateRoleTranslation(translation) {
-      console.log("TCL: async updateRoleTranslation -> translation", translation);
+      // console.log("TCL: async updateRoleTranslation -> translation", translation);
 			// TODO tempTranslation required?
 			var tempTranslation = {
 				id: translation.id,
@@ -300,7 +300,7 @@
 					id: translation.language.id
 				}
 			};
-      console.log("TCL: updateRoleTranslation -> tempTranslation", tempTranslation);
+      // console.log("TCL: updateRoleTranslation -> tempTranslation", tempTranslation);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/translation/"+translation.id,
@@ -314,17 +314,17 @@
 				}).done(function(data) {
 					// console.log("TCL: async updateRoleTranslation -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
     async updateRoleGroupTranslation(translation) {
-      console.log("TCL: async updateRoleGroupTranslation -> translation", translation);
+      // console.log("TCL: async updateRoleGroupTranslation -> translation", translation);
 			// TODO tempTranslation required?
 			var tempTranslation = {
 				id: translation.id,
@@ -333,7 +333,7 @@
 					id: translation.language.id
 				}
 			};
-      console.log("TCL: updateRoleGroupTranslation -> tempTranslation", tempTranslation);
+      // console.log("TCL: updateRoleGroupTranslation -> tempTranslation", tempTranslation);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/translation/"+translation.id,
@@ -347,17 +347,17 @@
 				}).done(function(data) {
 					// console.log("TCL: async updateRoleGroupTranslation -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 		
     async deleteRole(id) {
-			console.log("TCL: deleteRole -> id", id);
+			// console.log("TCL: deleteRole -> id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/"+id,
@@ -368,16 +368,16 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
     },
 
 		async deleteRoleGroup(id) {
-			console.log("TCL: deleteRoleGroup -> id", id);
+			// console.log("TCL: deleteRoleGroup -> id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/"+id,
@@ -388,11 +388,11 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
     },
 

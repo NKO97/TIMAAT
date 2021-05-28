@@ -33,8 +33,8 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -50,9 +50,9 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -70,8 +70,8 @@
       // console.log("TCL: listLocationSubtype -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 			
 		},
@@ -95,11 +95,11 @@
 					},
 				}).done(function(locationData) {
 					resolve(locationData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -116,11 +116,11 @@
 					},
 				}).done(function(translationData) {
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error( "error: ", e.responseText );
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -137,16 +137,16 @@
 					},
 				}).done(function(subtypeData) {
 						resolve(subtypeData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error( "error: ", e.responseText );
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateLocation(locationModel) {
-      console.log("TCL: updateLocation -> locationModel", locationModel);
+      // console.log("TCL: updateLocation -> locationModel", locationModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationModel.id,
@@ -159,17 +159,17 @@
 					},
 				}).done(function(updateData) {
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateLocationTranslation(locationId, locationTranslation) {
-      console.log("TCL: async updateLocationTranslation -> locationId, updatedLocationTranslation", locationId, locationTranslation);
+      // console.log("TCL: async updateLocationTranslation -> locationId, updatedLocationTranslation", locationId, locationTranslation);
 			// var updatedLocationTranslation = {
 			// 	id: location.model.locationTranslations[0].id, // TODO get the correct translation_id
 			// 	name: location.model.locationTranslations[0].name,
@@ -186,17 +186,17 @@
 					},
 				}).done(function(translationData) {
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateLocationSubtype(locationSubtype, subtypeModel) {
-			console.log("TCL: async updateLocationSubtype -> locationSubtype, subtypeModel", locationSubtype, subtypeModel);
+			// console.log("TCL: async updateLocationSubtype -> locationSubtype, subtypeModel", locationSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/"+locationSubtype+"/"+subtypeModel.locationId,
@@ -208,14 +208,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-				console.log("TCL: async updateLocationSubtype -> updateData", updateData);
+				// console.log("TCL: async updateLocationSubtype -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -229,9 +229,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -245,9 +245,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},	
 

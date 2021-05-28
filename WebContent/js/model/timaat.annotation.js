@@ -97,7 +97,7 @@
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
+				// console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
 					`<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountID+'">[ID '+anno.model.createdByUserAccountID+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
@@ -711,7 +711,7 @@
 			let id = svgitem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
-				console.log("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
 			}
 			switch (svgitem.type) {
 				case "rectangle":

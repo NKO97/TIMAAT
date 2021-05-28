@@ -132,7 +132,7 @@ require(['domReady',
 	'leaflet-customcontrol',
 	'leaflet-sidebar',
 	], function (domReady) { domReady(function () {
-	  console.log("TIMAAT::Init");
+	  console.info("TIMAAT::Init");
 		requirejs([
 			'moment',
 			'datatables',
@@ -202,11 +202,11 @@ require(['domReady',
 			'TIMAAT-tagLists',
 			
 		  ], function (moment) {
-		  console.log("TIMAAT::Setup");
+		  console.info("TIMAAT::Setup");
 		  window.moment = moment;		  
 		  // init UI
 		  TIMAAT.UI.init();
-			console.log("TIMAAT::Ready");
+			console.info("TIMAAT::Ready");
 		});
   });
 });

@@ -21,7 +21,7 @@
 
 	TIMAAT.Inspector = class Inspector {
 		constructor(viewer) {
-			console.log('TCL: Inspector -> constructor');
+			// console.log('TCL: Inspector -> constructor');
 			
 			// init sidebar control
 			this._viewer = viewer;
@@ -119,7 +119,7 @@
 							inspector.ui.dataTableActors.ajax.reload();
 							inspector.ui.dataTableAnnoActors.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -200,7 +200,7 @@
 							inspector.ui.dataTableActors.ajax.reload();
 							inspector.ui.dataTableAnnoActors.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -305,7 +305,7 @@
 							inspector.ui.dataTableEvents.ajax.reload();
 							inspector.ui.dataTableAnnoEvents.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -365,7 +365,7 @@
 							inspector.ui.dataTableEvents.ajax.reload();
 							inspector.ui.dataTableAnnoEvents.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -995,7 +995,7 @@
 						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime/1000.0;
 						duration = Math.max(0,Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime));
-            console.log("TCL: Inspector -> $ -> duration", duration);
+            // console.log("TCL: Inspector -> $ -> duration", duration);
 						// if ((startTime + duration) > TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0)
 						// 	duration = TIMAAT.VideoPlayer.curSegment.model.endTime/1000.0 - startTime;
 					break;

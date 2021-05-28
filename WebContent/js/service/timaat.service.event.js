@@ -31,11 +31,11 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listEvents -> data", data);
+				// console.log("TCL: listEvents -> data", data);
 				callback(data);
-			}).fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			}).fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -50,14 +50,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getEventDatasetsTotal -> data", data);
+					// console.log("TCL: getEventDatasetsTotal -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -72,19 +72,19 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getEvent -> data", data);
+					// console.log("TCL: getEvent -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
 		async getTagList(eventId) {
-      console.log("TCL: getTagList -> for eventId", eventId);
+      // console.log("TCL: getTagList -> for eventId", eventId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/"+eventId+"/hasTagList/",
@@ -95,20 +95,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getTagList -> data", data);
+					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async createEvent(eventModel) {
-			console.log("TCL: async createEvent -> eventModel", eventModel);
+			// console.log("TCL: async createEvent -> eventModel", eventModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/event/0",
@@ -122,11 +122,11 @@
 				}).done(function(eventData) {
 					// console.log("TCL: createEvent -> returning eventData", eventData);
 					resolve(eventData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -144,11 +144,11 @@
 					},
 				}).done(function(translationData) {
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error( "error: ", e.responseText );
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -166,17 +166,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 		});		
 		},
 
 		async updateEvent(eventModel) {
-			console.log("TCL: EventService: async updateEvent -> eventModel", eventModel);
+			// console.log("TCL: EventService: async updateEvent -> eventModel", eventModel);
 			delete eventModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
@@ -191,12 +191,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateEvent -> returning updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -220,12 +220,12 @@
 				}).done(function(translationData) {
 				// console.log("TCL: updateEventTranslation -> translationData", translationData);
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -242,12 +242,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -264,12 +264,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},	
 

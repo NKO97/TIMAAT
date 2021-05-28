@@ -36,8 +36,8 @@
 				// console.log("TCL getAnalysisLists ~ data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
 			});
 			
 		},
@@ -56,12 +56,12 @@
 					// console.log("TCL: getAnalysisLists -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -79,12 +79,12 @@
 					// console.log("TCL: getAnalysisList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -103,12 +103,12 @@
 					// console.log("TCL: getCategorySetList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -127,12 +127,12 @@
 					// console.log("TCL: getSelectedCategories -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -151,12 +151,12 @@
 					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -187,14 +187,14 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});			
 		},
 
 		updateAnalysisList(analysisList) {
-			console.log("TCL: updateAnalysisList -> analysisList", analysisList);
+			// console.log("TCL: updateAnalysisList -> analysisList", analysisList);
 			var list = {
 					id: analysisList.id,
 					mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
@@ -216,14 +216,14 @@
 				TIMAAT.Util.setDefTranslation(analysisList, 'mediumAnalysisListTranslations', 'title', data.title);
 				TIMAAT.Util.setDefTranslation(analysisList, 'mediumAnalysisListTranslations', 'text', data.text);
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
 		async updateMediumAnalysisList(analysisList) {
-			console.log("TCL: updateAnalysisList -> analysisList", analysisList);
+			// console.log("TCL: updateAnalysisList -> analysisList", analysisList);
 			var updateList = {
 				// annotationa: analysisList.annotations,
 				// analysisSegments: analysisList.analysisSegments,
@@ -244,14 +244,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: updateAnalysisList -> data", data);
+					// console.log("TCL: updateAnalysisList -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 				}).catch((error) => {
-					console.log( "error: ", error );
+					console.error("ERROR: ", error);
 			});	
 		},
 
@@ -266,14 +266,14 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
 		async addCategorySet(mediumAnalysisListId, categorySetId) {
-			console.log("TCL: addCategorySet -> mediumAnalysisListId, categorySetId", mediumAnalysisListId, categorySetId);
+			// console.log("TCL: addCategorySet -> mediumAnalysisListId, categorySetId", mediumAnalysisListId, categorySetId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/"+categorySetId,
@@ -285,12 +285,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -305,20 +305,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: removeCategorySet -> data", data);
+        	// console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async addCategory(typeId, categoryId, type) {
-			console.log("TCL: addCategory -> typeId, categoryId, type", typeId, categoryId, type);
+			// console.log("TCL: addCategory -> typeId, categoryId, type", typeId, categoryId, type);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+typeId+"/category/"+categoryId,
@@ -330,12 +330,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -350,20 +350,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: removeCategorySet -> data", data);
+        	// console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async addTag(mediumAnalysisListId, tagId) {
-			console.log("TCL: addTag -> mediumAnalysisListId, tagId", mediumAnalysisListId, tagId);
+			// console.log("TCL: addTag -> mediumAnalysisListId, tagId", mediumAnalysisListId, tagId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/tag/"+tagId,
@@ -375,12 +375,12 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -397,17 +397,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async createSegmentElement(type, model, parentElementId) {
-			console.log("TCL: createSegmentElement -> type, model, parentElementId", type, model, parentElementId);
+			// console.log("TCL: createSegmentElement -> type, model, parentElementId", type, model, parentElementId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+parentElementId+"/"+type,
@@ -419,21 +419,21 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: }).done -> data", data);
+					// console.log("TCL: }).done -> data", data);
 					resolve(data);
 					// callback(new TIMAAT.AnalysisSegment(data));
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});		
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
 		async updateSegmentElement(type, model) {
-      console.log("TCL: updateSegmentElement ~ type, model", type, model);
+      // console.log("TCL: updateSegmentElement ~ type, model", type, model);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+model.id,
@@ -447,17 +447,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async updateSegmentElementTranslation(type, model) {
-			console.log("TCL: updateSegmentElementTranslation -> type, model", type, model);
+			// console.log("TCL: updateSegmentElementTranslation -> type, model", type, model);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/translation/"+model.id,
@@ -471,17 +471,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async removeSegmentElement(type, modelId) {
-			console.log("TCL: removeSegment -> type, modelId", type, modelId);
+			// console.log("TCL: removeSegment -> type, modelId", type, modelId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+modelId,
@@ -493,12 +493,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 

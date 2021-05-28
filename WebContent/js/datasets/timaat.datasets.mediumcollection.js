@@ -66,12 +66,12 @@
 					try {	
 						await TIMAAT.MediumCollectionDatasets._mediumCollectionRemoved(mediumCollection);
 					} catch(error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 					try {
 						await TIMAAT.UI.refreshDataTable('mediumCollection');
 					} catch(error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 				}
 				modal.modal('hide');
@@ -240,7 +240,7 @@
 					minimumInputLength: 0,
 				});
 				await TIMAAT.MediumCollectionService.getTagList(mediumCollection.model.id).then(function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var tagSelect = $('#mediumcollection-tags-multi-select-dropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -270,7 +270,7 @@
 					return false;
 				var mediumCollection = modal.data('mediumCollection');
 				var formDataRaw = $('#mediumCollectionTagsModalForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var tagIdList = [];
 				var newTagList = [];
@@ -284,7 +284,7 @@
 				mediumCollection.model = await TIMAAT.MediumCollectionDatasets.updateMediumCollectionHasTagsList(mediumCollection.model, tagIdList);
 				if (newTagList.length > 0) {
 					var updatedMediumCollectionModel = await TIMAAT.MediumCollectionDatasets.createNewTagsAndAddToMediumCollection(mediumCollection.model, newTagList);
-					console.log("TCL: updatedMediumCollectionModel", updatedMediumCollectionModel);
+					// console.log("TCL: updatedMediumCollectionModel", updatedMediumCollectionModel);
 					mediumCollection.model.tags = updatedMediumCollectionModel.tags;
 				}
 				$('#medium-metadata-form').data('mediumCollection', mediumCollection);
@@ -336,7 +336,7 @@
 			// add medium collection button functionality (in medium collection list - opens datasheet form)
 			$('#mediumcollection-items-add-button').on('click', function(event) {
 				let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
-        console.log("TCL ~ $ ~ collection", collection);
+        // console.log("TCL ~ $ ~ collection", collection);
 				TIMAAT.MediumCollectionDatasets.addMediumCollectionItem(collection.model.id);
 			});
 
@@ -535,7 +535,7 @@
 		},
 
 		addMediumCollectionItem: async function(collectionId) {	
-    	console.log("TCL: addMediumCollectionItem - collectionId: ", collectionId);
+    	// console.log("TCL: addMediumCollectionItem - collectionId: ", collectionId);
 			if ( this.dataTableMedia ) {
 				this.dataTableMedia.ajax.url('api/mediumCollection/'+collectionId+'/notInMediaList');
 				this.dataTableMedia.ajax.reload(null, false);
@@ -638,7 +638,7 @@
 		},
 
 		mediumCollectionFormPublication: async function(collection) {
-      console.log("TCL ~ mediumCollectionFormPublication:function ~ collection", collection);
+      // console.log("TCL ~ mediumCollectionFormPublication:function ~ collection", collection);
 			$('#mediumCollection-publication').trigger('reset');
 			TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', collection.model.id);
 			mediumFormMetadataValidator.resetForm();
@@ -1160,14 +1160,14 @@
 						ev.stopPropagation();
 						// if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
-            console.log("TCL: collection", collection);
+            // console.log("TCL: collection", collection);
 						$(this).remove();
 						TIMAAT.MediumCollectionService.addCollectionItem(collection.model.id, medium.id)
 						.then((result) => {
 							TIMAAT.MediumCollectionDatasets.dataTableMedia.ajax.reload();
 							TIMAAT.MediumCollectionDatasets.dataTableCollectionItems.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -1275,14 +1275,14 @@
 						ev.stopPropagation();
 						// if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
-            console.log("TCL: collection", collection);
+            // console.log("TCL: collection", collection);
 						$(this).remove();
 						TIMAAT.MediumCollectionService.removeCollectionItem(collection.model.id, medium.id)
 						.then((result)=>{
 							TIMAAT.MediumCollectionDatasets.dataTableMedia.ajax.reload();
 							TIMAAT.MediumCollectionDatasets.dataTableCollectionItems.ajax.reload();
 						}).catch((error)=>{
-							console.log("ERROR:", error);
+							console.error("ERROR: ", error);
 						});
 					});
 				},
@@ -1347,7 +1347,7 @@
 		},
 		
 		createMediumCollectionModel: async function(formDataObject) {
-    	console.log("TCL: formDataObject, type", formDataObject);
+    	// console.log("TCL: formDataObject, type", formDataObject);
 			var model = {
 				id: 0,
 				isSystemic: formDataObject.isSystemic,
@@ -1378,17 +1378,17 @@
 					};
 				break;
 			}
-      console.log("TCL: model", model);
+      // console.log("TCL: model", model);
 			return model;
 		},
 
 		createMediumCollection: async function(type, model, subTypeModel) {
-    	console.log("TCL: createMediumCollection: type, model, subTypeModel", type, model, subTypeModel);
+    	// console.log("TCL: createMediumCollection: type, model, subTypeModel", type, model, subTypeModel);
 			try {				
 				// create medium collection
 				var newModel = await TIMAAT.MediumCollectionService.createMediumCollection(model);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
@@ -1398,7 +1398,7 @@
 					await TIMAAT.MediumCollectionService.createMediumCollectionSubtype(type, newModel, subTypeModel);
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
@@ -1412,13 +1412,13 @@
 					break;
 				};
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			return newModel;
 		},
 
 		updateMediumCollection: async function(subType, mediumCollection) {
-			console.log("TCL: updateMediumCollection: async function -> mediumCollection at beginning of update process: ", subType, mediumCollection);
+			// console.log("TCL: updateMediumCollection: async function -> mediumCollection at beginning of update process: ", subType, mediumCollection);
 				try { // update subtype
 					var tempSubtypeModel;
 					switch (subType) {
@@ -1432,21 +1432,21 @@
 							break;
 					}
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				};
 				
 				try { // update mediumCollection
 					await TIMAAT.MediumCollectionService.updateMediaCollection(mediumCollection.model);
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				};
 		},
 
 		updateMediumCollectionHasTagsList: async function(mediumCollectionModel, tagIdList) {
-    	console.log("TCL: mediumCollectionModel, tagIdList", mediumCollectionModel, tagIdList);
+    	// console.log("TCL: mediumCollectionModel, tagIdList", mediumCollectionModel, tagIdList);
 			try {
 				var existingMediumCollectionHasTagsEntries = await TIMAAT.MediumCollectionService.getTagList(mediumCollectionModel.id);
-        console.log("TCL: existingMediumCollectionHasTagsEntries", existingMediumCollectionHasTagsEntries);
+        // console.log("TCL: existingMediumCollectionHasTagsEntries", existingMediumCollectionHasTagsEntries);
 				if (tagIdList == null) { //* all entries will be deleted
 					mediumCollectionModel.tags = [];
 					await TIMAAT.MediumCollectionService.updateMediaCollection(mediumCollectionModel);
@@ -1466,7 +1466,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingMediumCollectionHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingMediumCollectionHasTagsEntries[i]);
 							existingMediumCollectionHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -1500,7 +1500,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							mediumCollectionModel.tags.push(idsToCreate[i]);
@@ -1509,7 +1509,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumCollectionModel;
 		},
@@ -1530,7 +1530,7 @@
 			try {
 				await TIMAAT.MediumCollectionService.removeMediaCollection(mediumCollection.model);
 			} catch(error) {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			mediumCollection.remove();
@@ -1552,14 +1552,14 @@
 					},
 					// additional parameters
 					data: function(params) {
-						console.log("TCL: data: params", params);
+						// console.log("TCL: data: params", params);
 						return {
 							// search: params.term,
 							// page: params.page
 						};          
 					},
 					processResults: function(data, params) {
-						console.log("TCL: processResults: data", data);
+						// console.log("TCL: processResults: data", data);
 						params.page = params.page || 1;
 						return {
 							results: data

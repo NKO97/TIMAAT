@@ -53,7 +53,7 @@
 		        let oldpercent = 0;
 		        xhr.upload.addEventListener('loadstart', function(event) {
 		        	uploaditem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
-		        	console.log('UPLOAD::Start', uploaditem.medium);
+		        	console.info('UPLOAD::Start', uploaditem.medium);
 		        }, false);
 
 		        xhr.upload.addEventListener('progress', function(event) {
@@ -74,7 +74,7 @@
 		            	if (event.target.status == 200) {
 				            uploaditem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload erfolgreich');
 		            		uploaditem.state = 'done';
-										console.log('UPLOAD::SUCCESS');
+										console.info('UPLOAD::SUCCESS');
 										switch (type) {
 											case 'image':
 												var newImage = JSON.parse(event.target.responseText);
@@ -101,10 +101,10 @@
 										TIMAAT.UploadManager.removeUpload(uploaditem);
 		            	} else {
 		            		uploaditem.state = 'fail';
-			                console.log('UPLOAD FAILED: Error in the response.', event);
+			                console.error('UPLOAD FAILED: Error in the response.', event);
 				            uploaditem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload fehlgeschlagen');
 		            	}
-		            } else console.log('STATE CHANGE: ', event);
+		            } else console.info('STATE CHANGE: ', event);
 		        }, false);
 
 		        // posting the form with the same method and action as specified by the HTML markup
@@ -131,7 +131,7 @@
 		
 		_handleAbort(event) {
 			let uploaditem = event.data;
-			console.log('UPLOAD::Canceled by user request', uploaditem);
+			console.info('UPLOAD::Canceled by user request', uploaditem);
 			uploaditem.state = 'abort';
 			uploaditem.xhr.abort(); // cancel transfer if active
 			TIMAAT.UploadManager.removeUpload(uploaditem);

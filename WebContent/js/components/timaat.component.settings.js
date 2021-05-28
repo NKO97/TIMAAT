@@ -60,12 +60,12 @@
           },
         }).done(function(data) {
           resolve(data);
-        }).fail(function(e) {
-          console.log( "error", e );
-          console.log( e.responseText );
+        }).fail(function(error) {
+          console.error("ERROR: ", error);
+          console.error("ERROR responseText: ", e.responseText);
         });
       }).catch((error) => {
-        console.log( "error: ", error );
+        console.error("ERROR: ", error);
       });
     },
 

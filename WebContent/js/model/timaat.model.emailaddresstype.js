@@ -107,7 +107,7 @@
 		}
 
 		remove() {
-			console.log("TCL: EmailAddressType -> remove -> remove()");
+			// console.log("TCL: EmailAddressType -> remove -> remove()");
 			// remove EmailAddressType from UI
 			this.listView.remove();
 			// remove from EmailAddressType list

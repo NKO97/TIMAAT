@@ -295,7 +295,7 @@
                 break;
                 case 'person': // #actor/person ...
                 case 'collective': // #actor/collective ...
-                  console.log("TCL: switch(pathSegments[1])", pathSegments[1]);
+                  // console.log("TCL: switch(pathSegments[1])", pathSegments[1]);
                   if (pathSegments.length >= 3 && !isNaN(pathSegments[2])) { // path segment is id of current actor
                     $('#timaat-actordatasets-'+pathSegments[1]+'-list tr[id='+pathSegments[2]+']').trigger('click');
                     let actor = {};

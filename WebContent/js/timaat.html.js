@@ -565,4 +565,4 @@ function allocateArray(strOrArr) {
 
 
 
-console.log("TIMAAT::HTML Scripts loaded");
+console.info("TIMAAT::HTML Scripts loaded");

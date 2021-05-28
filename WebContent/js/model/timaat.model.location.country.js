@@ -57,7 +57,7 @@
 			});
 
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				console.log("TCL: Country -> constructor -> country", country);
+				// console.log("TCL: Country -> constructor -> country", country);
 				if (country.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
 						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccount.id+'">[ID '+country.model.location.location.location.createdByUserAccount.id+']</span></b><br>\

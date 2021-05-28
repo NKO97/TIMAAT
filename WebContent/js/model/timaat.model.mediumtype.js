@@ -107,7 +107,7 @@
 		}
 
 		remove() {
-			console.log("TCL: MediumType -> remove -> remove()");
+			// console.log("TCL: MediumType -> remove -> remove()");
 			// remove MediumType from UI
 			this.listView.remove(); // TODO remove tags from medium_type_has_tags
 			// remove from MediumType list

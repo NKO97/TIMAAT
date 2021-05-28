@@ -48,12 +48,12 @@
           try {	
             await TIMAAT.TagLists._tagRemoved('tag', tag);
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
           try {
             await TIMAAT.UI.refreshDataTable('tag');
           } catch(error) {
-            console.log("error: ", error);
+            console.error("ERROR: ", error);
           }
         }
         modal.modal('hide');
@@ -100,13 +100,13 @@
         $(formDataRaw).each(function(i, field){
 					formDataObject[field.name] = field.value;
         });
-        console.log("TCL: formDataObject", formDataObject);
+        // console.log("TCL: formDataObject", formDataObject);
         var duplicateName = await TIMAAT.TagService.checkForDuplicateName(formDataObject.name);
         var duplicateCode = await TIMAAT.TagService.checkForDuplicateCode(formDataObject.code);
         if (!duplicateName && !duplicateCode || tag) {
           if (tag) { // update tag
             if (tag.model.id != 1) { //* Do not change 'default' entry
-              console.log("TCL: tag", tag);
+              // console.log("TCL: tag", tag);
               tag.model.name = formDataObject.name;
               tag.model.code = formDataObject.code;
               let tagData = tag.model;
@@ -142,14 +142,14 @@
       // inspector event handler
       $('#timaat-mediumAnalysisList-tag-form-submit').on('click', async function(event) {
         event.preventDefault();
-				console.log("TCL: Submit Tags for analysis list");
+				// console.log("TCL: Submit Tags for analysis list");
 				// var modal = $('#timaat-analysislistdatasets-mediumanalysislist-tags');
 				if (!$('#mediumAnalysisListTagsForm').valid()) 
 					return false;
 				var mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
-        console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
+        // console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
 				var formDataRaw = $('#mediumAnalysisListTagsForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var tagIdList = [];
 				var newTagList = [];
@@ -160,11 +160,11 @@
 						tagIdList.push( {id: formDataRaw[i].value} );
 					}
         }
-        console.log("TCL: tagIdList", tagIdList);
+        // console.log("TCL: tagIdList", tagIdList);
 				mediumAnalysisList = await TIMAAT.TagLists.updateMediumAnalysisListHasTagsList(mediumAnalysisList, tagIdList);
 				if (newTagList.length > 0) {
 					var updatedMediumAnalysisList = await TIMAAT.TagLists.createNewTagsAndAddToMediumAnalysisList(mediumAnalysisList, newTagList);
-					console.log("TCL: updatedMediumAnalysisList", updatedMediumAnalysisList);
+					// console.log("TCL: updatedMediumAnalysisList", updatedMediumAnalysisList);
 					mediumAnalysisList.tags = updatedMediumAnalysisList.tags;
 				}
 				// $('#medium-metadata-form').data('mediumAnalysisList', mediumAnalysisList);
@@ -210,7 +210,7 @@
 					minimumInputLength: 0,
 				});
 				TIMAAT.AnalysisListService.getTagList(TIMAAT.VideoPlayer.curAnalysisList.id).then(function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var tagSelect = $('#mediumAnalysisList-tags-multi-select-dropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -234,14 +234,14 @@
       // inspector event handler
       $('#timaat-annotation-tag-form-submit').on('click', async function(event) {
         event.preventDefault();
-        console.log("TCL: Submit Tags for analysis list");
+        // console.log("TCL: Submit Tags for analysis list");
         // var modal = $('#timaat-annotationdatasets-annotation-tags');
         if (!$('#annotationTagsForm').valid()) 
           return false;
         var annotation = TIMAAT.VideoPlayer.curAnnotation;
-        console.log("TCL: Inspector -> constructor -> annotation", annotation);
+        // console.log("TCL: Inspector -> constructor -> annotation", annotation);
         var formDataRaw = $('#annotationTagsForm').serializeArray();
-        console.log("TCL: formDataRaw", formDataRaw);
+        // console.log("TCL: formDataRaw", formDataRaw);
         var i = 0;
         var tagIdList = [];
         var newTagList = [];
@@ -252,11 +252,11 @@
             tagIdList.push( {id: formDataRaw[i].value} );
           }
         }
-        console.log("TCL: tagIdList", tagIdList);
+        // console.log("TCL: tagIdList", tagIdList);
         annotation.model = await TIMAAT.TagLists.updateAnnotationHasTagsList(annotation.model, tagIdList);
         if (newTagList.length > 0) {
           var updatedAnnotationModel = await TIMAAT.TagLists.createNewTagsAndAddToAnnotation(annotation.model, newTagList);
-          console.log("TCL: updatedAnnotationModel", updatedAnnotationModel);
+          // console.log("TCL: updatedAnnotationModel", updatedAnnotationModel);
           annotation.model.tags = updatedAnnotationModel.tags;
         }
         // $('#medium-metadata-form').data('annotation', annotation);
@@ -302,7 +302,7 @@
           minimumInputLength: 0,
         });
         TIMAAT.AnnotationService.getTagList(TIMAAT.VideoPlayer.curAnnotation.id).then(function(data) {
-          console.log("TCL: then: data", data);
+          // console.log("TCL: then: data", data);
           var tagSelect = $('#annotation-tags-multi-select-dropdown');
           if (data.length > 0) {
             data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -347,7 +347,7 @@
 			$('.form').hide();
 			$('.tags-data-tabs').hide();
 			if ( TIMAAT.TagLists.tags == null) return;
-      console.log("TCL: TIMAAT.TagLists.tags", TIMAAT.TagLists.tags);
+      // console.log("TCL: TIMAAT.TagLists.tags", TIMAAT.TagLists.tags);
 
 			$('#timaat-taglists-tag-list-loader').remove();
 			// clear old UI list
@@ -538,38 +538,38 @@
     },
   
     createTag: async function(model) {
-      console.log("TCL: createTag: model: ", model);
+      // console.log("TCL: createTag: model: ", model);
       try {				
         // create tag
         var newModel = await TIMAAT.TagService.createTag(model);
-        console.log("TCL: newModel", newModel);
+        // console.log("TCL: newModel", newModel);
         model.id = newModel.id;		
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
-      console.log("TCL: model", model);
+      // console.log("TCL: model", model);
       return (model);
     },
 
     // TODO update tags
     updateTag: async function(tag) {
-      console.log("TCL: updateTag: async function -> beginning of update: tag ", tag);
+      // console.log("TCL: updateTag: async function -> beginning of update: tag ", tag);
 
       try { // update translation
         var tempModel = await TIMAAT.TagService.updateTag(tag);
         tag = tempModel;
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
 
       await TIMAAT.UI.refreshDataTable('tag');
     },
 
     updateMediumAnalysisListHasTagsList: async function(mediumAnalysisListModel, tagIdList) {
-    	console.log("TCL: mediumAnalysisListModel, tagIdList", mediumAnalysisListModel, tagIdList);
+    	// console.log("TCL: mediumAnalysisListModel, tagIdList", mediumAnalysisListModel, tagIdList);
 			try {
 				var existingMediumAnalysisListHasTagsEntries = await TIMAAT.AnalysisListService.getTagList(mediumAnalysisListModel.id);
-        console.log("TCL: existingMediumAnalysisListHasTagsEntries", existingMediumAnalysisListHasTagsEntries);
+        // console.log("TCL: existingMediumAnalysisListHasTagsEntries", existingMediumAnalysisListHasTagsEntries);
 				if (tagIdList == null) { //* all entries will be deleted
 					mediumAnalysisListModel.tags = [];
 					await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
@@ -589,7 +589,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingMediumAnalysisListHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingMediumAnalysisListHasTagsEntries[i]);
 							existingMediumAnalysisListHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -623,7 +623,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							mediumAnalysisListModel.tags.push(idsToCreate[i]);
@@ -632,13 +632,13 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return mediumAnalysisListModel;
 		},
 
 		createNewTagsAndAddToMediumAnalysisList: async function (mediumAnalysisListModel, newTagList) {
-      console.log("TCL: Inspector -> createNewTagsAndAddToMediumAnalysisList -> mediumAnalysisListModel, newTagList", mediumAnalysisListModel, newTagList);
+      // console.log("TCL: Inspector -> createNewTagsAndAddToMediumAnalysisList -> mediumAnalysisListModel, newTagList", mediumAnalysisListModel, newTagList);
 			var i = 0;
 			for (; i < newTagList.length; i++) {
 				newTagList[i] = await TIMAAT.Service.createTag(newTagList[i].name);
@@ -649,20 +649,20 @@
     },
     
     updateAnnotationHasTagsList: async function(annotationModel, tagIdList) {
-    	console.log("TCL: annotationModel, tagIdList", annotationModel, tagIdList);
+    	// console.log("TCL: annotationModel, tagIdList", annotationModel, tagIdList);
 			try {
 				var existingAnnotationHasTagsEntries = await TIMAAT.AnnotationService.getTagList(annotationModel.id);
-        console.log("TCL: existingAnnotationHasTagsEntries", existingAnnotationHasTagsEntries);
+        // console.log("TCL: existingAnnotationHasTagsEntries", existingAnnotationHasTagsEntries);
         if (tagIdList == null) { //* all entries will be deleted
-          console.log("TCL: delete all tags");
+          // console.log("TCL: delete all tags");
 					annotationModel.tags = [];
 					await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
         } else if (existingAnnotationHasTagsEntries.length == 0) { //* all entries will be added
-          console.log("TCL: add all tags");
+          // console.log("TCL: add all tags");
 					annotationModel.tags = tagIdList;
 					await TIMAAT.AnnotationService.updateAnnotation(annotationModel);
         } else { //* delete removed entries
-          console.log("TCL: add/delete tags");
+          // console.log("TCL: add/delete tags");
 					var entriesToDelete = [];
 					var i = 0;
 					for (; i < existingAnnotationHasTagsEntries.length; i++) {
@@ -675,7 +675,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingAnnotationHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingAnnotationHasTagsEntries[i]);
 							existingAnnotationHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -709,7 +709,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							annotationModel.tags.push(idsToCreate[i]);
@@ -718,13 +718,13 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return annotationModel;
 		},
 
 		createNewTagsAndAddToAnnotation: async function (annotationModel, newTagList) {
-      console.log("TCL: Inspector -> createNewTagsAndAddToAnnotation -> annotationModel, newTagList", annotationModel, newTagList);
+      // console.log("TCL: Inspector -> createNewTagsAndAddToAnnotation -> annotationModel, newTagList", annotationModel, newTagList);
 			var i = 0;
 			for (; i < newTagList.length; i++) {
 				newTagList[i] = await TIMAAT.Service.createTag(newTagList[i].name);
@@ -735,11 +735,11 @@
 		},
 
     _tagRemoved: async function(tag) {
-      console.log("TCL: _tagRemoved: tag", tag);
+      // console.log("TCL: _tagRemoved: tag", tag);
       try {
         await TIMAAT.TagService.deleteTag(tag.model.id);
       } catch(error) {
-        console.log("error: ", error)
+        console.error("ERROR: ", error);
       }
       tag.remove();
     },

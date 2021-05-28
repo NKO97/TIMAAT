@@ -149,7 +149,7 @@
 						},
 						locationTranslations: [],
 					};
-					console.log("TCL: model", model);
+					// console.log("TCL: model", model);
 					var modelTranslation = {
 						id: 0,
 						name: name,
@@ -787,7 +787,7 @@
 				// push new location to dataset model
 				await TIMAAT.LocationDatasets._locationAdded(newLocationModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			// location.updateUI();
 		},
@@ -813,54 +813,54 @@
 				await TIMAAT.LocationDatasets._locationSubtypeAdded(locationSubtype, newLocationSubtypeModel);
 
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			// location.updateUI();
 		},
 
 		updateLocation: async function(location) {
-		console.log("TCL: updateLocation async function -> location at beginning of update process: ", location);
+		// console.log("TCL: updateLocation async function -> location at beginning of update process: ", location);
 			try {
 				// update data that is part of location (includes updating last edited by/at)
 				var tempLocationModel = await TIMAAT.LocationService.updateLocation(location.model);
 				location.model.locationType.id = tempLocationModel.locationType.id;
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 
 			try {
 				// update data that is part of location translation
 				// TODO: send request for each translation or for all translations
-				console.log("TCL: location", location);
+				// console.log("TCL: location", location);
 				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(location.model.id, location.model.locationTranslations[0]);
 				// location.model.locationTranslations[0].name = tempLocationTranslation.name;			
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 
 		updateLocationSubtype: async function(locationSubtype, locationSubtypeData) {
-			console.log("TCL: updateLocationSubtype async function -> locationSubtype, locationSubtypeData at beginning of update process: ", locationSubtype, locationSubtypeData);
+			// console.log("TCL: updateLocationSubtype async function -> locationSubtype, locationSubtypeData at beginning of update process: ", locationSubtype, locationSubtypeData);
 			try {
 				// update data that is part of locationSubtype
 				var tempLocationSubtypeModel = await TIMAAT.LocationService.updateLocationSubtype(locationSubtype, locationSubtypeData.model);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 
 			};
 			try {
 				// update data that is part of location and its translation
 				var locationSubtypeLocationModel = locationSubtypeData.model.location;
-        console.log("TCL: locationSubtypeLocationModel", locationSubtypeLocationModel);
+        // console.log("TCL: locationSubtypeLocationModel", locationSubtypeLocationModel);
 				var tempLocationSubtypeModelUpdate = await TIMAAT.LocationService.updateLocation(locationSubtypeLocationModel);
 
 				// update data that is part of location translation
 				// var locationSubtypeLocation = locationSubtypeData.location;
-				console.log("TCL: locationSubtypeData", locationSubtypeData);
+				// console.log("TCL: locationSubtypeData", locationSubtypeData);
 				var tempLocationTranslation = await	TIMAAT.LocationService.updateLocationTranslation(locationSubtypeData.model.id, locationSubtypeData.model.location.locationTranslations[0]);
 				// location.model.locationTranslations[0].name = tempLocationTranslation.name;			
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 		},
 

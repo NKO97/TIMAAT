@@ -45,7 +45,7 @@
 		},
 
 		initActorComponent: function() {
-    console.log("TCL: initActorComponent");
+    // console.log("TCL: initActorComponent");
 			if (!this.actorsLoaded) {
 				this.setActorList();
 			}
@@ -191,12 +191,12 @@
 					try {
 						await TIMAAT.ActorDatasets._actorRemoved(actor);
 					} catch (error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 					try {
 						await TIMAAT.UI.refreshDataTable(type);
 					} catch (error) {
-						console.log("error: ", error);
+						console.error("ERROR: ", error);
 					}
 				}
 				modal.modal('hide');
@@ -420,7 +420,7 @@
 					minimumInputLength: 0,
 				});
 				await TIMAAT.ActorService.getTagList(actor.model.id).then(function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					var tagSelect = $('#actor-tags-multi-select-dropdown');
 					if (data.length > 0) {
 						// create the options and append to Select2
@@ -448,9 +448,9 @@
 				if (!$('#actorTagsModalForm').valid()) 
 					return false;
 				var actor = modal.data('actor');
-        console.log("TCL: actor", actor);
+        // console.log("TCL: actor", actor);
 				var formData = $('#actorTagsModalForm').serializeArray();
-        console.log("TCL: formData", formData);
+        // console.log("TCL: formData", formData);
 				var i = 0;
 				var tagIdList = [];
 				var newTagList = [];
@@ -464,7 +464,7 @@
 				actor.model = await TIMAAT.ActorDatasets.updateActorHasTagsList(actor.model, tagIdList);
 				if (newTagList.length > 0) {
 					var updatedActorModel = await TIMAAT.ActorDatasets.createNewTagsAndAddToActor(actor.model, newTagList);
-					console.log("TCL: updatedActorModel", updatedActorModel);
+					// console.log("TCL: updatedActorModel", updatedActorModel);
 					actor.model.tags = updatedActorModel.tags;
 				}
 				$('#actor-metadata-form').data('actor', actor);
@@ -539,7 +539,7 @@
 			// Add name button click
 			$(document).on('click','[data-role="new-name-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
-				console.log("TCL: add name to list");
+				// console.log("TCL: add name to list");
 				var listEntry = $(this).closest('[data-role="new-name-fields"]');
 				var newName = [];
 				if (listEntry.find('input').each(function(){           
@@ -551,7 +551,7 @@
 					return false;
 				if (newName != '') { // TODO is '' proper check?
 					var namesInForm = $('#actor-names-form').serializeArray();
-					console.log("TCL: namesInForm", namesInForm);
+					// console.log("TCL: namesInForm", namesInForm);
 					var numberOfNameElements = 3;
 					var indexName = namesInForm[namesInForm.length-numberOfNameElements-1].name; // find last used indexed name (first prior to new address fields)
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
@@ -703,7 +703,7 @@
 						};
 						// only update if anything changed // TODO check will always pass due to different data formats
 						if (name != actor.model.actorNames[i]) {
-							console.log("TCL: update existing name");
+							// console.log("TCL: update existing name");
 							await TIMAAT.ActorDatasets.updateName(name, actor);
 						}
 						// update display name
@@ -753,7 +753,7 @@
 						};
 						// only update if anything changed // TODO check will always pass due to different data formats
 						if (name != actor.model.actorNames[i]) {
-							console.log("TCL: update existing names (and add new ones)");
+							// console.log("TCL: update existing names (and add new ones)");
 							await TIMAAT.ActorDatasets.updateName(name, actor);
 						}
 					}
@@ -768,14 +768,14 @@
 						};
 						newNames.push(name);
 					}
-					console.log("TCL: newNames", newNames);
-					console.log("TCL: (update existing names and) add new ones");
+					// console.log("TCL: newNames", newNames);
+					// console.log("TCL: (update existing names and) add new ones");
 					await TIMAAT.ActorDatasets.addNames(actor, newNames);
 					// for the whole list check new birth name
 					i = 0;
 					for (; i < formNameList.length; i++) {
-						console.log("TCL: formNameList", formNameList);
-						console.log("TCL: actor.model", actor.model);
+						// console.log("TCL: formNameList", formNameList);
+						// console.log("TCL: actor.model", actor.model);
 						// update display name
 						var displayNameChanged = false;
 						if (formNameList[i].isDisplayName) {
@@ -823,7 +823,7 @@
 							usedUntil: formNameList[i].usedUntil,
 						};
 						if (name != actor.model.actorNames[i]) {
-							console.log("TCL: update existing names (and delete obsolete ones)");
+							// console.log("TCL: update existing names (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateName(name, actor);
 						}
 						// update display name
@@ -856,25 +856,25 @@
 							birthNameChanged = true;
 						}
 						if (birthNameChanged || displayNameChanged) {
-							console.log("TCL type, actor", type, actor);
+							// console.log("TCL type, actor", type, actor);
 							await TIMAAT.ActorDatasets.updateActor(type, actor);
 						}
 					}
 					var i = actor.model.actorNames.length - 1;
 					for (; i >= formNameList.length; i-- ) { // remove obsolete names starting at end of list
-						console.log("TCL: actor.model", actor.model);
+						// console.log("TCL: actor.model", actor.model);
 						if (actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
-							console.log("TCL: remove birthName before deleting name");		
-							console.log("TCL type, actor", type, actor);
+							// console.log("TCL: remove birthName before deleting name");		
+							// console.log("TCL type, actor", type, actor);
 							await TIMAAT.ActorDatasets.updateActor(type, actor);
 						}
-						console.log("TCL: (update existing names and) delete obsolete ones");		
+						// console.log("TCL: (update existing names and) delete obsolete ones");		
 						TIMAAT.ActorService.removeName(actor.model.actorNames[i]);
 						actor.model.actorNames.pop();
 					}
 				}
-				console.log("TCL: show actor name form");
+				// console.log("TCL: show actor name form");
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
 				TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
@@ -936,7 +936,7 @@
 			// Add address button click
 			$(document).on('click','[data-role="new-actorhasaddress-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
-				console.log("TCL: add address to list");
+				// console.log("TCL: add address to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasaddress-fields"]');
 				var newAddress = [];
 				var addressTypeId = 1;
@@ -948,10 +948,10 @@
 				}));
 				if (!$('#actor-addresses-form').valid()) 
 					return false;
-				console.log("TCL: newAddress", newAddress);
+				// console.log("TCL: newAddress", newAddress);
 				if (newAddress != '') { // TODO is '' proper check?
 					var addressesInForm = $('#actor-addresses-form').serializeArray();
-					console.log("TCL: addressesInForm", addressesInForm);
+					// console.log("TCL: addressesInForm", addressesInForm);
 					var i;
 					var numberOfAddressElements = 9;
 					if (addressesInForm.length > numberOfAddressElements) {
@@ -1139,7 +1139,7 @@
 						addressUsedFrom: '',
 						addressUsedUntil: '',
 					};
-						console.log("TCL: formData", formData);
+						// console.log("TCL: formData", formData);
 						if (formData[i].name == 'isPrimaryAddress' && formData[i].value == 'on' ) {
 							element.isPrimaryAddress = true;
 							// element.streetName = formData[i+1].value;
@@ -1176,7 +1176,7 @@
 						var updatedActorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// only update if anything changed
 						// if (updatedActorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing address");
+							// console.log("TCL: update existing address");
 							await TIMAAT.ActorDatasets.updateActorHasAddress(updatedActorHasAddress, actor);
 						// }
 						var primaryAddressChanged = false;
@@ -1189,7 +1189,7 @@
 							primaryAddressChanged = true;
 						}
 						if (primaryAddressChanged) {
-							console.log("TCL actorType, actor", actorType, actor);
+							// console.log("TCL actorType, actor", actorType, actor);
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
 					}
@@ -1198,12 +1198,12 @@
 				else if (formActorHasAddressesList.length > actor.model.actorHasAddresses.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasAddresses.length; i++ ) { // update existing actorHasAddresses
-						console.log("TCL: actor", actor);
+						// console.log("TCL: actor", actor);
 						var actorHasAddress = {}; 
 						actorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasAddresses (and add new ones)");
+							// console.log("TCL: update existing actorHasAddresses (and add new ones)");
 							await TIMAAT.ActorDatasets.updateActorHasAddress(actorHasAddress, actor);
 						// }
 					}
@@ -1213,7 +1213,7 @@
 						var actorHasAddress = await TIMAAT.ActorDatasets.createActorHasAddressModel(formActorHasAddressesList[i], actor.model.id, 0);
 						newActorHasAddresses.push(actorHasAddress);
 					}
-					console.log("TCL: (update existing addresses and) add new ones");
+					// console.log("TCL: (update existing addresses and) add new ones");
 					await TIMAAT.ActorDatasets.addActorHasAddresses(actor, newActorHasAddresses);
 					// for the whole list check new primary actorHasAddress
 					i = 0;
@@ -1239,7 +1239,7 @@
 					for (; i < formActorHasAddressesList.length; i++ ) { // update existing actorHasAddresses
 						var actorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// if (actorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasAddresses (and delete obsolete ones)");
+							// console.log("TCL: update existing actorHasAddresses (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasAddress(actorHasAddress, actor);
 						// }
 						// update primary address
@@ -1259,15 +1259,15 @@
 					for (; i >= formActorHasAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
 						if (actor.model.primaryAddress != null && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].address.id) {
 							actor.model.primaryAddress = null;
-							console.log("TCL: remove primaryActorHasAddress before deleting address");		
+							// console.log("TCL: remove primaryActorHasAddress before deleting address");		
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						console.log("TCL: (update existing actorHasAddresses and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasAddresses and) delete obsolete ones");		
 						TIMAAT.ActorService.removeAddress(actor.model.actorHasAddresses[i].address);
 						actor.model.actorHasAddresses.pop();
 					}
 				}
-				console.log("TCL: show actor address form");
+				// console.log("TCL: show actor address form");
 				TIMAAT.UI.displayDataSetContent('addresses', actor, 'actor');
 			});
 
@@ -1394,7 +1394,7 @@
 			// Add email address button click
 			$(document).on('click','[data-role="new-actorhasemailaddress-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
-				console.log("TCL: add email address to list");
+				// console.log("TCL: add email address to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasemailaddress-fields"]');
 				var newEmailAddress = [];
 				var emailAddressTypeId = 1;
@@ -1406,10 +1406,10 @@
 				}));
 				if (!$('#actor-emailaddresses-form').valid()) 
 					return false;
-				console.log("TCL: newEmailAddress", newEmailAddress);
+				// console.log("TCL: newEmailAddress", newEmailAddress);
 				if (newEmailAddress != '') { // TODO is '' proper check?
 					var emailAddressesinForm = $('#actor-emailaddresses-form').serializeArray();
-					console.log("TCL: emailAddressesinForm", emailAddressesinForm);
+					// console.log("TCL: emailAddressesinForm", emailAddressesinForm);
 					var i;
 					var numberOfEmailAddressElements = 2;
 					if (emailAddressesinForm.length > numberOfEmailAddressElements) {
@@ -1505,7 +1505,7 @@
 						emailAddressTypeId: 0,
 						email: '',
 					};
-						console.log("TCL: formData", formData);
+						// console.log("TCL: formData", formData);
 						if (formData[i].name == 'isPrimaryEmailAddress' && formData[i].value == 'on' ) {
 							element.isPrimaryEmailAddress = true;
 							element.emailAddressTypeId = formData[i+1].value;
@@ -1528,7 +1528,7 @@
 						var updatedActorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// only update if anything changed
 						// if (updatedActorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing email address");
+							// console.log("TCL: update existing email address");
 							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(updatedActorHasEmailAddress, actor);
 						// }
 						var primaryEmailAddressChanged = false;
@@ -1541,7 +1541,7 @@
 							primaryEmailAddressChanged = true;
 						}
 						if (primaryEmailAddressChanged) {
-							console.log("TCL actorType, actor", actorType, actor);
+							// console.log("TCL actorType, actor", actorType, actor);
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
 					}
@@ -1550,12 +1550,12 @@
 				else if (formActorHasEmailAddressesList.length > actor.model.actorHasEmailAddresses.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
-						console.log("TCL: actor", actor);
+						// console.log("TCL: actor", actor);
 						var actorHasEmailAddress = {}; 
 						actorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasEmailAddresses (and add new ones)");
+							// console.log("TCL: update existing actorHasEmailAddresses (and add new ones)");
 							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(actorHasEmailAddress, actor);
 						// }
 					}
@@ -1565,7 +1565,7 @@
 						var actorHasEmailAddress = await TIMAAT.ActorDatasets.createActorHasEmailAddressModel(formActorHasEmailAddressesList[i], actor.model.id, 0);
 						newActorHasEmailAddresses.push(actorHasEmailAddress);
 					}
-					console.log("TCL: (update existing actorHasEmailAddresses and) add new ones");
+					// console.log("TCL: (update existing actorHasEmailAddresses and) add new ones");
 					await TIMAAT.ActorDatasets.addActorHasEmailAddresses(actor, newActorHasEmailAddresses);
 					// for the whole list check new primary actorHasEmailAddress
 					i = 0;
@@ -1591,7 +1591,7 @@
 					for (; i < formActorHasEmailAddressesList.length; i++ ) { // update existing actorHasEmailAddresses
 						var actorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasEmailAddresses (and delete obsolete ones)");
+							// console.log("TCL: update existing actorHasEmailAddresses (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasEmailAddress(actorHasEmailAddress, actor);
 						// }
 						// update primary address
@@ -1611,15 +1611,15 @@
 					for (; i >= formActorHasEmailAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
 						if (actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].emailAddress.id) {
 							actor.model.primaryEmailAddress = null;
-							console.log("TCL: remove primaryActorHasEmailAddress before deleting email address");		
+							// console.log("TCL: remove primaryActorHasEmailAddress before deleting email address");		
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");		
 						TIMAAT.ActorService.removeEmailAddress(actor.model.actorHasEmailAddresses[i].emailAddress);
 						actor.model.actorHasEmailAddresses.pop();
 					}
 				}
-				console.log("TCL: show actor email address form");
+				// console.log("TCL: show actor email address form");
 				TIMAAT.UI.displayDataSetContent('emails', actor, 'actor');
 			});
 
@@ -1745,7 +1745,7 @@
 			// Add phone number button click
 			$(document).on('click','[data-role="new-actorhasphonenumber-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
-				console.log("TCL: add phone number to list");
+				// console.log("TCL: add phone number to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasphonenumber-fields"]');
 				var newPhoneNumber = [];
 				var phoneNumberTypeId = 1;
@@ -1757,10 +1757,10 @@
 				}));
 				if (!$('#actor-phonenumbers-form').valid()) 
 					return false;
-				console.log("TCL: newPhoneNumber", newPhoneNumber);
+				// console.log("TCL: newPhoneNumber", newPhoneNumber);
 				if (newPhoneNumber != '') { // TODO is '' proper check?
 					var phoneNumbersinForm = $('#actor-phonenumbers-form').serializeArray();
-					console.log("TCL: phoneNumbersinForm", phoneNumbersinForm);
+					// console.log("TCL: phoneNumbersinForm", phoneNumbersinForm);
 					var i;
 					var numberOfPhoneNumberElements = 2;
 					if (phoneNumbersinForm.length > numberOfPhoneNumberElements) {
@@ -1857,7 +1857,7 @@
 						phoneNumberTypeId: 0,
 						phoneNumber: '',
 					};
-						console.log("TCL: formData", formData);
+						// console.log("TCL: formData", formData);
 						if (formData[i].name == 'isPrimaryPhoneNumber' && formData[i].value == 'on' ) {
 							element.isPrimaryPhoneNumber = true;
 							element.phoneNumberTypeId = formData[i+1].value;
@@ -1880,7 +1880,7 @@
 						var updatedActorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// only update if anything changed
 						// if (updatedActorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
-							console.log("TCL: update existing phone number");
+							// console.log("TCL: update existing phone number");
 							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(updatedActorHasPhoneNumber, actor);
 						// }
 						var primaryPhoneNumberChanged = false;
@@ -1893,7 +1893,7 @@
 							primaryPhoneNumberChanged = true;
 						}
 						if (primaryPhoneNumberChanged) {
-							console.log("TCL actorType, actor", actorType, actor);
+							// console.log("TCL actorType, actor", actorType, actor);
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
 					}
@@ -1902,12 +1902,12 @@
 				else if (formActorHasPhoneNumbersList.length > actor.model.actorHasPhoneNumbers.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
-						console.log("TCL: actor", actor);
+						// console.log("TCL: actor", actor);
 						var actorHasPhoneNumber = {}; 
 						actorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// only update if anything changed
 						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasPhoneNumbers (and add new ones)");
+							// console.log("TCL: update existing actorHasPhoneNumbers (and add new ones)");
 							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(actorHasPhoneNumber, actor);
 						// }
 					}
@@ -1917,7 +1917,7 @@
 						var actorHasPhoneNumber = await TIMAAT.ActorDatasets.createActorHasPhoneNumberModel(formActorHasPhoneNumbersList[i], actor.model.id, 0);
 						newActorHasPhoneNumbers.push(actorHasPhoneNumber);
 					}
-					console.log("TCL: (update existing actorHasPhoneNumbers and) add new ones");
+					// console.log("TCL: (update existing actorHasPhoneNumbers and) add new ones");
 					await TIMAAT.ActorDatasets.addActorHasPhoneNumbers(actor, newActorHasPhoneNumbers);
 					// for the whole list check new primary actorHasPhoneNumber
 					i = 0;
@@ -1943,7 +1943,7 @@
 					for (; i < formActorHasPhoneNumbersList.length; i++ ) { // update existing actorHasPhoneNumbers
 						var actorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
-							console.log("TCL: update existing actorHasPhoneNumbers (and delete obsolete ones)");
+							// console.log("TCL: update existing actorHasPhoneNumbers (and delete obsolete ones)");
 							await TIMAAT.ActorDatasets.updateActorHasPhoneNumber(actorHasPhoneNumber, actor);
 						// }
 						// update primary phone number
@@ -1963,15 +1963,15 @@
 					for (; i >= formActorHasPhoneNumbersList.length; i-- ) { // remove obsolete phone numbers starting at end of list
 						if (actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].phoneNumber.id) {
 							actor.model.primaryPhoneNumber = null;
-							console.log("TCL: remove primaryActorHasPhoneNumber before deleting phone number");		
+							// console.log("TCL: remove primaryActorHasPhoneNumber before deleting phone number");		
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						console.log("TCL: (update existing actorHasPhoneNumbers and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasPhoneNumbers and) delete obsolete ones");		
 						TIMAAT.ActorService.removePhoneNumber(actor.model.actorHasPhoneNumbers[i].phoneNumber);
 						actor.model.actorHasPhoneNumbers.pop();
 					}
 				}
-				console.log("TCL: show actor phone number form");
+				// console.log("TCL: show actor phone number form");
 				TIMAAT.UI.displayDataSetContent('phoneNumbers', actor, 'actor');
 			});
 
@@ -2096,7 +2096,7 @@
 
 			// add membership button click
 			$(document).on('click','[data-role="new-personismemberofcollective-fields"] > .form-group [data-role="add"]', async function(event) {
-				console.log("TCL: MemberOfCollective form: add new membership");
+				// console.log("TCL: MemberOfCollective form: add new membership");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-fields"]');
 				var newFormEntry = [];
@@ -2107,7 +2107,7 @@
 				if (listEntry.find('input').each(function(){           
 					newFormEntry.push($(this).val());
 				}));
-				console.log("TCL: newFormEntry", newFormEntry);
+				// console.log("TCL: newFormEntry", newFormEntry);
 
 				if (!$('#actor-memberofcollectives-form').valid()) {
 					return false;
@@ -2119,7 +2119,7 @@
 				$('.disable-on-submit').prop('disabled', true);
 				var existingEntriesInForm = $('#actor-memberofcollectives-form').serializeArray();
 				$('.disable-on-submit').prop('disabled', false);
-				console.log("TCL: existingEntriesInForm", existingEntriesInForm);
+				// console.log("TCL: existingEntriesInForm", existingEntriesInForm);
 
 				// create list of collectiveIds that the person is is already a member of
 				var existingEntriesIdList = [];
@@ -2137,11 +2137,11 @@
 				while (i < existingEntriesIdList.length) {
 					if (newEntryId == existingEntriesIdList[i]) {
 						duplicate = true;
-						console.log("TCL: duplicate entry found");
+						// console.log("TCL: duplicate entry found");
 						break;
 					}
 					// console.log("TCL: newEntryId", newEntryId);
-					console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
+					// console.log("TCL: existingEntriesIdList[i]", existingEntriesIdList[i]);
 					i++;
 				}
 
@@ -2188,7 +2188,7 @@
 			// add membership detail button click
 			// $(document).on('click','[data-role="new-personismemberofcollective-details-fields"] > .form-group [data-role="personismemberofcollective-entry"] > .form-group [data-role="memberofcollective-details-entry"] > .form-group [data-role="addMembershipDetails"]', async function(event) {
 			$(document).on('click', '.form-group [data-role="addMembershipDetails"]', async function(event) {
-				console.log("TCL: MemberOfCollective form: add details to membership");
+				// console.log("TCL: MemberOfCollective form: add details to membership");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]');
 				var newMemberOfCollectiveData = [];
@@ -2196,9 +2196,9 @@
 				if (listEntry.find('input').each(function(){
 					newMemberOfCollectiveData.push($(this).val());
 				}));
-				console.log("TCL: newMemberOfCollectiveData", newMemberOfCollectiveData);
+				// console.log("TCL: newMemberOfCollectiveData", newMemberOfCollectiveData);
 				if (newMemberOfCollectiveData[1] == "" && newMemberOfCollectiveData[2] == "") { // [0] is hidden id field
-					console.log("no data endered");
+					// console.log("no data endered");
 					return false; // don't add if all add fields were empty
 				}
 				var newMembershipDetailsEntry = {
@@ -2223,14 +2223,14 @@
 
 			// remove member of collective button click
 			$(document).on('click','[data-role="dynamic-personismemberofcollective-fields"] > .form-group [data-role="remove"]', async function(event) {
-				console.log("TCL: MemberOfCollective form: remove membership");
+				// console.log("TCL: MemberOfCollective form: remove membership");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
 			// remove membership detail button click
 			$(document).on('click','.form-group [data-role="removeMembershipDetails"]', async function(event) {
-				console.log("TCL: MemberOfCollective form: remove details");
+				// console.log("TCL: MemberOfCollective form: remove details");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
@@ -2292,7 +2292,7 @@
 				$('.disable-on-submit').prop('disabled', true);
 				var formData = $('#actor-memberofcollectives-form').serializeArray();
 				$('.disable-on-submit').prop('disabled', false);
-        console.log("TCL: formData", formData);
+        // console.log("TCL: formData", formData);
 				var formEntries = [];
 				var formEntryIds = []; // List of all collectives containing membership data for this actor
 				var formEntriesIdIndexes = []; // Index list of all collectiveIds/personIds and number of detail sets
@@ -2496,7 +2496,7 @@
 				}
 				// actor.updateUI();
 				await TIMAAT.UI.refreshDataTable(type);
-				console.log("TCL: show actor memberOfCollective form");
+				// console.log("TCL: show actor memberOfCollective form");
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
 			});
 
@@ -2533,11 +2533,11 @@
 
 				// the original actor model (in case of editing an existing actor)
 				var actor = $('#actor-metadata-form').data('actor');				
-        console.log("TCL: actor", actor);
+        // console.log("TCL: actor", actor);
 
 				// create/edit role window submitted data
 				var formSelectData = $('#actor-roles-form').serializeArray();
-        console.log("TCL: formSelectData", formSelectData);
+        // console.log("TCL: formSelectData", formSelectData);
         // console.log("TCL: formData", formData);
         // var formDataObject = {};
         // $(formData).each(function(i, field){
@@ -2597,11 +2597,11 @@
 
 				// the original actor model (in case of editing an existing actor)
 				var actor = $('#actor-metadata-form').data('actor');				
-        console.log("TCL: actor", actor);
+        // console.log("TCL: actor", actor);
 
 				// create/edit role medium window submitted data
 				var formSelectData = $('#actor-role-in-medium-form').serializeArray();
-        console.log("TCL: formSelectData", formSelectData);
+        // console.log("TCL: formSelectData", formSelectData);
         // console.log("TCL: formData", formData);
         // var formDataObject = {};
         // $(formData).each(function(i, field){
@@ -2727,7 +2727,7 @@
 		},
 
 		setActorNameList: function(actor) {
-			console.log("TCL: setActorNameList -> actor", actor);
+			// console.log("TCL: setActorNameList -> actor", actor);
 			if ( !actor ) return;
 			// setup model
 			var names = Array();
@@ -2840,8 +2840,7 @@
 		},
 		
 		addActor: function(type) {	
-			// console.log("TCL: addActor: function()");
-			console.log("TCL: addActor: type", type);
+			// console.log("TCL: addActor: type", type);
 			TIMAAT.UI.displayDataSetContentContainer('actor-tab-metadata', 'actor-metadata-form');
 			this.hideAddActorButton();
 			$('#actor-metadata-form').data('type', type);
@@ -2947,7 +2946,7 @@
 
 				var profileImageSelect = $('#actor-profile-image-multi-select-dropdown');
 				await TIMAAT.ActorService.getActorHasImageList(data.model.id).then(async function(data) {
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
 						let i = 0;
 						let mediumList = [];
@@ -3033,7 +3032,7 @@
 		},
 
 		actorFormNames: function(action, actor) {
-			console.log("TCL: actorFormNames: action, actor", action, actor);
+			// console.log("TCL: actorFormNames: action, actor", action, actor);
 			var node = document.getElementById("dynamic-name-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3143,7 +3142,7 @@
 		},
 
 		actorFormAddresses: function(action, actor) {
-    	console.log("TCL: actorFormAddresses: action, actor", action, actor);
+    	// console.log("TCL: actorFormAddresses: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3335,13 +3334,13 @@
 				$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
-				console.log("TCL: actor", actor);
+				// console.log("TCL: actor", actor);
 				$('#actor-addresses-form').data('actor', actor);
 			}
 		},
 
 		actorFormEmailAddresses: function(action, actor) {
-    	console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
+    	// console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3428,7 +3427,7 @@
 		},
 
 		actorFormPhoneNumbers: function(action, actor) {
-    	console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
+    	// console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3518,7 +3517,7 @@
 		},
 
 		actorFormMemberOfCollectives: async function(action, type, actor) {
-    	console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
+    	// console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
 			var node = document.getElementById("dynamic-personismemberofcollective-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3666,7 +3665,7 @@
 		},
 
 		actorFormRoles: async function(action, actor) {
-			console.log("TCL: actorFormRoles: action, actor", action, actor);
+			// console.log("TCL: actorFormRoles: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasrole-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3709,7 +3708,7 @@
 			});
 			var roleSelect = $('#actorroles-multi-select-dropdown');
 			await TIMAAT.ActorService.getActorHasRoleList(actor.model.id).then(function(data) {
-				console.log("TCL: then: data", data);
+				// console.log("TCL: then: data", data);
 				if (data.length > 0) {
 					data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
 					// create the options and append to Select2
@@ -3753,7 +3752,7 @@
 		},
 
 		actorFormRoleMedium: async function(action, actor) {
-			console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
+			// console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorroleinmedium-fields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -3804,7 +3803,7 @@
 				});
 				var roleMediumSelect = $('#actorrolemedium-multi-select-dropdown');
 				await TIMAAT.ActorService.getActorRoleInMediumList(actor.model.id, 5).then(function(data) { // TODO 5 = Producer
-					console.log("TCL: then: data", data);
+					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
 						data.sort((a, b) => (a.displayTitle.name > b.displayTitle.name)? 1 : -1);
 						// create the options and append to Select2
@@ -3855,14 +3854,14 @@
 		},
 
 		createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel) {
-			console.log("TCL: createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel)", 
-									actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
+			// console.log("TCL: createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel)", 
+									// actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
 			try {
 				// create actor
 				var tempActorModel = actorModel;
 				var newActorModel = await TIMAAT.ActorService.createActor(tempActorModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
@@ -3873,14 +3872,14 @@
 				newActorModel.birthName = newDisplayName;
 				newActorModel.actorNames[0] = newDisplayName;
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
 				// update display and birth name in actor
 				await TIMAAT.ActorService.updateActor(newActorModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
@@ -3892,7 +3891,7 @@
 				}
 				actorSubtypeModel = await TIMAAT.ActorService.createActorSubtype(actorType, newActorModel, actorSubtypeModel);
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
@@ -3902,19 +3901,19 @@
 					actorSubtypeModel.actorPersonTranslations[0] = newActorPersonModelTranslation;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
 				// create person_has_citizenship with person id
 				if (actorType == "person" && citizenshipModel != null) {
-          console.log("TCL: citizenshipModel", citizenshipModel);
+          // console.log("TCL: citizenshipModel", citizenshipModel);
 					var addedCitizenshipModel = await TIMAAT.ActorService.addCitizenship(newActorModel.id, citizenshipModel); // TODO more than one citizenship
 					// var addedCitizenshipModel = await TIMAAT.ActorService.addCitizenship(newActorModel.id, newCitizenshipModel); // <- once createCitizenship is used again
 					actorSubtypeModel.citizenships[0] = addedCitizenshipModel;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 
 			try {
@@ -3930,7 +3929,7 @@
 				// console.log("TCL: newActorModel", newActorModel);
 				// await this._actorAdded(actorType, newActorModel); //* commented out with datatables
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return (newActorModel);
 		},
@@ -3942,12 +3941,12 @@
 		// 		var newNameModel = await TIMAAT.ActorService.createName(nameModel.model);
     //     // console.log("TCL: newNameModel", newNameModel);
 		// 	} catch(error) {
-		// 		console.log( "error: ", error);
+		// 		console.error("ERROR: ", error);
 		// 	}
 		// },
 
 		addNames: async function(actor, newNames) {
-			console.log("TCL: addNames: async function -> actor, newNames", actor, newNames);
+			// console.log("TCL: addNames: async function -> actor, newNames", actor, newNames);
 			try {
 				// create name
 				var i = 0;
@@ -3957,12 +3956,12 @@
 					actor.model.actorNames.push(addedNameModel);
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		addActorHasAddresses: async function(actor, newActorHasAddresses) {
-			console.log("TCL: addActorHasAddresses: async function -> actor, newActorHasAddresses", actor, newActorHasAddresses);
+			// console.log("TCL: addActorHasAddresses: async function -> actor, newActorHasAddresses", actor, newActorHasAddresses);
 			try {
 				// create address
 				var i = 0;
@@ -3985,12 +3984,12 @@
 					actor.model.actorHasAddresses.push(addedActorHasAddressModel);
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		addActorHasEmailAddresses: async function(actor, newActorHasEmailAddresses) {
-			console.log("TCL: addActorHasEmailAddresses: async function -> actor, newActorHasEmailAddresses", actor, newActorHasEmailAddresses);
+			// console.log("TCL: addActorHasEmailAddresses: async function -> actor, newActorHasEmailAddresses", actor, newActorHasEmailAddresses);
 			try {
 				// create email address
 				var i = 0;
@@ -4007,12 +4006,12 @@
 					actor.model.actorHasEmailAddresses.push(addedActorHasEmailAddressModel);
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		addActorHasPhoneNumbers: async function(actor, newActorHasPhoneNumbers) {
-			console.log("TCL: addActorHasPhoneNumbers: async function -> actor, newActorHasPhoneNumbers", actor, newActorHasPhoneNumbers);
+			// console.log("TCL: addActorHasPhoneNumbers: async function -> actor, newActorHasPhoneNumbers", actor, newActorHasPhoneNumbers);
 			try {
 				// create phone number
 				var i = 0;
@@ -4029,25 +4028,25 @@
 					actor.model.actorHasPhoneNumbers.push(addedActorHasPhoneNumberModel);
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		addPersonIsMemberOfCollective: async function(actor, personIsMemberOfCollectiveData) {
-			console.log("TCL: addPersonIsMemberOfCollective: async function -> actor, personIsMemberOfCollectiveData", actor, personIsMemberOfCollectiveData);
+			// console.log("TCL: addPersonIsMemberOfCollective: async function -> actor, personIsMemberOfCollectiveData", actor, personIsMemberOfCollectiveData);
 			try {
 				// create memberofcollective
 				// TODO create and add membershipDetails
 				//? create model?
 				var newPersonIsMemberOfCollective = await TIMAAT.ActorService.addPersonIsMemberOfCollective(personIsMemberOfCollectiveData.actorId, personIsMemberOfCollectiveData.collectiveId);
-				console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
+				// console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
 				var i = 0;
 				for (; i < personIsMemberOfCollectiveData.membershipDetails.length; i++) {
 					var newDetails = await TIMAAT.ActorService.addMembershipDetails(personIsMemberOfCollectiveData.actorId, personIsMemberOfCollectiveData.collectiveId, personIsMemberOfCollectiveData.membershipDetails[i]);
-          console.log("TCL: newDetails", newDetails);
+          // console.log("TCL: newDetails", newDetails);
 					newPersonIsMemberOfCollective.membershipDetails.push(newDetails);
 				}
-				console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
+				// console.log("TCL: newPersonIsMemberOfCollective", newPersonIsMemberOfCollective);
 				switch (actor.model.actorType.actorTypeTranslations[0].type) {
 					case 'person':
 						actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.push(newPersonIsMemberOfCollective);
@@ -4058,12 +4057,12 @@
 				}
 				
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		updateActor: async function(actorSubtype, actor) {
-			console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
+			// console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
 				try {
 					// update birthname
 					if (actor.model.birthName) { // actor initially has no birth name set
@@ -4089,7 +4088,7 @@
 						actor.model.primaryPhoneNumber = tempPrimaryPhoneNumber;
 					}
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				}
 	
 				try {
@@ -4109,7 +4108,7 @@
 					// console.log("TCL: tempSubtypeModel", tempSubtypeModel);
 					var tempActorSubtypeModel = await TIMAAT.ActorService.updateActorSubtype(actorSubtype, tempSubtypeModel);
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				}
 
 				try {
@@ -4124,23 +4123,23 @@
 						break;
 					}
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				};
 
 				try { // update actor
 					// update data that is part of actor (includes updating last edited by/at)
 					var tempActorModel = await TIMAAT.ActorService.updateActor(actor.model);
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				};
 		},
 
 		updateActorHasMediumImageList: async function(actor, imageIdList) {
-			console.log("TCL: updateActorHasMediumImageList:function -> actor, imageIdList", actor, imageIdList);
+			// console.log("TCL: updateActorHasMediumImageList:function -> actor, imageIdList", actor, imageIdList);
 				try { // update actor_has_medium_image table entries
 					var existingActorHasImageEntries = await TIMAAT.ActorService.getActorHasImageList(actor.model.id);
-					console.log("TCL: existingActorHasImageEntries", existingActorHasImageEntries);
-					console.log("TCL: imageIdList", imageIdList);
+					// console.log("TCL: existingActorHasImageEntries", existingActorHasImageEntries);
+					// console.log("TCL: imageIdList", imageIdList);
 					if (imageIdList == null) { //* all entries will be deleted
 						// console.log("TCL: delete all existingActorHasImageEntries: ", existingActorHasImageEntries);
 						actor.model.profileImages = [];
@@ -4151,7 +4150,7 @@
 						for (; i < imageIdList.length; i++ ) {
 							actor.model.profileImages.push(imageIdList[i]);
 						}
-						console.log("TCL: actor.model.profileImages", actor.model.profileImages);
+						// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
 						actor.model = await TIMAAT.ActorService.updateActor(actor.model);          
 					} else { //* add/remove entries
 						// delete removed entries
@@ -4217,7 +4216,7 @@
 						}
 					}
 				} catch(error) {
-					console.log( "error: ", error);
+					console.error("ERROR: ", error);
 				};
 
 				// update data that is part of actor (includes updating last edited by/at)
@@ -4226,23 +4225,23 @@
 		},
 
 		updateName: async function(name, actor) {
-			console.log("TCL: updateName: async function -> name at beginning of update process: ", name, actor);
+			// console.log("TCL: updateName: async function -> name at beginning of update process: ", name, actor);
 			try {
 				// update name
 				var tempName = await TIMAAT.ActorService.updateName(name);
-				console.log("TCL: tempName", tempName);
+				// console.log("TCL: tempName", tempName);
 				var i = 0;
 				for (; i < actor.model.actorNames.length; i++) {
 					if (actor.model.actorNames[i].id == name.id)
 						actor.model.actorNames[i] = tempName;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		updateActorHasAddress: async function(actorHasAddress, actor) {
-			console.log("TCL: updateActorHasAddress: async function -> actorHasAddress at beginning of update process: ", actorHasAddress, actor);
+			// console.log("TCL: updateActorHasAddress: async function -> actorHasAddress at beginning of update process: ", actorHasAddress, actor);
 			try {
 				// update address
 				var tempActorHasAddress = actorHasAddress;
@@ -4265,12 +4264,12 @@
 						actor.model.actorHasAddresses[i] = updatedTempActorHasAddress;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		updateActorHasEmailAddress: async function(actorHasEmailAddress, actor) {
-			console.log("TCL: updateActorHasEmailAddress: async function -> actorHasEmailAddress at beginning of update process: ", actorHasEmailAddress, actor);
+			// console.log("TCL: updateActorHasEmailAddress: async function -> actorHasEmailAddress at beginning of update process: ", actorHasEmailAddress, actor);
 			try {
 				// update address
 				var tempActorHasEmailAddress = actorHasEmailAddress;
@@ -4289,12 +4288,12 @@
 						actor.model.actorHasEmailAddresses[i] = updatedTempActorHasEmailAddress;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
 		updateActorHasPhoneNumber: async function(actorHasPhoneNumber, actor) {
-			console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
+			// console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
 			try {
 				// update address
 				var tempActorHasPhoneNumber = actorHasPhoneNumber;
@@ -4313,7 +4312,7 @@
 						actor.model.actorHasPhoneNumbers[i] = updatedTempActorHasPhoneNumber;
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 		},
 
@@ -4330,12 +4329,12 @@
 		// 			}
 		// 		}
 		// 	} catch(error) {
-		// 		console.log( "error: ", error);
+		// 		console.error("ERROR: ", error);
 		// 	}
 		// },
 
 		updateActorHasRole: async function(actorModel, roleIdList) {
-    console.log("TCL: actorModel, roleIdList", actorModel, roleIdList);
+    // console.log("TCL: actorModel, roleIdList", actorModel, roleIdList);
 			try { // update actor_has_role table entries
         var existingActorHasRoleEntries = await TIMAAT.ActorService.getActorHasRoleList(actorModel.id);
         // console.log("TCL: existingActorHasRoleEntries", existingActorHasRoleEntries);
@@ -4412,7 +4411,7 @@
           }
         }
       } catch(error) {
-        console.log( "error: ", error);
+        console.error("ERROR: ", error);
       };
       
 			await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
@@ -4421,10 +4420,10 @@
 
 		// TODO currently only for Producer.
 		updateActorRoleInMedium: async function(actorModel, mediumIdList, roleId) {
-			console.log("TCL: updateActorRoleInMedium - actorModel, mediumIdList, roleId", actorModel, mediumIdList, roleId);
+			// console.log("TCL: updateActorRoleInMedium - actorModel, mediumIdList, roleId", actorModel, mediumIdList, roleId);
 			try { // update medium_has_actor_with_role table entries
 				var existingEntries = await TIMAAT.ActorService.getActorRoleInMediumList(actorModel.id, roleId);
-				console.log("TCL: existingEntries", existingEntries);
+				// console.log("TCL: existingEntries", existingEntries);
 				// console.log("TCL: mediumIdList", mediumIdList);
 				if (mediumIdList == null) { //* all entries will be deleted
 					// console.log("TCL: delete all existingEntries: ", existingEntries);
@@ -4461,7 +4460,7 @@
 						}
 					}
 					
-					console.log("TCL: entriesToDelete", entriesToDelete);
+					// console.log("TCL: entriesToDelete", entriesToDelete);
 					if (entriesToDelete.length > 0) { // anything to delete?
 						var i = 0;
 						for (; i < entriesToDelete.length; i++) {
@@ -4478,7 +4477,7 @@
 						var item = { id: 0 };
 						var j = 0;
 						for (; j < existingEntries.length; j++) {
-							console.log("TCL: existingEntries", existingEntries);
+							// console.log("TCL: existingEntries", existingEntries);
 							if (mediumIdList[i].id == existingEntries[j].id) {
 								idExists = true;
 								break; // no need to check further if match was found
@@ -4491,7 +4490,7 @@
 					}
 					// console.log("TCL: idsToCreate", idsToCreate);
 					if (idsToCreate.length > 0) { // anything to add?
-						console.log("TCL: idsToCreate", idsToCreate);
+						// console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							await TIMAAT.MediumService.addMediumHasActorWithRoles(idsToCreate[i].id, actorModel.id, roleId);
@@ -4499,16 +4498,16 @@
 					}
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			};
 			await TIMAAT.UI.refreshDataTable('video');
 		},
 
 		updateActorHasTagsList: async function(actorModel, tagIdList) {
-    	console.log("TCL: actorModel, tagIdList", actorModel, tagIdList);
+    	// console.log("TCL: actorModel, tagIdList", actorModel, tagIdList);
 			try {
 				var existingActorHasTagsEntries = await TIMAAT.ActorService.getTagList(actorModel.id);
-        console.log("TCL: existingActorHasTagsEntries", existingActorHasTagsEntries);
+        // console.log("TCL: existingActorHasTagsEntries", existingActorHasTagsEntries);
 				if (tagIdList == null) { //* all entries will be deleted
 					actorModel.tags = [];
 					await TIMAAT.ActorService.updateActor(actorModel);
@@ -4528,7 +4527,7 @@
 							}
 						}
 						if (deleteId) { // id is in existingActorHasTagEntries but not in tagIdList
-              console.log("TCL: deleteId", deleteId);
+              // console.log("TCL: deleteId", deleteId);
 							entriesToDelete.push(existingActorHasTagsEntries[i]);
 							existingActorHasTagsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
 							i--; // so the next list item is not jumped over due to the splicing
@@ -4562,7 +4561,7 @@
           }
           // console.log("TCL: idsToCreate", idsToCreate);
           if (idsToCreate.length > 0) { // anything to add?
-            console.log("TCL: idsToCreate", idsToCreate);
+            // console.log("TCL: idsToCreate", idsToCreate);
 						var i = 0;
 						for (; i < idsToCreate.length; i++) {
 							actorModel.tags.push(idsToCreate[i]);
@@ -4571,7 +4570,7 @@
           }
 				}
 			} catch(error) {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			}
 			return actorModel;
 		},
@@ -4587,7 +4586,7 @@
 		},
 
 		_actorRemoved: async function(actor) {
-			console.log("TCL: actor", actor);
+			// console.log("TCL: actor", actor);
 			if (actor.model.actorType.actorTypeTranslations[0].type == "collective") {
 				try {
 					// delete actorPersonIsMemberOfActorCollectives information from currently loaded actorPersons // TODO
@@ -4596,14 +4595,14 @@
 						await TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[i]);
 					}
 				} catch (error) {
-					console.log("error:", error);
+					console.error("ERROR: ", error);
 				}
 			}
 			// sync to server
 			try {
 				await TIMAAT.ActorService.removeActor(actor);
 			} catch (error) {
-				console.log("error: ", error);
+				console.error("ERROR: ", error);
 			}
 			actor.remove();
 		},
@@ -4689,7 +4688,7 @@
 					};
 				break;
 			}
-      console.log("model", model);
+      // console.log("model", model);
 			return model;
 		},
 
@@ -4705,7 +4704,7 @@
 		},
 
 		createNameModel: async function(formDataObject) {
-    	console.log("TCL: createNameModel: formDataObject", formDataObject);
+    	// console.log("TCL: createNameModel: formDataObject", formDataObject);
 			var model = {
 				id: 0,
 				actor: {
@@ -4715,7 +4714,7 @@
 				usedFrom: formDataObject.nameUsedFrom,
 				usedUntil: formDataObject.nameUsedUntil,
 			};
-      console.log("TCL: name", model);
+      // console.log("TCL: name", model);
 			return model;
 		},
 
@@ -4809,7 +4808,7 @@
 						name: formDataObject.citizenshipName, // TODO link actual citizenships
 					}],
 				};
-				console.log("TCL: model", model);
+				// console.log("TCL: model", model);
 			return model;
 		},
 
@@ -5039,7 +5038,7 @@
 		},
 
 		appendMemberOfCollectiveDataset: function(i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode) {
-			console.log("TCL: appendMemberOfCollectiveDataset -> i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode);
+			// console.log("TCL: appendMemberOfCollectiveDataset -> i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode);
 			var memberOfCollectiveFormData = 
 			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=`+i+` data-actor-id=`+actorId+`>
 				<div class="form-row">
@@ -5396,14 +5395,14 @@
 					},
 					// additional parameters
 					data: function(params) {
-						console.log("TCL: data: params", params);
+						// console.log("TCL: data: params", params);
 						return {
 							search: params.term,
 							page: params.page
 						};          
 					},
 					processResults: function(data, params) {
-						console.log("TCL: processResults: data", data);
+						// console.log("TCL: processResults: data", data);
 						params.page = params.page || 1;
 						return {
 							results: data
@@ -5585,7 +5584,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(person) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
-						console.log("TCL: clear last selection 'person'");
+						// console.log("TCL: clear last selection 'person'");
 						TIMAAT.UI.clearLastSelection('person');
 						$(row).addClass('selected');
 					}
@@ -5690,7 +5689,7 @@
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(collective) -  row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
-						console.log("TCL: clear last selection 'collective'");
+						// console.log("TCL: clear last selection 'collective'");
 						TIMAAT.UI.clearLastSelection('collective');
 						$(row).addClass('selected');
 					}
@@ -5742,7 +5741,7 @@
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItemId) {
-    	console.log("TCL: setDataTableOnItemSelect -> type, selectedItemId", type, selectedItemId);
+    	// console.log("TCL: setDataTableOnItemSelect -> type, selectedItemId", type, selectedItemId);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			switch (TIMAAT.UI.subNavTab) {

@@ -33,9 +33,9 @@
 			}).done(function(data) {
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -49,11 +49,11 @@
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				console.log("TCL: listActors -> data", data);
+				// console.log("TCL: listActors -> data", data);
 				callback(data);
-			}).fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			}).fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -68,14 +68,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorDatasetsTotal -> data", data);
+					// console.log("TCL: getActorDatasetsTotal -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -90,14 +90,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActor -> data", data);
+					// console.log("TCL: getActor -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -114,17 +114,17 @@
 				}).done(function(data) {
 					// console.log("TCL: getActorName -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
 		async getTagList(actorId) {
-      console.log("TCL: getTagList -> for actorId", actorId);
+      // console.log("TCL: getTagList -> for actorId", actorId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/hasTagList/",
@@ -135,15 +135,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getTagList -> data", data);
+					// console.log("TCL: getTagList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -162,9 +162,9 @@
       	// console.log("TCL: listActorSubtype -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -179,14 +179,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getMediaDatasetsTotal -> data", data);
+					// console.log("TCL: getMediaDatasetsTotal -> data", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
@@ -205,17 +205,17 @@
 					// console.log("TCL: getCollectiveSelectList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});		
 		},
 
 		async getActorHasRoleList(id) {
-			console.log("TCL: getActorRolesList -> id: ", id);
+			// console.log("TCL: getActorRolesList -> id: ", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/role/list/",
@@ -226,20 +226,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorRolesList -> data", data);
+					// console.log("TCL: getActorRolesList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getActorRoleInMediumList(actorId, roleId) {
-			console.log("TCL: getActorRoleInMediumList -> actorId, roleId: ", actorId, roleId);
+			// console.log("TCL: getActorRoleInMediumList -> actorId, roleId: ", actorId, roleId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/role/"+roleId+"/list/",
@@ -250,20 +250,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorRoleInMediumList -> data", data);
+					// console.log("TCL: getActorRoleInMediumList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getActorsWithThisRoleList(roleId) {
-			console.log("TCL: getActorsWithThisRoleList -> roleId: ", roleId);
+			// console.log("TCL: getActorsWithThisRoleList -> roleId: ", roleId);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/withRole/"+roleId,
@@ -274,20 +274,20 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getRoleGroupHasRoleList -> data", data);
+					// console.log("TCL: getRoleGroupHasRoleList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
 		async getActorHasImageList(id) {
-			console.log("TCL: getActorHasImageList -> id: ", id);
+			// console.log("TCL: getActorHasImageList -> id: ", id);
 			return new Promise(resolve => {
 				jQuery.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+id+"/image/list/",
@@ -298,15 +298,15 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActorHasImageList -> data", data);
+					// console.log("TCL: getActorHasImageList -> data", data);
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log(e.responseText);
-					console.log( "error", e );
+				.fail(function(error) {
+					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 
@@ -323,9 +323,9 @@
 				// console.log("TCL: listAddressTypes -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -342,9 +342,9 @@
 				// console.log("TCL: listEmailAddressTypes -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
@@ -361,14 +361,14 @@
 				// console.log("TCL: listPhoneNumberTypes -> data", data);
 				callback(data);
 			})
-			.fail(function(e) {
-				console.log(e.responseText);
-				console.log( "error", e );
+			.fail(function(error) {
+				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR: ", error);
 			});			
 		},
 
 		async createActor(actorModel) {
-			console.log("TCL: async createActor -> actorModel", actorModel);
+			// console.log("TCL: async createActor -> actorModel", actorModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/0",
@@ -382,11 +382,11 @@
 				}).done(function(actorData) {
 					// console.log("TCL: createActor -> returning actorData", actorData);
 					resolve(actorData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText);
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -405,11 +405,11 @@
 				}).done(function(subtypeData) {
 					// console.log("TCL: createActorSubtype - returning subtypeData", subtypeData);
 					resolve(subtypeData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -427,11 +427,11 @@
 					},
 				}).done(function(translationData) {
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -451,16 +451,16 @@
 				}).done(function(nameData) {
 					// console.log("TCL: createName -> nameData", nameData);
 					resolve(nameData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async addName(actorId, name) {
-      console.log("TCL: addName -> name", name);
+      // console.log("TCL: addName -> name", name);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/name/"+name.id,
@@ -474,11 +474,11 @@
 				}).done(function(nameData) {
 					// console.log("TCL: addName -> nameData", nameData);
 					resolve(nameData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -497,11 +497,11 @@
 				}).done(function(addressData) {
 					// console.log("TCL: createAddress -> addressData", addressData);
 					resolve(addressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -520,11 +520,11 @@
 				}).done(function(addressData) {
 					// console.log("TCL: addAddress -> addressData", addressData);
 					resolve(addressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -543,11 +543,11 @@
 		// 		}).done(function(actorHasAddressData) {
 		// 			// console.log("TCL: addActorHasAddress -> actorHasAddressData", actorHasAddressData);
 		// 			resolve(actorHasAddressData);
-		// 		}).fail(function(e) {
-		// 			console.log( "error: ", e.responseText );
+		// 		}).fail(function(error) {
+		// 			console.error("ERROR responseText:", error.responseText);
 		// 		});
 		// 	}).catch((error) => {
-		// 		console.log( "error: ", error );
+		// 		console.error("ERROR: ", error);
 		// 	});
 		// },
 
@@ -566,11 +566,11 @@
 				}).done(function(emailAddressData) {
 					// console.log("TCL: createEmailAddress -> emailAddressData", emailAddressData);
 					resolve(emailAddressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -589,11 +589,11 @@
 				}).done(function(emailAddressData) {
 					// console.log("TCL: addEmailAddress -> emailAddressData", emailAddressData);
 					resolve(emailAddressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -612,11 +612,11 @@
 				}).done(function(actorHasEmailAddressData) {
 					// console.log("TCL: addActorHasEmailAddress -> actorHasEmailAddressData", actorHasEmailAddressData);
 					resolve(actorHasEmailAddressData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -635,11 +635,11 @@
 				}).done(function(phoneNumberData) {
 					// console.log("TCL: createPhoneNumber -> phoneNumberData", phoneNumberData);
 					resolve(phoneNumberData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -658,11 +658,11 @@
 				}).done(function(phoneNumberData) {
 					// console.log("TCL: addPhoneNumber -> phoneNumberData", phoneNumberData);
 					resolve(phoneNumberData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -681,16 +681,16 @@
 				}).done(function(actorHasPhoneNumberData) {
 					// console.log("TCL: addActorHasPhoneNumber -> actorHasPhoneNumberData", actorHasPhoneNumberData);
 					resolve(actorHasPhoneNumberData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async addPersonIsMemberOfCollective(actorId, collectiveId) {
-      console.log("TCL: addPersonIsMemberOfCollective -> actorId, collectiveId", actorId, collectiveId);
+      // console.log("TCL: addPersonIsMemberOfCollective -> actorId, collectiveId", actorId, collectiveId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/personIsMemberOfCollective/"+collectiveId,
@@ -704,16 +704,16 @@
 				}).done(function(personIsMemberOfCollectiveData) {
 					// console.log("TCL: addPersonIsMemberOfCollective -> personIsMemberOfCollectiveData", personIsMemberOfCollectiveData);
 					resolve(personIsMemberOfCollectiveData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
 		async addMembershipDetails(actorId, collectiveId, membershipDetails) {
-      console.log("TCL: addMembershipDetails -> actorId, collectiveId, membershipDetails", actorId, collectiveId, membershipDetails);
+      // console.log("TCL: addMembershipDetails -> actorId, collectiveId, membershipDetails", actorId, collectiveId, membershipDetails);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/"+collectiveId+"/membershipDetails/"+membershipDetails.id,
@@ -725,13 +725,13 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: addMembershipDetails -> membershipDetails", data);
+					// console.log("TCL: addMembershipDetails -> membershipDetails", data);
 					resolve(data);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -750,11 +750,11 @@
 				}).done(function(citizenshipData) {
 					// console.log("TCL: createCitizenship -> citizenshipData", citizenshipData);
 					resolve(citizenshipData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 		
@@ -773,11 +773,11 @@
 				}).done(function(citizenshipData) {
 					// console.log("TCL: addCitizenship -> citizenshipData", citizenshipData);
 					resolve(citizenshipData);
-				}).fail(function(e) {
-					console.log( "error: ", e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -795,17 +795,17 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 		});		
 		},
 
 		async updateActor(actorModel) {
-			console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
+			// console.log("TCL: ActorService: async updateActor -> actorModel", actorModel);
 			delete actorModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
@@ -820,12 +820,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateActor -> returning updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -849,12 +849,12 @@
 				}).done(function(translationData) {
 				// console.log("TCL: updateActorTranslation -> translationData", translationData);
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -871,14 +871,14 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
+					// console.log("TCL: async updateActorSubtype -> returning updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -896,12 +896,12 @@
 					},
 				}).done(function(translationData) {
 					resolve(translationData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -920,12 +920,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateName -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -944,12 +944,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateAddress -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -968,12 +968,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateActorHasAddress -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -992,12 +992,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateEmailAddress -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1016,12 +1016,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateActorHasEmailAddress -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1040,12 +1040,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updatePhoneNumber -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1064,12 +1064,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateActorHasPhoneNumber -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1089,12 +1089,12 @@
 		// 		}).done(function(updateData) {
 		// 			// console.log("TCL: async updatePersonIsMemberOfCollective -> updateData", updateData);
 		// 			resolve(updateData);
-		// 		}).fail(function(e) {
-		// 			console.log( "error", e );
-		// 			console.log( e.responseText );
+		// 		}).fail(function(error) {
+		// 			console.error("ERROR: ", error);
+		// 			console.error("ERROR responseText:", error.responseText);
 		// 		});
 		// 	}).catch((error) => {
-		// 		console.log( "error: ", error);
+		// 		console.error("ERROR: ", error);
 		// 	});
 		// },
 
@@ -1113,12 +1113,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateMembership -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1137,12 +1137,12 @@
 				}).done(function(updateData) {
 					// console.log("TCL: async updateCitizenship -> updateData", updateData);
 					resolve(updateData);
-				}).fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1159,12 +1159,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
-				console.log( "error: ", error);
+				console.error("ERROR: ", error);
 			});
 		},
 
@@ -1179,9 +1179,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1196,9 +1196,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1213,9 +1213,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1230,9 +1230,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1247,14 +1247,14 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
 		async removeMemberOfCollective(memberOfCollective) {
-			console.log("TCL: removeMemberOfCollective -> memberOfCollective", memberOfCollective);
+			// console.log("TCL: removeMemberOfCollective -> memberOfCollective", memberOfCollective);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+memberOfCollective.id.actorPersonActorId+"/personIsMemberOfCollective/"+memberOfCollective.id.memberOfActorCollectiveActorId,
 				type:"DELETE",
@@ -1264,14 +1264,14 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
 		async removeMembershipDetails(membershipDetails) {
-			console.log("TCL: removeMembershipDetails -> removeMembershipDetails", membershipDetails);
+			// console.log("TCL: removeMembershipDetails -> removeMembershipDetails", membershipDetails);
 			$.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/membershipDetails/"+membershipDetails.id,
 				type:"DELETE",
@@ -1281,9 +1281,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1298,9 +1298,9 @@
 				},
 			}).done(function(data) {
 			})
-			.fail(function(e) {
-				console.log( "error", e );
-				console.log( e.responseText );
+			.fail(function(error) {
+				console.error("ERROR: ", error);
+				console.error("ERROR responseText:", error.responseText);
 			});
 		},
 
@@ -1317,12 +1317,12 @@
 				}).done(function(data) {
 					resolve(data);
 				})
-				.fail(function(e) {
-					console.log( "error", e );
-					console.log( e.responseText );
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
 				});	
 			}).catch((error) => {
-				console.log( "error: ", error );
+				console.error("ERROR: ", error);
 			});	
 		},
 

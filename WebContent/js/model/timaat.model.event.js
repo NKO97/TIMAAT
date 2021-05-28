@@ -113,7 +113,7 @@
 		}
 
 		remove() {
-			console.log("TCL: Event -> remove -> remove()");
+			// console.log("TCL: Event -> remove -> remove()");
 			// remove event from UI
 			this.listView.remove(); // TODO remove tags from event_has_tags
       // console.log("TCL: Event -> remove -> this", this);
