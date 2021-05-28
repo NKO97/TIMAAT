@@ -967,6 +967,12 @@
 				if ( TIMAAT.VideoPlayer.video.playbackRate != 1 ) $(this).addClass('active'); else $(this).removeClass('active');
 				
 			});
+			
+			$('#timaat-videoplayer-viewer').on('contextmenu', function(event){
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
+			});
 		},
 
 		initializeAnnotationMode: async function(video) {
