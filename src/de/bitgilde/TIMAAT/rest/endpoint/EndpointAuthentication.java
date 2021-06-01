@@ -124,6 +124,7 @@ public class EndpointAuthentication {
 
 			System.out.println(hexhash);
 			System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
+			System.out.println("User logged in: " + user.getDisplayName());
 
 			// compare calculated server hash with DB stored hash
 			if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
