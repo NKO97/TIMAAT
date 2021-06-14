@@ -44,22 +44,21 @@
 		
 		formatDate: function (timestamp) {
     // console.log("TCL: formatDate: function (timestamp)");
-			  var a = new Date(timestamp);
-//			  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-			  var year = a.getFullYear();
-			  var month = ("0" + (a.getMonth()+1)).substr(-2);
-			  var date = ("0" + a.getDate()).substr(-2);
-			  var hour = ("0" + a.getHours()).substr(-2);
-			  var min = ("0" + a.getMinutes()).substr(-2);
-			  var sec = ("0" + a.getSeconds()).substr(-2);
-			  var time = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
+			  var a      = new Date(timestamp);
+			  // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+			  var year   = a.getFullYear();
+			  var month  = ("0" + (a.getMonth()+1)).substr(-2);
+			  var date   = ("0" + a.getDate()).substr(-2);
+			  var hour   = ("0" + a.getHours()).substr(-2);
+			  var min    = ("0" + a.getMinutes()).substr(-2);
+			  var sec    = ("0" + a.getSeconds()).substr(-2);
+			  var time   = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
 			  return time;
 		},
 		
 		formatLogType: function(type) {
-    // console.log("TCL: formatLogType: function(type)");
-			var display = '['+type+']';
-			
+    	// console.log("TCL: formatLogType: function(type)");
+			// var display = '['+type+']';
 			switch (type) {
 			case 'login':
 				type = 'Anmeldung API';
@@ -103,8 +102,8 @@
 		
 		resolveUserID: function(idElement, myself) {
     	// console.log("TCL: resolveUserID: function(idElement, myself)");
-    // console.log("TCL:   -> idElement", idElement);
-    // console.log("TCL:   -> myself", myself);
+			// console.log("TCL:   -> idElement", idElement);
+			// console.log("TCL:   -> myself", myself);
 			if ( !myself ) myself = "mir";
 			
 			var id = $(idElement).data('userid');
@@ -185,14 +184,14 @@
 		getFuzzyDate(timestamp) {
 			let fuzzyDate = '';
 
-			let now = Date.now();
+			let now     = Date.now();
 			let seconds = Math.floor((now-timestamp)/1000);
 			let minutes = Math.floor(seconds/60);
-			let hours = Math.floor(minutes/60);
-			let days = Math.floor(hours/24);
-			let weeks = Math.floor(days / 7);
-			let months = Math.floor(days / 30);
-			let years = Math.floor(days / 365);
+			let hours   = Math.floor(minutes/60);
+			let days    = Math.floor(hours/24);
+			let weeks   = Math.floor(days / 7);
+			let months  = Math.floor(days / 30);
+			let years   = Math.floor(days / 365);
 			
 			if ( years > 0 ) fuzzyDate = (years == 1) ? 'vor einem Jahr' : 'vor '+years+' Jahren';
 			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'vor einem Monat' : 'vor '+months+' Monaten';
