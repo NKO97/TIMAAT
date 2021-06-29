@@ -5,8 +5,6 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
-
 
 /**
  * The persistent class for the lighting database table.
@@ -27,9 +25,35 @@ public class Lighting implements Serializable {
 	@JsonIgnore // Lighting is accessed through AnalysisMethod --> avoid reference cycle
 	private AnalysisMethod analysisMethod;
 
-	//bi-directional many-to-one association to LightingTranslation
-	@OneToMany(mappedBy="lighting")
-	private List<LightingTranslation> lightingTranslations;
+	//bi-directional many-to-one association to LightModifier
+	@OneToOne
+	@JoinColumn(name="light_modifier_analysis_method_id")
+	private LightModifier lightModifier;
+
+	//bi-directional many-to-one association to LightPosition
+	@OneToOne
+	@JoinColumn(name="light_position_analysis_method_id")
+	private LightPosition lightPosition;
+
+	//bi-directional many-to-one association to LightPositionAngleHorizontal
+	@OneToOne
+	@JoinColumn(name="light_position_angle_horizontal_analysis_method_id")
+	private LightPositionAngleHorizontal lightPositionAngleHorizontal;
+
+	//bi-directional many-to-one association to LightPositionAngleVertical
+	@OneToOne
+	@JoinColumn(name="light_position_angle_vertical_analysis_method_id")
+	private LightPositionAngleVertical lightPositionAngleVertical;
+
+	//bi-directional many-to-one association to LightingDuration
+	@OneToOne
+	@JoinColumn(name="lighting_duration_analysis_method_id")
+	private LightingDuration lightingDuration;
+
+	//bi-directional many-to-one association to LightingType
+	@OneToOne
+	@JoinColumn(name="lighting_type_analysis_method_id")
+	private LightingType lightingType;
 
 	public Lighting() {
 	}
@@ -50,26 +74,52 @@ public class Lighting implements Serializable {
 		this.analysisMethod = analysisMethod;
 	}
 
-	public List<LightingTranslation> getLightingTranslations() {
-		return this.lightingTranslations;
+	public LightModifier getLightModifier() {
+		return this.lightModifier;
 	}
 
-	public void setLightingTranslations(List<LightingTranslation> lightingTranslations) {
-		this.lightingTranslations = lightingTranslations;
+	public void setLightModifier(LightModifier lightModifier) {
+		this.lightModifier = lightModifier;
 	}
 
-	public LightingTranslation addLightingTranslation(LightingTranslation lightingTranslation) {
-		getLightingTranslations().add(lightingTranslation);
-		lightingTranslation.setLighting(this);
-
-		return lightingTranslation;
+	public LightPosition getLightPosition() {
+		return this.lightPosition;
 	}
 
-	public LightingTranslation removeLightingTranslation(LightingTranslation lightingTranslation) {
-		getLightingTranslations().remove(lightingTranslation);
-		lightingTranslation.setLighting(null);
+	public void setLightPosition(LightPosition lightPosition) {
+		this.lightPosition = lightPosition;
+	}
 
-		return lightingTranslation;
+	public LightPositionAngleHorizontal getLightPositionAngleHorizontal() {
+		return this.lightPositionAngleHorizontal;
+	}
+
+	public void setLightPositionAngleHorizontal(LightPositionAngleHorizontal lightPositionAngleHorizontal) {
+		this.lightPositionAngleHorizontal = lightPositionAngleHorizontal;
+	}
+
+	public LightPositionAngleVertical getLightPositionAngleVertical() {
+		return this.lightPositionAngleVertical;
+	}
+
+	public void setLightPositionAngleVertical(LightPositionAngleVertical lightPositionAngleVertical) {
+		this.lightPositionAngleVertical = lightPositionAngleVertical;
+	}
+
+	public LightingDuration getLightingDuration() {
+		return this.lightingDuration;
+	}
+
+	public void setLightingDuration(LightingDuration lightingDuration) {
+		this.lightingDuration = lightingDuration;
+	}
+
+	public LightingType getLightingType() {
+		return this.lightingType;
+	}
+
+	public void setLightingType(LightingType lightingType) {
+		this.lightingType = lightingType;
 	}
 
 }

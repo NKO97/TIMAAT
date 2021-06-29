@@ -104,9 +104,33 @@ public class AnalysisMethod implements Serializable {
 	@OneToOne(mappedBy="analysisMethod")
 	private ConceptCameraPositionAndPerspective conceptCameraPositionAndPerspective;
 
-	//bi-directional one-to-one association to ColorTemperature
+	//bi-directional one-to-one association to Lighting
 	@OneToOne(mappedBy="analysisMethod")
 	private Lighting lighting;
+
+	//bi-directional one-to-one association to LightingDuration
+	@OneToOne(mappedBy="analysisMethod")
+	private LightingDuration lightingDuration;
+
+	//bi-directional one-to-one association to LightingType
+	@OneToOne(mappedBy="analysisMethod")
+	private LightingType lightingType;
+
+	//bi-directional one-to-one association to LightModifier
+	@OneToOne(mappedBy="analysisMethod")
+	private LightModifier lightModifier;
+
+	//bi-directional one-to-one association to LightPosition
+	@OneToOne(mappedBy="analysisMethod")
+	private LightPosition lightPosition;
+
+	//bi-directional one-to-one association to LightPositionAngleHorizontal
+	@OneToOne(mappedBy="analysisMethod")
+	private LightPositionAngleHorizontal lightPositionAngleHorizontal;
+
+	//bi-directional one-to-one association to LightPositionAngleVertical
+	@OneToOne(mappedBy="analysisMethod")
+	private LightPositionAngleVertical lightPositionAngleVertical;
 
 	//bi-directional one-to-one association to MartinezScheffelUnreliableNarration
 	@OneToOne(mappedBy="analysisMethod")
@@ -343,6 +367,54 @@ public class AnalysisMethod implements Serializable {
 
 	public void setLighting(Lighting lighting) {
 		this.lighting = lighting;
+	}
+
+	public LightingDuration getLightingDuration() {
+		return this.lightingDuration;
+	}
+
+	public void setLightingDuration(LightingDuration lightingDuration) {
+		this.lightingDuration = lightingDuration;
+	}
+
+	public LightingType getLightingType() {
+		return this.lightingType;
+	}
+
+	public void setLightingType(LightingType lightingType) {
+		this.lightingType = lightingType;
+	}
+
+	public LightModifier getLightModifier() {
+		return this.lightModifier;
+	}
+
+	public void setLightModifier(LightModifier lightModifier) {
+		this.lightModifier = lightModifier;
+	}
+
+	public LightPosition getLightPosition() {
+		return this.lightPosition;
+	}
+
+	public void setLightPosition(LightPosition lightPosition) {
+		this.lightPosition = lightPosition;
+	}
+
+	public LightPositionAngleHorizontal getLightPositionAngleHorizontal() {
+		return this.lightPositionAngleHorizontal;
+	}
+
+	public void setLightPositionAngleHorizontal(LightPositionAngleHorizontal lightPositionAngleHorizontal) {
+		this.lightPositionAngleHorizontal = lightPositionAngleHorizontal;
+	}
+
+	public LightPositionAngleVertical getLightPositionAngleVertical() {
+		return this.lightPositionAngleVertical;
+	}
+
+	public void setLightPositionAngleVertical(LightPositionAngleVertical lightPositionAngleVertical) {
+		this.lightPositionAngleVertical = lightPositionAngleVertical;
 	}
 
 	public MartinezScheffelUnreliableNarration getMartinezScheffelUnreliableNarration() {

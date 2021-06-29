@@ -103,6 +103,7 @@
       	// console.log("TCL: createAnalysisMethodVariant -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {

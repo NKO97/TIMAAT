@@ -258,7 +258,7 @@ public class EndpointAnnotation {
 			@QueryParam("length") Integer length,
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
-			@QueryParam("search") String search, // not supported
+			@QueryParam("search") String search, //* not supported
 			@QueryParam("as_datatable") String asDatatable
 	)	{
 		// System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);

@@ -316,10 +316,7 @@
           break;
           case 24: // Analysis Voice
           break;
-          case 25: // Lighting type
-            analysisMethodId = Number($('#lighting-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
-            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+          case 25: // Lighting type - Part of 43: Lighting
           break;
           case 26: // Montage Figure Macro - Part of 34: Editing / Montage
           break;
@@ -378,6 +375,44 @@
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
             analysis.analysisMethod.editingMontage = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "editingMontage");
+          break;
+          case 35: // Concept Direction
+          break;
+          case 36: // Camera Movement Characteristic
+          break;
+          case 37: // Camera Movement Type
+          break;
+          case 38: // Light Position General - Part of 43: Lighting
+          break;
+          case 39: // Light Position Angle Horizontal - Part of 43: Lighting
+          break;
+          case 40: // Light Position Angle Vertical - Part of 43: Lighting
+          break;
+          case 41: // Light Modifier - Part of 43: Lighting
+          break;
+          case 42: // Lighting Duration - Part of 43: Lighting
+          break;
+          case 43: // Lighting
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              lightingType: null,
+              lightPosition: null,
+              lightPositionAngleHorizontal: null,
+              lightPositionAngleVertical: null,
+              lightModifier: null,
+              lightingDuration: null
+            };
+            (Number($('#lighting-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingType = { analysisMethodId: Number($('#lighting-type-select-dropdown').val()) };
+            (Number($('#light-position-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPosition = { analysisMethodId: Number($('#light-position-select-dropdown').val()) };
+            (Number($('#light-position-angle-horizontal-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleHorizontal = { analysisMethodId: Number($('#light-position-angle-horizontal-select-dropdown').val()) };
+            (Number($('#light-position-angle-vertical-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleVertical = { analysisMethodId: Number($('#light-position-angle-vertical-select-dropdown').val()) };
+            (Number($('#light-modifier-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightModifier = { analysisMethodId: Number($('#light-modifier-select-dropdown').val()) };
+            (Number($('#lighting-duration-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingDuration = { analysisMethodId: Number($('#lighting-duration-select-dropdown').val()) };
+
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysis.analysisMethod.lighting = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "lighting");
+            console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
           break;
         }
         modal.modal('hide');
@@ -1492,26 +1527,7 @@
         break;
         case 24: // Analysis Voice
         break;
-        case 25: // Lighting type
-          $('#analysisAddLabel').text('Choose lighting');
-          modal.find('.modal-body').html(`
-            <form role="form" id="newAnalysisMethodModalForm">
-              <div class="form-group">
-              <label for="lighting-select-dropdown">Lighting</label>
-                <div class="col-md-12">
-                  <select class="form-control form-control-md select-dropdown"
-                          style="width:100%;"
-                          id="lighting-select-dropdown"
-                          name="analysisMethodId"
-                          data-role="analysisMethodId"
-                          data-placeholder="Select lighting"
-                          required>
-                  </select>
-                </div>
-              </div>`+
-              remarkHtml +
-            `</form>`);
-          $('#lighting-select-dropdown').select2(select2Options);
+        case 25: // Lighting type - Part of 43: Lighting
         break;
         case 26: // Montage Figure Macro - Part of 34: Editing / Montage
         break;
@@ -1673,6 +1689,113 @@
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/imageCadreEditing/selectList/';
           $('#image-cadre-editing-select-dropdown').select2(select2Options);
         break;
+        case 35: // Concept Direction
+        break;
+        case 36: // Camera Movement Characteristic
+        break;
+        case 37: // Camera Movement Type
+        break;
+        case 38: // Light Position General - Part of 43: Lighting
+        break;
+        case 39: // Light Position Angle Horizontal - Part of 43: Lighting
+        break;
+        case 40: // Light Position Angle Vertical - Part of 43: Lighting
+        break;
+        case 41: // Light Modifier - Part of 43: Lighting
+        break;
+        case 42: // Lighting Duration - Part of 43: Lighting
+        break;
+        case 43: // Lighting
+          $('#analysisAddLabel').text('Describe lighting');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <h5 class="modal-title">Lighting</h5>
+              <div class="form-group">
+              <label for="lighting-type-select-dropdown">Lighting type</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="lighting-type-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select lighting type">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="light-position-select-dropdown">Light position</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="light-position-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select light position">
+                  </select>
+                </div>
+                <div class="form-group">
+                <label for="light-position-angle-horizontal-select-dropdown">Light position horizontal angle</label>
+                  <div class="col-md-12">
+                    <select class="form-control form-control-md select-dropdown"
+                            style="width:100%;"
+                            id="light-position-angle-horizontal-select-dropdown"
+                            name="analysisMethodId"
+                            data-role="analysisMethodId"
+                            data-placeholder="Select light position horizontal angle">
+                    </select>
+                  </div>
+                </div>
+              </div><div class="form-group">
+              <label for="light-position-angle-vertical-select-dropdown">Light position vertical angle</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="light-position-angle-vertical-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select light position vertical angle">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="light-modifier-select-dropdown">Light modifier</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="light-modifier-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select light modifier">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="lighting-duration-select-dropdown">Lighting duration</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="lighting-duration-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select lighting duration">
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightingType/selectList/';
+          $('#lighting-type-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPosition/selectList/';
+          $('#light-position-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPositionAngleHorizontal/selectList/';
+          $('#light-position-angle-horizontal-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPositionAngleVertical/selectList/';
+          $('#light-position-angle-vertical-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightModifier/selectList/';
+          $('#light-modifier-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightingDuration/selectList/';
+          $('#lighting-duration-select-dropdown').select2(select2Options);
+        break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
       modal.modal('show');
@@ -1694,9 +1817,9 @@
       modal.modal('show');
     },
 
-    displayAnalysisDetails: function( data ) {
+    displayAnalysisDetails: function(data) {
+      console.log("TCL: displayAnalysisDetails - data_ ", data);
       let cameraShotType;
-      // console.log("TCL: data", data);
       var details = 
         `<div>
           <table>
@@ -2140,11 +2263,6 @@
         case 24: // Analysis Voice
         break;
         case 25: // Lighting type
-          details +=
-          `<tr>
-            <td>Camera handling:</td>
-            <td>`+data.analysisMethod.lighting.lightingTranslations[0].name+`</td>
-          </tr>`;
         break;
         case 26: // Montage Figure Macro - Part of 34: Editing / Montage
         break;
@@ -2213,6 +2331,55 @@
           <tr>
             <td>Image cadre editing</td>
             <td>`+imageCadreEditing+`</td>
+          </tr>`;
+        break;
+        case 35: // Concept Direction
+        break;
+        case 36: // Camera Movement Characteristic
+        break;
+        case 37: // Camera Movement Type
+        break;
+        case 38: // Light Position General - Part of 43: Lighting
+        break;
+        case 39: // Light Position Angle Horizontal - Part of 43: Lighting
+        break;
+        case 40: // Light Position Angle Vertical - Part of 43: Lighting
+        break;
+        case 41: // Light Modifier - Part of 43: Lighting
+        break;
+        case 42: // Lighting Duration - Part of 43: Lighting
+        break;
+        case 43: // Lighting
+          let lightingType = (data.analysisMethod.lighting.lightingType == null) ? '' : data.analysisMethod.lighting.lightingType.lightingTypeTranslations[0].name;
+          let lightPosition = (data.analysisMethod.lighting.lightPosition == null) ? '' : data.analysisMethod.lighting.lightPosition.lightPositionTranslations[0].name;
+          let lightPositionAngleHorizontal = (data.analysisMethod.lighting.lightPositionAngleHorizontal == null) ? '' : data.analysisMethod.lighting.lightPositionAngleHorizontal.lightPositionAngleHorizontalTranslations[0].name;
+          let lightPositionAngleVertical = (data.analysisMethod.lighting.lightPositionAngleVertical == null) ? '' : data.analysisMethod.lighting.lightPositionAngleVertical.lightPositionAngleVerticalTranslations[0].name;
+          let lightModifier = (data.analysisMethod.lighting.lightModifier == null) ? '' : data.analysisMethod.lighting.lightModifier.lightModifierTranslations[0].name;
+          let lightingDuration = (data.analysisMethod.lighting.lightingDuration == null) ? '' : data.analysisMethod.lighting.lightingDuration.lightingDurationTranslations[0].name;
+          details +=
+          `<tr>
+            <td>Lighting type</td>
+            <td>`+lightingType+`</td>
+          </tr>
+          <tr>
+            <td>Lighting position</td>
+            <td>`+lightPosition+`</td>
+          </tr>
+          <tr>
+            <td>Light position horizontal angle</td>
+            <td>`+lightPositionAngleHorizontal+`</td>
+          </tr>
+          <tr>
+            <td>Light position vertical angle</td>
+            <td>`+lightPositionAngleVertical+`</td>
+          </tr>
+          <tr>
+            <td>Light modifier</td>
+            <td>`+lightModifier+`</td>
+          </tr>
+          <tr>
+            <td>Lighting duration</td>
+            <td>`+lightingDuration+`</td>
           </tr>`;
         break;
       }
@@ -2299,7 +2466,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,8,9,10,11,12,14,16,17,20,22,23,25,34].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,8,9,10,11,12,14,16,17,20,22,23,34,43].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

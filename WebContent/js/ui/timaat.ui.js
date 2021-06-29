@@ -347,8 +347,7 @@
 						}
 					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
-						console.error("TCL: processLogin fail: e", e);
-						console.error("ERROR: ", error);
+						console.error("process login ERROR: ", error);
 						jQuery('#timaat-login-message').fadeIn();
 					});
 				}, 50);

@@ -60,6 +60,13 @@ import de.bitgilde.TIMAAT.model.FIPOP.EditingRhythmTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.LightModifierTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleHorizontalTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleVerticalTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LightPositionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Lighting;
+import de.bitgilde.TIMAAT.model.FIPOP.LightingDurationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LightingTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
 import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacroTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicroTranslation;
@@ -109,14 +116,16 @@ public class EndpointAnalysis {
 		}
 
 		// exclude method type entries that are not standalone
-		String excludedMethodTypeIds = "amt.id NOT IN (9,10,11,12,13,14,17,21,24,26,27,28,29,30,31,32,33,35,36,37)";
+		// String excludedMethodTypeIds = "amt.id NOT IN (9,10,11,12,13,14,17,21,24,25,26,27,28,29,30,31,32,33,35,36,37,38,39,40,41,42)";
+		// include method type entries that are standalone only
+		String includedMethodTypeIds = "amt.id IN (1,2,3,4,5,6,7,8,15,16,18,19,20,22,23,34,43)";
 
 		// define default query strings
-		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE "+excludedMethodTypeIds+" AND amt.id = amtt.id ORDER BY ";
+		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE "+includedMethodTypeIds+" AND amt.id = amtt.id ORDER BY ";
 
 		// calculate total # of records
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE  "+excludedMethodTypeIds);
+		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE  "+includedMethodTypeIds);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		// System.out.println("records total: " + recordsTotal);
@@ -127,7 +136,7 @@ public class EndpointAnalysis {
 		List<AnalysisMethodType> analysisMethodTypeList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE "+excludedMethodTypeIds+" AND amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE "+includedMethodTypeIds+" AND amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all analysisMethodTypeTranslations
@@ -257,9 +266,9 @@ public class EndpointAnalysis {
 			break;
 			case 24: // Analysis Voice
 			break;
-			case 25: // Lighting type
+			case 25: // Lighting type - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLighting().getLightingTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingType().getLightingTypeTranslations().get(0).getName()));
 				}
 			break;
 			case 26: // Montage Figure Macro - Part of 34: Editing / Montage
@@ -303,16 +312,39 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 34: // Editing / Montage
-
 			break;
 			case 35: // Concept Direction
-
 			break;
 			case 36: // Camera Movement Characteristic
-
 			break;
 			case 37: // Camera Movement Type
-
+			break;
+			case 38: // Light Position General - Part of 43: Lighting
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPosition().getLightPositionTranslations().get(0).getName()));
+				}
+			break;
+			case 39: // Light Position Angle Horizontal - Part of 43: Lighting
+			for (AnalysisMethod analysisMethod : analysisMethodList) {
+				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleHorizontal().getLightPositionAngleHorizontalTranslations().get(0).getName()));
+			}
+			break;
+			case 40: // Light Position Angle Vertical - Part of 43: Lighting
+			for (AnalysisMethod analysisMethod : analysisMethodList) {
+				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleVertical().getLightPositionAngleVerticalTranslations().get(0).getName()));
+			}
+			break;
+			case 41: // Light Modifier - Part of 43: Lighting
+			for (AnalysisMethod analysisMethod : analysisMethodList) {
+				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightModifier().getLightModifierTranslations().get(0).getName()));
+			}
+			break;
+			case 42: // Lighting Duration - Part of 43: Lighting
+			for (AnalysisMethod analysisMethod : analysisMethodList) {
+				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingDuration().getLightingDurationTranslations().get(0).getName()));
+			}
+			break;
+			case 43: // Lighting
 			break;
 		}
 
@@ -703,7 +735,7 @@ public class EndpointAnalysis {
 			break;
 			case 24: // Analysis Voice
 			break;
-			case 25: // Lighting type
+			case 25: // Lighting type - Part of 43: Lighting
 			break;
 			case 26: // Montage Figure Macro - Part of 34: Editing / Montage
 			break;
@@ -806,13 +838,84 @@ public class EndpointAnalysis {
 			}
 			break;
 			case 35: // Concept Direction
-
 			break;
 			case 36: // Camera Movement Characteristic
-
 			break;
 			case 37: // Camera Movement Type
-
+			break;
+			case 38: // Light Position General - Part of 43: Lighting
+			break;
+			case 39: // Light Position Angle Horizontal - Part of 43: Lighting
+			break;
+			case 40: // Light Position Angle Vertical - Part of 43: Lighting
+			break;
+			case 41: // Light Modifier - Part of 43: Lighting
+			break;
+			case 42: // Lighting Duration - Part of 43: Lighting
+			break;
+			case 43: // Lighting
+				switch(element) {
+					case "lightingType":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT ltt FROM LightingTypeTranslation ltt WHERE ltt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY ltt.id ASC");
+						List<LightingTypeTranslation> lightingTypeTranslationList = castList(LightingTypeTranslation.class, query.getResultList());
+						List<SelectElement> lightingTypeSelectList = new ArrayList<>();
+						for (LightingTypeTranslation lightingTypeTranslation : lightingTypeTranslationList) {
+							lightingTypeSelectList.add(new SelectElement(lightingTypeTranslation.getLightingType().getAnalysisMethodId(), lightingTypeTranslation.getName()));
+						}
+						selectElementList = lightingTypeSelectList;
+					break;
+					case "lightPosition":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT lpt FROM LightPositionTranslation lpt WHERE lpt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY lpt.id ASC");
+						List<LightPositionTranslation> lightPositionTranslationList = castList(LightPositionTranslation.class, query.getResultList());
+						List<SelectElement> lightPositionSelectList = new ArrayList<>();
+						for (LightPositionTranslation lightPositionTranslation : lightPositionTranslationList) {
+							lightPositionSelectList.add(new SelectElement(lightPositionTranslation.getLightPosition().getAnalysisMethodId(), lightPositionTranslation.getName()));
+						}
+						selectElementList = lightPositionSelectList;
+					break;
+					case "lightPositionAngleHorizontal":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT lpaht FROM LightPositionAngleHorizontalTranslation lpaht WHERE lpaht.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY lpaht.id ASC");
+						List<LightPositionAngleHorizontalTranslation> lightPositionAngleHorizontalTranslationList = castList(LightPositionAngleHorizontalTranslation.class, query.getResultList());
+						List<SelectElement> lightPositionAngleHorizontalSelectList = new ArrayList<>();
+						for (LightPositionAngleHorizontalTranslation lightPositionAngleHorizontalTranslation : lightPositionAngleHorizontalTranslationList) {
+							lightPositionAngleHorizontalSelectList.add(new SelectElement(lightPositionAngleHorizontalTranslation.getLightPositionAngleHorizontal().getAnalysisMethodId(), lightPositionAngleHorizontalTranslation.getName()));
+						}
+						selectElementList = lightPositionAngleHorizontalSelectList;
+					break;
+					case "lightPositionAngleVertical":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT lpavt FROM LightPositionAngleVerticalTranslation lpavt WHERE lpavt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY lpavt.id ASC");
+						List<LightPositionAngleVerticalTranslation> lightPositionAngleVerticalTranslationList = castList(LightPositionAngleVerticalTranslation.class, query.getResultList());
+						List<SelectElement> lightPositionAngleVerticalSelectList = new ArrayList<>();
+						for (LightPositionAngleVerticalTranslation lightPositionAngleVerticalTranslation : lightPositionAngleVerticalTranslationList) {
+							lightPositionAngleVerticalSelectList.add(new SelectElement(lightPositionAngleVerticalTranslation.getLightPositionAngleVertical().getAnalysisMethodId(), lightPositionAngleVerticalTranslation.getName()));
+						}
+						selectElementList = lightPositionAngleVerticalSelectList;
+					break;
+					case "lightModifier":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT lmt FROM LightModifierTranslation lmt WHERE lmt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY lmt.id ASC");
+						List<LightModifierTranslation> lightModifierTranslationList = castList(LightModifierTranslation.class, query.getResultList());
+						List<SelectElement> lightModifierSelectList = new ArrayList<>();
+						for (LightModifierTranslation lightModifierTranslation : lightModifierTranslationList) {
+							lightModifierSelectList.add(new SelectElement(lightModifierTranslation.getLightModifier().getAnalysisMethodId(), lightModifierTranslation.getName()));
+						}
+						selectElementList = lightModifierSelectList;
+					break;
+					case "lightingDuration":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT ldt FROM LightingDurationTranslation ldt WHERE ldt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY ldt.id ASC");
+						List<LightingDurationTranslation> lightingDurationTranslationList = castList(LightingDurationTranslation.class, query.getResultList());
+						List<SelectElement> lightingDurationSelectList = new ArrayList<>();
+						for (LightingDurationTranslation lightingDurationTranslation : lightingDurationTranslationList) {
+							lightingDurationSelectList.add(new SelectElement(lightingDurationTranslation.getLightingDuration().getAnalysisMethodId(), lightingDurationTranslation.getName()));
+						}
+						selectElementList = lightingDurationSelectList;
+					break;
+				}
 			break;
 		}
 
@@ -1436,6 +1539,47 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
 		System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective - done");
 		return Response.ok().entity(conceptCameraPositionAndPerspective).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("lighting/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodLighting(@PathParam("analysisMethodId") int analysisMethodId, 
+																							 String jsonData) {
+		System.out.println("EndpointAnalysis: createAnalysisMethodLighting: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		Lighting lighting = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			lighting = mapper.readValue(jsonData, Lighting.class);
+		} catch (IOException e) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodLighting: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( lighting == null ) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodLighting: lighting == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(lighting);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(lighting);
+		entityManager.refresh(lighting.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointAnalysis: createAnalysisMethodLighting - done");
+		return Response.ok().entity(lighting).build();
 	}
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {

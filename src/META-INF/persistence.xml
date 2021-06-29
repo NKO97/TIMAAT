@@ -123,7 +123,18 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Language</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Lighting</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingDuration</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingDurationTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightingTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightModifier</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightModifierTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPosition</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleHorizontal</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleHorizontalTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleVertical</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPositionAngleVerticalTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.LightPositionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LineupMember</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Location</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation</class>

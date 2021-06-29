@@ -243,10 +243,35 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<JinsTranslation> jinsTranslations;
 
-	//bi-directional many-to-one association to JinsTranslation
+	//bi-directional many-to-one association to LightingTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
-	private List<LightingTranslation> LightingTranslations;
+	private List<LightingTypeTranslation> LightingTypeTranslations;
+
+	//bi-directional many-to-one association to LightingDurationTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightingDurationTranslation> LightingDurationTranslations;
+
+	//bi-directional many-to-one association to LightModifierTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightModifierTranslation> LightModifierTranslations;
+
+	//bi-directional many-to-one association to LightPositionTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightPositionTranslation> LightPositionTranslations;
+
+	//bi-directional many-to-one association to LightPositionAngleHorizontalTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightPositionAngleHorizontalTranslation> LightPositionAngleHorizontalTranslations;
+
+	//bi-directional many-to-one association to LightPositionAngleHorizontalTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<LightPositionAngleVerticalTranslation> LightPositionAngleVerticalTranslations;
 
 	//bi-directional many-to-one association to LocationTranslation
 	@OneToMany(mappedBy="language")
