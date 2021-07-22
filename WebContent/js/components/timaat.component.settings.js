@@ -62,7 +62,7 @@
           resolve(data);
         }).fail(function(error) {
           console.error("ERROR: ", error);
-          console.error("ERROR responseText: ", e.responseText);
+          console.error("ERROR responseText: ", error.responseText);
         });
       }).catch((error) => {
         console.error("ERROR: ", error);

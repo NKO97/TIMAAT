@@ -51,7 +51,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -117,7 +117,7 @@
 				}).done(function(translationData) {
 					resolve(translationData);
 				}).fail(function(error) {
-					console.error( "error: ", e.responseText );
+					console.error( "error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -138,7 +138,7 @@
 				}).done(function(subtypeData) {
 						resolve(subtypeData);
 				}).fail(function(error) {
-					console.error( "error: ", e.responseText );
+					console.error( "error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);

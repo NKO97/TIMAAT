@@ -53,7 +53,7 @@
 					// console.log("TCL: getMediumCollection -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -77,7 +77,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {

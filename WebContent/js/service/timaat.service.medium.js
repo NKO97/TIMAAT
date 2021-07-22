@@ -34,7 +34,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -52,7 +52,7 @@
 		// 		// console.log("TCL: listMedia -> data", data);
 		// 		callback(data);
 		// 	}).fail(function(error) {
-		// 		console.error("ERROR responseText: ", e.responseText);
+		// 		console.error("ERROR responseText: ", error.responseText);
 		// 		console.error("ERROR: ", error);
 		// 	});			
 		// },
@@ -71,7 +71,7 @@
 					// console.log("TCL: getMediaDatasetsTotal -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -95,7 +95,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -116,7 +116,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -140,7 +140,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -162,7 +162,7 @@
 					// console.log("TCL: getMedium -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -184,7 +184,7 @@
 					// console.log("TCL: getViewToken -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -208,7 +208,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -232,7 +232,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -256,7 +256,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -699,7 +699,7 @@
 						// window.clearInterval(medium.poll);
 						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
 						console.error("ERROR: ", error);
-						console.error("ERROR responseText: ", e.responseText);
+						console.error("ERROR responseText: ", error.responseText);
 					});
 				}).catch((error) => {
 					console.error("ERROR: ", error);
@@ -722,7 +722,7 @@
 						resolve(data);					
 					}).fail(function(error) {
 						console.error("ERROR: ", error);
-						console.error("ERROR responseText: ", e.responseText);
+						console.error("ERROR responseText: ", error.responseText);
 					});
 				}).catch((error) => {
 					console.error("ERROR: ", error);

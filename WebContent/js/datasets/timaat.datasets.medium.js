@@ -1237,8 +1237,8 @@
 			});
 
 			// Add languageTrack button click
-			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', async function(e) {
-				e.preventDefault();
+			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', async function(event) {
+				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
@@ -1348,8 +1348,8 @@
 			});
 
 			// Remove languageTrack button click
-			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(e) {
-				e.preventDefault();
+			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(event) {
+				event.preventDefault();
 				var entry = $(this).closest('.form-group').attr('data-id');
 				var medium = $('#medium-metadata-form').data('medium');
 				var listEntry = $(this).closest('[data-role="dynamic-languagetrack-fields"]');

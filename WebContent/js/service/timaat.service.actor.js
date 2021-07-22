@@ -34,7 +34,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -52,7 +52,7 @@
 				// console.log("TCL: listActors -> data", data);
 				callback(data);
 			}).fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -71,7 +71,7 @@
 					// console.log("TCL: getActorDatasetsTotal -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -93,7 +93,7 @@
 					// console.log("TCL: getActor -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -115,7 +115,7 @@
 					// console.log("TCL: getActorName -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -139,7 +139,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -163,7 +163,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -182,7 +182,7 @@
 					// console.log("TCL: getMediaDatasetsTotal -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -206,7 +206,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -230,7 +230,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -254,7 +254,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -278,7 +278,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -302,7 +302,7 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -324,7 +324,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -343,7 +343,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
@@ -362,7 +362,7 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", e.responseText);
+				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
 			});			
 		},
