@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="user_password_hash_type")
-@NamedQuery(name="UserPasswordHashType.findAll", query="SELECT u FROM UserPasswordHashType u")
+@NamedQuery(name="UserPasswordHashType.findAll", query="SELECT upht FROM UserPasswordHashType upht")
 public class UserPasswordHashType implements Serializable {
 	private static final long serialVersionUID = 1L;
 

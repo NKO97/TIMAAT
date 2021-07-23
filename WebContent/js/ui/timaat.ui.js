@@ -55,6 +55,7 @@
 			TIMAAT.VideoChooser.init();	 
 			TIMAAT.VideoPlayer.init();
 			TIMAAT.Settings.init();
+			TIMAAT.UserSettings.init();
 			TIMAAT.URLHistory.init();
 			
 			$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
@@ -309,7 +310,7 @@
 				TIMAAT.UI.setLoginEnabled(false);
 				
 				setTimeout(function() {
-					var hash = TIMAAT.Util.getArgonHash(pass,user+"timaat.kunden.bitgilde.de"); // TODO refactor
+					var hash = TIMAAT.Util.getArgonHash(pass, user + TIMAAT.Service.clientSalt); // TODO refactor
 					var credentials = {
 						username : user,
 						password: hash

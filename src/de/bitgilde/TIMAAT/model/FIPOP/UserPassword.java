@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="user_password")
-@NamedQuery(name="UserPassword.findAll", query="SELECT u FROM UserPassword u")
+@NamedQuery(name="UserPassword.findAll", query="SELECT up FROM UserPassword up")
 public class UserPassword implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,10 +39,6 @@ public class UserPassword implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="user_password_hash_type_id")
 	private UserPasswordHashType userPasswordHashType;
-
-	//bi-directional many-to-one association to UserPasswordOldHashe
-	@OneToMany(mappedBy="userPassword")
-	private List<UserPasswordOldHash> UserPasswordOldHash;
 
 	public UserPassword() {
 	}
@@ -107,28 +103,6 @@ public class UserPassword implements Serializable {
 
 	public void setUserPasswordHashType(UserPasswordHashType userPasswordHashType) {
 		this.userPasswordHashType = userPasswordHashType;
-	}
-
-	public List<UserPasswordOldHash> getUserPasswordOldHash() {
-		return this.UserPasswordOldHash;
-	}
-
-	public void setUserPasswordOldHash(List<UserPasswordOldHash> UserPasswordOldHash) {
-		this.UserPasswordOldHash = UserPasswordOldHash;
-	}
-
-	public UserPasswordOldHash addUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
-		getUserPasswordOldHash().add(UserPasswordOldHash);
-		UserPasswordOldHash.setUserPassword(this);
-
-		return UserPasswordOldHash;
-	}
-
-	public UserPasswordOldHash removeUserPasswordOldHashe(UserPasswordOldHash UserPasswordOldHash) {
-		getUserPasswordOldHash().remove(UserPasswordOldHash);
-		UserPasswordOldHash.setUserPassword(null);
-
-		return UserPasswordOldHash;
 	}
 
 }

@@ -4,12 +4,56 @@ $('#timaat-login-modal').on('shown.bs.modal', function() {
 });
 
 // <!-- client side form validation -->
-var mediumFormMetadata = $('#medium-metadata-form');
 
 jQuery.validator.addMethod("greaterThanStart", function (value, element, params) {
   return this.optional(element) || new Date(value) >= new Date($(params).val());
 },'Must be greater than recording start date.');
 
+jQuery.validator.addMethod("equals", function (value, element, params) {
+  return this.optional(element) || value == $(params).val();
+},'The retyped password does not match your new password.');
+
+var changeUserPassword = $('#changeUserPassword');
+var changeUserPasswordValidator = $('#changeUserPassword').validate({
+  rules: {
+    currentPassword: {
+      required: true,
+      maxlength: 255
+    },
+    newPassword: {
+      required: true,
+      minlength: 13,
+      maxlength: 255
+    },
+    newPasswordConfirmed: {
+      required: true,
+      minlength: 13,
+      maxlength: 255,
+      equals: '#newPassword'
+    },
+  },
+  messages: {
+    currentPassword: {
+      required: "Please enter your current password",
+      maxlength: "The password cannot be longer than 255 characters. That's enough entropy. :)",
+    },
+    newPassword: {
+      required: "Please enter a new password",
+      minlength: "The password has to be at least 13 characters long.",
+      maxlength: "The password cannot be longer than 255 characters. That's enough entropy. :)",
+    },
+    newPasswordConfirmed: {
+      required: "Please confirm your new password",
+      minlength: "The password has to be at least 13 characters long.",
+      maxlength: "The password cannot be longer than 255 characters. That's enough entropy. :)",
+      equals: "Your retyped password does not match your new password."
+    },
+  },
+  submitHandler: function(changeUserPassword) {
+    changeUserPassword.submit();
+  }
+});
+var mediumFormMetadata = $('#medium-metadata-form');
 var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
   rules: {
     displayTitle: {

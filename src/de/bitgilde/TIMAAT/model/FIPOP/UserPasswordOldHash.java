@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the user_password_old_hashes database table.
@@ -10,11 +12,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="user_password_old_hash")
-@NamedQuery(name="UserPasswordOldHash.findAll", query="SELECT u FROM UserPasswordOldHash u")
+@NamedQuery(name="UserPasswordOldHash.findAll", query="SELECT upoh FROM UserPasswordOldHash upoh")
 public class UserPasswordOldHash implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="key_stretching_iterations")
@@ -27,8 +30,14 @@ public class UserPasswordOldHash implements Serializable {
 
 	//bi-directional many-to-one association to UserPassword
 	@ManyToOne
-	@JoinColumn(name="user_password_id")
-	private UserPassword userPassword;
+	@JsonIgnore
+	@JoinColumn(name="user_account_id")
+	private UserAccount userAccount;
+
+	//bi-directional many-to-one association to UserPasswordHashType
+	@ManyToOne
+	@JoinColumn(name="user_password_hash_type_id")
+	private UserPasswordHashType userPasswordHashType;
 
 	public UserPasswordOldHash() {
 	}
@@ -65,12 +74,20 @@ public class UserPasswordOldHash implements Serializable {
 		this.stretchedHashEncrypted = stretchedHashEncrypted;
 	}
 
-	public UserPassword getUserPassword() {
-		return this.userPassword;
+	public UserAccount getUserAccount() {
+		return this.userAccount;
 	}
 
-	public void setUserPassword(UserPassword userPassword) {
-		this.userPassword = userPassword;
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
+	}
+
+	public UserPasswordHashType getUserPasswordHashType() {
+		return this.userPasswordHashType;
+	}
+
+	public void setUserPasswordHashType(UserPasswordHashType userPasswordHashType) {
+		this.userPasswordHashType = userPasswordHashType;
 	}
 
 }

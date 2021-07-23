@@ -24,6 +24,7 @@
 		session: null,
 		token: null,
 		idCache: new Map(),
+		clientSalt: "timaat.kunden.bitgilde.de",
 		
 		logout: function() {
 			// console.log("TCL: logout: function()");
@@ -50,7 +51,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					// resolve(null);
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
@@ -116,7 +117,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					// resolve(null);
-					console.error("ERROR responseText: ", e.responseText);
+					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 				});	
 			}).catch((error) => {
