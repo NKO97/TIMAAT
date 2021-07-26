@@ -47,7 +47,7 @@
 		async changePassword(credentials) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/changePassword",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/changePassword"+'?authtoken='+TIMAAT.Service.session.token,
 					type       : "PATCH",
 					data       : JSON.stringify(credentials),
 					contentType: "application/json; charset=utf-8",

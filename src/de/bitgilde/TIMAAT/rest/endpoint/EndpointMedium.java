@@ -794,24 +794,24 @@ public class EndpointMedium {
 		// verify auth token
 		if ( authToken == null ) return Response.status(401).build();
 		try {
-            String username = AuthenticationFilter.validateToken(authToken);
-            
-            try {
-            	// Validate user status
-            	UserAccount user = AuthenticationFilter.validateAccountStatus(username);
-            	
-                // Authentication succeeded, set request context
-                containerRequestContext.setProperty("TIMAAT.userID", user.getId());
-                containerRequestContext.setProperty("TIMAAT.userName", user.getAccountName());
-                containerRequestContext.setProperty("TIMAAT.user", user);
+			String username = AuthenticationFilter.validateToken(authToken);
+			
+			try {
+				// Validate user status
+				UserAccount user = AuthenticationFilter.validateAccountStatus(username);
+				
+				// Authentication succeeded, set request context
+				containerRequestContext.setProperty("TIMAAT.userID", user.getId());
+				containerRequestContext.setProperty("TIMAAT.userName", user.getAccountName());
+				containerRequestContext.setProperty("TIMAAT.user", user);
 
-            } catch (AccountSuspendedException e) {
-            	return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
-            }
-            
-        } catch (Exception e) {
-        	return Response.status(Status.UNAUTHORIZED).build();
-        }
+			} catch (AccountSuspendedException e) {
+				return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
+			}
+			
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 		
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		Medium medium = em.find(Medium.class, id);

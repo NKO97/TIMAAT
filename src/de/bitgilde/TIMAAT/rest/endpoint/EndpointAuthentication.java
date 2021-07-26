@@ -16,6 +16,7 @@ import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,6 +33,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserPassword;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.UserCredentials;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.mkammerer.argon2.Argon2Advanced;
@@ -164,22 +166,40 @@ public class EndpointAuthentication {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("changePassword")
 	@Secured
-	public Response changePassword(UserCredentials credentials) {
+	public Response changePassword(UserCredentials credentials,
+																 @QueryParam("authtoken") String authToken) {
 		// System.out.println("EndpointAuthentication - changePassword");
-		String username = credentials.getUsername();
-		String password = credentials.getPassword();
-		String newPassword = credentials.getNewPassword();
-		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
-			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
-			.setParameter("username", username)
-			.getSingleResult();
-		try {
-			//* check again whether current credentials are correct
-			user = authenticate(username, password);
+
+		// verify auth token
+		String authenticatedUser;
+		if ( authToken == null ) return Response.status(401).build();
+		try { //* check whether the password change request came from the user whose password shall be changed
+			authenticatedUser = AuthenticationFilter.validateToken(authToken);
 		} catch(Exception e) {
 			// should not occur
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
+		
+		String username = credentials.getUsername();
+		String password = credentials.getPassword();
+		String newPassword = credentials.getNewPassword();
+
+		//* check that the password of the account of the user, whose auth token is used, will become altered
+		if (authenticatedUser.compareTo(username) != 0) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		};
+
+		UserAccount userAccount = (UserAccount) TIMAATApp.emf.createEntityManager()
+			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
+			.setParameter("username", username)
+			.getSingleResult();
+		try { //* check again whether current credentials are correct
+			userAccount = authenticate(username, password);
+		} catch(Exception e) {
+			// should not occur
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
 		//* disallow recycling of old passwords
 		// hash user password hash using server user account salt
 		Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
@@ -189,7 +209,7 @@ public class EndpointAuthentication {
 			1, 		// parallel threads
 			newPassword.toCharArray(),
 			Charset.defaultCharset(),
-			user.getUserPassword().getSalt().getBytes());
+			userAccount.getUserPassword().getSalt().getBytes());
 
 		newHash = newHash.substring(newHash.lastIndexOf("$")+1); // remove hash algorithm metadata
 
@@ -197,17 +217,18 @@ public class EndpointAuthentication {
 		while (hexhash.length() < 64) hexhash = "0" + hexhash;
 
 		// compare calculated server hash with DB stored old hashes
-		for (UserPasswordOldHash oldHash : user.getUserPasswordOldHash()) {
+		for (UserPasswordOldHash oldHash : userAccount.getUserPasswordOldHash()) {
 			if ( hexhash.compareTo(oldHash.getStretchedHashEncrypted()) == 0 ) {
 				return Response.status(Status.CONFLICT).build();
 			}
 		}
+
 		// new password hash is acceptable, store current one in old hash list and store new one in user_password
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		UserPassword userPassword = entityManager.find(UserPassword.class, user.getUserPassword().getId());
+		UserPassword userPassword = entityManager.find(UserPassword.class, userAccount.getUserPassword().getId());
 		if (userPassword == null) return Response.status(Status.NOT_FOUND).build();
 		UserPasswordOldHash userPasswordOldHash = new UserPasswordOldHash();
-		userPasswordOldHash.setUserAccount(user);
+		userPasswordOldHash.setUserAccount(userAccount);
 		userPasswordOldHash.setUserPasswordHashType(userPassword.getUserPasswordHashType());
 		userPasswordOldHash.setSalt(userPassword.getSalt());
 		userPasswordOldHash.setKeyStretchingIterations(userPassword.getKeyStretchingIterations());
