@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -31,6 +34,7 @@ public class Bibliography implements Serializable {
 
 	//bi-directional many-to-many association to Reference
 	@ManyToMany(mappedBy="bibliographies")
+	@JsonIgnore
 	private List<Reference> references;
 
 	public Bibliography() {

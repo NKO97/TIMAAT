@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Set;
 
 
@@ -27,6 +30,7 @@ public class ImageGallery implements Serializable {
 
 	//bi-directional many-to-many association to MediumImage
 	@ManyToMany(mappedBy="imageGalleries")
+	@JsonIgnore
 	private Set<MediumImage> mediumImages;
 
 	public ImageGallery() {

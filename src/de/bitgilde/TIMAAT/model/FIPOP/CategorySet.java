@@ -244,28 +244,4 @@ public class CategorySet implements Serializable {
 		return userAccountHasCategorySet;
 	}
 
-// 	public void addCategories(List<Category> categories) {
-
-// 	}
-
-// 	public void addCategory(Category category) {
-// 		CategorySetHasCategory categorySetHasCategory = new CategorySetHasCategory(this, category);
-// //		categories.add(categorySetHasCategory);
-// 		// category.getCategorySets().add(categorySetHasCategory);
-// 	}
-
-	// public void removeCategory(Category category) {
-	// 	for (Iterator<CategorySetHasCategory> iterator = categories.iterator();
-	// 		iterator.hasNext(); ) {
-	// 			CategorySetHasCategory categorySetHasCategory = iterator.next();
-	// 			if (categorySetHasCategory.getCategorySet().equals(this) &&
-	// 				categorySetHasCategory.getCategory().equals(category)) {
-	// 					iterator.remove();
-	// 					categorySetHasCategory.getCategory().getCategorySets().remove(categorySetHasCategory);
-	// 					categorySetHasCategory.setCategorySet(null);
-	// 					categorySetHasCategory.setCategory(null);						
-	// 				}
-	// 		}
-	// }
-
 }

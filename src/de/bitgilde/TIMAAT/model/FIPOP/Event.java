@@ -82,10 +82,12 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-many association to EventDomain
 	@ManyToMany(mappedBy="events")
+	@JsonIgnore
 	private List<EventDomain> eventDomains;
 
 	//bi-directional many-to-many association to EventType
 	@ManyToMany(mappedBy="events")
+	@JsonIgnore
 	private List<EventType> eventTypes;
 
 	//bi-directional many-to-many association to Tag

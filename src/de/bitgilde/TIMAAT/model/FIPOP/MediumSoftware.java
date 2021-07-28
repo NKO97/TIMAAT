@@ -32,6 +32,7 @@ public class MediumSoftware implements Serializable {
 
 	//bi-directional many-to-many association to Platform
 	@ManyToMany(mappedBy="mediumSoftwares")
+	@JsonIgnore
 	private Set<Platform> platforms;
 
 	public MediumSoftware() {

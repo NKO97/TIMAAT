@@ -94,6 +94,11 @@ public class MediumAnalysisList implements Serializable {
 	@JsonProperty("lastEditedByUserAccountID")
 	private int lastEditedByUserAccountID;
 
+	//bi-directional many-to-many association to UserAccount
+	@ManyToMany(mappedBy="mediumAnalysisLists3")
+	@JsonIgnore
+	private List<UserAccount> userAccounts;
+
 	//bi-directional many-to-many association to Tag
 	@ManyToMany
 	@JoinTable(
@@ -112,8 +117,9 @@ public class MediumAnalysisList implements Serializable {
 	private List<MediumAnalysisListTranslation> mediumAnalysisListTranslations;
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
-	// @OneToMany(mappedBy="mediumAnalysisList")
-	// private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
+	@OneToMany(mappedBy="mediumAnalysisList")
+	@JsonManagedReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
+	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
 	public MediumAnalysisList() {
 	}
@@ -241,6 +247,14 @@ public class MediumAnalysisList implements Serializable {
 		return 0;
 	}
 
+	public List<UserAccount> getUserAccounts() {
+		return this.userAccounts;
+	}
+
+	public void setUserAccounts(List<UserAccount> userAccounts) {
+		this.userAccounts = userAccounts;
+	}
+
 	public List<Tag> getTags() {
 		return this.tags;
 	}
@@ -285,26 +299,26 @@ public class MediumAnalysisList implements Serializable {
 		}
 	}
 
-	// public List<UserAccountHasMediumAnalysisList> getUserAccountHasMediumAnalysisLists() {
-	// 	return this.userAccountHasMediumAnalysisLists;
-	// }
+	public List<UserAccountHasMediumAnalysisList> getUserAccountHasMediumAnalysisLists() {
+		return this.userAccountHasMediumAnalysisLists;
+	}
 
-	// public void setUserAccountHasMediumAnalysisLists(List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists) {
-	// 	this.userAccountHasMediumAnalysisLists = userAccountHasMediumAnalysisLists;
-	// }
+	public void setUserAccountHasMediumAnalysisLists(List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists) {
+		this.userAccountHasMediumAnalysisLists = userAccountHasMediumAnalysisLists;
+	}
 
-	// public UserAccountHasMediumAnalysisList addUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
-	// 	getUserAccountHasMediumAnalysisLists().add(userAccountHasMediumAnalysisList);
-	// 	userAccountHasMediumAnalysisList.setMediumAnalysisList(this);
+	public UserAccountHasMediumAnalysisList addUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
+		getUserAccountHasMediumAnalysisLists().add(userAccountHasMediumAnalysisList);
+		userAccountHasMediumAnalysisList.setMediumAnalysisList(this);
 
-	// 	return userAccountHasMediumAnalysisList;
-	// }
+		return userAccountHasMediumAnalysisList;
+	}
 
-	// public UserAccountHasMediumAnalysisList removeUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
-	// 	getUserAccountHasMediumAnalysisLists().remove(userAccountHasMediumAnalysisList);
-	// 	userAccountHasMediumAnalysisList.setMediumAnalysisList(null);
+	public UserAccountHasMediumAnalysisList removeUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
+		getUserAccountHasMediumAnalysisLists().remove(userAccountHasMediumAnalysisList);
+		userAccountHasMediumAnalysisList.setMediumAnalysisList(null);
 
-	// 	return userAccountHasMediumAnalysisList;
-	// }
+		return userAccountHasMediumAnalysisList;
+	}
 
 }

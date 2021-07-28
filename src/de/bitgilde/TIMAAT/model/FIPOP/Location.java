@@ -121,6 +121,7 @@ public class Location implements Serializable {
 
 	//bi-directional many-to-many association to Territory
 	@ManyToMany(mappedBy="locations")
+	@JsonIgnore
 	private List<Territory> territories;
 
 	public Location() {

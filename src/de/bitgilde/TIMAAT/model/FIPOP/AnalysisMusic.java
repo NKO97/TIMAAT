@@ -103,6 +103,7 @@ public class AnalysisMusic implements Serializable {
 
 	//bi-directional many-to-many association to LineupMember
 	@ManyToMany(mappedBy="analysisMusics")
+	@JsonIgnore
 	private List<LineupMember> lineupMembers;
 
 	//bi-directional many-to-one association to MusicalNotation

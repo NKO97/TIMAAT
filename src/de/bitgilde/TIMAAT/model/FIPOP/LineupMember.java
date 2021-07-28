@@ -61,6 +61,7 @@ public class LineupMember implements Serializable {
 
 	//bi-directional many-to-many association to Voice
 	@ManyToMany(mappedBy="lineupMembers")
+	@JsonIgnore
 	private List<Voice> voices;
 
 	public LineupMember() {

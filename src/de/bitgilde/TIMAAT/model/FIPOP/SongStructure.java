@@ -28,6 +28,7 @@ public class SongStructure implements Serializable {
 
 	//bi-directional many-to-many association to SongStructureElement
 	@ManyToMany(mappedBy="songStructures")
+	@JsonIgnore
 	private List<SongStructureElement> songStructureElements;
 
 	public SongStructure() {
