@@ -2136,10 +2136,14 @@
 			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeAttr('onclick');
+			$('#timaat-analysislist-manage').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-manage').removeAttr('onclick');
 			$('#timaat-analysislist-delete').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-delete').removeAttr('onclick');
 			$('#timaat-annotation-add').addClass("timaat-item-disabled");
 			$('#timaat-annotation-add').removeAttr('onclick');
+			$('#timaat-analysislist-segment-options').addClass("timaat-item-disabled");
+			$('#timaat-analysislist-segment-options').removeAttr('onclick');
 			$('.timaat-segment-structure-add').addClass("timaat-item-disabled");
 			$('.timaat-segment-structure-add').removeAttr('onclick');
 			$('#timaat-medium-offlinepublication').addClass("timaat-item-disabled");
@@ -2153,6 +2157,8 @@
 			$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').attr('onclick','TIMAAT.VideoPlayer.editAnalysisList()');
+			$('#timaat-analysislist-manage').removeClass("timaat-item-disabled");
+			$('#timaat-analysislist-manage').attr('onclick','TIMAAT.VideoPlayer.manageAnalysisList()');
 			$('#timaat-analysissegment-add').removeClass("timaat-item-disabled");
 			if (this.mediaType != 'video') $('#timaat-analysissegment-add').addClass("timaat-item-disabled");
 			$('#timaat-analysissegment-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("segment")');
