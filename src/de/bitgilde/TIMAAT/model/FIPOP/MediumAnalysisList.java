@@ -37,6 +37,9 @@ public class MediumAnalysisList implements Serializable {
 
 	// TODO text and title from translation
 
+	@Column(name="global_permission")
+	private Byte globalPermission;
+
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
@@ -118,7 +121,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
 	@OneToMany(mappedBy="mediumAnalysisList")
-	@JsonBackReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
+	// @JsonBackReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
 	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
 	public MediumAnalysisList() {
@@ -135,6 +138,14 @@ public class MediumAnalysisList implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Byte getGlobalPermission() {
+		return this.globalPermission;
+	}
+
+	public void setGlobalPermission(Byte globalPermission) {
+		this.globalPermission = globalPermission;
 	}
 	
 	public Timestamp getCreatedAt() {

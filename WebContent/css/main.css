@@ -924,6 +924,11 @@ fieldset legend {
 	/* margin-left: 10px; */
 }
 
+.radioButtonsHorizontalEvenlySpaced {
+	display: flex;
+	justify-content: space-evenly;
+}
+
 .dataTables_paginate .paginate_button.disabled {
 	display: none;
 }

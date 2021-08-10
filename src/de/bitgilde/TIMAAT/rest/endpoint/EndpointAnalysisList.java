@@ -663,7 +663,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedList == null ) return Response.notModified().build();
 		    	
-    	// update analysislist
+    // update analysislist
 		if ( updatedList.getMediumAnalysisListTranslations() != null )
 			for ( MediumAnalysisListTranslation trans : updatedList.getMediumAnalysisListTranslations() ) {
 				mediumAnalysisList.setTitle(trans.getTitle(), trans.getLanguage().getCode());
@@ -673,6 +673,7 @@ public class EndpointAnalysisList {
 		mediumAnalysisList.setCategorySets(updatedList.getCategorySets());
 		List<Tag> oldTags = mediumAnalysisList.getTags();
 		mediumAnalysisList.setTags(updatedList.getTags());
+		mediumAnalysisList.setGlobalPermission(updatedList.getGlobalPermission());
 		
 		// TODO update log metadata in general log
 		
@@ -945,28 +946,6 @@ public class EndpointAnalysisList {
 				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		} // else user has permission for requested change 
-
-		// try {
-		// 	userWithAdminPermission = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
-		// 			.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-		// 			.setParameter("userAccount", user)
-		// 			.getSingleResult();
-		// } catch (Exception e) {
-		// 	e.printStackTrace();
-		// }
-		// UserAccountHasMediumAnalysisList userToBeRemoved = null;
-		// try {
-		// 	userToBeRemoved = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount.id=:userAccountId")
-		// 			.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-		// 			.setParameter("userAccountId", userAccountId)
-		// 			.getSingleResult();
-		// } catch (Exception e) {
-		// 	e.printStackTrace();
-		// }
-		// // only user with administrate permission level may remove users with moderate or administrate permission
-		// if ((userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4) && userWithAdminPermission.getPermissionType().getId() != 4) {
-		// 	return Response.status(Status.UNAUTHORIZED).build();
-		// }
 
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();

@@ -339,6 +339,15 @@
 				TIMAAT.VideoPlayer.userPermissionList = await TIMAAT.AnalysisListService.getDisplayNamesAndPermissions(TIMAAT.VideoPlayer.curAnalysisList.id);
 			});
 
+			$(document).on('change', 'input[type=radio][name=globalPermission]', async function(event) {
+				event.preventDefault();
+				let globalPermissionValue = Number($(this).val());
+				if (!globalPermissionValue || globalPermissionValue == null || globalPermissionValue > 2) globalPermissionValue = 0;
+				let analysisList = TIMAAT.VideoPlayer.curAnalysisList;
+				analysisList.globalPermission = globalPermissionValue;
+				TIMAAT.AnalysisListService.updateMediumAnalysisList(analysisList);
+			});
+
 			$(document).on('click','[data-role="removeUserPermission"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
 				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
@@ -1708,17 +1717,36 @@
 						<option value="4">Administrate</option>`;
 				}
 				modalBodyText += `</select>
+							</div>
+							<div class="col-1" data-role="newUserPermission">
+								<button class="addNewPermission btn btn-sm btn-primary p-1 float-right" data-role="add" data-userId="0" data-listId="0">
+									<i class="fas fa-plus fa-fw"></i>
+								</button>
+							</div>
 						</div>
-						<div class="col-1" data-role="newUserPermission">
-							<button class="addNewPermission btn btn-sm btn-primary p-1 float-right" data-role="add" data-userId="0" data-listId="0">
-								<i class="fas fa-plus fa-fw"></i>
-							</button>
+						<div class="globalPermissionContainer">
+							<hr>
+							<div class="row vertical-aligned" data-role="globalUserPermission">
+								<fieldset>
+									<legend>You can grant all users access to this analysis</legend>
+									<div id="globalPermission" class="radioButtonsHorizontalEvenlySpaced" data-role="select">
+										<label>
+											<input id="globalPermission_0" type="radio" name="globalPermission" value="0"> No global access
+										</label>
+										<label>
+											<input id="globalPermission_1" type="radio" name="globalPermission" value="1"> Read
+										</label>
+										<label>
+											<input id="globalPermission_2" type="radio" name="globalPermission" value="2"> Read+Write
+										</label>
+									</div>
+								</fieldset>
+							</div>
 						</div>
 					</div>
 				</div>`;
-				modalBodyText += `</div>`;
 				modal.find('.modal-body').html(modalBodyText);
-
+				$('#globalPermission_'+ TIMAAT.VideoPlayer.curAnalysisList.globalPermission).prop('checked', true);
 				modal.modal('show');
 			}
 			// TODO else show popup 'you have no rights'

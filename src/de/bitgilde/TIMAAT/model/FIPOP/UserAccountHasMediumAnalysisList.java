@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -27,7 +28,8 @@ public class UserAccountHasMediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
-	@JsonManagedReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
+	@JsonIgnore
+	// @JsonManagedReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
 	@JoinColumn(name="medium_analysis_list_id")
 	private MediumAnalysisList mediumAnalysisList;
 

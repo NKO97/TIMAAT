@@ -3393,7 +3393,7 @@ public class EndpointMedium {
 		}
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		String sql = "SELECT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE mal.medium.id = :mediumId AND mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId";
+		String sql = "SELECT DISTINCT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE (mal.medium.id = :mediumId AND mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId) OR mal.globalPermission > 0";
 		Query query = entityManager.createQuery(sql)
 															 .setParameter("mediumId", mediumId)
 															 .setParameter("userId", user.getId());
