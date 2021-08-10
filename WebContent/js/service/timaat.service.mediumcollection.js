@@ -24,7 +24,7 @@
 		getMediaCollections(callback) {
 			// console.log("TCL: getMediaCollections -> getMediaCollections(callback) ");
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/listCard?nocontents=1",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/listCard?noContents=1",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -36,6 +36,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});
 		},
 

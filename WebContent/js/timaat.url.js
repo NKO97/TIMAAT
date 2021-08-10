@@ -682,8 +682,8 @@
               // TIMAAT.VideoPlayer.setupAnalysisList(analysisList);
               // TIMAAT.UI.clearLastSelection('analysisList');
               if ( pathSegments.length == 2 ) { //* #analysis/:id     (default view, show analysis list)
-                //* no extra steps necessary that are not also required for annotations, segments, etc.
-                // TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+                // required to load the correct analysis if the url is wrong (e.g. permission to linked analysis changed)
+                TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
               } else { //* as long as no substructure is accessible via url
                 this.redirectToDefaultView();
               }

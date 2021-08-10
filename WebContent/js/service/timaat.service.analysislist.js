@@ -25,7 +25,7 @@
 			// console.log("TCL: getAnalysisLists -> getAnalysisLists(mediumId, callback) ");
 			// console.log("TCL: getAnalysisLists -> mediumId", mediumId);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysisLists",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysisLists/"+'?authToken='+TIMAAT.Service.session.token,
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",
@@ -45,7 +45,7 @@
 		async getMediumAnalysisLists(mediumId) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysisLists",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysisLists/"+'?authToken='+TIMAAT.Service.session.token,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",

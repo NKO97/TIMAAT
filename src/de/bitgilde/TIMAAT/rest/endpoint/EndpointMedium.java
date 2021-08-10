@@ -68,7 +68,6 @@ import de.bitgilde.TIMAAT.model.fileInformation.*;
 import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.rest.endpoint.EndpointAuthentication;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
@@ -78,6 +77,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudio;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumDocument;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
@@ -3378,17 +3378,36 @@ public class EndpointMedium {
   @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/analysisLists")
 	@Secured
-	public Response getAnalysisLists(@PathParam("id") int id) {
-    	
+	public Response getAnalysisLists(@PathParam("id") int mediumId,
+																   @QueryParam("authToken") String authToken) {
+    // verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount user = null;
+		String username = "";
+		try {
+			username = AuthenticationFilter.validateToken(authToken);
+			// Validate user status
+			user = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE mal.medium.id = :mediumId AND mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId";
+		Query query = entityManager.createQuery(sql)
+															 .setParameter("mediumId", mediumId)
+															 .setParameter("userId", user.getId());
+		List<MediumAnalysisList> mediumAnalysisLists = castList(MediumAnalysisList.class, query.getResultList());
 
+		if (user.getAccountName().toLowerCase().compareTo("admin") == 0) {
 		// find medium
-		Medium medium = entityManager.find(Medium.class, id);
-		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+			if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+			entityManager.refresh(medium);
+			mediumAnalysisLists = medium.getMediumAnalysisLists();
+		}
 		
-		entityManager.refresh(medium);
-		
-		return Response.ok(medium.getMediumAnalysisLists()).build();    	
+		return Response.ok(mediumAnalysisLists).build();    	
 	}
 
 	@POST

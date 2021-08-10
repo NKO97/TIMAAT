@@ -118,7 +118,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
 	@OneToMany(mappedBy="mediumAnalysisList")
-	@JsonManagedReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
+	@JsonBackReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
 	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
 	public MediumAnalysisList() {

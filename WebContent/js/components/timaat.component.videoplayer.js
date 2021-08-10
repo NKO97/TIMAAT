@@ -1394,7 +1394,7 @@
 		},
 		
 		setupMediumAnalysisLists: function (lists) {
-//			console.log("TCL: setupMediumAnalysisLists: ", lists);
+			// console.log("TCL: setupMediumAnalysisLists: ", lists);
 			// clear old lists if any
 			$('#timaat-analysislist-chooser').empty();
 			// setup model
@@ -2132,7 +2132,7 @@
 		},
 
 		initEmptyAnalysisListMenu: function() {
-			$('#timaat-analysislist-chooser').append('<option>keine Analyse vorhanden</option');
+			$('#timaat-analysislist-chooser').append('<option>No analyses available or accessible. You can create a new one.</option>');
 			$('#timaat-analysislist-chooser').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').addClass("timaat-item-disabled");
 			$('#timaat-analysislist-edit').removeAttr('onclick');
