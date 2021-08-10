@@ -75,7 +75,7 @@
 			// 	} else {
 			// 		$('body').removeClass('timaat-login-modal-open');
 			// 		$('#timaat-login-modal').modal('hide');
-			// 		$('#timaat-user-info').html(event.accountName);
+			// 		$('#timaat-user-info').html(event.displayName);
 			// 	}
 			// });
 			
@@ -132,7 +132,7 @@
 				});
 				$('.timaat-user-log-details').html(html);
 					
-				$(log).each(function(index, entry) {TIMAAT.Service.idCache.set(entry.userAccount.id, entry.userAccount.accountName);});
+				$(log).each(function(index, entry) {TIMAAT.Service.idCache.set(entry.userAccount.id, entry.userAccount.displayName);});
 				//	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"ich")});
 				});
 			});
@@ -331,7 +331,8 @@
             // console.log("TCL ~ setTimeout ~ TIMAAT.Service.token", TIMAAT.Service.token);
 						$('body').removeClass('timaat-login-modal-open');
 						$('#timaat-login-modal').modal('hide');
-						$('#timaat-user-info').html(e.accountName);
+						// $('#timaat-user-info').html(e.accountName);
+						$('#timaat-user-info').html(e.displayName);						
 
 						TIMAAT.VideoChooser.loadCollections();
 						TIMAAT.Datasets.load();

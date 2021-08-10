@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -53,10 +54,13 @@ import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.PermissionType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -74,6 +78,46 @@ public class EndpointAnalysisList {
 	ContainerRequestContext crc;
 	@Context
 	ServletContext ctx;
+
+	@GET
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/displayNames")
+	@Secured
+	public Response getDisplayNamesAndPermissions(@PathParam("id") Integer id,
+																							  @QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysisList: getDisplayNames - ID: "+ id);
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		try {
+			String username = AuthenticationFilter.validateToken(authToken);
+			// Validate user status
+			UserAccount user = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+		List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisListList = mediumAnalysisList.getUserAccountHasMediumAnalysisLists();
+		class DisplayNameElement {
+			public int userAccountId;
+			public String displayName;
+			public int permissionId;
+			public DisplayNameElement(int userAccountId, String displayName, int permissionId) {
+				this.userAccountId = userAccountId;
+				this.displayName = displayName;
+				this.permissionId = permissionId;
+			};
+			public String getDisplayName() {
+				return this.displayName;
+			}
+		}
+		List<DisplayNameElement> displayNameElementList = new ArrayList<>();
+		for (UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList : userAccountHasMediumAnalysisListList) {
+			displayNameElementList.add(new DisplayNameElement(userAccountHasMediumAnalysisList.getUserAccount().getId(), userAccountHasMediumAnalysisList.getUserAccount().getDisplayName(), userAccountHasMediumAnalysisList.getPermissionType().getId()));
+		}
+		Collections.sort(displayNameElementList, (Comparator<DisplayNameElement>) (DisplayNameElement d1, DisplayNameElement d2) -> d1.getDisplayName().toLowerCase().compareTo(d2.getDisplayName().toLowerCase()) );
+		return Response.ok().entity(displayNameElementList).build();
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +174,7 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
 		List<Category> categoryList = segment.getCategories();
-		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 
 		// System.out.println("EndPointAnalysisList: getSegmentSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
@@ -191,7 +235,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -269,7 +313,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -347,7 +391,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -361,12 +405,13 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("medium/{mediumId}")
-	public Response createAnalysisList(@PathParam("mediumId") int mediumId, String jsonData) {
+	public Response createAnalysisList(@PathParam("mediumId") int mediumId,
+																		 String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList newList = null;    	
     	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Medium m = entityManager.find(Medium.class, mediumId);
-    	if ( m == null ) return Response.status(Status.NOT_FOUND).build();		
+    	Medium medium = entityManager.find(Medium.class, mediumId);
+    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
     	// parse JSON data
 		try {
 			newList = mapper.readValue(jsonData, MediumAnalysisList.class);
@@ -377,11 +422,12 @@ public class EndpointAnalysisList {
 		if ( newList == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newList.setId(0);
-		newList.setMedium(m);
+		newList.setMedium(medium);
 		// update log metadata
 		newList.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		if ( crc.getProperty("TIMAAT.userID") != null ) {
 			newList.setCreatedByUserAccount(entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
+			newList.setLastEditedByUserAccount(entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();
@@ -396,12 +442,28 @@ public class EndpointAnalysisList {
 		entityTransaction.begin();
 		entityManager.persist(newList.getMediumAnalysisListTranslations().get(0));
 		entityManager.persist(newList);
-		m.addMediumAnalysisList(newList);
-		entityManager.persist(m);
+		medium.addMediumAnalysisList(newList);
+		entityManager.persist(medium);
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newList);
-		entityManager.refresh(m);
+		entityManager.refresh(medium);
+
+		// set initial permission for newly created analysis list
+		UserAccount userAccount = entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"));
+		UserAccountHasMediumAnalysisList uahmal = new UserAccountHasMediumAnalysisList(userAccount, newList);
+		PermissionType permissionType = entityManager.find(PermissionType.class, 4); // List creator becomes list admin
+		uahmal.setPermissionType(permissionType);
+		entityTransaction.begin();
+		userAccount.getUserAccountHasMediumAnalysisLists().add(uahmal);
+		newList.getUserAccountHasMediumAnalysisLists().add(uahmal);
+		entityManager.merge(userAccount);
+		entityManager.merge(newList);
+		entityManager.persist(userAccount);
+		entityManager.persist(newList);
+		entityTransaction.commit();
+		entityManager.refresh(userAccount);
+		entityManager.refresh(newList);
 		
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newList.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
@@ -478,7 +540,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -556,7 +618,7 @@ public class EndpointAnalysisList {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
@@ -663,6 +725,267 @@ public class EndpointAnalysisList {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTDELETED);
+
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{analysisListId}/userAccount/{userAccountId}/withPermission/{permissionId}")
+	@Secured
+	public Response addUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+																																		@PathParam("userAccountId") int userAccountId,
+																																		@PathParam("permissionId") int permissionTypeId,
+																																		@QueryParam("authToken") String authToken) {
+		System.out.println("EndpointMediumAnalysisList: addUserAccountHasMediumAnalysisListWithPermission");
+
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount user = null;
+		String username = "";
+		try {
+			username = AuthenticationFilter.validateToken(authToken);
+			// Validate user status
+			user = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
+		try {
+			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
+				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+				.setParameter("userAccount", user);
+			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
+		} catch (Exception e) {
+		}
+
+		// only users with administrate permission level may add users with moderate or administrate permission
+		// IF no list entry found but user is not sys admin
+		// OR user is on list but without high enough permission level to set others to moderate or administrate
+		// OR user is on list but without high enough permission level to set any permission levels
+		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		} // else user has permission for requested change 
+
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
+		UserAccount userAccount = entityManager.find(UserAccount.class, userAccountId);
+		if (userAccount == null) return Response.status(Status.NOT_FOUND).build();
+		PermissionType permissionType = entityManager.find(PermissionType.class, permissionTypeId);
+		if (permissionType == null) return Response.status(Status.NOT_FOUND).build();
+
+		UserAccountHasMediumAnalysisList uahmal = null;
+		try {
+			Query countQuery = entityManager.createQuery("SELECT COUNT(uahmal) FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList=:mediumAnalysisList AND uahmal.userAccount=:userAccount")
+																			.setParameter("mediumAnalysisList", mediumAnalysisList)
+																			.setParameter("userAccount", userAccount);
+																			// .setParameter("permissionType", permissionType);
+			long recordsTotal = (long) countQuery.getSingleResult();
+			if (recordsTotal >= 1) {
+				return Response.status(Status.FORBIDDEN).build();	// an entry already exists, do not create a new one
+			// uahmal = (UserAccountHasMediumAnalysisList) entityManager.createQuery(
+			// 	"SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList=:mediumAnalysisList AND uahmal.userAccount=:userAccount")
+			// 		.setParameter("mediumAnalysisList", mediumAnalysisList)
+			// 		.setParameter("userAccount", userAccount)
+			// 		// .setParameter("permissionType", permissionType)
+			// 		.getSingleResult();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// doesn't matter
+		}
+		if ( uahmal == null ) {
+			System.out.println("EndpointMediumAnalysisList: UserAccountHasMediumAnalysisList - create new entry");
+			uahmal = new UserAccountHasMediumAnalysisList();
+			uahmal.setMediumAnalysisList(mediumAnalysisList);
+			uahmal.setUserAccount(userAccount);
+			uahmal.setPermissionType(permissionType);
+			try {
+				EntityTransaction entityTransaction = entityManager.getTransaction();
+				entityTransaction.begin();
+				entityManager.persist(uahmal);
+				entityTransaction.commit();
+				entityManager.refresh(mediumAnalysisList);
+				entityManager.refresh(userAccount);
+				entityManager.refresh(permissionType);
+				entityManager.refresh(uahmal);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Response.notModified().build();
+			}
+		}
+		System.out.println("EndpointMediumAnalysisList: addMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
+
+		// add log entry
+		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
+
+		return Response.ok().entity(uahmal).build();
+	}
+
+	@PATCH
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("{analysisListId}/userAccount/{userAccountId}/withPermission/{permissionId}")
+	@Secured
+	public Response updateUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+																																			 @PathParam("userAccountId") int userAccountId,
+																																			 @PathParam("permissionId") int permissionTypeId,
+																																			 @QueryParam("authToken") String authToken) {
+		System.out.println("EndpointMediumAnalysisList: updateUserAccountHasMediumAnalysisListWithPermission");
+
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount user = null;
+		String username = "";
+		try {
+			username = AuthenticationFilter.validateToken(authToken);
+			// Validate user status
+			user = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
+		try {
+			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
+				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+				.setParameter("userAccount", user);
+			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
+		} catch (Exception e) {
+		}
+
+		// only users with administrate permission level may change users with moderate or administrate permission
+		// IF no list entry found but user is not sys admin
+		// OR user is on list but without high enough permission level to set others to moderate or administrate
+		// OR user is on list but without high enough permission level to set any permission levels
+		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		} // else user has permission for requested change 
+
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
+		UserAccount userAccount = entityManager.find(UserAccount.class, userAccountId);
+		if (userAccount == null) return Response.status(Status.NOT_FOUND).build();
+		PermissionType permissionType = entityManager.find(PermissionType.class, permissionTypeId);
+		if (permissionType == null) return Response.status(Status.NOT_FOUND).build();
+		UserAccountHasMediumAnalysisList uahmalKey = new UserAccountHasMediumAnalysisList(userAccount, mediumAnalysisList);
+		UserAccountHasMediumAnalysisList uahmal = entityManager.find(UserAccountHasMediumAnalysisList.class, uahmalKey.getId());
+
+    uahmal.setPermissionType(permissionType);
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(uahmal);
+		entityManager.persist(uahmal);
+		entityTransaction.commit();
+		entityManager.refresh(uahmal);
+
+		System.out.println("EndpointMediumAnalysisList: updateMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
+
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
+
+		return Response.ok().entity(uahmal).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{analysisListId}/userAccount/{userAccountId}")
+	@Secured
+	public Response deleteUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+																																			 @PathParam("userAccountId") int userAccountId,
+																																			 @QueryParam("authToken") String authToken) {
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount user = null;
+		String username = "";
+		try {
+			username = AuthenticationFilter.validateToken(authToken);
+			// Validate user status
+			user = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
+		try {
+			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
+				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+				.setParameter("userAccount", user);
+			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
+		} catch (Exception e) {
+		}
+
+		UserAccountHasMediumAnalysisList userToBeRemoved = null;
+		try {
+			userToBeRemoved = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount.id=:userAccountId")
+					.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+					.setParameter("userAccountId", userAccountId)
+					.getSingleResult();
+		} catch (NoResultException nre) {
+			nre.printStackTrace();
+			return Response.status(Status.NOT_FOUND).build();
+		}
+
+		// only users with administrate permission level may delete users with moderate or administrate permission
+		// IF no list entry found but user is not sys admin
+		// OR user is on list but without high enough permission level to delete others with moderate or administrate permission
+		// OR user is on list but without high enough permission level to delete anyone
+		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
+				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		} // else user has permission for requested change 
+
+		// try {
+		// 	userWithAdminPermission = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
+		// 			.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+		// 			.setParameter("userAccount", user)
+		// 			.getSingleResult();
+		// } catch (Exception e) {
+		// 	e.printStackTrace();
+		// }
+		// UserAccountHasMediumAnalysisList userToBeRemoved = null;
+		// try {
+		// 	userToBeRemoved = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount.id=:userAccountId")
+		// 			.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+		// 			.setParameter("userAccountId", userAccountId)
+		// 			.getSingleResult();
+		// } catch (Exception e) {
+		// 	e.printStackTrace();
+		// }
+		// // only user with administrate permission level may remove users with moderate or administrate permission
+		// if ((userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4) && userWithAdminPermission.getPermissionType().getId() != 4) {
+		// 	return Response.status(Status.UNAUTHORIZED).build();
+		// }
+
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		UserAccount userAccount = entityManager.find(UserAccount.class, userAccountId);
+		if ( userAccount == null ) return Response.status(Status.NOT_FOUND).build();
+		UserAccountHasMediumAnalysisList uahmalKey = new UserAccountHasMediumAnalysisList(userAccount, mediumAnalysisList);
+		UserAccountHasMediumAnalysisList uahmal = entityManager.find(UserAccountHasMediumAnalysisList.class, uahmalKey.getId());
+			
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+    entityManager.remove(uahmal);
+		entityTransaction.commit();
+		entityManager.refresh(mediumAnalysisList);
+		entityManager.refresh(userAccount);
+
+		// add log entry
+		UserLogManager.getLogger()
+									.addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().build();
 	}

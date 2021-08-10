@@ -134,30 +134,27 @@
       <div class="navigation">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top pt-1 pb-1 pl-1" role="navigation" style="margin-bottom: 0">
-          <div class="navbar-header">
-            <a href="https://bitgilde.de" target="_blank" class="navbar-brand float-left">
-              <img src="img/bitgilde-small.png" style="height: 32px;float: left;margin-top:-6px;padding-right: 15px;" title="bitGilde IT Solutions UG" alt="bitGilde Logo" />
-            </a>
-            <a class="navbar-brand float-left">
-              <i class="fas fa-photo-video"></i>
-              <div id="timaat-title-info">
-                TIMAAT - Time-based Image Area Annotation Tool
-              </div>
-            </a>
-          </div>
-          <!-- /.navbar-header -->
-          <div>
-            <span id="timaat-user-log-list" class="timaat-user-log"><i class="fas fa-user"></i></span>
-            <span id="timaat-user-info"></span> &nbsp;
-            <span id="timaat-upload-manager" class="timaat-uploads btn btn-sm btn-secondary "><i class="fas fa-cloud-upload-alt"></i></span>
-            <span id="timaat-user-settings" class="btn btn-sm btn-secondary"><i class="fas fa-cog"></i></span> &nbsp; 
-            <a href="#"
-              onclick="TIMAAT.Service.logout()"
-              id="timaat-logout">
-              <i class="fa fa-sign-out-alt fa-fw"></i>
-              Logout
-            </a>
-          </div>
+          <a class="navbar-brand" href="https://bitgilde.de" target="_blank">
+            <img src="img/bitgilde-small.png" style="height: 32px;float: left;margin-top:-6px;padding-right: 15px;" title="bitGilde IT Solutions UG" alt="bitGilde Logo" />
+          </a>
+          <a class="navbar-brand" id="timaat-title-info">TIMAAT - Time-based Image Area Annotation Tool</a>
+          <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex vertical-aligned">
+            <li class="timaat-user-log" id="timaat-user-log-list">
+              <i class="fas fa-user"></i>
+            </li>
+            <li class="ml-1" id="timaat-user-info"></li>
+            <li class="ml-1 timaat-uploads btn btn-sm btn-secondary" id="timaat-upload-manager">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </li>
+            <li class="ml-1 btn btn-sm btn-secondary" id="timaat-user-settings">
+              <i class="fas fa-cog"></i>
+            </li>
+            <li class="ml-1">
+              <a href="#" onclick="TIMAAT.Service.logout()" id="timaat-logout"> 
+                <i class="fa fa-sign-out-alt fa-fw"></i>Logout
+              </a>
+            </li>
+          </ul>
           <div id="sidebar-wrapper">
             <div class="navbar-default sidebar" role="navigation">
               <ul id="side-menu">
@@ -308,13 +305,13 @@
                 <br>
                 <div class="">
                   <label for="currentPassword"><b>Current password</b></label>
-                  <input type="password" id="currentPassword" name="currentPassword" autocorrect="off" autocapitalize="off" spellcheck="false" class="form-control" maxlength="255" required>
+                  <input type="password" id="currentPassword" name="currentPassword" autocorrect="off" autocapitalize="off" spellcheck="false" class="form-control input-usersettings" maxlength="255" required>
                 </div>
                 <div class="">
                   <label for="newPassword"><b>New password</b>
                     <sup><i class="fas fa-exclamation-circle text-info" title="Minimum length: 13 characters"></i></sup>
                   </label>
-                  <input type="password" id="newPassword" name="newPassword" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" class="form-control" minlength="13" maxlength="255" required>
+                  <input type="password" id="newPassword" name="newPassword" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" class="form-control input-usersettings" minlength="13" maxlength="255" required>
                 </div>
                 <div class="">
                   <label for="newPasswordConfirmed"><b>Confirm password</b></label>
@@ -620,6 +617,24 @@
                     <button type="button" class="btn btn-danger" id="timaat-analysis-delete-submit">Delete Analysis</button>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-analysis-manage" tabindex="-1" role="dialog" aria-labelledby="analysisManageLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <form class="modal-content" role="form" id="analysisAccessRightsForm" name="analysisAccessRightsForm" method="POST">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="analysisManageLabel">Set analysis access rights</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">                  
+                  </div>
+                  <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="timaat-analysis-manage-submit">Submit</button>
+                  </div> -->
+                </form>
               </div>
             </div>
             <div class="modal fade" id="timaat-mediumAnalysisList-categorySet-in-use" tabindex="-1" role="dialog" aria-labelledby="categorySetInUseLabel" aria-hidden="true">
@@ -1088,28 +1103,29 @@
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i title="Analysislist menu" class="fas fa-fw fa-list-alt"></i>
+                        <i title="Analysis list menu" class="fas fa-fw fa-list-alt"></i>
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysisList()" id="timaat-analysislist-edit">Analyse bearbeiten...</a>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-annotation-add">Neue Annotation</a>
-                        <a class="dropdown-item dropdown-toggle" id="timaat-analysislist-segment-options" disabled href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Segmentstruktur</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-annotation-add">Add annotation</a>
+                        <a class="dropdown-item dropdown-toggle" id="timaat-analysislist-segment-options" disabled href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Segment structure</a>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item timaat-segment-structure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')" id="timaat-analysissegment-add">Neues Segment</a>
-                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')" id="timaat-analysissequence-add">Sequence hinzufügen</a>
-                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')" id="timaat-analysistake-add">Take hinzufügen</a>
-                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('scene')" id="timaat-analysisscene-add">Scene hinzufügen</a>
-                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('action')" id="timaat-analysisaction-add">Action hinzufügen</a>
+                          <a class="dropdown-item timaat-segment-structure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')" id="timaat-analysissegment-add">Add segment</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')" id="timaat-analysissequence-add">Add sequence</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')" id="timaat-analysistake-add">Add take</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('scene')" id="timaat-analysisscene-add">Add scene</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('action')" id="timaat-analysisaction-add">Add action</a>
                         </div>
                         <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Neue Analyse erstellen</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Create new Analysis</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysisList()" id="timaat-analysislist-edit">Edit analysis</a>
+                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.manageAnalysisList()" id="timaat-analysislist-manage">Manage analysis</a>
                         <!-- <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysisList()" id="timaat-analysislist-delete">Analyse löschen</a> -->
                         <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.managePublication()" id="timaat-medium-publication">
-                          <i class="fas fa-chalkboard"></i> Publikationseinstellungen...
+                          <i class="fas fa-chalkboard"></i> Publication settings
                         </a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.offLinePublication()" id="timaat-medium-offlinepublication">
-                          <i class="fas fa-chalkboard-teacher"></i> Offline-Publikation...
+                          <i class="fas fa-chalkboard-teacher"></i> Offline-Publication
                         </a>
                       </div>
                     </div>
@@ -4324,6 +4340,8 @@
                     <i class="fas fa-cogs"></i> Allgemein
                   </a>
                   <button type="button" class="btn btn-sm btn-primary" id="length-fix-button">Fix length
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary" id="no-permission-set-fix-button">Fix missing permission
                   </button>
                 </li>
               </ul>

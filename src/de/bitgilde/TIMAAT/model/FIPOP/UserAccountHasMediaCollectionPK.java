@@ -4,25 +4,25 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the user_account_has_category_set database table.
+ * The primary key class for the user_account_has_media_collection database table.
  * 
  */
 @Embeddable
-public class UserAccountHasCategorySetPK implements Serializable {
+public class UserAccountHasMediaCollectionPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="user_account_id", insertable=false, updatable=false)
 	private int userAccountId;
 
-	@Column(name="category_set_id", insertable=false, updatable=false)
-	private int categorySetId;
+	@Column(name="media_collection_id", insertable=false, updatable=false)
+	private int mediaCollectionId;
 
-	public UserAccountHasCategorySetPK() {
+	public UserAccountHasMediaCollectionPK() {
 	}
-	public UserAccountHasCategorySetPK(int userAccountId, int categorySetId) {
+	public UserAccountHasMediaCollectionPK(int userAccountId, int mediaCollectionId) {
 		this.userAccountId = userAccountId;
-		this.categorySetId = categorySetId;
+		this.mediaCollectionId = mediaCollectionId;
 	}
 	public int getUserAccountId() {
 		return this.userAccountId;
@@ -30,31 +30,31 @@ public class UserAccountHasCategorySetPK implements Serializable {
 	public void setUserAccountId(int userAccountId) {
 		this.userAccountId = userAccountId;
 	}
-	public int getCategorySetId() {
-		return this.categorySetId;
+	public int getMediaCollectionId() {
+		return this.mediaCollectionId;
 	}
-	public void setCategorySetId(int categorySetId) {
-		this.categorySetId = categorySetId;
+	public void setMediaCollectionId(int mediaCollectionId) {
+		this.mediaCollectionId = mediaCollectionId;
 	}
 
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof UserAccountHasCategorySetPK)) {
+		if (!(other instanceof UserAccountHasMediaCollectionPK)) {
 			return false;
 		}
-		UserAccountHasCategorySetPK castOther = (UserAccountHasCategorySetPK)other;
+		UserAccountHasMediaCollectionPK castOther = (UserAccountHasMediaCollectionPK)other;
 		return 
 			(this.userAccountId == castOther.userAccountId)
-			&& (this.categorySetId == castOther.categorySetId);
+			&& (this.mediaCollectionId == castOther.mediaCollectionId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.userAccountId;
-		hash = hash * prime + this.categorySetId;
+		hash = hash * prime + this.mediaCollectionId;
 		
 		return hash;
 	}

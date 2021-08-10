@@ -230,9 +230,9 @@ public class EndpointAnnotation {
 				List<Actor> actors = anno.getActors();
 				if ( actors.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, actors)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
-					Collections.sort(actors, (Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().compareTo( a2.getDisplayName().getName() ));
+					Collections.sort(actors, (Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().toLowerCase().compareTo( a2.getDisplayName().getName().toLowerCase()));
 				else
-					Collections.sort(actors, ((Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().compareTo( a2.getDisplayName().getName() )).reversed());
+					Collections.sort(actors, ((Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().toLowerCase().compareTo( a2.getDisplayName().getName().toLowerCase())).reversed() );
 				
 				if ( start != null ) {
 					if ( start < 0 ) start = 0;
@@ -281,9 +281,9 @@ public class EndpointAnnotation {
 				List<Analysis> analysis = anno.getAnalysis();
 				if ( analysis.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, analysis)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
-					Collections.sort(analysis, (Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName() ));
+					Collections.sort(analysis, (Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase()));
 				else
-					Collections.sort(analysis, ((Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName() )).reversed());
+					Collections.sort(analysis, ((Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase())).reversed());
 				if ( start != null ) {
 					if ( start < 0 ) start = 0;
 					if ( start > analysis.size()-1 ) start = analysis.size()-1;
@@ -331,9 +331,9 @@ public class EndpointAnnotation {
 				List<Event> events = anno.getEvents();
 				if ( events.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, events)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
-					Collections.sort(events, (Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().compareTo( a2.getEventTranslations().get(0).getName() ));
+					Collections.sort(events, (Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().toLowerCase().compareTo( a2.getEventTranslations().get(0).getName().toLowerCase()));
 				else
-					Collections.sort(events, ((Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().compareTo( a2.getEventTranslations().get(0).getName() )).reversed());
+					Collections.sort(events, ((Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().toLowerCase().compareTo( a2.getEventTranslations().get(0).getName().toLowerCase())).reversed());
 				
 				if ( start != null ) {
 					if ( start < 0 ) start = 0;
@@ -422,7 +422,7 @@ public class EndpointAnnotation {
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
-			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}

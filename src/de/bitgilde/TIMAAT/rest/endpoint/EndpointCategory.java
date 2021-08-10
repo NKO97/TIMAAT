@@ -187,7 +187,7 @@ public class EndpointCategory {
 		}
 		List<SelectElement> categorySelectList = new ArrayList<>();
 		List<Category> categoryList = castList(Category.class, query.getResultList());
-		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().compareTo(c2.getName()));
+		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		for (Category category : categoryList) {
 			categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 		}

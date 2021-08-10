@@ -2,6 +2,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -45,6 +48,11 @@ public class MediaCollectionAnalysisList implements Serializable {
 	//bi-directional many-to-one association to MediaCollectionAnalysisListTranslation
 	@OneToMany(mappedBy="mediaCollectionAnalysisList")
 	private List<MediaCollectionAnalysisListTranslation> mediaCollectionAnalysisListTranslations;
+
+	//bi-directional many-to-one association to UserAccountHasMediaCollectionAnalysisList
+	@OneToMany(mappedBy="mediaCollectionAnalysisList")
+	@JsonManagedReference(value = "MediaCollectionAnalysisList-UserAccountHasMediaCollectionAnalysisList")
+	private List<UserAccountHasMediaCollectionAnalysisList> userAccountHasMediaCollectionAnalysisLists;
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany
@@ -160,6 +168,29 @@ public class MediaCollectionAnalysisList implements Serializable {
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	
+	public List<UserAccountHasMediaCollectionAnalysisList> getUserAccountHasMediaCollectionAnalysisLists() {
+		return this.userAccountHasMediaCollectionAnalysisLists;
+	}
+
+	public void setUserAccountHasMediaCollectionAnalysisLists(List<UserAccountHasMediaCollectionAnalysisList> userAccountHasMediaCollectionAnalysisLists) {
+		this.userAccountHasMediaCollectionAnalysisLists = userAccountHasMediaCollectionAnalysisLists;
+	}
+
+	public UserAccountHasMediaCollectionAnalysisList addUserAccountHasMediaCollectionAnalysisList(UserAccountHasMediaCollectionAnalysisList userAccountHasMediaCollectionAnalysisList) {
+		getUserAccountHasMediaCollectionAnalysisLists().add(userAccountHasMediaCollectionAnalysisList);
+		userAccountHasMediaCollectionAnalysisList.setMediaCollectionAnalysisList(this);
+
+		return userAccountHasMediaCollectionAnalysisList;
+	}
+
+	public UserAccountHasMediaCollectionAnalysisList removeUserAccountHasMediaCollectionAnalysisList(UserAccountHasMediaCollectionAnalysisList userAccountHasMediaCollectionAnalysisList) {
+		getUserAccountHasMediaCollectionAnalysisLists().remove(userAccountHasMediaCollectionAnalysisList);
+		userAccountHasMediaCollectionAnalysisList.setMediaCollectionAnalysisList(null);
+
+		return userAccountHasMediaCollectionAnalysisList;
 	}
 
 }

@@ -787,9 +787,8 @@ public class EndpointMedium {
 	@GET
 	@Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
 	@Path("video/offline/{id}.html")
-	public Response getVideoPublication(
-			@PathParam("id") int id,
-			@QueryParam("authtoken") String authToken) {
+	public Response getVideoPublication(@PathParam("id") int id,
+																			@QueryParam("authToken") String authToken) {
 
 		// verify auth token
 		if ( authToken == null ) return Response.status(401).build();
@@ -3237,7 +3236,6 @@ public class EndpointMedium {
 			return Response.ok().entity(thumbnail).build();
 	}
 	
-	
 	@GET
 	@Path("image/{id}/preview")
 	@Produces("image/png")
@@ -3584,6 +3582,93 @@ public class EndpointMedium {
 		return Response.ok().build();
 	}
 	
+	@PATCH
+  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("fileLengthFix")
+	@Secured
+	public Response updateAllFileLengths(@QueryParam("authToken") String authToken) {
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount userAccount = null;
+		try {
+			String username = AuthenticationFilter.validateToken(authToken);
+				// Validate user status
+				userAccount = AuthenticationFilter.validateAccountStatus(username);
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		if (userAccount.getId() != 1) { // only Admin may update file lengths
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
+		Runtime r = Runtime.getRuntime();
+		Process p;     // Process tracks one external native process
+		BufferedReader is;  // reader for output of process
+		String line;
+		String filename;
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT m FROM Medium m WHERE m.filePath IS NOT NULL";
+		Query query = entityManager.createQuery(sql);		
+		List<Medium> mediumList = castList(Medium.class, query.getResultList());
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		for (Medium medium : mediumList) {
+			if (!(medium.getFilePath().contains("medium"))) {
+				medium.setFilePath(null);
+			}
+			if ((medium.getMediumAudio() != null || medium.getMediumVideo() != null) && medium.getFilePath() != null){
+				filename = medium.getFilePath();
+				System.out.println("filename: "+ filename);
+				String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
+				"-v", "error", "-select_streams", "v:0",
+				"-show_entries", "stream=width,height,r_frame_rate,codec_name",
+				"-show_entries", "format=duration", "-sexagesimal",
+				"-of", "json", filename };
+				try {
+					p = r.exec(commandLine);
+					is = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+					try {
+						p.waitFor();  // wait for process to complete
+					} catch (InterruptedException e) {
+						System.err.println(e);  // "can't happen"
+					}
+
+					String jsonString = "";
+					while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+
+					JSONObject json = new JSONObject(jsonString);
+					String sDuration = json.getJSONObject("format").getString("duration");
+					String[] hms = sDuration.split(":");
+					double dTotalSecs = Integer.parseInt(hms[0]) * 3600
+														+ Integer.parseInt(hms[1]) *   60
+														+ Double.parseDouble(hms[2]);
+					long lDuration = (long) (dTotalSecs*1000);
+
+					if (medium.getMediumAudio() != null) {
+						medium.getMediumAudio().setLength(lDuration);
+					} else if (medium.getMediumVideo() != null) {
+						medium.getMediumVideo().setLength(lDuration);
+					}
+					System.out.println("updated Medium "+ medium.getId() + " file length to "+ lDuration);
+
+					entityTransaction.begin();
+					entityManager.merge(medium);
+					entityManager.persist(medium);
+					entityTransaction.commit();
+					entityManager.refresh(medium);
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		System.out.println("Completed updating all file lengths.");
+		return Response.ok().build();
+}
+	
 	private Response downloadFile(String fileName, HttpHeaders headers) {
 		return downloadFile(fileName, headers, null);
 	}
@@ -3800,80 +3885,6 @@ public class EndpointMedium {
 	    return videoInfo;
 	}
 
-	@PATCH
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Path("fileLengthFix")
-	@Secured
-	public Response updateAllFileLengths() {
-		Runtime r = Runtime.getRuntime();
-		Process p;     // Process tracks one external native process
-		BufferedReader is;  // reader for output of process
-		String line;
-		String filename;
-
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		String sql = "SELECT m FROM Medium m WHERE m.filePath IS NOT NULL";
-		Query query = entityManager.createQuery(sql);		
-		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-
-		for (Medium medium : mediumList) {
-			if (!(medium.getFilePath().contains("medium"))) {
-				medium.setFilePath(null);
-			}
-			if ((medium.getMediumAudio() != null || medium.getMediumVideo() != null) && medium.getFilePath() != null){
-				filename = medium.getFilePath();
-				System.out.println("filename: "+ filename);
-				String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
-				"-v", "error", "-select_streams", "v:0",
-				"-show_entries", "stream=width,height,r_frame_rate,codec_name",
-				"-show_entries", "format=duration", "-sexagesimal",
-				"-of", "json", filename };
-				try {
-					p = r.exec(commandLine);
-					is = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-					try {
-						p.waitFor();  // wait for process to complete
-					} catch (InterruptedException e) {
-						System.err.println(e);  // "can't happen"
-					}
-
-					String jsonString = "";
-					while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
-
-					JSONObject json = new JSONObject(jsonString);
-					String sDuration = json.getJSONObject("format").getString("duration");
-					String[] hms = sDuration.split(":");
-					double dTotalSecs = Integer.parseInt(hms[0]) * 3600
-														+ Integer.parseInt(hms[1]) *   60
-														+ Double.parseDouble(hms[2]);
-					long lDuration = (long) (dTotalSecs*1000);
-
-					if (medium.getMediumAudio() != null) {
-						medium.getMediumAudio().setLength(lDuration);
-					} else if (medium.getMediumVideo() != null) {
-						medium.getMediumVideo().setLength(lDuration);
-					}
-					System.out.println("updated Medium "+ medium.getId() + " file length to "+ lDuration);
-
-					entityTransaction.begin();
-					entityManager.merge(medium);
-					entityManager.persist(medium);
-					entityTransaction.commit();
-					entityManager.refresh(medium);
-
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		}
-		System.out.println("Completed updating all file lengths.");
-		return Response.ok().build();
-}
-	
 	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException
 	{
 		BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);

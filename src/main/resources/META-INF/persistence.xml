@@ -190,6 +190,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKey</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PermissionType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
@@ -236,6 +237,12 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySet</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasCategorySetPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollection</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollectionAnalysisList</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollectionAnalysisListPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollectionPK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisListPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLog</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPassword</class>

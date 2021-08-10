@@ -17,8 +17,10 @@ public class UserAccountHasCategorySet implements Serializable {
 	@EmbeddedId
 	private UserAccountHasCategorySetPK id;
 
-	@Column(name="permission_type")
-	private String permissionType;
+	//bi-directional many-to-one association to PermissionType
+	@ManyToOne
+	@JoinColumn(name="permission_type_id")
+	private PermissionType permissionType;
 
 	//bi-directional many-to-one association to CategorySet
 	@ManyToOne
@@ -33,6 +35,12 @@ public class UserAccountHasCategorySet implements Serializable {
 	public UserAccountHasCategorySet() {
 	}
 
+	public UserAccountHasCategorySet(UserAccount userAccount, CategorySet categorySet) {
+		this.userAccount = userAccount;
+		this.categorySet = categorySet;
+		this.id = new UserAccountHasCategorySetPK(userAccount.getId(), categorySet.getId());
+	}
+
 	public UserAccountHasCategorySetPK getId() {
 		return this.id;
 	}
@@ -41,11 +49,11 @@ public class UserAccountHasCategorySet implements Serializable {
 		this.id = id;
 	}
 
-	public String getPermissionType() {
+	public PermissionType getPermissionType() {
 		return this.permissionType;
 	}
 
-	public void setPermissionType(String permissionType) {
+	public void setPermissionType(PermissionType permissionType) {
 		this.permissionType = permissionType;
 	}
 

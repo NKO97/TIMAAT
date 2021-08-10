@@ -33,7 +33,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: getActor -> data", data);
+					// console.log("TCL: isPasswordValid -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
@@ -47,7 +47,7 @@
 		async changePassword(credentials) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/changePassword"+'?authtoken='+TIMAAT.Service.session.token,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/changePassword"+'?authToken='+TIMAAT.Service.session.token,
 					type       : "PATCH",
 					data       : JSON.stringify(credentials),
 					contentType: "application/json; charset=utf-8",

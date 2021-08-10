@@ -206,6 +206,72 @@
 			});
 		},
 
+		async displayNameExists(displayName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/displayNameExists'+'?name='+displayName,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: displayNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", error.responseText);
+					console.error("ERROR: ", error);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});		
+		},
+
+		async getUserAccountIdByDisplayName(displayName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/getIdByDisplayName'+'?name='+displayName,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: displayNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", error.responseText);
+					console.error("ERROR: ", error);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});		
+		},
+
+		async getUserAccountNameByDisplayName(displayName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/getAccountNameByDisplayName'+'?name='+displayName,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: displayNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", error.responseText);
+					console.error("ERROR: ", error);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});		
+		},
+
 		getUserLog: function(id, limit, callback) {
     // console.log("TCL: getUserLog: function(id, limit, callback)");
     // console.log("TCL: id, limit, callback", id, limit, callback);

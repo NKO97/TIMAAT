@@ -80,8 +80,8 @@
 					resolve(data);
 				})
 				.fail(function(error) {
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -254,6 +254,75 @@
 					console.error("ERROR: ", error);
 			});	
 		},
+
+		async addUserAccountHasMediumAnalysisListWithPermission(userAccountId, mediumAnalysisListId, permissionId) {
+			console.log("TCL: addUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+          // console.log("TCL: addUserAccountHasMediumAnalysisListWithPermission - done -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async updateUserAccountHasMediumAnalysisListWithPermission(userAccountId, mediumAnalysisListId, permissionId) {
+			console.log("TCL: updateUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					type:"PATCH",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+          // console.log("TCL: updateUserAccountHasMediumAnalysisListWithPermission - done -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async removeUserAccountHasMediumAnalysisList(userAccountId, mediumAnalysisListId) {
+      console.log("TCL: removeUserAccountHasMediumAnalysisList -> userAccountId, mediumAnalysisListId", userAccountId, mediumAnalysisListId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});	
+		},
+
 
 		removeAnalysisList(analysisList) {
 			// console.log("TCL: removeAnalysisList -> analysisList", analysisList);
@@ -500,6 +569,53 @@
 			}).catch((error) => {
 				console.error("ERROR: ", error);
 			});
+		},
+
+		async getPermissionLevel(mediumAnalysisListId) {
+      // console.log("TCL: isAuthorized);
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/permissionLevel/"+mediumAnalysisListId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					type       : "POST",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: isAuthorized -> data", data);
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});	
+		},
+
+		async getDisplayNamesAndPermissions(mediumAnalysisListId) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/analysislist/'+mediumAnalysisListId+'/displayNames/'+'?authToken='+TIMAAT.Service.session.token,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: getDisplayNamesAndPermissions -> data", data);
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});	
 		},
 
 	}

@@ -73,6 +73,15 @@ public class MediaCollection implements Serializable {
 	@OneToOne(mappedBy="mediaCollection")
 	private MediaCollectionSeries mediaCollectionSeries;
 
+	//bi-directional many-to-many association to UserAccount
+	// @ManyToMany(mappedBy="mediaCollections")
+	// @JsonIgnore
+	// private List<UserAccount> userAccounts;
+
+	//bi-directional many-to-one association to UserAccountHasMediaCollection
+	// @OneToMany(mappedBy="mediaCollection")
+	// private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
+
 	public MediaCollection() {
 	}
 
@@ -207,5 +216,35 @@ public class MediaCollection implements Serializable {
 	public void setMediaCollectionSeries(MediaCollectionSeries mediaCollectionSeries) {
 		this.mediaCollectionSeries = mediaCollectionSeries;
 	}
+
+	// public List<UserAccount> getUserAccounts() {
+	// 	return this.userAccounts;
+	// }
+
+	// public void setUserAccounts(List<UserAccount> userAccounts) {
+	// 	this.userAccounts = userAccounts;
+	// }
+
+	// public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
+	// 	return this.userAccountHasMediaCollections;
+	// }
+
+	// public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
+	// 	this.userAccountHasMediaCollections = userAccountHasMediaCollections;
+	// }
+
+	// public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+	// 	getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
+	// 	userAccountHasMediaCollection.setMediaCollection(this);
+
+	// 	return userAccountHasMediaCollection;
+	// }
+
+	// public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+	// 	getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
+	// 	userAccountHasMediaCollection.setMediaCollection(null);
+
+	// 	return userAccountHasMediaCollection;
+	// }
 
 }

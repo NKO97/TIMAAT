@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -171,13 +172,40 @@ public class UserAccount implements Serializable {
 	// 	)
 	// private List<MediaCollection> mediaCollections;
 
+		// bi-directional many-to-many association to MediaCollectionAnalysisList
+		@ManyToMany
+		@JoinTable(
+			name="user_account_has_media_collection_analysis_list"
+			, joinColumns={
+				@JoinColumn(name="user_account_id")
+				}
+			, inverseJoinColumns={
+				@JoinColumn(name="media_collection_analysis_list_id")
+				}
+			)
+		private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists;
+
+	// bi-directional many-to-many association to MediumAnalysisList
+	@ManyToMany
+	@JoinTable(
+		name="user_account_has_medium_analysis_list"
+		, joinColumns={
+			@JoinColumn(name="user_account_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="medium_analysis_list_id")
+			}
+		)
+	private List<MediumAnalysisList> mediumAnalysisLists3;
+
 	//bi-directional many-to-one association to UserAccountHasMediaCollectionAnalysisList
 	// @OneToMany(mappedBy="userAccount")
 	// private List<UserAccountHasMediaCollectionAnalysisList> userAccountHasMediaCollectionAnalysisLists;
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
-	// @OneToMany(mappedBy="userAccount")
-	// private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
+	@OneToMany(mappedBy="userAccount")
+	@JsonManagedReference(value = "UserAccount-UserAccountHasMediumAnalysisList")
+	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
 	//bi-directional many-to-one association to UserAccountHasWorkAnalysisList
 	// @OneToMany(mappedBy="userAccount")
@@ -197,6 +225,23 @@ public class UserAccount implements Serializable {
 	// @OneToMany(mappedBy="lastEditedByUserAccount")
 	// @JsonIgnore
 	// private List<WorkAnalysisList> workAnalysisLists2;
+
+	//bi-directional many-to-one association to UserAccountHasMediaCollection
+	// @OneToMany(mappedBy="userAccount")
+	// private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
+
+	//bi-directional many-to-many association to PermissionType
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="user_account_has_media_collection_analysis_list"
+	// 	, joinColumns={
+	// 		@JoinColumn(name="user_account_id")
+	// 		}
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="permission_type_id")
+	// 		}
+	// 	)
+	// private List<PermissionType> permissionTypes;
 
 	public UserAccount() {
 	}
@@ -741,6 +786,44 @@ public class UserAccount implements Serializable {
 	// 	this.mediaCollections = mediaCollections;
 	// }
 
+	public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists() {
+		return this.mediaCollectionAnalysisLists;
+	}
+
+	public void setMediaCollectionAnalysisLists(List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists) {
+		this.mediaCollectionAnalysisLists = mediaCollectionAnalysisLists;
+	}
+
+	public List<MediumAnalysisList> getMediumAnalysisLists3() {
+		return this.mediumAnalysisLists3;
+	}
+
+	public void setMediumAnalysisLists3(List<MediumAnalysisList> mediumAnalysisLists3) {
+		this.mediumAnalysisLists3 = mediumAnalysisLists3;
+	}
+
+	// public List<UserAccountHasCategorySet> getUserAccountHasCategorySets() {
+	// 	return this.userAccountHasCategorySets;
+	// }
+
+	// public void setUserAccountHasCategorySets(List<UserAccountHasCategorySet> userAccountHasCategorySets) {
+	// 	this.userAccountHasCategorySets = userAccountHasCategorySets;
+	// }
+
+	// public UserAccountHasCategorySet addUserAccountHasCategorySet(UserAccountHasCategorySet userAccountHasCategorySet) {
+	// 	getUserAccountHasCategorySets().add(userAccountHasCategorySet);
+	// 	userAccountHasCategorySet.setUserAccount(this);
+
+	// 	return userAccountHasCategorySet;
+	// }
+
+	// public UserAccountHasCategorySet removeUserAccountHasCategorySet(UserAccountHasCategorySet userAccountHasCategorySet) {
+	// 	getUserAccountHasCategorySets().remove(userAccountHasCategorySet);
+	// 	userAccountHasCategorySet.setUserAccount(null);
+
+	// 	return userAccountHasCategorySet;
+	// }
+
 	// public List<UserAccountHasMediaCollectionAnalysisList> getUserAccountHasMediaCollectionAnalysisLists() {
 	// 	return this.userAccountHasMediaCollectionAnalysisLists;
 	// }
@@ -763,27 +846,27 @@ public class UserAccount implements Serializable {
 	// 	return userAccountHasMediaCollectionAnalysisList;
 	// }
 
-	// public List<UserAccountHasMediumAnalysisList> getUserAccountHasMediumAnalysisLists() {
-	// 	return this.userAccountHasMediumAnalysisLists;
-	// }
+	public List<UserAccountHasMediumAnalysisList> getUserAccountHasMediumAnalysisLists() {
+		return this.userAccountHasMediumAnalysisLists;
+	}
 
-	// public void setUserAccountHasMediumAnalysisLists(List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists) {
-	// 	this.userAccountHasMediumAnalysisLists = userAccountHasMediumAnalysisLists;
-	// }
+	public void setUserAccountHasMediumAnalysisLists(List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists) {
+		this.userAccountHasMediumAnalysisLists = userAccountHasMediumAnalysisLists;
+	}
 
-	// public UserAccountHasMediumAnalysisList addUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
-	// 	getUserAccountHasMediumAnalysisLists().add(userAccountHasMediumAnalysisList);
-	// 	userAccountHasMediumAnalysisList.setUserAccount(this);
+	public UserAccountHasMediumAnalysisList addUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
+		getUserAccountHasMediumAnalysisLists().add(userAccountHasMediumAnalysisList);
+		userAccountHasMediumAnalysisList.setUserAccount(this);
 
-	// 	return userAccountHasMediumAnalysisList;
-	// }
+		return userAccountHasMediumAnalysisList;
+	}
 
-	// public UserAccountHasMediumAnalysisList removeUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
-	// 	getUserAccountHasMediumAnalysisLists().remove(userAccountHasMediumAnalysisList);
-	// 	userAccountHasMediumAnalysisList.setUserAccount(null);
+	public UserAccountHasMediumAnalysisList removeUserAccountHasMediumAnalysisList(UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList) {
+		getUserAccountHasMediumAnalysisLists().remove(userAccountHasMediumAnalysisList);
+		userAccountHasMediumAnalysisList.setUserAccount(null);
 
-	// 	return userAccountHasMediumAnalysisList;
-	// }
+		return userAccountHasMediumAnalysisList;
+	}
 
 	// public List<UserAccountHasWorkAnalysisList> getUserAccountHasWorkAnalysisLists() {
 	// 	return this.userAccountHasWorkAnalysisLists;
@@ -881,5 +964,34 @@ public class UserAccount implements Serializable {
 	// 	return workAnalysisLists2;
 	// }
 
+	// public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
+	// 	return this.userAccountHasMediaCollections;
+	// }
+
+	// public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
+	// 	this.userAccountHasMediaCollections = userAccountHasMediaCollections;
+	// }
+
+	// public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+	// 	getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
+	// 	userAccountHasMediaCollection.setUserAccount(this);
+
+	// 	return userAccountHasMediaCollection;
+	// }
+
+	// public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+	// 	getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
+	// 	userAccountHasMediaCollection.setUserAccount(null);
+
+	// 	return userAccountHasMediaCollection;
+	// }
+
+	// public List<PermissionType> getPermissionTypes() {
+	// 	return this.permissionTypes;
+	// }
+
+	// public void setPermissionTypes(List<PermissionType> permissionTypes) {
+	// 	this.permissionTypes = permissionTypes;
+	// }
 	
 }

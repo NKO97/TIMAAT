@@ -27,7 +27,7 @@
 
 		initSettings: function() {
       $('#timaat-user-settings').on('click', function(event) {
-        if (TIMAAT.Service.session && TIMAAT.Service.session.accountName == 'gast') { //* Do not allow changes to gast-account used on demo-server
+        if (TIMAAT.Service.session && TIMAAT.Service.session.displayName == 'Gast Account') { //* Do not allow changes to gast-account used on demo-server
             let modal = $('#user-settings');
             modal.find('.modal-header').html(`
               <h5 class="modal-title">User settings</h5>
@@ -54,7 +54,7 @@
         if (!$('#changeUserPassword').valid())
           return;
         let currentPassword = $('#currentPassword').val();
-        let username = TIMAAT.Service.session.accountName;
+        let username = TIMAAT.Service.getUserAccountByDisplayName(TIMAAT.Service.session.displayName);
         let oldHash = TIMAAT.Util.getArgonHash(currentPassword, username + TIMAAT.Service.clientSalt);
         let credentials = {
           username : username,

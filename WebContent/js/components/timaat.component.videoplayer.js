@@ -39,6 +39,7 @@
 		repeatSection: false,
 		selectedVideo: null,
 		selectedElementType: null,
+		userPermissionList: null,
 
 		init: function() {
 			// init UI
@@ -255,6 +256,114 @@
 					TIMAAT.VideoPlayer.setupAnalysisList(list);
 					TIMAAT.URLHistory.setURL(null, 'Analysis · '+ list.mediumAnalysisListTranslations[0].title, '#analysis/'+list.id);
 				}
+			});
+
+			$('#timaat-videoplayer-analysis-manage').on('change paste keyup', '#userAccountForNewPermission', function(event) {
+				console.log("hide warning messages");
+				$('#adminCanNotBeAddedInfo').hide();
+				$('#userAccountDoesNotExistInfo').hide();
+				$('#userAccountAlreadyInList').hide();
+			});
+
+			$('#timaat-videoplayer-analysis-manage').on('blur', '.custom-select', function(event) {
+				console.log("hide warning messages");
+				$('[id^="adminCannotBeChanged_"]').hide();
+			});
+
+			$(document).on('click', '[data-role="newUserPermission"] > [data-role="add"]', async function(event) {
+				event.preventDefault();
+				let listEntry = $(this).closest('[data-role="newPermission"]');
+				let displayName = '';
+				let permissionId = null;
+				if (listEntry.find('input').each(function(){
+					displayName = $(this).val();
+				}));
+				if (listEntry.find('select').each(function(){
+					permissionId = $(this).val();
+				}));
+
+				if (displayName == '') return; // no data entered
+
+				// 'admin' can't be added as admin always has access
+				if (displayName.toLowerCase() == 'admin') {
+					$('#adminCanNotBeAddedInfo').show();
+					return;
+				}
+				// check if name exists
+				// TODO make check case insensitive
+				let displayNameExists = await TIMAAT.Service.displayNameExists(displayName);
+				if (!displayNameExists) {
+					$('#userAccountDoesNotExistInfo').show();
+					return;
+				}
+
+				// check if name is already in the list
+				let displayNameDuplicate = false;
+				let i = 0;
+				for (; i < TIMAAT.VideoPlayer.userPermissionList.length; i++) {
+					if ($('#userAccountForNewPermission').val() == TIMAAT.VideoPlayer.userPermissionList[i].displayName ) {
+						displayNameDuplicate = true;
+						break;
+					}
+				}
+				if (displayNameDuplicate) {
+					$('#userAccountAlreadyInList').show();
+					return;
+				}
+
+				// add new entry to the list
+				let userAccountId = await TIMAAT.Service.getUserAccountIdByDisplayName(displayName);
+				await TIMAAT.AnalysisListService.addUserAccountHasMediumAnalysisListWithPermission(userAccountId, TIMAAT.VideoPlayer.curAnalysisList.id, permissionId);
+				TIMAAT.VideoPlayer.manageAnalysisList();
+			});
+
+			$(document).on('change', '[data-role="changeUserPermission"] > [data-role="select"]', async function(event) {
+				event.preventDefault();
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let permissionId = $(this).closest('.custom-select').val();
+
+				// prevent removal of the last admin. One admin has to exist at any time
+				let adminCount = 0;
+				$('.permissionContainer [data-role="select"]').each(function() {
+					if ( $(this).val() == 4 ) {
+						adminCount++;
+					}
+				});
+				if (adminCount <= 0) {
+					$(this).closest('.custom-select').val(4); // return invalidly changed option back to 'Administrate'
+					$('#adminCannotBeChanged_'+userId).show();
+					return;
+				}
+
+				await TIMAAT.AnalysisListService.updateUserAccountHasMediumAnalysisListWithPermission(userId, TIMAAT.VideoPlayer.curAnalysisList.id, permissionId);
+				TIMAAT.VideoPlayer.userPermissionList = await TIMAAT.AnalysisListService.getDisplayNamesAndPermissions(TIMAAT.VideoPlayer.curAnalysisList.id);
+			});
+
+			$(document).on('click','[data-role="removeUserPermission"] > [data-role="remove"]', async function (event) {
+				event.preventDefault();
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let index = TIMAAT.VideoPlayer.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
+				let userPermissionId = TIMAAT.VideoPlayer.userPermissionList[index].permissionId;
+				if (!userPermissionId) return;
+
+				// if the to be removed user has administrate permission, make sure that she is not the only one
+				if (userPermissionId == 4) {
+					// prevent removal of the last admin. One admin has to exist at any time
+					let adminCount = 0;
+					$('.permissionContainer [data-role="select"]').each(function() {
+						if ( $(this).val() == 4 ) {
+							adminCount++;
+						}
+					});
+					if (adminCount <= 1) {
+						$('#adminCannotBeChanged_'+userId).show();
+						return;
+					}
+				}
+
+				await TIMAAT.AnalysisListService.removeUserAccountHasMediumAnalysisList(userId, TIMAAT.VideoPlayer.curAnalysisList.id);
+				$(this).closest('.permissionContainer').remove();
+				TIMAAT.VideoPlayer.userPermissionList.splice(index, 1);
 			});
 
 			// publication dialog events
@@ -1433,6 +1542,187 @@
 			$('#timaat-videoplayer-analysislist-delete').data('analysislist', this.curAnalysisList);
 			$('#timaat-videoplayer-analysislist-delete').modal('show');
 		},
+
+		manageAnalysisList: async function() {
+			// console.log("TCL: manageAnalysisList: function()");
+			// check if user is moderator or administrator of the analysis list.
+			let permissionLevel = await TIMAAT.AnalysisListService.getPermissionLevel(this.curAnalysisList.id);
+      console.log("TCL: manageAnalysisList: function -> permissionLevel", permissionLevel);
+			if (permissionLevel == 3 || permissionLevel == 4) {
+				TIMAAT.VideoPlayer.pause();
+				let modal = $('#timaat-videoplayer-analysis-manage');
+				// get all display names and permissions for this analysis
+				let userDisplayNameAndPermissionList = await TIMAAT.AnalysisListService.getDisplayNamesAndPermissions(this.curAnalysisList.id);
+        console.log("TCL: manageAnalysisList: function -> userDisplayNameAndPermissionList", userDisplayNameAndPermissionList);
+				TIMAAT.VideoPlayer.userPermissionList = userDisplayNameAndPermissionList;
+				//? TODO allow global read / write access
+				let modalBodyText = `<div class="col-12">
+					<div class="row">
+						<div class="col-7">
+							<h6>User</h6>
+							<div id="analysisPermissionUserName">
+							</div>
+						</div>
+						<div class="col-4">
+							<h6>Access rights</h6>
+							<div id="analysisPermissionLevel">
+							</div>
+						</div>
+						<div class="col-1">
+						</div>
+					</div>`;
+				let i = 0;
+				for (; i < userDisplayNameAndPermissionList.length; i++) {
+					modalBodyText += `<div class="permissionContainer" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`">
+						<hr>
+						<div class="row vertical-aligned">
+							<div class="col-7">
+								` + userDisplayNameAndPermissionList[i].displayName + `
+							</div>
+							<div class="col-4" data-role="changeUserPermission">`;
+					if ( permissionLevel == 3 ) {
+						switch (userDisplayNameAndPermissionList[i].permissionId) {
+							case 1:
+								modalBodyText += `<select class="custom-select" data-role="select">
+													<option value="1" selected>Read</option>
+													<option value="2">Read+Write</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermission">
+												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+													<i class="fas fa-minus fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 2:
+								modalBodyText += `<select class="custom-select" data-role="select">
+													<option value="1">Read</option>
+													<option value="2" selected>Read+Write</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermission">
+												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+													<i class="fas fa-minus fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 3:
+								modalBodyText += `<select class="custom-select" data-role="select" disabled>
+													<option value="3" selected>Moderate</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermission">
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 4:
+								modalBodyText += `<select class="custom-select" data-role="select" disabled>
+													<option value="4" selected>Administrate</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermission">
+											</div>
+										</div>
+									</div>`;
+							break;
+							default:
+								modalBodyText += `An error occurred!`; // should never occur
+							break;
+						}
+					} else { // permissionLevel == 4	
+						switch (userDisplayNameAndPermissionList[i].permissionId) {
+							case 1:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1" selected>Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4">Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 2:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2" selected>Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4">Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 3:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3" selected>Moderate</option>
+										<option value="4">Administrate</option>
+									</select>	
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 4:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4" selected>Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							default:
+								modalBodyText += `An error occurred!`; // should never occur
+							break;
+						}
+						modalBodyText += `
+									</div>
+									<div class="col-1" data-role="removeUserPermission">
+										<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+											<i class="fas fa-minus fa-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>`;
+					}
+				}
+				modalBodyText += `<div id="newPermissionContainer">
+					<hr>
+					<div class="row vertical-aligned" data-role="newPermission">
+						<div class="col-2">
+							<h6>Add user</h6>
+						</div>
+						<div class="col-5">
+							<input type="text" id="userAccountForNewPermission" class="form-control username" placeholder="Username" aria-label="Username">
+							<small id="userAccountDoesNotExistInfo" style="display: none; color: red;">This user name does not exist. Please check your spelling and try again.</small>
+							<small id="userAccountAlreadyInList" style="display: none; color: red;">This user already has a permission level.</small>
+							<small id="adminCanNotBeAddedInfo" style="display: none; color: red;">Admin can not be added.</small>
+						</div>
+						<div class="col-4">
+							<select class="custom-select" id="newAccessRightsSelect">
+								<option value="1" selected>Read</option>
+								<option value="2">Read+Write</option>`;
+				if (permissionLevel == 4) {	 // only admins can create mods and admins
+					modalBodyText += `<option value="3">Moderate</option>
+						<option value="4">Administrate</option>`;
+				}
+				modalBodyText += `</select>
+						</div>
+						<div class="col-1" data-role="newUserPermission">
+							<button class="addNewPermission btn btn-sm btn-primary p-1 float-right" data-role="add" data-userId="0" data-listId="0">
+								<i class="fas fa-plus fa-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>`;
+				modalBodyText += `</div>`;
+				modal.find('.modal-body').html(modalBodyText);
+
+				modal.modal('show');
+			}
+			// TODO else show popup 'you have no rights'
+		},
 		
 		addQuickAnnotation: function() {
 			// console.log("TCL: addQuickAnnotation: function()");
@@ -1596,7 +1886,7 @@
 
 		offLinePublication: function() {
 			let modal = $('#timaat-videoplayer-download-publication');
-			modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authtoken='+TIMAAT.Service.session.token);
+			modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
 			modal.find('a.download-video-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
 			modal.modal('show');
 		},

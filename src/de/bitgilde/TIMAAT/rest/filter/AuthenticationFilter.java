@@ -101,7 +101,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                         .build());
     }
     
-    
     public static UserAccount validateAccountStatus(String username) throws Exception {
     	// verify user and user status
     	if ( username == null ) throw new Exception("provided credentials invalid");

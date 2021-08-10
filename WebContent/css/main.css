@@ -18,6 +18,12 @@ body {
 	padding: 0;
 }
 
+hr {
+  border: 0;            
+  background-color:#dee2e6;
+  height: 1px;
+}
+
 #timaat-notification-pane {
 	position: absolute;
 	top: 1em;
@@ -64,7 +70,7 @@ p + p {
 	margin-top: 15px;
 }
 
-input {
+.input-usersettings {
 	margin-bottom: 16px !important;
 }
 

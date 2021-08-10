@@ -5,8 +5,11 @@ import java.nio.charset.Charset;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -15,6 +18,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -28,6 +32,7 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPassword;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash;
@@ -74,7 +79,8 @@ public class EndpointAuthentication {
 			// Return the token on the response
 			return Response.ok("{\"token\":\""+token+"\","
 					+ "\"id\":"+user.getId()+","
-					+ "\"accountName\":\""+user.getAccountName()+"\""
+					// + "\"accountName\":\""+user.getAccountName()+"\""
+					+ "\"displayName\":\""+user.getDisplayName()+"\""
 					+ "}").build();
 
 		} catch (AccountSuspendedException se) {
@@ -99,48 +105,49 @@ public class EndpointAuthentication {
 			+ "}").build();
 	}
 
-	
-	// ----------------------------------------------------------------------------
-	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("permissionLevel/{mediumAnalysisListId}")
+	@Secured
+	public Response getPermissionLevel(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																		 @QueryParam("authToken") String authToken) {
+		// verify auth token
+		if ( authToken == null ) return Response.status(401).build();
+		UserAccount userAccount = null;
+		try {
+			String username = AuthenticationFilter.validateToken(authToken);
+			try {
+				// Validate user status
+				userAccount = AuthenticationFilter.validateAccountStatus(username);
+			} catch (AccountSuspendedException e) {
+				// can't occur as user wouldn't be able to log in in the first place
+				return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
+			}
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 
-	private UserAccount authenticate(String username, String password) throws Exception {
-		// Authenticate against the FIP-OP database
-		// Throw an Exception if the credentials are invalid
-
-		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
-			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
-			.setParameter("username", username)
-			.getSingleResult();
-			
-		// check if account is suspended
-		if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
-			throw new AccountSuspendedException();
-
-		// hash user password hash using server user account salt
-		Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
-		String hash = argon2.hash(
-			8, 		// iterations
-			4096,  // memory usage
-			1, 		// parallel threads
-			password.toCharArray(),
-			Charset.defaultCharset(),
-			user.getUserPassword().getSalt().getBytes());
-
-		hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
-		
-		String hexhash = toHex(Base64.getDecoder().decode(hash));
-		while (hexhash.length() < 64) hexhash = "0" + hexhash;
-
-		System.out.println(hexhash);
-		System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
-		System.out.println("User logged in: " + user.getDisplayName());
-
-		// compare calculated server hash with DB stored hash
-		if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
-			throw new CredentialException();
-
-		return user;
-	
+		int permissionType = 0;
+		UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		int userAccountId = userAccount.getId();
+		String sql = "SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.userAccount.id = :userAccountId AND uahmal.mediumAnalysisList.id = :mediumAnalysisListId";
+		try {
+			userAccountHasMediumAnalysisList = (UserAccountHasMediumAnalysisList) entityManager.createQuery(sql)
+				.setParameter("userAccountId", userAccountId)
+				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+				.getSingleResult();
+		} catch (Exception e) {
+			// System.out.println("User is neither mod nor admin");
+			// no return here. Admin user needs to access all lists without having an entry everywhere
+		}
+		if (userAccountHasMediumAnalysisList != null) {
+			permissionType = userAccountHasMediumAnalysisList.getPermissionType().getId();
+		}
+		if (userAccount.getAccountName().compareTo("admin") == 0) { // admin account is always authorized
+			permissionType = 4;
+		}
+		return Response.ok().entity(permissionType).build();
 	}
 
 	@POST
@@ -167,7 +174,7 @@ public class EndpointAuthentication {
 	@Path("changePassword")
 	@Secured
 	public Response changePassword(UserCredentials credentials,
-																 @QueryParam("authtoken") String authToken) {
+																 @QueryParam("authToken") String authToken) {
 		// System.out.println("EndpointAuthentication - changePassword");
 
 		// verify auth token
@@ -180,6 +187,8 @@ public class EndpointAuthentication {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
+		// TODO Check if someone tries to change 'gast'-account password and prevent it
+
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 		String newPassword = credentials.getNewPassword();
@@ -254,6 +263,47 @@ public class EndpointAuthentication {
 		return Response.ok().build();
 	}
 
+	
+	// ----------------------------------------------------------------------------
+	
+
+	private UserAccount authenticate(String username, String password) throws Exception {
+		// Authenticate against the FIP-OP database
+		// Throw an Exception if the credentials are invalid
+		UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
+			.createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
+			.setParameter("username", username)
+			.getSingleResult();
+		// check if account is suspended
+		if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
+			throw new AccountSuspendedException();
+		// hash user password hash using server user account salt
+		Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
+		String hash = argon2.hash(
+			8, 		// iterations
+			4096,  // memory usage
+			1, 		// parallel threads
+			password.toCharArray(),
+			Charset.defaultCharset(),
+			user.getUserPassword().getSalt().getBytes());
+
+		hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
+		
+		String hexhash = toHex(Base64.getDecoder().decode(hash));
+		while (hexhash.length() < 64) hexhash = "0" + hexhash;
+
+		System.out.println(hexhash);
+		System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
+		System.out.println("User logged in: " + user.getDisplayName());
+
+		// compare calculated server hash with DB stored hash
+		if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
+			throw new CredentialException();
+
+		return user;
+	
+	}
+
 	private String issueToken(String username, int userID) {
 		Key key = TIMAATKeyGenerator.generateKey();
 		String token = Jwts.builder()
@@ -286,4 +336,11 @@ public class EndpointAuthentication {
 		return data;
 	}
 
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+		List<T> r = new ArrayList<T>(c.size());
+		for(Object o: c)
+			r.add(clazz.cast(o));
+		return r;
+    }
+	
 }
