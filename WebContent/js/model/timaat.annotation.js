@@ -119,8 +119,9 @@
 			$(this.listView).on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
+				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 				else {
-					TIMAAT.VideoPlayer.selectAnnotation(null);
+					TIMAAT.VideoPlayer.selectAnnotation(curAnnotation);
 				}
 				TIMAAT.VideoPlayer.updateListUI();
 				// TIMAAT.VideoPlayer.selectAnnotation(ev.data);
