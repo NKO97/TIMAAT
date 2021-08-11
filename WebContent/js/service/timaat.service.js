@@ -187,11 +187,11 @@
 			});
 		},
 
-		getUserName: function(id, callback) {
-      // console.log("TCL: getUserName: function(id, callback)");
+		getUserDisplayName: function(id, callback) {
+      // console.log("TCL: getUserDisplayName: function(id, callback)");
 			// console.log("TCL: id, callback", id, callback);
 			jQuery.ajax({
-				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/name",
+				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/displayName",
 				type       : "GET",
 				contentType: "application/json; charset=utf-8",
 				dataType   : "text",

@@ -44,9 +44,9 @@ public class EndpointUserAccount {
 	
 	@GET
   @Produces(MediaType.TEXT_PLAIN)
-	@Path("{id}/name")
+	@Path("{id}/displayName")
 	@Secured
-	public Response getUserName(@PathParam("id") int id) {
+	public Response getUserDisplayName(@PathParam("id") int id) {
 		UserAccount user = null;
 		try {
 			user = (UserAccount) TIMAATApp.emf.createEntityManager()
@@ -58,7 +58,7 @@ public class EndpointUserAccount {
 		}
 		if ( user == null ) return Response.status(Status.NOT_FOUND).entity("User not found!").build();
 		
-		return Response.ok().entity(user.getAccountName()).build();
+		return Response.ok().entity(user.getDisplayName()).build();
 	}
 
 	@GET

@@ -110,7 +110,7 @@
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
 			else if ( TIMAAT.Service.idCache.has(id) ) $(idElement).text(TIMAAT.Service.idCache.get(id));
 			else {
-				TIMAAT.Service.getUserName(id,function(name) {
+				TIMAAT.Service.getUserDisplayName(id,function(name) {
 					$(idElement).text(name);
 					TIMAAT.Service.idCache.set(id, name);
 				});
