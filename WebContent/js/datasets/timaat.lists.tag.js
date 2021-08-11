@@ -301,7 +301,7 @@
           },
           minimumInputLength: 0,
         });
-        TIMAAT.AnnotationService.getTagList(TIMAAT.VideoPlayer.curAnnotation.id).then(function(data) {
+        TIMAAT.AnnotationService.getTagList(TIMAAT.VideoPlayer.curAnnotation.model.id).then(function(data) {
           // console.log("TCL: then: data", data);
           var tagSelect = $('#annotation-tags-multi-select-dropdown');
           if (data.length > 0) {

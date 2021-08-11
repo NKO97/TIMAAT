@@ -326,7 +326,6 @@
 			});	
 		},
 
-
 		removeAnalysisList(analysisList) {
 			// console.log("TCL: removeAnalysisList -> analysisList", analysisList);
 			jQuery.ajax({

@@ -434,8 +434,8 @@ public class EndpointAnnotation {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{annotationId}/hasTagList")
-	public Response getTagList(@PathParam("annotationId") Integer annotationId)
+	@Path("{id}/hasTagList")
+	public Response getTagList(@PathParam("id") Integer annotationId)
 	{
 		// System.out.println("EndpointAnnotation: getTagList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
