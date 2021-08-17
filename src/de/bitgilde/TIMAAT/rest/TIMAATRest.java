@@ -1,16 +1,16 @@
 package de.bitgilde.TIMAAT.rest;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
-import javax.persistence.PersistenceContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+import jakarta.persistence.PersistenceContext;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;

@@ -29,27 +29,27 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HEAD;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -117,7 +117,7 @@ public class EndpointMedium {
 	ServletContext servletContext;
 	
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
 	public Response getMediaList(	@QueryParam("draw") Integer draw,
@@ -217,7 +217,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("selectList")
 	public Response getMediumSelectList(@QueryParam("start") Integer start,
@@ -270,7 +270,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("image/selectList")
 	public Response getImageSelectList(
@@ -333,7 +333,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/selectList")
 	public Response getVideoSelectList(
@@ -389,7 +389,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("total")
 	public Response getMediaDatasetsTotal() {
@@ -404,7 +404,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("mediatype/list")
 	public Response getMediatypeList() {
@@ -415,7 +415,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("audio/list")
 	public Response getAudioList(	@QueryParam("draw") Integer draw,
@@ -489,7 +489,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("document/list")
 	public Response getDocumentList(@QueryParam("draw") Integer draw,
@@ -563,7 +563,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("image/list")
 	public Response getImageList(	@QueryParam("draw") Integer draw,
@@ -637,7 +637,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("software/list")
 	public Response getSoftwareList(@QueryParam("draw") Integer draw,
@@ -711,7 +711,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("text/list")
 	public Response getTextList(@QueryParam("draw") Integer draw,
@@ -785,7 +785,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
 	@Path("video/offline/{id}.html")
 	public Response getVideoPublication(@PathParam("id") int id,
 																			@QueryParam("authToken") String authToken) {
@@ -841,7 +841,7 @@ public class EndpointMedium {
 	}
 	
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
 	public Response getVideoList(	@QueryParam("draw") Integer draw,
@@ -923,7 +923,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("videogame/list")
 	public Response getVideogameList(	@QueryParam("draw") Integer draw,
@@ -998,7 +998,7 @@ public class EndpointMedium {
 	}
 	
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("hasActor/{actor_id}/withRoles/selectList")
 	public Response getRoleSelectList(@PathParam("actor_id") int actorId,
@@ -1041,7 +1041,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{mediumId}/hasActorList")
 	public Response getActorList(@PathParam("mediumId") Integer mediumId)
@@ -1060,7 +1060,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{mediumId}/hasActor/{actorId}/withRoleList")
 	public Response getActorHasRoleList(@PathParam("mediumId") Integer mediumId,
@@ -1082,7 +1082,7 @@ public class EndpointMedium {
 	}
 	
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/categorySet/list")
 	public Response getCategorySetList(@PathParam("id") Integer id)
@@ -1096,7 +1096,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/category/list")
 	public Response getSelectedCategories(@PathParam("id") Integer id)
@@ -1110,7 +1110,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/category/selectList")
 	public Response getCategorySelectList(@PathParam("id") Integer id,
@@ -1172,7 +1172,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{mediumId}/hasTagList")
 	public Response getTagList(@PathParam("mediumId") Integer mediumId)
@@ -1186,7 +1186,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/titles/list")
 	public Response getTitlesList(@PathParam("id") int id) {
@@ -1208,8 +1208,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response createMedium(@PathParam("id") int id, String jsonData) {
@@ -1294,7 +1294,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
 	public Response getMedium(@PathParam("id") int id) {    	
@@ -1304,7 +1304,7 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
+	@Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
 	@Secured
 	@Path("{id}/viewToken")
 	public Response getViewToken(@PathParam("id") int id) {    	
@@ -1316,8 +1316,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response updateMedium(@PathParam("id") int id, String jsonData) {
@@ -1409,7 +1409,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response deleteMedium(@PathParam("id") int id) {
@@ -1437,8 +1437,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audio/{id}")
 	@Secured
 	public Response createAudio(@PathParam("id") int id, String jsonData) {
@@ -1481,8 +1481,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audio/{id}")
 	@Secured
 	public Response updateAudio(@PathParam("id") int id, String jsonData) {
@@ -1529,7 +1529,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audio/{id}")
 	@Secured
 	public Response deleteAudio(@PathParam("id") int id) {  
@@ -1554,8 +1554,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("document/{id}")
 	@Secured
 	public Response createDocument(@PathParam("id") int id, String jsonData) {
@@ -1594,8 +1594,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("document/{id}")
 	@Secured
 	public Response updateDocument(@PathParam("id") int id, String jsonData) {
@@ -1637,7 +1637,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("document/{id}")
 	@Secured
 	public Response deleteDocument(@PathParam("id") int id) {  
@@ -1661,8 +1661,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("image/{id}")
 	@Secured
 	public Response createImage(@PathParam("id") int id, String jsonData) {
@@ -1701,8 +1701,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("image/{id}")
 	@Secured
 	public Response updateImage(@PathParam("id") int id, String jsonData) {
@@ -1747,7 +1747,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("image/{id}")
 	@Secured
 	public Response deleteImage(@PathParam("id") int id) {  
@@ -1771,8 +1771,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("software/{id}")
 	@Secured
 	public Response createSoftware(@PathParam("id") int id, String jsonData) {
@@ -1811,8 +1811,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("software/{id}")
 	@Secured
 	public Response updateSoftware(@PathParam("id") int id, String jsonData) {
@@ -1856,7 +1856,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("software/{id}")
 	@Secured
 	public Response deleteSoftware(@PathParam("id") int id) {  
@@ -1880,8 +1880,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("text/{id}")
 	@Secured
 	public Response createText(@PathParam("id") int id, String jsonData) {
@@ -1921,8 +1921,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("text/{id}")
 	@Secured
 	public Response updateText(@PathParam("id") int id, String jsonData) {
@@ -1966,7 +1966,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("text/{id}")
 	@Secured
 	public Response deleteText(@PathParam("id") int id) {  
@@ -1990,8 +1990,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("video/{id}")
 	@Secured
 	public Response createVideo(@PathParam("id") int id, String jsonData) {
@@ -2038,8 +2038,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("video/{id}")
 	@Secured
 	public Response updateVideo(@PathParam("id") int id, String jsonData) {
@@ -2100,7 +2100,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("video/{id}")
 	@Secured
 	public Response deleteVideo(@PathParam("id") int id) {
@@ -2130,8 +2130,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("videogame/{id}")
 	@Secured
 	public Response createVideogame(@PathParam("id") int id, String jsonData) {
@@ -2170,8 +2170,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("videogame/{id}")
 	@Secured
 	public Response updateVideogame(@PathParam("id") int id, String jsonData) {
@@ -2215,7 +2215,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("videogame/{id}")
 	@Secured
 	public Response deleteVideogame(@PathParam("id") int id) {  
@@ -2239,8 +2239,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
 	public Response createTitle(@PathParam("id") int id, String jsonData) {
@@ -2296,8 +2296,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/title/{id}")
 	@Secured
 	public Response addTitle(@PathParam("mediumId") int mediumId, @PathParam("id") int id, String jsonData) {
@@ -2366,8 +2366,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
 	public Response updateTitle(@PathParam("id") int id, String jsonData) {
@@ -2415,7 +2415,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
 	public Response deleteTitle(@PathParam("id") int id) {    
@@ -2436,8 +2436,8 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  // @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  // @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
 	public Response addMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
@@ -2497,8 +2497,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
 	public Response updateMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
@@ -2577,7 +2577,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
 	public Response deleteMediumHasLanguageItem(@PathParam("mediumId") int mediumId,
@@ -2614,7 +2614,7 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
 	public Response addMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
@@ -2684,7 +2684,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}")
 	@Secured
 	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
@@ -2718,7 +2718,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
 	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
@@ -2758,8 +2758,8 @@ public class EndpointMedium {
 
 	// Currently not in use
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("source/{id}")
 	@Secured
 	public Response createSource(@PathParam("id") int id, String jsonData) {
@@ -2810,8 +2810,8 @@ public class EndpointMedium {
 	}
 
 	@PATCH
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("source/{id}")
 	@Secured
 	public Response updateSource(@PathParam("id") int id, String jsonData) {
@@ -2863,7 +2863,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("source/{id}")
 	@Secured
 	public Response deleteSource(@PathParam("id") int id) {    
@@ -2884,8 +2884,8 @@ public class EndpointMedium {
 
 	@POST
 	@Path("image/{id}/upload")
-	@Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadImage(@PathParam("id") int id,
 															@FormDataParam("file") InputStream uploadedInputStream,
@@ -3018,8 +3018,8 @@ public class EndpointMedium {
 		
 	@POST
 	@Path("video/{id}/upload")
-	@Consumes(javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadVideo(@PathParam("id") int id,
 															@FormDataParam("file") InputStream uploadedInputStream,
@@ -3193,7 +3193,7 @@ public class EndpointMedium {
 
 	@GET
 	@Path("{type}/{id}/status")
-	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
+	@Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
 	@Secured
 	public Response updateFileStatus(@PathParam("type") String type,
 																	 @PathParam("id") int id) {
@@ -3375,7 +3375,7 @@ public class EndpointMedium {
 	 * @return
 	 */
 	@GET
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/analysisLists")
 	@Secured
 	public Response getAnalysisLists(@PathParam("id") int mediumId,
@@ -3411,7 +3411,7 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/tag/{tagId}")
 	@Secured
 	public Response addExistingTag(@PathParam("mediumId") int mediumId,
@@ -3439,7 +3439,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/tag/{tagId}")
 	@Secured
 	public Response removeTag(@PathParam("mediumId") int mediumId,
@@ -3467,7 +3467,7 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/categorySet/{categorySetId}")
 	@Secured
 	public Response addExistingCategorySet(@PathParam("mediumId") int mediumId,
@@ -3495,7 +3495,7 @@ public class EndpointMedium {
 	}
 
 	@DELETE
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/categorySet/{categorySetId}")
 	@Secured
 	public Response removeCategorySet(@PathParam("mediumId") int mediumId,
@@ -3546,7 +3546,7 @@ public class EndpointMedium {
 	}
 
 	@POST
-	@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategory(@PathParam("mediumId") int mediumId, 
@@ -3573,7 +3573,7 @@ public class EndpointMedium {
 	}
 	
 	@DELETE
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/category/{categoryId}")
 	@Secured
 	public Response removeCategory(@PathParam("mediumId") int mediumId, 
@@ -3602,8 +3602,8 @@ public class EndpointMedium {
 	}
 	
 	@PATCH
-  @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-  @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("fileLengthFix")
 	@Secured
 	public Response updateAllFileLengths(@QueryParam("authToken") String authToken) {
@@ -3799,7 +3799,7 @@ public class EndpointMedium {
 				int height = reader.getHeight(reader.getMinIndex());
 				// IIOMetadata metadata = reader.getImageMetadata(0);
 				// if (metadata.isStandardMetadataFormatSupported()) { // true for all bundled formats
-				// IIOMetadataNode bitDepth = (IIOMetadataNode) metadata.getAsTree("javax_imageio_1.0")
+				// IIOMetadataNode bitDepth = (IIOMetadataNode) metadata.getAsTree("jakarta_imageio_1.0")
 				// 	.getElementsByTagName('Data').item(0)
 				// 	.get_elements_by_tag_name('BitsPerSample').item(0)
 				// 	.getAttribute('value');

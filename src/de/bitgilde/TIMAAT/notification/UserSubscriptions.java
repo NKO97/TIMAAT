@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.notification;
 
-import javax.websocket.Session;
+import jakarta.websocket.Session;
 
 public class UserSubscriptions {
 	

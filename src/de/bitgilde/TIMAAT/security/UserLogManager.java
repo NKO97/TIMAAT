@@ -3,8 +3,8 @@ package de.bitgilde.TIMAAT.security;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;

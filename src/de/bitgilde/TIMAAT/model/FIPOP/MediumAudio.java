@@ -2,7 +2,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

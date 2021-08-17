@@ -20,9 +20,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.ws.rs.core.Application;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.ws.rs.core.Application;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
@@ -32,7 +32,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
 */
 
-@javax.ws.rs.ApplicationPath("timaatapp")
+@jakarta.ws.rs.ApplicationPath("timaatapp")
 public class TIMAATApp extends Application {
 
     // load TIMAAT application properties
@@ -66,15 +66,17 @@ public class TIMAATApp extends Application {
     private void initEntityManager() throws InstantiationException {
     	Logger.getGlobal().log(Level.INFO, "[TIMAAT::Persistence Unit Init]");
         HashMap<String, String> dbProps = new HashMap<String, String>();
-        dbProps.put("javax.persistence.jdbc.url", timaatProps.getProp(PropertyConstants.DATABASE_URL));
-        dbProps.put("javax.persistence.jdbc.driver", timaatProps.getProp(PropertyConstants.DATABASE_DRIVER));
-        dbProps.put("javax.persistence.jdbc.user", timaatProps.getProp(PropertyConstants.DATABASE_USER));
-        dbProps.put("javax.persistence.jdbc.password", timaatProps.getProp(PropertyConstants.DATABASE_PASSWORD));
+        dbProps.put("jakarta.persistence.jdbc.url", timaatProps.getProp(PropertyConstants.DATABASE_URL));
+        dbProps.put("jakarta.persistence.jdbc.driver", timaatProps.getProp(PropertyConstants.DATABASE_DRIVER));
+        dbProps.put("jakarta.persistence.jdbc.user", timaatProps.getProp(PropertyConstants.DATABASE_USER));
+        dbProps.put("jakarta.persistence.jdbc.password", timaatProps.getProp(PropertyConstants.DATABASE_PASSWORD));
 //        dbProps.put("eclipselink.target-database", "MySQL");
                 
         try {
             // obtain entity manager factory with provided connection settings
+            // emf = Persistence.createEntityManagerFactory("FIPOP-JPA", dbProps);
             emf = Persistence.createEntityManagerFactory("FIPOP-JPA", dbProps);
+            // emf = Persistence.createEntityManagerFactory("FIPOP-JPA");
             emf.createEntityManager();
         } catch (Exception e) {
             Logger.getLogger(PropertyManagement.class.getName()).log(Level.SEVERE, "TIMAAT::DB Init Error", e);

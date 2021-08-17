@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;

@@ -1,7 +1,7 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * The primary key class for the user_account_has_category_set database table.
