@@ -23,7 +23,7 @@ public class SelectorSvg implements Serializable {
 	@Column(name="color_hex")
 	private String colorHex;
 
-	private Byte opacity;
+	private byte opacity;
 
 	@Column(name="stroke_width")
 	private int strokeWidth;
@@ -62,11 +62,11 @@ public class SelectorSvg implements Serializable {
 		this.colorHex = colorHex;
 	}
 
-	public Byte getOpacity() {
+	public byte getOpacity() {
 		return this.opacity;
 	}
 
-	public void setOpacity(Byte opacity) {
+	public void setOpacity(byte opacity) {
 		this.opacity = opacity;
 	}
 

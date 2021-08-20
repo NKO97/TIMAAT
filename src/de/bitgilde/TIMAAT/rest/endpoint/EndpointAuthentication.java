@@ -31,8 +31,8 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPassword;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash;
@@ -109,45 +109,32 @@ public class EndpointAuthentication {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("permissionLevel/{mediumAnalysisListId}")
 	@Secured
-	public Response getPermissionLevel(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
-																		 @QueryParam("authToken") String authToken) {
+	public Response getMediumAnalysisListPermissionLevel(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																		 									 @QueryParam("authToken") String authToken) {
+
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount userAccount = null;
-		try {
-			String username = AuthenticationFilter.validateToken(authToken);
-			try {
-				// Validate user status
-				userAccount = AuthenticationFilter.validateAccountStatus(username);
-			} catch (AccountSuspendedException e) {
-				// can't occur as user wouldn't be able to log in in the first place
-				return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
-			}
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
-		int permissionType = 0;
-		UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList = null;
+		// admin account is always authorized
+		if (userId == 1) {
+			return Response.ok().entity(4).build();
+		}		
+		// check for permission level
+		int permissionType = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		int userAccountId = userAccount.getId();
-		String sql = "SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.userAccount.id = :userAccountId AND uahmal.mediumAnalysisList.id = :mediumAnalysisListId";
-		try {
-			userAccountHasMediumAnalysisList = (UserAccountHasMediumAnalysisList) entityManager.createQuery(sql)
-				.setParameter("userAccountId", userAccountId)
-				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-				.getSingleResult();
-		} catch (Exception e) {
-			// System.out.println("User is neither mod nor admin");
-			// no return here. Admin user needs to access all lists without having an entry everywhere
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		byte globalPermissionType = mediumAnalysisList.getGlobalPermission();
+		if ( permissionType < 1 && globalPermissionType < 1) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		} else {
+			int maxPermissionType = Math.max(permissionType, globalPermissionType);
+			return Response.ok().entity(maxPermissionType).build();
 		}
-		if (userAccountHasMediumAnalysisList != null) {
-			permissionType = userAccountHasMediumAnalysisList.getPermissionType().getId();
-		}
-		if (userAccount.getAccountName().compareTo("admin") == 0) { // admin account is always authorized
-			permissionType = 4;
-		}
-		return Response.ok().entity(permissionType).build();
 	}
 
 	@POST
@@ -178,23 +165,26 @@ public class EndpointAuthentication {
 		// System.out.println("EndpointAuthentication - changePassword");
 
 		// verify auth token
-		String authenticatedUser;
-		if ( authToken == null ) return Response.status(401).build();
-		try { //* check whether the password change request came from the user whose password shall be changed
-			authenticatedUser = AuthenticationFilter.validateToken(authToken);
-		} catch(Exception e) {
-			// should not occur
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		
-		// TODO Check if someone tries to change 'gast'-account password and prevent it
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		UserAccount authenticatedUser = entityManager.find(UserAccount.class, userId);
+
+		// Check if someone tries to change 'gast'-account password and prevent it
+		if (authenticatedUser.getAccountName().compareTo("gast") == 0) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 		String newPassword = credentials.getNewPassword();
 
 		//* check that the password of the account of the user, whose auth token is used, will become altered
-		if (authenticatedUser.compareTo(username) != 0) {
+		if (authenticatedUser.getAccountName().compareTo(username) != 0) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		};
 
@@ -233,7 +223,7 @@ public class EndpointAuthentication {
 		}
 
 		// new password hash is acceptable, store current one in old hash list and store new one in user_password
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		UserPassword userPassword = entityManager.find(UserPassword.class, userAccount.getUserPassword().getId());
 		if (userPassword == null) return Response.status(Status.NOT_FOUND).build();
 		UserPasswordOldHash userPasswordOldHash = new UserPasswordOldHash();
@@ -256,9 +246,6 @@ public class EndpointAuthentication {
 		entityManager.persist(userPassword);
 		entityTransaction.commit();
 		entityManager.refresh(userPassword);
-
-		// Issue a new token for the user
-		// String token = issueToken(username, user.getId());
 
 		return Response.ok().build();
 	}
@@ -292,9 +279,9 @@ public class EndpointAuthentication {
 		String hexhash = toHex(Base64.getDecoder().decode(hash));
 		while (hexhash.length() < 64) hexhash = "0" + hexhash;
 
-		System.out.println(hexhash);
-		System.out.println("Stored: "+user.getUserPassword().getStretchedHashEncrypted());
-		System.out.println("User logged in: " + user.getDisplayName());
+		// System.out.println("Entered: " + hexhash);
+		// System.out.println("Stored: " + user.getUserPassword().getStretchedHashEncrypted());
+		System.out.println("User logged in: " + user.getDisplayName() + " at " + LocalDateTime.now());
 
 		// compare calculated server hash with DB stored hash
 		if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )

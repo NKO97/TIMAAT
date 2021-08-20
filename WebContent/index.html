@@ -693,6 +693,23 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="analysisListNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="analysisListNoPermissionLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="analysisListNoPermissionLabel">Not enough permissions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      Your access level is not high enough to make any changes to this analysis.
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div id="timaat-videoplayer-medium-modals-container"></div>
           <div id="timaat-inspector" class="leaflet-sidebar collapsed">
@@ -966,8 +983,8 @@
                           </div>
                         </div>
                         <div class="annotation-tag-form-submit">
-                          <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-tag-form-submit" name="submit">Save</button>
-                          <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-tag-form-dismiss" name="dismiss">Cancel</button>
+                          <button type="submit" class="btn btn-outline-primary" id="timaat-annotation-tag-form-submit-button" name="submit">Save</button>
+                          <button type="button" class="btn btn-outline-secondary" id="timaat-annotation-tag-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
                       </form>
                     </div>
@@ -994,18 +1011,20 @@
                       <tbody></tbody>
                     </table>
                   </div>
-                   <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper">
-                    <i class="collapse-icon fas fa-fw"></i> Actor hinzufügen
-                  </button>
-                  <div class="actors-available-wrapper p-2 border border-light bg-light collapse">
-                    <table class="actors-available table table-striped table-bordered table-hover">
-                      <thead class="thead-dark">
-                        <tr>
-                          <th>Titel</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
+                  <div id="timaat-inspector-add-actors">
+                    <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper">
+                      <i class="collapse-icon fas fa-fw"></i> Actor hinzufügen
+                    </button>
+                    <div class="actors-available-wrapper p-2 border border-light bg-light collapse show">
+                      <table class="actors-available table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th>Titel</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1029,18 +1048,20 @@
                       <tbody></tbody>
                     </table>
                   </div>
-                   <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-available-wrapper">
-                    <i class="collapse-icon fas fa-fw"></i> Event hinzufügen
-                  </button>
-                  <div class="events-available-wrapper p-2 border border-light bg-light collapse">
-                    <table class="events-available table table-striped table-bordered table-hover">
-                      <thead class="thead-dark">
-                        <tr>
-                          <th>Titel</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
+                  <div id="timaat-inspector-add-events">
+                    <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-available-wrapper">
+                      <i class="collapse-icon fas fa-fw"></i> Event hinzufügen
+                    </button>
+                    <div class="events-available-wrapper p-2 border border-light bg-light collapse show">
+                      <table class="events-available table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th>Titel</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1074,18 +1095,20 @@
                       <tbody></tbody>
                     </table>
                   </div>
-                  <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-analysis-pane .analysis-available-wrapper">
-                    <i class="collapse-icon fas fa-fw"></i> Add available analysis guideline
-                  </button>
-                  <div class="analysis-available-wrapper p-2 border border-light bg-light collapse show">
-                    <table class="analysis-available table table-striped table-bordered table-hover" id="analysis-methods-available-table">
-                      <thead class="thead-dark">
-                        <tr>
-                          <th>Analysis guidelines</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
+                  <div id="timaat-inspector-add-analyses">
+                    <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-inspector-analysis-pane .analysis-available-wrapper">
+                      <i class="collapse-icon fas fa-fw"></i> Add available analysis guideline
+                    </button>
+                    <div class="analysis-available-wrapper p-2 border border-light bg-light collapse show">
+                      <table class="analysis-available table table-striped table-bordered table-hover" id="analysis-methods-available-table">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th>Analysis guidelines</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1105,10 +1128,10 @@
                       <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i title="Analysis list menu" class="fas fa-fw fa-list-alt"></i>
                       </button>
-                      <div class="dropdown-menu">
+                      <div class="dropdown-menu" id="timat-analysislist-menu">
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-annotation-add">Add annotation</a>
                         <a class="dropdown-item dropdown-toggle" id="timaat-analysislist-segment-options" disabled href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Segment structure</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu" id="timaat-analysislist-segment-dropdown">
                           <a class="dropdown-item timaat-segment-structure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')" id="timaat-analysissegment-add">Add segment</a>
                           <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')" id="timaat-analysissequence-add">Add sequence</a>
                           <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')" id="timaat-analysistake-add">Add take</a>

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 
 @ServerEndpoint("/api/notification")
@@ -133,11 +134,11 @@ public class NotificationWebSocket {
     
     private String validateRequestToken(String token) {
     	String username = null;
-    	
     	try {
     		Key key = TIMAATKeyGenerator.generateKey();
-    		username = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-    	} catch (Exception e) {
+    		username = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+    	} catch (JwtException e) {
+				e.printStackTrace();
     		return null;
     	}
 		

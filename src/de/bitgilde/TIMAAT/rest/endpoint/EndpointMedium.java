@@ -62,7 +62,6 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.fileInformation.*;
 import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
@@ -791,28 +790,18 @@ public class EndpointMedium {
 																			@QueryParam("authToken") String authToken) {
 
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		try {
-			String username = AuthenticationFilter.validateToken(authToken);
-			
-			try {
-				// Validate user status
-				UserAccount user = AuthenticationFilter.validateAccountStatus(username);
-				
-				// Authentication succeeded, set request context
-				containerRequestContext.setProperty("TIMAAT.userID", user.getId());
-				containerRequestContext.setProperty("TIMAAT.userName", user.getAccountName());
-				containerRequestContext.setProperty("TIMAAT.user", user);
-
-			} catch (AccountSuspendedException e) {
-				return Response.status(Status.FORBIDDEN).entity("This account has been suspended.").build();
-			}
-			
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		
 		EntityManager em = TIMAATApp.emf.createEntityManager();
+		UserAccount userAccount = em.find(UserAccount.class, userId);
+		containerRequestContext.setProperty("TIMAAT.userID", userAccount.getId());
+		containerRequestContext.setProperty("TIMAAT.userName", userAccount.getAccountName());
+		containerRequestContext.setProperty("TIMAAT.user", userAccount);		
+		
 		Medium medium = em.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		
@@ -821,7 +810,9 @@ public class EndpointMedium {
 		String content = "";
 		try {
 			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
-		} catch (IOException | URISyntaxException e1) {return Response.serverError().build();}
+		} catch (IOException | URISyntaxException e1) {
+			return Response.serverError().build();
+		}
 		
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
@@ -1204,7 +1195,7 @@ public class EndpointMedium {
 		
 		entityManager.refresh(medium);
 		
-		return Response.ok(medium.getTitles()).build();
+		return Response.ok().entity(medium.getTitles()).build();
 	}
 
 	@POST
@@ -3378,36 +3369,33 @@ public class EndpointMedium {
   @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/analysisLists")
 	@Secured
-	public Response getAnalysisLists(@PathParam("id") int mediumId,
-																   @QueryParam("authToken") String authToken) {
-    // verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount user = null;
-		String username = "";
-		try {
-			username = AuthenticationFilter.validateToken(authToken);
-			// Validate user status
-			user = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+	public Response getMediumAnalysisLists(@PathParam("id") int mediumId,
+																   			 @QueryParam("authToken") String authToken) {
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		String sql = "SELECT DISTINCT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE (mal.medium.id = :mediumId AND mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId) OR mal.globalPermission > 0";
+		String sql = "SELECT DISTINCT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE mal.medium.id = :mediumId AND (mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId OR mal.globalPermission > 0)";
 		Query query = entityManager.createQuery(sql)
 															 .setParameter("mediumId", mediumId)
-															 .setParameter("userId", user.getId());
+															 .setParameter("userId", userId);
 		List<MediumAnalysisList> mediumAnalysisLists = castList(MediumAnalysisList.class, query.getResultList());
 
-		if (user.getAccountName().toLowerCase().compareTo("admin") == 0) {
-		// find medium
-		Medium medium = entityManager.find(Medium.class, mediumId);
+		if (userId == 1) { // admin
+			// find medium and get all its' mediumAnalysisLists
+			Medium medium = entityManager.find(Medium.class, mediumId);
 			if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 			entityManager.refresh(medium);
 			mediumAnalysisLists = medium.getMediumAnalysisLists();
 		}
 		
-		return Response.ok(mediumAnalysisLists).build();    	
+		return Response.ok().entity(mediumAnalysisLists).build();    	
 	}
 
 	@POST
@@ -3608,18 +3596,16 @@ public class EndpointMedium {
 	@Secured
 	public Response updateAllFileLengths(@QueryParam("authToken") String authToken) {
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount userAccount = null;
-		try {
-			String username = AuthenticationFilter.validateToken(authToken);
-				// Validate user status
-				userAccount = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		if (userAccount.getId() != 1) { // only Admin may update file lengths
+		if (userId != 1) { // only Admin may update file lengths
 			return Response.status(Status.FORBIDDEN).build(); 
 		}
+		
 		Runtime r = Runtime.getRuntime();
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
@@ -3993,7 +3979,7 @@ public class EndpointMedium {
 			// Throw an Exception if the token is invalid
 
 		Key key = TIMAATKeyGenerator.generateKey();
-		int mediumID = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("file", Integer.class);
+		int mediumID = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("file", Integer.class);
 	
 	return mediumID;
 	}

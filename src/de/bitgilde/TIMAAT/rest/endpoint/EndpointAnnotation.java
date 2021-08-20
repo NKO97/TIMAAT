@@ -43,7 +43,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
-import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
@@ -52,6 +51,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 
 /**
@@ -82,25 +82,40 @@ public class EndpointAnnotation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/actors/{actorID}")
-	public Response addActor(@PathParam("id") int id, @PathParam("actorID") int actorID) {
+	public Response addActor(@PathParam("id") int id,
+													 @PathParam("actorID") int actorID,
+													 @QueryParam("authToken") String authToken) {
+
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		Annotation anno = em.find(Annotation.class, id);
+		Annotation annotation = em.find(Annotation.class, id);
 		Actor actor = em.find(Actor.class, actorID);
 
-		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
-		if ( anno.getActors().contains(actor) ) return Response.ok().entity(false).build();
+		if ( annotation == null || actor == null ) return Response.ok().entity(false).build();
+		if ( annotation.getActors().contains(actor) ) return Response.ok().entity(false).build();
 
-		anno.getActors().add(actor);
-		actor.getAnnotations().add(anno);
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		annotation.getActors().add(actor);
+		actor.getAnnotations().add(annotation);
 
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
-		em.merge(anno);
-		em.persist(anno);
+		em.merge(annotation);
+		em.persist(annotation);
 		em.merge(actor);
 		em.persist(actor);
 		entityTransaction.commit();
-		em.refresh(anno);
+		em.refresh(annotation);
 		em.refresh(actor);
 		
 		// TODO log entry annotation modified
@@ -113,25 +128,39 @@ public class EndpointAnnotation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/actors/{actorID}")
-	public Response removeActor(@PathParam("id") int id, @PathParam("actorID") int actorID) {
+	public Response removeActor(@PathParam("id") int id,
+															@PathParam("actorID") int actorID,
+															@QueryParam("authToken") String authToken) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		Annotation anno = em.find(Annotation.class, id);
+		Annotation annotation = em.find(Annotation.class, id);
 		Actor actor = em.find(Actor.class, actorID);
 
-		if ( anno == null || actor == null ) return Response.ok().entity(false).build();
-		if ( anno.getActors().contains(actor) == false ) return Response.ok().entity(false).build();
+		if ( annotation == null || actor == null ) return Response.ok().entity(false).build();
+		if ( annotation.getActors().contains(actor) == false ) return Response.ok().entity(false).build();
 
-		anno.getActors().remove(actor);
-		actor.getAnnotations().remove(anno);
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		annotation.getActors().remove(actor);
+		actor.getAnnotations().remove(annotation);
 
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
-		em.merge(anno);
-		em.persist(anno);
+		em.merge(annotation);
+		em.persist(annotation);
 		em.merge(actor);
 		em.persist(actor);
 		entityTransaction.commit();
-		em.refresh(anno);
+		em.refresh(annotation);
 		em.refresh(actor);
 		
 		return Response.ok().entity(true).build();
@@ -141,25 +170,39 @@ public class EndpointAnnotation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/events/{eventId}")
-	public Response addEvent(@PathParam("id") int id, @PathParam("eventId") int eventId) {
+	public Response addEvent(@PathParam("id") int id,
+													 @PathParam("eventId") int eventId,
+													 @QueryParam("authToken") String authToken) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		Annotation anno = em.find(Annotation.class, id);
+		Annotation annotation = em.find(Annotation.class, id);
 		Event event = em.find(Event.class, eventId);
 
-		if ( anno == null || event == null ) return Response.ok().entity(false).build();
-		if ( anno.getEvents().contains(event) ) return Response.ok().entity(false).build();
+		if ( annotation == null || event == null ) return Response.ok().entity(false).build();
+		if ( annotation.getEvents().contains(event) ) return Response.ok().entity(false).build();
 
-		anno.getEvents().add(event);
-		event.getAnnotations().add(anno);
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		annotation.getEvents().add(event);
+		event.getAnnotations().add(annotation);
 
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
-		em.merge(anno);
-		em.persist(anno);
+		em.merge(annotation);
+		em.persist(annotation);
 		em.merge(event);
 		em.persist(event);
 		entityTransaction.commit();
-		em.refresh(anno);
+		em.refresh(annotation);
 		em.refresh(event);
 		
 		// TODO log entry annotation modified
@@ -172,25 +215,39 @@ public class EndpointAnnotation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/events/{eventId}")
-	public Response removeEvent(@PathParam("id") int id, @PathParam("eventId") int eventId) {
+	public Response removeEvent(@PathParam("id") int id,
+															@PathParam("eventId") int eventId,
+															@QueryParam("authToken") String authToken) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		Annotation anno = em.find(Annotation.class, id);
+		Annotation annotation = em.find(Annotation.class, id);
 		Event event = em.find(Event.class, eventId);
 
-		if ( anno == null || event == null ) return Response.ok().entity(false).build();
-		if ( anno.getEvents().contains(event) == false ) return Response.ok().entity(false).build();
+		if ( annotation == null || event == null ) return Response.ok().entity(false).build();
+		if ( annotation.getEvents().contains(event) == false ) return Response.ok().entity(false).build();
 
-		anno.getEvents().remove(event);
-		event.getAnnotations().remove(anno);
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		annotation.getEvents().remove(event);
+		event.getAnnotations().remove(annotation);
 
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
-		em.merge(anno);
-		em.persist(anno);
+		em.merge(annotation);
+		em.persist(annotation);
 		em.merge(event);
 		em.persist(event);
 		entityTransaction.commit();
-		em.refresh(anno);
+		em.refresh(annotation);
 		em.refresh(event);
 		
 		return Response.ok().entity(true).build();
@@ -448,42 +505,49 @@ public class EndpointAnnotation {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("medium/{id}")
+	@Path("mediumAnalysisList/{mediumAnalysisListId}")
 	@Secured
-	public Response createAnnotation(@PathParam("id") int id, String jsonData) {
-		ObjectMapper mapper = new ObjectMapper();
-		Annotation newAnno = null;
+	public Response createAnnotation(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																	 String jsonData,
+																	 @QueryParam("authToken") String authToken) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Medium medium = entityManager.find(Medium.class, id);
-		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
-	
-		// parse JSON data
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if ( EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		Annotation annotation = null;
 		try {
-			newAnno = mapper.readValue(jsonData, Annotation.class);
+			annotation = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newAnno == null ) return Response.status(Status.BAD_REQUEST).build();
+		if ( annotation == null ) return Response.status(Status.BAD_REQUEST).build();
+
 		// sanitize object data
-		newAnno.setId(0);
-		newAnno.getSelectorSvgs().get(0).setId(0);
-		
-		// get analysis list id for medium
-		@SuppressWarnings("unchecked")
-		List<MediumAnalysisList> malList = (List<MediumAnalysisList>) entityManager.createQuery("SELECT mal FROM MediumAnalysisList mal WHERE mal.medium=:medium AND mal.id=:listId")
-		.setParameter("medium", medium)
-		.setParameter("listId", newAnno.getAnalysisListID()).getResultList();
-		if ( malList.size() < 1 ) Response.status(Status.NOT_FOUND).build();
-		newAnno.setMediumAnalysisList(malList.get(0));
+		annotation.setId(0);
+		annotation.getSelectorSvgs().get(0).setId(0);
+		annotation.setMediumAnalysisList(mediumAnalysisList);
 		
 		// set up metadata
-		newAnno.getAnnotationTranslations().get(0).setId(0);
-		newAnno.getAnnotationTranslations().get(0).setAnnotation(newAnno);
-		newAnno.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		newAnno.setLayerAudio((byte) 1);
-//		newAnno.setLayerVisual((byte) 1);
+		annotation.getAnnotationTranslations().get(0).setId(0);
+		annotation.getAnnotationTranslations().get(0).setAnnotation(annotation);
+		annotation.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		annotation.setLayerAudio((byte) 1);
+//		annotation.setLayerVisual((byte) 1);
 	
 		// create IRI
 		// String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
@@ -516,57 +580,57 @@ public class EndpointAnnotation {
 		// entityManager.flush();
 		// entityTransaction.commit();
 		// entityManager.refresh(iri);		
-		// newAnno.setIri(iri);
+		// annotation.setIri(iri);
 		
 		// create UUID
 		Uuid uuid = new Uuid();
 		uuid.setId(0);
 		uuid.setUuid(UUID.randomUUID().toString());
-		newAnno.setUuid(uuid);
+		annotation.setUuid(uuid);
 		
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-		newAnno.setCreatedAt(creationDate);
-		newAnno.setLastEditedAt(creationDate);
+		annotation.setCreatedAt(creationDate);
+		annotation.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newAnno.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-			newAnno.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+			annotation.setCreatedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+			annotation.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 
-		newAnno.setSegmentSelectorType(entityManager.find(SegmentSelectorType.class, 1)); // TODO
+		annotation.setSegmentSelectorType(entityManager.find(SegmentSelectorType.class, 1)); // TODO
 		
-		SelectorSvg newSVG = newAnno.getSelectorSvgs().get(0);
-		newAnno.getSelectorSvgs().remove(0);
-//		newSVG.setSvgShapeType(entityManager.find(SvgShapeType.class, 5)); // TODO refactor
+		SelectorSvg newSVG = annotation.getSelectorSvgs().get(0);
+		annotation.getSelectorSvgs().remove(0);
+		// newSVG.setSvgShapeType(entityManager.find(SvgShapeType.class, 5)); // TODO refactor
 		
 		// persist annotation and polygons
 		entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.persist(newAnno.getAnnotationTranslations().get(0));
+		entityManager.persist(annotation.getAnnotationTranslations().get(0));
 		entityManager.persist(uuid);
-		newAnno.setUuid(uuid);
-		entityManager.persist(newAnno);
-		newSVG.setAnnotation(newAnno);
+		annotation.setUuid(uuid);
+		entityManager.persist(annotation);
+		newSVG.setAnnotation(annotation);
 		entityManager.persist(newSVG);
-		newAnno.addSelectorSvg(newSVG);
-		entityManager.persist(newAnno);
-		malList.get(0).getAnnotations().add(newAnno);
-		entityManager.persist(malList.get(0));
+		annotation.addSelectorSvg(newSVG);
+		entityManager.persist(annotation);
+		mediumAnalysisList.getAnnotations().add(annotation);
+		entityManager.persist(mediumAnalysisList);
 		entityManager.flush();
 		entityTransaction.commit();
-		entityManager.refresh(newAnno);
-		entityManager.refresh(malList.get(0));
+		entityManager.refresh(annotation);
+		entityManager.refresh(mediumAnalysisList);
 		entityManager.refresh(newSVG);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry(newAnno.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
+		UserLogManager.getLogger().addLogEntry(annotation.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "add-annotation", malList.get(0).getId(), newAnno);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "add-annotation", mediumAnalysisListId, annotation);
 
-		return Response.ok().entity(newAnno).build();
+		return Response.ok().entity(annotation).build();
 	}
 	
 	@PATCH
@@ -574,7 +638,8 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response updateAnnotation(@PathParam("id") int id, String jsonData) {
+	public Response updateAnnotation(@PathParam("id") int id, String jsonData,
+																	 @QueryParam("authToken") String authToken) {
 		System.out.println("EndpointAnnotation: updateAnnotation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation updatedAnno = null;
@@ -582,6 +647,18 @@ public class EndpointAnnotation {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// parse JSON data
 		try {
@@ -605,7 +682,7 @@ public class EndpointAnnotation {
 
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorHex() != null )
 			annotation.getSelectorSvgs().get(0).setColorHex(updatedAnno.getSelectorSvgs().get(0).getColorHex());
-		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getOpacity() != null )
+		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getOpacity() >= 0)
 			annotation.getSelectorSvgs().get(0).setOpacity(updatedAnno.getSelectorSvgs().get(0).getOpacity());
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0)) 
 			annotation.getSelectorSvgs().get(0).setStrokeWidth(updatedAnno.getSelectorSvgs().get(0).getStrokeWidth());
@@ -690,8 +767,9 @@ public class EndpointAnnotation {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{annotationId}/category/{categoryId}")
 	@Secured
-	public Response addExistingCategories(@PathParam("annotationId") int annotationId,
-																 				@PathParam("categoryId") int categoryId) {
+	public Response addExistingCategory(@PathParam("annotationId") int annotationId,
+																 			@PathParam("categoryId") int categoryId,
+																			@QueryParam("authToken") String authToken) {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
@@ -699,6 +777,18 @@ public class EndpointAnnotation {
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
 		
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// attach category to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -719,13 +809,26 @@ public class EndpointAnnotation {
 	@Path("{annotationId}/category/{categoryId}")
 	@Secured
 	public Response removeCategory(@PathParam("annotationId") int annotationId,
-																 @PathParam("categoryId") int categoryId) {
+																 @PathParam("categoryId") int categoryId,
+																 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach category to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -832,13 +935,26 @@ public class EndpointAnnotation {
 	@Path("{annotationId}/tag/{tagId}")
 	@Secured
 	public Response addExistingTag(@PathParam("annotationId") int annotationId,
-																 @PathParam("tagId") int tagId) {
+																 @PathParam("tagId") int tagId,
+																 @QueryParam("authToken") String authToken) {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach tag to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -860,13 +976,26 @@ public class EndpointAnnotation {
 	@Path("{annotationId}/tag/{tagId}")
 	@Secured
 	public Response removeTag(@PathParam("annotationId") int annotationId,
-														@PathParam("tagId") int tagId) {
+														@PathParam("tagId") int tagId,
+														@QueryParam("authToken") String authToken) {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach tag to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();

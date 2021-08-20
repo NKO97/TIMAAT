@@ -25,7 +25,7 @@
 	  // console.log("TCL: addAnalysisMethodToAnalysis -> model", model);
 		return new Promise(resolve => {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+model.annotation.id+"/"+model.analysisMethod.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+model.annotation.id+"/"+model.analysisMethod.id+'/?authToken='+TIMAAT.Service.session.token,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -49,7 +49,7 @@
 	  // console.log("TCL: deleteStaticAnalysis -> analysisId", analysisId);
 		return new Promise(resolve => {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/"+analysisId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -93,7 +93,7 @@
 		// console.log("TCL: deleteDynamicAnalysis -> analysisMethodId", analysisMethodId);
 		return new Promise(resolve => {
 			$.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/analysisAndMethod/"+analysisMethodId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysis/analysisAndMethod/"+analysisMethodId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {

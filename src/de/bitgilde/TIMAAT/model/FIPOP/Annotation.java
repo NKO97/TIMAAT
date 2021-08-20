@@ -73,8 +73,8 @@ public class Annotation implements Serializable {
 	private MediumAnalysisList mediumAnalysisList;
 
 	@Transient
-	@JsonProperty("analysisListID")
-	private int analysisListID;
+	@JsonProperty("analysisListId")
+	private int analysisListId;
 	
 	// //bi-directional many-to-one association to MediumAnalysisList
 	// @ManyToOne
@@ -548,11 +548,11 @@ public class Annotation implements Serializable {
 	}
 
 	public int getAnalysisListID() {
-		return analysisListID;
+		return analysisListId;
 	}
 
-	public void setAnalysisListID(int analysisListID) {
-		this.analysisListID = analysisListID;
+	public void setAnalysisListID(int analysisListId) {
+		this.analysisListId = analysisListId;
 	}
 
 	// public List<SpatialSemanticsTypeActorPerson> getSpatialSemanticsTypeActorPersons() {

@@ -635,7 +635,7 @@ public class EndpointActor {
 		
 		entityManager.refresh(actor);
 		
-		return Response.ok(actor.getActorNames()).build();
+		return Response.ok().entity(actor.getActorNames()).build();
 	}
 
 	@GET

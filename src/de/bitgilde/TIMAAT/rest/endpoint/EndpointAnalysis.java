@@ -80,6 +80,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.TakeTypeProgressionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Timbre;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 
 @Service
 @Path("/analysis")
@@ -932,7 +933,8 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysis(@PathParam("annotationId") int annotationId,
 																 @PathParam("analysisMethodId") int analysisMethodId, 
-																 String jsonData) {
+																 String jsonData,
+																 @QueryParam("authToken") String authToken) {
 		System.out.println("EndpointAnalysis: createAnalysis: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -940,10 +942,23 @@ public class EndpointAnalysis {
 		Analysis newAnalysis = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
+		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
+		if ( analysisMethod== null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// parse JSON data
-		if (annotation == null) return Response.status(Status.NOT_FOUND).build();
 		try {
 			newAnalysis = mapper.readValue(jsonData, Analysis.class);
 		} catch (IOException e) {
@@ -1003,7 +1018,8 @@ public class EndpointAnalysis {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisId}")
 	@Secured
-	public Response deleteAnalysis(@PathParam("analysisId") int analysisId) {   
+	public Response deleteAnalysis(@PathParam("analysisId") int analysisId,
+																 @QueryParam("authToken") String authToken) {   
 		System.out.println("EndpointAnalysis: deleteAnalysis"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -1011,6 +1027,18 @@ public class EndpointAnalysis {
 		if ( analysis == null ) return Response.status(Status.NOT_FOUND).build();
 		Annotation annotation = analysis.getAnnotation();
 		if ( annotation.getAnalysis().contains(analysis) == false) return Response.ok().entity(false).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		annotation.getAnalysis().remove(analysis);
 
@@ -1031,7 +1059,8 @@ public class EndpointAnalysis {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("analysisAndMethod/{analysisMethodId}")
 	@Secured
-	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId) {   
+	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId,
+																									@QueryParam("authToken") String authToken) {   
 		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod"); 	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -1040,6 +1069,18 @@ public class EndpointAnalysis {
 		Analysis analysis = analysisMethod.getAnalysis().get(0); //* dynamically created analysis methods will only exist in one analysis
 		Annotation annotation = analysis.getAnnotation();
 		if ( annotation.getAnalysis().contains(analysis) == false) return Response.ok().entity(false).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1190,6 +1231,7 @@ public class EndpointAnalysis {
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 		AnalysisMusic analysisMusic = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
 		// parse JSON data
 		try {
 			analysisMusic = mapper.readValue(jsonData, AnalysisMusic.class);

@@ -128,18 +128,16 @@ public class EndpointUserAccount {
 	@Secured
 	public Response updateAllPermissions(@QueryParam("authToken") String authToken) {
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount admin = null;
-		try {
-			String username = AuthenticationFilter.validateToken(authToken);
-				// Validate user status
-				admin = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		if (admin.getId() != 1) { // only Admin may update file lengths
+		if (userId != 1) { // only Admin may update file lengths
 			return Response.status(Status.FORBIDDEN).build(); 
 		}
+
 		System.out.println("add missing permissions");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -177,7 +175,40 @@ public class EndpointUserAccount {
 		System.out.println("Completed updating all missing permissions.");
 		return Response.ok().build();
 	}
-		
+	
+	public static int getPermissionLevelForAnalysisList(int userAccountId, int mediumAnalysisListId) {
+		// System.out.println("getPermissionLevelForAnalysisList - userId: " + userAccountId + " listId: " + mediumAnalysisListId);
+		UserAccountHasMediumAnalysisList uahmal;
+		try {
+			String countQuerySQL = "SELECT COUNT (uahmal) FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.userAccount.id = :userAccountId AND uahmal.mediumAnalysisList.id = :mediumAnalysisListId";
+			Query countQuery = TIMAATApp.emf.createEntityManager()
+													.createQuery(countQuerySQL)
+													.setParameter("userAccountId", userAccountId)
+													.setParameter("mediumAnalysisListId", mediumAnalysisListId);
+			long recordsTotal = (long) countQuery.getSingleResult();
+			if (recordsTotal == 1) {
+				uahmal = (UserAccountHasMediumAnalysisList) TIMAATApp.emf.createEntityManager()
+					.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.userAccount.id = :userAccountId AND uahmal.mediumAnalysisList.id = :mediumAnalysisListId")
+					.setParameter("userAccountId", userAccountId)
+					.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+					.getSingleResult();
+			} else {
+				return -1;
+			}
+		} catch (NoResultException nre) {
+			System.out.println("No entry found. Setting value to -1");
+			nre.printStackTrace();
+			return -1; // no permission set for this user on this mediumAnalysisList
+		} catch (Exception e) {
+			System.out.println("No entry found. Setting value to -1");
+			e.printStackTrace();
+			return -1; // no permission set for this user on this mediumAnalysisList
+		}
+		// System.out.println("getPermissionLevelForAnalysisList - permission level found: " + uahmal.getPermissionType().getId());
+		return uahmal.getPermissionType().getId();
+	}
+
+
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());
 		for(Object o: c)

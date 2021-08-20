@@ -83,20 +83,24 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/displayNames")
 	@Secured
-	public Response getDisplayNamesAndPermissions(@PathParam("id") Integer id,
+	public Response getDisplayNamesAndPermissions(@PathParam("id") Integer mediumAnalysisListId,
 																							  @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysisList: getDisplayNames - ID: "+ id);
+		// System.out.println("EndpointAnalysisList: getDisplayNames - ID: "+ mediumAnalysisListId);
+		
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		try {
-			String username = AuthenticationFilter.validateToken(authToken);
-			// Validate user status
-			UserAccount user = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 3 && userId != 1) { // only mods and admins may see permission list
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
     EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisListList = mediumAnalysisList.getUserAccountHasMediumAnalysisLists();
 		class DisplayNameElement {
 			public int userAccountId;
@@ -645,13 +649,28 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response updateAnalysisList(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointAnalysisList: updateAnalysisList "+ jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		MediumAnalysisList updatedList = null;
+	public Response updateAnalysisList(@PathParam("id") int mediumAnalysisListId,
+																		 String jsonData,
+																		 @QueryParam("authToken") String authToken) {
 
+		System.out.println("EndpointAnalysisList: updateAnalysisList "+ jsonData);
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2 && userId != 1) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
+		MediumAnalysisList updatedList = null;
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		
     // parse JSON data
@@ -707,12 +726,25 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response deleteAnalysisList(@PathParam("id") int id) {
+	public Response deleteAnalysisList(@PathParam("id") int mediumAnalysisListId,
+																		 @QueryParam("authToken") String authToken) {
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2 && userId != 1) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
     	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
-    	if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
-		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
+	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		// remove all associated annotations
@@ -741,37 +773,25 @@ public class EndpointAnalysisList {
 		System.out.println("EndpointMediumAnalysisList: addUserAccountHasMediumAnalysisListWithPermission");
 
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount user = null;
-		String username = "";
-		try {
-			username = AuthenticationFilter.validateToken(authToken);
-			// Validate user status
-			user = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
-		try {
-			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
-				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-				.setParameter("userAccount", user);
-			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
-		} catch (Exception e) {
-		}
-
+		// check for permission level
 		// only users with administrate permission level may add users with moderate or administrate permission
-		// IF no list entry found but user is not sys admin
-		// OR user is on list but without high enough permission level to set others to moderate or administrate
-		// OR user is on list but without high enough permission level to set any permission levels
-		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
-			return Response.status(Status.UNAUTHORIZED).build();
+		int permissionLevel = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
+		// IF user is not sys admin AND (
+		// user is without high enough permission level to set others to moderate or administrate
+		// OR user is without high enough permission level to set any permission levels)
+		if ((userId != 1) && (
+				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(permissionLevel != 3 && permissionLevel != 4))) {
+			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
 		UserAccount userAccount = entityManager.find(UserAccount.class, userAccountId);
@@ -838,37 +858,25 @@ public class EndpointAnalysisList {
 		System.out.println("EndpointMediumAnalysisList: updateUserAccountHasMediumAnalysisListWithPermission");
 
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount user = null;
-		String username = "";
-		try {
-			username = AuthenticationFilter.validateToken(authToken);
-			// Validate user status
-			user = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
-		try {
-			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
-				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-				.setParameter("userAccount", user);
-			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
-		} catch (Exception e) {
-		}
-
-		// only users with administrate permission level may change users with moderate or administrate permission
-		// IF no list entry found but user is not sys admin
-		// OR user is on list but without high enough permission level to set others to moderate or administrate
-		// OR user is on list but without high enough permission level to set any permission levels
-		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
-			return Response.status(Status.UNAUTHORIZED).build();
+		// check for permission level
+		// only users with administrate permission level may add users with moderate or administrate permission
+		int permissionLevel = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
+		// IF user is not sys admin AND (
+		// user is without high enough permission level to set others to moderate or administrate
+		// OR user is without high enough permission level to set any permission levels)
+		if ((userId != 1) && (
+				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(permissionLevel != 3 && permissionLevel != 4))) {
+			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
 		UserAccount userAccount = entityManager.find(UserAccount.class, userAccountId);
@@ -905,27 +913,14 @@ public class EndpointAnalysisList {
 																																			 @PathParam("userAccountId") int userAccountId,
 																																			 @QueryParam("authToken") String authToken) {
 		// verify auth token
-		if ( authToken == null ) return Response.status(401).build();
-		UserAccount user = null;
-		String username = "";
-		try {
-			username = AuthenticationFilter.validateToken(authToken);
-			// Validate user status
-			user = AuthenticationFilter.validateAccountStatus(username);
-		} catch (Exception e) {
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		List<UserAccountHasMediumAnalysisList> userWithAdminPermission = null;
-		try {
-			Query query = entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount=:userAccount")
-				.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-				.setParameter("userAccount", user);
-			userWithAdminPermission = castList(UserAccountHasMediumAnalysisList.class, query.getResultList());
-		} catch (Exception e) {
-		}
-
 		UserAccountHasMediumAnalysisList userToBeRemoved = null;
 		try {
 			userToBeRemoved = (UserAccountHasMediumAnalysisList) entityManager.createQuery("SELECT uahmal FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.mediumAnalysisList.id=:mediumAnalysisListId AND uahmal.userAccount.id=:userAccountId")
@@ -936,15 +931,16 @@ public class EndpointAnalysisList {
 			nre.printStackTrace();
 			return Response.status(Status.NOT_FOUND).build();
 		}
-
-		// only users with administrate permission level may delete users with moderate or administrate permission
-		// IF no list entry found but user is not sys admin
-		// OR user is on list but without high enough permission level to delete others with moderate or administrate permission
-		// OR user is on list but without high enough permission level to delete anyone
-		if ((userWithAdminPermission.size() == 0 && username.toLowerCase().compareTo("admin") != 0) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
-				(userWithAdminPermission.size() >= 1 && userWithAdminPermission.get(0).getPermissionType().getId() != 3 && userWithAdminPermission.get(0).getPermissionType().getId() != 4)) {
-			return Response.status(Status.UNAUTHORIZED).build();
+		// check for permission level
+		// only users with administrate permission level may add users with moderate or administrate permission
+		int permissionLevel = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
+		// IF user is not sys admin AND (
+		// user is without high enough permission level to set others to moderate or administrate
+		// OR user is without high enough permission level to set any permission levels)
+		if ((userId != 1) &&
+				((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
+				(permissionLevel != 3 && permissionLevel != 4))) {
+			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
@@ -974,39 +970,55 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{analysisListId}/segment")
-	public Response createAnalysisSegment(@PathParam("analysisListId") int analysisListId, String jsonData) {
-		System.out.println("createAnalysisSegment - jsonData: "+ jsonData);
+	public Response createAnalysisSegment(@PathParam("analysisListId") int mediumAnalysisListId,
+																			  String jsonData,
+																				@QueryParam("authToken") String authToken) {
+
+		// System.out.println("createAnalysisSegment - jsonData: "+ jsonData);
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		ObjectMapper mapper = new ObjectMapper();
-		AnalysisSegment newSegment = null;    	
+		AnalysisSegment analysisSegment = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();	
+
 		// parse JSON data
 		try {
-			newSegment = mapper.readValue(jsonData, AnalysisSegment.class);
+			analysisSegment = mapper.readValue(jsonData, AnalysisSegment.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newSegment == null ) return Response.status(Status.BAD_REQUEST).build();
+		if ( analysisSegment == null ) return Response.status(Status.BAD_REQUEST).build();
 		
 		// sanitize object data
-		newSegment.setId(0);
-		mediumAnalysisList.addAnalysisSegment(newSegment);
-		newSegment.getAnalysisSegmentTranslations().get(0).setId(0);
-		newSegment.getAnalysisSegmentTranslations().get(0).setAnalysisSegment(newSegment);
-		newSegment.getAnalysisSegmentTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		analysisSegment.setId(0);
+		mediumAnalysisList.addAnalysisSegment(analysisSegment);
+		analysisSegment.getAnalysisSegmentTranslations().get(0).setId(0);
+		analysisSegment.getAnalysisSegmentTranslations().get(0).setAnalysisSegment(analysisSegment);
+		analysisSegment.getAnalysisSegmentTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		// persist analysissegment and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.persist(newSegment.getAnalysisSegmentTranslations().get(0));
-		entityManager.persist(newSegment);
+		entityManager.persist(analysisSegment.getAnalysisSegmentTranslations().get(0));
+		entityManager.persist(analysisSegment);
 		entityManager.flush();
-		newSegment.setMediumAnalysisList(mediumAnalysisList);
+		analysisSegment.setMediumAnalysisList(mediumAnalysisList);
 		entityManager.persist(mediumAnalysisList);
 		entityTransaction.commit();
-		entityManager.refresh(newSegment);
+		entityManager.refresh(analysisSegment);
 		entityManager.refresh(mediumAnalysisList);		
 
 		// add log entry
@@ -1016,10 +1028,10 @@ public class EndpointAnalysisList {
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
 																					 "add-segment",
-																					 newSegment.getMediumAnalysisList().getId(),
-																					 newSegment);
+																					 analysisSegment.getMediumAnalysisList().getId(),
+																					 analysisSegment);
 
-		return Response.ok().entity(newSegment).build();
+		return Response.ok().entity(analysisSegment).build();
 	}
 	
 	@PATCH
@@ -1027,15 +1039,29 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("segment/{id}")
 	@Secured
-	public Response updateAnalysisSegment(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
+	public Response updateAnalysisSegment(@PathParam("id") int segmentId,
+																				String jsonData,
+																				@QueryParam("authToken") String authToken) {
+		// System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment updatedSegment = null;
     	
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, id);
-		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
-		
 		// parse JSON data
 		try {
 			updatedSegment = mapper.readValue(jsonData, AnalysisSegment.class);
@@ -1076,13 +1102,26 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("segment/{id}")
 	@Secured
-	public Response deleteAnalysisSegment(@PathParam("id") int id) {
+	public Response deleteAnalysisSegment(@PathParam("id") int segmentId,
+																				@QueryParam("authToken") String authToken) {
     	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, id);
-    	if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
-		
-    	MediumAnalysisList mediumAnalysisList = analysisSegment.getMediumAnalysisList();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+	
+		MediumAnalysisList mediumAnalysisList = analysisSegment.getMediumAnalysisList();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisSegment);
@@ -1107,39 +1146,55 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{segmentId}/sequence")
-	public Response createAnalysisSequence(@PathParam("segmentId") int segmentId, String jsonData) {
-		System.out.println("EndpointAnalysisList: createAnalysisSequence - jsonData: "+ jsonData);
+	public Response createAnalysisSequence(@PathParam("segmentId") int segmentId,
+																				 String jsonData,
+																				 @QueryParam("authToken") String authToken) {
+		// System.out.println("EndpointAnalysisList: createAnalysisSequence - jsonData: "+ jsonData);
+
 		ObjectMapper mapper = new ObjectMapper();
-		AnalysisSequence newSequence = null;
+		AnalysisSequence analysisSequence = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
 		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();	
+		
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// parse JSON data
 		try {
-			newSequence = mapper.readValue(jsonData, AnalysisSequence.class);
+			analysisSequence = mapper.readValue(jsonData, AnalysisSequence.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( newSequence == null ) return Response.status(Status.BAD_REQUEST).build();
+		if ( analysisSequence == null ) return Response.status(Status.BAD_REQUEST).build();
 		
 		// sanitize object data
-		newSequence.setId(0);
-		analysisSegment.addAnalysisSequence(newSequence);
-		newSequence.getAnalysisSequenceTranslations().get(0).setId(0);
-		newSequence.getAnalysisSequenceTranslations().get(0).setAnalysisSequence(newSequence);
-		newSequence.getAnalysisSequenceTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+		analysisSequence.setId(0);
+		analysisSegment.addAnalysisSequence(analysisSequence);
+		analysisSequence.getAnalysisSequenceTranslations().get(0).setId(0);
+		analysisSequence.getAnalysisSequenceTranslations().get(0).setAnalysisSequence(analysisSequence);
+		analysisSequence.getAnalysisSequenceTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		
 		// persist analysissequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.persist(newSequence);
+		entityManager.persist(analysisSequence);
 		entityManager.flush();
-		newSequence.setAnalysisSegment(analysisSegment);
+		analysisSequence.setAnalysisSegment(analysisSegment);
 		entityManager.persist(analysisSegment);
 		entityTransaction.commit();
-		entityManager.refresh(newSequence);
+		entityManager.refresh(analysisSequence);
 		entityManager.refresh(analysisSegment);
 
 		// add log entry
@@ -1149,10 +1204,10 @@ public class EndpointAnalysisList {
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
 																					 "add-sequence",
-																					 newSequence.getAnalysisSegment().getId(),
-																					 newSequence);
+																					 analysisSequence.getAnalysisSegment().getId(),
+																					 analysisSequence);
 
-		return Response.ok().entity(newSequence).build();
+		return Response.ok().entity(analysisSequence).build();
 	}
 	
 	@PATCH
@@ -1160,13 +1215,29 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("sequence/{id}")
 	@Secured
-	public Response updateAnalysisSequence(@PathParam("id") int id, String jsonData) {
-		ObjectMapper mapper = new ObjectMapper();
-		AnalysisSequence updatedSequence = null;
+	public Response updateAnalysisSequence(@PathParam("id") int sequenceId,
+																				 String jsonData,
+																				 @QueryParam("authToken") String authToken) {
+		// System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, id);
+		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		AnalysisSequence updatedSequence = null;
 	
 		// parse JSON data
 		try {
@@ -1204,11 +1275,24 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("sequence/{id}")
 	@Secured
-	public Response deleteAnalysisSequence(@PathParam("id") int id) {
+	public Response deleteAnalysisSequence(@PathParam("id") int id,
+																				 @QueryParam("authToken") String authToken) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, id);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		AnalysisSegment analysisSegment = analysisSequence.getAnalysisSegment();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1360,12 +1444,27 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{segmentId}/scene")
-	public Response createAnalysisScene(@PathParam("segmentId") int segmentId, String jsonData) {
+	public Response createAnalysisScene(@PathParam("segmentId") int segmentId,
+																			String jsonData,
+																			@QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisScene newScene = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
-		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// parse JSON data
 		try {
 			newScene = mapper.readValue(jsonData, AnalysisScene.class);
@@ -1411,14 +1510,28 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("scene/{id}")
 	@Secured
-	public Response updateAnalysisScene(@PathParam("id") int id, String jsonData) {
+	public Response updateAnalysisScene(@PathParam("id") int id,
+																			String jsonData,
+																			@QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisScene updatedScene = null;
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, id);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// parse JSON data
 		try {
 			updatedScene = mapper.readValue(jsonData, AnalysisScene.class);
@@ -1455,11 +1568,24 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("scene/{id}")
 	@Secured
-	public Response deleteAnalysisScene(@PathParam("id") int id) {
+	public Response deleteAnalysisScene(@PathParam("id") int id,
+																			@QueryParam("authToken") String authToken) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, id);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		AnalysisSegment analysisSegment = analysisScene.getAnalysisSegment();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1609,12 +1735,27 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{sequenceId}/take")
-	public Response createAnalysisTake(@PathParam("sequenceId") int sequenceId, String jsonData) {
+	public Response createAnalysisTake(@PathParam("sequenceId") int sequenceId,
+																		 String jsonData,
+																		 @QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTake newTake = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();	
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// parse JSON data
 		try {
 			newTake = mapper.readValue(jsonData, AnalysisTake.class);
@@ -1661,13 +1802,27 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("take/{id}")
 	@Secured
-	public Response updateAnalysisTake(@PathParam("id") int id, String jsonData) {
+	public Response updateAnalysisTake(@PathParam("id") int id,
+																		 String jsonData,
+																		@QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTake updatedTake = null;
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, id);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		// parse JSON data
 		try {
@@ -1705,11 +1860,24 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("take/{id}")
 	@Secured
-	public Response deleteAnalysisTake(@PathParam("id") int id) {
+	public Response deleteAnalysisTake(@PathParam("id") int id,
+																		 @QueryParam("authToken") String authToken) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, id);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		AnalysisSequence analysisSequence = analysisTake.getAnalysisSequence();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1859,12 +2027,27 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{sceneId}/action")
-	public Response createAnalysisAction(@PathParam("sceneId") int sceneId, String jsonData) {
+	public Response createAnalysisAction(@PathParam("sceneId") int sceneId,
+																			 String jsonData,
+																			 @QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisAction newAction = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();	
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		// parse JSON data
 		try {
 			newAction = mapper.readValue(jsonData, AnalysisAction.class);
@@ -1910,13 +2093,27 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("action/{id}")
 	@Secured
-	public Response updateAnalysisAction(@PathParam("id") int id, String jsonData) {
+	public Response updateAnalysisAction(@PathParam("id") int id,
+																			 String jsonData,
+																			 @QueryParam("authToken") String authToken) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisAction updatedAction = null;
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, id);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		// parse JSON data
 		try {
@@ -1954,11 +2151,24 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("action/{id}")
 	@Secured
-	public Response deleteAnalysisAction(@PathParam("id") int id) {
+	public Response deleteAnalysisAction(@PathParam("id") int id,
+																			 @QueryParam("authToken") String authToken) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, id);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 	
 		AnalysisScene analysisScene = analysisAction.getAnalysisScene();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2107,26 +2317,39 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/categorySet/{categorySetId}")
 	@Secured
-	public Response addExistingCategorySet(@PathParam("analysisListId") int analysisListId,
-																 				 @PathParam("categorySetId") int categorySetId) {
+	public Response addExistingCategorySet(@PathParam("analysisListId") int mediumAnalysisListId,
+																 				 @PathParam("categorySetId") int categorySetId,
+																					@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		analysisList.getCategorySets().add(categorySet);
-		categorySet.getMediumAnalysisLists().add(analysisList);
+		mediumAnalysisList.getCategorySets().add(categorySet);
+		categorySet.getMediumAnalysisLists().add(mediumAnalysisList);
 		entityManager.merge(categorySet);
-		entityManager.merge(analysisList);
-		entityManager.persist(analysisList);
+		entityManager.merge(mediumAnalysisList);
+		entityManager.persist(mediumAnalysisList);
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
-		entityManager.refresh(analysisList);
+		entityManager.refresh(mediumAnalysisList);
  	
 		return Response.ok().entity(categorySet).build();
 	}
@@ -2136,25 +2359,38 @@ public class EndpointAnalysisList {
 	@Path("segment/{segmentId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategoryToSegment(@PathParam("segmentId") int segmentId,
-																 				 		 	 @PathParam("categoryId") int categoryId) {
+																 				 		 	 @PathParam("categoryId") int categoryId,
+																							 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, segmentId);
-		if ( segment == null ) return Response.status(Status.NOT_FOUND).build();
+		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		segment.getCategories().add(category);
-		category.getAnalysisSegments().add(segment);
+		analysisSegment.getCategories().add(category);
+		category.getAnalysisSegments().add(analysisSegment);
 		entityManager.merge(category);
-		entityManager.merge(segment);
-		entityManager.persist(segment);
+		entityManager.merge(analysisSegment);
+		entityManager.persist(analysisSegment);
 		entityManager.persist(category);
 		entityTransaction.commit();
-		entityManager.refresh(segment);
+		entityManager.refresh(analysisSegment);
  	
 		return Response.ok().entity(category).build();
 	}
@@ -2164,25 +2400,38 @@ public class EndpointAnalysisList {
 	@Path("sequence/{sequenceId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategoryToSequence(@PathParam("sequenceId") int sequenceId,
-																 				 		 	 @PathParam("categoryId") int categoryId) {
+																 				 		 	  @PathParam("categoryId") int categoryId,
+																								@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, sequenceId);
-		if ( sequence == null ) return Response.status(Status.NOT_FOUND).build();
+		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
+		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		sequence.getCategories().add(category);
-		category.getAnalysisSequences().add(sequence);
+		analysisSequence.getCategories().add(category);
+		category.getAnalysisSequences().add(analysisSequence);
 		entityManager.merge(category);
-		entityManager.merge(sequence);
-		entityManager.persist(sequence);
+		entityManager.merge(analysisSequence);
+		entityManager.persist(analysisSequence);
 		entityManager.persist(category);
 		entityTransaction.commit();
-		entityManager.refresh(sequence);
+		entityManager.refresh(analysisSequence);
  	
 		return Response.ok().entity(category).build();
 	}
@@ -2192,25 +2441,38 @@ public class EndpointAnalysisList {
 	@Path("take/{takeId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategoryToTake(@PathParam("takeId") int takeId,
-																 				 		 	 @PathParam("categoryId") int categoryId) {
+																 				 		@PathParam("categoryId") int categoryId,
+																						@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisTake take = entityManager.find(AnalysisTake.class, takeId);
-		if ( take == null ) return Response.status(Status.NOT_FOUND).build();
+		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
+		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		take.getCategories().add(category);
-		category.getAnalysisTakes().add(take);
+		analysisTake.getCategories().add(category);
+		category.getAnalysisTakes().add(analysisTake);
 		entityManager.merge(category);
-		entityManager.merge(take);
-		entityManager.persist(take);
+		entityManager.merge(analysisTake);
+		entityManager.persist(analysisTake);
 		entityManager.persist(category);
 		entityTransaction.commit();
-		entityManager.refresh(take);
+		entityManager.refresh(analysisTake);
  	
 		return Response.ok().entity(category).build();
 	}
@@ -2220,25 +2482,38 @@ public class EndpointAnalysisList {
 	@Path("scene/{sceneId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategoryToScene(@PathParam("sceneId") int sceneId,
-																 				 		 	 @PathParam("categoryId") int categoryId) {
+																 				 		 @PathParam("categoryId") int categoryId,
+																						 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisScene scene = entityManager.find(AnalysisScene.class, sceneId);
-		if ( scene == null ) return Response.status(Status.NOT_FOUND).build();
+		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
+		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		scene.getCategories().add(category);
-		category.getAnalysisScenes().add(scene);
+		analysisScene.getCategories().add(category);
+		category.getAnalysisScenes().add(analysisScene);
 		entityManager.merge(category);
-		entityManager.merge(scene);
-		entityManager.persist(scene);
+		entityManager.merge(analysisScene);
+		entityManager.persist(analysisScene);
 		entityManager.persist(category);
 		entityTransaction.commit();
-		entityManager.refresh(scene);
+		entityManager.refresh(analysisScene);
  	
 		return Response.ok().entity(category).build();
 	}
@@ -2248,25 +2523,39 @@ public class EndpointAnalysisList {
 	@Path("action/{actionId}/category/{categoryId}")
 	@Secured
 	public Response addExistingCategoryToAction(@PathParam("actionId") int actionId,
-																 				 		 	 @PathParam("categoryId") int categoryId) {
+																 				 		 	@PathParam("categoryId") int categoryId,
+																							@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		AnalysisAction action = entityManager.find(AnalysisAction.class, actionId);
-		if ( action == null ) return Response.status(Status.NOT_FOUND).build();
+		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
+		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
 		
 		// attach categorySet to annotation and vice versa    	
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		action.getCategories().add(category);
-		category.getAnalysisActions().add(action);
+		analysisAction.getCategories().add(category);
+		category.getAnalysisActions().add(analysisAction);
 		entityManager.merge(category);
-		entityManager.merge(action);
-		entityManager.persist(action);
+		entityManager.merge(analysisAction);
+		entityManager.persist(analysisAction);
 		entityManager.persist(category);
 		entityTransaction.commit();
-		entityManager.refresh(action);
+		entityManager.refresh(analysisAction);
  	
 		return Response.ok().entity(category).build();
 	}
@@ -2275,14 +2564,27 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/categorySet/{categorySetId}")
 	@Secured
-	public Response removeCategorySet(@PathParam("analysisListId") int analysisListId,
-																		@PathParam("categorySetId") int categorySetId) {
+	public Response removeCategorySet(@PathParam("analysisListId") int mediumAnalysisListId,
+																		@PathParam("categorySetId") int categorySetId,
+																		@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
-		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// TODO delete categories from annotations of matching categorySets
 		List<Category> categoryList = new ArrayList<>();
@@ -2295,7 +2597,7 @@ public class EndpointAnalysisList {
 			categoryList.add(itr.next().getCategory());
 		}
 		// remove categories from removed category set from all associated annotations of the annotation list the category set is removed from
-		for (Annotation annotation : analysisList.getAnnotations()) {
+		for (Annotation annotation : mediumAnalysisList.getAnnotations()) {
 			List<Category> annotationCategoryList = annotation.getCategories();
 			List<Category> categoriesToRemove = categoryList.stream()
 																										 .distinct()
@@ -2313,14 +2615,14 @@ public class EndpointAnalysisList {
 
 		// attach categorySet to annotation and vice versa    	
 		entityTransaction.begin();
-		analysisList.getCategorySets().remove(categorySet);
-		categorySet.getMediumAnalysisLists().remove(analysisList);
+		mediumAnalysisList.getCategorySets().remove(categorySet);
+		categorySet.getMediumAnalysisLists().remove(mediumAnalysisList);
 		entityManager.merge(categorySet);
-		entityManager.merge(analysisList);
-		entityManager.persist(analysisList);
+		entityManager.merge(mediumAnalysisList);
+		entityManager.persist(mediumAnalysisList);
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
-		entityManager.refresh(analysisList);
+		entityManager.refresh(mediumAnalysisList);
  	
 		return Response.ok().build();
 	}
@@ -2330,13 +2632,26 @@ public class EndpointAnalysisList {
 	@Path("segment/{segmentId}/category/{categoryId}")
 	@Secured
 	public Response removeSegmentCategory(@PathParam("segmentId") int segmentId,
-																 				@PathParam("categoryId") int categoryId) {
+																 				@PathParam("categoryId") int categoryId,
+																				@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
 		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();    	
@@ -2358,13 +2673,26 @@ public class EndpointAnalysisList {
 	@Path("sequence/{sequenceId}/category/{categoryId}")
 	@Secured
 	public Response removeSequenceCategory(@PathParam("sequenceId") int sequenceId,
-																 				@PathParam("categoryId") int categoryId) {
+																 				 @PathParam("categoryId") int categoryId,
+																				 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();    	
@@ -2386,13 +2714,26 @@ public class EndpointAnalysisList {
 	@Path("take/{takeId}/category/{categoryId}")
 	@Secured
 	public Response removeTakeCategory(@PathParam("takeId") int takeId,
-																 				@PathParam("categoryId") int categoryId) {
+																 		 @PathParam("categoryId") int categoryId,
+																		 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();    	
@@ -2414,13 +2755,26 @@ public class EndpointAnalysisList {
 	@Path("scene/{sceneId}/category/{categoryId}")
 	@Secured
 	public Response removeSceneCategory(@PathParam("sceneId") int sceneId,
-																 				@PathParam("categoryId") int categoryId) {
+																 			@PathParam("categoryId") int categoryId,
+																			@QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();    	
@@ -2442,13 +2796,26 @@ public class EndpointAnalysisList {
 	@Path("action/{actionId}/category/{categoryId}")
 	@Secured
 	public Response removeActionCategory(@PathParam("actionId") int actionId,
-																 				@PathParam("categoryId") int categoryId) {
+																 			 @PathParam("categoryId") int categoryId,
+																			 @QueryParam("authToken") String authToken) {
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		// check for permission level
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
+			return Response.status(Status.FORBIDDEN).build();
+		}
 
 		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();    	

@@ -147,6 +147,10 @@
       // inspector event handler
       $('#timaat-annotation-category-form-submit-button').on('click', async function(event) {
         event.preventDefault();
+        if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+          $('#analysisListNoPermissionModal').modal('show');
+          return;
+        }
         // console.log("TCL: Submit Categories for analysis list");
         // var modal = $('#timaat-annotationdatasets-annotation-categories');
         if (!$('#annotationCategoriesForm').valid()) 
@@ -227,6 +231,10 @@
       // inspector event handler
       $('#timaat-segment-element-category-form-submit').on('click', async function(event) {
         event.preventDefault();
+        if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+          $('#analysisListNoPermissionModal').modal('show');
+          return;
+        }
         let type = $('#segmentElementCategoriesForm').data('type');
         // var modal = $('#timaat-segmentdatasets-segment-categories');
         if (!$('#segmentElementCategoriesForm').valid()) return false;
@@ -460,6 +468,10 @@
       // inspector event handler
       $('#timaat-mediumAnalysisList-categorySet-form-submit-button').on('click', async function(event) {
         event.preventDefault();
+        if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+          $('#analysisListNoPermissionModal').modal('show');
+          return;
+        }
         // console.log("TCL: Submit category sets for analysis list");
         if (!$('#mediumAnalysisListCategorySetsForm').valid()) 
           return false;

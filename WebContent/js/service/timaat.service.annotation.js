@@ -89,39 +89,10 @@
 			});	
 		},
 
-		createAnnotation(title, comment, startTime, endTime, color, opacity, strokeWidth, layerVisual, list, callback) {
-			// console.log("TCL: createAnnotation -> title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback", title, comment, startTime, endTime, color, strokeWidth, layerVisual, list, callback);
-			var model = { 	
-				id: 0, 
-				analysisListID: list,
-				startTime: startTime,
-				endTime: endTime,
-				layerVisual: layerVisual,
-//				actors: [],
-//				annotations1: [],
-//				annotations2: [],
-//				categories: [],
-//				events: [],
-//				locations: [],
-//				mediums: [],
-				annotationTranslations: [{
-					id: 0,
-					comment: comment,
-					title: title,
-				}],
-				selectorSvgs: [{
-					id: 0,
-					colorHex: color,
-					opacity: opacity * 100, //* 0..1 is stored as 0..100 (Byte)
-					svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
-					strokeWidth: strokeWidth,
-					svgShapeType: {
-						id: 5
-					}
-				}]
-			};
+		createAnnotation(model, callback) {
+      console.log("TCL: createAnnotation -> model", model);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/medium/"+TIMAAT.VideoPlayer.model.video.id,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/mediumAnalysisList/"+model.analysisListId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -163,7 +134,7 @@
 			// console.log("TCL: updateAnnotation -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id+'/?authToken='+TIMAAT.Service.session.token,
 					type:"PATCH",
 					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
@@ -204,7 +175,7 @@
 		addAnnotationActor(annotationId, actorId) {
       // console.log("TCL: addAnnotationActor -> annotationId, actorId", annotationId, actorId);
 			return jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"POST",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -224,7 +195,7 @@
 		removeAnnotationActor(annotationId, actorId) {
       // console.log("TCL: removeAnnotationActor -> annotationId, actorId", annotationId, actorId);
 			return jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/actors/"+actorId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -243,7 +214,7 @@
 		addAnnotationEvent(annotationId, eventId) {
       // console.log("TCL: addAnnotationEvent -> annotationId, eventId", annotationId, eventId);
 			return jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/events/"+eventId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/events/"+eventId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"POST",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -263,7 +234,7 @@
 		removeAnnotationEvent(annotationId, eventId) {
       // console.log("TCL: removeAnnotationEvent -> annotationId, eventId", annotationId, eventId);
 			return jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/events/"+eventId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/events/"+eventId+'/?authToken='+TIMAAT.Service.session.token,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -283,7 +254,7 @@
 			// console.log("TCL: addCategory -> annotationId, categoryId", annotationId, categoryId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -305,7 +276,7 @@
 			// console.log("TCL: removeCategory -> annotationId, categoryName", annotationId, categoryName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -327,7 +298,7 @@
 			// console.log("TCL: addTag -> annotationId, tagId", annotationId, tagId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/tag/"+tagId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -349,7 +320,7 @@
 			// console.log("TCL: removeTag -> annotationId, tagName", annotationId, tagName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/tag/"+tagId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {

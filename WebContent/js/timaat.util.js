@@ -155,7 +155,7 @@
 				return from + (to - from) * percent;
 		},
 		
-		getDefTranslation: function(item, list, prop) {
+		getDefaultTranslation: function(item, list, prop) {
 			var value = null;
 			item[list].forEach(function(translation) {
 				if ( translation && translation.language && translation.language.code == 'default' )
@@ -164,7 +164,7 @@
 			return value;
 		},
 		
-		setDefTranslation: function(item, list, prop, value) {
+		setDefaultTranslation: function(item, list, prop, value) {
 			item[list].forEach(function(translation) {
 				if ( translation && translation.language && translation.language.code == 'default' )
 					translation[prop] = value;

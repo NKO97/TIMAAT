@@ -153,6 +153,7 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to UserPasswordOldHash
 	@OneToMany(mappedBy="userAccount")
+	@JsonIgnore
 	private List<UserPasswordOldHash> userPasswordOldHash;
 
 	//bi-directional many-to-one association to UserAccountHasCategorySet
@@ -184,19 +185,6 @@ public class UserAccount implements Serializable {
 				}
 			)
 		private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists;
-
-	// bi-directional many-to-many association to MediumAnalysisList
-	@ManyToMany
-	@JoinTable(
-		name="user_account_has_medium_analysis_list"
-		, joinColumns={
-			@JoinColumn(name="user_account_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="medium_analysis_list_id")
-			}
-		)
-	private List<MediumAnalysisList> mediumAnalysisLists3;
 
 	//bi-directional many-to-one association to UserAccountHasMediaCollectionAnalysisList
 	// @OneToMany(mappedBy="userAccount")
@@ -792,14 +780,6 @@ public class UserAccount implements Serializable {
 
 	public void setMediaCollectionAnalysisLists(List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists) {
 		this.mediaCollectionAnalysisLists = mediaCollectionAnalysisLists;
-	}
-
-	public List<MediumAnalysisList> getMediumAnalysisLists3() {
-		return this.mediumAnalysisLists3;
-	}
-
-	public void setMediumAnalysisLists3(List<MediumAnalysisList> mediumAnalysisLists3) {
-		this.mediumAnalysisLists3 = mediumAnalysisLists3;
 	}
 
 	// public List<UserAccountHasCategorySet> getUserAccountHasCategorySets() {

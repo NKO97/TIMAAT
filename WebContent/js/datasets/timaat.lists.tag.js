@@ -232,8 +232,12 @@
 			});
 
       // inspector event handler
-      $('#timaat-annotation-tag-form-submit').on('click', async function(event) {
+      $('#timaat-annotation-tag-form-submit-button').on('click', async function(event) {
         event.preventDefault();
+        if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+          $('#analysisListNoPermissionModal').modal('show');
+          return;
+        }
         // console.log("TCL: Submit Tags for analysis list");
         // var modal = $('#timaat-annotationdatasets-annotation-tags');
         if (!$('#annotationTagsForm').valid()) 
@@ -263,8 +267,8 @@
       });
 
       // inspector event handler
-      $('#timaat-annotation-tag-form-dismiss').on('click', function(event) {
-        // event.preventDefault();
+      $('#timaat-annotation-tag-form-dismiss-button').on('click', function(event) {
+        event.preventDefault();
         $('#annotation-tags-multi-select-dropdown').val(null).trigger('change');
         $('#annotation-tags-multi-select-dropdown').select2('destroy');
         $('#annotation-tags-multi-select-dropdown').find('option').remove();

@@ -2443,6 +2443,10 @@
 
 					analysisMethodTypeElement.find('.add-analysisMethod').on('click', analysisMethodType, async function(ev) {
 						ev.stopPropagation();
+            if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+              $('#analysisListNoPermissionModal').modal('show');
+              return;
+            }
 						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						// $(this).remove();
 						TIMAAT.AnalysisDatasets.annotationAnalysisMethodAddModal(TIMAAT.VideoPlayer.curAnnotation.model.id, analysisMethodType);
@@ -2541,8 +2545,12 @@
 					let analysis = data;
 					analysisElement.data('analysis', analysis);
 
-					analysisElement.find('.remove-analysis').on('click', analysis, async function(ev) {
+					analysisElement.find('.remove-AnalysisMethod').on('click', analysis, async function(ev) {
 						ev.stopPropagation();
+            if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+              $('#analysisListNoPermissionModal').modal('show');
+              return;
+            }
 						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						// $(this).remove();
 						TIMAAT.AnalysisDatasets.annotationAnalysisMethodDeleteModal(analysis);
@@ -2577,7 +2585,7 @@
 							// }
 							// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name+`
 							let nameDisplay = `<p>` + `  ` + analysis.analysisMethod.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-							<span class="remove-analysis badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis guideline"></i></span>
+							<span class="remove-AnalysisMethod badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis guideline"></i></span>
 							</p>`;
 							return nameDisplay;
 						}

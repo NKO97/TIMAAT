@@ -38,7 +38,7 @@ public class MediumAnalysisList implements Serializable {
 	// TODO text and title from translation
 
 	@Column(name="global_permission")
-	private Byte globalPermission;
+	private byte globalPermission;
 
 	@Column(name="created_at")
 	private Timestamp createdAt;
@@ -97,11 +97,6 @@ public class MediumAnalysisList implements Serializable {
 	@JsonProperty("lastEditedByUserAccountID")
 	private int lastEditedByUserAccountID;
 
-	//bi-directional many-to-many association to UserAccount
-	@ManyToMany(mappedBy="mediumAnalysisLists3")
-	@JsonIgnore
-	private List<UserAccount> userAccounts;
-
 	//bi-directional many-to-many association to Tag
 	@ManyToMany
 	@JoinTable(
@@ -121,7 +116,7 @@ public class MediumAnalysisList implements Serializable {
 
 	//bi-directional many-to-one association to UserAccountHasMediumAnalysisList
 	@OneToMany(mappedBy="mediumAnalysisList")
-	// @JsonBackReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
+	@JsonManagedReference(value = "MediumAnalysisList-UserAccountHasMediumAnalysisList")
 	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
 	public MediumAnalysisList() {
@@ -140,11 +135,11 @@ public class MediumAnalysisList implements Serializable {
 		this.id = id;
 	}
 
-	public Byte getGlobalPermission() {
+	public byte getGlobalPermission() {
 		return this.globalPermission;
 	}
 
-	public void setGlobalPermission(Byte globalPermission) {
+	public void setGlobalPermission(byte globalPermission) {
 		this.globalPermission = globalPermission;
 	}
 	
@@ -256,14 +251,6 @@ public class MediumAnalysisList implements Serializable {
 	public int getLastEditedByUserAccountID() {
 		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
 		return 0;
-	}
-
-	public List<UserAccount> getUserAccounts() {
-		return this.userAccounts;
-	}
-
-	public void setUserAccounts(List<UserAccount> userAccounts) {
-		this.userAccounts = userAccounts;
 	}
 
 	public List<Tag> getTags() {
