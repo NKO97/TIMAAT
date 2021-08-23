@@ -83,21 +83,15 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "Annotation-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
-	@Transient
-	@JsonProperty("createdByUserAccountID")
-	private int createdByUserAccountID;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "Annotation-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
-	@Transient
-	@JsonProperty("lastEditedByUserAccountID")
-	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
@@ -343,15 +337,6 @@ public class Annotation implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
-	public int getCreatedByUserAccountID() {
-		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
-		return 0;
-	}
-
-	// public void setCreatedByUserAccountId(int id) {
-	// 	// do nothing
-	// }
-
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
@@ -359,15 +344,6 @@ public class Annotation implements Serializable {
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
-
-	public int getLastEditedByUserAccountID() {
-		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
-		return 0;
-	}
-
-	// public void setLastEditedByUserAccountId(int id) {
-	// 	// do nothing
-	// }
 
 	public Uuid getUuid() {
 		return this.uuid;

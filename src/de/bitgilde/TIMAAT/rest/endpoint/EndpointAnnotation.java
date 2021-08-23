@@ -640,7 +640,7 @@ public class EndpointAnnotation {
 	@Secured
 	public Response updateAnnotation(@PathParam("id") int id, String jsonData,
 																	 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnnotation: updateAnnotation: " + jsonData);
+		// System.out.println("EndpointAnnotation: updateAnnotation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Annotation updatedAnno = null;
 
@@ -669,7 +669,7 @@ public class EndpointAnnotation {
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
 
-		System.out.println("EndpointAnnotation: updateAnnotation: update annotation data");
+		// System.out.println("EndpointAnnotation: updateAnnotation: update annotation data");
     	// update annotation
 		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
 		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
@@ -693,7 +693,7 @@ public class EndpointAnnotation {
 		List<Tag> oldTags = annotation.getTags();
 		annotation.setTags(updatedAnno.getTags());
 
-		System.out.println("EndpointAnnotation: updateAnnotation: update log metadata");
+		// System.out.println("EndpointAnnotation: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -702,7 +702,7 @@ public class EndpointAnnotation {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
  
-		System.out.println("EndpointAnnotation: updateAnnotation: persist data");
+		// System.out.println("EndpointAnnotation: updateAnnotation: persist data");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(annotation);
@@ -729,7 +729,7 @@ public class EndpointAnnotation {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-annotation", annotation.getMediumAnalysisList().getId(), annotation);
-		System.out.println("EndpointAnnotation: updateAnnotation - update complete");	
+		// System.out.println("EndpointAnnotation: updateAnnotation - update complete");	
 		return Response.ok().entity(annotation).build();
 	}
 

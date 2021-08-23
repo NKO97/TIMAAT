@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -45,19 +46,14 @@ public class CategorySet implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "CategorySet-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
-	@Transient
-	@JsonProperty("createdByUserAccountID")
-	private int createdByUserAccountID;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "CategorySet-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
-	@Transient
-	@JsonProperty("lastEditedByUserAccountID")
-	private int lastEditedByUserAccountID;
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="categorySet", cascade = CascadeType.PERSIST)
@@ -76,7 +72,7 @@ public class CategorySet implements Serializable {
 
 	//bi-directional many-to-one association to UserAccountHasCategorySet
 	@OneToMany(mappedBy="categorySet")
-	@JsonIgnore
+	@JsonManagedReference(value = "CategorySet-UserAccountHasCategorySet")
 	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
 
 	public CategorySet() {
@@ -166,22 +162,12 @@ public class CategorySet implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
-	public int getCreatedByUserAccountID() {
-		if ( this.createdByUserAccount != null ) return this.createdByUserAccount.getId();
-		return 0;
-	}
-
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
-	}
-
-	public int getLastEditedByUserAccountID() {
-		if ( this.lastEditedByUserAccount != null ) return this.lastEditedByUserAccount.getId();
-		return 0;
 	}
 
 	public Set<CategorySetHasCategory> getCategorySetHasCategories() {

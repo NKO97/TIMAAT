@@ -201,6 +201,8 @@
 				mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
 				mediumID: analysisList.mediumID,
 				tags: analysisList.tags,
+				createdByUserAccount: {id: analysisList.createdByUserAccountID},
+				lastEditedByUserAccount: {id: analysisList.lastEditedByUserAccountID},
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id+'/?authToken='+TIMAAT.Service.session.token,
@@ -226,7 +228,7 @@
 		async updateMediumAnalysisList(analysisList) {
 			// console.log("TCL: updateMediumAnalysisList -> analysisList", analysisList);
 			var updateList = {
-				// annotationa: analysisList.annotations,
+				// annotations: analysisList.annotations,
 				// analysisSegments: analysisList.analysisSegments,
 				categorySets: analysisList.categorySets,
 				globalPermission: analysisList.globalPermission,
@@ -234,7 +236,10 @@
 				mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
 				mediumID: analysisList.mediumId,
 				tags: analysisList.tags,
+				createdByUserAccount: { id: analysisList.createdByUserAccountID},
+				lastEditedByUserAccount: { id: analysisList.lastEditedByUserAccountID},
 			};
+      // console.log("TCL: updateMediumAnalysisList -> updateList", updateList);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+analysisList.id+'/?authToken='+TIMAAT.Service.session.token,

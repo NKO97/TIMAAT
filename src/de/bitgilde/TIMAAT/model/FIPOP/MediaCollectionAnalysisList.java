@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Timestamp;
@@ -27,14 +28,20 @@ public class MediaCollectionAnalysisList implements Serializable {
 	@Column(name="created_at", nullable=false)
 	private Timestamp createdAt;
 
-	@Column(name="created_by_user_account_id", nullable=false)
-	private int createdByUserAccountID;
-
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
-	@Column(name="last_edited_by_user_account_id")
-	private int lastEditedByUserAccountID;
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "MediaCollectionAnalysisList-CreatedByUserAccount")
+	private UserAccount createdByUserAccount;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "MediaCollectionAnalysisList-LastEditedByUserAccount")
+	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
@@ -86,14 +93,6 @@ public class MediaCollectionAnalysisList implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public int getCreatedByUserAccountId() {
-		return this.createdByUserAccountID;
-	}
-
-	public void setCreatedByUserAccountId(int createdByUserAccountID) {
-		this.createdByUserAccountID = createdByUserAccountID;
-	}
-
 	public Timestamp getLastEditedAt() {
 		return this.lastEditedAt;
 	}
@@ -102,12 +101,20 @@ public class MediaCollectionAnalysisList implements Serializable {
 		this.lastEditedAt = lastEditedAt;
 	}
 
-	public int getLastEditedByUserAccountId() {
-		return this.lastEditedByUserAccountID;
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
 	}
 
-	public void setLastEditedByUserAccountId(int lastEditedByUserAccountID) {
-		this.lastEditedByUserAccountID = lastEditedByUserAccountID;
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
+	}
+
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
+	}
+
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
 
 	public MediaCollection getMediaCollection() {

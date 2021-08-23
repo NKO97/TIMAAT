@@ -34,6 +34,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -75,7 +76,7 @@ public class EndpointAnalysisList {
 	@Context
 	private UriInfo uriInfo;
 	@Context
-	ContainerRequestContext crc;
+	ContainerRequestContext containerRequestContext;
 	@Context
 	ServletContext ctx;
 
@@ -429,9 +430,9 @@ public class EndpointAnalysisList {
 		newList.setMedium(medium);
 		// update log metadata
 		newList.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-		if ( crc.getProperty("TIMAAT.userID") != null ) {
-			newList.setCreatedByUserAccount(entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
-			newList.setLastEditedByUserAccount(entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID")));
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			newList.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+			newList.setLastEditedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();
@@ -441,6 +442,13 @@ public class EndpointAnalysisList {
 		newList.getMediumAnalysisListTranslations().get(0).setId(0);
 		newList.getMediumAnalysisListTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		newList.getMediumAnalysisListTranslations().get(0).setMediumAnalysisList(newList);
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			newList.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+			newList.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error
+			return Response.serverError().build();
+		}
 		// persist analysislist and polygons
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -454,7 +462,7 @@ public class EndpointAnalysisList {
 		entityManager.refresh(medium);
 
 		// set initial permission for newly created analysis list
-		UserAccount userAccount = entityManager.find(UserAccount.class, crc.getProperty("TIMAAT.userID"));
+		UserAccount userAccount = entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"));
 		UserAccountHasMediumAnalysisList uahmal = new UserAccountHasMediumAnalysisList(userAccount, newList);
 		PermissionType permissionType = entityManager.find(PermissionType.class, 4); // List creator becomes list admin
 		uahmal.setPermissionType(permissionType);
@@ -675,9 +683,10 @@ public class EndpointAnalysisList {
 		
     // parse JSON data
 		try {
+			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			updatedList = mapper.readValue(jsonData, MediumAnalysisList.class);
 		} catch (IOException e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedList == null ) return Response.notModified().build();
@@ -695,6 +704,13 @@ public class EndpointAnalysisList {
 		mediumAnalysisList.setGlobalPermission(updatedList.getGlobalPermission());
 		
 		// TODO update log metadata in general log
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			mediumAnalysisList.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+			mediumAnalysisList.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error
+			return Response.serverError().build();
+		}
 		
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -717,7 +733,7 @@ public class EndpointAnalysisList {
 
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().entity(mediumAnalysisList).build();
 	}
@@ -757,7 +773,7 @@ public class EndpointAnalysisList {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTDELETED);
 
 		return Response.ok().build();
 	}
@@ -842,7 +858,7 @@ public class EndpointAnalysisList {
 		System.out.println("EndpointMediumAnalysisList: addMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().entity(uahmal).build();
 	}
@@ -899,7 +915,7 @@ public class EndpointAnalysisList {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().entity(uahmal).build();
@@ -959,7 +975,7 @@ public class EndpointAnalysisList {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) crc.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().build();
@@ -1022,11 +1038,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(mediumAnalysisList);		
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEGMENTCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-segment",
 																					 analysisSegment.getMediumAnalysisList().getId(),
 																					 analysisSegment);
@@ -1077,7 +1093,7 @@ public class EndpointAnalysisList {
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setTranscript(updatedSegment.getAnalysisSegmentTranslations().get(0).getTranscript());
 		analysisSegment.setStartTime(updatedSegment.getStartTime());
 		analysisSegment.setEndTime(updatedSegment.getEndTime());
-		if (updatedSegment.getCategories() != null) analysisSegment.setCategories(updatedSegment.getCategories());
+		analysisSegment.setCategories(updatedSegment.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1087,10 +1103,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSegment);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEGMENTEDITED);
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "edit-segment",
 																					 analysisSegment.getMediumAnalysisList().getId(),
 																					 analysisSegment);
@@ -1129,11 +1145,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(mediumAnalysisList);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEGMENTDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "remove-segment",
 																					 mediumAnalysisList.getId(),
 																					 analysisSegment);
@@ -1198,11 +1214,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSegment);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEQUENCECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-sequence",
 																					 analysisSequence.getAnalysisSegment().getId(),
 																					 analysisSequence);
@@ -1218,7 +1234,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisSequence(@PathParam("id") int sequenceId,
 																				 String jsonData,
 																				 @QueryParam("authToken") String authToken) {
-		// System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
+		System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
@@ -1250,7 +1266,7 @@ public class EndpointAnalysisList {
     // update sequence
 		analysisSequence.setStartTime(updatedSequence.getStartTime());
 		analysisSequence.setEndTime(updatedSequence.getEndTime());
-		if (updatedSequence.getCategories() != null) analysisSequence.setCategories(updatedSequence.getCategories());
+		analysisSequence.setCategories(updatedSequence.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1260,10 +1276,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequence);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEQUENCEEDITED);
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "edit-sequence",
 																					 analysisSequence.getAnalysisSegment().getId(),
 																					 analysisSequence);
@@ -1302,11 +1318,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSegment);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEQUENCEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "remove-sequence",
 																					 analysisSegment.getId(),
 																					 analysisSequence);
@@ -1355,11 +1371,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequence);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEQUENCECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-sequence-translation",
 																					 newTranslation.getAnalysisSequence().getId(),
 																					 newTranslation);
@@ -1403,10 +1419,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequenceTranslation);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEQUENCEEDITED);
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEQUENCEEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-sequence", analysisSequenceTranslation.getAnalysisSequence().getId(), analysisSequenceTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-sequence", analysisSequenceTranslation.getAnalysisSequence().getId(), analysisSequenceTranslation);
 		
 		return Response.ok().entity(analysisSequenceTranslation).build();
 	}
@@ -1431,10 +1447,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequence);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEQUENCEDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEQUENCEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-sequence", analysisSequence.getId(), analysisSequenceTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-sequence", analysisSequence.getId(), analysisSequenceTranslation);
 
 		return Response.ok().build();
 	}
@@ -1493,11 +1509,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSegment);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSCENECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-scene",
 																					 newScene.getAnalysisSegment().getId(),
 																					 newScene);
@@ -1513,6 +1529,8 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisScene(@PathParam("id") int id,
 																			String jsonData,
 																			@QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysisList: updateAnalysisScene "+ jsonData);
+
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisScene updatedScene = null;
 
@@ -1543,7 +1561,7 @@ public class EndpointAnalysisList {
     // update scene
 		analysisScene.setStartTime(updatedScene.getStartTime());
 		analysisScene.setEndTime(updatedScene.getEndTime());
-		if (updatedScene.getCategories() != null) analysisScene.setCategories(updatedScene.getCategories());
+		analysisScene.setCategories(updatedScene.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1553,10 +1571,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisScene);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSCENEEDITED);
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "edit-scene",
 																					 analysisScene.getAnalysisSegment().getId(),
 																					 analysisScene);
@@ -1595,11 +1613,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSegment);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSCENEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "remove-scene",
 																					 analysisSegment.getId(),
 																					 analysisScene);
@@ -1647,11 +1665,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisScene);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSCENECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-scene-translation",
 																					 newTranslation.getAnalysisScene().getId(),
 																					 newTranslation);
@@ -1695,10 +1713,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSceneTranslation);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSCENEEDITED);
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSCENEEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-scene", analysisSceneTranslation.getAnalysisScene().getId(), analysisSceneTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-scene", analysisSceneTranslation.getAnalysisScene().getId(), analysisSceneTranslation);
 		
 		return Response.ok().entity(analysisSceneTranslation).build();
 	}
@@ -1722,10 +1740,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisScene);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSCENEDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSCENEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-scene", analysisScene.getId(), analysisSceneTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-scene", analysisScene.getId(), analysisSceneTranslation);
 
 		return Response.ok().build();
 	}
@@ -1785,11 +1803,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequence);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISTAKECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-take",
 																					 newTake.getAnalysisSequence().getId(),
 																					 newTake);
@@ -1805,6 +1823,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisTake(@PathParam("id") int id,
 																		 String jsonData,
 																		@QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysisList: updateAnalysisTake "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTake updatedTake = null;
 
@@ -1835,7 +1854,7 @@ public class EndpointAnalysisList {
     // update take
 		analysisTake.setStartTime(updatedTake.getStartTime());
 		analysisTake.setEndTime(updatedTake.getEndTime());
-		if (updatedTake.getCategories() != null) analysisTake.setCategories(updatedTake.getCategories());
+		analysisTake.setCategories(updatedTake.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1845,10 +1864,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisTake);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISTAKEEDITED);
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "edit-take",
 																					 analysisTake.getAnalysisSequence().getId(),
 																					 analysisTake);
@@ -1887,11 +1906,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisSequence);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISTAKEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "remove-take",
 																					 analysisSequence.getId(),
 																					 analysisTake);
@@ -1939,11 +1958,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisTake);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISTAKECREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-take-translation",
 																					 newTranslation.getAnalysisTake().getId(),
 																					 newTranslation);
@@ -1987,10 +2006,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisTakeTranslation);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISTAKEEDITED);
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISTAKEEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-take", analysisTakeTranslation.getAnalysisTake().getId(), analysisTakeTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-take", analysisTakeTranslation.getAnalysisTake().getId(), analysisTakeTranslation);
 		
 		return Response.ok().entity(analysisTakeTranslation).build();
 	}
@@ -2014,10 +2033,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisTake);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISTAKEDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISTAKEDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-take", analysisTake.getId(), analysisTakeTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-take", analysisTake.getId(), analysisTakeTranslation);
 
 		return Response.ok().build();
 	}
@@ -2076,11 +2095,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisScene);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISACTIONCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-action",
 																					 newAction.getAnalysisScene().getId(),
 																					 newAction);
@@ -2096,6 +2115,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisAction(@PathParam("id") int id,
 																			 String jsonData,
 																			 @QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysisList: updateAnalysisAction "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisAction updatedAction = null;
 
@@ -2126,7 +2146,7 @@ public class EndpointAnalysisList {
     // update action
 		analysisAction.setStartTime(updatedAction.getStartTime());
 		analysisAction.setEndTime(updatedAction.getEndTime());
-		if (updatedAction.getCategories() != null) analysisAction.setCategories(updatedAction.getCategories());
+		analysisAction.setCategories(updatedAction.getCategories());
 				
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2136,10 +2156,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisAction);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISACTIONEDITED);
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "edit-action",
 																					 analysisAction.getAnalysisScene().getId(),
 																					 analysisAction);
@@ -2178,11 +2198,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisScene);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISACTIONDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "remove-action",
 																					 analysisScene.getId(),
 																					 analysisAction);
@@ -2230,11 +2250,11 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisAction);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"),
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISACTIONCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"),
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
 																					 "add-action-translation",
 																					 newTranslation.getAnalysisAction().getId(),
 																					 newTranslation);
@@ -2278,10 +2298,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisActionTranslation);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISACTIONEDITED);
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISACTIONEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "edit-action", analysisActionTranslation.getAnalysisAction().getId(), analysisActionTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-action", analysisActionTranslation.getAnalysisAction().getId(), analysisActionTranslation);
 		
 		return Response.ok().entity(analysisActionTranslation).build();
 	}
@@ -2305,10 +2325,10 @@ public class EndpointAnalysisList {
 		entityManager.refresh(analysisAction);
 		
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISACTIONDELETED);
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISACTIONDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) crc.getProperty("TIMAAT.userName"), "remove-action", analysisAction.getId(), analysisActionTranslation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-action", analysisAction.getId(), analysisActionTranslation);
 
 		return Response.ok().build();
 	}
@@ -2606,7 +2626,6 @@ public class EndpointAnalysisList {
 																										  .collect(Collectors.toList());
 			entityTransaction.begin();
 			for (Category category : categoriesToRemove) {
-				System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 				annotation.getCategories().remove(category);
 			}
 			entityManager.merge(annotation);
@@ -2624,7 +2643,6 @@ public class EndpointAnalysisList {
 																														 .collect(Collectors.toList());
 			entityTransaction.begin();
 			for (Category category : segmentCategoriesToRemove) {
-				System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 				analysisSegment.getCategories().remove(category);
 			}
 			entityManager.merge(analysisSegment);
@@ -2641,7 +2659,6 @@ public class EndpointAnalysisList {
 																																.collect(Collectors.toList());
 				entityTransaction.begin();
 				for (Category category : sequenceCategoriesToRemove) {
-					System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 					analysisSequence.getCategories().remove(category);
 				}
 				entityManager.merge(analysisSequence);
@@ -2658,7 +2675,6 @@ public class EndpointAnalysisList {
 																															.collect(Collectors.toList());
 					entityTransaction.begin();
 					for (Category category : takeCategoriesToRemove) {
-						System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 						analysisTake.getCategories().remove(category);
 					}
 					entityManager.merge(analysisTake);
@@ -2677,7 +2693,6 @@ public class EndpointAnalysisList {
 																														 .collect(Collectors.toList());
 				entityTransaction.begin();
 				for (Category category : sceneCategoriesToRemove) {
-					System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 					analysisScene.getCategories().remove(category);
 				}
 				entityManager.merge(analysisScene);
@@ -2694,7 +2709,6 @@ public class EndpointAnalysisList {
 																																.collect(Collectors.toList());
 					entityTransaction.begin();
 					for (Category category : actionCategoriesToRemove) {
-						System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 						analysisAction.getCategories().remove(category);
 					}
 					entityManager.merge(analysisAction);

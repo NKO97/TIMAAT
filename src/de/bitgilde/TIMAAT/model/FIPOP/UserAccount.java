@@ -49,23 +49,23 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Actor
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<Actor> actors1;
+	@JsonManagedReference(value = "Actor-CreatedByUserAccount")
+	private List<Actor> actorsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Actor
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<Actor> actors2;
+	@JsonManagedReference(value = "Actor-LastEditedByUserAccount")
+	private List<Actor> actorsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<Annotation> annotations1;
+	@JsonManagedReference(value = "Annotation-CreatedByUserAccount")
+	private List<Annotation> annotationsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<Annotation> annotations2;
+	@JsonManagedReference(value = "Annotation-LastEditedByUserAccount")
+	private List<Annotation> annotationsLastEditedByUserAccount;
 
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
@@ -83,33 +83,33 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<CategorySet> categorySets1;
+	@JsonManagedReference(value = "CategorySet-CreatedByUserAccount")
+	private List<CategorySet> categorySetsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<CategorySet> categorySets2;
+	@JsonManagedReference(value = "CategorySet-LastEditedByUserAccount")
+	private List<CategorySet> categorySetsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<Event> events1;
+	@JsonManagedReference(value = "Event-CreatedByUserAccount")
+	private List<Event> eventsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<Event> events2;
+	@JsonManagedReference(value = "Event-LastEditedByUserAccount")
+	private List<Event> eventsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<Location> locations1;
+	@JsonManagedReference(value = "Location-CreatedByUserAccount")
+	private List<Location> locationsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<Location> locations2;
+	@JsonManagedReference(value = "Location-LastEditedByUserAccount")
+	private List<Location> locationsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
 	// @OneToMany(mappedBy="createdByUserAccount")
@@ -123,23 +123,23 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<Medium> mediums1;
+	@JsonManagedReference(value = "Medium-CreatedByUserAccount")
+	private List<Medium> mediaCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<Medium> mediums2;
+	@JsonManagedReference(value = "Medium-LastEditedByUserAccount")
+	private List<Medium> mediaLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
-	private List<MediumAnalysisList> mediumAnalysisLists1;
+	@JsonManagedReference(value = "MediumAnalysisList-CreatedByUserAccount")
+	private List<MediumAnalysisList> mediumAnalysisListsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
-	private List<MediumAnalysisList> mediumAnalysisLists2;
+	@JsonManagedReference(value = "MediumAnalysisList-LastEditedByUserAccount")
+	private List<MediumAnalysisList> mediumAnalysisListsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to UserAccessToken
 	// @OneToMany(mappedBy="userAccount")
@@ -173,18 +173,19 @@ public class UserAccount implements Serializable {
 	// 	)
 	// private List<MediaCollection> mediaCollections;
 
-		// bi-directional many-to-many association to MediaCollectionAnalysisList
-		@ManyToMany
-		@JoinTable(
-			name="user_account_has_media_collection_analysis_list"
-			, joinColumns={
-				@JoinColumn(name="user_account_id")
-				}
-			, inverseJoinColumns={
-				@JoinColumn(name="media_collection_analysis_list_id")
-				}
-			)
-		private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists;
+	// TODO This is a different structure than used for userAccountHasMediumAnalysisLists
+	// bi-directional many-to-many association to MediaCollectionAnalysisList
+	@ManyToMany
+	@JoinTable(
+		name="user_account_has_media_collection_analysis_list"
+		, joinColumns={
+			@JoinColumn(name="user_account_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="media_collection_analysis_list_id")
+			}
+		)
+	private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists;
 
 	//bi-directional many-to-one association to UserAccountHasMediaCollectionAnalysisList
 	// @OneToMany(mappedBy="userAccount")
@@ -195,6 +196,11 @@ public class UserAccount implements Serializable {
 	@JsonManagedReference(value = "UserAccount-UserAccountHasMediumAnalysisList")
 	private List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisLists;
 
+	//bi-directional many-to-one association to UserAccountHasCategorySet
+	@OneToMany(mappedBy="userAccount")
+	@JsonManagedReference(value = "UserAccount-UserAccountHasCategorySet")
+	private List<UserAccountHasCategorySet> userAccountHasCategorySets;
+	
 	//bi-directional many-to-one association to UserAccountHasWorkAnalysisList
 	// @OneToMany(mappedBy="userAccount")
 	// private List<UserAccountHasWorkAnalysisList> userAccountHasWorkAnalysisLists;
@@ -299,91 +305,91 @@ public class UserAccount implements Serializable {
 	}
 
 	public List<Actor> getActors1() {
-		return this.actors1;
+		return this.actorsCreatedByUserAccount;
 	}
 
-	public void setActors1(List<Actor> actors1) {
-		this.actors1 = actors1;
+	public void setActors1(List<Actor> actorsCreatedByUserAccount) {
+		this.actorsCreatedByUserAccount = actorsCreatedByUserAccount;
 	}
 
-	public Actor addActors1(Actor actors1) {
-		getActors1().add(actors1);
-		actors1.setCreatedByUserAccount(this);
+	public Actor addActors1(Actor actorsCreatedByUserAccount) {
+		getActors1().add(actorsCreatedByUserAccount);
+		actorsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return actors1;
+		return actorsCreatedByUserAccount;
 	}
 
-	public Actor removeActors1(Actor actors1) {
-		getActors1().remove(actors1);
-		actors1.setCreatedByUserAccount(null);
+	public Actor removeActors1(Actor actorsCreatedByUserAccount) {
+		getActors1().remove(actorsCreatedByUserAccount);
+		actorsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return actors1;
+		return actorsCreatedByUserAccount;
 	}
 
 	public List<Actor> getActors2() {
-		return this.actors2;
+		return this.actorsLastEditedByUserAccount;
 	}
 
-	public void setActors2(List<Actor> actors2) {
-		this.actors2 = actors2;
+	public void setActors2(List<Actor> actorsLastEditedByUserAccount) {
+		this.actorsLastEditedByUserAccount = actorsLastEditedByUserAccount;
 	}
 
-	public Actor addActors2(Actor actors2) {
-		getActors2().add(actors2);
-		actors2.setLastEditedByUserAccount(this);
+	public Actor addActors2(Actor actorsLastEditedByUserAccount) {
+		getActors2().add(actorsLastEditedByUserAccount);
+		actorsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return actors2;
+		return actorsLastEditedByUserAccount;
 	}
 
-	public Actor removeActors2(Actor actors2) {
-		getActors2().remove(actors2);
-		actors2.setLastEditedByUserAccount(null);
+	public Actor removeActors2(Actor actorsLastEditedByUserAccount) {
+		getActors2().remove(actorsLastEditedByUserAccount);
+		actorsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return actors2;
+		return actorsLastEditedByUserAccount;
 	}
 
 	public List<Annotation> getAnnotations1() {
-		return this.annotations1;
+		return this.annotationsCreatedByUserAccount;
 	}
 
-	public void setAnnotations1(List<Annotation> annotations1) {
-		this.annotations1 = annotations1;
+	public void setAnnotations1(List<Annotation> annotationsCreatedByUserAccount) {
+		this.annotationsCreatedByUserAccount = annotationsCreatedByUserAccount;
 	}
 
-	public Annotation addAnnotations1(Annotation annotations1) {
-		getAnnotations1().add(annotations1);
-		annotations1.setCreatedByUserAccount(this);
+	public Annotation addAnnotations1(Annotation annotationsCreatedByUserAccount) {
+		getAnnotations1().add(annotationsCreatedByUserAccount);
+		annotationsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return annotations1;
+		return annotationsCreatedByUserAccount;
 	}
 
-	public Annotation removeAnnotations1(Annotation annotations1) {
-		getAnnotations1().remove(annotations1);
-		annotations1.setCreatedByUserAccount(null);
+	public Annotation removeAnnotations1(Annotation annotationsCreatedByUserAccount) {
+		getAnnotations1().remove(annotationsCreatedByUserAccount);
+		annotationsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return annotations1;
+		return annotationsCreatedByUserAccount;
 	}
 
 	public List<Annotation> getAnnotations2() {
-		return this.annotations2;
+		return this.annotationsLastEditedByUserAccount;
 	}
 
-	public void setAnnotations2(List<Annotation> annotations2) {
-		this.annotations2 = annotations2;
+	public void setAnnotations2(List<Annotation> annotationsLastEditedByUserAccount) {
+		this.annotationsLastEditedByUserAccount = annotationsLastEditedByUserAccount;
 	}
 
-	public Annotation addAnnotations2(Annotation annotations2) {
-		getAnnotations2().add(annotations2);
-		annotations2.setLastEditedByUserAccount(this);
+	public Annotation addAnnotations2(Annotation annotationsLastEditedByUserAccount) {
+		getAnnotations2().add(annotationsLastEditedByUserAccount);
+		annotationsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return annotations2;
+		return annotationsLastEditedByUserAccount;
 	}
 
-	public Annotation removeAnnotations2(Annotation annotations2) {
-		getAnnotations2().remove(annotations2);
-		annotations2.setLastEditedByUserAccount(null);
+	public Annotation removeAnnotations2(Annotation annotationsLastEditedByUserAccount) {
+		getAnnotations2().remove(annotationsLastEditedByUserAccount);
+		annotationsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return annotations2;
+		return annotationsLastEditedByUserAccount;
 	}
 
 	// public List<AnnotationTextualBody> getAnnotationTextualBodies1() {
@@ -431,135 +437,135 @@ public class UserAccount implements Serializable {
 	// }
 
 	public List<CategorySet> getCategorySets1() {
-		return this.categorySets1;
+		return this.categorySetsCreatedByUserAccount;
 	}
 
-	public void setCategorySets1(List<CategorySet> categorySets1) {
-		this.categorySets1 = categorySets1;
+	public void setCategorySets1(List<CategorySet> categorySetsCreatedByUserAccount) {
+		this.categorySetsCreatedByUserAccount = categorySetsCreatedByUserAccount;
 	}
 
-	public CategorySet addCategorySets1(CategorySet categorySets1) {
-		getCategorySets1().add(categorySets1);
-		categorySets1.setCreatedByUserAccount(this);
+	public CategorySet addCategorySets1(CategorySet categorySetsCreatedByUserAccount) {
+		getCategorySets1().add(categorySetsCreatedByUserAccount);
+		categorySetsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return categorySets1;
+		return categorySetsCreatedByUserAccount;
 	}
 
-	public CategorySet removeCategorySets1(CategorySet categorySets1) {
-		getCategorySets1().remove(categorySets1);
-		categorySets1.setCreatedByUserAccount(null);
+	public CategorySet removeCategorySets1(CategorySet categorySetsCreatedByUserAccount) {
+		getCategorySets1().remove(categorySetsCreatedByUserAccount);
+		categorySetsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return categorySets1;
+		return categorySetsCreatedByUserAccount;
 	}
 
 	public List<CategorySet> getCategorySets2() {
-		return this.categorySets2;
+		return this.categorySetsLastEditedByUserAccount;
 	}
 
-	public void setCategorySets2(List<CategorySet> categorySets2) {
-		this.categorySets2 = categorySets2;
+	public void setCategorySets2(List<CategorySet> categorySetsLastEditedByUserAccount) {
+		this.categorySetsLastEditedByUserAccount = categorySetsLastEditedByUserAccount;
 	}
 
-	public CategorySet addCategorySets2(CategorySet categorySets2) {
-		getCategorySets2().add(categorySets2);
-		categorySets2.setLastEditedByUserAccount(this);
+	public CategorySet addCategorySets2(CategorySet categorySetsLastEditedByUserAccount) {
+		getCategorySets2().add(categorySetsLastEditedByUserAccount);
+		categorySetsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return categorySets2;
+		return categorySetsLastEditedByUserAccount;
 	}
 
-	public CategorySet removeCategorySets2(CategorySet categorySets2) {
-		getCategorySets2().remove(categorySets2);
-		categorySets2.setLastEditedByUserAccount(null);
+	public CategorySet removeCategorySets2(CategorySet categorySetsLastEditedByUserAccount) {
+		getCategorySets2().remove(categorySetsLastEditedByUserAccount);
+		categorySetsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return categorySets2;
+		return categorySetsLastEditedByUserAccount;
 	}
 
 	public List<Event> getEvents1() {
-		return this.events1;
+		return this.eventsCreatedByUserAccount;
 	}
 
-	public void setEvents1(List<Event> events1) {
-		this.events1 = events1;
+	public void setEvents1(List<Event> eventsCreatedByUserAccount) {
+		this.eventsCreatedByUserAccount = eventsCreatedByUserAccount;
 	}
 
-	public Event addEvents1(Event events1) {
-		getEvents1().add(events1);
-		events1.setCreatedByUserAccount(this);
+	public Event addEvents1(Event eventsCreatedByUserAccount) {
+		getEvents1().add(eventsCreatedByUserAccount);
+		eventsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return events1;
+		return eventsCreatedByUserAccount;
 	}
 
-	public Event removeEvents1(Event events1) {
-		getEvents1().remove(events1);
-		events1.setCreatedByUserAccount(null);
+	public Event removeEvents1(Event eventsCreatedByUserAccount) {
+		getEvents1().remove(eventsCreatedByUserAccount);
+		eventsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return events1;
+		return eventsCreatedByUserAccount;
 	}
 
 	public List<Event> getEvents2() {
-		return this.events2;
+		return this.eventsLastEditedByUserAccount;
 	}
 
-	public void setEvents2(List<Event> events2) {
-		this.events2 = events2;
+	public void setEvents2(List<Event> eventsLastEditedByUserAccount) {
+		this.eventsLastEditedByUserAccount = eventsLastEditedByUserAccount;
 	}
 
-	public Event addEvents2(Event events2) {
-		getEvents2().add(events2);
-		events2.setLastEditedByUserAccount(this);
+	public Event addEvents2(Event eventsLastEditedByUserAccount) {
+		getEvents2().add(eventsLastEditedByUserAccount);
+		eventsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return events2;
+		return eventsLastEditedByUserAccount;
 	}
 
-	public Event removeEvents2(Event events2) {
-		getEvents2().remove(events2);
-		events2.setLastEditedByUserAccount(null);
+	public Event removeEvents2(Event eventsLastEditedByUserAccount) {
+		getEvents2().remove(eventsLastEditedByUserAccount);
+		eventsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return events2;
+		return eventsLastEditedByUserAccount;
 	}
 
 	public List<Location> getLocations1() {
-		return this.locations1;
+		return this.locationsCreatedByUserAccount;
 	}
 
-	public void setLocations1(List<Location> locations1) {
-		this.locations1 = locations1;
+	public void setLocations1(List<Location> locationsCreatedByUserAccount) {
+		this.locationsCreatedByUserAccount = locationsCreatedByUserAccount;
 	}
 
-	public Location addLocations1(Location locations1) {
-		getLocations1().add(locations1);
-		locations1.setCreatedByUserAccount(this);
+	public Location addLocations1(Location locationsCreatedByUserAccount) {
+		getLocations1().add(locationsCreatedByUserAccount);
+		locationsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return locations1;
+		return locationsCreatedByUserAccount;
 	}
 
-	public Location removeLocations1(Location locations1) {
-		getLocations1().remove(locations1);
-		locations1.setCreatedByUserAccount(null);
+	public Location removeLocations1(Location locationsCreatedByUserAccount) {
+		getLocations1().remove(locationsCreatedByUserAccount);
+		locationsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return locations1;
+		return locationsCreatedByUserAccount;
 	}
 
 	public List<Location> getLocations2() {
-		return this.locations2;
+		return this.locationsLastEditedByUserAccount;
 	}
 
-	public void setLocations2(List<Location> locations2) {
-		this.locations2 = locations2;
+	public void setLocations2(List<Location> locationsLastEditedByUserAccount) {
+		this.locationsLastEditedByUserAccount = locationsLastEditedByUserAccount;
 	}
 
-	public Location addLocations2(Location locations2) {
-		getLocations2().add(locations2);
-		locations2.setLastEditedByUserAccount(this);
+	public Location addLocations2(Location locationsLastEditedByUserAccount) {
+		getLocations2().add(locationsLastEditedByUserAccount);
+		locationsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return locations2;
+		return locationsLastEditedByUserAccount;
 	}
 
-	public Location removeLocations2(Location locations2) {
-		getLocations2().remove(locations2);
-		locations2.setLastEditedByUserAccount(null);
+	public Location removeLocations2(Location locationsLastEditedByUserAccount) {
+		getLocations2().remove(locationsLastEditedByUserAccount);
+		locationsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return locations2;
+		return locationsLastEditedByUserAccount;
 	}
 
 	// public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists1() {
@@ -607,91 +613,91 @@ public class UserAccount implements Serializable {
 	// }
 
 	public List<Medium> getMediums1() {
-		return this.mediums1;
+		return this.mediaCreatedByUserAccount;
 	}
 
-	public void setMediums1(List<Medium> mediums1) {
-		this.mediums1 = mediums1;
+	public void setMediums1(List<Medium> mediaCreatedByUserAccount) {
+		this.mediaCreatedByUserAccount = mediaCreatedByUserAccount;
 	}
 
-	public Medium addMediums1(Medium mediums1) {
-		getMediums1().add(mediums1);
-		mediums1.setCreatedByUserAccount(this);
+	public Medium addMediums1(Medium mediaCreatedByUserAccount) {
+		getMediums1().add(mediaCreatedByUserAccount);
+		mediaCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return mediums1;
+		return mediaCreatedByUserAccount;
 	}
 
-	public Medium removeMediums1(Medium mediums1) {
-		getMediums1().remove(mediums1);
-		mediums1.setCreatedByUserAccount(null);
+	public Medium removeMediums1(Medium mediaCreatedByUserAccount) {
+		getMediums1().remove(mediaCreatedByUserAccount);
+		mediaCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return mediums1;
+		return mediaCreatedByUserAccount;
 	}
 
 	public List<Medium> getMediums2() {
-		return this.mediums2;
+		return this.mediaLastEditedByUserAccount;
 	}
 
-	public void setMediums2(List<Medium> mediums2) {
-		this.mediums2 = mediums2;
+	public void setMediums2(List<Medium> mediaLastEditedByUserAccount) {
+		this.mediaLastEditedByUserAccount = mediaLastEditedByUserAccount;
 	}
 
-	public Medium addMediums2(Medium mediums2) {
-		getMediums2().add(mediums2);
-		mediums2.setLastEditedByUserAccount(this);
+	public Medium addMediums2(Medium mediaLastEditedByUserAccount) {
+		getMediums2().add(mediaLastEditedByUserAccount);
+		mediaLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return mediums2;
+		return mediaLastEditedByUserAccount;
 	}
 
-	public Medium removeMediums2(Medium mediums2) {
-		getMediums2().remove(mediums2);
-		mediums2.setLastEditedByUserAccount(null);
+	public Medium removeMediums2(Medium mediaLastEditedByUserAccount) {
+		getMediums2().remove(mediaLastEditedByUserAccount);
+		mediaLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return mediums2;
+		return mediaLastEditedByUserAccount;
 	}
 
 	public List<MediumAnalysisList> getMediumAnalysisLists1() {
-		return this.mediumAnalysisLists1;
+		return this.mediumAnalysisListsCreatedByUserAccount;
 	}
 
-	public void setMediumAnalysisLists1(List<MediumAnalysisList> mediumAnalysisLists1) {
-		this.mediumAnalysisLists1 = mediumAnalysisLists1;
+	public void setMediumAnalysisLists1(List<MediumAnalysisList> mediumAnalysisListsCreatedByUserAccount) {
+		this.mediumAnalysisListsCreatedByUserAccount = mediumAnalysisListsCreatedByUserAccount;
 	}
 
-	public MediumAnalysisList addMediumAnalysisLists1(MediumAnalysisList mediumAnalysisLists1) {
-		getMediumAnalysisLists1().add(mediumAnalysisLists1);
-		mediumAnalysisLists1.setCreatedByUserAccount(this);
+	public MediumAnalysisList addMediumAnalysisLists1(MediumAnalysisList mediumAnalysisListsCreatedByUserAccount) {
+		getMediumAnalysisLists1().add(mediumAnalysisListsCreatedByUserAccount);
+		mediumAnalysisListsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-		return mediumAnalysisLists1;
+		return mediumAnalysisListsCreatedByUserAccount;
 	}
 
-	public MediumAnalysisList removeMediumAnalysisLists1(MediumAnalysisList mediumAnalysisLists1) {
-		getMediumAnalysisLists1().remove(mediumAnalysisLists1);
-		mediumAnalysisLists1.setCreatedByUserAccount(null);
+	public MediumAnalysisList removeMediumAnalysisLists1(MediumAnalysisList mediumAnalysisListsCreatedByUserAccount) {
+		getMediumAnalysisLists1().remove(mediumAnalysisListsCreatedByUserAccount);
+		mediumAnalysisListsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-		return mediumAnalysisLists1;
+		return mediumAnalysisListsCreatedByUserAccount;
 	}
 
 	public List<MediumAnalysisList> getMediumAnalysisLists2() {
-		return this.mediumAnalysisLists2;
+		return this.mediumAnalysisListsLastEditedByUserAccount;
 	}
 
-	public void setMediumAnalysisLists2(List<MediumAnalysisList> mediumAnalysisLists2) {
-		this.mediumAnalysisLists2 = mediumAnalysisLists2;
+	public void setMediumAnalysisLists2(List<MediumAnalysisList> mediumAnalysisListsLastEditedByUserAccount) {
+		this.mediumAnalysisListsLastEditedByUserAccount = mediumAnalysisListsLastEditedByUserAccount;
 	}
 
-	public MediumAnalysisList addMediumAnalysisLists2(MediumAnalysisList mediumAnalysisLists2) {
-		getMediumAnalysisLists2().add(mediumAnalysisLists2);
-		mediumAnalysisLists2.setLastEditedByUserAccount(this);
+	public MediumAnalysisList addMediumAnalysisLists2(MediumAnalysisList mediumAnalysisListsLastEditedByUserAccount) {
+		getMediumAnalysisLists2().add(mediumAnalysisListsLastEditedByUserAccount);
+		mediumAnalysisListsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-		return mediumAnalysisLists2;
+		return mediumAnalysisListsLastEditedByUserAccount;
 	}
 
-	public MediumAnalysisList removeMediumAnalysisLists2(MediumAnalysisList mediumAnalysisLists2) {
-		getMediumAnalysisLists2().remove(mediumAnalysisLists2);
-		mediumAnalysisLists2.setLastEditedByUserAccount(null);
+	public MediumAnalysisList removeMediumAnalysisLists2(MediumAnalysisList mediumAnalysisListsLastEditedByUserAccount) {
+		getMediumAnalysisLists2().remove(mediumAnalysisListsLastEditedByUserAccount);
+		mediumAnalysisListsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-		return mediumAnalysisLists2;
+		return mediumAnalysisListsLastEditedByUserAccount;
 	}
 
 	// public List<UserAccessToken> getUserAccessTokens() {
@@ -846,6 +852,28 @@ public class UserAccount implements Serializable {
 		userAccountHasMediumAnalysisList.setUserAccount(null);
 
 		return userAccountHasMediumAnalysisList;
+	}
+
+	public List<UserAccountHasCategorySet> getUserAccountHasCategorySets() {
+		return this.userAccountHasCategorySets;
+	}
+
+	public void setUserAccountHasCategorySets(List<UserAccountHasCategorySet> userAccountHasCategorySets) {
+		this.userAccountHasCategorySets = userAccountHasCategorySets;
+	}
+
+	public UserAccountHasCategorySet addUserAccountHasCategorySet(UserAccountHasCategorySet userAccountHasCategorySet) {
+		getUserAccountHasCategorySets().add(userAccountHasCategorySet);
+		userAccountHasCategorySet.setUserAccount(this);
+
+		return userAccountHasCategorySet;
+	}
+
+	public UserAccountHasCategorySet removeUserAccountHasCategorySet(UserAccountHasCategorySet userAccountHasCategorySet) {
+		getUserAccountHasCategorySets().remove(userAccountHasCategorySet);
+		userAccountHasCategorySet.setUserAccount(null);
+
+		return userAccountHasCategorySet;
 	}
 
 	// public List<UserAccountHasWorkAnalysisList> getUserAccountHasWorkAnalysisLists() {
