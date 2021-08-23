@@ -2586,25 +2586,27 @@ public class EndpointAnalysisList {
 			return Response.status(Status.FORBIDDEN).build();
 		}
 
-		// TODO delete categories from annotations of matching categorySets
+		// delete categories of matching categorySets from annotations and segment structure elements
 		List<Category> categoryList = new ArrayList<>();
 		Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
 		Iterator<CategorySetHasCategory> itr = cshc.iterator();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 
+		// fill categoryList will all categories of the category set that will be deleted
 		while (itr.hasNext()) {
-			// categorySelectList.add(new SelectElement(itr.next().getCategory().getId(), itr.next().getCategory().getName()));
 			categoryList.add(itr.next().getCategory());
 		}
-		// remove categories from removed category set from all associated annotations of the annotation list the category set is removed from
+
+		// remove categories from removed category set from all associated annotations of the analysis list the category set is removed from
 		for (Annotation annotation : mediumAnalysisList.getAnnotations()) {
 			List<Category> annotationCategoryList = annotation.getCategories();
 			List<Category> categoriesToRemove = categoryList.stream()
-																										 .distinct()
-																										 .filter(annotationCategoryList::contains)
-																										 .collect(Collectors.toList());
+																										  .distinct()
+																										  .filter(annotationCategoryList::contains)
+																										  .collect(Collectors.toList());
 			entityTransaction.begin();
 			for (Category category : categoriesToRemove) {
+				System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
 				annotation.getCategories().remove(category);
 			}
 			entityManager.merge(annotation);
@@ -2612,6 +2614,98 @@ public class EndpointAnalysisList {
 			entityTransaction.commit();
 			entityManager.refresh(annotation);
 		}
+
+		// remove categories from removed category set from all associated segments of the analysis list the category set is removed from
+		for (AnalysisSegment analysisSegment : mediumAnalysisList.getAnalysisSegments()) {
+			List<Category> analysisSegmentCategoryList = analysisSegment.getCategories();
+			List<Category> segmentCategoriesToRemove = categoryList.stream()
+																														 .distinct()
+																														 .filter(analysisSegmentCategoryList::contains)
+																														 .collect(Collectors.toList());
+			entityTransaction.begin();
+			for (Category category : segmentCategoriesToRemove) {
+				System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
+				analysisSegment.getCategories().remove(category);
+			}
+			entityManager.merge(analysisSegment);
+			entityManager.persist(analysisSegment);
+			entityTransaction.commit();
+			entityManager.refresh(analysisSegment);
+
+			// remove categories from removed category set from all associated sequences of the analysis list the category set is removed from
+			for (AnalysisSequence analysisSequence : analysisSegment.getAnalysisSequences()) {
+				List<Category> analysisSequenceCategoryList = analysisSequence.getCategories();
+				List<Category> sequenceCategoriesToRemove = categoryList.stream()
+																																.distinct()
+																																.filter(analysisSequenceCategoryList::contains)
+																																.collect(Collectors.toList());
+				entityTransaction.begin();
+				for (Category category : sequenceCategoriesToRemove) {
+					System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
+					analysisSequence.getCategories().remove(category);
+				}
+				entityManager.merge(analysisSequence);
+				entityManager.persist(analysisSequence);
+				entityTransaction.commit();
+				entityManager.refresh(analysisSequence);
+
+				// remove categories from removed category set from all associated takes of the analysis list the category set is removed from
+				for (AnalysisTake analysisTake : analysisSequence.getAnalysisTakes()) {
+					List<Category> analysisTakeCategoryList = analysisTake.getCategories();
+					List<Category> takeCategoriesToRemove = categoryList.stream()
+																															.distinct()
+																															.filter(analysisTakeCategoryList::contains)
+																															.collect(Collectors.toList());
+					entityTransaction.begin();
+					for (Category category : takeCategoriesToRemove) {
+						System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
+						analysisTake.getCategories().remove(category);
+					}
+					entityManager.merge(analysisTake);
+					entityManager.persist(analysisTake);
+					entityTransaction.commit();
+					entityManager.refresh(analysisTake);
+				}
+			}
+
+			// remove categories from removed category set from all associated scenes of the analysis list the category set is removed from
+			for (AnalysisScene analysisScene : analysisSegment.getAnalysisScenes()) {
+				List<Category> analysisSceneCategoryList = analysisScene.getCategories();
+				List<Category> sceneCategoriesToRemove = categoryList.stream()
+																														 .distinct()
+																														 .filter(analysisSceneCategoryList::contains)
+																														 .collect(Collectors.toList());
+				entityTransaction.begin();
+				for (Category category : sceneCategoriesToRemove) {
+					System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
+					analysisScene.getCategories().remove(category);
+				}
+				entityManager.merge(analysisScene);
+				entityManager.persist(analysisScene);
+				entityTransaction.commit();
+				entityManager.refresh(analysisScene);
+
+				// remove categories from removed category set from all associated actions of the analysis list the category set is removed from
+				for (AnalysisAction analysisAction : analysisScene.getAnalysisActions()) {
+					List<Category> analysisActionCategoryList = analysisAction.getCategories();
+					List<Category> actionCategoriesToRemove = categoryList.stream()
+																																.distinct()
+																																.filter(analysisActionCategoryList::contains)
+																																.collect(Collectors.toList());
+					entityTransaction.begin();
+					for (Category category : actionCategoriesToRemove) {
+						System.out.print("Delete Category '" + category.getName() + "' with id: " + category.getId());
+						analysisAction.getCategories().remove(category);
+					}
+					entityManager.merge(analysisAction);
+					entityManager.persist(analysisAction);
+					entityTransaction.commit();
+					entityManager.refresh(analysisAction);
+				}
+			}
+		}
+
+		
 
 		// attach categorySet to annotation and vice versa    	
 		entityTransaction.begin();

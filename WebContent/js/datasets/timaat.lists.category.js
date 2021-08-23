@@ -512,6 +512,7 @@
           }
         }
         if (annosUseCategorySet) {
+          // console.log("TCL: $ -> annosUseCategorySet", annosUseCategorySet);
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('mediumAnalysisList', mediumAnalysisList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('categorySetIdList', categorySetIdList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').modal('show');
@@ -1367,9 +1368,32 @@
 					mediumAnalysisListModel.categorySets = [];
           await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
           // remove categories from annotations that belong to those category sets (= all)
-          var i = 0;
+          let i = 0;
           for (; i < mediumAnalysisListModel.annotations.length; i++) {
             await this.updateElementHasCategoriesList(mediumAnalysisListModel.annotations[i], null, 'annotation');
+          }
+          // remove categories from segment structure elements that belong to those category sets (= all)
+          i = 0;
+          let j = 0;
+          let k = 0;
+          for (; i < mediumAnalysisListModel.analysisSegments.length; i++) {
+            await this.updateElementHasCategoriesList(mediumAnalysisListModel.analysisSegments[i], null, 'segment');
+            j = 0;
+            for (; j < mediumAnalysisListModel.analysisSegments[i].analysisSequences.length; j++) {
+              await this.updateElementHasCategoriesList(mediumAnalysisListModel.analysisSegments[i].analysisSequences[j], null, 'sequence');
+              k = 0;
+              for (; k < mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].analysisTakes.length; k++) {
+                await this.updateElementHasCategoriesList(mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].analysisTakes[k], null, 'take');
+              }
+            }
+            j = 0;
+            for (; j < mediumAnalysisListModel.analysisSegments[i].analysisScenes.length; j++) {
+              await this.updateElementHasCategoriesList(mediumAnalysisListModel.analysisSegments[i].analysisScenes[j], null, 'scene');
+              k = 0;
+              for (; k < mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].analysisActions.length; k++) {
+                await this.updateElementHasCategoriesList(mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].analysisActions[k], null, 'action');
+              }
+            }
           }
         } else if (existingMediumAnalysisListHasCategorySetsEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add  all entries");
@@ -1400,12 +1424,36 @@
 						for (; i < entriesToDelete.length; i++) {
 							var index = mediumAnalysisListModel.categorySets.findIndex(({id}) => id === entriesToDelete[i].id);
 							mediumAnalysisListModel.categorySets.splice(index,1);
+              // will also remove categories from all affected elements (annotations, segment structure elements)
               await TIMAAT.AnalysisListService.removeCategorySet(mediumAnalysisListModel.id, entriesToDelete[i].id);
             }
             // categories will be removed from annotations if corresponding category set is removed from analysislist
             i = 0;
             for (; i < mediumAnalysisListModel.annotations.length; i++) {
               mediumAnalysisListModel.annotations[i].categories = await TIMAAT.AnnotationService.getSelectedCategories(mediumAnalysisListModel.annotations[i].id);
+            }
+            // categories will be removed from segment structure elements if corresponding category set is removed from analysislist
+            i = 0;
+            let j = 0;
+            let k = 0;
+            for (; i < mediumAnalysisListModel.analysisSegments.length; i++) {
+              mediumAnalysisListModel.analysisSegments[i].categories = await TIMAAT.AnalysisListService.getSelectedCategories(mediumAnalysisListModel.analysisSegments[i].id, 'segment');
+              j = 0;
+              for (; j < mediumAnalysisListModel.analysisSegments[i].analysisSequences.length; j++) {
+                mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].categories = await TIMAAT.AnalysisListService.getSelectedCategories(mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].id, 'sequence');
+                k = 0;
+                for (; k < mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].analysisTakes.length; k++) {
+                  mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].analysisTakes[k].categories = await TIMAAT.AnalysisListService.getSelectedCategories(mediumAnalysisListModel.analysisSegments[i].analysisSequences[j].analysisTakes[k].id, 'take');
+                }
+              }
+              j = 0;
+              for (; j < mediumAnalysisListModel.analysisSegments[i].analysisScenes.length; j++) {
+                mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].categories = await TIMAAT.AnalysisListService.getSelectedCategories(mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].id, 'scene');
+                k = 0;
+                for (; k < mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].analysisActions.length; k++) {
+                  mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].analysisActions[k].categories =  await TIMAAT.AnalysisListService.getSelectedCategories(mediumAnalysisListModel.analysisSegments[i].analysisScenes[j].analysisActions[k].id, 'action');
+                }
+              }
             }
 					}
 					//* add existing categorySets
@@ -1435,6 +1483,7 @@
 							await TIMAAT.AnalysisListService.addCategorySet(mediumAnalysisListModel.id, idsToCreate[i].id);
 						}
           }
+          // console.log("TCL: updateMediumAnalysisListHasCategorySetsList:function -> mediumAnalysisListModel", mediumAnalysisListModel);
           await TIMAAT.AnalysisListService.updateMediumAnalysisList(mediumAnalysisListModel);
           //! TODO check if annotationList or curAnalysisList.annotations should be checked here
           // console.log("TCL: TIMAAT.VideoPlayer.annotationList", TIMAAT.VideoPlayer.annotationList);
@@ -1448,6 +1497,7 @@
 			} catch(error) {
 				console.error("ERROR: ", error);
 			}
+      TIMAAT.VideoPlayer.inspector.setItem(this.curAnalysisList, 'analysisList');
 			return mediumAnalysisListModel;
     },
     
@@ -1579,22 +1629,28 @@
         }
         switch (type) {
           case 'annotation':
-            TIMAAT.VideoPlayer.curAnnotation.updateUI();
+            if (TIMAAT.VideoPlayer.curAnnotation)
+              TIMAAT.VideoPlayer.curAnnotation.updateUI();
           break;
           case 'segment':
-            TIMAAT.VideoPlayer.curSegment.updateUI();
+            if (TIMAAT.VideoPlayer.curSegment)
+              TIMAAT.VideoPlayer.curSegment.updateUI();
           break;
           case 'sequence':
-            TIMAAT.VideoPlayer.curSequence.updateUI();
+            if (TIMAAT.VideoPlayer.curSequence)
+              TIMAAT.VideoPlayer.curSequence.updateUI();
           break;
           case 'take':
-            TIMAAT.VideoPlayer.curTake.updateUI();
+            if (TIMAAT.VideoPlayer.curTake)
+              TIMAAT.VideoPlayer.curTake.updateUI();
           break;
           case 'scene':
-            TIMAAT.VideoPlayer.curScene.updateUI();
+            if (TIMAAT.VideoPlayer.curScene)
+              TIMAAT.VideoPlayer.curScene.updateUI();
           break;
           case 'action':
-            TIMAAT.VideoPlayer.curAction.updateUI();
+            if (TIMAAT.VideoPlayer.curAction)
+              TIMAAT.VideoPlayer.curAction.updateUI();
           break;
         }
 			} catch(error) {

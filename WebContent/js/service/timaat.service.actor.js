@@ -39,6 +39,7 @@
 			});			
 		},
 
+		//* not used anymore
 		listActors(callback) {
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/list",
