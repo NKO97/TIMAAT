@@ -201,8 +201,6 @@
 				mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
 				mediumID: analysisList.mediumID,
 				tags: analysisList.tags,
-				createdByUserAccount: {id: analysisList.createdByUserAccount},
-				lastEditedByUserAccount: {id: analysisList.lastEditedByUserAccount},
 			};
 			jQuery.ajax({
 				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id+'/?authToken='+TIMAAT.Service.session.token,
@@ -236,8 +234,6 @@
 				mediumAnalysisListTranslations: analysisList.mediumAnalysisListTranslations,
 				mediumID: analysisList.mediumId,
 				tags: analysisList.tags,
-				createdByUserAccount: { id: analysisList.createdByUserAccount},
-				lastEditedByUserAccount: { id: analysisList.lastEditedByUserAccount},
 			};
       // console.log("TCL: updateMediumAnalysisList -> updateList", updateList);
 			return new Promise(resolve => {

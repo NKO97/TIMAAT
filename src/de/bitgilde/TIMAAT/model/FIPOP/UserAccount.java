@@ -130,7 +130,6 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "MediumAnalysisList-LastEditedByUserAccount")
 	private List<MediumAnalysisList> mediumAnalysisListsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to UserAccessToken
