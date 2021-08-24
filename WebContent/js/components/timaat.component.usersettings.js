@@ -54,7 +54,7 @@
         if (!$('#changeUserPassword').valid())
           return;
         let currentPassword = $('#currentPassword').val();
-        let username = TIMAAT.Service.getUserAccountByDisplayName(TIMAAT.Service.session.displayName);
+        let username = await TIMAAT.Service.getUserAccountNameByDisplayName(TIMAAT.Service.session.displayName);
         let oldHash = TIMAAT.Util.getArgonHash(currentPassword, username + TIMAAT.Service.clientSalt);
         let credentials = {
           username : username,

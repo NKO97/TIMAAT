@@ -103,14 +103,14 @@ public class EndpointUserAccount {
 
 	@GET
   @Produces(MediaType.TEXT_PLAIN)
-	@Path("getAccountNameByDisplayName")
+	@Path("getAccountNameByDisplayName/{displayName}")
 	@Secured
-	public Response getAccountNameByDisplayName(@QueryParam("name") String name) {
+	public Response getAccountNameByDisplayName(@PathParam("displayName") String displayName) {
 		UserAccount user = null;
 		try {
 			user = (UserAccount) TIMAATApp.emf.createEntityManager()
-				.createQuery("SELECT ua FROM UserAccount ua WHERE ua.displayName=:name")
-				.setParameter("name", name)
+				.createQuery("SELECT ua FROM UserAccount ua WHERE ua.displayName=:displayName")
+				.setParameter("displayName", displayName)
 				.getSingleResult();
 		} catch (NoResultException e) {
 			return Response.status(Status.NOT_FOUND).entity("User not found!").build();

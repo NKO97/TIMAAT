@@ -253,10 +253,10 @@
 		async getUserAccountNameByDisplayName(displayName) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/getAccountNameByDisplayName'+'?name='+displayName,
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/getAccountNameByDisplayName/'+displayName,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
-					dataType   : "json",
+					dataType   : "text",
 					beforeSend : function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
