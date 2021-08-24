@@ -101,9 +101,7 @@
 		},
 		
 		resolveUserID: function(idElement, myself) {
-    	// console.log("TCL: resolveUserID: function(idElement, myself)");
-			// console.log("TCL:   -> idElement", idElement);
-			// console.log("TCL:   -> myself", myself);
+			// console.log("TCL: resolveUserID: idElement, myself ", idElement, myself);
 			if ( !myself ) myself = "mir";
 			
 			var id = $(idElement).data('userid');
@@ -156,6 +154,7 @@
 		},
 		
 		getDefaultTranslation: function(item, list, prop) {
+    	// console.log("TCL: item, list, prop", item, list, prop);
 			var value = null;
 			item[list].forEach(function(translation) {
 				if ( translation && translation.language && translation.language.code == 'default' )

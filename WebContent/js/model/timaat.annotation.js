@@ -99,9 +99,9 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				// console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
 				$('.timaat-user-log-details').html(
-					`<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountID+'">[ID '+anno.model.createdByUserAccountID+']</span></b><br>\
+					`<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccount+'">[ID '+anno.model.createdByUserAccount+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
-					<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountID+'">[ID '+anno.model.lastEditedByUserAccountID+']</span></b><br>\
+					<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccount+'">[ID '+anno.model.lastEditedByUserAccount+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});

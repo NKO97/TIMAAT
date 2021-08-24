@@ -3,10 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -46,13 +44,11 @@ public class CategorySet implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "CategorySet-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "CategorySet-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySetHasCategory

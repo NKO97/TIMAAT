@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -51,13 +50,11 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "Event-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "Event-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to ActorHasRole

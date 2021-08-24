@@ -5,8 +5,11 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
@@ -18,6 +21,8 @@ import java.util.List;
 @Entity
 @Table(name="user_account")
 @NamedQuery(name="UserAccount.findAll", query="SELECT ua FROM UserAccount ua")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityReference(alwaysAsId = true)
 public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -49,22 +54,18 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Actor
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "Actor-CreatedByUserAccount")
 	private List<Actor> actorsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Actor
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "Actor-LastEditedByUserAccount")
 	private List<Actor> actorsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "Annotation-CreatedByUserAccount")
 	private List<Annotation> annotationsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "Annotation-LastEditedByUserAccount")
 	private List<Annotation> annotationsLastEditedByUserAccount;
 
 	@OneToMany(mappedBy="owner")
@@ -83,32 +84,26 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "CategorySet-CreatedByUserAccount")
 	private List<CategorySet> categorySetsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to CategorySet
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "CategorySet-LastEditedByUserAccount")
 	private List<CategorySet> categorySetsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "Event-CreatedByUserAccount")
 	private List<Event> eventsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "Event-LastEditedByUserAccount")
 	private List<Event> eventsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "Location-CreatedByUserAccount")
 	private List<Location> locationsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Location
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "Location-LastEditedByUserAccount")
 	private List<Location> locationsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisList
@@ -123,17 +118,14 @@ public class UserAccount implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "Medium-CreatedByUserAccount")
 	private List<Medium> mediaCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonManagedReference(value = "Medium-LastEditedByUserAccount")
 	private List<Medium> mediaLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonManagedReference(value = "MediumAnalysisList-CreatedByUserAccount")
 	private List<MediumAnalysisList> mediumAnalysisListsCreatedByUserAccount;
 
 	//bi-directional many-to-one association to MediumAnalysisList

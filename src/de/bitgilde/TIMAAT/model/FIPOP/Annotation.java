@@ -84,13 +84,11 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "Annotation-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "Annotation-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Uuid

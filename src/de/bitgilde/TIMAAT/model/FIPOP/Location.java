@@ -3,10 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -81,13 +79,11 @@ public class Location implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "Location-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "Location-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to LocationTranslation

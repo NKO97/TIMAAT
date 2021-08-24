@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -21,9 +20,9 @@ import java.util.List;
 @Entity
 @Table(name="medium_analysis_list")
 @NamedQuery(name="MediumAnalysisList.findAll", query="SELECT m FROM MediumAnalysisList m")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-property  = "id", 
-scope     = MediumAnalysisList.class)
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+// property  = "id", 
+// scope     = MediumAnalysisList.class)
 public class MediumAnalysisList implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -82,13 +81,11 @@ public class MediumAnalysisList implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "MediumAnalysisList-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
-	
+
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "MediumAnalysisList-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to Tag

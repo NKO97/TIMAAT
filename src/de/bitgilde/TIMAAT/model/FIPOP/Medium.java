@@ -5,7 +5,6 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
@@ -36,13 +35,11 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
-	@JsonBackReference(value = "Medium-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
-	@JsonBackReference(value = "Medium-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	@Column(name="file_hash")
