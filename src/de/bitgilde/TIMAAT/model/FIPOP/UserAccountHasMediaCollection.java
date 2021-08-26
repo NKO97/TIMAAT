@@ -1,6 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 
@@ -20,6 +23,7 @@ public class UserAccountHasMediaCollection implements Serializable {
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
 	@JoinColumn(name="media_collection_id")
+	@JsonBackReference(value = "MediaCollection-UserAccountHasMediaCollection")
 	private MediaCollection mediaCollection;
 
 	//bi-directional many-to-one association to PermissionType
@@ -30,6 +34,7 @@ public class UserAccountHasMediaCollection implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="user_account_id")
+	@JsonBackReference(value = "UserAccount-UserAccountHasMediaCollection")
 	private UserAccount userAccount;
 
 	public UserAccountHasMediaCollection() {

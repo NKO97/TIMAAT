@@ -26,6 +26,7 @@
 		curVideos: [],
 		videos: null,
 		videoChooserLoaded: false,
+		currentPermissionLevel: null,
 
 		loadCollections: function() {
 			// load media collections
@@ -133,6 +134,10 @@
 					var target = $('#timaat-videochooser-list-target-collection option:selected').data('collection');
 					if ( target == null ) return;
 					if ( TIMAAT.VideoChooser.collection != null && TIMAAT.VideoChooser.collection.id == target.id ) return;
+					if (TIMAAT.VideoChooser.currentPermissionLevel < 2) {
+						$('#mediumCollectionInsufficientPermissionModal').modal('show');
+						return;
+					}
 					// gather and add items
 					TIMAAT.VideoChooser.dt.$('input:checked').each(function(index, item) {
 						var row = $(item).parents('tr');
@@ -155,6 +160,10 @@
 					});
 				} else if ( action == 'remove') {
 					if ( TIMAAT.VideoChooser.collection == null || TIMAAT.VideoChooser.dt == null ) return;
+					if (TIMAAT.VideoChooser.currentPermissionLevel < 2) {
+						$('#mediumCollectionInsufficientPermissionModal').modal('show');
+						return;
+					}
 					// gather and remove items
 					TIMAAT.VideoChooser.dt.$('input:checked').each(function(index, item) {
 						var row = $(item).parents('tr');
@@ -437,6 +446,10 @@
 					});
 
 					mediumElement.on('click', '.timaat-video-collectionitemremove', function(ev) {
+						if (TIMAAT.VideoChooser.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						var row = $(this).parents('tr');
 						TIMAAT.VideoChooser._removeCollectionItemRow(row);
 					});
@@ -653,9 +666,10 @@
 			if ( TIMAAT.UploadManager.isUploading(video) ) video.ui.find('.timaat-medium-upload').css('display', 'none');
 		},
 		
-		setCollection: function(collection) {
+		setCollection: async function(collection) {
     	// console.log("TCL: collection", collection);
 			if ( this.collection == collection ) return;
+			if (collection) TIMAAT.VideoChooser.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(collection.id);
 			
 			$('#timaat-videochooser-list-loading').attr('style','');
 			$('#timaat-videochooser-list-selectall input:checkbox').prop('checked', false);
@@ -676,9 +690,9 @@
 				$('#timaat-videochooser-collectionlibrary').addClass("active");
 				$('li[id^="timaat-videochooser-collection-"]').removeClass("active");
 				$('#timaat-videochooser-collectionlibrary').removeClass("text-info");
-//				if ( !TIMAAT.MediumDatasets.videos.model ) return;
+				// if ( !TIMAAT.MediumDatasets.videos.model ) return;
         // console.log("TCL: TIMAAT.MediumDatasets.videos.model", TIMAAT.MediumDatasets.videos.model);
-//				this.setVideoList(TIMAAT.MediumDatasets.videos.model);
+				// this.setVideoList(TIMAAT.MediumDatasets.videos.model);
 				// set ajax data source
 				if ( this.dt ) {
 					this.dt.ajax.url('/TIMAAT/api/medium/video/list');
@@ -791,6 +805,10 @@
 		updateMediaCollection: function(collection) {
 			// console.log("TCL: updateMediaCollection: function(collection)");
 			// console.log("TCL: collection", collection);
+			if (TIMAAT.VideoChooser.currentPermissionLevel < 2) {
+				$('#mediumCollectionInsufficientPermissionModal').modal('show');
+				return;
+			}
 			// sync to server
 			TIMAAT.MediumCollectionService.updateMediaCollection(collection);
 			// update UI collection view
@@ -802,6 +820,10 @@
 		
 		removeMediaCollection: function() {
 			// console.log("TCL: removeMediaCollection: function()");
+			if (TIMAAT.VideoChooser.currentPermissionLevel < 4) {
+				$('#mediumCollectionInsufficientPermissionModal').modal('show');
+				return;
+			}
 			if ( !this.collection ) return;
 			$('#timaat-videochooser-mediacollection-delete').data('mediacollection', this.collection);
 			$('#timaat-videochooser-mediacollection-delete').modal('show');
@@ -867,10 +889,8 @@
 		},
 
 		_addCollection: function(collection) {
-			var colelement = $('<li id="timaat-videochooser-collection-'+collection.id+'" class="list-group-item list-group-item-action">\
-				<i class="fas fa-folder"></i> <span class="collection-title">'+collection.title+'</span>'+
-				' <button type="button" onclick="TIMAAT.VideoChooser.removeMediaCollection()" class="btn btn-danger btn-outline btn-sm float-right">\
-				<i class="fas fa-trash-alt"></i></button></li>');
+			var colelement = $(`<li id="timaat-videochooser-collection-`+collection.id+`" class="list-group-item list-group-item-action">
+			<i class="fas fa-folder"><span class="collection-title">`+collection.title+`</span></li>`);
 			
 			colelement.appendTo('#timaat-videochooser-collectionlist');
 			

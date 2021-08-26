@@ -128,6 +128,40 @@
         <div id="timaat-notification-pane">
         </div>
       </div>
+      <div class="modal fade" id="mediumCollectionInsufficientPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionInsufficientPermissionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="mediumCollectionInsufficientPermissionLabel">Insufficient access rights</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Your access level is not high enough to make any changes to this collection.
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="mediumCollectionNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionNoPermissionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="mediumCollectionNoPermissionLabel">No access rights</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              This collection is not available to you.
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
       <!-------------------------------------------------------------------->
       <!-- Navigation                                                     -->
       <!-------------------------------------------------------------------->
@@ -388,21 +422,22 @@
           	  <div class="card datatables" id="videochooser-datatable">
 			          <div class="card-header">
                   <strong>Mediensammlungen</strong>
-                  <button type="button" onclick="TIMAAT.VideoChooser.addMediaCollection()" class="btn btn-outline-success btn-sm float-right">
+                  <!-- <button type="button" onclick="TIMAAT.VideoChooser.addMediaCollection()" class="btn btn-outline-success btn-sm float-right">
                     <i class="fas fa-plus"></i>
-                  </button></div>
-			            <div class="card-body" style="padding:0">
-				            <ul class="list-group">
-                      <li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                        <i class="fas fa-inbox"></i> Bibliothek
-                      </li>
-                    </ul>
-				            <div id="timaat-mediacollection-list-loader" class="text-center card-body">
-                	    <i class="fas fa-spinner fa-spin"></i> Lade Mediensammlungen...
-				            </div>
-				            <ul id="timaat-videochooser-collectionlist" class="list-group">
-            				</ul>			
-			            </div>
+                  </button> -->
+                </div>
+                <div class="card-body" style="padding:0">
+                  <ul class="list-group">
+                    <li id="timaat-videochooser-collectionlibrary" class="list-group-item list-group-item-action font-weight-bold active">
+                      <i class="fas fa-inbox"></i> Bibliothek
+                    </li>
+                  </ul>
+                  <div id="timaat-mediacollection-list-loader" class="text-center card-body">
+                    <i class="fas fa-spinner fa-spin"></i> Lade Mediensammlungen...
+                  </div>
+                  <ul id="timaat-videochooser-collectionlist" class="list-group">
+                  </ul>
+                </div>
 		          </div>	
           	</div>
             <!-- --------------------- -->
@@ -1949,12 +1984,12 @@
                     </div>
                     <div class="modal-body">
                       <div id="timaat-mediacollection-items-modal" class="timaat-mediacollection-modal">
-                        <button class="btn-block text-left btn btn-outline-secondary collapsed" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-available-wrapper">
-                          <i class="collapse-icon fas fa-fw"></i> Add media to collection
+                        <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-collection-wrapper">
+                          <i class="collapse-icon fas fa-fw"></i> Associated Media
                         </button>
-                        <div class="media-available-wrapper p-2 border border-light bg-light collapse">
-                          <table class="media-available table table-striped table-bordered table-hover">
-                            <thead class="thead-dark">
+                        <div class="media-collection-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                          <table class="media-collection table table-striped table-bordered table-hover">
+                            <thead class="thead-light">
                               <tr>
                                 <th>Title</th>
                               </tr>
@@ -1962,12 +1997,12 @@
                             <tbody></tbody>
                           </table>
                         </div>
-                        <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-collection-wrapper">
-                          <i class="collapse-icon fas fa-fw"></i> Associated Media
+                        <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-mediacollection-items-modal .media-available-wrapper">
+                          <i class="collapse-icon fas fa-fw"></i> Add media to collection
                         </button>
-                        <div class="media-collection-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
-                          <table class="media-collection table table-striped table-bordered table-hover">
-                            <thead class="thead-light">
+                        <div class="media-available-wrapper p-2 border border-light bg-light collapse show">
+                          <table class="media-available table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
                               <tr>
                                 <th>Title</th>
                               </tr>
@@ -2054,6 +2089,20 @@
                       <button type="submit" class="btn btn-primary" id="timaat-mediumcollectiondatasets-modal-tag-submit-button">Save</button>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="modal fade" id="timaat-mediumcollectiondatasets-mediumcollection-manage" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionManageLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <form class="modal-content" role="form" id="mediumCollectionAccessRightsForm" name="mediumCollectionAccessRightsForm" method="POST">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="mediumCollectionManageLabel">Set medium collection access rights</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">                  
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -2331,6 +2380,9 @@
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="mediumcollection-form-edit-button" title="Edit datasheet" name="edit">
                                       <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="mediumcollection-form-permission-button" title="Edit access rights" name="userPermission">
+                                      <i class="fas fa-unlock-alt"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="mediumcollection-form-delete-button" title="Delete medium collection">
                                       <i class="fas fa-trash-alt"></i>

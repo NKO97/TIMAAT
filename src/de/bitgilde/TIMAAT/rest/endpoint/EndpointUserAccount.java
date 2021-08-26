@@ -24,9 +24,11 @@ import jakarta.ws.rs.core.Response.Status;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.PermissionType;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
@@ -138,7 +140,7 @@ public class EndpointUserAccount {
 			return Response.status(Status.FORBIDDEN).build(); 
 		}
 
-		System.out.println("add missing permissions");
+		System.out.println("add missing permissions - mediumAnalysisLists");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		Query query;
@@ -158,24 +160,48 @@ public class EndpointUserAccount {
 				mediumAnalysisList.addUserAccountHasMediumAnalysisList(userAccountHasMediumAnalysisList);
 				entityTransaction.begin();
 				entityManager.merge(mediumAnalysisList);
-				// entityManager.merge(userAccountHasMediumAnalysisList);
 				entityManager.persist(mediumAnalysisList);
-				// entityManager.persist(userAccountHasMediumAnalysisList);
 				entityTransaction.commit();
-				// entityManager.refresh(userAccountHasMediumAnalysisList);
 				entityManager.refresh(mediumAnalysisList);
 			}
 		} catch (Exception e) {
 			System.err.println(e);
 			e.printStackTrace();
 		}
-		// TODO fix all MediaCollection permissions
+
+		System.out.println("add missing permissions - mediaCollections");
+		// fix all MediaCollection permissions
+		try {
+			List<MediaCollection> mediaCollectionList = new ArrayList<>();
+			sql = "SELECT mal FROM MediaCollection mal WHERE mal.id NOT IN (SELECT uahmal.mediaCollection.id FROM UserAccountHasMediaCollection uahmal)";
+			query = entityManager.createQuery(sql);
+			mediaCollectionList = castList(MediaCollection.class, query.getResultList());
+			for (MediaCollection mediaCollection : mediaCollectionList) {
+				UserAccount userAccount = mediaCollection.getCreatedByUserAccount();
+				if (userAccount == null) {
+					userAccount = entityManager.find(UserAccount.class, 1); //* if entry is null, give privileges to admin account (all media collections that were created before created_by_user_account attribute was available)
+				}
+				UserAccountHasMediaCollection userAccountHasMediaCollection = new UserAccountHasMediaCollection(userAccount, mediaCollection);
+				PermissionType permissionType = new PermissionType();
+				permissionType.setId(4);
+				userAccountHasMediaCollection.setPermissionType(permissionType);
+				mediaCollection.addUserAccountHasMediaCollection(userAccountHasMediaCollection);
+				entityTransaction.begin();
+				entityManager.merge(mediaCollection);
+				entityManager.persist(mediaCollection);
+				entityTransaction.commit();
+				entityManager.refresh(mediaCollection);
+			}
+		} catch (Exception e) {
+			System.err.println(e);
+			e.printStackTrace();
+		}
 		// TODO fix all Work permissions
 		// TODO fix all CategorySet permissions
 		System.out.println("Completed updating all missing permissions.");
 		return Response.ok().build();
 	}
-	
+
 	public static int getPermissionLevelForAnalysisList(int userAccountId, int mediumAnalysisListId) {
 		// System.out.println("getPermissionLevelForAnalysisList - userId: " + userAccountId + " listId: " + mediumAnalysisListId);
 		UserAccountHasMediumAnalysisList uahmal;
@@ -208,6 +234,37 @@ public class EndpointUserAccount {
 		return uahmal.getPermissionType().getId();
 	}
 
+	public static int getPermissionLevelForMediumCollection(int userAccountId, int mediaCollectionId) {
+		// System.out.println("getPermissionLevelForMediaCollection - userId: " + userAccountId + " listId: " + mediaCollectionId);
+		UserAccountHasMediaCollection uahmc;
+		try {
+			String countQuerySQL = "SELECT COUNT (uahmc) FROM UserAccountHasMediaCollection uahmc WHERE uahmc.userAccount.id = :userAccountId AND uahmc.mediaCollection.id = :mediaCollectionId";
+			Query countQuery = TIMAATApp.emf.createEntityManager()
+													.createQuery(countQuerySQL)
+													.setParameter("userAccountId", userAccountId)
+													.setParameter("mediaCollectionId", mediaCollectionId);
+			long recordsTotal = (long) countQuery.getSingleResult();
+			if (recordsTotal == 1) {
+				uahmc = (UserAccountHasMediaCollection) TIMAATApp.emf.createEntityManager()
+					.createQuery("SELECT uahmc FROM UserAccountHasMediaCollection uahmc WHERE uahmc.userAccount.id = :userAccountId AND uahmc.mediaCollection.id = :mediaCollectionId")
+					.setParameter("userAccountId", userAccountId)
+					.setParameter("mediaCollectionId", mediaCollectionId)
+					.getSingleResult();
+			} else {
+				return -1;
+			}
+		} catch (NoResultException nre) {
+			System.out.println("No entry found. Setting value to -1");
+			nre.printStackTrace();
+			return -1; // no permission set for this user on this mediaCollection
+		} catch (Exception e) {
+			System.out.println("No entry found. Setting value to -1");
+			e.printStackTrace();
+			return -1; // no permission set for this user on this mediaCollection
+		}
+		// System.out.println("getPermissionLevelForMediaCollection- permission level found: " + uahmc.getPermissionType().getId());
+		return uahmc.getPermissionType().getId();
+	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());

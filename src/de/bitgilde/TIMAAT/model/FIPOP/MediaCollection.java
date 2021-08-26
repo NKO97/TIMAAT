@@ -1,6 +1,8 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -31,6 +33,25 @@ public class MediaCollection implements Serializable {
 
 	@Column(nullable=false, length=255)
 	private String title;
+
+	@Column(name="global_permission")
+	private byte globalPermission;
+
+	@Column(name="created_at")
+	private Timestamp createdAt;
+
+	@Column(name="last_edited_at")
+	private Timestamp lastEditedAt;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="created_by_user_account_id")
+	private UserAccount createdByUserAccount;
+
+	//bi-directional many-to-one association to UserAccount
+	@ManyToOne
+	@JoinColumn(name="last_edited_by_user_account_id")
+	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediaCollectionType
 	@ManyToOne
@@ -78,9 +99,10 @@ public class MediaCollection implements Serializable {
 	// @JsonIgnore
 	// private List<UserAccount> userAccounts;
 
-	//bi-directional many-to-one association to UserAccountHasMediaCollection
-	// @OneToMany(mappedBy="mediaCollection")
-	// private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
+	// bi-directional many-to-one association to UserAccountHasMediaCollection
+	@OneToMany(mappedBy="mediaCollection")
+	@JsonManagedReference(value = "MediaCollection-UserAccountHasMediaCollection")
+	private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
 
 	public MediaCollection() {
 	}
@@ -117,6 +139,30 @@ public class MediaCollection implements Serializable {
 		this.title = title;
 	}
 
+	public byte getGlobalPermission() {
+		return this.globalPermission;
+	}
+
+	public void setGlobalPermission(byte globalPermission) {
+		this.globalPermission = globalPermission;
+	}
+
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getLastEditedAt() {
+		return this.lastEditedAt;
+	}
+
+	public void setLastEditedAt(Timestamp lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
+	}
+
 	public MediaCollectionType getMediaCollectionType() {
 		return this.mediaCollectionType;
 	}
@@ -131,6 +177,22 @@ public class MediaCollection implements Serializable {
 
 	public void setMediaCollectionAlbum(MediaCollectionAlbum mediaCollectionAlbum) {
 		this.mediaCollectionAlbum = mediaCollectionAlbum;
+	}
+
+	public UserAccount getCreatedByUserAccount() {
+		return this.createdByUserAccount;
+	}
+
+	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
+		this.createdByUserAccount = createdByUserAccount;
+	}
+
+	public UserAccount getLastEditedByUserAccount() {
+		return this.lastEditedByUserAccount;
+	}
+
+	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
+		this.lastEditedByUserAccount = lastEditedByUserAccount;
 	}
 
 	public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists() {
@@ -225,26 +287,26 @@ public class MediaCollection implements Serializable {
 	// 	this.userAccounts = userAccounts;
 	// }
 
-	// public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
-	// 	return this.userAccountHasMediaCollections;
-	// }
+	public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
+		return this.userAccountHasMediaCollections;
+	}
 
-	// public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
-	// 	this.userAccountHasMediaCollections = userAccountHasMediaCollections;
-	// }
+	public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
+		this.userAccountHasMediaCollections = userAccountHasMediaCollections;
+	}
 
-	// public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
-	// 	getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
-	// 	userAccountHasMediaCollection.setMediaCollection(this);
+	public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+		getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
+		userAccountHasMediaCollection.setMediaCollection(this);
 
-	// 	return userAccountHasMediaCollection;
-	// }
+		return userAccountHasMediaCollection;
+	}
 
-	// public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
-	// 	getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
-	// 	userAccountHasMediaCollection.setMediaCollection(null);
+	public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+		getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
+		userAccountHasMediaCollection.setMediaCollection(null);
 
-	// 	return userAccountHasMediaCollection;
-	// }
+		return userAccountHasMediaCollection;
+	}
 
 }

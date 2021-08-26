@@ -269,7 +269,7 @@
 				$('[id^="adminCannotBeChanged_"]').hide();
 			});
 
-			$(document).on('click', '[data-role="newUserPermission"] > [data-role="add"]', async function(event) {
+			$(document).on('click', '[data-role="newUserPermissionAnalysisList"] > [data-role="add"]', async function(event) {
 				event.preventDefault();
 				let listEntry = $(this).closest('[data-role="newPermission"]');
 				let displayName = '';
@@ -316,7 +316,7 @@
 				TIMAAT.VideoPlayer.manageAnalysisList();
 			});
 
-			$(document).on('change', '[data-role="changeUserPermission"] > [data-role="select"]', async function(event) {
+			$(document).on('change', '[data-role="changeUserPermissionAnalysisList"] > [data-role="select"]', async function(event) {
 				event.preventDefault();
 				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
 				let permissionId = $(this).closest('.custom-select').val();
@@ -338,7 +338,7 @@
 				TIMAAT.VideoPlayer.userPermissionList = await TIMAAT.AnalysisListService.getDisplayNamesAndPermissions(TIMAAT.VideoPlayer.curAnalysisList.id);
 			});
 
-			$(document).on('change', 'input[type=radio][name=globalPermission]', async function(event) {
+			$(document).on('change', 'input[type=radio][name=globalPermissionAnalysisList]', async function(event) {
 				event.preventDefault();
 				let globalPermissionValue = Number($(this).val());
 				if (!globalPermissionValue || globalPermissionValue == null || globalPermissionValue > 2) globalPermissionValue = 0;
@@ -347,7 +347,7 @@
 				TIMAAT.AnalysisListService.updateMediumAnalysisList(analysisList);
 			});
 
-			$(document).on('click','[data-role="removeUserPermission"] > [data-role="remove"]', async function (event) {
+			$(document).on('click','[data-role="removeUserPermissionAnalysisList"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
 				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
 				let index = TIMAAT.VideoPlayer.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
@@ -1592,7 +1592,7 @@
 							<div class="col-7">
 								` + userDisplayNameAndPermissionList[i].displayName + `
 							</div>
-							<div class="col-4" data-role="changeUserPermission">`;
+							<div class="col-4" data-role="changeUserPermissionAnalysisList">`;
 					if ( permissionLevel == 3 ) {
 						switch (userDisplayNameAndPermissionList[i].permissionId) {
 							case 1:
@@ -1601,7 +1601,7 @@
 													<option value="2">Read+Write</option>
 												</select>
 											</div>
-											<div class="col-1" data-role="removeUserPermission">
+											<div class="col-1" data-role="removeUserPermissionAnalysisList">
 												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
 													<i class="fas fa-minus fa-fw"></i>
 												</button>
@@ -1615,7 +1615,7 @@
 													<option value="2" selected>Read+Write</option>
 												</select>
 											</div>
-											<div class="col-1" data-role="removeUserPermission">
+											<div class="col-1" data-role="removeUserPermissionAnalysisList">
 												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
 													<i class="fas fa-minus fa-fw"></i>
 												</button>
@@ -1628,7 +1628,7 @@
 													<option value="3" selected>Moderate</option>
 												</select>
 											</div>
-											<div class="col-1" data-role="removeUserPermission">
+											<div class="col-1" data-role="removeUserPermissionAnalysisList">
 											</div>
 										</div>
 									</div>`;
@@ -1638,7 +1638,7 @@
 													<option value="4" selected>Administrate</option>
 												</select>
 											</div>
-											<div class="col-1" data-role="removeUserPermission">
+											<div class="col-1" data-role="removeUserPermissionAnalysisList">
 											</div>
 										</div>
 									</div>`;
@@ -1691,7 +1691,7 @@
 						}
 						modalBodyText += `
 									</div>
-									<div class="col-1" data-role="removeUserPermission">
+									<div class="col-1" data-role="removeUserPermissionAnalysisList">
 										<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
 											<i class="fas fa-minus fa-fw"></i>
 										</button>
@@ -1722,7 +1722,7 @@
 				}
 				modalBodyText += `</select>
 							</div>
-							<div class="col-1" data-role="newUserPermission">
+							<div class="col-1" data-role="newUserPermissionAnalysisList">
 								<button class="addNewPermission btn btn-sm btn-primary p-1 float-right" data-role="add" data-userId="0" data-listId="0">
 									<i class="fas fa-plus fa-fw"></i>
 								</button>
@@ -1735,13 +1735,13 @@
 									<legend>You can grant all users access to this analysis</legend>
 									<div id="globalPermission" class="radioButtonsHorizontalEvenlySpaced" data-role="select">
 										<label>
-											<input id="globalPermission_0" type="radio" name="globalPermission" value="0"> No global access
+											<input id="globalPermission_0" type="radio" name="globalPermissionAnalysisList" value="0"> No global access
 										</label>
 										<label>
-											<input id="globalPermission_1" type="radio" name="globalPermission" value="1"> Read
+											<input id="globalPermission_1" type="radio" name="globalPermissionAnalysisList" value="1"> Read
 										</label>
 										<label>
-											<input id="globalPermission_2" type="radio" name="globalPermission" value="2"> Read+Write
+											<input id="globalPermission_2" type="radio" name="globalPermissionAnalysisList" value="2"> Read+Write
 										</label>
 									</div>
 								</fieldset>

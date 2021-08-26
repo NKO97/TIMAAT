@@ -187,6 +187,7 @@
               let mediumCollection = {};
               mediumCollection.model = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
               // console.log("TCL: setupView:function -> mediumCollection", mediumCollection);
+              TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.model.id);
               TIMAAT.UI.clearLastSelection('mediumCollection');
               $('#mediumcollection-metadata-form').data('mediumCollection', mediumCollection);
               let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
