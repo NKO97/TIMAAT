@@ -212,8 +212,9 @@ public class UserAccount implements Serializable {
 	// private List<WorkAnalysisList> workAnalysisLists2;
 
 	//bi-directional many-to-one association to UserAccountHasMediaCollection
-	// @OneToMany(mappedBy="userAccount")
-	// private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
+	@OneToMany(mappedBy="userAccount")
+	@JsonManagedReference(value = "UserAccount-UserAccountHasMediaCollection")
+	private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
 
 	//bi-directional many-to-many association to PermissionType
 	// @ManyToMany
@@ -963,27 +964,27 @@ public class UserAccount implements Serializable {
 	// 	return workAnalysisLists2;
 	// }
 
-	// public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
-	// 	return this.userAccountHasMediaCollections;
-	// }
+	public List<UserAccountHasMediaCollection> getUserAccountHasMediaCollections() {
+		return this.userAccountHasMediaCollections;
+	}
 
-	// public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
-	// 	this.userAccountHasMediaCollections = userAccountHasMediaCollections;
-	// }
+	public void setUserAccountHasMediaCollections(List<UserAccountHasMediaCollection> userAccountHasMediaCollections) {
+		this.userAccountHasMediaCollections = userAccountHasMediaCollections;
+	}
 
-	// public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
-	// 	getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
-	// 	userAccountHasMediaCollection.setUserAccount(this);
+	public UserAccountHasMediaCollection addUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+		getUserAccountHasMediaCollections().add(userAccountHasMediaCollection);
+		userAccountHasMediaCollection.setUserAccount(this);
 
-	// 	return userAccountHasMediaCollection;
-	// }
+		return userAccountHasMediaCollection;
+	}
 
-	// public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
-	// 	getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
-	// 	userAccountHasMediaCollection.setUserAccount(null);
+	public UserAccountHasMediaCollection removeUserAccountHasMediaCollection(UserAccountHasMediaCollection userAccountHasMediaCollection) {
+		getUserAccountHasMediaCollections().remove(userAccountHasMediaCollection);
+		userAccountHasMediaCollection.setUserAccount(null);
 
-	// 	return userAccountHasMediaCollection;
-	// }
+		return userAccountHasMediaCollection;
+	}
 
 	// public List<PermissionType> getPermissionTypes() {
 	// 	return this.permissionTypes;

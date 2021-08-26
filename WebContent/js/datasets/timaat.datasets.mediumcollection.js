@@ -24,6 +24,8 @@
 		mediaCollectionItemList: null,
 		mediaCollectionPublication: null,
 		selectedMediumCollectionItemId: null,
+		userPermissionList: null,
+		currentPermissionLevel: null,
 
 		init: function() {
 			this.initMediaCollections();
@@ -53,6 +55,10 @@
 			// delete medium collection button (in form) handler
 			$('#mediumcollection-form-delete-button').on('click', function(event) {
 				event.stopPropagation();
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 4) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
 				TIMAAT.UI.hidePopups();
 				$('#timaat-mediumcollectiondatasets-mediumcollection-delete').data('mediumCollection', $('#mediumcollection-metadata-form').data('mediumCollection'));
 				$('#timaat-mediumcollectiondatasets-mediumcollection-delete').modal('show');
@@ -61,6 +67,10 @@
 			// confirm delete medium collection modal functionality
 			$('#timaat-mediumcollectiondatasets-modal-delete-submit-button').on('click', async function(ev) {
 				var modal = $('#timaat-mediumcollectiondatasets-mediumcollection-delete');
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 4) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
 				var mediumCollection = modal.data('mediumCollection');
 				if (mediumCollection) {
 					try {	
@@ -83,6 +93,10 @@
 			// edit content form button handler
 			$('#mediumcollection-form-edit-button').on('click', function(event) {
 				event.stopPropagation();
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
 				TIMAAT.UI.hidePopups();
 				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
 				switch(TIMAAT.UI.subNavTab) {
@@ -173,6 +187,7 @@
 				await TIMAAT.UI.refreshDataTable('mediumCollection');
 				TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', mediumCollection.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', mediumCollection, 'mediumCollection');
+				TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.model.id);
 			});
 
 			// cancel add/edit button in content form functionality
@@ -187,6 +202,10 @@
 			// tag button handler
 			$('#mediumcollection-form-tag-button').on('click', async function(event) {
 				event.stopPropagation();
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
 				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediumcollectiondatasets-mediumcollection-tags');
 				modal.data('mediumCollection', $('#mediumcollection-metadata-form').data('mediumCollection'));
@@ -262,6 +281,132 @@
 				$('#timaat-mediumcollectiondatasets-mediumcollection-tags').modal('show');
 			});
 
+			// tag button handler
+			$('#mediumcollection-form-permission-button').on('click', function(event) {
+				event.stopPropagation();
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 3) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
+				TIMAAT.MediumCollectionDatasets.manageMediumCollection();
+			});
+
+			$('#timaat-mediumcollectiondatasets-mediumcollection-manage').on('change paste keyup', '#userAccountForNewPermission', function(event) {
+				$('#adminCanNotBeAddedInfo').hide();
+				$('#userAccountDoesNotExistInfo').hide();
+				$('#userAccountAlreadyInList').hide();
+			});
+
+			$('#timaat-mediumcollectiondatasets-mediumcollection-manage').on('blur', '.custom-select', function(event) {
+				$('[id^="adminCannotBeChanged_"]').hide();
+			});
+
+			$(document).on('click', '[data-role="newUserPermissionMediumCollection"] > [data-role="add"]', async function(event) {
+				event.preventDefault();
+				let listEntry = $(this).closest('[data-role="newPermission"]');
+				let displayName = '';
+				let permissionId = null;
+				if (listEntry.find('input').each(function(){
+					displayName = $(this).val();
+				}));
+				if (listEntry.find('select').each(function(){
+					permissionId = $(this).val();
+				}));
+
+				if (displayName == '') return; // no data entered
+
+				// 'admin' can't be added as admin always has access
+				if (displayName.toLowerCase() == 'admin') {
+					$('#adminCanNotBeAddedInfo').show();
+					return;
+				}
+				// check if name exists
+				// TODO make check case insensitive
+				let displayNameExists = await TIMAAT.Service.displayNameExists(displayName);
+				if (!displayNameExists) {
+					$('#userAccountDoesNotExistInfo').show();
+					return;
+				}
+
+				// check if name is already in the list
+				let displayNameDuplicate = false;
+				let i = 0;
+				for (; i < TIMAAT.MediumCollectionDatasets.userPermissionList.length; i++) {
+					if ($('#userAccountForNewPermission').val() == TIMAAT.MediumCollectionDatasets.userPermissionList[i].displayName ) {
+						displayNameDuplicate = true;
+						break;
+					}
+				}
+				if (displayNameDuplicate) {
+					$('#userAccountAlreadyInList').show();
+					return;
+				}
+
+				// add new entry to the list
+				let userAccountId = await TIMAAT.Service.getUserAccountIdByDisplayName(displayName);
+				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+				await TIMAAT.MediumCollectionService.addUserAccountHasMediumCollectionWithPermission(userAccountId, mediumCollection.model.id, permissionId);
+				TIMAAT.MediumCollectionDatasets.manageMediumCollection();
+			});
+
+			$(document).on('change', '[data-role="changeUserPermissionMediumCollection"] > [data-role="select"]', async function(event) {
+				event.preventDefault();
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let permissionId = $(this).closest('.custom-select').val();
+
+				// prevent removal of the last admin. One admin has to exist at any time
+				let adminCount = 0;
+				$('.permissionContainer [data-role="select"]').each(function() {
+					if ( $(this).val() == 4 ) {
+						adminCount++;
+					}
+				});
+				if (adminCount <= 0) {
+					$(this).closest('.custom-select').val(4); // return invalidly changed option back to 'Administrate'
+					$('#adminCannotBeChanged_'+userId).show();
+					return;
+				}
+				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+				await TIMAAT.MediumCollectionService.updateUserAccountHasMediumCollectionWithPermission(userId, mediumCollection.model.id, permissionId);
+				TIMAAT.MediumCollectionDatasets.userPermissionList = await TIMAAT.MediumCollectionService.getDisplayNamesAndPermissions(mediumCollection.model.id);
+			});
+
+			$(document).on('change', 'input[type=radio][name=globalPermissionMediumCollection]', async function(event) {
+				event.preventDefault();
+				let globalPermissionValue = Number($(this).val());
+				if (!globalPermissionValue || globalPermissionValue == null || globalPermissionValue > 2) globalPermissionValue = 0;
+				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+				mediumCollection.model.globalPermission = globalPermissionValue;
+				TIMAAT.MediumCollectionService.updateMediaCollection(mediumCollection.model);
+			});
+
+			$(document).on('click','[data-role="removeUserPermissionMediumCollection"] > [data-role="remove"]', async function (event) {
+				event.preventDefault();
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let index = TIMAAT.MediumCollectionDatasets.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
+				let userPermissionId = TIMAAT.MediumCollectionDatasets.userPermissionList[index].permissionId;
+				if (!userPermissionId) return;
+
+				// if the to be removed user has administrate permission, make sure that she is not the only one
+				if (userPermissionId == 4) {
+					// prevent removal of the last admin. One admin has to exist at any time
+					let adminCount = 0;
+					$('.permissionContainer [data-role="select"]').each(function() {
+						if ( $(this).val() == 4 ) {
+							adminCount++;
+						}
+					});
+					if (adminCount <= 1) {
+						$('#adminCannotBeChanged_'+userId).show();
+						return;
+					}
+				}
+				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+				await TIMAAT.MediumCollectionService.removeUserAccountHasMediumCollection(userId, mediumCollection.model.id);
+				$(this).closest('.permissionContainer').remove();
+				TIMAAT.MediumCollectionDatasets.userPermissionList.splice(index, 1);
+			});
+
 			// submit tag modal button functionality
 			$('#timaat-mediumcollectiondatasets-modal-tag-submit-button').on('click', async function(event) {
 				event.preventDefault();
@@ -335,6 +480,10 @@
 
 			// add medium collection button functionality (in medium collection list - opens datasheet form)
 			$('#mediumcollection-items-add-button').on('click', function(event) {
+				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+					$('#mediumCollectionInsufficientPermissionModal').modal('show');
+					return;
+				}
 				let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
         // console.log("TCL ~ $ ~ collection", collection);
 				TIMAAT.MediumCollectionDatasets.addMediumCollectionItem(collection.model.id);
@@ -345,7 +494,7 @@
 			})
 
 		},
-		
+
 		_setupPublicationSheet: function(enabled, restricted) {
 			$('#timaat-publish-mediacollection-switch').prop('checked', enabled);
 			$('#timaat-publication-mediacollection-protected-switch').prop('checked', restricted);
@@ -637,6 +786,208 @@
 			// $('#mediumCollection-mediaItems').data(type, data);
 		},
 
+		manageMediumCollection: async function() {
+			// console.log("TCL: manageMediumCollection: function()");
+			// check if user is moderator or administrator of the media collection.
+			let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+      // console.log("TCL: manageMediumCollection:function -> mediumCollection", mediumCollection);
+			let permissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.model.id);
+      // console.log("TCL: manageMediumCollection:function -> permissionLevel", permissionLevel);
+			if (permissionLevel == 3 || permissionLevel == 4) {
+				let modal = $('#timaat-mediumcollectiondatasets-mediumcollection-manage');
+				// get all display names and permissions for this media collection
+				let userDisplayNameAndPermissionList = await TIMAAT.MediumCollectionService.getDisplayNamesAndPermissions(mediumCollection.model.id);
+        // console.log("TCL: manageMediumCollection:function -> userDisplayNameAndPermissionList", userDisplayNameAndPermissionList);
+				TIMAAT.MediumCollectionDatasets.userPermissionList = userDisplayNameAndPermissionList;
+				//? TODO allow global read / write access
+				let modalBodyText = `<div class="col-12">
+					<div class="row">
+						<div class="col-7">
+							<h6>User</h6>
+							<div id="mediumCollectionPermissionUserName">
+							</div>
+						</div>
+						<div class="col-4">
+							<h6>Access rights</h6>
+							<div id="mediumCollectionPermissionLevel">
+							</div>
+						</div>
+						<div class="col-1">
+						</div>
+					</div>`;
+				let i = 0;
+				for (; i < userDisplayNameAndPermissionList.length; i++) {
+					modalBodyText += `<div class="permissionContainer" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`">
+						<hr>
+						<div class="row vertical-aligned">
+							<div class="col-7">
+								` + userDisplayNameAndPermissionList[i].displayName + `
+							</div>
+							<div class="col-4" data-role="changeUserPermissionMediumCollection">`;
+					if ( permissionLevel == 3 ) {
+						switch (userDisplayNameAndPermissionList[i].permissionId) {
+							case 1:
+								modalBodyText += `<select class="custom-select" data-role="select">
+													<option value="1" selected>Read</option>
+													<option value="2">Read+Write</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermissionMediumCollection">
+												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+													<i class="fas fa-minus fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 2:
+								modalBodyText += `<select class="custom-select" data-role="select">
+													<option value="1">Read</option>
+													<option value="2" selected>Read+Write</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermissionMediumCollection">
+												<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+													<i class="fas fa-minus fa-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 3:
+								modalBodyText += `<select class="custom-select" data-role="select" disabled>
+													<option value="3" selected>Moderate</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermissionMediumCollection">
+											</div>
+										</div>
+									</div>`;
+							break;
+							case 4:
+								modalBodyText += `<select class="custom-select" data-role="select" disabled>
+													<option value="4" selected>Administrate</option>
+												</select>
+											</div>
+											<div class="col-1" data-role="removeUserPermissionMediumCollection">
+											</div>
+										</div>
+									</div>`;
+							break;
+							default:
+								modalBodyText += `An error occurred!`; // should never occur
+							break;
+						}
+					} else { // permissionLevel == 4	
+						switch (userDisplayNameAndPermissionList[i].permissionId) {
+							case 1:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1" selected>Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4">Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 2:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2" selected>Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4">Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 3:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3" selected>Moderate</option>
+										<option value="4">Administrate</option>
+									</select>	
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							case 4:
+								modalBodyText += `<select class="custom-select" data-role="select">
+										<option value="1">Read</option>
+										<option value="2">Read+Write</option>
+										<option value="3">Moderate</option>
+										<option value="4" selected>Administrate</option>
+									</select>
+									<small id="adminCannotBeChanged_`+userDisplayNameAndPermissionList[i].userAccountId+`" style="display: none; color: red;">At least one administrator needs to exist.</small>`;
+							break;
+							default:
+								modalBodyText += `An error occurred!`; // should never occur
+							break;
+						}
+						modalBodyText += `
+									</div>
+									<div class="col-1" data-role="removeUserPermissionMediumCollection">
+										<button class="removePermission badge btn btn-sm btn-danger p-1 float-right" data-role="remove" data-userId="`+userDisplayNameAndPermissionList[i].userAccountId+`" data-listId="`+userDisplayNameAndPermissionList[i].permissionId+`">
+											<i class="fas fa-minus fa-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>`;
+					}
+				}
+				modalBodyText += `<div id="newPermissionContainer">
+					<hr>
+					<div class="row vertical-aligned" data-role="newPermission">
+						<div class="col-2">
+							<h6>Add user</h6>
+						</div>
+						<div class="col-5">
+							<input type="text" id="userAccountForNewPermission" class="form-control username" placeholder="Username" aria-label="Username">
+							<small id="userAccountDoesNotExistInfo" style="display: none; color: red;">This user name does not exist. Please check your spelling and try again.</small>
+							<small id="userAccountAlreadyInList" style="display: none; color: red;">This user already has a permission level.</small>
+							<small id="adminCanNotBeAddedInfo" style="display: none; color: red;">Admin can not be added.</small>
+						</div>
+						<div class="col-4">
+							<select class="custom-select" id="newAccessRightsSelect">
+								<option value="1" selected>Read</option>
+								<option value="2">Read+Write</option>`;
+				if (permissionLevel == 4) {	 // only admins can create mods and admins
+					modalBodyText += `<option value="3">Moderate</option>
+						<option value="4">Administrate</option>`;
+				}
+				modalBodyText += `</select>
+							</div>
+							<div class="col-1" data-role="newUserPermissionMediumCollection">
+								<button class="addNewPermission btn btn-sm btn-primary p-1 float-right" data-role="add" data-userId="0" data-listId="0">
+									<i class="fas fa-plus fa-fw"></i>
+								</button>
+							</div>
+						</div>
+						<div class="globalPermissionContainer">
+							<hr>
+							<div class="row vertical-aligned" data-role="globalUserPermission">
+								<fieldset>
+									<legend>You can grant all users access to this medium collection</legend>
+									<div id="globalPermission" class="radioButtonsHorizontalEvenlySpaced" data-role="select">
+										<label>
+											<input id="globalPermission_0" type="radio" name="globalPermissionMediumCollection" value="0"> No global access
+										</label>
+										<label>
+											<input id="globalPermission_1" type="radio" name="globalPermissionMediumCollection" value="1"> Read
+										</label>
+										<label>
+											<input id="globalPermission_2" type="radio" name="globalPermissionMediumCollection" value="2"> Read+Write
+										</label>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+				</div>`;
+				modal.find('.modal-body').html(modalBodyText);
+				if (mediumCollection.globalPermission == null) mediumCollection.globalPermission = 0;
+				$('#globalPermission_'+ mediumCollection.globalPermission).prop('checked', true);
+				modal.modal('show');
+			}
+			// TODO else show popup 'you have no rights'
+		},
+
 		mediumCollectionFormPublication: async function(collection) {
       // console.log("TCL ~ mediumCollectionFormPublication:function ~ collection", collection);
 			$('#mediumCollection-publication').trigger('reset');
@@ -741,6 +1092,10 @@
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-remove', async function(ev) {
+						if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						var row = $(this).parents('tr');
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
 						let mediumToRemove = $(row).data('medium');
@@ -749,6 +1104,10 @@
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-moveup', async function(event) {
+						if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						let row = $(this).parents('tr');
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
 						let mediumToMoveUp = $(row).data('medium');
@@ -770,6 +1129,10 @@
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-movedown', async function(event) {
+						if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						let row = $(this).parents('tr');
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
 						let mediumToMoveDown = $(row).data('medium');
@@ -997,7 +1360,7 @@
 				"rowId"					: 'id',
 				"serverSide"    : true,
 				"ajax"          : {
-					"url"        : "api/mediumCollection/list",
+					"url"        : "api/mediumCollection/list/"+'?authToken='+TIMAAT.Service.session.token,
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
 					"data"       : function(data) {
@@ -1045,8 +1408,9 @@
 					mediumCollectionElement.data('mediumCollection', mediumCollection);
 					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
-					mediumCollectionElement.on('click', '.title', function(event) {
+					mediumCollectionElement.on('click', '.title', async function(event) {
 						event.stopPropagation();
+						TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.id);
 						// show tag editor - trigger popup
 						TIMAAT.UI.hidePopups();
 						$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
@@ -1060,9 +1424,9 @@
 							case 'items':
 								TIMAAT.UI.displayDataSetContentContainer('mediumcollection-items-tab', 'mediumcollection-mediaItems', 'mediumCollection');
 							break;
-							case 'publication':
-								TIMAAT.UI.displayDataSetContentContainer('mediumcollection-publication-tab', 'mediumcollection-publication', 'mediumCollection');
-							break;
+							// case 'publication':
+							// 	TIMAAT.UI.displayDataSetContentContainer('mediumcollection-publication-tab', 'mediumcollection-publication', 'mediumCollection');
+							// break;
 						}
 						TIMAAT.UI.clearLastSelection('mediumCollection');
 						let index = TIMAAT.MediumCollectionDatasets.mediaCollectionList.findIndex(({model}) => model.id == mediumCollection.id);
@@ -1158,6 +1522,10 @@
 
 					mediumElement.find('.add-medium').on('click', medium, async function(ev) {
 						ev.stopPropagation();
+						if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						// if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
             // console.log("TCL: collection", collection);
@@ -1273,6 +1641,10 @@
 
 					mediumElement.find('.remove-medium').on('click', medium, function(ev) {
 						ev.stopPropagation();
+						if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
+							$('#mediumCollectionInsufficientPermissionModal').modal('show');
+							return;
+						}
 						// if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
             // console.log("TCL: collection", collection);

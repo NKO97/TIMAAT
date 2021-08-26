@@ -31,6 +31,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
@@ -107,7 +108,7 @@ public class EndpointAuthentication {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("permissionLevel/{mediumAnalysisListId}")
+	@Path("permissionLevelMediumAnalysisList/{mediumAnalysisListId}")
 	@Secured
 	public Response getMediumAnalysisListPermissionLevel(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
 																		 									 @QueryParam("authToken") String authToken) {
@@ -129,6 +130,38 @@ public class EndpointAuthentication {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		byte globalPermissionType = mediumAnalysisList.getGlobalPermission();
+		if ( permissionType < 1 && globalPermissionType < 1) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		} else {
+			int maxPermissionType = Math.max(permissionType, globalPermissionType);
+			return Response.ok().entity(maxPermissionType).build();
+		}
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("permissionLevelMediaCollection/{mediaCollectionId}")
+	@Secured
+	public Response getMediaCollectionPermissionLevel(@PathParam("mediaCollectionId") int mediaCollectionId,
+																		 								@QueryParam("authToken") String authToken) {
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
+		// admin account is always authorized
+		if (userId == 1) {
+			return Response.ok().entity(4).build();
+		}		
+		// check for permission level
+		int permissionType = EndpointUserAccount.getPermissionLevelForMediumCollection(userId, mediaCollectionId);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection mediaCollection = entityManager.find(MediaCollection.class, mediaCollectionId);
+		byte globalPermissionType = mediaCollection.getGlobalPermission();
 		if ( permissionType < 1 && globalPermissionType < 1) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		} else {

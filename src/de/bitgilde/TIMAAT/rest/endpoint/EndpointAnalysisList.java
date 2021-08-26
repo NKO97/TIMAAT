@@ -753,7 +753,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		// check for permission level
-		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2 && userId != 1) {
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 4 && userId != 1) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
     	

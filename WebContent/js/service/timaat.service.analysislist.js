@@ -577,7 +577,7 @@
       // console.log("TCL: isAuthorized);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/permissionLevel/"+mediumAnalysisListId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate/permissionLevelMediumAnalysisList/"+mediumAnalysisListId+"/"+'?authToken='+TIMAAT.Service.session.token,
 					type       : "POST",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
