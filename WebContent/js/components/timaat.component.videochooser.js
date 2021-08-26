@@ -47,7 +47,7 @@
 				this.loadCollections();
 			} 
 			if (TIMAAT.UI.component != 'videochooser') {
-				// this.dt.ajax.reload();
+				this.dt.columns.adjust().draw(); // fix: needed due to scrollX behavior in hidden elements
 				TIMAAT.UI.showComponent('videochooser');
 				$('#timaat-videochooser-collectionlibrary').trigger('click');
 			}
@@ -578,7 +578,7 @@
 						"last"    : "Letzte"
 					},
 				},				
-			});				
+			});
 		},
 		
 		setupMediaCollections: function(collections) {
