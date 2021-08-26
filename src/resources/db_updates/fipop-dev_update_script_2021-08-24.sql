@@ -1,4 +1,4 @@
-ALTER TABLE `FIPOP`.`media_collectiont` CHANGE `global_permission` `global_permission` TINYINT(2) NULL DEFAULT '0';
+ALTER TABLE `FIPOP`.`media_collection` CHANGE `global_permission` `global_permission` TINYINT(2) NULL DEFAULT '0';
 ALTER TABLE `FIPOP`.`media_collection` ADD `created_by_user_account_id` INT NOT NULL DEFAULT 1 AFTER `media_collection_type_id`;
 ALTER TABLE `FIPOP`.`media_collection` ADD `last_edited_by_user_account_id` INT NULL AFTER `created_by_user_account_id`;
 ALTER TABLE `FIPOP`.`media_collection` ADD `created_at` TIMESTAMP NOT NULL;
