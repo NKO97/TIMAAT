@@ -944,7 +944,8 @@ public class EndpointAnalysis {
 		Annotation annotation = entityManager.find(Annotation.class, annotationId);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
-		if ( analysisMethod== null ) return Response.status(Status.NOT_FOUND).build();
+		//* id can be 0 so that a unique new method will be created further below
+		if ( analysisMethodId > 0 && analysisMethod == null ) return Response.status(Status.NOT_FOUND).build(); // only return if existing analysisMethod was supposed to be found
 
 		// verify auth token
 		int userId = 0;

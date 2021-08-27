@@ -37,6 +37,7 @@
       	// console.log("TCL: addAnalysisMethodToAnalysis -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
@@ -58,6 +59,7 @@
 			}).done(function(data) {
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
@@ -81,6 +83,7 @@
       	// console.log("TCL: createAnalysisMethodVariant -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
@@ -126,6 +129,7 @@
       	// console.log("TCL: createAudioPostProduction -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
@@ -147,6 +151,7 @@
       	// console.log("TCL: deleteAudioPostProduction -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
@@ -170,6 +175,7 @@
       	// console.log("TCL: createAudioPostProductionTranslation -> data", data);
 				resolve(data);
 			}).fail(function(error) {
+				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
 		}).catch((error) => {
