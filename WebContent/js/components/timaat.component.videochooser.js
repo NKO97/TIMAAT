@@ -890,7 +890,7 @@
 
 		_addCollection: function(collection) {
 			var colelement = $(`<li id="timaat-videochooser-collection-`+collection.id+`" class="list-group-item list-group-item-action">
-			<i class="fas fa-folder"><span class="collection-title">`+collection.title+`</span></li>`);
+			<i class="fas fa-folder"></i><span class="collection-title"> `+collection.title+`</span></li>`);
 			
 			colelement.appendTo('#timaat-videochooser-collectionlist');
 			
