@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -101,7 +102,8 @@ public class MediaCollection implements Serializable {
 
 	// bi-directional many-to-one association to UserAccountHasMediaCollection
 	@OneToMany(mappedBy="mediaCollection")
-	@JsonManagedReference(value = "MediaCollection-UserAccountHasMediaCollection")
+	@JsonIgnore
+	// @JsonManagedReference(value = "MediaCollection-UserAccountHasMediaCollection")
 	private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
 
 	public MediaCollection() {
