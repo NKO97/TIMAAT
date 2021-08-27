@@ -900,10 +900,10 @@
 				TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediaLibrary/'+collection.id);
 			});
 
-			colelement.on('dblclick', function(ev) {
-				$('#timaat-videochooser-mediacollection-meta').data('mediacollection', collection);
-				$('#timaat-videochooser-mediacollection-meta').modal('show');
-			});
+			// colelement.on('dblclick', function(ev) {
+			// 	$('#timaat-videochooser-mediacollection-meta').data('mediacollection', collection);
+			// 	$('#timaat-videochooser-mediacollection-meta').modal('show');
+			// });
 			collection.ui = colelement;
 
 			// add to action target list
