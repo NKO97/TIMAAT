@@ -23,14 +23,12 @@ public class MediaTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-MediaTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediaType
 	@ManyToOne
-	@JsonIgnore
 	@JoinColumn(name="media_type_id")
-	// @JsonBackReference(value = "MediaType-MediaTypeTranslation")
+	@JsonIgnore
 	private MediaType mediaType;
 
 	public MediaTypeTranslation() {

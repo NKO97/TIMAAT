@@ -27,7 +27,6 @@ public class CitizenshipTranslation implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="citizenship_id")
 	@JsonIgnore
-	// @JsonBackReference(value = "Citizenship-CitizenshipTranslation") //? Jsonignore does NOT work here
 	private Citizenship citizenship;
 
 	//bi-directional many-to-one association to Language

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -34,10 +35,12 @@ public class Actor implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "Actor-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "Actor-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	@Column(name="created_at")
@@ -96,18 +99,18 @@ public class Actor implements Serializable {
 		)
 	private List<Role> roles;
 
-		//bi-directional many-to-many association to Medium_Image
-		@ManyToMany
-		@JoinTable(
-			name="actor_has_medium_image"
-			, joinColumns={
-				@JoinColumn(name="actor_id")
-				}
-			, inverseJoinColumns={
-				@JoinColumn(name="medium_image_medium_id")
-				}
-			)
-		private List<MediumImage> profileImages;
+	//bi-directional many-to-many association to Medium_Image
+	@ManyToMany
+	@JoinTable(
+		name="actor_has_medium_image"
+		, joinColumns={
+			@JoinColumn(name="actor_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="medium_image_medium_id")
+			}
+		)
+	private List<MediumImage> profileImages;
 
 	//bi-directional many-to-one association to ActorIsLocatedInCountry
 	// @OneToMany(mappedBy="actor")

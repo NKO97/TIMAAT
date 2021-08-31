@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -29,7 +30,7 @@ public class RoleGroupTranslation implements Serializable {
 	//bi-directional many-to-one association to RoleGroup
 	@ManyToOne
 	@JoinColumn(name="role_group_id")
-	@JsonBackReference(value = "RoleGroup-RoleGroupTranslation")
+	@JsonIgnore
 	private RoleGroup roleGroup;
 
 	public RoleGroupTranslation() {

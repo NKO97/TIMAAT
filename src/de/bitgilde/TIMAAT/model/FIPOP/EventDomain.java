@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 /**
  * The persistent class for the event_domain database table.
@@ -22,7 +24,7 @@ public class EventDomain implements Serializable {
 
 	//bi-directional many-to-one association to EventDomainTranslation
 	@OneToMany(mappedBy="eventDomain")
-	// @JsonManagedReference(value = "EventDomain-EventDomainTranslation")
+	@JsonManagedReference(value = "EventDomain-EventDomainTranslation")
 	private List<EventDomainTranslation> eventDomainTranslations;
 
 	//bi-directional many-to-many association to Event

@@ -658,10 +658,12 @@ public class EndpointMediumCollection {
 		if ( newCol == null ) return Response.status(Status.BAD_REQUEST).build();
 		// sanitize object data
 		newCol.setId(0);
-		// newCol.setMediaCollectionAlbum(null);
 		newCol.setMediaCollectionAnalysisLists(new ArrayList<MediaCollectionAnalysisList>());
 		newCol.setMediaCollectionHasMediums(new ArrayList<MediaCollectionHasMedium>());
-		newCol.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		newCol.setTags(null);
+		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		newCol.setCreatedAt(creationDate);
+		newCol.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			newCol.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newCol.setLastEditedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
@@ -669,12 +671,7 @@ public class EndpointMediumCollection {
 			// DEBUG do nothing - production system should abort with internal server error		
 			return Response.serverError().build();
 		}
-		newCol.setTags(null);
-		// newCol.setMediaCollectionSeries(null);
-		// newCol.setMediaCollectionType(entityManager.find(MediaCollectionType.class, 2)); // TODO refactor
-		// update log metadata
-		// TODO log not in model
-
+		
 		// persist mediacollection
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -754,12 +751,16 @@ public class EndpointMediumCollection {
 		if ( updatedCollection.getTitle() != null ) collection.setTitle(updatedCollection.getTitle());
 		if ( updatedCollection.getRemark() != null ) collection.setRemark(updatedCollection.getRemark());
 		collection.setGlobalPermission(updatedCollection.getGlobalPermission());
-		collection.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		List<Tag> oldTags = collection.getTags();
 		collection.setTags(updatedCollection.getTags());
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			collection.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		} else {
+			// DEBUG do nothing - production system should abort with internal server error
+			return Response.serverError().build();
+		}
+		collection.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 
-		// TODO update log metadata in general log
-		
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(collection);

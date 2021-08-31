@@ -64,13 +64,12 @@ public class Medium implements Serializable {
 	private String remark;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany(mappedBy = "mediums")
-	@JsonIgnore
-	private List<Annotation> annotations;
+	// @ManyToMany(mappedBy = "mediums")
+	// @JsonIgnore
+	// private List<Annotation> annotations;
 
 	//bi-directional many-to-one association to MediaCollectionHasMedium
 	@OneToMany(mappedBy="medium")
-	// @JsonBackReference(value = "Medium-MediaCollectionHasMedium")
 	@JsonIgnore
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
 	
@@ -127,6 +126,7 @@ public class Medium implements Serializable {
 	private MediumVideogame mediumVideogame;
 
 	//bi-directional many-to-many association to ActorHasRole
+	// @JsonIdentityReference(alwaysAsId = true)
 	@ManyToMany
 	@JoinTable(
 		name="medium_has_actor_with_role"
@@ -251,7 +251,7 @@ public class Medium implements Serializable {
 
 	//bi-directional many-to-one association to Source
 	@OneToMany(mappedBy="medium")
-	// @JsonManagedReference(value = "Medium-Source")
+	@JsonManagedReference(value = "Medium-Source")
 	private List<Source> sources;
 
 	@Transient
@@ -363,13 +363,13 @@ public class Medium implements Serializable {
 		this.remark = remark;
 	}
 
-	public List<Annotation> getAnnotations() {
-		return this.annotations;
-	}
+	// public List<Annotation> getAnnotations() {
+	// 	return this.annotations;
+	// }
 
-	public void setAnnotations(List<Annotation> annotations) {
-		this.annotations = annotations;
-	}
+	// public void setAnnotations(List<Annotation> annotations) {
+	// 	this.annotations = annotations;
+	// }
 
 	public List<MediaCollectionHasMedium> getMediaCollectionHasMediums() {
 		return this.mediaCollectionHasMediums;

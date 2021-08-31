@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -25,13 +26,11 @@ public class MediaCollectionType implements Serializable {
 
 	//bi-directional many-to-one association to MediaCollection
 	@OneToMany(mappedBy="mediaCollectionType")
-	// @JsonBackReference
 	@JsonIgnore
 	private List<MediaCollection> mediaCollections;
 
 	//bi-directional many-to-one association to MediaCollectionTypeTranslation
 	@OneToMany(mappedBy="mediaCollectionType")
-	// @JsonManagedReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
 	private List<MediaCollectionTypeTranslation> mediaCollectionTypeTranslations;
 
 	public MediaCollectionType() {

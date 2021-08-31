@@ -3,7 +3,6 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class Iri implements Serializable {
 	private String iri;
 
 	//bi-directional many-to-one association to Annotation
-	@JsonIgnore
 	@OneToMany(mappedBy="iri")
 	@JsonManagedReference(value = "Iri-Annotation")
 	private List<Annotation> annotations;
@@ -59,14 +57,14 @@ public class Iri implements Serializable {
 
 	public Annotation addAnnotation(Annotation annotation) {
 		getAnnotations().add(annotation);
-		annotation.setIri(this);
+		// annotation.setIri(this);
 
 		return annotation;
 	}
 
 	public Annotation removeAnnotation(Annotation annotation) {
 		getAnnotations().remove(annotation);
-		annotation.setIri(null);
+		// annotation.setIri(null);
 
 		return annotation;
 	}

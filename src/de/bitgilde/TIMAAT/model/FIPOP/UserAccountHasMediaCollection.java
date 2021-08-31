@@ -23,7 +23,7 @@ public class UserAccountHasMediaCollection implements Serializable {
 	//bi-directional many-to-one association to MediaCollection
 	@ManyToOne
 	@JoinColumn(name="media_collection_id")
-	// @JsonBackReference(value = "MediaCollection-UserAccountHasMediaCollection")
+	@JsonBackReference(value = "MediaCollection-UserAccountHasMediaCollection")
 	private MediaCollection mediaCollection;
 
 	//bi-directional many-to-one association to PermissionType

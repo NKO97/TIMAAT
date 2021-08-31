@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the uuid database table.
@@ -23,7 +25,7 @@ public class Uuid implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@OneToMany(mappedBy="uuid")
-//	@JsonManagedReference(value = "Uuid-Annotation")
+	@JsonIgnore
 	private List<Annotation> annotations;
 	
 	public Uuid() {

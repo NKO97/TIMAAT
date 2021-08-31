@@ -23,7 +23,7 @@ public class ActorActorRelationshipType implements Serializable {
 
 	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
 	@OneToMany(mappedBy="actorActorRelationshipType")
-	// @JsonManagedReference(value = "ActorActorRelationshipType-ActorActorRelationshipTypeTranslation")
+	@JsonManagedReference(value = "ActorActorRelationshipType-ActorActorRelationshipTypeTranslation")
 	private List<ActorActorRelationshipTypeTranslation> actorActorRelationshipTypeTranslations;
 
 	//bi-directional many-to-one association to ActorRelatesToActor

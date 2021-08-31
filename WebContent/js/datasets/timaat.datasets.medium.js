@@ -186,7 +186,8 @@
 
 			$('#medium-tab-metadata').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
 				TIMAAT.UI.displayDataSetContentArea('medium-metadata-form');
@@ -200,7 +201,8 @@
 
 			$('#medium-tab-preview').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
 				TIMAAT.UI.displayDataSetContentArea('medium-preview-form');
@@ -233,7 +235,8 @@
 			$('#timaat-mediadatasets-modal-delete-submit-button').on('click', async function(event) {
 				let modal = $('#timaat-mediadatasets-medium-delete');
 				let medium = modal.data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
         // console.log("TCL: $ -> type", type);
 				if (medium) {
 					try {	
@@ -271,7 +274,8 @@
 				if (!$('#medium-metadata-form').valid()) return false;
 
 				var medium = $('#medium-metadata-form').data('medium');
-				var type = $('#medium-metadata-form').data('type');	
+				// var type = $('#medium-metadata-form').data('type');	
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 
 				// create/edit medium window submitted data
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
@@ -694,7 +698,8 @@
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				medium = new TIMAAT.Medium(medium.model, type);
 				medium.listView.find('.timaat-medium-upload-file').click();
 			});
@@ -802,7 +807,8 @@
 		initTitles: function() {
 			$('#medium-tab-titles').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
 				TIMAAT.UI.displayDataSetContentArea('medium-titles-form');
@@ -1223,7 +1229,8 @@
 			// languagetrack tab click handling
 			$('#medium-tab-languagetracks').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
 				TIMAAT.UI.displayDataSetContentArea('medium-languagetracks-form');
@@ -1378,7 +1385,8 @@
 		initActorRoles: function() {
 			$('#medium-tab-actorwithroles').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				let type = $('#medium-metadata-form').data('type');
+				// let type = $('#medium-metadata-form').data('type');
+				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
 				TIMAAT.UI.displayDataSetContentArea('medium-actorwithroles-form');
@@ -2741,7 +2749,7 @@
 		},
 
 		updateMedium: async function(mediumSubtype, medium) {
-			// console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
+			console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
 			try { // update display title
 				var tempDisplayTitle = await TIMAAT.MediumService.updateTitle(medium.model.displayTitle);
         // console.log("tempDisplayTitle", tempDisplayTitle);
@@ -3103,7 +3111,7 @@
 		},
 
 		updateMediumModelData: async function(model, formDataObject) {
-    	// console.log("TCL: medium, formDataObject", medium, formDataObject);
+    	console.log("TCL: model, formDataObject", model, formDataObject);
 			// medium data
 			model.releaseDate = formDataObject.releaseDate;
 			model.recordingStartDate = formDataObject.recordingStartDate;

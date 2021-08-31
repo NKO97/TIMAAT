@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -23,13 +24,12 @@ public class MediumEventRelationshipTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-MediumEventRelationshipTypeTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to MediumEventRelationshipType
 	@ManyToOne
 	@JoinColumn(name="medium_event_relationship_type_id")
-	@JsonBackReference(value = "MediumEventRelationshipType-MediumEventRelationshipTypeTranslation")
+	@JsonIgnore
 	private MediumEventRelationshipType mediumEventRelationshipType;
 
 	public MediumEventRelationshipTypeTranslation() {

@@ -20,7 +20,6 @@ public class MediaCollectionHasMedium implements Serializable {
 	private MediaCollectionHasMediumPK id;
 
 	@ManyToOne
-	// @JsonManagedReference(value = "Medium-MediaCollectionHasMedium")
 	@JoinColumn(name="medium_id")
 	private Medium medium;
 

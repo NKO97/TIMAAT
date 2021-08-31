@@ -58,8 +58,7 @@ public class Category implements Serializable {
 
 	//bi-directional many-to-one association to CategorySetHasCategory
 	@OneToMany(mappedBy="category")
-	// @JsonIgnore
-	@JsonManagedReference(value = "Category-CategorySetHsCategory")
+	@JsonManagedReference(value = "Category-CategorySetHasCategory")
 	private Set<CategorySetHasCategory> categorySetHasCategories;
 
 	//bi-directional many-to-many association to Medium

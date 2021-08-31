@@ -26,7 +26,7 @@ public class MediumRelatesToEvent implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
-	@JsonBackReference(value = "Medium-MediumRelatesToEvent")
+	// @JsonBackReference(value = "Medium-MediumRelatesToEvent")
 	private Medium medium;
 
 	//bi-directional many-to-one association to MediumEventRelationshipType

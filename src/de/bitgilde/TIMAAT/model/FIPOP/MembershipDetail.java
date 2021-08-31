@@ -30,7 +30,7 @@ public class MembershipDetail implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@ManyToOne
-	@JsonBackReference(value = "ActorPersonIsMeMberOFActorCollectives-MemberShipDetails")
+	// @JsonBackReference(value = "ActorPersonIsMemberOFActorCollectives-MemberShipDetails")
 	@JoinColumns({
 		@JoinColumn(name="actor_person_actor_id", referencedColumnName="actor_person_actor_id"),
 		@JoinColumn(name="member_of_actor_collective_actor_id", referencedColumnName="member_of_actor_collective_actor_id")

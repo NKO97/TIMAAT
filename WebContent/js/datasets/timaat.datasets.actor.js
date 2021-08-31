@@ -269,7 +269,8 @@
 				if (!$('#actor-metadata-form').valid()) return false;
 
 				var actor = $('#actor-metadata-form').data('actor');
-				var type = $('#actor-metadata-form').data('type');	
+				// var type = $('#actor-metadata-form').data('type');	
+				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// create/Edit actor window submitted data
 				var formData = $('#actor-metadata-form').serializeArray();
@@ -4062,7 +4063,7 @@
 		},
 
 		updateActor: async function(actorSubtype, actor) {
-			// console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
+			console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
 				try {
 					// update birthname
 					if (actor.model.birthName) { // actor initially has no birth name set

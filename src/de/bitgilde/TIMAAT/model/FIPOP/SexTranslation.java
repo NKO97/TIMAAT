@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -23,12 +24,11 @@ public class SexTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-SexTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Sex
 	@ManyToOne
-	@JsonBackReference(value = "Sex-SexTranslation")
+	@JsonIgnore
 	private Sex sex;
 
 	public SexTranslation() {

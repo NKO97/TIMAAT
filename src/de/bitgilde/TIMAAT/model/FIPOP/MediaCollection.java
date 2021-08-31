@@ -102,8 +102,7 @@ public class MediaCollection implements Serializable {
 
 	// bi-directional many-to-one association to UserAccountHasMediaCollection
 	@OneToMany(mappedBy="mediaCollection")
-	@JsonIgnore
-	// @JsonManagedReference(value = "MediaCollection-UserAccountHasMediaCollection")
+	@JsonManagedReference(value = "MediaCollection-UserAccountHasMediaCollection")
 	private List<UserAccountHasMediaCollection> userAccountHasMediaCollections;
 
 	public MediaCollection() {

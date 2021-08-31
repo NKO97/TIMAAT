@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 /**
  * The persistent class for the event_type database table.
@@ -34,7 +36,7 @@ public class EventType implements Serializable {
 
 	//bi-directional many-to-one association to EventTypeTranslation
 	@OneToMany(mappedBy="eventType")
-	// @JsonManagedReference(value = "EventType-EventTypeTranslation")
+	@JsonManagedReference(value = "EventType-EventTypeTranslation")
 	private List<EventTypeTranslation> eventTypeTranslations;
 
 	public EventType() {

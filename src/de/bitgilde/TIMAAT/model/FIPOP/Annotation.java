@@ -22,10 +22,6 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Annotation.findAll", query="SELECT a FROM Annotation a")
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-property  = "id", 
-scope     = Annotation.class)
 public class Annotation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -53,6 +49,7 @@ public class Annotation implements Serializable {
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
+	@JsonManagedReference(value= "Annotation-Analysis")
 	private List<Analysis> analysis;
 	
 	//bi-directional many-to-one association to SegmentSelectorType
@@ -72,9 +69,9 @@ public class Annotation implements Serializable {
 	@JsonBackReference(value = "MediumAnalysisList-Annotation")
 	private MediumAnalysisList mediumAnalysisList;
 
-	@Transient
-	@JsonProperty("analysisListId")
-	private int analysisListId;
+	// @Transient
+	// @JsonProperty("analysisListId")
+	// private int analysisListId;
 	
 	// //bi-directional many-to-one association to MediumAnalysisList
 	// @ManyToOne
@@ -84,11 +81,13 @@ public class Annotation implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "Annotation-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "Annotation-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Uuid
@@ -162,22 +161,34 @@ public class Annotation implements Serializable {
 	// private List<IconclassCategory> iconclassCategories;
 
 	//bi-directional many-to-many association to Location
-	@ManyToMany(mappedBy="annotations")
-	@JsonIgnore
-	private List<Location> locations;
-
-	//bi-directional many-to-many association to Medium
 	@ManyToMany
 	@JoinTable(
-		name="annotation_has_medium"
+		name="annotation_has_location"
 		, inverseJoinColumns={
-			@JoinColumn(name="medium_id")
+			@JoinColumn(name="location_id")
 			}
 		, joinColumns={
 			@JoinColumn(name="annotation_id")
 			}
 		)
-	private List<Medium> mediums;
+	private List<Location> locations;
+	// @ManyToMany(mappedBy="annotations")
+	// @JsonIgnore
+	// private List<Location> locations;
+	
+
+	//bi-directional many-to-many association to Medium
+	// @ManyToMany
+	// @JoinTable(
+	// 	name="annotation_has_medium"
+	// 	, inverseJoinColumns={
+	// 		@JoinColumn(name="medium_id")
+	// 		}
+	// 	, joinColumns={
+	// 		@JoinColumn(name="annotation_id")
+	// 		}
+	// 	)
+	// private List<Medium> mediums;
 
 	//bi-directional many-to-many association to Motivation
 	// @ManyToMany(mappedBy="annotations")
@@ -415,13 +426,13 @@ public class Annotation implements Serializable {
 		this.locations = locations;
 	}
 
-	public List<Medium> getMediums() {
-		return this.mediums;
-	}
+	// public List<Medium> getMediums() {
+	// 	return this.mediums;
+	// }
 
-	public void setMediums(List<Medium> mediums) {
-		this.mediums = mediums;
-	}
+	// public void setMediums(List<Medium> mediums) {
+	// 	this.mediums = mediums;
+	// }
 
 	// public List<Motivation> getMotivations() {
 	// 	return this.motivations;
@@ -521,13 +532,13 @@ public class Annotation implements Serializable {
 		return selectorSvg;
 	}
 
-	public int getAnalysisListID() {
-		return analysisListId;
-	}
+	// public int getAnalysisListID() {
+	// 	return analysisListId;
+	// }
 
-	public void setAnalysisListID(int analysisListId) {
-		this.analysisListId = analysisListId;
-	}
+	// public void setAnalysisListID(int analysisListId) {
+	// 	this.analysisListId = analysisListId;
+	// }
 
 	// public List<SpatialSemanticsTypeActorPerson> getSpatialSemanticsTypeActorPersons() {
 	// 	return this.spatialSemanticsTypeActorPersons;

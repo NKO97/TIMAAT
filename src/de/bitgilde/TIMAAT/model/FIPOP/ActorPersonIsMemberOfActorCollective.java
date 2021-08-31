@@ -4,7 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 // import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,7 +39,7 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 
 	//bi-directional many-to-one association to MembershipDetail
 	@OneToMany(mappedBy="actorPersonIsMemberOfActorCollective")
-	@JsonManagedReference(value="ActorPersonIsMeMberOFActorCollectives-MemberShipDetails")
+	@JsonIgnore
 	private List<MembershipDetail> membershipDetails;
 
 	public ActorPersonIsMemberOfActorCollective() {

@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -30,16 +31,7 @@ public class Location implements Serializable {
 	private Timestamp lastEditedAt;
 
 	//bi-directional many-to-many association to Annotation
-	@ManyToMany
-	@JoinTable(
-		name="annotation_has_location"
-		, joinColumns={
-			@JoinColumn(name="location_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="annotation_id")
-			}
-		)
+	@ManyToMany(mappedBy="locations")
 	@JsonIgnore
 	private List<Annotation> annotations;
 
@@ -55,9 +47,10 @@ public class Location implements Serializable {
 	@OneToOne(mappedBy="location")
 	private County county;
 
+	// TODO m-n-relationship
 	//bi-directional many-to-one association to Event
 	@OneToMany(mappedBy="location")
-    @JsonManagedReference(value = "Location-Event")
+	@JsonManagedReference(value = "Location-Event")
 	private List<Event> events;
 
 	//bi-directional many-to-one association to Location
@@ -79,11 +72,13 @@ public class Location implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "Location-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "Location-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-one association to LocationTranslation

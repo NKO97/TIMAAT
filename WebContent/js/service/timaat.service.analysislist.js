@@ -53,7 +53,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: getMediumAnalysisLists -> data", data);
+					console.log("TCL: getMediumAnalysisLists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
@@ -75,7 +75,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					// console.log("TCL: getAnalysisList -> data", data);
+					console.log("TCL: getAnalysisList -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {

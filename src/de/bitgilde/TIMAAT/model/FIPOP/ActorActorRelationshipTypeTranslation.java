@@ -28,7 +28,6 @@ public class ActorActorRelationshipTypeTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-ActorActorRelationshipTypeTranslation")
 	private Language language;
 
 	public ActorActorRelationshipTypeTranslation() {

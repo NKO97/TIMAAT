@@ -17,23 +17,18 @@ public class MediaCollectionTypeTranslation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	// @GeneratedValue(strategy=GenerationType.IDENTITY)
-	// @Column(unique=true, nullable=false)
 	private int id;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @Column(name="language_id", nullable=false)
 	private Language language;
 
-	// @Column(nullable=false, length=45)
 	private String type;
 
 	//bi-directional many-to-one association to MediaCollectionType
 	@ManyToOne
 	@JoinColumn(name="media_collection_type_id", nullable=false)
 	@JsonIgnore
-	// @JsonBackReference(value = "MediaCollectionType-MediaCollectionTypeTranslation")
 	private MediaCollectionType mediaCollectionType;
 
 	public MediaCollectionTypeTranslation() {

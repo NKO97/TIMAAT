@@ -864,6 +864,7 @@ public class EndpointActor {
 			updatedActor = mapper.readValue(jsonData, Actor.class);
 		} catch (IOException e) {
 			System.out.println("EndpointActor: updateActor - IOException");
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedActor == null ) return Response.notModified().build();

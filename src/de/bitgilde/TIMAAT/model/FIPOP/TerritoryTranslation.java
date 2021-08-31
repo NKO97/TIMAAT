@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -23,12 +24,11 @@ public class TerritoryTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-TerritoryTranslation")
 	private Language language;
 
 	//bi-directional many-to-one association to Territory
 	@ManyToOne
-	@JsonBackReference(value = "Territory-TerritoryTranslation")
+	@JsonIgnore
 	private Territory territory;
 
 	public TerritoryTranslation() {

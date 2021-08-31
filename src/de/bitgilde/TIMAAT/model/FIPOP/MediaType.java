@@ -37,7 +37,6 @@ public class MediaType implements Serializable {
 
 	//bi-directional many-to-one association to MediaTypeTranslation
 	@OneToMany(mappedBy="mediaType")
-	// @JsonManagedReference(value = "MediaType-MediaTypeTranslation")
 	private List<MediaTypeTranslation> mediaTypeTranslations;
 
 	//bi-directional many-to-one association to Medium

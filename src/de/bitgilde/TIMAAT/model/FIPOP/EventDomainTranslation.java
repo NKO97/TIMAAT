@@ -29,7 +29,6 @@ public class EventDomainTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	// @JsonBackReference(value = "Language-EventDomainTranslation")
 	private Language language;
 
 	public EventDomainTranslation() {

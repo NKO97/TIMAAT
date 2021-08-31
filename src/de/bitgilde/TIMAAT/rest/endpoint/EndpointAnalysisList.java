@@ -428,15 +428,6 @@ public class EndpointAnalysisList {
 		// sanitize object data
 		newList.setId(0);
 		newList.setMedium(medium);
-		// update log metadata
-		newList.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newList.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
-			newList.setLastEditedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
-		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
-			return Response.serverError().build();
-		}
 		newList.setAnalysisSegments(new ArrayList<AnalysisSegment>());
 		newList.setAnnotations(new ArrayList<Annotation>());
 		newList.getMediumAnalysisListTranslations().get(0).setId(0);
@@ -449,6 +440,10 @@ public class EndpointAnalysisList {
 			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
+		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		newList.setCreatedAt(creationDate);
+		newList.setLastEditedAt(creationDate);
+		
 		// persist analysislist and polygons
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -703,14 +698,13 @@ public class EndpointAnalysisList {
 		mediumAnalysisList.setTags(updatedList.getTags());
 		mediumAnalysisList.setGlobalPermission(updatedList.getGlobalPermission());
 		
-		// TODO update log metadata in general log
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			mediumAnalysisList.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			mediumAnalysisList.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
+		mediumAnalysisList.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();

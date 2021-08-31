@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LocationType implements Serializable {
 
 	//bi-directional many-to-one association to LocationTypeTranslation
 	@OneToMany(mappedBy="locationType")
-	// @JsonManagedReference(value = "LocationType-LocationTypeTranslation")
+	@JsonManagedReference(value = "LocationType-LocationTypeTranslation")
 	private List<LocationTypeTranslation> locationTypeTranslations;
 
 	public LocationType() {

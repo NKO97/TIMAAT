@@ -1,6 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 
@@ -30,6 +33,7 @@ public class Analysis implements Serializable {
 
 	//bi-directional many-to-one association to Annotation
 	@ManyToOne
+	@JsonBackReference(value= "Annotation-Analysis")
 	private Annotation annotation;
 
 	public Analysis() {

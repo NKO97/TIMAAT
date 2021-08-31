@@ -42,6 +42,7 @@ public class Event implements Serializable {
 	@JsonIgnore
 	private List<Annotation> annotations;
 
+	// TODO m-n-relationship
 	//bi-directional many-to-one association to Location
 	@ManyToOne
 	@JsonBackReference(value = "Location-Event")
@@ -50,11 +51,13 @@ public class Event implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
+	@JsonBackReference(value = "Event-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
+	@JsonBackReference(value = "Event-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
 
 	//bi-directional many-to-many association to ActorHasRole
@@ -106,7 +109,7 @@ public class Event implements Serializable {
 
 	//bi-directional many-to-one association to EventTranslation
 	@OneToMany(mappedBy="event")
-	// @JsonManagedReference(value = "Event-EventTranslation")
+	@JsonManagedReference(value = "Event-EventTranslation")
 	private List<EventTranslation> eventTranslations;
 
 	//bi-directional many-to-one association to MediumRelatesToEvent

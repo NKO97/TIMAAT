@@ -23,13 +23,12 @@ public class CategorySetHasCategory implements Serializable {
 
 	//bi-directional many-to-one association to Category
 	@ManyToOne
-	@JsonBackReference(value = "Category-CategorySetHsCategory")
+	@JsonBackReference(value = "Category-CategorySetHasCategory")
 	@JoinColumn(name="category_id")
 	private Category category;
 
 	//bi-directional many-to-one association to CategorySet
 	@ManyToOne
-	// @JsonIgnore
 	@JsonBackReference(value = "CategorySet-CategorySetHasCategory")
 	@JoinColumn(name="category_set_id")
 	private CategorySet categorySet;
