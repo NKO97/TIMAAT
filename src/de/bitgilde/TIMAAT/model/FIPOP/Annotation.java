@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -84,11 +85,19 @@ public class Annotation implements Serializable {
 	@JsonBackReference(value = "Annotation-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
+	@Transient
+	@JsonProperty("createdByUserAccountId")
+	private int createdByUserAccountId;
+
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
 	@JsonBackReference(value = "Annotation-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
+
+	@Transient
+	@JsonProperty("lastEditedByUserAccountId")
+	private int lastEditedByUserAccountId;
 
 	//bi-directional many-to-one association to Uuid
 	@ManyToOne
@@ -346,12 +355,21 @@ public class Annotation implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
+	public int getCreatedByUserAccountId() {
+		return this.getCreatedByUserAccount().getId();
+	}
+
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public int getLastEditedByUserAccountId() {
+		if (Objects.isNull(this.getLastEditedByUserAccount())) return 0;
+		return this.getLastEditedByUserAccount().getId();
 	}
 
 	public Uuid getUuid() {

@@ -175,6 +175,7 @@ public class EndpointMedium {
 				String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
 				switch (type) {
 					case "video":
+					case "image":
 						// strip analysis lists for faster response --> get lists via EndpointAnalysisList
 						medium.getMediumAnalysisLists().clear();
 					break;
@@ -206,6 +207,7 @@ public class EndpointMedium {
 			String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
 			switch (type) {
 				case "video":
+				case "image":
 					// strip analysis lists for faster response --> get lists via EndpointAnalysisList
 					medium.getMediumAnalysisLists().clear();
 				break;
@@ -408,8 +410,7 @@ public class EndpointMedium {
 	@Path("mediatype/list")
 	public Response getMediatypeList() {
 		// System.out.println("EndpointMedium: getMediaTypeList");		
-		@SuppressWarnings("unchecked")
-		List<MediaType> mediaTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList();
+		List<MediaType> mediaTypeList = castList(MediaType.class,TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList());
 		return Response.ok().entity(mediaTypeList).build();
 	}
 

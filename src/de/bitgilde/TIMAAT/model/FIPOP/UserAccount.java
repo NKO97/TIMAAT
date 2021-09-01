@@ -118,24 +118,24 @@ public class UserAccount implements Serializable {
 	@JsonManagedReference(value = "Location-LastEditedByUserAccount")
 	private List<Location> locationsLastEditedByUserAccount;
 
-	//bi-directional many-to-one association to MediaCollectionAnalysisList
-	// @OneToMany(mappedBy="createdByUserAccount")
-	// @JsonIgnore
-	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists1;
+	// bi-directional many-to-one association to MediaCollectionAnalysisList
+	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonIgnore
+	private List<MediaCollectionAnalysisList> mediaCollectionAnalysisListsCreatedByUserAccount;
 
-	//bi-directional many-to-one association to MediaCollectionAnalysisList
-	// @OneToMany(mappedBy="lastEditedByUserAccount")
-	// @JsonIgnore
-	// private List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists2;
+	// bi-directional many-to-one association to MediaCollectionAnalysisList
+	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonIgnore
+	private List<MediaCollectionAnalysisList> mediaCollectionAnalysisListsLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="createdByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "Medium-CreatedByUserAccount")
 	private List<Medium> mediaCreatedByUserAccount;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="lastEditedByUserAccount")
-	@JsonIgnore
+	@JsonManagedReference(value = "Medium-LastEditedByUserAccount")
 	private List<Medium> mediaLastEditedByUserAccount;
 
 	//bi-directional many-to-one association to MediumAnalysisList
@@ -576,49 +576,49 @@ public class UserAccount implements Serializable {
 		return locationsLastEditedByUserAccount;
 	}
 
-	// public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists1() {
-	// 	return this.mediaCollectionAnalysisLists1;
-	// }
+	public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists1() {
+		return this.mediaCollectionAnalysisListsCreatedByUserAccount;
+	}
 
-	// public void setMediaCollectionAnalysisLists1(List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists1) {
-	// 	this.mediaCollectionAnalysisLists1 = mediaCollectionAnalysisLists1;
-	// }
+	public void setMediaCollectionAnalysisLists1(List<MediaCollectionAnalysisList> mediaCollectionAnalysisListsCreatedByUserAccount) {
+		this.mediaCollectionAnalysisListsCreatedByUserAccount = mediaCollectionAnalysisListsCreatedByUserAccount;
+	}
 
-	// public MediaCollectionAnalysisList addMediaCollectionAnalysisLists1(MediaCollectionAnalysisList mediaCollectionAnalysisLists1) {
-	// 	getMediaCollectionAnalysisLists1().add(mediaCollectionAnalysisLists1);
-	// 	mediaCollectionAnalysisLists1.setCreatedByUserAccount(this);
+	public MediaCollectionAnalysisList addMediaCollectionAnalysisLists1(MediaCollectionAnalysisList mediaCollectionAnalysisListsCreatedByUserAccount) {
+		getMediaCollectionAnalysisLists1().add(mediaCollectionAnalysisListsCreatedByUserAccount);
+		mediaCollectionAnalysisListsCreatedByUserAccount.setCreatedByUserAccount(this);
 
-	// 	return mediaCollectionAnalysisLists1;
-	// }
+		return mediaCollectionAnalysisListsCreatedByUserAccount;
+	}
 
-	// public MediaCollectionAnalysisList removeMediaCollectionAnalysisLists1(MediaCollectionAnalysisList mediaCollectionAnalysisLists1) {
-	// 	getMediaCollectionAnalysisLists1().remove(mediaCollectionAnalysisLists1);
-	// 	mediaCollectionAnalysisLists1.setCreatedByUserAccount(null);
+	public MediaCollectionAnalysisList removeMediaCollectionAnalysisLists1(MediaCollectionAnalysisList mediaCollectionAnalysisListsCreatedByUserAccount) {
+		getMediaCollectionAnalysisLists1().remove(mediaCollectionAnalysisListsCreatedByUserAccount);
+		mediaCollectionAnalysisListsCreatedByUserAccount.setCreatedByUserAccount(null);
 
-	// 	return mediaCollectionAnalysisLists1;
-	// }
+		return mediaCollectionAnalysisListsCreatedByUserAccount;
+	}
 
-	// public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists2() {
-	// 	return this.mediaCollectionAnalysisLists2;
-	// }
+	public List<MediaCollectionAnalysisList> getMediaCollectionAnalysisLists2() {
+		return this.mediaCollectionAnalysisListsLastEditedByUserAccount;
+	}
 
-	// public void setMediaCollectionAnalysisLists2(List<MediaCollectionAnalysisList> mediaCollectionAnalysisLists2) {
-	// 	this.mediaCollectionAnalysisLists2 = mediaCollectionAnalysisLists2;
-	// }
+	public void setMediaCollectionAnalysisLists2(List<MediaCollectionAnalysisList> mediaCollectionAnalysisListsLastEditedByUserAccount) {
+		this.mediaCollectionAnalysisListsLastEditedByUserAccount = mediaCollectionAnalysisListsLastEditedByUserAccount;
+	}
 
-	// public MediaCollectionAnalysisList addMediaCollectionAnalysisLists2(MediaCollectionAnalysisList mediaCollectionAnalysisLists2) {
-	// 	getMediaCollectionAnalysisLists2().add(mediaCollectionAnalysisLists2);
-	// 	mediaCollectionAnalysisLists2.setLastEditedByUserAccount(this);
+	public MediaCollectionAnalysisList addMediaCollectionAnalysisLists2(MediaCollectionAnalysisList mediaCollectionAnalysisListsLastEditedByUserAccount) {
+		getMediaCollectionAnalysisLists2().add(mediaCollectionAnalysisListsLastEditedByUserAccount);
+		mediaCollectionAnalysisListsLastEditedByUserAccount.setLastEditedByUserAccount(this);
 
-	// 	return mediaCollectionAnalysisLists2;
-	// }
+		return mediaCollectionAnalysisListsLastEditedByUserAccount;
+	}
 
-	// public MediaCollectionAnalysisList removeMediaCollectionAnalysisLists2(MediaCollectionAnalysisList mediaCollectionAnalysisLists2) {
-	// 	getMediaCollectionAnalysisLists2().remove(mediaCollectionAnalysisLists2);
-	// 	mediaCollectionAnalysisLists2.setLastEditedByUserAccount(null);
+	public MediaCollectionAnalysisList removeMediaCollectionAnalysisLists2(MediaCollectionAnalysisList mediaCollectionAnalysisListsLastEditedByUserAccount) {
+		getMediaCollectionAnalysisLists2().remove(mediaCollectionAnalysisListsLastEditedByUserAccount);
+		mediaCollectionAnalysisListsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
-	// 	return mediaCollectionAnalysisLists2;
-	// }
+		return mediaCollectionAnalysisListsLastEditedByUserAccount;
+	}
 
 	public List<Medium> getMediums1() {
 		return this.mediaCreatedByUserAccount;

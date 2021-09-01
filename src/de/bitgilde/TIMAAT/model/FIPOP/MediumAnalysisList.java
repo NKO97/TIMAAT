@@ -4,12 +4,12 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -83,11 +83,19 @@ public class MediumAnalysisList implements Serializable {
 	@JsonBackReference(value = "MediumAnalysisList-CreatedByUserAccount")
 	private UserAccount createdByUserAccount;
 
+	@Transient
+	@JsonProperty("created_by_user_account_id")
+	private int createdByUserAccountId;
+
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="last_edited_by_user_account_id")
 	@JsonBackReference(value = "MediumAnalysisList-LastEditedByUserAccount")
 	private UserAccount lastEditedByUserAccount;
+
+	@Transient
+	@JsonProperty("last_edited_by_user_account_id")
+	private int lastEditedByUserAccountId;
 
 	//bi-directional many-to-many association to Tag
 	@ManyToMany
@@ -227,12 +235,21 @@ public class MediumAnalysisList implements Serializable {
 		this.createdByUserAccount = createdByUserAccount;
 	}
 
+	public int getCreatedByUserAccountId() {
+		return this.getCreatedByUserAccount().getId();
+	}
+
 	public UserAccount getLastEditedByUserAccount() {
 		return this.lastEditedByUserAccount;
 	}
 
 	public void setLastEditedByUserAccount(UserAccount lastEditedByUserAccount) {
 		this.lastEditedByUserAccount = lastEditedByUserAccount;
+	}
+
+	public int getLastEditedByUserAccountId() {
+		if (Objects.isNull(this.getLastEditedByUserAccount())) return 0;
+		return this.getLastEditedByUserAccount().getId();
 	}
 
 	public List<Tag> getTags() {

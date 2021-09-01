@@ -35,6 +35,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});			
 		},
 
@@ -51,8 +52,8 @@
 				callback(data);
 			})
 			.fail(function(error) {
-				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});			
 		},
 
@@ -72,6 +73,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});
 			
 		},
@@ -96,6 +98,7 @@
 				}).done(function(locationData) {
 					resolve(locationData);
 				}).fail(function(error) {
+					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
@@ -117,8 +120,9 @@
 				}).done(function(translationData) {
 					resolve(translationData);
 				}).fail(function(error) {
-					console.error( "error: ", error.responseText );
-				});
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+			});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
 			});
@@ -138,7 +142,8 @@
 				}).done(function(subtypeData) {
 						resolve(subtypeData);
 				}).fail(function(error) {
-					console.error( "error: ", error.responseText );
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
