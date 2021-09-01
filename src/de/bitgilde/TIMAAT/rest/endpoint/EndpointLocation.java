@@ -2,6 +2,8 @@ package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
@@ -61,12 +63,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("list")
 	public Response getLocationList() {
-
-		@SuppressWarnings("unchecked")
-		List<Location> locationList = TIMAATApp.emf.createEntityManager().createNamedQuery("Location.findAll").getResultList();
-
+		List<Location> locationList = castList(Location.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Location.findAll").getResultList());
 		return Response.ok().entity(locationList).build();
-
 	}
 
 	@GET
@@ -74,12 +72,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("locationtype/list")
 	public Response getLocationTypeList() {
-
-		@SuppressWarnings("unchecked")
-		List<LocationType> locationTypeList = TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList();
-
+		List<LocationType> locationTypeList = castList(LocationType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList());
 		return Response.ok().entity(locationTypeList).build();
-
 	}
 
 	@GET
@@ -87,12 +81,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("country/list")
 	public Response getCountryList() {
-
-		@SuppressWarnings("unchecked")
-		List<Country> countryList = TIMAATApp.emf.createEntityManager().createNamedQuery("Country.findAll").getResultList();
-
+		List<Country> countryList = castList(Country.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Country.findAll").getResultList());
 		return Response.ok().entity(countryList).build();
-		
 	}
 	
 	@GET
@@ -100,12 +90,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("province/list")
 	public Response getProvinceList() {
-
-		@SuppressWarnings("unchecked")
-		List<Province> provinceList = TIMAATApp.emf.createEntityManager().createNamedQuery("Province.findAll").getResultList();
-
+		List<Province> provinceList = castList(Province.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Province.findAll").getResultList());
 		return Response.ok().entity(provinceList).build();
-
 	}
 
 	@GET
@@ -113,12 +99,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("county/list")
 	public Response getCountyList() {
-
-		@SuppressWarnings("unchecked")
-		List<County> countyList = TIMAATApp.emf.createEntityManager().createNamedQuery("County.findAll").getResultList();
-
+		List<County> countyList = castList(County.class, TIMAATApp.emf.createEntityManager().createNamedQuery("County.findAll").getResultList());
 		return Response.ok().entity(countyList).build();
-
 	}
 
 	@GET
@@ -126,12 +108,8 @@ public class EndpointLocation {
 	@Secured
 	@Path("city/list")
 	public Response getCityList() {
-
-		@SuppressWarnings("unchecked")
-		List<City> cityList = TIMAATApp.emf.createEntityManager().createNamedQuery("City.findAll").getResultList();
-
+		List<City> cityList = castList(City.class, TIMAATApp.emf.createEntityManager().createNamedQuery("City.findAll").getResultList());
 		return Response.ok().entity(cityList).build();
-
 	}
 
 	@GET
@@ -139,16 +117,12 @@ public class EndpointLocation {
 	@Secured
 	@Path("street/list")
 	public Response getStreetList() {
-
-		@SuppressWarnings("unchecked")
-		List<Street> streetList = TIMAATApp.emf.createEntityManager().createNamedQuery("Street.findAll").getResultList();
-
+		List<Street> streetList = castList(Street.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Street.findAll").getResultList());
 		return Response.ok().entity(streetList).build();
-
 	}
 
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
 	public Response getLocation(@PathParam("id") int id) {
@@ -175,65 +149,53 @@ public class EndpointLocation {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("all")
 	public Response getAllLocations() {
-
 		System.out.println("EndpointLocation: getAllLocations");
 		List<Location> locations = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
-			locations = (List<Location>) entityManager.createQuery("SELECT l from Location l")
-						.getResultList();
+			locations = castList(Location.class, entityManager.createQuery("SELECT l from Location l")
+						.getResultList());
 		} catch(Exception e) {};
-
 		return Response.ok().entity(locations).build();
-
 	}
 
-	@SuppressWarnings("unchecked")
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("locationtype/all")
 	public Response getAllLocationTypes() {
-
 		System.out.println("EndpointLocation: getAllLocations");
 		List<LocationType> locationTypes = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
-			locationTypes = (List<LocationType>) entityManager.createQuery("SELECT lt from LocationType lt")
-						.getResultList();
+			locationTypes = castList(LocationType.class, entityManager.createQuery("SELECT lt from LocationType lt")
+						.getResultList());
 		} catch(Exception e) {};
-
 		return Response.ok().entity(locationTypes).build();
-
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("country/all")
 	public Response getAllCountries() {
-
 		List<Country> countries = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
-			countries = (List<Country>) entityManager.createQuery("SELECT c from Country c")
-				.getResultList();
+			countries = castList(Country.class, entityManager.createQuery("SELECT c from Country c")
+				.getResultList());
 		} catch(Exception e) {};	 	
-
 		return Response.ok().entity(countries).build();
-
 	}
 
 	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response createLocation(@PathParam("id") int id, String jsonData) {
@@ -286,8 +248,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response updateLocation(@PathParam("id") int id, String jsonData) {
@@ -335,7 +297,7 @@ public class EndpointLocation {
 	}
 
 	@DELETE
-		@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
 	public Response deleteLocation(@PathParam("id") int id) {   
@@ -483,8 +445,8 @@ public class EndpointLocation {
 	}
 
 	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("country/{id}")
 	@Secured
 	public Response createCountry(@PathParam("id") int id, String jsonData) {
@@ -528,8 +490,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("country/{id}")
 	@Secured
 	public Response updateCountry(@PathParam("id") int id, String jsonData) {
@@ -658,8 +620,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-		@Produces(MediaType.APPLICATION_JSON)
-		@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("province/{id}")
 	@Secured
 	public Response updateProvince(@PathParam("id") int id, String jsonData) {
@@ -738,8 +700,8 @@ public class EndpointLocation {
 	}
 
 	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("county/{id}")
 	@Secured
 	public Response createCounty(@PathParam("id") int id, String jsonData) {
@@ -783,8 +745,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("county/{id}")
 	@Secured
 	public Response updateCounty(@PathParam("id") int id, String jsonData) {
@@ -863,8 +825,8 @@ public class EndpointLocation {
 	}
 
 	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("city/{id}")
 	@Secured
 	public Response createCity(@PathParam("id") int id, String jsonData) {
@@ -908,8 +870,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("city/{id}")
 	@Secured
 	public Response updateCity(@PathParam("id") int id, String jsonData) {
@@ -988,8 +950,8 @@ public class EndpointLocation {
 	}
 
 	@POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("street/{id}")
 	@Secured
 	public Response createStreet(@PathParam("id") int id, String jsonData) {
@@ -1033,8 +995,8 @@ public class EndpointLocation {
 	}
 
 	@PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
 	@Path("street/{id}")
 	@Secured
 	public Response updateStreet(@PathParam("id") int id, String jsonData) {
@@ -1112,4 +1074,10 @@ public class EndpointLocation {
 
 	}
 
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+    List<T> r = new ArrayList<T>(c.size());
+    for(Object o: c)
+      r.add(clazz.cast(o));
+    return r;
+	}
 }

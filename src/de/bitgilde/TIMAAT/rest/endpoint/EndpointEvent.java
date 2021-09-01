@@ -156,7 +156,6 @@ public class EndpointEvent {
 		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, eventList)).build();
   }
 
-	@SuppressWarnings("unchecked")
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -166,14 +165,12 @@ public class EndpointEvent {
 		List<Event> events = null;    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
-			events = (List<Event>) entityManager.createQuery("SELECT e from Event e")
-				.getResultList();
+			events = castList(Event.class,entityManager.createQuery("SELECT e from Event e").getResultList());
 		} catch(Exception e) {};	
 		if ( events != null ) {
 			List<Tag> tags = null;
 				try {
-					tags = (List<Tag>) entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Event e WHERE e.tags = t)")
-								.getResultList();
+					tags = castList(Tag.class, entityManager.createQuery("SELECT t from Tag t WHERE NOT EXISTS ( SELECT NULL FROM Event e WHERE e.tags = t)").getResultList());
 				} catch(Exception e) {};
 			if ( tags != null ) {
 				Event emptyEvent = new Event();

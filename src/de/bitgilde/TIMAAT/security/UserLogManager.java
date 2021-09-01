@@ -1,6 +1,8 @@
 package de.bitgilde.TIMAAT.security;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
@@ -162,7 +164,6 @@ public class UserLogManager {
 		return new UserLogManager();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<UserLog> getLogForUser(int id, int limit) {
 		
 		List<UserLog> log = null;
@@ -174,11 +175,11 @@ public class UserLogManager {
     	
     	limit = 12; // TODO implement
 
-    	log = (List<UserLog>) TIMAATApp.emf.createEntityManager()
+    	log = castList(UserLog.class, TIMAATApp.emf.createEntityManager()
 				.createQuery("SELECT ul FROM UserLog ul WHERE ul.userAccount.id=:id ORDER BY ul.dateTime DESC")
 				.setParameter("id", id)
 				.setMaxResults(limit)
-				.getResultList();
+				.getResultList());
 				
 		return log;		
 	}
@@ -201,6 +202,13 @@ public class UserLogManager {
     		e.printStackTrace();
     		// TODO implement error handling of log
     	}
+	}
+
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+    List<T> r = new ArrayList<T>(c.size());
+    for(Object o: c)
+      r.add(clazz.cast(o));
+    return r;
 	}
 	
 }

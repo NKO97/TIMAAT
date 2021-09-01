@@ -2877,7 +2877,6 @@ public class EndpointActor {
 		return Response.ok().build();
 	}
 
-	// @SuppressWarnings("unchecked")
 	// @POST
   //   @Produces(MediaType.APPLICATION_JSON)
 	// @Path("{id}/tag/{name}") // 	@Path("actor/{id}/tag/{name}")
@@ -2958,6 +2957,6 @@ public class EndpointActor {
     for(Object o: c)
       r.add(clazz.cast(o));
     return r;
-}
+	}
 	
 }
