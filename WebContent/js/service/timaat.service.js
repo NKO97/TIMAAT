@@ -51,8 +51,8 @@
 					resolve(data);
 				}).fail(function(error) {
 					// resolve(null);
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -117,8 +117,8 @@
 					resolve(data);
 				}).fail(function(error) {
 					// resolve(null);
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -184,12 +184,13 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});
 		},
 
 		getUserDisplayName: function(id, callback) {
       // console.log("TCL: getUserDisplayName: function(id, callback)");
-			// console.log("TCL: id, callback", id, callback);
+			console.log("TCL: getUserDisplayName: id, callback", id, callback);
 			jQuery.ajax({
 				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/displayName",
 				type       : "GET",
@@ -203,6 +204,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});
 		},
 
@@ -220,8 +222,8 @@
 					console.log("TCL: displayNameExists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -242,8 +244,8 @@
 					console.log("TCL: displayNameExists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -264,8 +266,8 @@
 					console.log("TCL: displayNameExists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
-					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
 				});	
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -288,6 +290,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});		
 		},
 
@@ -307,6 +310,7 @@
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
+				console.error("ERROR responseText: ", error.responseText);
 			});
 			
 		},

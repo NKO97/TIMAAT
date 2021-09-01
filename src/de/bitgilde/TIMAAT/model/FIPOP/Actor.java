@@ -41,7 +41,7 @@ public class Actor implements Serializable {
 	private UserAccount createdByUserAccount;
 
 	@Transient
-	@JsonProperty("created_by_user_account_id")
+	@JsonProperty("createdByUserAccountId")
 	private int createdByUserAccountId;
 
 	@ManyToOne
@@ -50,7 +50,7 @@ public class Actor implements Serializable {
 	private UserAccount lastEditedByUserAccount;
 
 	@Transient
-	@JsonProperty("last_edited_by_user_account_id")
+	@JsonProperty("lastEditedByUserAccountId")
 	private int lastEditedByUserAccountId;
 
 	@Column(name="created_at")

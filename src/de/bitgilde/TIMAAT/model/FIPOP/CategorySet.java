@@ -51,7 +51,7 @@ public class CategorySet implements Serializable {
 	private UserAccount createdByUserAccount;
 
 	@Transient
-	@JsonProperty("created_by_user_account_id")
+	@JsonProperty("createdByUserAccountId")
 	private int createdByUserAccountId;
 
 	//bi-directional many-to-one association to UserAccount
@@ -61,7 +61,7 @@ public class CategorySet implements Serializable {
 	private UserAccount lastEditedByUserAccount;
 
 	@Transient
-	@JsonProperty("last_edited_by_user_account_id")
+	@JsonProperty("lastEditedByUserAccountId")
 	private int lastEditedByUserAccountId;
 
 

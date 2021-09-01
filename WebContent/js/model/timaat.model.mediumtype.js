@@ -59,15 +59,15 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (mediaType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccount.id+'">[ID '+mediaType.model.createdByUserAccount.id+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccount.id+'">[ID '+mediaType.model.createdByUserAccount.id+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+mediaType.model.lastEditedByUserAccount.id+'">[ID '+mediaType.model.lastEditedByUserAccount.id+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+mediaType.model.lastEditedByUserAccountId+'">[ID '+mediaType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.lastEditedAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});

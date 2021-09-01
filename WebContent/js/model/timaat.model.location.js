@@ -61,15 +61,15 @@
 						// console.log("TCL: Location -> constructor -> location", location);
 						if (location.model.lastEditedAt == null) {
 							$('.timaat-user-log-details').html(
-								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
+								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+location.model.createdByUserAccountId+'">[ID '+location.model.createdByUserAccountId+']</span></b><br>\
 								'+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>'
 							);
 							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 						} else {
 							$('.timaat-user-log-details').html(
-									'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+location.model.createdByUserAccount.id+'">[ID '+location.model.createdByUserAccount.id+']</span></b><br>\
+									'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+location.model.createdByUserAccountId+'">[ID '+location.model.createdByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(location.model.createdAt)+'<br>\
-									<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+location.model.lastEditedByUserAccount.id+'">[ID '+location.model.lastEditedByUserAccount.id+']</span></b><br>\
+									<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+location.model.lastEditedByUserAccountId+'">[ID '+location.model.lastEditedByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(location.model.lastEditedAt)+'<br>'
 							);
 							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});

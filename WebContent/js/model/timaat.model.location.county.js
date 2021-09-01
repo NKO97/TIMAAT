@@ -59,15 +59,15 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (county.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccount.id+'">[ID '+county.model.location.createdByUserAccount.id+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccount.id+'">[ID '+county.model.location.createdByUserAccount.id+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+county.model.location.lastEditedByUserAccount.id+'">[ID '+county.model.location.lastEditedByUserAccount.id+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+county.model.location.lastEditedByUserAccountId+'">[ID '+county.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(county.model.location.lastEditedAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});

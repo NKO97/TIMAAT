@@ -60,15 +60,15 @@
 				// console.log("TCL: Country -> constructor -> country", country);
 				if (country.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccount.id+'">[ID '+country.model.location.location.location.createdByUserAccount.id+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccount.id+'">[ID '+country.model.location.location.location.createdByUserAccount.id+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+country.model.location.location.location.lastEditedByUserAccount.id+'">[ID '+country.model.location.location.location.lastEditedByUserAccount.id+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+country.model.location.location.location.lastEditedByUserAccountId+'">[ID '+country.model.location.location.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.location.location.location.lastEditedAt)+'<br>'
 					);
 					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});

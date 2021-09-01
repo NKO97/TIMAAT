@@ -60,15 +60,15 @@
 						// console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
 						if (locationtype.model.lastEditedAt == null) {
 							$('.timaat-user-log-details').html(
-								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccount.id+'">[ID '+locationtype.model.createdByUserAccount.id+']</span></b><br>\
+								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
 								'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>'
 							);
 							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
 						} else {
 							$('.timaat-user-log-details').html(
-									'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccount.id+'">[ID '+locationtype.model.createdByUserAccount.id+']</span></b><br>\
+									'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>\
-									<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+locationtype.model.lastEditedByUserAccount.id+'">[ID '+locationtype.model.lastEditedByUserAccount.id+']</span></b><br>\
+									<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+locationtype.model.lastEditedByUserAccountId+'">[ID '+locationtype.model.lastEditedByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(locationtype.model.lastEditedAt)+'<br>'
 							);
 							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
