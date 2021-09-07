@@ -932,6 +932,12 @@
 			});
 
 			$('#timaat-inspector-meta-visual-layer').on('click', function(event) {
+				// if svg and/or animation data is available, prevent un-checking
+				if (TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '"{"keyframes":[{"time":0,"shapes":[]}]}"') {
+					event.preventDefault();
+					$('#timaat-annotation-analysis-layer-in-use').modal('show');
+					return;
+				}
 				// if an analysis is attached that is only available for the visual-layer, prevent un-checking
 				if (!$('#timaat-inspector-meta-visual-layer').is(":checked")) {
 					if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.analysis.length > 0) { // early out
