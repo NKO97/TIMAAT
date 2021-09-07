@@ -1095,9 +1095,9 @@
             var idExists = false;
             var item = { id: 0 };
             var j = 0;
-            for (; j < existingEntries.length; j++) {
-              // console.log("TCL: existingEntries", existingEntries);
-              if (roleGroupIdList[i].id == existingEntries[j].id) {
+            for (; j < existingRoleGroupEntries.length; j++) {
+              // console.log("TCL: existingRoleGroupEntries", existingRoleGroupEntries);
+              if (roleGroupIdList[i].id == existingRoleGroupEntries[j].id) {
                 idExists = true;
                 break; // no need to check further if match was found
               }
