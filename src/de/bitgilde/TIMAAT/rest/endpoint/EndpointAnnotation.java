@@ -31,6 +31,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -546,8 +547,6 @@ public class EndpointAnnotation {
 		annotation.getAnnotationTranslations().get(0).setId(0);
 		annotation.getAnnotationTranslations().get(0).setAnnotation(annotation);
 		annotation.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		annotation.setLayerAudio((byte) 1);
-//		annotation.setLayerVisual((byte) 1);
 	
 		// create IRI
 		// String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
@@ -638,12 +637,10 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response updateAnnotation(@PathParam("id") int id, String jsonData,
+	public Response updateAnnotation(@PathParam("id") int id,
+																	 String jsonData,
 																	 @QueryParam("authToken") String authToken) {
 		// System.out.println("EndpointAnnotation: updateAnnotation: " + jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		Annotation updatedAnno = null;
-
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);
 		if ( annotation == null ) return Response.status(Status.NOT_FOUND).build();
@@ -661,6 +658,9 @@ public class EndpointAnnotation {
 		}
 
 		// parse JSON data
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		Annotation updatedAnno = null;
 		try {
 			updatedAnno = mapper.readValue(jsonData, Annotation.class);
 		} catch (IOException e) {
@@ -671,14 +671,14 @@ public class EndpointAnnotation {
 
 		// System.out.println("EndpointAnnotation: updateAnnotation: update annotation data");
     	// update annotation
-		if ( updatedAnno.getTitle() != null ) annotation.setTitle(updatedAnno.getTitle());
-		if ( updatedAnno.getComment() != null ) annotation.setComment(updatedAnno.getComment());
+		if ( updatedAnno.getAnnotationTranslations().get(0).getTitle() != null ) annotation.getAnnotationTranslations().get(0).setTitle(updatedAnno.getAnnotationTranslations().get(0).getTitle());
+		annotation.getAnnotationTranslations().get(0).setComment(updatedAnno.getAnnotationTranslations().get(0).getComment());
 		// if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
 		// if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
-
 		annotation.setStartTime(updatedAnno.getStartTime());
 		annotation.setEndTime(updatedAnno.getEndTime());
 		annotation.setLayerVisual(updatedAnno.getLayerVisual());
+		annotation.setLayerAudio(updatedAnno.getLayerAudio());
 
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorHex() != null )
 			annotation.getSelectorSvgs().get(0).setColorHex(updatedAnno.getSelectorSvgs().get(0).getColorHex());
@@ -845,7 +845,6 @@ public class EndpointAnnotation {
 		return Response.ok().build();
 	}
 
-	// @SuppressWarnings("unchecked")
 	// @POST
   // @Produces(MediaType.APPLICATION_JSON)
 	// @Path("{id}/category/{name}")

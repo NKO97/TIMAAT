@@ -73,15 +73,15 @@
 
 			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
 				lengthChange	: false,
-				dom				: 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-//				dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
+				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength		: 3,
 				deferLoading	: 0,
 				pagingType		: 'full',
-				order			: [[ 0, 'asc' ]],
+				order					: [[ 0, 'asc' ]],
 				processing		: true,
 				serverSide		: true,
-				ajax			: {
+				ajax					: {
 					"url"        : "api/actor/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
@@ -164,11 +164,11 @@
 			this.ui.dataTableAnnoActors = $('#timaat-inspector-actors-pane .actors-annotation').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
-				dom				: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-//				dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-				searching		: false,
+				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
+				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				searching			: false,
 				deferLoading	: 0,
-				order			: [[ 0, 'asc' ]],
+				order					: [[ 0, 'asc' ]],
 				processing		: true,
 				serverSide		: true,
 				ajax			: {
@@ -267,15 +267,15 @@
 			
 			this.ui.dataTableEvents = $('#timaat-inspector-events-pane .events-available').DataTable({
 				lengthChange	: false,
-				dom				: 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				dom				: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength		: 3,
 				deferLoading	: 0,
 				pagingType		: 'full',
-				order			: [[ 0, 'asc' ]],
+				order					: [[ 0, 'asc' ]],
 				processing		: true,
 				serverSide		: true,
-				ajax			: {
+				ajax					: {
 					"url"        : "api/event/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
@@ -337,14 +337,14 @@
 			this.ui.dataTableAnnoEvents = $('#timaat-inspector-events-pane .events-annotation').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
-				dom				: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-				searching		: false,
+				searching			: false,
 				deferLoading	: 0,
-				order			: [[ 0, 'asc' ]],
+				order					: [[ 0, 'asc' ]],
 				processing		: true,
 				serverSide		: true,
-				ajax			: {
+				ajax					: {
 					"url"        : "api/annotation/0/events",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
@@ -400,9 +400,6 @@
 			// attach listeners
 			$('#timaat-inspector-meta-submit').on('click', async function(ev) {
 				if ( !inspector.state.type ) return;
-				console.log("TCL: Inspector -> $ -> TIMAAT.VideoPlayer.currentPermissionLevel", TIMAAT.VideoPlayer.currentPermissionLevel);
-				console.log("TCL: Inspector -> $ -> inspector.state.type", inspector.state.type);
-				console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2 && !(inspector.state.type == 'analysislist' && !inspector.state.item)) {
 					$('#analysisListNoPermissionModal').modal('show');
 					return;
@@ -412,8 +409,9 @@
 					var anno = inspector.state.item;
 					var title = $('#timaat-inspector-meta-name').val();
 					var opacity = Number($('#timaat-inspector-meta-opacity').val());
-					var layerVisual = 1;
-					if ( $('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').hasClass('btn-secondary') ) layerVisual = 0;
+					let layerVisual = $('#timaat-inspector-meta-visual-layer').is(":checked") ? true : false;
+					let layerAudio = $('#timaat-inspector-meta-audio-layer').is(":checked") ? true : false;
+					if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'image') layerVisual = true; // layer display is invisible in image but needs to be set
 					var comment = $('#timaat-inspector-meta-comment').summernote('code');
 					comment = comment.substring(0,4096);
 					$('#timaat-inspector-meta-comment').summernote('code', comment);
@@ -421,22 +419,23 @@
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					var color = inspector.cp.colorHex.substring(1);
 					if (anno) {
-						anno.model.title = title;
-						anno.model.comment = comment;
+						anno.model.annotationTranslations[0].title = title;
+						anno.model.annotationTranslations[0].comment = comment;
 						anno.model.startTime = startTime;
 						anno.model.endTime = endTime;
 						anno.svg.colorHex = color;
 						anno.svg.opacity = opacity;
-						anno.layerVisual = layerVisual;
+						anno.model.layerVisual = layerVisual;
+						anno.model.layerAudio = layerAudio;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
 					} else {
 						let model = { 	
 							id: 0, 
-							analysisListId: TIMAAT.VideoPlayer.curAnalysisList.id,
 							startTime: startTime,
 							endTime: endTime,
 							layerVisual: layerVisual,
+							layerAudio: layerAudio,
 							// actors: [],
 							// annotations1: [],
 							// annotations2: [],
@@ -460,7 +459,7 @@
 								}
 							}]
 						};
-						TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer._annotationAdded);
+						TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
 				}
 				// analysis lists
@@ -932,7 +931,58 @@
 
 			});
 
-			$('#timaat-inspector-meta-delete').on('click', function(event) {
+			$('#timaat-inspector-meta-visual-layer').on('click', function(event) {
+				// if an analysis is attached that is only available for the visual-layer, prevent un-checking
+				if (!$('#timaat-inspector-meta-visual-layer').is(":checked")) {
+					if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.analysis.length > 0) { // early out
+						let indexes = TIMAAT.VideoPlayer.curAnnotation.model.analysis.reduce((result, entry, index) => entry.analysisMethod.analysisMethodType.layerVisual === true ? result.concat(index) : result, []);
+						let i = 0;
+						let preventUncheck = false;
+						for (; i < indexes.length; i++) {
+							if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[indexes[i]].analysisMethod.analysisMethodType.layerAudio == false) {
+								preventUncheck = true;
+								continue;
+							}
+						}
+						if (preventUncheck) {
+							event.preventDefault();
+							$('#timaat-annotation-analysis-layer-in-use').modal('show');
+							return;
+						}
+					}
+				}
+				// if both checkboxes are unchecked after un-checking a checkbox, check the other one
+				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && !$('#timaat-inspector-meta-audio-layer').is(":checked")) {
+					$('#timaat-inspector-meta-audio-layer').prop("checked", true);
+				}
+			});
+
+			$('#timaat-inspector-meta-audio-layer').on('click', function(event) {
+				if (!$('#timaat-inspector-meta-audio-layer').is(":checked")) {
+					if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.analysis.length > 0) { // early out
+						let indexes = TIMAAT.VideoPlayer.curAnnotation.model.analysis.reduce((result, entry, index) => entry.analysisMethod.analysisMethodType.layerAudio === true ? result.concat(index) : result, []);
+						let i = 0;
+						let preventUncheck = false;
+						for (; i < indexes.length; i++) {
+							if (TIMAAT.VideoPlayer.curAnnotation.model.analysis[indexes[i]].analysisMethod.analysisMethodType.layerVisual == false) {
+								preventUncheck = true;
+								continue;
+							}
+						}
+						if (preventUncheck) {
+							event.preventDefault();
+							$('#timaat-annotation-analysis-layer-in-use').modal('show');
+							return;
+						}
+					}
+				}
+				// if both checkboxes are unchecked after un-checking a checkbox, check the other one
+				if (!$('#timaat-inspector-meta-audio-layer').is(":checked") && !$('#timaat-inspector-meta-visual-layer').is(":checked")) {
+					$('#timaat-inspector-meta-visual-layer').prop("checked", true);
+				}
+			});
+
+			$('#timaat-inspector-meta-delete').on('click', function() {
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
 					$('#analysisListNoPermissionModal').modal('show');
 					return;
@@ -1016,17 +1066,6 @@
 					
 					inspector._setInspectorStroke(anno.stroke);
 				}
-			});
-			
-			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').on('click', function(ev) {
-				var anno = inspector.state.item;
-				if ( anno ) anno.layerVisual = 1;
-				inspector._setInspectorAnnotationType( (anno) ? anno.layerVisual : 1 );
-			});
-			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').on('click', function(ev) {
-				var anno = inspector.state.item;
-				if ( anno ) anno.layerVisual = 0;
-				inspector._setInspectorAnnotationType( (anno) ? anno.layerVisual : 0 );
 			});
 			
 			$('#timaat-inspector-meta-start, #timaat-inspector-meta-end').on('blur change', function(ev) {
@@ -1113,6 +1152,7 @@
 					$('#analysisListNoPermissionModal').modal('show');
 					return;
 				}
+				// TODO only allow animation if svg data is available
 				if ( TIMAAT.VideoPlayer.curAnnotation && !TIMAAT.VideoPlayer.curAnnotation.isAnimation() ) {
 					TIMAAT.VideoPlayer.pause();
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
@@ -1241,14 +1281,24 @@
 					var heading = (anno) ? "Annotation bearbeiten" : "Annotation hinzufügen";
 					var submit = (anno) ? "Speichern" : "Hinzufügen";
 					var colorHex = (anno) ? anno.svg.colorHex : this.cp.colorHex.substring(1);
-					var title = (anno) ? anno.model.title : "";
+					var title = (anno) ? anno.model.annotationTranslations[0].title : "";
 					var opacity = (anno) ? anno.opacity : 0.3;
 					var stroke = (anno) ? anno.stroke : 2;
-					var layerVisual = (anno) ? anno.layerVisual : (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
-					var comment = (anno) ? anno.model.comment : "";
-
+					let layerVisual = false;
+					let layerAudio = false;
+					switch (TIMAAT.VideoPlayer.curAnalysisList.mediumType) {
+						case 'video':
+							layerVisual = (anno) ? anno.layerVisual : true;
+							layerAudio = (anno) ? anno.layerAudio : true;
+						break;
+						case 'image':
+							layerVisual = (anno) ? anno.layerVisual : true;
+						break;
+					}
+					var comment = (anno) ? anno.model.annotationTranslations[0].comment : "";
 					var start = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true);
 					var end = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.endTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true);
+
 
 					// setup UI from Video Player state
 					$('#timaat-inspector-metadata-title').html(heading);
@@ -1257,7 +1307,16 @@
 					$('#timaat-inspector-meta-name').val(title).trigger('input');
 					$('#timaat-inspector-meta-opacity').val(opacity);
 					this._setInspectorStroke(stroke);
-					this._setInspectorAnnotationType(layerVisual);
+					if (layerVisual) {
+						$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+					} else {
+						$('#timaat-inspector-meta-visual-layer').prop('checked', false);
+					}
+					if (layerAudio) {
+						$('#timaat-inspector-meta-audio-layer').prop('checked', true);
+					} else {
+						$('#timaat-inspector-meta-audio-layer').prop('checked', false);
+					}
 					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);	
@@ -1290,6 +1349,7 @@
 						// analysis panel
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/'+item.model.id+'/analysis');
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload();
+						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.url('/TIMAAT/api/analysis/method/list?visual='+item.model.layerVisual+'&audio='+item.model.layerAudio);
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 
 						// category and tag panel
@@ -1764,6 +1824,7 @@
 		}
 
 		fillInspectorMetadataSegmentElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMetadataSegmentElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
 			$('#timaat-inspector-metadata-title').html(model.heading);
@@ -1916,18 +1977,6 @@
 			} else {
 				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-outline-secondary');
 				$('#timaat-inspector-meta-outline').find('i').attr('class', 'fas fa-border-style');
-			}					
-		}
-
-		_setInspectorAnnotationType(layerVisual) {
-			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').removeClass('btn-secondary').removeClass('btn-outline-secondary');
-			$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').removeClass('btn-secondary').removeClass('btn-outline-secondary');
-			if ( layerVisual > 0 ) {
-				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').addClass('btn-secondary');
-				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').addClass('btn-outline-secondary');
-			} else {
-				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-videolayer').addClass('btn-outline-secondary');
-				$('#timaat-inspector-meta-type-group .timaat-inspector-meta-audiolayer').addClass('btn-secondary');
 			}					
 		}
 

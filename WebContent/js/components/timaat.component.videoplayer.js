@@ -207,6 +207,7 @@
 						// update UI list view
 						localAnno.remove();
 						// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
+						// TODO Why is sorting again necessary?
 						TIMAAT.VideoPlayer.updateListUI();
 						TIMAAT.VideoPlayer.sortListUI();
 						if ( TIMAAT.VideoPlayer.inspector.state.item == localAnno ) TIMAAT.VideoPlayer.selectAnnotation(null);
@@ -895,19 +896,29 @@
 
 		initTimeLineControls: function() {
 			// setup timeline view events
-			$('.timaat-button-videolayer').on('click', function(ev) {
-				$('.timaat-button-videolayer').removeClass('btn-outline-secondary').addClass('btn-primary');
-				$('.timaat-button-audiolayer').removeClass('btn-primary').addClass('btn-outline-secondary');
-				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-audiolayer').addClass('timaat-timeline-videolayer');
-				TIMAAT.VideoPlayer.editAudioLayer = false;
+			$('.timaat-button-visual-layer').on('click', function(ev) {
+				$('.timaat-button-visual-layer').removeClass('btn-outline-secondary').addClass('btn-primary');
+				$('.timaat-button-audio-layer').removeClass('btn-primary').addClass('btn-outline-secondary');
+				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-audio-layer').addClass('timaat-timeline-visual-layer');
+				$('.timaat-timeline-marker-audio').hide();
+				$('.timaat-timeline-marker-visual').show();
+				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ){
+					$('#timaat-timeline-keyframe-pane').show();
+				} else {
+					$('#timaat-timeline-keyframe-pane').hide();
+				}
+				TIMAAT.VideoPlayer.activeLayer = 'visual';
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
-			$('.timaat-button-audiolayer').on('click', function(ev) {
-				$('.timaat-button-videolayer').removeClass('btn-primary').addClass('btn-outline-secondary');
-				$('.timaat-button-audiolayer').removeClass('btn-outline-secondary').addClass('btn-primary');
-				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-videolayer').addClass('timaat-timeline-audiolayer');
-				TIMAAT.VideoPlayer.editAudioLayer = true;
+			$('.timaat-button-audio-layer').on('click', function(ev) {
+				$('.timaat-button-visual-layer').removeClass('btn-primary').addClass('btn-outline-secondary');
+				$('.timaat-button-audio-layer').removeClass('btn-outline-secondary').addClass('btn-primary');
+				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-visual-layer').addClass('timaat-timeline-audio-layer');
+				$('.timaat-timeline-marker-visual').hide();
+				$('#timaat-timeline-keyframe-pane').hide();
+				$('.timaat-timeline-marker-audio').show();
+				TIMAAT.VideoPlayer.activeLayer = 'audio';
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
@@ -1281,7 +1292,7 @@
 			// attach event handlers for UI elements
 			if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.animCtrl.updateUI();
 			TIMAAT.VideoPlayer.updateUI();
-			TIMAAT.VideoPlayer.editAudioLayer = false;
+			TIMAAT.VideoPlayer.activeLayer = 'visual';
 			
 		},
 		
@@ -1393,8 +1404,8 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.animCtrl.updateUI();
 				TIMAAT.VideoPlayer.updateUI();
 			});
-			TIMAAT.VideoPlayer.editAudioLayer = false;
-			$('.timaat-button-videolayer').click();
+			TIMAAT.VideoPlayer.activeLayer = 'visual';
+			$('.timaat-button-visual-layer').click();
 		},
 		
 		setupMediumAnalysisLists: async function (lists) {
@@ -1760,38 +1771,63 @@
 		addQuickAnnotation: function() {
 			// console.log("TCL: addQuickAnnotation: function()");
 			if ( !TIMAAT.VideoPlayer.curAnalysisList ) return;
-			TIMAAT.VideoPlayer.pause();
-			let layerVisual = (TIMAAT.VideoPlayer.editAudioLayer) ? 0 : 1;
-			var model = { 	
-				id: 0, 
-				analysisListId: TIMAAT.VideoPlayer.curAnalysisList.id,
-				startTime: TIMAAT.VideoPlayer.video.currentTime*1000,
-				endTime: TIMAAT.VideoPlayer.video.currentTime*1000,
-				layerVisual: layerVisual,
-				// actors: [],
-				// annotations1: [],
-				// annotations2: [],
-				// categories: [],
-				// events: [],
-				// locations: [],
-				// mediums: [],
-				annotationTranslations: [{
-					id: 0,
-					comment: "Lesezeichen, noch zu bearbeiten",
-					title: "Annotation bei "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000,true),
-				}],
-				selectorSvgs: [{
-					id: 0,
-					colorHex: "555555",
-					opacity: 30, //* 0..1 is stored as 0..100 (Byte)
-					svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
-					strokeWidth: 1,
-					svgShapeType: {
-						id: 5
-					}
-				}]
-			};
-			TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer._annotationAdded);
+			let model = {};
+			if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'video') {
+				TIMAAT.VideoPlayer.pause();
+				model = { 	
+					id: 0, 
+					startTime: TIMAAT.VideoPlayer.video.currentTime*1000,
+					endTime: TIMAAT.VideoPlayer.video.currentTime*1000,
+					layerVisual: true,
+					layerAudio: true,
+					// actors: [],
+					// annotations1: [],
+					// annotations2: [],
+					// categories: [],
+					// events: [],
+					// locations: [],
+					// mediums: [],
+					annotationTranslations: [{
+						id: 0,
+						comment: "Bookmark to edit",
+						title: "Annotation at "+TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000,true),
+					}],
+					selectorSvgs: [{
+						id: 0,
+						colorHex: "555555",
+						opacity: 30, //* 0..1 is stored as 0..100 (Byte)
+						svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
+						strokeWidth: 1,
+						svgShapeType: {
+							id: 5
+						}
+					}]
+				}
+			// } else if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'image') {
+			// 	model = { 	
+			// 		id: 0, 
+			// 		startTime: 0,
+			// 		endTime: 0,
+			// 		layerVisual: true,
+			// 		layerAudio: false,
+			// 		annotationTranslations: [{
+			// 			id: 0,
+			// 			comment: "Bookmark to edit",
+			// 			title: "Quick annotation",
+			// 		}],
+			// 		selectorSvgs: [{
+			// 			id: 0,
+			// 			colorHex: "555555",
+			// 			opacity: 30, //* 0..1 is stored as 0..100 (Byte)
+			// 			svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
+			// 			strokeWidth: 1,
+			// 			svgShapeType: {
+			// 				id: 5
+			// 			}
+			// 		}]
+			// 	}
+			} else return; // for now only videos can receive quick annotations
+			TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 		},
 		
 		addAnnotation: function() {
@@ -1854,10 +1890,16 @@
 			if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 			this.curAnnotation = annotation;
 			if ( this.curAnnotation ) {
+				// switch layer if selected annotation is not available on active layer
+				if (this.activeLayer == 'visual' && !this.curAnnotation.model.layerVisual) {
+					$('.timaat-button-audio-layer').trigger('click');
+				} else if (this.activeLayer == 'audio' && !this.curAnnotation.model.layerAudio) {
+					$('.timaat-button-visual-layer').trigger('click');
+				}
 				this.curAnnotation.setSelected(true);
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', false);
 				$('#timaat-videoplayer-annotation-remove-button').removeAttr('disabled');
-				// TIMAAT.URLHistory.setURL(null, 'Annotation · '+this.curAnnotation.model.title, '#analysis/'+this.curAnalysisList.id+'/annotation/'+this.curAnnotation.model.id);
+				// TIMAAT.URLHistory.setURL(null, 'Annotation · '+this.curAnnotation.model.annotationTranslations[0].title, '#analysis/'+this.curAnalysisList.id+'/annotation/'+this.curAnnotation.model.id);
 			} else {
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', true);
 				$('#timaat-videoplayer-annotation-remove-button').attr('disabled');
@@ -1970,6 +2012,21 @@
 			
 			// sort annotation markers in timeline
 			var sortedList = TIMAAT.VideoPlayer.annotationList.concat();
+			if ( sortedList.length > 0 ) {
+				// sort and display only annotations of the active layer
+				let i = sortedList.length -1;
+				if (TIMAAT.VideoPlayer.activeLayer == 'visual') {
+					for (; i >= 0; i--) {
+						if (!sortedList[i].model.layerVisual)
+							sortedList.splice(i, 1);
+					}
+				} else if (TIMAAT.VideoPlayer.activeLayer == 'audio') {
+					for (; i >= 0; i--) {
+						if (!sortedList[i].model.layerAudio)
+							sortedList.splice(i, 1);
+					}
+				}
+			}
 			sortedList.sort(function (a, b) {
 				if ( b.startTime < a.startTime ) return 1;
 				if ( b.startTime > a.startTime ) return -1;
@@ -1977,19 +2034,22 @@
 			});
 			
 			// position annotation markers in timeline
-			let layerVisual = ( TIMAAT.VideoPlayer.editAudioLayer ) ? 0 : 1;
 			let maxOffset = 0;
 			if ( sortedList.length > 0 ) {
 				sortedList[0].marker.UIOffset = 0;
-				for (let i=1; i < sortedList.length; i++) {
+				for (let i = 1; i < sortedList.length; i++) {
 					let curOffset = 0;
-					let occupiedOffets = [];
-					for (var a=0; a < i; a++) if ( sortedList[a].endTime >= sortedList[i].startTime && sortedList[a].layerVisual == layerVisual ) {
-						occupiedOffets.push(sortedList[a].marker.UIOffset);
-						while ( occupiedOffets.indexOf(curOffset) >= 0 ) curOffset++;
+					let occupiedOffsets = [];
+					// TODO
+					for (var a = 0; a < i; a++) {
+						if (sortedList[a].endTime >= sortedList[i].startTime ) {
+							occupiedOffsets.push(sortedList[a].marker.UIOffset);
+							while ( occupiedOffsets.indexOf(curOffset) >= 0 ) curOffset++;
+						}
 					}
 					sortedList[i].marker.UIOffset = curOffset;
 					if ( curOffset > maxOffset ) maxOffset = curOffset;
+					sortedList[i].marker.updateView();
 				}
 			}
 			$('#timaat-timeline-marker-pane').css('height', (15+(maxOffset*12))+'px');
@@ -2017,7 +2077,7 @@
 								});
 						});
 				});
-			if (this.annotationList) for (let annotation of this.annotationList) if ( TIMAAT.VideoPlayer.duration > 0 )annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+			if (this.annotationList) for (let annotation of this.annotationList) if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
 		},
 		
 		updateUI: function() {

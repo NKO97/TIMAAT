@@ -103,7 +103,9 @@ public class EndpointAnalysis {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
 			@QueryParam("search") String search,
-			@QueryParam("exclude_annotation") Integer annotationID)
+			@QueryParam("exclude_annotation") Integer annotationID,
+			@QueryParam("visual") Boolean visualLayer,
+			@QueryParam("audio") Boolean audioLayer)
 	{
 		// System.out.println("EndpointAnalysis: getAnalysisList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
 		if ( draw == null ) draw = 0;
@@ -121,12 +123,20 @@ public class EndpointAnalysis {
 		// include method type entries that are standalone only
 		String includedMethodTypeIds = "amt.id IN (1,2,3,4,5,6,7,8,15,16,18,19,20,22,23,34,43)";
 
+		String analysesBasedOnLayer = ""; // no exclusion if both layers are available
+		if (visualLayer && !audioLayer) {
+			analysesBasedOnLayer = "AND amt.layerVisual = 1";
+		} else if (!visualLayer && audioLayer) {
+			analysesBasedOnLayer = "AND amt.layerAudio = 1";
+		} else if (!visualLayer && !audioLayer) { //* in case no layer information are available, display only analyses that are valid for all layers
+			analysesBasedOnLayer = "AND amt.layerVisual = 1 AND amt.layerAudio = 1";
+		}
 		// define default query strings
-		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE "+includedMethodTypeIds+" AND amt.id = amtt.id ORDER BY ";
+		String analysisMethodTypeQuery = "SELECT amt FROM AnalysisMethodType amt, AnalysisMethodTypeTranslation amtt WHERE "+includedMethodTypeIds+" "+analysesBasedOnLayer+" AND amt.id = amtt.id ORDER BY ";
 
 		// calculate total # of records
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE  "+includedMethodTypeIds);
+		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE "+includedMethodTypeIds+ " "+ analysesBasedOnLayer);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		// System.out.println("records total: " + recordsTotal);
@@ -137,7 +147,7 @@ public class EndpointAnalysis {
 		List<AnalysisMethodType> analysisMethodTypeList = new ArrayList<>();
 		if ( search != null && search.length() > 0 ) {
 			// find all matching names
-			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE "+includedMethodTypeIds+" AND amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
+			sql = "SELECT amt FROM AnalysisMethodTypeTranslation amtt, AnalysisMethodType amt WHERE "+includedMethodTypeIds+" "+analysesBasedOnLayer+" AND amt.id = amtt.id AND lower(amtt.name) LIKE lower(concat('%', :search, '%'))";
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			// find all analysisMethodTypeTranslations

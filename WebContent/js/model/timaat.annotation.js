@@ -40,6 +40,7 @@
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
 			this._layerVisual = this.model.layerVisual;
+			this._layerAudio = this.model.layerAudio;
 
 			// create keyframes
 			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
@@ -50,7 +51,10 @@
 			this.listView = $(`
 				<li class="list-group-item" style="padding:0">
 					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
-					<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-polygon" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
 					<span class="timaat-annotation-list-time"></span>
 					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
@@ -120,8 +124,10 @@
 				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
-				else {
-					TIMAAT.VideoPlayer.selectAnnotation(curAnnotation);
+				else TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
+
+				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ){
+					$('#timaat-timeline-keyframe-pane').show();
 				}
 				TIMAAT.VideoPlayer.updateListUI();
 				// TIMAAT.VideoPlayer.selectAnnotation(ev.data);
@@ -299,6 +305,17 @@
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
 		};
+
+		get layerAudio() {
+			return this._layerAudio;
+		}
+
+		set layerAudio(layerAudio) {
+			this._layerAudio = layerAudio;
+			this.setChanged();
+			TIMAAT.VideoPlayer.updateUI();
+			this.updateUI();
+		};
 		  
 		get stroke() {
 			return this.svg.strokeWidth;
@@ -355,7 +372,7 @@
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			if ( TIMAAT.VideoPlayer.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
-			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
+			this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
 			// categories
 			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Kategorien");			
 			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
@@ -365,7 +382,7 @@
 			this._updateAnnotationType();
 			
 			// comment
-			if ( this.model.comment && this.model.comment.length > 0 )
+			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
 				this.listView.find('.timaat-annotation-list-comment').show();
 			else
 				this.listView.find('.timaat-annotation-list-comment').hide();
@@ -380,15 +397,25 @@
 		}		  
 
 		_updateAnnotationType() {
-			let type = this.listView.find('.timaat-annotation-list-type');
-			type.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-headphones');
-			if ( this.isAnimation() ) type.text(' \uf70c'); else type.text('');
-			if ( this.layerVisual == 0 ) {
-				type.addClass('fa-headphones');
+			let typeImage = this.listView.find('.timaat-annotation-list-type-image');
+			let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
+			let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
+			let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
+			if ( this.layerVisual) {
+				if ( this.svg.items.length > 0 ) {
+					typePolygon.show();
+					typeImage.hide();
+				}
+				else {
+					typePolygon.hide();
+					typeImage.show();
+				}
 			} else {
-				if ( this.svg.items.length > 0 ) type.addClass('fa-draw-polygon');
-				else type.addClass('fa-image');
+				typePolygon.hide();
+				typeImage.hide();
 			}
+			( this.isAnimation() ) ? typeAnimation.show() : typeAnimation.hide();
+			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
 		};
 		
 		remove() {
@@ -486,6 +513,7 @@
 			this.svg.layer.clearLayers();
 			this.svg.items = Array();
 			this._layerVisual = this.model.layerVisual;
+			this._layerAudio = this.model.layerAudio;
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
 			this.svg.colorHex = this.model.selectorSvgs[0].colorHex;
@@ -601,6 +629,8 @@
 			else {
 				this.discardChanges();
 				this.listView.removeClass('timaat-annotation-list-selected');
+
+				TIMAAT.VideoPlayer.curAnnotation = null;
 /*
 				this.svg.items.forEach(function(item) {
 					item.dragging.disable();
@@ -747,9 +777,14 @@
 		_syncToModel() {
 			// console.log("TCL: Annotation -> _syncToModel -> _syncToModel()");
 			let jsonData = { keyframes: [] };
-			this.model.startTime = this._startTime;
-			this.model.endTime = this._endTime;
-			this.model.layerVisual = this._layerVisual;
+			// this.model.startTime = this._startTime;
+			// this.model.endTime = this._endTime;
+			// this.model.layerVisual = this._layerVisual;
+			// this.model.layerAudio = this._layerAudio;
+			this._startTime = this.model.startTime;
+			this._endTime = this.model.endTime;
+			this._layerVisual = this.model.layerVisual;
+			this._layerAudio = this.model.layerAudio;
 
 			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
 			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;

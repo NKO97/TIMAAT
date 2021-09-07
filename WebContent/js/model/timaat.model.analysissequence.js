@@ -102,8 +102,9 @@
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
-					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);					
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
 				//TODO
 				// TIMAAT.URLHistory.setURL(null, 'Sequence · '+sequence.model.analysisSequenceTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/sequence/'+sequence.model.id);
@@ -128,8 +129,9 @@
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
-					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);					
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 				// TODO

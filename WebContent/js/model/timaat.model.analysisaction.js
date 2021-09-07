@@ -107,6 +107,7 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
@@ -134,6 +135,7 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					// TODO

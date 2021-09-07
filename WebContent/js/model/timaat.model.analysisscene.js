@@ -106,6 +106,7 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Scene · '+scene.model.analysisSceneTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/scene/'+scene.model.id);
@@ -132,6 +133,7 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
+				$('#timaat-timeline-keyframe-pane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 					// TODO

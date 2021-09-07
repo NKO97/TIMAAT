@@ -1,16 +1,12 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -37,10 +33,10 @@ public class Annotation implements Serializable {
 	private Timestamp lastEditedAt;
 
 	@Column(name="layer_audio")
-	private int layerAudio;
+	private Boolean layerAudio;
 
 	@Column(name="layer_visual")
-	private int layerVisual;
+	private Boolean layerVisual;
 
 	@Column(name="start_time", columnDefinition = "INT")
 	private long startTime;
@@ -269,19 +265,19 @@ public class Annotation implements Serializable {
 		this.lastEditedAt = lastEditedAt;
 	}
 
-	public int getLayerAudio() {
+	public Boolean getLayerAudio() {
 		return this.layerAudio;
 	}
 
-	public void setLayerAudio(int layerAudio) {
+	public void setLayerAudio(Boolean layerAudio) {
 		this.layerAudio = layerAudio;
 	}
 
-	public int getLayerVisual() {
+	public Boolean getLayerVisual() {
 		return this.layerVisual;
 	}
 
-	public void setLayerVisual(int layerVisual) {
+	public void setLayerVisual(Boolean layerVisual) {
 		this.layerVisual = layerVisual;
 	}
 
@@ -496,22 +492,6 @@ public class Annotation implements Serializable {
 
 	public void setAnnotationTranslations(List<AnnotationTranslation> annotationTranslations) {
 		this.annotationTranslations = annotationTranslations;
-	}
-
-	public String getComment() {
-		return this.getAnnotationTranslations().get(0).getComment(); // TODO get proper language
-	}
-
-	public void setComment(String comment) {
-		this.getAnnotationTranslations().get(0).setComment(comment); // TODO get proper language
-	}
-
-	public String getTitle() {
-		return this.getAnnotationTranslations().get(0).getTitle(); // TODO get proper language
-	}
-
-	public void setTitle(String title) {
-		this.getAnnotationTranslations().get(0).setTitle(title); // TODO get proper language
 	}
 
 	// public AnnotationTranslation addAnnotationTranslation(AnnotationTranslation annotationTranslation) {

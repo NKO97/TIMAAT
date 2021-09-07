@@ -32,7 +32,16 @@
 			  // construct marker element
 			  this.ui = {
 					  offset: 0,
-					  element: $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerbar"></div><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>'),
+					  element: $(`<div class="timaat-timeline-marker">
+													<div class="timaat-timeline-markerbar">
+													</div>
+													<div class="timaat-timeline-markerhead">
+													</div>
+													<div class="timaat-timeline-marker-start">
+													</div>
+													<div class="timaat-timeline-marker-end">
+													</div>
+												</div>`),
 			  };
 			  this.ui.element.attr('id','timaat-marker-'+this.annotationID);
 			    
@@ -209,7 +218,7 @@
 		  }
 			  
 		  _updateElementOffset() {
-//			  console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
+			  // console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
 			  var magicoffset = 0; // TODO replace input slider
 
 			  var width =  $('#timaat-video-seek-bar').width();
@@ -220,20 +229,19 @@
 			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
-			  if ( this.annotation.model.layerVisual == 0 ) startoffset += 37;
+			  if ( TIMAAT.VideoPlayer.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
-		  
 		  }
 		  
 		  _updateElementStyle() {
-//			  console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
-			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon').removeClass('timaat-markerhead-anim');
+			  // console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
+			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon')
+																													 .removeClass('timaat-markerhead-anim');
 			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
 			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 			  
-			  this.ui.element.removeClass('timaat-timeline-marker-video').removeClass('timaat-timeline-marker-audio');
-			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-video');
-			  else this.ui.element.addClass('timaat-timeline-marker-audio');
+				(this.annotation.model.layerVisual) ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.removeClass('timaat-timeline-marker-visual');
+				(this.annotation.model.layerAudio) ? this.ui.element.addClass('timaat-timeline-marker-audio') : this.ui.element.removeClass('timaat-timeline-marker-audio');
 		  }
 		  
 			hexToRgbA(hex, alpha) {

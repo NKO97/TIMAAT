@@ -418,7 +418,9 @@
         modal.modal('hide');
         TIMAAT.VideoPlayer.curAnnotation.model.analysis.push(analysis);
         TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload(null, false);
+        TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.url('/TIMAAT/api/analysis/method/list?visual='+TIMAAT.VideoPlayer.curAnnotation.model.layerVisual+'&audio='+TIMAAT.VideoPlayer.curAnnotation.model.layerAudio);
         TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload(null, false);
+        TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnnotation, 'annotation'); // mainly to reverse unsaved layer changes
       });
 
       $('#timaat-analysis-delete-submit').on('click', async function(event) {
@@ -445,6 +447,7 @@
           }
         }
         TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.reload(null, false);
+        TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.url('/TIMAAT/api/analysis/method/list?visual='+TIMAAT.VideoPlayer.curAnnotation.model.layerVisual+'&audio='+TIMAAT.VideoPlayer.curAnnotation.model.layerAudio);
         TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload(null, false);
       });
 
@@ -2405,7 +2408,7 @@
     setupAnalysisMethodsDataTable: function() {
       TIMAAT.AnalysisDatasets.dataTableAnalysisMethods = $('#analysis-methods-available-table').DataTable({
 				lengthChange: false,
-				dom         : 'rft<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				dom         : 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength  : 5,
 				deferLoading: 0,
@@ -2414,7 +2417,7 @@
 				processing  : true,
 				serverSide  : true,
 				ajax        : {
-					"url"        : "api/analysis/method/list",
+					"url"        : "api/analysis/method/list/?visual=false&audio=false",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
 					"data"       : function(data) {
@@ -2514,7 +2517,7 @@
 			TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis = $('#analysis-annotation-table').DataTable({
 				lengthChange: false,
 				pageLength  : 10,
-				dom         : 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+				dom         : 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				searching   : false,
 				deferLoading: 0,

@@ -124,40 +124,59 @@
       <!-------------------------------------------------------------------->
       <!-- Notifications                                                  -->
       <!-------------------------------------------------------------------->
-      <div aria-live="polite" aria-atomic="true" style="position: relative; z-index:1500">
-        <div id="timaat-notification-pane">
+      <div>
+        <div aria-live="polite" aria-atomic="true" style="position: relative; z-index:1500">
+          <div id="timaat-notification-pane">
+          </div>
         </div>
-      </div>
-      <div class="modal fade" id="mediumCollectionInsufficientPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionInsufficientPermissionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="mediumCollectionInsufficientPermissionLabel">Insufficient access rights</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Your access level is not high enough to make any changes to this collection.
-            </div>
-            <div class="modal-footer">
+        <div class="modal fade" id="mediumCollectionInsufficientPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionInsufficientPermissionLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="mediumCollectionInsufficientPermissionLabel">Insufficient access rights</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Your access level is not high enough to make any changes to this collection.
+              </div>
+              <div class="modal-footer">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal fade" id="mediumCollectionNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionNoPermissionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="mediumCollectionNoPermissionLabel">No access rights</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+        <div class="modal fade" id="mediumCollectionNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="mediumCollectionNoPermissionLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="mediumCollectionNoPermissionLabel">No access rights</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                This collection is not available to you.
+              </div>
+              <div class="modal-footer">
+              </div>
             </div>
-            <div class="modal-body">
-              This collection is not available to you.
-            </div>
-            <div class="modal-footer">
+          </div>
+        </div>
+        <div class="modal fade" id="timaat-annotation-analysis-layer-in-use" tabindex="-1" role="dialog" aria-labelledby="annotationAnalysisLayerInUseLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="annotationAnalysisLayerInUseLabel">Layer in use</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                One or more analysis guidelines require this annotation layer.
+              </div>
+              <div class="modal-footer">
+              </div>
             </div>
           </div>
         </div>
@@ -748,24 +767,27 @@
           </div>
           <div id="timaat-videoplayer-medium-modals-container"></div>
           <div id="timaat-inspector" class="leaflet-sidebar collapsed">
-			    <div class="inspector-title border-bottom border-dark">Inspector<div class="inspector-drag float-right"><i class="fas fa-arrows-alt"></i></div></div>
+            <div class="inspector-title border-bottom border-dark">Inspector
+              <div class="inspector-drag float-right"><i class="fas fa-arrows-alt"></i>
+              </div>
+            </div>
             <!-- Nav tabs -->
             <div class="leaflet-sidebar-tabs">
               <ul role="tablist" class="inspector-tabs"> <!-- top aligned tabs -->
-                <li><a title="Metadaten bearbeiten" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
-                <li><a title="Animationseinstellungen (nur bei Annotationen)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
-                <li><a title="Kategorien und Tags verknüpfen" href="#timaat-inspector-categories-and-tags" role="tab"><i class="fas fa-tags"></i></a></li>
-                <li><a title="Actors verknüpfen (nur bei Annotationen)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-                <li><a title="Events verknüpfen (nur bei Annotationen)" href="#timaat-inspector-events" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
-                <li><a title="Orte verknüpfen (nur bei Annotationen)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
-                <li><a title="Analysen verknüpfen (nur bei Annotationen)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
+                <li><a title="Edit metadata" id="timaat-inspector-metadata-tab" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
+                <li><a title="Animation settings (only for Annotations)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
+                <li><a title="Link categories and tags" href="#timaat-inspector-categories-and-tags" role="tab"><i class="fas fa-tags"></i></a></li>
+                <li><a title="Link actors (only for Annotations)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+                <li><a title="Link events (only for Annotations)" href="#timaat-inspector-events" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
+                <li><a title="Link locations (only for Annotations)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
+                <li><a title="Link analysis guidelines (only for Annotations)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
               </ul>
             </div>
             <!-- Tab panes -->
             <div class="leaflet-sidebar-content">
               <div class="leaflet-sidebar-pane" id="timaat-inspector-metadata">
                 <h1 class="leaflet-sidebar-header border-bottom border-dark">
-                  <span id="timaat-inspector-metadata-title">Metadaten</span>
+                  <span id="timaat-inspector-metadata-title">Metadata</span>
                   <div class="leaflet-sidebar-close">
                     <i class="fas fa-caret-up"></i>
                   </div>
@@ -790,7 +812,7 @@
                   </div>
                   <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Deckkraft</span>
+                      <span class="input-group-text">Opacity</span>
                     </div>
                     <div class="form-control form-control-sm">
                       <input id="timaat-inspector-meta-opacity" type="range" name="opacity" min="0" max="1" step="0.1" aria-label="Deckkraft" />
@@ -801,17 +823,28 @@
                       </button>
                     </div>
                   </div>
-                  <div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Annotationsziel</span>
+                  <div id="timaat-inspector-meta-type-group" class="input-group input-group-sm mb-1 form-inline">
+                    <label class="sr-only">Annotation layer(s)</label>
+                    <div class="input-group-prepend mr-sm-4">
+                      <div class="input-group-text">
+                        Annotation layer(s)
+                      </div>
                     </div>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-secondary timaat-inspector-meta-videolayer">
-                        <i class="fas fa-video"></i> Video
-                      </button>
-                      <button type="button" class="btn btn-sm timaat-inspector-meta-audiolayer btn-outline-secondary">
-                        <i class="fas fa-headphones"></i> Audio
-                      </button>
+                    <div class="vertical-aligned">
+                      <div class="form-check mr-sm-3">
+                        <input class="form-check-input" type="checkbox" id="timaat-inspector-meta-visual-layer">
+                        <label class="form-check-label" for="timaat-inspector-meta-visual-layer">
+                          <i class="fas fa-video fa-fw mr-1"></i> Visual
+                        </label>
+                      </div>
+                    </div>
+                    <div class="vertical-aligned">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="timaat-inspector-meta-audio-layer">
+                        <label class="form-check-label" for="timaat-inspector-meta-audio-layer">
+                          <i class="fas fa-headphones fa-fw mr-1"></i> Audio
+                        </label>
+                      </div>
                     </div>
                   </div>
                   <div id="timaat-inspector-meta-timecode-group">
@@ -828,9 +861,9 @@
                     </div>
                     <div class="input-group input-group-sm mb-3">
                       <div class="input-group-prepend">				
-                        <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ende</button>
+                        <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">End</button>
                         <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
-                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">dieses Frame</a>
+                          <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">This frame</a>
                           <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(1000)">Start +1 sek</a>
                           <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(5000)">Start +5 sek</a>
                           <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(15000)">Start +15 sek</a>
@@ -862,8 +895,8 @@
                     <label class="col-form-label col-form-label-sm" for="timaat-inspector-meta-transcript">Transcript</label>
                     <textarea class="form-control form-control-sm" id="timaat-inspector-meta-transcript" placeholder="Transcript" aria-label="Transcript"></textarea>
                   </div>
-                  <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Hinzufügen</button>
-                  <button type="button" class="btn btn-outline-danger" id="timaat-inspector-meta-delete" disabled>Löschen</button>
+                  <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Add</button>
+                  <button type="button" class="btn btn-outline-danger" id="timaat-inspector-meta-delete" disabled>Delete</button>
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
@@ -1286,10 +1319,10 @@
                 	<div class="d-flex justify-content-between align-items-end mb-2">
 						        <div>00:00</div>
                 		<div class="btn-group">
-                			<button type="button" class="btn btn-sm btn-primary timaat-button-videolayer">
+                			<button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
                         <i class="fas fa-video"></i> Video
                       </button>
-                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audiolayer">
+                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audio-layer">
                         <i class="fas fa-headphones"></i> Audio
                       </button>
                 		</div>
@@ -1306,8 +1339,8 @@
                       <div id="timaat-timeline-slider-pane">
                         <input type="range" class="timaat-timeline-slider" id="timaat-video-seek-bar" min="0" max="100" step="0.01" value="0">
                         <br>
-                        <div id="timaat-timeline-marker-pane" class="timaat-timeline-videolayer">
-                          <div class="timaat-audiolayer mb-2">
+                        <div id="timaat-timeline-marker-pane">
+                          <div class="timaat-audio-layer mb-2">
                             <div class="timaat-audio-baseline"></div>
                             <img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform"/>
                           </div>
@@ -2660,11 +2693,11 @@
                             <div class="form-group datasheet-data source-data">
                               <div class="form-row">
                                 <div class="col-md-9">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Quelle (URL)</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Source (URL)</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
                                 </div> 
                                 <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primärquelle?</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primary source?</label>
                                   <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
                                 </div>
                               </div>
@@ -2672,17 +2705,17 @@
                             <div class="form-group datasheet-data source-data">
                               <div class="form-row">
                                 <div class="col-md-9">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Quelle (letzter Zugriff)</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Source (last access)</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
                                 </div> 
                                 <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Quelle verfügbar?</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Source available ?</label>
                                   <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
                                 </div>
                               </div>
                             </div>
                             <div class="form-group datasheet-data audio-data">
-                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-length">Länge</label>
+                              <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-length">Length</label>
                               <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-length" name="length" placeholder="[Length]" aria-describedby="Length">
                             </div>
                             <div class="form-group datasheet-data audio-data">
@@ -2692,15 +2725,15 @@
                             <div class="form-group datasheet-data image-data">
                               <div class="form-row">
                                 <div class="col-md-4">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Bildbreite</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-width">Image width</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-width" name="width" placeholder="[upload image]" aria-describedby="Image Width">
                                 </div>
                                 <div class="col-md-4">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Bildhöhe</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Image height</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[upload image]" aria-describedby="Image Height">
                                 </div>
                                 <div class="col-md-4">                                
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bittiefe</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bit depth</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[upload image]" aria-describedby="Bit Depth">
                                 </div>
                               </div>
@@ -2716,7 +2749,7 @@
                             <div class="form-group datasheet-data video-data">
                               <div class="form-row">
                                 <div class="col-md-9">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Länge</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-length">Length</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-length" name="length" placeholder="[upload video]" aria-describedby="Length">
                                 </div>
                                 <div class="col-md-3">
@@ -2732,11 +2765,11 @@
                             <div class="form-group datasheet-data video-data">
                               <div class="form-row">
                                 <div class="col-md-6">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Videobreite</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-width">Video width</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-width" name="width" max="65535" placeholder="[upload video]" aria-describedby="Width">
                                 </div>
                                 <div class="col-md-6">
-                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Videohöhe</label>
+                                  <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Video height</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[upload video]" aria-describedby="Height">
                                 </div>  
                               </div>

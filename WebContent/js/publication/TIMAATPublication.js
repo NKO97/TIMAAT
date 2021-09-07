@@ -218,9 +218,8 @@ class Marker {
 			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
-			  if ( this.annotation.model.layerVisual == 0 ) startoffset += 37;
+			  if ( this.annotation.model.layerAudio == true ) startoffset += 37;
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
-		  
 		  }
 		  
 		  _updateElementStyle() {
@@ -229,9 +228,8 @@ class Marker {
 			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
 			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 			  
-			  this.ui.element.removeClass('timaat-timeline-marker-video').removeClass('timaat-timeline-marker-audio');
-			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-video');
-			  else this.ui.element.addClass('timaat-timeline-marker-audio');
+			  this.ui.element.removeClass('timaat-timeline-marker-visual').removeClass('timaat-timeline-marker-audio');
+				( TIMAAT.VideoPlayer.activeLayer == 'visual') ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.addClass('timaat-timeline-marker-audio');
 		  }
 		  
 		  hexToRgbA(hex, opacity) {
@@ -485,6 +483,7 @@ class Annotation {
 		this._startTime = this.model.startTime;
 		this._endTime = this.model.endTime;
 		this._layerVisual = this.model.layerVisual;
+		this._layerAudio = this.model.layerAudio;
 		// create keyframes
 		for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new Keyframe(keyframe, this));
 
@@ -586,6 +585,10 @@ class Annotation {
 		get layerVisual() {
 			return this._layerVisual;
 		}
+
+		get layerAudio() {
+			return this._layerAudio;
+		}
 		  
 		get stroke() {
 			return this.svg.strokeWidth;
@@ -629,7 +632,7 @@ class Annotation {
 			this._updateAnnotationType();
 			
 			// comment
-			if ( this.model.comment && this.model.comment.length > 0 )
+			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
 				this.listView.find('.timaat-annotation-list-comment').show();
 			else
 				this.listView.find('.timaat-annotation-list-comment').hide();
@@ -647,17 +650,12 @@ class Annotation {
 			let type = this.listView.find('.timaat-annotation-list-type');
 			type.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-headphones');
 			if ( this.isAnimation() ) type.text(' \uf70c'); else type.text('');
-			if ( this.layerVisual == 0 ) {
+			if ( this.layerAudio ) {
 				type.addClass('fa-headphones');
-				this._type = 2;
-			} else {
-				if ( this.hasPolygons() ) {
-					this._type = 1;
-					type.addClass('fa-draw-polygon');
-				} else {
-					this._type = 0;
-					type.addClass('fa-image');
-				}
+			}
+			if ( this.layerVisual) {
+				if ( this.svg.items.length > 0 ) type.addClass('fa-draw-polygon');
+				else type.addClass('fa-image');
 			}
 		};
 		
@@ -688,7 +686,7 @@ class Annotation {
 			
 			// add tooltip
 			let tooltip = '<strong>'+this.model.title+'</strong>';
-			if ( this.model.comment && this.model.comment.length > 0 ) tooltip += '<br><br>'+this.model.comment;
+			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 ) tooltip += '<br><br>'+this.model.annotationTranslations[0].comment;
 			item.bindTooltip(tooltip);
 
 			// add to list of shapes
@@ -1308,10 +1306,10 @@ class TIMAATPublication {
 			this.ui.annotation.title.removeClass('empty');
 			this.ui.annotation.title.find('.contents').html(this.curAnnotation.model.title);
 		}
-		if ( !this.curAnnotation.model.comment || this.curAnnotation.model.comment == 0) this.ui.annotation.comment.addClass('empty');
+		if ( !this.curAnnotation.model.annotationTranslations[0].comment || this.curAnnotation.model.annotationTranslations[0].comment == 0) this.ui.annotation.comment.addClass('empty');
 		else {
 			this.ui.annotation.comment.removeClass('empty');
-			this.ui.annotation.comment.find('.contents').html(this.curAnnotation.model.comment);
+			this.ui.annotation.comment.find('.contents').html(this.curAnnotation.model.annotationTranslations[0].comment);
 		}
 		this.ui.annotation.categories.addClass('empty');
 		this.ui.annotation.actors.addClass('empty');

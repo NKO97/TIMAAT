@@ -1210,8 +1210,8 @@ class Marker {
 			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
 			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 			  
-			  this.ui.element.removeClass('timaat-timeline-marker-video').removeClass('timaat-timeline-marker-audio');
-			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-video');
+			  this.ui.element.removeClass('timaat-timeline-marker-visual').removeClass('timaat-timeline-marker-audio');
+			  if ( this.annotation.model.layerVisual != 0 ) this.ui.element.addClass('timaat-timeline-marker-visual');
 			  else this.ui.element.addClass('timaat-timeline-marker-audio');
 		  }
 		  

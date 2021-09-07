@@ -33,6 +33,10 @@ public class MediumAnalysisList implements Serializable {
 	@JsonProperty("mediumID")
 	private int mediumID;
 
+	@Transient
+	@JsonProperty("mediumType")
+	private String mediumType;
+
 	// TODO text and title from translation
 
 	@Column(name="global_permission")
@@ -129,6 +133,11 @@ public class MediumAnalysisList implements Serializable {
 	public int getMediumID() {
 		if ( this.medium != null ) return this.medium.getId();
 		return 0;
+	}
+
+	public String getMediumType() {
+		if (this.medium != null) return this.medium.getMediaType().getMediaTypeTranslations().get(0).getType();
+		return "";
 	}
 
 	public void setId(int id) {

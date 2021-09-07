@@ -25,6 +25,12 @@ public class AnalysisMethodType implements Serializable {
 	@Column(name="is_static", columnDefinition = "BOOLEAN")
 	private Boolean isStatic;
 
+	@Column(name="layer_visual", columnDefinition = "BOOLEAN")
+	private Boolean layerVisual;
+
+	@Column(name="layer_audio", columnDefinition = "BOOLEAN")
+	private Boolean layerAudio;
+
 	//bi-directional many-to-one association to AnalysisMethod
 	@OneToMany(mappedBy="analysisMethodType")
 	@JsonIgnore
@@ -51,6 +57,22 @@ public class AnalysisMethodType implements Serializable {
 
 	public void setIsStatic(Boolean isStatic) {
 		this.isStatic = isStatic;
+	}
+
+	public Boolean getLayerVisual() {
+		return this.layerVisual;
+	}
+
+	public void setIsVisual(Boolean layerVisual) {
+		this.layerVisual = layerVisual;
+	}
+
+	public Boolean getLayerAudio() {
+		return this.layerAudio;
+	}
+
+	public void setIsAudio(Boolean layerAudio) {
+		this.layerAudio = layerAudio;
 	}
 
 	public List<AnalysisMethod> getAnalysisMethods() {
