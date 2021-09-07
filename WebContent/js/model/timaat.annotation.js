@@ -52,7 +52,7 @@
 				<li class="list-group-item" style="padding:0">
 					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
 					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-polygon" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-draw-polygon" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
 					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
@@ -129,6 +129,9 @@
 				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ){
 					$('#timaat-timeline-keyframe-pane').show();
 				}
+				if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
+					TIMAAT.VideoPlayer.inspector.ui.addAnimButton.prop('disabled', false);
+			 }
 				TIMAAT.VideoPlayer.updateListUI();
 				// TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.pause();
@@ -414,7 +417,10 @@
 				typePolygon.hide();
 				typeImage.hide();
 			}
-			( this.isAnimation() ) ? typeAnimation.show() : typeAnimation.hide();
+			if ( this.isAnimation() ) {
+				typeAnimation.show();
+				typePolygon.hide()
+			} else typeAnimation.hide();
 			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
 		};
 		
@@ -447,6 +453,10 @@
 			// add to list of shapes
 			this.svg.items.push(item);
 			this.svg.layer.addLayer(item);
+
+			// in case it was not set before, adding geometric data requires visual layer to be set
+			this.model.layerVisual = true;
+			$('#timaat-inspector-meta-visual-layer').prop('checked', true);
 			
 			this.changed = true;
 
@@ -458,13 +468,18 @@
 			let anno = this;
 			item.on('click', function(ev) {
 				TIMAAT.VideoPlayer.selectAnnotation(anno);
-				// delete annotation if user presses alt
+				// delete annotation geometry if user presses alt
 				if ( ev.originalEvent.altKey && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isOnKeyframe()  ) {
-					anno.removeSVGItem(ev.target);
-					TIMAAT.VideoPlayer.updateUI();
-					// console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
+					// prevent deletion if its the last geometric object and animation is active
+          if (TIMAAT.VideoPlayer.curAnnotation.svg.items.length == 1 && TIMAAT.VideoPlayer.curAnnotation.svg.keyframes.length > 1) {
+						$('#annotationAnimationNeedsGeometricDataModal').modal('show');
+					} else {
+						anno.removeSVGItem(ev.target);
+						TIMAAT.VideoPlayer.updateUI();
+					}
 				}
 			});
+
 			item.on('dragstart', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});
 			// console.log("TCL: Annotation -> addSVGItem -> TIMAAT.VideoPlayer.updateUI()");
 			item.on('dragend', function(ev) {anno.setChanged();TIMAAT.VideoPlayer.updateUI();});

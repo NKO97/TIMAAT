@@ -933,7 +933,7 @@
 
 			$('#timaat-inspector-meta-visual-layer').on('click', function(event) {
 				// if svg and/or animation data is available, prevent un-checking
-				if (TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '"{"keyframes":[{"time":0,"shapes":[]}]}"') {
+				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
 					event.preventDefault();
 					$('#timaat-annotation-analysis-layer-in-use').modal('show');
 					return;
@@ -1157,14 +1157,21 @@
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
 					$('#analysisListNoPermissionModal').modal('show');
 					return;
+
 				}
-				// TODO only allow animation if svg data is available
+				if (TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData == '{"keyframes":[{"time":0,"shapes":[]}]}') {
+					$('#annotationNoGeometricDataModal').modal('show');
+					return;
+				}
 				if ( TIMAAT.VideoPlayer.curAnnotation && !TIMAAT.VideoPlayer.curAnnotation.isAnimation() ) {
 					TIMAAT.VideoPlayer.pause();
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
 					anno.addKeyframeAt(anno.endTime);
+					$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+					
 				}
 			});
+
 			this.ui.removeAnimButton.on('click', function(ev) {
 				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ) {
 					TIMAAT.VideoPlayer.pause();
@@ -1284,8 +1291,8 @@
 					$('#timaat-inspector-meta-comment-group').show();
 					$('#timaat-inspector-meta-transcript-group').hide();
 					var anno = item;
-					var heading = (anno) ? "Annotation bearbeiten" : "Annotation hinzufügen";
-					var submit = (anno) ? "Speichern" : "Hinzufügen";
+					var heading = (anno) ? "Edit annotation" : "Add annotation";
+					var submit = (anno) ? "Save" : "Add";
 					var colorHex = (anno) ? anno.svg.colorHex : this.cp.colorHex.substring(1);
 					var title = (anno) ? anno.model.annotationTranslations[0].title : "";
 					var opacity = (anno) ? anno.opacity : 0.3;
@@ -1326,7 +1333,7 @@
 					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);	
-					$('#timaat-inspector-categories-and-tags-title').html('Kategorien und Tags');
+					$('#timaat-inspector-categories-and-tags-title').html('Categories and tags');
 
 					if ( !anno ) this.open('timaat-inspector-metadata');
 					else this.updateItem();
@@ -1871,6 +1878,9 @@
 					} else {
 						this.ui.addAnimButton.show();
 						this.ui.addAnimButton.prop('disabled', this.state.item.length == 0);
+						if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData == '{"keyframes":[{"time":0,"shapes":[]}]}') {
+							 this.ui.addAnimButton.prop('disabled', true);
+						}
 						this.ui.removeAnimButton.hide();
 					}
 					// set keyframes

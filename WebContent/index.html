@@ -180,6 +180,40 @@
             </div>
           </div>
         </div>
+        <div class="modal fade" id="annotationNoGeometricDataModal" tabindex="-1" role="dialog" aria-labelledby="annotationNoGeometricDataModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="annotationNoGeometricDataModalLabel">No geometric data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                You need to add geometric objects first before you can animate them.
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="annotationAnimationNeedsGeometricDataModal" tabindex="-1" role="dialog" aria-labelledby="annotationAnimationNeedsGeometricDataModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="annotationAnimationNeedsGeometricDataModalLabel">animation requires geometric data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                You cannot delete the last geometric object as long as animation data is available.
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-------------------------------------------------------------------->
       <!-- Navigation                                                     -->
@@ -900,21 +934,21 @@
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-animation">
-                <h1 class="leaflet-sidebar-header border-bottom border-dark">Animationseinstellungen
+                <h1 class="leaflet-sidebar-header border-bottom border-dark">Animation settings
                   <div class="leaflet-sidebar-close">
                     <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
                 <div id="timaat-inspector-animation-pane" class="timaat-inspector-pane">
                   <p>
-                    <strong>Hinweis: </strong>Die Start- und Endzeit einer Annotation mit Animationen kann nicht verändert werden. Annotationen mit gleicher Start- und Endzeit können keine Animationen enthalten.
+                    <strong>Note: </strong>Start and end times of annotations with animations cannot be altered. Annotations cannot have the same start and end time if they shall contain animation data. Geometric data is required to add animations.
                   </p>
                   <br>
                   <button id="timaat-inspector-animation-add-button" class="btn btn-success btn-block">
-                    <i class="fas fa-running fa-fw"></i> Animation erstellen
+                    <i class="fas fa-running fa-fw"></i> Create animation
                   </button>
                   <button id="timaat-inspector-animation-delete-button" class="btn btn-danger btn-block">
-                    <i class="fas fa-trash-alt fa-fw"></i> Animationsdaten entfernen
+                    <i class="fas fa-trash-alt fa-fw"></i> Remove all animation data
                   </button>
                   <br>
                   <h6>Keyframes</h6>
@@ -923,7 +957,7 @@
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-categories-and-tags">
                 <h1 class="leaflet-sidebar-header border-bottom border-dark">
-                  <span id="timaat-inspector-categories-and-tags-title">Kategorien-Sets und Tags</span>
+                  <span id="timaat-inspector-categories-and-tags-title">Category sets and tags</span>
                   <div class="leaflet-sidebar-close">
                     <i class="fas fa-caret-up"></i>
                   </div>
@@ -931,7 +965,7 @@
                 <div id="timaat-inspector-categories-and-tags-pane" class="timaat-inspector-pane">
                   <div id="mediumAnalysisListCategorySetPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .categoryset-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Verknüpfte Kategorien-Sets
+                      <i class="collapse-icon fas fa-fw"></i> Linked category sets
                     </button>
                     <div class="categoryset-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="mediumAnalysisListCategorySetsForm">
@@ -957,7 +991,7 @@
                   </div>
                   <div id="mediumAnalysisListCategoryPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .category-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Verknüpfte Kategorien
+                      <i class="collapse-icon fas fa-fw"></i> Linked categories
                     </button>
                     <div class="category-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <div id="annotation-categories" class="mediumAnalysisListCategories">
@@ -1007,7 +1041,7 @@
                   <hr />
                   <div id="mediumAnalysisListTagPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .tag-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Verknüpfte Tags
+                      <i class="collapse-icon fas fa-fw"></i> Linked tags
                     </button>
                     <div class="tag-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="mediumAnalysisListTagsForm">
@@ -1033,7 +1067,7 @@
                   </div>
                   <div id="annotationTagPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .tag-annotation-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Verknüpfte Tags
+                      <i class="collapse-icon fas fa-fw"></i> Linked tags
                     </button>
                     <div class="tag-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="annotationTagsForm">
@@ -1067,7 +1101,7 @@
                 </h1>
                 <div id="timaat-inspector-actors-pane" class="timaat-inspector-pane">
                   <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-annotation-wrapper">
-                    <i class="collapse-icon fas fa-fw"></i> Verknüpfte Actors
+                    <i class="collapse-icon fas fa-fw"></i> Linked actors
                   </button>
                   <div class="actors-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                     <table class="actors-annotation table table-striped table-bordered table-hover">
@@ -1081,7 +1115,7 @@
                   </div>
                   <div id="timaat-inspector-add-actors">
                     <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-inspector-actors-pane .actors-available-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Actor hinzufügen
+                      <i class="collapse-icon fas fa-fw"></i> Add actor
                     </button>
                     <div class="actors-available-wrapper p-2 border border-light bg-light collapse show">
                       <table class="actors-available table table-striped table-bordered table-hover">
@@ -1104,7 +1138,7 @@
                 </h1>
                 <div id="timaat-inspector-events-pane" class="timaat-inspector-pane">
                   <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-annotation-wrapper">
-                    <i class="collapse-icon fas fa-fw"></i> Verknüpfte Events
+                    <i class="collapse-icon fas fa-fw"></i> Linked events
                   </button>
                   <div class="events-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                     <table class="events-annotation table table-striped table-bordered table-hover">
@@ -1118,7 +1152,7 @@
                   </div>
                   <div id="timaat-inspector-add-events">
                     <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-inspector-events-pane .events-available-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Event hinzufügen
+                      <i class="collapse-icon fas fa-fw"></i> Add Event
                     </button>
                     <div class="events-available-wrapper p-2 border border-light bg-light collapse show">
                       <table class="events-available table table-striped table-bordered table-hover">
@@ -1139,7 +1173,7 @@
                     <i class="fas fa-caret-up"></i>
                   </div>
                 </h1>
-                <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane"> Locations werden von FIPOP noch nicht unterstützt.
+                <div id="timaat-inspector-locations-pane" class="timaat-inspector-pane"> Locations are currently not supported, yet.
                 </div>
               </div>
               <div class="leaflet-sidebar-pane" id="timaat-inspector-analysis">
@@ -1216,7 +1250,7 @@
                           <i class="fas fa-chalkboard"></i> Publication settings
                         </a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.offLinePublication()" id="timaat-medium-offlinepublication">
-                          <i class="fas fa-chalkboard-teacher"></i> Offline-Publication
+                          <i class="fas fa-chalkboard-teacher"></i> Offline publication
                         </a>
                       </div>
                     </div>
