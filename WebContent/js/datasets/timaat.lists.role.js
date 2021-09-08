@@ -520,6 +520,8 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'role-metadata-form');
       $('#list-tab-metadata').data('type', 'role');
 			$('#role-metadata-form').data('role', null);
+      $('#rolegroups-multi-select-dropdown').val(null).trigger('change');
+      $('#actors-multi-select-dropdown').val(null).trigger('change');
       roleFormMetadataValidator.resetForm();
       
       TIMAAT.UI.addSelectedClassToSelectedItem('role', null);
@@ -538,6 +540,8 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'rolegroup-metadata-form');
       $('#list-tab-metadata').data('type', 'roleGroup');
 			$('#rolegroup-metadata-form').data('roleGroup', null);
+      $('#roles-multi-select-dropdown').val(null).trigger('change');
+      $('#actors-multi-select-dropdown').val(null).trigger('change');
       roleGroupFormMetadataValidator.resetForm();
       
       TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', null);

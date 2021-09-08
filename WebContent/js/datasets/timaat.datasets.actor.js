@@ -2846,6 +2846,7 @@
 			this.hideAddActorButton();
 			$('#actor-metadata-form').data('type', type);
 			$('#actor-metadata-form').data('actor', null);
+			$('#person-sex-type-select-dropdown').empty().trigger('change');
 			actorFormMetadataValidator.resetForm();
 
 			$('.carousel-inner').empty();

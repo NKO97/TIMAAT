@@ -857,6 +857,7 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'category-metadata-form');
 			$('#list-tab-metadata').data('type', 'category');
       $('#category-metadata-form').data('category', null);
+      $('#categorySets-multi-select-dropdown').val(null).trigger('change');
       categoryOrCategorySetFormMetadataValidator.resetForm();
       
       TIMAAT.UI.addSelectedClassToSelectedItem('category', null);
@@ -875,6 +876,7 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'categoryset-metadata-form');
 			$('#list-tab-metadata').data('type', 'categorySet');
       $('#categoryset-metadata-form').data('categorySet', null);
+      $('#categories-multi-select-dropdown').val(null).trigger('change');
       categoryOrCategorySetFormMetadataValidator.resetForm();
       
       TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', null);
@@ -902,7 +904,7 @@
       categoryOrCategorySetFormMetadataValidator.resetForm();
 
       $('#dynamic-category-ispartof-categoryset-fields').append(this.appendCategoryIsPartOfCategorySetsDataset());
-      $('#categorysets-multi-select-dropdown').select2({
+      $('#categorySets-multi-select-dropdown').select2({
         closeOnSelect: false,
         scrollAfterSelect: true,
         allowClear: true,
@@ -934,7 +936,7 @@
         },
         minimumInputLength: 0,
       });
-      var categorySetSelect = $('#categorysets-multi-select-dropdown');
+      var categorySetSelect = $('#categorySets-multi-select-dropdown');
       await TIMAAT.CategoryService.getCategoryHasCategorySetList(data.model.id).then(function (data) {
         // console.log("TCL: then: data", data);
         if (data.length > 0) {
@@ -1729,7 +1731,7 @@
           <div class="col-md-12">
             <label class="sr-only">Is part of CategorySet(s)</label>
             <select class="form-control form-control-sm"
-                    id="categorysets-multi-select-dropdown"
+                    id="categorySets-multi-select-dropdown"
                     name="categorySetId"
                     data-placeholder="Select category set(s)"
                     multiple="multiple"

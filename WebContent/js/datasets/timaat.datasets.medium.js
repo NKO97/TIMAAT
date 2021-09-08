@@ -1882,6 +1882,7 @@
 			$('.add-medium-button :input').prop('disabled', true);
 			$('#medium-metadata-form').data('type', type);
 			$('#medium-metadata-form').data('medium', null);
+			$('#medium-title-language-select-dropdown').empty().trigger('change');
 			mediumFormMetadataValidator.resetForm();
 			$('#videoPreview').get(0).pause();
 
