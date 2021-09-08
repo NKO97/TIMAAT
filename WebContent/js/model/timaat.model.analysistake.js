@@ -67,7 +67,7 @@
 			
 			// update timeline position
 			let magicoffset = 0; // TODO replace input slider
-			let width =  $('#timaat-video-seek-bar').width();
+			let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * width;
 			// length -= 2; // TODO magic number - replace input slider
 			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * width;

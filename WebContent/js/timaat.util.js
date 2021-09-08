@@ -43,17 +43,16 @@
 		},
 		
 		formatDate: function (timestamp) {
-    // console.log("TCL: formatDate: function (timestamp)");
-			  var a      = new Date(timestamp);
-			  // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-			  var year   = a.getFullYear();
-			  var month  = ("0" + (a.getMonth()+1)).substr(-2);
-			  var date   = ("0" + a.getDate()).substr(-2);
-			  var hour   = ("0" + a.getHours()).substr(-2);
-			  var min    = ("0" + a.getMinutes()).substr(-2);
-			  var sec    = ("0" + a.getSeconds()).substr(-2);
-			  var time   = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
-			  return time;
+			var a      = new Date(timestamp);
+			// var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+			var year   = a.getFullYear();
+			var month  = ("0" + (a.getMonth()+1)).substr(-2);
+			var date   = ("0" + a.getDate()).substr(-2);
+			var hour   = ("0" + a.getHours()).substr(-2);
+			var min    = ("0" + a.getMinutes()).substr(-2);
+			var sec    = ("0" + a.getSeconds()).substr(-2);
+			var time   = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
+			return time;
 		},
 		
 		formatLogType: function(type) {
@@ -127,9 +126,8 @@
 			switch (shapeFrom.type) {
 				case 'rectangle': 
 					interShape.bounds = [ this._lerpValue(shapeFrom.bounds[0], shapeTo.bounds[0], percent), this._lerpValue(shapeFrom.bounds[1], shapeTo.bounds[1], percent) ];
-//					interShape.bounds = L.latLngBounds( this._lerpValue(shapeFrom.bounds.getSouthWest(), shapeTo.bounds.getSouthWest(), percent), this._lerpValue(shapeFrom.bounds.getNorthEast(), shapeTo.bounds.getNorthEast(), percent) );
+					// interShape.bounds = L.latLngBounds( this._lerpValue(shapeFrom.bounds.getSouthWest(), shapeTo.bounds.getSouthWest(), percent), this._lerpValue(shapeFrom.bounds.getNorthEast(), shapeTo.bounds.getNorthEast(), percent) );
 					break;
-					
 				case "polygon":
 				case "line":
 					interShape.points = new Array();

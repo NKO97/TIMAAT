@@ -923,45 +923,45 @@
 			});
 
 			// setup timeline preview
-			var preview = $('#timaat-video-seek-bar-preview');
+			var preview = $('#video-seek-bar-preview');
 			preview.removeClass('show');
 			preview.hide();
 
-			$('#timaat-video-seek-bar').change(function(ev) {
+			$('#video-seek-bar').change(function(ev) {
 				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});
 
-			$('#timaat-video-seek-bar').on('input', function(ev) {
+			$('#video-seek-bar').on('input', function(ev) {
 			  this.style.background="linear-gradient(to right, #ed1e24 0%,#ed1e24 "+this.value+"%,#939393 "+this.value+"%,#939393 100%)";
 			});	
 
-			$('#timaat-video-seek-bar').on('click', function(ev) {
+			$('#video-seek-bar').on('click', function(ev) {
 				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});	
 
-			$('#timaat-video-seek-bar').mouseenter(function (ev) {
+			$('#video-seek-bar').mouseenter(function (ev) {
 				if ( !TIMAAT.VideoPlayer.video ) return;
-				var preview = $('#timaat-video-seek-bar-preview');
+				var preview = $('#video-seek-bar-preview');
 				preview.addClass('show');
 				preview.show();
 			});
 
-			$('#timaat-video-seek-bar').mouseleave(function (ev) {
-				var preview = $('#timaat-video-seek-bar-preview');
+			$('#video-seek-bar').mouseleave(function (ev) {
+				var preview = $('#video-seek-bar-preview');
 				preview.removeClass('show');
 				preview.hide();
 			});
 
-			$('#timaat-video-seek-bar').mousemove(function (ev) {
+			$('#video-seek-bar').mousemove(function (ev) {
 				if ( !TIMAAT.VideoPlayer.video ) return;
 				var token = TIMAAT.VideoPlayer.model.video.viewToken;
 				var bar = $(this);
 				var time = Math.round(ev.originalEvent.offsetX/bar.width()*TIMAAT.VideoPlayer.duration);
-				var preview = $('#timaat-video-seek-bar-preview');
-				$('#timaat-video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
-				$('#timaat-video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
+				var preview = $('#video-seek-bar-preview');
+				$('#video-seek-bar-preview').css('left', ev.originalEvent.pageX-(preview.width()/2)+'px');
+				$('#video-seek-bar-preview').css('top', bar.offset().top-preview.height()-7+'px');
 				preview.find('img').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.id+"/thumbnail?token="+token+"&time="+time);
 			});
 			
@@ -1222,7 +1222,7 @@
 				$(TIMAAT.VideoPlayer.video).off('canplay');
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(0);
-				$('#timaat-video-seek-bar').val(0);
+				$('#video-seek-bar').val(0);
 				TIMAAT.VideoPlayer.video.currentTime = 0;
 			}
 			if ( this.overlay ) TIMAAT.VideoPlayer.viewer.removeLayer(this.overlay);
@@ -1314,7 +1314,7 @@
 				$(TIMAAT.VideoPlayer.video).off('canplay');
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(0);
-				$('#timaat-video-seek-bar').val(0);
+				$('#video-seek-bar').val(0);
 				TIMAAT.VideoPlayer.video.currentTime = 0;
 			}
 			if ( this.overlay ) TIMAAT.VideoPlayer.viewer.removeLayer(this.overlay);
@@ -1387,7 +1387,7 @@
 			let curVideo = this.video;
 			$(this.video).on('canplay', function(ev) {
 				TIMAAT.VideoPlayer.video.currentTime = 0;
-				$('#timaat-video-seek-bar').val(0);
+				$('#video-seek-bar').val(0);
 				TIMAAT.VideoPlayer.viewer.invalidateSize(true);				
 				TIMAAT.UI.setWaiting(false);
 				$(curVideo).off('canplay');
@@ -1396,8 +1396,8 @@
 				if (TIMAAT.VideoPlayer.duration == 0) return;	
 				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));		
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
-				$('#timaat-video-seek-bar').val(value);
-				$('#timaat-video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
+				$('#video-seek-bar').val(value);
+				$('#video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
 				// update annotation list UI
 				// console.log("TCL: timeupdate -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI("timeupdate");
@@ -1899,11 +1899,9 @@
 				this.curAnnotation.setSelected(true);
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', false);
 				$('#timaat-videoplayer-annotation-remove-button').removeAttr('disabled');
-				// TIMAAT.URLHistory.setURL(null, 'Annotation · '+this.curAnnotation.model.annotationTranslations[0].title, '#analysis/'+this.curAnalysisList.id+'/annotation/'+this.curAnnotation.model.id);
 			} else {
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', true);
 				$('#timaat-videoplayer-annotation-remove-button').attr('disabled');
-				// TIMAAT.URLHistory.setURL(null, 'Analysis · '+ this.curAnalysisList.mediumAnalysisListTranslations[0].title, '#analysis/'+this.curAnalysisList.id);
 				// stop editing in progress
 				if ( TIMAAT.VideoPlayer.viewer.editTools.drawing() ) {
 					try {
@@ -2217,7 +2215,7 @@
 			// let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 			// let videoTime = TIMAAT.VideoPlayer.video.currentTime;
 			// let time = Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime;
-//			if ( videoTime != time ) TIMAAT.VideoPlayer.jumpTo(time);
+			// if ( videoTime != time ) TIMAAT.VideoPlayer.jumpTo(time);
 			$('.playbutton').removeClass('active');
 		},
 

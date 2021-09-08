@@ -21,7 +21,6 @@
 	
 	TIMAAT.Keyframe = class Keyframe {
 		constructor(keyframe, annotation) {
-			// console.log("TCL: Keyframe -> constructor -> keyframe, annotation", keyframe, annotation);
 			this.parent = annotation;
 			this.model = keyframe;
 			this._time = this.model.time;
@@ -36,18 +35,22 @@
 			}
 			// init keyframe UI
 			this.ui = {
-					timelineTemplate : `<div class="timaat-timeline-keyframe"><div class="timaat-timeline-keyframehead"></div></div>`,
+					timelineTemplate : `<div class="timaat-timeline-keyframe">
+																<div class="timaat-timeline-keyframehead">
+																</div>
+															</div>`,
 					inspectorTemplate : `<div class="list-group-item p-0">
-					<div class="input-group input-group-sm">
-						<div class="input-group-prepend">
-							<span class="input-group-text keyframe-number">01</span>
-						</div>
-						<input type="text" class="form-control keyframe-time">
-						<div class="input-group-append">
-							<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
-							<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
-						</div>
-					</div></div>`
+																<div class="input-group input-group-sm">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text keyframe-number">01</span>
+																	</div>
+																	<input type="text" class="form-control keyframe-time">
+																	<div class="input-group-append">
+																		<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
+																		<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
+																	</div>
+																</div>
+															</div>`
 			};
 			this.ui.timelineView = $(this.ui.timelineTemplate);
 			this.ui.inspectorView = $(this.ui.inspectorTemplate);
@@ -62,7 +65,6 @@
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				// console.log("TCL: ev.data.time ",ev.data.time);
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
@@ -240,9 +242,8 @@
 			switch (svgitem.type) {
 				case "rectangle":
 					shape.bounds = [ [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-//					shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
 					return shape;
-					
 				case "polygon":
 				case "line":
 					let points = new Array();
@@ -250,16 +251,15 @@
 						let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						let lng = point[0]*factor*width;
 						points.push([lat, lng]);
-//						points.push(L.latLng(lat, lng));
+						// points.push(L.latLng(lat, lng));
 					};
 					shape.points = points;
 					return shape;
-
 				case "circle":
 					let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
 					let lng = svgitem.x*factor*width;
 					shape.point = [lat, lng];
-//					shape.point = L.latLng(lat,lng);
+					// shape.point = L.latLng(lat,lng);
 					shape.radius = svgitem.radius * factor;
 					return shape;
 			}
@@ -273,14 +273,12 @@
 		}
 
 		_updateOffsetUI() {
-			  var width =  $('#timaat-video-seek-bar').width();
+			  var width =  $('#video-seek-bar').width();
 			  var offset = (this.parent.startTime+this.time) / TIMAAT.VideoPlayer.duration * width;
 			  this.ui.timelineView.css('margin-left', offset+'px');
-
 		}
 		
 		updateStatus() {
-			
 		}
 		
 		updateTimeUI() {
@@ -314,7 +312,6 @@
 				}
 				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
 			}
-			
 		}
 		
 	}

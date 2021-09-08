@@ -264,7 +264,7 @@
 				<div class="top-control">
 					<div class="segment-seekbar seekbar mt-1 mb-1">
 					</div>
-					<div class="video-seekbar seekbar">
+					<div class="video-seek-bar seekbar">
 						<span class="progress"></span>
 					</div>
 				</div>

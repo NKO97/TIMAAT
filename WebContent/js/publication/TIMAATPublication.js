@@ -3,8 +3,9 @@ class AnalysisSegment {
 					// setup model
 					this.model = model;
 					this.active = false;
-					this._startTime = this.model.startTime;
-					this._endTime = this.model.endTime;
+					// TODO still needed?
+					// this._startTime = this.model.startTime;
+					// this._endTime = this.model.endTime;
 					
 					// create and style list view element
 					this.listView = $(`
@@ -17,9 +18,14 @@ class AnalysisSegment {
 							</div>
 						</li>`
 					);
+					// this.timelineView = $(`
+					// 	<div class="timaat-timeline-segment progress bg-info border border-dark" data-toggle="tooltip" data-placement="top" data-html="true">
+					// 		<!-- <div class="timaat-timeline-segment-name text-white font-weight-bold"></div> -->
+					// 	</div>`
+					// );
 					this.timelineView = $(`
-						<div class="timaat-timeline-segment progress bg-info border border-dark" data-toggle="tooltip" data-placement="top" data-html="true">
-							<!-- <div class="timaat-timeline-segment-name text-white font-weight-bold"></div> -->
+						<div class="timaat-timeline-segment">
+							<div class="timaat-timeline-segment-name text-white font-weight-bold"></div>
 						</div>`
 					);
 					
@@ -28,6 +34,9 @@ class AnalysisSegment {
 				
 				updateUI() {
 					this.listView.attr('data-starttime', this.model.startTime);
+					this.listView.attr('data-endtime', this.model.endTime);
+					this.listView.attr('id', 'segment-'+this.model.id);
+					this.listView.attr('data-type', 'segment');
 					let timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
 					let name = this.model.analysisSegmentTranslations[0].name;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
@@ -46,7 +55,7 @@ class AnalysisSegment {
 					
 					// update timeline position
 					let magicoffset = 0;
-					let width =  100;
+					let width =  100; // TODO: $('#video-seek-bar').width(); ?
 					let length = ((this.model.endTime - this.model.startTime)) / TIMAATPub.duration * width;
 					let offset = (this.model.startTime) / TIMAATPub.duration * width;
 					this.timelineView.css('width', length+'%');
@@ -56,9 +65,11 @@ class AnalysisSegment {
 				
 				addUI() {
 					$('#timaat-annotation-list').append(this.listView);
-					$('.segment-seekbar').append(this.timelineView);
+					$('#timaat-timeline-segment-pane').append(this.timelineView);
+					// $('.segment-seekbar').append(this.timelineView);
 
 					var segment = this; // save annotation for events
+					// TODO might need to be adjusted
 					// attach event handlers
 					this.listView.on('click', this, function(ev) {
 						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
@@ -99,6 +110,7 @@ class AnalysisSegment {
 					var status = false;
 					if ( time >= this.model.startTime && time <= this.model.endTime) status = true;
 
+					// TODO might need to be adjusted
 					if ( status != this.active ) {
 						this.active = status;
 						if ( this.active ) this.timelineView.addClass('bg-info');
@@ -118,21 +130,26 @@ class Marker {
 			  // this.annotationID = annotation.model.id;
 			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
 			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
-			  this._color = '#'+annotation.model.selectorSvgs[0].colorHex;
+			  this._colorHex = annotation.model.selectorSvgs[0].colorHex;
 			  
 			  // construct marker element
 			  this.ui = {
 					  offset: 0,
-					  element: $('<div class="timaat-timeline-marker"><div class="timaat-timeline-markerbar"></div><div class="timaat-timeline-markerhead"></div><div class="timaat-timeline-marker-start"></div><div class="timaat-timeline-marker-end"></div></div>'),
-			  };
+						element: $(`<div class="timaat-timeline-marker">
+													<div class="timaat-timeline-markerbar">
+													</div>
+													<div class="timaat-timeline-markerhead">
+													</div>
+													<div class="timaat-timeline-marker-start">
+													</div>
+													<div class="timaat-timeline-marker-end">
+													</div>
+												</div>`),			  };
 			  this.ui.element.attr('id','timaat-marker-'+this.parent.model.id);
 			    
 			  this.regionstart = $(this.ui.element.find('.timaat-timeline-marker-start'));
 			  this.regionend = $(this.ui.element.find('.timaat-timeline-marker-end'));
 			    
-			  var marker = this;
-			  var _markerlength;
-
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  $('#timaat-timeline-marker-pane').append(this.ui.element);
@@ -167,7 +184,7 @@ class Marker {
 		  }
 				
 		  get color() {
-			  return this._color;
+			  return this._colorHex;
 		  }
 			  
 		  remove() {
@@ -178,7 +195,7 @@ class Marker {
 //			  console.log("TCL: Marker -> updateView -> updateView()");
 			  this._from = this.parent.startTime;
 			  this._to = this.parent.endTime;
-			  this._color = '#'+this.parent.svg.color;
+			  this._colorHex = this.parent.svg.colorHex;
 			  this._updateElementColor();
 			  this._updateElementOffset();
 			  this._updateElementStyle();
@@ -198,19 +215,19 @@ class Marker {
 		  }
 
 		  _updateElementColor() {
-//			  console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
+			  // console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
 			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._color,0.3));
-			  this.ui.element.css('border-left-color', this._color);
-			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', this._color);
+			  this.ui.element.css('border-left-color', '#'+this._colorHex);
+			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', '#'+this._colorHex);
 			  this.ui.element.removeClass('timaat-timeline-marker-white');
-			  if ( this._color.toLowerCase() == '#ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
+			  if ( this._colorHex.toLowerCase() == 'ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
 		  }
 			  
 		  _updateElementOffset() {
-//			  console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
+			  // console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
 			  var magicoffset = 0; // TODO replace input slider
 
-			  var width =  $('.video-seekbar').width()
+			  var width =  $('.video-seek-bar').width()
 			  var length = (this._to - this._from) / TIMAATPub.duration * width;
 			  length = Math.max(0,length);
 			  var offset = this._from / TIMAATPub.duration * width;
@@ -218,34 +235,41 @@ class Marker {
 			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
-			  if ( this.annotation.model.layerAudio == true ) startoffset += 37;
+			  if ( TIMAATPub.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
 		  }
 		  
 		  _updateElementStyle() {
-//			  console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
-			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon').removeClass('timaat-markerhead-anim');
+			  // console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
+			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon')
+																													 .removeClass('timaat-markerhead-anim');
 			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
 			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
 			  
-			  this.ui.element.removeClass('timaat-timeline-marker-visual').removeClass('timaat-timeline-marker-audio');
-				( TIMAAT.VideoPlayer.activeLayer == 'visual') ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.addClass('timaat-timeline-marker-audio');
-		  }
+				(this.annotation.model.layerVisual) ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.removeClass('timaat-timeline-marker-visual');
+				(this.annotation.model.layerAudio) ? this.ui.element.addClass('timaat-timeline-marker-audio') : this.ui.element.removeClass('timaat-timeline-marker-audio');
+}
 		  
-		  hexToRgbA(hex, opacity) {
-//			  console.log("TCL: Marker -> hexToRgbA -> hex", hex);
-//			  console.log("TCL: Marker -> hexToRgbA -> opacity", opacity);
-			  var c;
-			  if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-				  c = hex.substring(1).split('');
-				  if ( c.length == 3 ) {
-					  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-				  }
-				  c = '0x'+c.join('');
-				  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
-			  }
-			  throw new Error('Bad Hex');
-		  }
+
+			hexToRgbA(hex, alpha) {
+				var r = parseInt(hex.slice(0, 2), 16);
+				var	g = parseInt(hex.slice(2, 4), 16);
+				var b = parseInt(hex.slice(4, 6), 16);
+				return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+			}
+
+		  // hexToRgbA(hex, opacity) {
+			//   var c;
+			//   if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+			// 	  c = hex.substring(1).split('');
+			// 	  if ( c.length == 3 ) {
+			// 		  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+			// 	  }
+			// 	  c = '0x'+c.join('');
+			// 	  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
+			//   }
+			//   throw new Error('Bad Hex');
+		  // }
 	}
 	
 /* ****************************************************************** */
@@ -268,18 +292,22 @@ class Keyframe {
 			}
 			// init keyframe UI
 			this.ui = {
-					timelineTemplate : `<div class="timaat-timeline-keyframe"><div class="timaat-timeline-keyframehead"></div></div>`,
+					timelineTemplate : `<div class="timaat-timeline-keyframe">
+																<div class="timaat-timeline-keyframehead">
+																</div>
+															</div>`,
 					inspectorTemplate : `<div class="list-group-item p-0">
-					<div class="input-group input-group-sm">
-						<div class="input-group-prepend">
-							<span class="input-group-text keyframe-number">01</span>
-						</div>
-						<input type="text" class="form-control keyframe-time">
-						<div class="input-group-append">
-							<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
-							<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
-						</div>
-					</div></div>`
+																<div class="input-group input-group-sm">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text keyframe-number">01</span>
+																	</div>
+																	<input type="text" class="form-control keyframe-time">
+																	<div class="input-group-append">
+																		<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
+																		<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
+																	</div>
+																</div>
+															</div>`
 			};
 			this.ui.timelineView = $(this.ui.timelineTemplate);
 			this.ui.inspectorView = $(this.ui.inspectorTemplate);
@@ -294,7 +322,7 @@ class Keyframe {
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAATPub.pause();
-				TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time);
+				TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;
@@ -361,35 +389,43 @@ class Keyframe {
 			let shape = {
 					type: svgitem.type,
 			}
-			let width = TIMAATPub.video.mediumVideo.width;
-			let height = TIMAATPub.video.mediumVideo.height;
+			// let width = TIMAATPub.video.mediumVideo.width;
+			// let height = TIMAATPub.video.mediumVideo.height;
+			let width = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.width : TIMAATPub.model.video.mediumImage.width;
+			let height = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.height : TIMAATPub.model.video.mediumImage.height;
+			let factor = TIMAATPub.videoBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
-				id = TIMAAT.Util.createUUIDv4();
+				// id = TIMAAT.Util.createUUIDv4();
+				id = '-----';
 				console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
 			}
 			shape.id = id;
 			switch (svgitem.type) {
 				case "rectangle":
-					shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
+					// shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
+					shape.bounds = [ [Math.round(TIMAATPub.videoBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
+					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
 					return shape;
-					
 				case "polygon":
 				case "line":
 					let points = new Array();
 					for (let point of svgitem.points) {
-						let lat = height-(point[1]*height);
+						// let lat = height-(point[1]*height);
+						let lat = TIMAATPub.videoBounds.getNorth()-(point[1]*factor*height);
 						let lng = point[0]*width;
 						points.push([lat, lng]);
 					};
 					shape.points = points;
 					return shape;
-
 				case "circle":
-					let lat = height-(svgitem.y*height);
-					let lng = svgitem.x*width;
+					// let lat = height-(svgitem.y*height);
+					let lat = TIMAATPub.videoBounds.getNorth()-(svgitem.y*factor*height);
+					// let lng = svgitem.x*width;
+					let lng = svgitem.x*factor*width;
 					shape.point = [lat, lng];
-					shape.radius = svgitem.radius;
+					// shape.radius = svgitem.radius;
+					shape.radius = svgitem.radius * factor;
 					return shape;
 			}
 		}
@@ -402,14 +438,12 @@ class Keyframe {
 		}
 
 		_updateOffsetUI() {
-			  var width =  $('.video-seekbar').width()
+			  var width =  $('.video-seek-bar').width()
 			  var offset = (this.parent.startTime+this.time) / TIMAATPub.duration * width;
 			  this.ui.timelineView.css('margin-left', offset+'px');
-
 		}
 		
 		updateStatus() {
-			
 		}
 		
 		updateTimeUI() {
@@ -443,7 +477,6 @@ class Keyframe {
 				}
 				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
 			}
-			
 		}
 		
 	}
@@ -463,10 +496,10 @@ class Annotation {
 		this.svg.items = Array();
 		this.svg.keyframes = Array();
 		this.svg.strokeWidth = this.model.selectorSvgs[0].strokeWidth ? 2 : 0;
-		this.svg.color = this.model.selectorSvgs[0].colorHex;
-		this.svg.opacity = this.model.selectorSvgs[0].opacity/100;
-		// if ( isNaN(this._opacity) ) this._opacity = 0.3; // default value
+		this.svg.colorHex = this.model.selectorSvgs[0].colorHex;
+		this.svg.opacity = this.model.selectorSvgs[0].opacity/100; //* DB value is stored as Byte 0..100 range is converted to 0..1 range
 		this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
+
 		if ( Array.isArray(this.svg.model) ) {
 			// upgrade old DB model
 			let newModel = {
@@ -492,16 +525,20 @@ class Annotation {
 		// create and style list view element
 		this.listView = $(`
 			<li class="list-group-item" style="padding:0">
-				<div class="timaat-annotation-status-marker" style="float: left;line-height: 300%;margin-right: 5px;">&nbsp;</div>
-				<i class="timaat-annotation-list-type fas fa-image" aria-hidden="true"></i>
-				<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
-				<span class="timaat-annotation-list-time"></span>
-				<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
-				<div class="d-flex justify-content-between">
-					<div class="timaat-annotation-list-title text-muted"></div>
-				</div>
-			</li>`
+					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-draw-polygon" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
+					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
+					<span class="timaat-annotation-list-time"></span>
+					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
+					<div class="d-flex justify-content-between">
+						<div class="timaat-annotation-list-title text-muted"></div>
+					</div>
+				</li>`
 		);
+		if (TIMAATPub.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted'); //? TODO needed?
 			
 		this.updateUI();
 					
@@ -516,6 +553,7 @@ class Annotation {
 		});
 			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
+			//! TODO differs from timaat.annotation.js
 			// convert SVG data
 			this.polygonCount = this.svg.model.keyframes[0].shapes.length;
 			for (let svgitem of this.svg.model.keyframes[0].shapes) {
@@ -524,7 +562,7 @@ class Annotation {
 			};
 			if ( !this.hasPolygons() ) this.addSVGItem(this._parseSVG({ id: "00000000-0000-4000-0000-000000000000", type: "rectangle", x: 0.0, y: 0.0, width: 1.0, height: 1.0, fill: 0 }));
 			
-
+			//! TODO differs from timaat.annotation.js
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
 				TIMAATPub.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
@@ -606,25 +644,29 @@ class Annotation {
 			return this._type;
 		}
 		
-
 		get length() {
 			return this._endTime - this._startTime;
 		}
 
 		hasPolygons() {
-			return this.polygonCount;
+			// return this.polygonCount;
+			return this.svg.items.length > 0;
 		}
 
 		
 		updateUI() {
 			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.color);
+			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('id', 'annotation-'+this.model.id);
+			this.listView.attr('data-type', 'annotation');
+			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
 			var timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
+			if ( TIMAATPub.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
-			this.listView.find('.timaat-annotation-list-title').html(this.model.title);
+			this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
 			// categories
-			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Kategorien");			
+			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");			
 			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
 			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
 			else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
@@ -639,7 +681,7 @@ class Annotation {
 				
 			// update svg
 			for (let item of this.svg.items) {
-				item.setStyle({color:'#'+this.svg.color, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
+				item.setStyle({color:'#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 			};
 			
 			// update marker
@@ -647,16 +689,28 @@ class Annotation {
 		}		  
 
 		_updateAnnotationType() {
-			let type = this.listView.find('.timaat-annotation-list-type');
-			type.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-headphones');
-			if ( this.isAnimation() ) type.text(' \uf70c'); else type.text('');
-			if ( this.layerAudio ) {
-				type.addClass('fa-headphones');
-			}
+			let typeImage = this.listView.find('.timaat-annotation-list-type-image');
+			let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
+			let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
+			let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
 			if ( this.layerVisual) {
-				if ( this.svg.items.length > 0 ) type.addClass('fa-draw-polygon');
-				else type.addClass('fa-image');
+				if ( this.svg.items.length > 0 ) {
+					typePolygon.show();
+					typeImage.hide();
+				}
+				else {
+					typePolygon.hide();
+					typeImage.show();
+				}
+			} else {
+				typePolygon.hide();
+				typeImage.hide();
 			}
+			if ( this.isAnimation() ) {
+				typeAnimation.show();
+				typePolygon.hide()
+			} else typeAnimation.hide();
+			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
 		};
 		
 		remove() {
@@ -683,53 +737,40 @@ class Annotation {
 				// TODO check if stringify needed to decouple references
 				for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
 			}
+			// add to list of shapes
+			this.svg.items.push(item);
+			this.svg.layer.addLayer(item);
 			
+			// in case it was not set before, adding geometric data requires visual layer to be set
+			this.model.layerVisual = true;
+			$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+
 			// add tooltip
 			let tooltip = '<strong>'+this.model.title+'</strong>';
 			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 ) tooltip += '<br><br>'+this.model.annotationTranslations[0].comment;
 			item.bindTooltip(tooltip);
 
-			// add to list of shapes
-			this.svg.items.push(item);
-			this.svg.layer.addLayer(item);
+			// update UI
+			this._updateAnnotationType();
+			if ( this.marker ) this.marker.updateView();
 			
 			// add events
 			let anno = this;
 			item.on('click', function(ev) { TIMAATPub.selectAnnotation(anno); });
 			item.on('dblclick', function(ev) { TIMAATPub.selectAnnotation(anno); TIMAATPub.openSidebar('right') });
+		}
 
-			// update UI
-			this._updateAnnotationType();
-			if ( this.marker ) this.marker.updateView();
-		}
-				
-		removeSVGItem (item) {
-			// console.log("TCL: Annotation -> removeSVGItem -> item", item);
-			if ( !item || !this.svg.items.includes(item) ) return;
-			this.svg.layer.removeLayer(item);
-			var index = this.svg.items.indexOf(item);
-			if (index > -1) this.svg.items.splice(index, 1);
-			// propagate changes to keyframes
-			for (let keyframe of this.svg.keyframes) keyframe.removeShape(item.options.id);
-			
-			// update UI
-			if ( this.svg.items.length == 0 ) {
-				this._updateAnnotationType();
-				if ( this.marker ) this.marker.updateView();
-			}
-		}
-		
 		getModel() {
 			return this.model;
 		}
-		
 
 		updateStatus(time) {
 			time = parseFloat(time.toFixed(3));
 			let animTime = time - this._startTime;
 			animTime = parseFloat(animTime.toFixed(3));
 			var active = false;
-			if ( time >= this.startTime && time <= this.endTime ) active = true;
+			// if ( time >= this.startTime && time <= this.endTime ) active = true;
+			if (  TIMAATPub.duration == 0 || (time >= this.startTime && time <= this.endTime)  ) active = true;
 			this.setActive(active);
 			if ( animTime == this._animTime ) return;
 			this._animTime = animTime;
@@ -769,6 +810,7 @@ class Annotation {
 			}
 			else {
 				this.listView.removeClass('timaat-annotation-list-selected');
+				TIMAATPub.curAnnotation = null;
 			}
 			// update marker
 			if ( this.marker ) this.marker.updateView();
@@ -835,14 +877,12 @@ class Annotation {
 				case 'rectangle':
 					item.setBounds(shape.bounds);
 					return;
-
 				case "polygon":
 					item.setLatLngs([shape.points]);
 					return;
 				case "line":
 					item.setLatLngs(shape.points);
 					return;
-				
 				case "circle":
 					item.setLatLng(shape.point);
 					item.setRadius(shape.radius);
@@ -863,8 +903,11 @@ class Annotation {
 		}
 		
 		_parseSVG(svgitem) {
-			let width = TIMAATPub.video.mediumVideo.width;
-			let height = TIMAATPub.video.mediumVideo.height;
+			// let width = TIMAATPub.video.mediumVideo.width;
+			// let height = TIMAATPub.video.mediumVideo.height;
+			let width = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.width : TIMAATPub.model.video.mediumImage.width;
+			let height = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.height : TIMAATPub.model.video.mediumImage.height;
+			let factor = TIMAATPub.videoBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
 				id = '-----';
@@ -873,36 +916,45 @@ class Annotation {
 			switch (svgitem.type) {
 				case "rectangle":
 					// [[ height, x], [ y, width]]
-					var bounds = [[ Math.round(height-(svgitem.y*height)), Math.round(svgitem.x*width)], [ Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round((svgitem.x+svgitem.width)*width)]];
-					let options = {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth}
-					if ( svgitem.fill == 0 ) {
-						options.fill = false;
-						options.weight = 5
-						options.opacity = 0.7;
-					}
-					return L.rectangle(bounds, options);
+					// var bounds = [[ Math.round(height-(svgitem.y*height)), Math.round(svgitem.x*width)], [ Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round((svgitem.x+svgitem.width)*width)]];
+					// let options = {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}
+					var bounds = [[ Math.round(TIMAATPub.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
+					// TODO still required?
+					// if ( svgitem.fill == 0 ) {
+					// 	options.fill = false;
+					// 	options.weight = 5
+					// 	options.opacity = 0.7;
+					// }
+					// return L.rectangle(bounds, options);
 				case "polygon":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
-						var lat = height-(point[1]*height);
-						var lng = point[0]*width;
+						// var lat = height-(point[1]*height);
+						var lat = TIMAATPubr.videoBounds.getNorth()-(point[1]*factor*height);
+						// var lng = point[0]*width;
+						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 				case "line":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
-						var lat = height-(point[1]*height);
-						var lng = point[0]*width;
+						// var lat = height-(point[1]*height);
+						var lat = TIMAATPub.videoBounds.getNorth()-(point[1]*factor*height);
+						// var lng = point[0]*width;
+						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 				case "circle":
-					var lat = height-(svgitem.y*height);
-					var lng = svgitem.x*width;
-					var radius = svgitem.radius;
-
-					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.color, weight: this.svg.strokeWidth});
+					// var lat = height-(svgitem.y*height);
+					var lat = TIMAATPub.videoBounds.getNorth()-(svgitem.y*factor*height);
+					// var lng = svgitem.x*width;
+					var lng = svgitem.x*factor*width;
+					// var radius = svgitem.radius;
+					var radius = svgitem.radius * factor;
+					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
 			}
 		}		
 	}
@@ -967,13 +1019,13 @@ class TIMAATPublication {
 
 	jumpTo(timeInSeconds) {
 		this.ui.video.currentTime = timeInSeconds;
-		this.updateListUI();
+		// this.updateListUI();
 	}
 	
 	jumpVisible(startInSeconds, endInSeconds) {
 		let curTime = this.ui.video.currentTime;
 		if ( curTime < startInSeconds || curTime > endInSeconds ) this.ui.video.currentTime = startInSeconds;
-		this.updateListUI();
+		// this.updateListUI();
 	}
 	
 	setVolume(volume) {
@@ -1054,14 +1106,12 @@ class TIMAATPublication {
 				case 'rectangle': 
 					interShape.bounds = [ this._lerpValue(shapeFrom.bounds[0], shapeTo.bounds[0], percent), this._lerpValue(shapeFrom.bounds[1], shapeTo.bounds[1], percent) ];
 					break;
-					
 				case "polygon":
 				case "line":
 					interShape.points = new Array();
 					for (let index=0; index < shapeFrom.points.length; index++)
 						interShape.points.push(this._lerpValue(shapeFrom.points[index], shapeTo.points[index], percent));
 					break;
-				
 				case "circle":
 					interShape.point = this._lerpValue(shapeFrom.point, shapeTo.point, percent);
 					interShape.radius = this._lerpValue(shapeFrom.radius, shapeTo.radius, percent);
@@ -1078,37 +1128,36 @@ class TIMAATPublication {
 				return from + (to - from) * percent;
 	}
 	
-	
-	formatTime(seconds, withFraction = false) {
-		var hours = Math.floor(seconds / 60 / 60);
-		var mins = Math.floor((seconds-(hours*60*60)) / 60);
-		var secs = seconds - ((hours*60*60)+(mins*60));
-		secs = Math.floor(secs);
+	formatTime(timeInMilliseconds, withFraction = false) {
+		var timeInSeconds = timeInMilliseconds / 1000;
+		var hours         = Math.floor(timeInSeconds / 3600);
+		var minutes       = Math.floor((timeInSeconds - (hours * 3600)) / 60);
+		var seconds       = timeInSeconds - ((hours * 3600) + (minutes * 60));
+		var fraction      = seconds - Math.floor(seconds);
+		seconds       		= Math.floor(seconds);
 		
 		var time = "";
-		if ( hours >0  ) time += hours+":";
-		if (mins < 10 ) time += "0";
-		time += mins+":";
-		if (secs < 10 ) time += "0";
-		time += secs;
-					
-		var fraction = seconds - ((hours*60*60) + (mins * 60) + secs);
-
-		if ( withFraction ) time += "."+fraction.toFixed(3).substring(2);
+		if ( hours < 10) time += "0";
+		time += hours + ":";
+		if ( minutes < 10 ) time += "0";
+		time += minutes + ":";
+		if ( seconds < 10 ) time += "0";
+		time += seconds;
+		if ( withFraction ) time += fraction.toFixed(3).substring(1);
 
 		return time;
 	}
 	
 	formatDate(timestamp) {
-		var a = new Date(timestamp);
-//		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-		var year = a.getFullYear();
-		var month = ("0" + (a.getMonth()+1)).substr(-2);
-		var date = ("0" + a.getDate()).substr(-2);
-		var hour = ("0" + a.getHours()).substr(-2);
-		var min = ("0" + a.getMinutes()).substr(-2);
-		var sec = ("0" + a.getSeconds()).substr(-2);
-		var time = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
+		var a      = new Date(timestamp);
+		// var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+		var year   = a.getFullYear();
+		var month  = ("0" + (a.getMonth()+1)).substr(-2);
+		var date   = ("0" + a.getDate()).substr(-2);
+		var hour   = ("0" + a.getHours()).substr(-2);
+		var min    = ("0" + a.getMinutes()).substr(-2);
+		var sec    = ("0" + a.getSeconds()).substr(-2);
+		var time   = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
 		return time;
 	}
 	
@@ -1396,8 +1445,8 @@ class TIMAATPublication {
 	setupUI() {
 		if (this.ui) return;
 		this.ui = {
-			videoSeekBar: $('.video-seekbar'),
-			videoProgress: $('.video-seekbar').find('.progress'),
+			videoSeekBar: $('.video-seek-bar'),
+			videoProgress: $('.video-seek-bar').find('.progress'),
 			volumeSlider: $('.volume-seekbar').find('.progress'),
 			timeLabel: $('.start-time'),
 			durationLabel: $('.end-time'),
@@ -1434,11 +1483,15 @@ class TIMAATPublication {
 			listMetadata: $('.list-metadata'),
 			segmentMetadata: $('.segment-metadata'),
 			videoTemplate: `<li class="card mr-2 mb-2 bg-dark" style="width: 268px">
-<a href="#" title="">
-			<img src="#" alt="" class="preview img-responsive card m-auto b-block border-dark" height="150px">
-			<h6 class="pt-1 pl-1 pr-1 text-light" style="font-size:80%;"><i class="fas fa-video"></i> <span class="title">Video</span></h6>
-			<span class="duration badge badge-dark badge-pill" style="position: absolute;top: 10px;right: 20px; opacity: 0.8;">00:00</span>
-		</a></li>`,
+												<a href="#" title="">
+													<img src="#" alt="" class="preview img-responsive card m-auto b-block border-dark" height="150px">
+													<h6 class="pt-1 pl-1 pr-1 text-light" style="font-size:80%;">
+														<i class="fas fa-video"></i>
+														<span class="title">Video</span>
+													</h6>
+													<span class="duration badge badge-dark badge-pill" style="position: absolute;top: 10px;right: 20px; opacity: 0.8;">00:00</span>
+												</a>
+											</li>`,
 		};
 		
 		if ( this.video ) {
@@ -1550,17 +1603,17 @@ class TIMAATPublication {
 		$('#timaat-video-controls').on('mouseleave', ev=> { TIMAATPub.ui.onControls = false; TIMAATPub.updateControlsTimeout(); });
 		
 		$('.sidebar').on('transitionend', function(ev) { TIMAATPub.fitVideo(); });
-		$('.video-seekbar').on('mouseenter mouseleave', ev => { TIMAATPub.ui.seekBarPos = ev.originalEvent.layerX; 
+		$('.video-seek-bar').on('mouseenter mouseleave', ev => { TIMAATPub.ui.seekBarPos = ev.originalEvent.layerX; 
 			if ( ev.type == 'mouseenter' ) TIMAATPub.ui.timeInfoLabel.addClass('show');
 			else TIMAATPub.ui.timeInfoLabel.removeClass('show');
-			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(ev.originalEvent.layerX / $('.video-seekbar').width() * TIMAATPub.duration)));
+			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(ev.originalEvent.layerX / $('.video-seek-bar').width() * TIMAATPub.duration)));
 		});
-		$('.video-seekbar').on('click mousemove', e => {
+		$('.video-seek-bar').on('click mousemove', e => {
 			TIMAATPub.ui.timeInfoLabel.css('left', (e.originalEvent.layerX-30)+'px');
-			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(e.originalEvent.layerX / $('.video-seekbar').width() * TIMAATPub.duration)));
+			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(e.originalEvent.layerX / $('.video-seek-bar').width() * TIMAATPub.duration)));
 			if ( e.type == 'mousemove' && e.originalEvent.buttons != 1 ) return;
-			let seekPos = e.pageX - $('#timaat-video-controls')[0].offsetLeft - $('.video-seekbar')[0].offsetLeft;
-			let seekVal = seekPos / $('.video-seekbar')[0].clientWidth;
+			let seekPos = e.pageX - $('#timaat-video-controls')[0].offsetLeft - $('.video-seek-bar')[0].offsetLeft;
+			let seekVal = seekPos / $('.video-seek-bar')[0].clientWidth;
 			TIMAATPub.jumpTo(seekVal * TIMAATPub.duration);
 		});
 		$('.volume-seekbar').on('click mousemove', e => {
