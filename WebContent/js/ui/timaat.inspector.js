@@ -429,6 +429,8 @@
 						anno.model.layerAudio = layerAudio;
 						anno.saveChanges();
 						TIMAAT.VideoPlayer.updateAnnotation(anno);
+						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.url('/TIMAAT/api/analysis/method/list?visual='+anno.model.layerVisual+'&audio='+anno.model.layerAudio);
+						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 					} else {
 						let model = { 	
 							id: 0, 
