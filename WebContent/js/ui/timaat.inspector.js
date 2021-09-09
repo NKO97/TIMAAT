@@ -935,7 +935,7 @@
 
 			$('#timaat-inspector-meta-visual-layer').on('click', function(event) {
 				// if svg and/or animation data is available, prevent un-checking
-				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
+				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
 					event.preventDefault();
 					$('#timaat-annotation-analysis-layer-in-use').modal('show');
 					return;
@@ -1264,6 +1264,9 @@
 					$('#timaat-inspector-metadata-title').html('Kein Element ausgewählt');
 				break;
 				case 'annotation':
+					if (!item) {
+						TIMAAT.VideoPlayer.curAnnotation = null;
+					}
 					this.enablePanel('timaat-inspector-metadata');
 					// animation panel
 					if ( TIMAAT.VideoPlayer.duration > 0 ) this.enablePanel('timaat-inspector-animation');
