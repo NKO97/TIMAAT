@@ -41,10 +41,12 @@ class AnalysisSegment {
 					let name = this.model.analysisSegmentTranslations[0].name;
 					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
 					let comment = this.model.analysisSegmentTranslations[0].comment;
+					let transcript = this.model.analysisSegmentTranslations[0].transcript;
 					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
 					this.listView.find('.timaat-annotation-segment-name').html(name);
 					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 					this.listView.find('.timaat-annotation-segment-comment').html(comment);
+					this.listView.find('.timaat-annotation-segment-transcript').html(transcript);
 					this.timelineView.find('.timaat-timeline-segment-name ').html(name);
 					this.timelineView.attr('title', '<strong>'+name+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime, true)+' - '+TIMAATPub.formatTime(this.model.endTime, true)+'</div>'+desc);
 					// comment
@@ -55,7 +57,7 @@ class AnalysisSegment {
 					
 					// update timeline position
 					let magicoffset = 0;
-					let width =  100; // TODO: $('#video-seek-bar').width(); ?
+					let width = $('#video-seek-bar').width();
 					let length = ((this.model.endTime - this.model.startTime)) / TIMAATPub.duration * width;
 					let offset = (this.model.startTime) / TIMAATPub.duration * width;
 					this.timelineView.css('width', length+'%');
@@ -72,32 +74,23 @@ class AnalysisSegment {
 					// TODO might need to be adjusted
 					// attach event handlers
 					this.listView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
+						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
-						TIMAATPub.setSegmentMetadata(segment);
-					});
-					this.timelineView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
-						TIMAATPub.pause();
-						TIMAATPub.selectAnnotation(null);
+						$('.annotation-section').hide();
+						$('.segment-section').show();
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.listView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
+						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
 						TIMAATPub.pause();
 						TIMAATPub.selectAnnotation(null);
-						TIMAATPub.setSegmentMetadata(segment);
-					});
-					this.timelineView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime/1000, segment.model.endTime/1000);
-						TIMAATPub.pause();
-						TIMAATPub.selectAnnotation(null);
+						$('.annotation-section').hide();
+						$('.segment-section').show();
 						TIMAATPub.setSegmentMetadata(segment);
 					});
 					this.updateUI();
 					this.timelineView.tooltip();
-					
 				}
 				
 				removeUI() {
@@ -105,10 +98,11 @@ class AnalysisSegment {
 					this.timelineView.remove();
 					this.updateUI();      
 				}
-					
+
+				// not in use
 				updateStatus(time) {
 					var status = false;
-					if ( time >= this.model.startTime && time <= this.model.endTime) status = true;
+					if ( time >= this.model.startTime && time < this.model.endTime) status = true;
 
 					// TODO might need to be adjusted
 					if ( status != this.active ) {
@@ -124,7 +118,6 @@ class AnalysisSegment {
 
 class Marker {
 		  constructor(annotation) {
-     		// console.log("TCL: Marker -> constructor -> annotation", annotation);
 			  this.parent = annotation;
 			  this.annotation = annotation;
 			  // this.annotationID = annotation.model.id;
@@ -192,7 +185,6 @@ class Marker {
 		  }
 			  
 		  updateView() {
-//			  console.log("TCL: Marker -> updateView -> updateView()");
 			  this._from = this.parent.startTime;
 			  this._to = this.parent.endTime;
 			  this._colorHex = this.parent.svg.colorHex;
@@ -215,8 +207,7 @@ class Marker {
 		  }
 
 		  _updateElementColor() {
-			  // console.log("TCL: Marker -> _updateElementColor -> _updateElementColor()");
-			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._color,0.3));
+			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._colorHex, 0.3));
 			  this.ui.element.css('border-left-color', '#'+this._colorHex);
 			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', '#'+this._colorHex);
 			  this.ui.element.removeClass('timaat-timeline-marker-white');
@@ -224,10 +215,9 @@ class Marker {
 		  }
 			  
 		  _updateElementOffset() {
-			  // console.log("TCL: Marker -> _updateElementOffset -> _updateElementOffset()");
 			  var magicoffset = 0; // TODO replace input slider
 
-			  var width =  $('.video-seek-bar').width()
+			  var width = $('.video-seek-bar').width();
 			  var length = (this._to - this._from) / TIMAATPub.duration * width;
 			  length = Math.max(0,length);
 			  var offset = this._from / TIMAATPub.duration * width;
@@ -240,7 +230,6 @@ class Marker {
 		  }
 		  
 		  _updateElementStyle() {
-			  // console.log("TCL: Marker -> _updateElementStyle -> _updateElementStyle()");
 			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon')
 																													 .removeClass('timaat-markerhead-anim');
 			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
@@ -248,8 +237,7 @@ class Marker {
 			  
 				(this.annotation.model.layerVisual) ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.removeClass('timaat-timeline-marker-visual');
 				(this.annotation.model.layerAudio) ? this.ui.element.addClass('timaat-timeline-marker-audio') : this.ui.element.removeClass('timaat-timeline-marker-audio');
-}
-		  
+			}
 
 			hexToRgbA(hex, alpha) {
 				var r = parseInt(hex.slice(0, 2), 16);
@@ -258,18 +246,6 @@ class Marker {
 				return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
 			}
 
-		  // hexToRgbA(hex, opacity) {
-			//   var c;
-			//   if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-			// 	  c = hex.substring(1).split('');
-			// 	  if ( c.length == 3 ) {
-			// 		  c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-			// 	  }
-			// 	  c = '0x'+c.join('');
-			// 	  return 'rgba('+[(c>>16)&255, (c>>8)&255, (c)&255].join(',')+','+opacity+')';
-			//   }
-			//   throw new Error('Bad Hex');
-		  // }
 	}
 	
 /* ****************************************************************** */
@@ -389,11 +365,16 @@ class Keyframe {
 			let shape = {
 					type: svgitem.type,
 			}
-			// let width = TIMAATPub.video.mediumVideo.width;
-			// let height = TIMAATPub.video.mediumVideo.height;
-			let width = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.width : TIMAATPub.model.video.mediumImage.width;
-			let height = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.height : TIMAATPub.model.video.mediumImage.height;
-			let factor = TIMAATPub.videoBounds.getNorth() / height;
+			let width = 0;
+			let height = 0;
+			if (TIMAATData.mediumVideo) {
+				width = TIMAATPub.video.mediumVideo.width;
+				height = TIMAATPub.video.mediumVideo.height;
+			} else if (TIMAATData.mediumImage) {
+				width = TIMAATPub.video.mediumImage.width;
+				height = TIMAATPub.video.mediumImage.height;
+			}
+			let factor = TIMAATPub.mediumBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
 				// id = TIMAAT.Util.createUUIDv4();
@@ -404,15 +385,15 @@ class Keyframe {
 			switch (svgitem.type) {
 				case "rectangle":
 					// shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
-					shape.bounds = [ [Math.round(TIMAATPub.videoBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+					shape.bounds = [ [Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
+					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
 					return shape;
 				case "polygon":
 				case "line":
 					let points = new Array();
 					for (let point of svgitem.points) {
 						// let lat = height-(point[1]*height);
-						let lat = TIMAATPub.videoBounds.getNorth()-(point[1]*factor*height);
+						let lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
 						let lng = point[0]*width;
 						points.push([lat, lng]);
 					};
@@ -420,7 +401,7 @@ class Keyframe {
 					return shape;
 				case "circle":
 					// let lat = height-(svgitem.y*height);
-					let lat = TIMAATPub.videoBounds.getNorth()-(svgitem.y*factor*height);
+					let lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
 					// let lng = svgitem.x*width;
 					let lng = svgitem.x*factor*width;
 					shape.point = [lat, lng];
@@ -438,7 +419,7 @@ class Keyframe {
 		}
 
 		_updateOffsetUI() {
-			  var width =  $('.video-seek-bar').width()
+			  var width = $('.video-seek-bar').width();
 			  var offset = (this.parent.startTime+this.time) / TIMAATPub.duration * width;
 			  this.ui.timelineView.css('margin-left', offset+'px');
 		}
@@ -538,7 +519,7 @@ class Annotation {
 					</div>
 				</li>`
 		);
-		if (TIMAATPub.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted'); //? TODO needed?
+		if (TIMAATPub.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
 			
 		this.updateUI();
 					
@@ -551,427 +532,445 @@ class Annotation {
 			TIMAATPub.pause();
 			if ( TIMAATPub.curAnnotation != ev.data ) TIMAATPub.selectAnnotation(ev.data);
 		});
-			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
-			//! TODO differs from timaat.annotation.js
-			// convert SVG data
-			this.polygonCount = this.svg.model.keyframes[0].shapes.length;
-			for (let svgitem of this.svg.model.keyframes[0].shapes) {
-				let item = this._parseSVG(svgitem);
-				this.addSVGItem(item);
-			};
-			if ( !this.hasPolygons() ) this.addSVGItem(this._parseSVG({ id: "00000000-0000-4000-0000-000000000000", type: "rectangle", x: 0.0, y: 0.0, width: 1.0, height: 1.0, fill: 0 }));
-			
-			//! TODO differs from timaat.annotation.js
-			// attach event handlers
-			$(this.listView).on('click', this, function(ev) {
-				TIMAATPub.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
-				if ( TIMAATPub.curAnnotation != ev.data ) TIMAATPub.selectAnnotation(ev.data);
-				else TIMAATPub.selectAnnotation(null);
-				TIMAATPub.pause();
-			});
-			$(this.listView).on('dblclick', this, function(ev) {
-				TIMAATPub.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
-				TIMAATPub.selectAnnotation(ev.data);
-				TIMAATPub.pause();
-				TIMAATPub.openSidebar('right');
-			});
+		this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
 
-			// create marker with UI
-			this.marker = new Marker(this);
-			this.marker.updateView();
-		}
-		
-		isAnimation() {
-			return this.svg.keyframes.length > 1;
-		}
-		
-		get currentKeyframe() {
-			let curKeyframe = this.svg.keyframes[0];
-			if ( !this.isAnimation() ) return curKeyframe;
-			for (let keyframe of this.svg.keyframes) if ( this._animTime >= keyframe.time ) curKeyframe = keyframe;
-			return curKeyframe;
-		}
-		
-		get nextKeyframe() {
-			if ( !this.isAnimation() ) return this.svg.keyframes[0];
-			let index = this.svg.keyframes.indexOf(this.currentKeyframe);
-			if ( index < 0 ) return this.svg.keyframes[0];
-			index += 1;
-			if ( index >= this.svg.keyframes.length ) index = this.svg.keyframes.length-1;
-			return this.svg.keyframes[index];
-		}
-		
-		isOnKeyframe() {
-			let onKeyframe = false;
-			if ( !this.isAnimation() ) onKeyframe = true;
-			else for (let keyframe of this.svg.keyframes) if ( this._animTime == keyframe.time ) onKeyframe = true;
-			return onKeyframe;
-		}
-		
-		getKeyframeIndex(keyframe) {
-			if ( !keyframe || !this.isAnimation() ) return 0;
-			let index = this.svg.keyframes.indexOf(keyframe);
-			if ( index < 0 ) index = 0;
-			return index;
-		}
-		
-		get opacity() {
-			return this.svg.opacity;
-		}
-			
-		get layerVisual() {
-			return this._layerVisual;
-		}
-
-		get layerAudio() {
-			return this._layerAudio;
-		}
-		  
-		get stroke() {
-			return this.svg.strokeWidth;
-		}
-
-		get startTime() {
-			return this._startTime;
-		}
-			
-		get endTime() {
-			return this._endTime;
-		}
-		
-		get type() {
-			return this._type;
-		}
-		
-		get length() {
-			return this._endTime - this._startTime;
-		}
-
-		hasPolygons() {
-			// return this.polygonCount;
-			return this.svg.items.length > 0;
-		}
-
-		
-		updateUI() {
-			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.attr('data-endtime', this.model.endTime);
-			this.listView.attr('id', 'annotation-'+this.model.id);
-			this.listView.attr('data-type', 'annotation');
-			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
-			var timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
-			if ( TIMAATPub.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
-			this.listView.find('.timaat-annotation-list-time').html(timeString);
-			this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
-			// categories
-			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");			
-			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
-			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
-			else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
-			// type
-			this._updateAnnotationType();
-			
-			// comment
-			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
-				this.listView.find('.timaat-annotation-list-comment').show();
-			else
-				this.listView.find('.timaat-annotation-list-comment').hide();
-				
-			// update svg
-			for (let item of this.svg.items) {
-				item.setStyle({color:'#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
-			};
-			
-			// update marker
-			if ( this.marker ) this.marker.updateView();
-		}		  
-
-		_updateAnnotationType() {
-			let typeImage = this.listView.find('.timaat-annotation-list-type-image');
-			let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
-			let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
-			let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
-			if ( this.layerVisual) {
-				if ( this.svg.items.length > 0 ) {
-					typePolygon.show();
-					typeImage.hide();
-				}
-				else {
-					typePolygon.hide();
-					typeImage.show();
-				}
-			} else {
-				typePolygon.hide();
-				typeImage.hide();
-			}
-			if ( this.isAnimation() ) {
-				typeAnimation.show();
-				typePolygon.hide()
-			} else typeAnimation.hide();
-			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
+		//! TODO differs from timaat.annotation.js
+		// convert SVG data
+		this.polygonCount = this.svg.model.keyframes[0].shapes.length;
+		for (let svgitem of this.svg.model.keyframes[0].shapes) {
+			let item = this._parseSVG(svgitem);
+			this.addSVGItem(item);
 		};
+		if ( !this.hasPolygons() ) this.addSVGItem(this._parseSVG({ id: "00000000-0000-4000-0000-000000000000", type: "rectangle", x: 0.0, y: 0.0, width: 1.0, height: 1.0, fill: 0 }));
 		
-		remove() {
-			// remove annotation from UI
-			this.listView.remove();
-			this.marker.remove();
-			this.svg.layer.remove();
-			this.selected = false;
-			this._destroyed = true;
-		}
-		
-		addSVGItem (item) {
-			if ( !item || this.svg.items.includes(item) ) return;
-			// generate UUID for shape and propagate through keyframes
-			if ( !item.options.id ) {
-				item.options.id = '-----';
-				let shape = { id: item.options.id };
-				if ( item instanceof L.Rectangle ) shape.type = 'rectangle';
-				else if ( item instanceof L.Polygon ) shape.type = 'polygon';
-				else if ( item instanceof L.Polyline ) shape.type = 'line';
-				else if ( item instanceof L.Circle ) shape.type = 'circle';
-				shape = this.syncShape(item, shape);
-				// propagate changes to keyframes
-				// TODO check if stringify needed to decouple references
-				for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
-			}
-			// add to list of shapes
-			this.svg.items.push(item);
-			this.svg.layer.addLayer(item);
-			
-			// in case it was not set before, adding geometric data requires visual layer to be set
-			this.model.layerVisual = true;
-			$('#timaat-inspector-meta-visual-layer').prop('checked', true);
-
-			// add tooltip
-			let tooltip = '<strong>'+this.model.title+'</strong>';
-			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 ) tooltip += '<br><br>'+this.model.annotationTranslations[0].comment;
-			item.bindTooltip(tooltip);
-
-			// update UI
-			this._updateAnnotationType();
-			if ( this.marker ) this.marker.updateView();
-			
-			// add events
-			let anno = this;
-			item.on('click', function(ev) { TIMAATPub.selectAnnotation(anno); });
-			item.on('dblclick', function(ev) { TIMAATPub.selectAnnotation(anno); TIMAATPub.openSidebar('right') });
-		}
-
-		getModel() {
-			return this.model;
-		}
-
-		updateStatus(time) {
-			time = parseFloat(time.toFixed(3));
-			let animTime = time - this._startTime;
-			animTime = parseFloat(animTime.toFixed(3));
-			var active = false;
-			// if ( time >= this.startTime && time <= this.endTime ) active = true;
-			if (  TIMAATPub.duration == 0 || (time >= this.startTime && time <= this.endTime)  ) active = true;
-			this.setActive(active);
-			if ( animTime == this._animTime ) return;
-			this._animTime = animTime;
-			this._updateShapeUI();
-			// update keyframe UI
-			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
-		}
-		
-		isActive() {
-			return this.active;
-		}
-		
-		setActive(active) {
-			if ( this.active == active ) return;
-			this.active = active;
-			if ( active ) {
-				this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
-				TIMAATPub.viewer.annoLayer.addLayer(this.svg.layer);
-				// scroll list
-				this._scrollIntoView(this.listView);
-			} else {
-				this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
-				TIMAATPub.viewer.annoLayer.removeLayer(this.svg.layer);
-				this.svg.layer.options.removed = true;
-			}
-		}
-				
-		setSelected(selected) {
-			if (this._destroyed) return;
-			if ( this.selected == selected ) return;			
-			this.selected = selected;
-			if ( selected ) {
-				this.listView.addClass('timaat-annotation-list-selected');
-				for (let item of this.svg.items) {
-					try {item.bringToFront();} catch(e){};
-				};
+		//! TODO differs from timaat.annotation.js
+		// attach event handlers
+		$(this.listView).on('click', this, function(ev) {
+			TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
+			if ( TIMAATPub.curAnnotation != ev.data ) {
+				TIMAATPub.selectAnnotation(ev.data);
+				$('.segment-section').hide();
+				$('.annotation-section').show();
 			}
 			else {
-				this.listView.removeClass('timaat-annotation-list-selected');
-				TIMAATPub.curAnnotation = null;
+				TIMAATPub.selectAnnotation(null);
+				$('.annotation-section').hide();
 			}
-			// update marker
-			if ( this.marker ) this.marker.updateView();
-			// update keyframe UI
-			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
-		}
+			TIMAATPub.pause();
+		});
+		$(this.listView).on('dblclick', this, function(ev) {
+			TIMAATPub.jumpVisible(ev.data.startTime, ev.data.endTime);
+			TIMAATPub.selectAnnotation(ev.data);
+			$('.segment-section').hide();
+			$('.annotation-section').show();
+			TIMAATPub.pause();
+			TIMAATPub.openSidebar('right');
+		});
 
-		isSelected() {
-			return this.selected;
-		}
-		
-		syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
-			if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
-			let id = svgitem.options.id;
-			if ( !shape ) shape = this.currentKeyframe.getShape(id);
-			if ( !shape ) return;
-			switch (shape.type) {
-				case 'rectangle':
-					shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
-					break;
-
-				case "polygon":
-					shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
-					break;
-				case "line":
-					shape.points = this._copyLatLngs(svgitem.getLatLngs());
-					break;
-
-				case "circle":
-					shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
-					shape.radius = svgitem.getRadius();
-					break;
-			}
-			return shape;
-		}
-		
-		_copyLatLngs(latlngs) {
-			let points = new Array();
-			for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
-			return points;
-		}
-		
-		_updateShapeUI() {
-			if ( this._destroyed || !this.isAnimation() || !this.isActive() ) return;
-			let fromKeyframe = this.currentKeyframe;
-			let toKeyframe = this.nextKeyframe;
-			let interpolate = ( fromKeyframe != toKeyframe );
-			let percent = (this._animTime-fromKeyframe.time) / (toKeyframe.time-fromKeyframe.time);
-			for (let item of this.svg.items) {
-				if ( interpolate ) {
-					this._updateSVGItem(item, TIMAATPub.getInterpolatedShape(
-							fromKeyframe.getShape(item.options.id),
-							toKeyframe.getShape(item.options.id),
-							percent
-					));
-				} else this._updateSVGItem(item, fromKeyframe.getShape(item.options.id));
-			}
-		}
-
-		_updateSVGItem(item, shape) {
-			if ( !item || !shape ) return;
-			if ( item.options.id != shape.id ) return;
-			switch (shape.type) {
-				case 'rectangle':
-					item.setBounds(shape.bounds);
-					return;
-				case "polygon":
-					item.setLatLngs([shape.points]);
-					return;
-				case "line":
-					item.setLatLngs(shape.points);
-					return;
-				case "circle":
-					item.setLatLng(shape.point);
-					item.setRadius(shape.radius);
-					return;
-			}
-		}
-		
-		_scrollIntoView(listItem) {
-			var listTop = $('.timaat-annotation-wrapper').scrollTop();
-			var listHeight = $('.timaat-annotation-wrapper').height();
-			var elementTop = listItem.position().top;
-			// TODO scroll from bottom if out of view
-			if ( elementTop < 0 )
-				$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
-			if ( elementTop > listHeight )
-				$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
-				
-		}
-		
-		_parseSVG(svgitem) {
-			// let width = TIMAATPub.video.mediumVideo.width;
-			// let height = TIMAATPub.video.mediumVideo.height;
-			let width = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.width : TIMAATPub.model.video.mediumImage.width;
-			let height = ( TIMAATPub.mediaType == 'video' ) ? TIMAATPub.model.video.mediumVideo.height : TIMAATPub.model.video.mediumImage.height;
-			let factor = TIMAATPub.videoBounds.getNorth() / height;
-			let id = svgitem.id;
-			if ( !id ) {
-				id = '-----';
-				console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
-			}
-			switch (svgitem.type) {
-				case "rectangle":
-					// [[ height, x], [ y, width]]
-					// var bounds = [[ Math.round(height-(svgitem.y*height)), Math.round(svgitem.x*width)], [ Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round((svgitem.x+svgitem.width)*width)]];
-					// let options = {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}
-					var bounds = [[ Math.round(TIMAATPub.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAATPub.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
-					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
-					// TODO still required?
-					// if ( svgitem.fill == 0 ) {
-					// 	options.fill = false;
-					// 	options.weight = 5
-					// 	options.opacity = 0.7;
-					// }
-					// return L.rectangle(bounds, options);
-				case "polygon":
-					var points = new Array();
-					$(svgitem.points).each(function(index,point) {
-						// var lat = height-(point[1]*height);
-						var lat = TIMAATPubr.videoBounds.getNorth()-(point[1]*factor*height);
-						// var lng = point[0]*width;
-						var lng = point[0]*factor*width;
-						points.push([lat,lng]);
-					});
-					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
-				case "line":
-					var points = new Array();
-					$(svgitem.points).each(function(index,point) {
-						// var lat = height-(point[1]*height);
-						var lat = TIMAATPub.videoBounds.getNorth()-(point[1]*factor*height);
-						// var lng = point[0]*width;
-						var lng = point[0]*factor*width;
-						points.push([lat,lng]);
-					});
-					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
-				case "circle":
-					// var lat = height-(svgitem.y*height);
-					var lat = TIMAATPub.videoBounds.getNorth()-(svgitem.y*factor*height);
-					// var lng = svgitem.x*width;
-					var lng = svgitem.x*factor*width;
-					// var radius = svgitem.radius;
-					var radius = svgitem.radius * factor;
-					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
-			}
-		}		
+		// create marker with UI
+		this.marker = new Marker(this);
+		this.marker.updateView();
 	}
+		
+	isAnimation() {
+		return this.svg.keyframes.length > 1;
+	}
+	
+	get currentKeyframe() {
+		let curKeyframe = this.svg.keyframes[0];
+		if ( !this.isAnimation() ) return curKeyframe;
+		for (let keyframe of this.svg.keyframes) if ( this._animTime >= keyframe.time ) curKeyframe = keyframe;
+		return curKeyframe;
+	}
+	
+	get nextKeyframe() {
+		if ( !this.isAnimation() ) return this.svg.keyframes[0];
+		let index = this.svg.keyframes.indexOf(this.currentKeyframe);
+		if ( index < 0 ) return this.svg.keyframes[0];
+		index += 1;
+		if ( index >= this.svg.keyframes.length ) index = this.svg.keyframes.length-1;
+		return this.svg.keyframes[index];
+	}
+	
+	isOnKeyframe() {
+		let onKeyframe = false;
+		if ( !this.isAnimation() ) onKeyframe = true;
+		else for (let keyframe of this.svg.keyframes) if ( this._animTime == keyframe.time ) onKeyframe = true;
+		return onKeyframe;
+	}
+	
+	getKeyframeIndex(keyframe) {
+		if ( !keyframe || !this.isAnimation() ) return 0;
+		let index = this.svg.keyframes.indexOf(keyframe);
+		if ( index < 0 ) index = 0;
+		return index;
+	}
+	
+	get opacity() {
+		return this.svg.opacity;
+	}
+
+	get layerVisual() {
+		return this._layerVisual;
+	}
+
+	get layerAudio() {
+		return this._layerAudio;
+	}
+		
+	get stroke() {
+		return this.svg.strokeWidth;
+	}
+
+	get startTime() {
+		return this._startTime;
+	}
+		
+	get endTime() {
+		return this._endTime;
+	}
+	
+	get type() {
+		return this._type;
+	}
+	
+	get length() {
+		return this._endTime - this._startTime;
+	}
+
+	hasPolygons() {
+		// return this.polygonCount;
+		return this.svg.items.length > 0;
+	}
+
+	
+	updateUI() {
+		this.listView.attr('data-starttime', this.model.startTime);
+		this.listView.attr('data-endtime', this.model.endTime);
+		this.listView.attr('id', 'annotation-'+this.model.id);
+		this.listView.attr('data-type', 'annotation');
+		this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
+		var timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
+		if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
+		// if ( TIMAATPub.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
+		this.listView.find('.timaat-annotation-list-time').html(timeString);
+		this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
+		// categories
+		this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Kategorien");			
+		if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
+		else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
+		else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
+		// type
+		this._updateAnnotationType();
+		
+		// comment
+		if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
+			this.listView.find('.timaat-annotation-list-comment').show();
+		else
+			this.listView.find('.timaat-annotation-list-comment').hide();
+			
+		// update svg
+		for (let item of this.svg.items) {
+			item.setStyle({color:'#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
+		};
+		
+		// update marker
+		if ( this.marker ) this.marker.updateView();
+	}		  
+
+	_updateAnnotationType() {
+		let typeImage = this.listView.find('.timaat-annotation-list-type-image');
+		let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
+		let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
+		let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
+		if ( this.layerVisual) {
+			if ( this.svg.items.length > 0 ) {
+				typePolygon.show();
+				typeImage.hide();
+			}
+			else {
+				typePolygon.hide();
+				typeImage.show();
+			}
+		} else {
+			typePolygon.hide();
+			typeImage.hide();
+		}
+		if ( this.isAnimation() ) {
+			typeAnimation.show();
+			typePolygon.hide()
+		} else typeAnimation.hide();
+		( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
+	};
+	
+	remove() {
+		// remove annotation from UI
+		this.listView.remove();
+		this.marker.remove();
+		this.svg.layer.remove();
+		this.selected = false;
+		this._destroyed = true;
+	}
+	
+	addSVGItem (item) {
+		if ( !item || this.svg.items.includes(item) ) return;
+		// generate UUID for shape and propagate through keyframes
+		if ( !item.options.id ) {
+			item.options.id = '-----';
+			let shape = { id: item.options.id };
+			if ( item instanceof L.Rectangle ) shape.type = 'rectangle';
+			else if ( item instanceof L.Polygon ) shape.type = 'polygon';
+			else if ( item instanceof L.Polyline ) shape.type = 'line';
+			else if ( item instanceof L.Circle ) shape.type = 'circle';
+			shape = this.syncShape(item, shape);
+			// propagate changes to keyframes
+			// TODO check if stringify needed to decouple references
+			for (let keyframe of this.svg.keyframes) keyframe.addShape(Object.assign({}, shape));
+		}
+		// add to list of shapes
+		this.svg.items.push(item);
+		this.svg.layer.addLayer(item);
+		
+		// in case it was not set before, adding geometric data requires visual layer to be set
+		this.model.layerVisual = true;
+		$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+
+		// add tooltip
+		let tooltip = '<strong>'+this.model.annotationTranslations[0].title+'</strong>';
+		if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 ) tooltip += '<br><br>'+this.model.annotationTranslations[0].comment;
+		item.bindTooltip(tooltip);
+
+		// update UI
+		this._updateAnnotationType();
+		if ( this.marker ) this.marker.updateView();
+		
+		// add events
+		let anno = this;
+		item.on('click', function(ev) { TIMAATPub.selectAnnotation(anno); });
+		item.on('dblclick', function(ev) { TIMAATPub.selectAnnotation(anno); TIMAATPub.openSidebar('right') });
+	}
+
+	getModel() {
+		return this.model;
+	}
+
+	updateStatus(time) {
+		time = parseFloat(time.toFixed(3));
+		let animTime = time - this._startTime;
+		animTime = parseFloat(animTime.toFixed(3));
+		var active = false;
+		if (  TIMAATPub.duration == 0 || (time >= this.startTime && time < this.endTime)  ) active = true;
+		this.setActive(active);
+		if ( animTime == this._animTime ) return;
+		this._animTime = animTime;
+		this._updateShapeUI();
+		// update keyframe UI
+		if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
+	}
+	
+	isActive() {
+		return this.active;
+	}
+	
+	setActive(active) {
+		if ( this.active == active ) return;
+		this.active = active;
+		if ( active ) {
+			this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
+			TIMAATPub.viewer.annoLayer.addLayer(this.svg.layer);
+			// scroll list
+			this._scrollIntoView(this.listView);
+		} else {
+			this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
+			TIMAATPub.viewer.annoLayer.removeLayer(this.svg.layer);
+			this.svg.layer.options.removed = true;
+		}
+	}
+			
+	setSelected(selected) {
+		if (this._destroyed) return;
+		if ( this.selected == selected ) return;			
+		this.selected = selected;
+		if ( selected ) {
+			this.listView.addClass('timaat-annotation-list-selected');
+			for (let item of this.svg.items) {
+				try {item.bringToFront();} catch(e){};
+			};
+		}
+		else {
+			this.listView.removeClass('timaat-annotation-list-selected');
+			TIMAATPub.curAnnotation = null;
+		}
+		// update marker
+		if ( this.marker ) this.marker.updateView();
+		// update keyframe UI
+		if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
+	}
+
+	isSelected() {
+		return this.selected;
+	}
+	
+	syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
+		if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
+		let id = svgitem.options.id;
+		if ( !shape ) shape = this.currentKeyframe.getShape(id);
+		if ( !shape ) return;
+		switch (shape.type) {
+			case 'rectangle':
+				shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
+				break;
+
+			case "polygon":
+				shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
+				break;
+			case "line":
+				shape.points = this._copyLatLngs(svgitem.getLatLngs());
+				break;
+
+			case "circle":
+				shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
+				shape.radius = svgitem.getRadius();
+				break;
+		}
+		return shape;
+	}
+	
+	_copyLatLngs(latlngs) {
+		let points = new Array();
+		for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
+		return points;
+	}
+	
+	_updateShapeUI() {
+		if ( this._destroyed || !this.isAnimation() || !this.isActive() ) return;
+		let fromKeyframe = this.currentKeyframe;
+		let toKeyframe = this.nextKeyframe;
+		let interpolate = ( fromKeyframe != toKeyframe );
+		let percent = (this._animTime-fromKeyframe.time) / (toKeyframe.time-fromKeyframe.time);
+		for (let item of this.svg.items) {
+			if ( interpolate ) {
+				this._updateSVGItem(item, TIMAATPub.getInterpolatedShape(
+						fromKeyframe.getShape(item.options.id),
+						toKeyframe.getShape(item.options.id),
+						percent
+				));
+			} else this._updateSVGItem(item, fromKeyframe.getShape(item.options.id));
+		}
+	}
+
+	_updateSVGItem(item, shape) {
+		if ( !item || !shape ) return;
+		if ( item.options.id != shape.id ) return;
+		switch (shape.type) {
+			case 'rectangle':
+				item.setBounds(shape.bounds);
+				return;
+			case "polygon":
+				item.setLatLngs([shape.points]);
+				return;
+			case "line":
+				item.setLatLngs(shape.points);
+				return;
+			case "circle":
+				item.setLatLng(shape.point);
+				item.setRadius(shape.radius);
+				return;
+		}
+	}
+	
+	_scrollIntoView(listItem) {
+		var listTop = $('.timaat-annotation-wrapper').scrollTop();
+		var listHeight = $('.timaat-annotation-wrapper').height();
+		var elementTop = listItem.position().top;
+		// TODO scroll from bottom if out of view
+		if ( elementTop < 0 )
+			$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
+		if ( elementTop > listHeight )
+			$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
+			
+	}
+	
+	_parseSVG(svgitem) {
+		let width = 0;
+			let height = 0;
+			if (TIMAATData.mediumVideo) {
+				width = TIMAATPub.video.mediumVideo.width;
+				height = TIMAATPub.video.mediumVideo.height;
+			} else if (TIMAATData.mediumImage) {
+				width = TIMAATPub.video.mediumImage.width;
+				height = TIMAATPub.video.mediumImage.height;
+			}
+		let factor = TIMAATPub.mediumBounds.getNorth() / height;
+		let id = svgitem.id;
+		if ( !id ) {
+			id = '-----';
+			console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+		}
+		switch (svgitem.type) {
+			case "rectangle":
+				// [[ height, x], [ y, width]]
+				// var bounds = [[ Math.round(height-(svgitem.y*height)), Math.round(svgitem.x*width)], [ Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round((svgitem.x+svgitem.width)*width)]];
+				// let options = {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}
+				var bounds = [[ Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+				return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
+				// TODO still required?
+				// if ( svgitem.fill == 0 ) {
+				// 	options.fill = false;
+				// 	options.weight = 5
+				// 	options.opacity = 0.7;
+				// }
+				// return L.rectangle(bounds, options);
+			case "polygon":
+				var points = new Array();
+				$(svgitem.points).each(function(index,point) {
+					// var lat = height-(point[1]*height);
+					var lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
+					// var lng = point[0]*width;
+					var lng = point[0]*factor*width;
+					points.push([lat,lng]);
+				});
+				return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
+			case "line":
+				var points = new Array();
+				$(svgitem.points).each(function(index,point) {
+					// var lat = height-(point[1]*height);
+					var lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
+					// var lng = point[0]*width;
+					var lng = point[0]*factor*width;
+					points.push([lat,lng]);
+				});
+				return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, opacity: this.svg.opacity});
+			case "circle":
+				// var lat = height-(svgitem.y*height);
+				var lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
+				// var lng = svgitem.x*width;
+				var lng = svgitem.x*factor*width;
+				// var radius = svgitem.radius;
+				var radius = svgitem.radius * factor;
+				return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
+		}
+	}		
+}
 
 /* ****************************************************************** */
 
 class TIMAATPublication {
 	constructor() {
-		this.version = "v1.2";
+		this.version = "v1.3";
 		// setup model
 		if ( TIMAATData.mediaCollectionHasMediums != null ) {
 			this.collection = TIMAATData;
 			this.video = null;
-		} else {
+		} else if (TIMAATData.mediumVideo) {
 			this.collection = null;
 			this.video = TIMAATData;
 			this.duration = this.video.mediumVideo.length;
+		} else if (TIMAATData.mediumImage) {
+			this.collection = null;
+			this.video = TIMAATData;
+			this.duration = 0;
 		}
 		this.frameRate = 25;
 		this.volume = 1.0;
@@ -981,9 +980,9 @@ class TIMAATPublication {
 		this.setupUI();
 		
 		// setup events
-		$('.timaat-ui-mode').on('click', function() {
+		// $('.timaat-ui-mode').on('click', function() {
 			
-		})
+		// })
 
 		// animation player shape updater
 		let animFrameRate = 20;
@@ -997,7 +996,6 @@ class TIMAATPublication {
 		let startList = (this.video) ? TIMAATPub.video.mediumAnalysisLists[0] : null;
 		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.video ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-    // console.log("TCL ~ TIMAATPublication ~ run ~ startList", startList);
 		if ( this.video ) this.setupAnalysisList(startList);
 
 		// restore session
@@ -1005,27 +1003,30 @@ class TIMAATPublication {
 	}
 	
 	pause() {
-		this.ui.video.pause();
-		// let frameTime = 1000 / this.frameRate;
-		// let videoTime = this.ui.video.currentTime*1000;
-		// let time = Math.round(this.ui.video.currentTime*1000/frameTime) * frameTime;
+		var isPlaying = this.ui.video.currentTime > 0 && !this.ui.video.paused && !this.ui.video.ended && this.ui.video.readyState > this.ui.video.HAVE_CURRENT_DATA;
+		if (isPlaying) {
+			this.ui.video.pause();
+		}
 		$('.toggle-play-pause').removeClass('pause').addClass('play');
 	}
 
 	play() {
-		this.ui.video.play();
+		var isPlaying = this.ui.video.currentTime > 0 && !this.ui.video.paused && !this.ui.video.ended && this.ui.video.readyState > this.ui.video.HAVE_CURRENT_DATA;
+		if (!isPlaying) {
+			this.ui.video.play();
+		}
 		$('.toggle-play-pause').removeClass('play').addClass('pause');
 	}
 
 	jumpTo(timeInSeconds) {
 		this.ui.video.currentTime = timeInSeconds;
-		// this.updateListUI();
+		// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
 	}
 	
-	jumpVisible(startInSeconds, endInSeconds) {
-		let curTime = this.ui.video.currentTime;
-		if ( curTime < startInSeconds || curTime > endInSeconds ) this.ui.video.currentTime = startInSeconds;
-		// this.updateListUI();
+	jumpVisible(startInMilliseconds, endInMilliseconds) {
+		let curTime = this.ui.video.currentTime * 1000;
+		if ( curTime < startInMilliseconds || curTime >= endInMilliseconds ) this.ui.video.currentTime = startInMilliseconds / 1000;
+		// this.updateListUI(); // obsolete as on timeupdate is called afterward
 	}
 	
 	setVolume(volume) {
@@ -1062,7 +1063,7 @@ class TIMAATPublication {
 	fitVideo() {
 		if ( !this.video ) return;
 		this.viewer.invalidateSize();
-		this.viewer.fitBounds(TIMAATPub.videoBounds);
+		this.viewer.fitBounds(TIMAATPub.mediumBounds);
 /*
 		let left = $(this.ui.video).offset().left;
 		let right = $(this.ui.video).width();
@@ -1072,7 +1073,7 @@ class TIMAATPublication {
 	}
 	
 	updateSeekBar() {
-		this.ui.videoProgress.css('width', parseFloat( ((this.ui.video.currentTime / this.duration) * 100.0).toString() )+'%' );
+		this.ui.videoProgress.css('width', parseFloat( ((this.ui.video.currentTime*1000 / this.duration) * 100.0).toString() )+'%' );
 	}
 	
 	updateTimeInfo() {
@@ -1174,6 +1175,30 @@ class TIMAATPublication {
 			this.ui.list.comment.removeClass('empty');
 			this.ui.list.comment.find('.contents').html(this.curAnalysisList.mediumAnalysisListTranslations[0].text);
 		}
+		if ( !this.curAnalysisList.categorySets || this.curAnalysisList.categorySets.length == 0) {
+			this.ui.list.categorySets.addClass('empty');
+		}	else {
+			let i = 0;
+			let categorySetString = '';
+			for (; i < this.curAnalysisList.categorySets.length; i++) {
+				categorySetString += this.curAnalysisList.categorySets[i].name + ', ';
+			}
+			categorySetString = categorySetString.slice(0, -2); // remove last ', ' from string
+			this.ui.list.categorySets.removeClass('empty');
+			this.ui.list.categorySets.find('.contents').html(categorySetString);
+		}
+		if ( !this.curAnalysisList.tags || this.curAnalysisList.tags.length == 0) {
+			this.ui.list.tags.addClass('empty');
+		} else {
+			let i = 0;
+			let tagString = '';
+			for (; i < this.curAnalysisList.tags.length; i++) {
+				tagString += this.curAnalysisList.tags[i].name + ', ';
+			}
+			tagString = tagString.slice(0, -2); // remove last ', ' from string
+			this.ui.list.tags.removeClass('empty');
+			this.ui.list.tags.find('.contents').html(tagString);
+		}
 	}
 
 	setSegmentMetadata(segment) {
@@ -1205,6 +1230,18 @@ class TIMAATPublication {
 		else {
 			this.ui.segment.transcript.removeClass('empty');
 			this.ui.segment.transcript.find('.contents').html(transcript);
+		}
+		if ( !segment.model.categories || segment.model.categories.length == 0) {
+			this.ui.segment.categories.addClass('empty');
+		}	else {
+			let i = 0;
+			let categoryString = '';
+			for (; i < segment.model.categories.length; i++) {
+				categoryString += segment.model.categories[i].name + ', ';
+			}
+			categoryString = categoryString.slice(0, -2); // remove last ', ' from string
+			this.ui.segment.categories.removeClass('empty');
+			this.ui.segment.categories.find('.contents').html(categoryString);
 		}
 	}
 
@@ -1349,22 +1386,65 @@ class TIMAATPublication {
 	
 	setAnnotationMetadata() {
 		if ( !this.curAnnotation ) return;
-
-		if ( !this.curAnnotation.model.title || this.curAnnotation.model.title == 0) this.ui.annotation.title.addClass('empty');
+		if ( !this.curAnnotation.model.annotationTranslations[0].title || this.curAnnotation.model.annotationTranslations[0].title == 0) this.ui.annotation.title.addClass('empty');
 		else {
 			this.ui.annotation.title.removeClass('empty');
-			this.ui.annotation.title.find('.contents').html(this.curAnnotation.model.title);
+			this.ui.annotation.title.find('.contents').html(this.curAnnotation.model.annotationTranslations[0].title);
 		}
 		if ( !this.curAnnotation.model.annotationTranslations[0].comment || this.curAnnotation.model.annotationTranslations[0].comment == 0) this.ui.annotation.comment.addClass('empty');
 		else {
 			this.ui.annotation.comment.removeClass('empty');
 			this.ui.annotation.comment.find('.contents').html(this.curAnnotation.model.annotationTranslations[0].comment);
 		}
-		this.ui.annotation.categories.addClass('empty');
-		this.ui.annotation.actors.addClass('empty');
-		this.ui.annotation.events.addClass('empty');
-		this.ui.annotation.places.addClass('empty');
-		this.ui.annotation.links.addClass('empty');
+		if ( !this.curAnnotation.model.categories || this.curAnnotation.model.categories.length == 0) {
+			this.ui.annotation.categories.addClass('empty');
+		}	else {
+			let i = 0;
+			let categoryString = '';
+			for (; i < this.curAnnotation.model.categories.length; i++) {
+				categoryString += this.curAnnotation.model.categories[i].name + ', ';
+			}
+			categoryString = categoryString.slice(0, -2); // remove last ', ' from string
+			this.ui.annotation.categories.removeClass('empty');
+			this.ui.annotation.categories.find('.contents').html(categoryString);
+		}
+		if ( !this.curAnnotation.model.tags || this.curAnnotation.model.tags.length == 0) {
+			this.ui.annotation.tags.addClass('empty');
+		} else {
+			let i = 0;
+			let tagString = '';
+			for (; i < this.curAnnotation.model.tags.length; i++) {
+				tagString += this.curAnnotation.model.tags[i].name + ', ';
+			}
+			tagString = tagString.slice(0, -2); // remove last ', ' from string
+			this.ui.annotation.tags.removeClass('empty');
+			this.ui.annotation.tags.find('.contents').html(tagString);
+		}
+		if ( !this.curAnnotation.model.actors || this.curAnnotation.model.actors.length == 0) {
+			this.ui.annotation.actors.addClass('empty');
+		} else {
+			let i = 0;
+			let actorString = '';
+			for (; i < this.curAnnotation.model.actors.length; i++) {
+				actorString += this.curAnnotation.model.actors[i].displayName.name + ', ';
+			}
+			actorString = actorString.slice(0, -2); // remove last ', ' from string
+			this.ui.annotation.actors.removeClass('empty');
+			this.ui.annotation.actors.find('.contents').html(actorString);
+		}
+		if ( !this.curAnnotation.model.events || this.curAnnotation.model.events.length == 0) {
+			this.ui.annotation.events.addClass('empty');
+		} else {
+			let i = 0;
+			let eventString = '';
+			for (; i < this.curAnnotation.model.events.length; i++) {
+				eventString += this.curAnnotation.model.events[i].eventTranslations[0].name + ', ';
+			}
+			eventString = eventString.slice(0, -2); // remove last ', ' from string
+			this.ui.annotation.events.removeClass('empty');
+			this.ui.annotation.events.find('.contents').html(eventString);
+		}
+		// this.ui.annotation.places.addClass('empty');
 		
 	}
 	
@@ -1413,7 +1493,9 @@ class TIMAATPublication {
 		this.updateListUI();
 		this.sortListUI();
 		
-		this.ui.video.pause();
+		if (TIMAATData.mediumVideo) {
+			this.ui.video.pause();
+		}
 	}
 	
 	sortSegments() {
@@ -1460,11 +1542,13 @@ class TIMAATPublication {
 				source : $('.medium-source'),
 				copyright : $('.medium-copyright'),
 				categories : $('.medium-categories'),
+				tags : $('.medium-tags'),
 			},
 			annotation: {
 				title : $('.annotation-title'),
 				comment : $('.annotation-comment'),
 				categories : $('.annotation-categories'),
+				tags : $('.annotation-tags'),
 				actors : $('.annotation-actors'),
 				events : $('.annotation-events'),
 				places : $('.annotation-places'),
@@ -1473,11 +1557,15 @@ class TIMAATPublication {
 			list: {
 				title : $('.list-title'),
 				comment : $('.list-comment'),
+				categorySets : $('.list-categorySets'),
+				tags : $('.list-tags'),
 			},
 			segment: {
 				title : $('.segment-name'),
 				description : $('.segment-description'),
 				comment : $('.segment-comment'),
+				transcript : $('.segment-transcript'),
+				categories : $('.segment-categories'),
 			},
 			annoMetadata: $('.annotation-metadata'),
 			listMetadata: $('.list-metadata'),
@@ -1514,12 +1602,21 @@ class TIMAATPublication {
 			this.viewer.scrollWheelZoom.disable();
 		
 			// video
-			this.videoBounds = L.latLngBounds([[ this.video.mediumVideo.height, 0], [ 0, this.video.mediumVideo.width]]);
-			this.viewer.setMaxBounds(this.videoBounds);
-			this.viewer.fitBounds(this.videoBounds);
-			let filename = ( TIMAATSettings.offline ) ? this.video.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
-			this.overlay = L.videoOverlay(filename, this.videoBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
-			this.ui.video = this.overlay.getElement();
+			if (TIMAATData.mediumVideo) {
+				this.mediumBounds = L.latLngBounds([[ this.video.mediumVideo.height, 0], [ 0, this.video.mediumVideo.width]]);
+				this.viewer.setMaxBounds(this.mediumBounds);
+				this.viewer.fitBounds(this.mediumBounds);
+				let filename = ( TIMAATSettings.offline ) ? this.video.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
+				this.overlay = L.videoOverlay(filename, this.mediumBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
+				this.ui.video = this.overlay.getElement();
+			} else if (TIMAATData.mediumImage) {
+				this.mediumBounds = L.latLngBounds([[ this.video.mediumImage.height, 0], [ 0, this.video.mediumImage.width]]);
+				this.viewer.setMaxBounds(this.mediumBounds);
+				this.viewer.fitBounds(this.mediumBounds);
+				let filename = ( TIMAATSettings.offline ) ? this.video.id+'.png' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
+				this.overlay = L.imageOverlay( filename, this.mediumBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
+				this.ui.video = this.overlay.getElement();
+			}
 
 			// polygon layer
 			this.viewer.annoLayer = new L.LayerGroup();;
@@ -1533,8 +1630,12 @@ class TIMAATPublication {
 				this.ui.analysislist.append(item);
 				item.on('click', ev => { TIMAATPub.setupAnalysisList(list) });
 			}
+
+			// initial display adjustments
+			$('.annotation-section').hide();
+			$('.segment-section').hide();
 		
-			// mediumvideo metadata
+			// medium metadata
 			let title = this.video.displayTitle.name+' ('+this.video.displayTitle.language.code+')';
 			if ( this.video.originalTitle ) title += '<br>OT: '+this.video.originalTitle.name+' ('+this.video.originalTitle.language.code+')'
 			this.ui.medium.title.find('.contents').html(title);
@@ -1551,9 +1652,30 @@ class TIMAATPublication {
 				}
 				this.ui.medium.source.find('.contents').html(sources);
 			}
-			if ( !this.video.copyright || this.video.copyright.length == 0) this.ui.medium.copyright.addClass('empty')
+			if ( !this.video.copyright || this.video.copyright.length == 0) this.ui.medium.copyright.addClass('empty');
 			else this.ui.medium.copyright.find('.contents').html(this.video.copyright);
-			this.ui.medium.categories.addClass('empty');
+			if ( !this.video.categories || this.video.categories.length == 0) this.ui.medium.categories.addClass('empty');
+			else {
+				let i = 0;
+				let categoryString = '';
+				for (; i < this.video.categories.length; i++) {
+					categoryString += this.video.categories[i].name + ', ';
+				}
+				categoryString = categoryString.slice(0, -2); // remove last ', ' from string
+				this.ui.medium.categories.removeClass('empty');
+				this.ui.medium.categories.find('.contents').html(categoryString);
+			}
+			if ( !this.video.tags || this.video.tags.length == 0) this.ui.medium.tags.addClass('empty');
+			else {
+				let i = 0;
+				let tagString = '';
+				for (; i < this.video.tags.length; i++) {
+					tagString += this.video.tags[i].name + ', ';
+				}
+				tagString = tagString.slice(0, -2); // remove last ', ' from string
+				this.ui.medium.tags.removeClass('empty');
+				this.ui.medium.tags.find('.contents').html(tagString);
+			}
 		} else {
 			// setup video list
 			let list = $('#timaat-collection');
@@ -1569,9 +1691,7 @@ class TIMAATPublication {
 				item.find('.duration').html(this.formatTime(medium.mediumVideo.length,true));
 				list.append(item);
 			}
-			// console.log(list);
 		}
-		
 
 		// settings events
 		$('.timaat-publication-settings').on('click', function(ev) {ev.stopPropagation();});
@@ -1598,24 +1718,39 @@ class TIMAATPublication {
 			else $('#timaat-toggle-fullscreen').addClass('btn-outline-dark').removeClass('btn-dark');
 		});
 		
-		$('#timaat-viewer').on('mousemove', ev=> { $('#timaat-video-controls').fadeIn(); TIMAATPub.updateControlsTimeout(); });
-		$('#timaat-video-controls').on('mouseenter', ev=> { TIMAATPub.ui.onControls = true; TIMAATPub.updateControlsTimeout(); });
-		$('#timaat-video-controls').on('mouseleave', ev=> { TIMAATPub.ui.onControls = false; TIMAATPub.updateControlsTimeout(); });
+		if (TIMAATData.mediumVideo) {
+			$('#timaat-viewer').on('mousemove', ev=> { $('#timaat-video-controls').fadeIn(); TIMAATPub.updateControlsTimeout(); });
+			$('#timaat-video-controls').on('mouseenter', ev=> { TIMAATPub.ui.onControls = true; TIMAATPub.updateControlsTimeout(); });
+			$('#timaat-video-controls').on('mouseleave', ev=> { TIMAATPub.ui.onControls = false; TIMAATPub.updateControlsTimeout(); });
+		} else if (TIMAATData.mediumImage) {
+			$('.stop-playback-conditions').hide();
+			$('#timaat-video-controls').show();
+			$('.top-control').hide();
+			$('.playback-controls').hide();
+			$('.video-volume-control').hide();
+			$('.video-timings').removeClass('d-inline-flex');
+			$('.video-timings').hide();
+			$('.video-speed-info').closest('div').hide();
+			$('.toggle-right-sidebar').trigger('click');
+		}
 		
 		$('.sidebar').on('transitionend', function(ev) { TIMAATPub.fitVideo(); });
+
 		$('.video-seek-bar').on('mouseenter mouseleave', ev => { TIMAATPub.ui.seekBarPos = ev.originalEvent.layerX; 
 			if ( ev.type == 'mouseenter' ) TIMAATPub.ui.timeInfoLabel.addClass('show');
 			else TIMAATPub.ui.timeInfoLabel.removeClass('show');
 			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(ev.originalEvent.layerX / $('.video-seek-bar').width() * TIMAATPub.duration)));
 		});
+
 		$('.video-seek-bar').on('click mousemove', e => {
 			TIMAATPub.ui.timeInfoLabel.css('left', (e.originalEvent.layerX-30)+'px');
 			TIMAATPub.ui.timeInfoLabel.text(TIMAATPub.formatTime(parseFloat(e.originalEvent.layerX / $('.video-seek-bar').width() * TIMAATPub.duration)));
 			if ( e.type == 'mousemove' && e.originalEvent.buttons != 1 ) return;
 			let seekPos = e.pageX - $('#timaat-video-controls')[0].offsetLeft - $('.video-seek-bar')[0].offsetLeft;
 			let seekVal = seekPos / $('.video-seek-bar')[0].clientWidth;
-			TIMAATPub.jumpTo(seekVal * TIMAATPub.duration);
+			TIMAATPub.jumpTo(seekVal * TIMAATPub.duration/1000);
 		});
+
 		$('.volume-seekbar').on('click mousemove', e => {
 			e.preventDefault();
 			if ( e.type == 'mousemove' && e.originalEvent.buttons != 1 ) return;
@@ -1623,6 +1758,7 @@ class TIMAATPublication {
 			seekVal = Math.max(0.0, Math.min(seekVal, 1.0));
 			TIMAATPub.setVolume(seekVal);
 		});
+
 		$('.stepbckbutton').on('click dblclick', ev => {
 			ev.preventDefault();
 			ev.stopPropagation();
@@ -1632,15 +1768,17 @@ class TIMAATPublication {
 				Math.max(0, (Math.round(TIMAATPub.ui.video.currentTime / frameTime) * frameTime) - frameTime)
 			);
 		});
+
 		$('.stepfwdbutton').on('click dblclick', ev => {
 			ev.preventDefault();
 			ev.stopPropagation();
 			TIMAATPub.pause();
 			let frameTime = 1 / TIMAATPub.frameRate;
 			TIMAATPub.jumpTo(
-				Math.min(TIMAATPub.ui.video.duration, (Math.round(TIMAATPub.ui.video.currentTime / frameTime) * frameTime) + frameTime)
+				Math.min(TIMAATPub.duration, (Math.round(TIMAATPub.ui.video.currentTime / frameTime) * frameTime) + frameTime)
 			);
 		});
+
 		$('.video-speed').on('click', function() {
 			var playbackSpeeds = [1,2,0.5,0.25]; // TODO move to config
 
@@ -1675,8 +1813,11 @@ class TIMAATPublication {
 		 
 		$('.toggle-play-pause').on('click', ev => {
 			ev.preventDefault();
-			if ( $('.toggle-play-pause').hasClass('play') ) TIMAATPub.play(); else TIMAATPub.pause();
+			if (TIMAATData.mediumVideo) {
+				if ( $('.toggle-play-pause').hasClass('play') ) TIMAATPub.play(); else TIMAATPub.pause();
+			}
 		});
+
 		$('.toggle-volume').on('click', ev => {
 			ev.preventDefault();
 			if ( TIMAATPub.ui.video.volume > 0 ) {
@@ -1748,14 +1889,14 @@ class TIMAATPublication {
 			if ( !TIMAATPub.curAnnotation || TIMAATPub.curAnnotation.model.uuid.uuid != id ) for ( let anno of TIMAATPub.annotationList ) if ( anno.model.uuid.uuid == id ) {
 				TIMAATPub.selectAnnotation(anno);
 				TIMAATPub.pause();
-				TIMAATPub.jumpVisible(anno.startTime/1000, anno.endTime/1000);
+				TIMAATPub.jumpVisible(anno.startTime, anno.endTime);
 			}
 		});
 		
 		// text
 		if ( this.video ) {
 			$('.video-title').text(this.video.displayTitle.name);
-			this.ui.video.durationLabel.html(this.formatTime(this.duration));
+			this.ui.durationLabel.html(this.formatTime(this.duration, true));
 		} else {
 			$('.video-title').text(this.collection.title);
 		}

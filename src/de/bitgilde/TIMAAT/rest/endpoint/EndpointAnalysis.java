@@ -372,7 +372,7 @@ public class EndpointAnalysis {
 																										 @QueryParam("length") Integer length,
 																										 @QueryParam("language") String languageCode)
 	{
-		System.out.println("EndpointAnalysis: getAnalysisMethodElementSelectList: methodTypeId: "+methodTypeId+" element: "+element+" start: "+start+" length: "+length+" language: "+languageCode);
+		// System.out.println("EndpointAnalysis: getAnalysisMethodElementSelectList: methodTypeId: "+methodTypeId+" element: "+element+" start: "+start+" length: "+length+" language: "+languageCode);
 
 		// String column = "a.id";
 		// if ( orderby != null ) {

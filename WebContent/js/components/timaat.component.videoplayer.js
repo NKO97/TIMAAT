@@ -376,8 +376,8 @@
 			});
 
 			// publication dialog events
-			$('#timaat-publish-video-switch, #timaat-publication-protected-switch').on('change', ev => {
-				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-video-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
+			$('#timaat-publish-medium-switch, #timaat-publication-protected-switch').on('change', ev => {
+				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-medium-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
 			});
 
 			let dialog = $('#timaat-videoplayer-publication');
@@ -389,7 +389,7 @@
 			});
 
 			dialog.find('.username, .password').on('change input', ev => {
-				let enabled = $('#timaat-publish-video-switch').prop('checked');
+				let enabled = $('#timaat-publish-medium-switch').prop('checked');
 				let restricted = $('#timaat-publication-protected-switch').prop('checked');
 				let username = dialog.find('.username').val();
 				let password = dialog.find('.password').val();
@@ -1206,7 +1206,7 @@
 		},
 		
 		setupImage: function(image) {
-			console.log("TCL: setupImage: function(image) ", image);
+			// console.log("TCL: setupImage: function(image) ", image);
 			let type = image.mediaType.mediaTypeTranslations[0].type;
 			this.mediaType = type;
 			
@@ -1352,7 +1352,7 @@
 			$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedVideo.model);');
 			$('.timaat-sidebar-tab-videoplayer').attr('title', 'Annotate video');
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length,true));
+			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length, true));
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 			// this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
@@ -1977,8 +1977,13 @@
 
 		offLinePublication: function() {
 			let modal = $('#timaat-videoplayer-download-publication');
-			modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
-			modal.find('a.download-video-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
+			if (TIMAAT.VideoPlayer.mediaType == 'video') {
+				modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
+				modal.find('a.download-medium-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
+			} else if (TIMAAT.VideoPlayer.mediaType == 'image') {
+				modal.find('a.download-player-link').attr('href', 'api/medium/image/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
+				modal.find('a.download-medium-link').attr('href', 'api/medium/image/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
+			}
 			modal.modal('show');
 		},
 
@@ -2209,9 +2214,13 @@
 		},
 		
 		pause: function() {
-			// console.log("TCL: pause: function()");
 			if ( !this.video || this.mediaType != 'video' ) return;
-			this.video.pause();
+			var isPlaying = this.video.currentTime > 0 && !this.video.paused && !this.video.ended && this.video.readyState > this.video.HAVE_CURRENT_DATA;
+
+			if (isPlaying) {
+				this.video.pause();
+			}
+			// this.video.pause();
 			// let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
 			// let videoTime = TIMAAT.VideoPlayer.video.currentTime;
 			// let time = Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime;
@@ -2220,9 +2229,13 @@
 		},
 
 		play: function() {
-			// console.log("TCL: play: function()");
 			if ( !this.video || this.mediaType != 'video' ) return;
-			this.video.play();
+			var isPlaying = this.video.currentTime > 0 && !this.video.paused && !this.video.ended && this.video.readyState > this.video.HAVE_CURRENT_DATA;
+
+			if (!isPlaying) {
+				this.video.play();
+			}
+			// this.video.play();
 			$('.playbutton').addClass('active');
 		},
 		
@@ -2297,7 +2310,7 @@
 		
 		_updatePublicationSettings: function() {
 			let dialog = $('#timaat-videoplayer-publication');
-			let enabled = $('#timaat-publish-video-switch').prop('checked');
+			let enabled = $('#timaat-publish-medium-switch').prop('checked');
 			let restricted = $('#timaat-publication-protected-switch').prop('checked');
 			let username = ( dialog.find('.username').val() && restricted ) ? dialog.find('.username').val() : '';
 			let password = ( dialog.find('.password').val() && restricted ) ? dialog.find('.password').val() : '';
@@ -2343,7 +2356,7 @@
 		},
 		
 		_setupPublicationDialog: function(enabled, restricted) {
-			$('#timaat-publish-video-switch').prop('checked', enabled);
+			$('#timaat-publish-medium-switch').prop('checked', enabled);
 			$('#timaat-publication-protected-switch').prop('checked', restricted);
 			let credentials = {};
 			try {

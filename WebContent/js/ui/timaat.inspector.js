@@ -1947,7 +1947,7 @@
 		}
 		
 		setMetaEnd(milliseconds) {
-			console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
+			// console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
 			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 			var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 			if ( milliseconds == 0 ) {

@@ -36,6 +36,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
+import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
 /**
 *
@@ -224,7 +225,6 @@ public class PublicationServlet {
 		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
 
 		ResponseBuilder rb = Response.ok();
-		rb.header("Content-Type", "video/mp4");
 
 		// find medium
 		Medium medium = null;
@@ -233,16 +233,25 @@ public class PublicationServlet {
 			for ( MediaCollectionHasMedium colMed : pub.getCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		File file = new File( 
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + itemID + "/" + itemID + "-video.mp4");
-		
-		return rb
-				.status( Response.Status.PARTIAL_CONTENT )
-				.header( HttpHeaders.CONTENT_LENGTH, file.length() )
-				.header( "Accept-Ranges", "bytes" )
-				.build();
+
+		if ( medium.getMediumVideo() != null) {		
+			File file = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+													 + "medium/video/" + itemID + "/" + itemID + "-video.mp4");
+			rb.header("Content-Type", "video/mp4");
+			return rb.status( Response.Status.PARTIAL_CONTENT )
+							 .header( HttpHeaders.CONTENT_LENGTH, file.length() )
+							 .header( "Accept-Ranges", "bytes" )
+							 .build();
+		} else if (medium.getMediumImage() != null) {
+			File file = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+													 + "medium/image/" + itemID + "/" + itemID + "-image-scaled.png");
+			rb.header("Content-Type", "image/png");
+			return rb.status( Response.Status.PARTIAL_CONTENT )
+							 .header( HttpHeaders.CONTENT_LENGTH, file.length() )
+							 .header( "Accept-Ranges", "bytes" )
+							 .build();
+		}
+		else return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -268,8 +277,19 @@ public class PublicationServlet {
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + itemID + "/" + itemID + "-video.mp4", headers, "video/mp4");
+		if (medium.getMediumVideo() != null) {
+			if ( EndpointMedium.mediumFileStatus(itemID, "video").compareTo("waiting") == 0 || EndpointMedium.mediumFileStatus(itemID, "video").compareTo("transcoding") == 0 )
+				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/video/" + itemID + "-video-original.mp4", headers, itemID+".mp4");
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/video/" + itemID + "/" + itemID + "-video.mp4", headers, "video/mp4");
+		} else if (medium.getMediumImage() != null) {
+			if ( EndpointMedium.mediumFileStatus(itemID, "image").compareTo("ready") != 0 )
+				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + itemID + "-image-original.png", headers, itemID+".png");
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/image/" + itemID + "/" + itemID + "-image-scaled.png", headers, itemID+".png");
+		} else return Response.status(Status.NOT_FOUND).build();
 	}
 	
 	@GET

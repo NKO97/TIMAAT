@@ -553,7 +553,7 @@
 			let animTime = time - this._startTime;
 			animTime = parseFloat(animTime.toFixed(3));
 			var active = false;
-			if (  TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time <= this.endTime)  ) active = true;
+			if (  TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time < this.endTime)  ) active = true;
 			this.setActive(active);
 			if ( animTime == this._animTime ) return;
 			this._animTime = animTime;
@@ -739,7 +739,7 @@
 				case "rectangle":
 					// [[ height, x], [ y, width]]
 					var bounds = [[ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
-					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
+					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 				case "polygon":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
@@ -747,7 +747,7 @@
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
+					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 				case "line":
 					var points = new Array();
 					$(svgitem.points).each(function(index,point) {
@@ -755,12 +755,12 @@
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
-					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
+					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO , opacity: this.svg.opacity ? (not working)
 				case "circle":
 					var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
 					var lng = svgitem.x*factor*width;
 					var radius = svgitem.radius * factor;
-					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth});
+					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 			}
 		}
 		

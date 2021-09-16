@@ -833,6 +833,54 @@ public class EndpointMedium {
 	}
 	
 	@GET
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM)
+	@Path("image/offline/{id}.html")
+	public Response getImagePublication(@PathParam("id") int id,
+																			@QueryParam("authToken") String authToken) {
+
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		UserAccount userAccount = em.find(UserAccount.class, userId);
+		containerRequestContext.setProperty("TIMAAT.userID", userAccount.getId());
+		containerRequestContext.setProperty("TIMAAT.userName", userAccount.getAccountName());
+		containerRequestContext.setProperty("TIMAAT.user", userAccount);		
+		
+		Medium medium = em.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		
+		// TODO strip analysis lists depending on user rights, once rights system is finalized by project team
+		
+		String content = "";
+		try {
+			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
+		} catch (IOException | URISyntaxException e1) {
+			return Response.serverError().build();
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		PublicationSettings settings = new PublicationSettings();
+		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false).setOffline(true);
+
+		String serMedium = "";
+		try {
+			serMedium = mapper.writeValueAsString(medium);
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			
+			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
+			content = temp[0]+serMedium+temp[1];
+			
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
+		
+		return Response.ok().header("Content-Disposition", "attachment; filename=\""+id+"-player.html\"").entity(content).build();
+	}
+	
+	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("video/list")
@@ -3280,9 +3328,40 @@ public class EndpointMedium {
 		return Response.ok().entity(image).build();
 	}
 
+	@HEAD
+	@Path("image/{id}/download")
+	@Produces("image/png")
+	public Response getImageFileInfo(@PathParam("id") int id,
+																	 @QueryParam("token") String fileToken) {
+		
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}
+		if ( tokenMediumID != id ) return Response.status(401).build();
+			if ( mediumFileStatus(id, "image").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
+			File file = new File( 
+				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + id + "/" + id + "-image-scaled.png");
+			
+		return Response.ok()
+			.status( Response.Status.PARTIAL_CONTENT )
+			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+			.header( "Accept-Ranges", "bytes" )
+			.build();
+	}
+
 	@GET
 	@Path("image/{id}/download")
-	public Response getImageFile(@PathParam("id") int id, @QueryParam("token") String fileToken) {
+	@Produces("image/png")
+	public Response getImageFile(@Context HttpHeaders headers,
+															 @PathParam("id") int id,
+															 @QueryParam("token") String fileToken,
+															 @QueryParam("force") boolean force) {
 		System.out.println("triggered getImageOriginalFile");
 		// verify token
 		if (fileToken == null) {
@@ -3298,17 +3377,17 @@ public class EndpointMedium {
 			return Response.status(401).build();
 		}
 
-		String mediaType = "image/png";
-		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/image/" + id + "-image-original.png");
-		if ( !image.exists() ) {
-			image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/image/" + id + "-image-original.jpg");
-			mediaType = "image/jpeg";
-		}
-		if ( !image.exists() || !image.canRead() ) return Response.status(404).build();
+		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-		return Response.ok().entity(image).type(mediaType).build();
+		if ( mediumFileStatus(id, "image").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumFileStatus(id, "image").compareTo("ready") != 0 )
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/image/" + id + "-image-original.png", headers, id+".png");
+
+		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/image/" + id + "/" + id + "-image-scaled.png", headers, id+".png");
 	}	
 	
 	@GET

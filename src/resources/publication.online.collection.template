@@ -1,226 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="bitGilde IT Solutions UG (haftungsbeschr&auml;nkt)">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="bitGilde IT Solutions UG (haftungsbeschr&auml;nkt)"
+    />
 
     <title>TIMAAT - Publication - Medium</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link
+      href="../../vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
 
     <!-- JQuery UI CSS -->
-    <link href="../../vendor/jquery/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <link
+      href="../../vendor/jquery/plugins/jquery-ui/jquery-ui.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
 
-    <!-- Fotawesome -->	
-    <link href="../../vendor/fontawesome/css/all.css" rel="stylesheet" type="text/css">
+    <!-- FontAwesome -->
+    <link
+      href="../../vendor/fontawesome/css/all.css"
+      rel="stylesheet"
+      type="text/css"
+    />
 
     <!-- Leaflet CSS -->
-    <link href="../../vendor/leaflet/leaflet.css" rel="stylesheet" type="text/css">
+    <link
+      href="../../vendor/leaflet/leaflet.css"
+      rel="stylesheet"
+      type="text/css"
+    />
 
-	<!-- ***************************************************************************************************************** -->
-	
-	<!-- JQuery -->
-	<script src="../../vendor/jquery/jquery.min.js"></script>
+    <!-- ***************************************************************************************************************** -->
 
-	<!-- JQuery UI -->
+    <!-- JQuery -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
 
-	<!-- Bootstrap -->
-	<script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- JQuery UI -->
 
-	<!-- Leaflet -->
-	<script src="../../vendor/leaflet/leaflet.js"></script>
+    <!-- Bootstrap -->
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-	<!-- ***************************************************************************************************************** -->
+    <!-- Leaflet -->
+    <script src="../../vendor/leaflet/leaflet.js"></script>
 
-	<!-- Publication Data -->
+    <!-- ***************************************************************************************************************** -->
+
+    <!-- Publication Data -->
     <script type="text/javascript">
-		 var TIMAATSettings = {{TIMAAT-SETTINGS}};
-		 var TIMAATData = {{TIMAAT-DATA}};
-	</script>
+      var TIMAATSettings = {{TIMAAT-SETTINGS}};
+      var TIMAATData = {{TIMAAT-DATA}};
+    </script>
 
-	<!-- ***************************************************************************************************************** -->
+    <!-- ***************************************************************************************************************** -->
 
-	<!-- TIMAAT Publication Module -->
-	<link rel="stylesheet" href="../../css/publication.css" type="text/css">
-	<script type="text/javascript" src="../../js/publication/TIMAATPublication.js"></script>
+    <!-- TIMAAT Publication Module -->
+    <link rel="stylesheet" href="../../css/publication.css" type="text/css" />
+    <script
+      type="text/javascript"
+      src="../../js/publication/TIMAATPublication.js"
+    ></script>
 
-		  <script type="text/javascript">
-		 	function setupPublication() {
-				window.TIMAATPub = new TIMAATPublication();
-				// load annotation list
-				TIMAATPub.run();
-			}
-		 </script>
-    
+    <script type="text/javascript">
+      function setupPublication() {
+        window.TIMAATPub = new TIMAATPublication();
+        // load annotation list
+        TIMAATPub.run();
+      }
+    </script>
   </head>
 
-	<!-- ***************************************************************************************************************** -->
+  <!-- ***************************************************************************************************************** -->
 
   <body class="bg-light" onload="setupPublication()">
-		 
-		 <div id="timaat-left-sidebar" class="sidebar collapsed">
-			<div class="alert alert-dark mb-0">
-			<div class="btn-group btn-group-sm dropdown">
-  		  		<button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-list"></i></button>
-				<div class="dropdown-menu">
-				<ul id="timaat-analysis-list" class="list-group list-group-flush">
-				</ul>
-				</div>
-			</div>
-			
-			
-			<span class="badge">Analyseliste</span></div>
-					   <a href="javascript:void(0)" class="closebtn" onclick="TIMAATPub.closeSidebar('left')"><i class="fas fa-chevron-circle-left"></i></a>
-			
-			<div class="timaat-annotation-wrapper overflow-auto">
-				<ul id="timaat-annotation-list" class="list-group list-group-flush">
-				</ul>
-			</div>
-
-		 </div>
-
-		 <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
-		   <div class="alert alert-dark mb-0 text-right"><span class="badge">Metadaten</span></div>
-		   <a href="javascript:void(0)" class="closebtn" onclick="TIMAATPub.closeSidebar('right')"><i class="fas fa-chevron-circle-right"></i></a>
-
-			<div class="timaat-metadata-wrapper overflow-auto">
-<div class="metadata-content">
-
-			<div class="metadata-section annotation-metadata d-none">
-			<div class="metadata-field annotation-title">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-draw-polygon"></i> Titel</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field annotation-comment">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-comment"></i> Anmerkung</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field annotation-categories">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-tags"></i> Kategorien und Tags</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			
-			<div class="metadata-field annotation-actors">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-users"></i> Actors</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			
-			<div class="metadata-field annotation-events">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="far fa-calendar-alt"></i> Events</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
+    <div id="timaat-left-sidebar" class="sidebar collapsed">
+      <div class="alert alert-dark mb-0">
+        <div class="btn-group btn-group-sm dropdown">
+          <button
+            type="button"
+            class="btn btn-outline-secondary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fas fa-list"></i>
+          </button>
+          <div class="dropdown-menu">
+            <ul
+              id="timaat-analysis-list"
+              class="list-group list-group-flush"
+            ></ul>
+          </div>
+        </div>
+        <span class="badge">Analyseliste</span>
+      </div>
+      <a
+        href="javascript:void(0)"
+        class="closebtn"
+        onclick="TIMAATPub.closeSidebar('left')"
+        ><i class="fas fa-chevron-circle-left"></i
+      ></a>
+      <div class="timaat-annotation-wrapper overflow-auto">
+        <ul
+          id="timaat-annotation-list"
+          class="list-group list-group-flush"
+        ></ul>
+      </div>
+    </div>
+    <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
+      <div class="alert alert-dark mb-0 text-right">
+        <span class="badge">Metadaten</span>
+      </div>
+      <a
+        href="javascript:void(0)"
+        class="closebtn"
+        onclick="TIMAATPub.closeSidebar('right')"
+        ><i class="fas fa-chevron-circle-right"></i
+      ></a>
+      <div class="timaat-metadata-wrapper overflow-auto">
+        <div class="metadata-content">
+          <div class="metadata-section annotation-section">
+            <div
+              class="
+                metadata-header
+                border-top border-bottom border-dark
+                bg-secondary
+                font-weight-bold
+                text-light text-center
+                pl-2
+                pr-2
+              "
+            >
+              Annotation
+            </div>
+          </div>
+          <div class="metadata-section annotation-metadata d-none">
+            <div class="metadata-field annotation-title">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-draw-polygon"></i> Titel
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field annotation-comment">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-comment"></i> Anmerkung
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field annotation-categories">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-tags"></i> Kategorien
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field annotation-tags">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-tags"></i> Tags
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field annotation-actors">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-users"></i> Actors
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field annotation-events">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="far fa-calendar-alt"></i> Events
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <!--
 			<div class="metadata-field annotation-places">
 			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
 			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
 			</div>
-
-			<div class="metadata-field annotation-links">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-link"></i> Links</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-<hr />
-
-			</div>
-
-
-			<div class="metadata-section medium-metadata">
-			<div class="metadata-field medium-title">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-video"></i> Titel</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field medium-remark">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-comment"></i> Remark</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field medium-release-date">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="far fa-calendar-alt"></i> Release Date</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			
-			<div class="metadata-field medium-source">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-external-link-alt"></i> Quellen</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			
-			<div class="metadata-field medium-copyright">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="far fa-copyright"></i> Copyright</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-
-			<div class="metadata-field medium-categories">
-			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-tags"></i> Kategorien und Tags</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-			</div>
-			</div>
-
-
-
-</div>
-			</div>
-			
-		 </div>
-
-		 <div id="timaat-main" class="collection">
-			
-			<div class="alert alert-dark timaat-header mb-0">
-			
-			<div class="d-flex justify-content-between">
-			<div class="left-header">
-				<div class="btn-group btn-group-sm dropdown">
-  		  			<button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></button>
-					<div class="dropdown-menu pl-2 pr-2 timaat-publication-settings">
-						<span class="badge"><i class="fas fa-chalkboard-teacher"></i> TIMAAT Publication</span><hr class="mt-0 mb-2" />
-		<div class="font-weight-bold">Wiedergabe anhalten bei Annotationen vom Typ:</div>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-      <input type="checkbox" class="timaat-settings settings-stop-image">
+			-->
+          </div>
+          <div class="metadata-section medium-section">
+            <div
+              class="
+                metadata-header
+                border-top border-bottom border-dark
+                bg-secondary
+                font-weight-bold
+                text-light text-center
+                pl-2
+                pr-2
+              "
+            >
+              Medium
+            </div>
+          </div>
+          <div class="metadata-section medium-metadata">
+            <div class="metadata-field medium-title">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-video"></i> Titel
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-remark">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-comment"></i> Remark
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-release-date">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="far fa-calendar-alt"></i> Release Date
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-source">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-external-link-alt"></i> Quellen
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-copyright">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="far fa-copyright"></i> Copyright
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-categories">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-tags"></i> Kategorien
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+            <div class="metadata-field medium-tags">
+              <div
+                class="
+                  metadata-header
+                  border-bottom border-dark
+                  bg-light
+                  pl-2
+                  pr-2
+                "
+              >
+                <i class="fas fa-tags"></i> Tags
+              </div>
+              <div class="metadata-value mb-2 pl-2 pr-2">
+                <div class="empty-placeholder text-center text-muted">
+                  - keine Angabe -
+                </div>
+                <span class="contents"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-control"><i class="fas fa-image"></i> ganzes Bild</div>
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-      <input type="checkbox" class="timaat-settings settings-stop-polygon">
+    <div id="timaat-main" class="collection">
+      <div class="alert alert-dark timaat-header mb-0">
+        <div class="d-flex justify-content-between">
+          <div class="left-header">
+            <div
+              class="btn-group btn-group-sm dropdown stop-playback-conditions"
+            >
+              <button
+                type="button"
+                class="btn btn-outline-dark dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-cog"></i>
+              </button>
+              <div class="dropdown-menu pl-2 pr-2 timaat-publication-settings">
+                <span class="badge"
+                  ><i class="fas fa-chalkboard-teacher"></i> TIMAAT
+                  Publication</span
+                >
+                <hr class="mt-0 mb-2" />
+                <div class="font-weight-bold">
+                  Wiedergabe anhalten bei Annotationen vom Typ:
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input
+                        type="checkbox"
+                        class="timaat-settings settings-stop-image"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-control">
+                    <i class="fas fa-image"></i> ganzes Bild
+                  </div>
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input
+                        type="checkbox"
+                        class="timaat-settings settings-stop-polygon"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-control">
+                    <i class="fas fa-draw-polygon"></i> Polygon
+                  </div>
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <input
+                        type="checkbox"
+                        class="timaat-settings settings-stop-audio"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-control">
+                    <i class="fas fa-headphones"></i> Audiospur
+                  </div>
+                </div>
+              </div>
+            </div>
+            &nbsp; <i class="fas fa-folder-open"></i>
+            <span class="video-title"></span>
+          </div>
+          <div class="right-header">
+            <button
+              id="timaat-toggle-fullscreen"
+              title="Vollbild-Modus"
+              type="button"
+              class="mr-2 btn btn-sm btn-outline-dark"
+            >
+              <i class="fas fa-expand-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul id="timaat-collection" class="list-unstyled row p-3 m-auto"></ul>
     </div>
-  </div>
-  <div class="form-control"><i class="fas fa-draw-polygon"></i> Polygon</div>
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-      <input type="checkbox" class="timaat-settings settings-stop-audio">
-    </div>
-  </div>
-  <div class="form-control"><i class="fas fa-headphones"></i> Audiospur</div>
-</div>
-			
-			
-					</div>
-			</div>
-			
-				 &nbsp; <i class="fas fa-folder-open"></i> <span class="video-title"></span>
-			</div>
-			<div class="right-header">
-				<button id="timaat-toggle-fullscreen" title="Vollbild-Modus" type="button" class="mr-2 btn btn-sm btn-outline-dark"><i class="fas fa-expand-alt"></i></button>
-			
-			
-			</div>
-			</div>
-			
-			</div>
-
-			<ul id="timaat-collection" class="list-unstyled row p-3 m-auto"></ul>
-			
-				
-				
-
-		 </div>
   </body>
 </html>
