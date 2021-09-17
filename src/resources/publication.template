@@ -1366,11 +1366,11 @@ class Keyframe {
 			let width = 0;
 			let height = 0;
 			if (TIMAATData.mediumVideo) {
-				width = TIMAATPub.video.mediumVideo.width;
-				height = TIMAATPub.video.mediumVideo.height;
+				width = TIMAATPub.medium.mediumVideo.width;
+				height = TIMAATPub.medium.mediumVideo.height;
 			} else if (TIMAATData.mediumImage) {
-				width = TIMAATPub.video.mediumImage.width;
-				height = TIMAATPub.video.mediumImage.height;
+				width = TIMAATPub.medium.mediumImage.width;
+				height = TIMAATPub.medium.mediumImage.height;
 			}
 			let factor = TIMAATPub.mediumBounds.getNorth() / height;
 			let id = svgitem.id;
@@ -1894,11 +1894,11 @@ class Annotation {
 		let width = 0;
 			let height = 0;
 			if (TIMAATData.mediumVideo) {
-				width = TIMAATPub.video.mediumVideo.width;
-				height = TIMAATPub.video.mediumVideo.height;
+				width = TIMAATPub.medium.mediumVideo.width;
+				height = TIMAATPub.medium.mediumVideo.height;
 			} else if (TIMAATData.mediumImage) {
-				width = TIMAATPub.video.mediumImage.width;
-				height = TIMAATPub.video.mediumImage.height;
+				width = TIMAATPub.medium.mediumImage.width;
+				height = TIMAATPub.medium.mediumImage.height;
 			}
 		let factor = TIMAATPub.mediumBounds.getNorth() / height;
 		let id = svgitem.id;
@@ -1960,14 +1960,14 @@ class TIMAATPublication {
 		// setup model
 		if ( TIMAATData.mediaCollectionHasMediums != null ) {
 			this.collection = TIMAATData;
-			this.video = null;
+			this.medium = null;
 		} else if (TIMAATData.mediumVideo) {
 			this.collection = null;
-			this.video = TIMAATData;
-			this.duration = this.video.mediumVideo.length;
+			this.medium = TIMAATData;
+			this.duration = this.medium.mediumVideo.length;
 		} else if (TIMAATData.mediumImage) {
 			this.collection = null;
-			this.video = TIMAATData;
+			this.medium = TIMAATData;
 			this.duration = 0;
 		}
 		this.frameRate = 25;
@@ -1984,17 +1984,17 @@ class TIMAATPublication {
 
 		// animation player shape updater
 		let animFrameRate = 20;
-		if ( this.video ) this.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
+		if ( this.medium ) this.animInterval = setInterval(this._updateAnimations, 1000 / animFrameRate);
 		
 		console.info("TIMAAT::Publication:"+this.version+" ready");
 	}
 	
 	run() {
 		let hash = location.hash;
-		let startList = (this.video) ? TIMAATPub.video.mediumAnalysisLists[0] : null;
-		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.video ) for (let list of TIMAATPub.video.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
+		let startList = (this.medium) ? TIMAATPub.medium.mediumAnalysisLists[0] : null;
+		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.medium ) for (let list of TIMAATPub.medium.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-		if ( this.video ) this.setupAnalysisList(startList);
+		if ( this.medium ) this.setupAnalysisList(startList);
 
 		// restore session
 		if ( hash && hash.length > 1 ) location.hash = hash;
@@ -2059,7 +2059,7 @@ class TIMAATPublication {
 	}
 	
 	fitVideo() {
-		if ( !this.video ) return;
+		if ( !this.medium ) return;
 		this.viewer.invalidateSize();
 		this.viewer.fitBounds(TIMAATPub.mediumBounds);
 /*
@@ -2447,7 +2447,7 @@ class TIMAATPublication {
 	}
 	
 	setupAnalysisList(analysislist, changehash=true) {
-		if ( !this.video ) return;
+		if ( !this.medium ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		
 		if ( this.analysislist ) this.analysislist.ui.removeClass('selected');
@@ -2580,7 +2580,7 @@ class TIMAATPublication {
 											</li>`,
 		};
 		
-		if ( this.video ) {
+		if ( this.medium ) {
 			// viewer
 			this.viewer = L.map('timaat-viewer', {
 				zoomControl: false,
@@ -2601,17 +2601,17 @@ class TIMAATPublication {
 		
 			// video
 			if (TIMAATData.mediumVideo) {
-				this.mediumBounds = L.latLngBounds([[ this.video.mediumVideo.height, 0], [ 0, this.video.mediumVideo.width]]);
+				this.mediumBounds = L.latLngBounds([[ this.medium.mediumVideo.height, 0], [ 0, this.medium.mediumVideo.width]]);
 				this.viewer.setMaxBounds(this.mediumBounds);
 				this.viewer.fitBounds(this.mediumBounds);
-				let filename = ( TIMAATSettings.offline ) ? this.video.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
+				let filename = ( TIMAATSettings.offline ) ? this.medium.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.medium.id;
 				this.overlay = L.videoOverlay(filename, this.mediumBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
 				this.ui.video = this.overlay.getElement();
 			} else if (TIMAATData.mediumImage) {
-				this.mediumBounds = L.latLngBounds([[ this.video.mediumImage.height, 0], [ 0, this.video.mediumImage.width]]);
+				this.mediumBounds = L.latLngBounds([[ this.medium.mediumImage.height, 0], [ 0, this.medium.mediumImage.width]]);
 				this.viewer.setMaxBounds(this.mediumBounds);
 				this.viewer.fitBounds(this.mediumBounds);
-				let filename = ( TIMAATSettings.offline ) ? this.video.id+'.png' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.video.id;
+				let filename = ( TIMAATSettings.offline ) ? this.medium.id+'.png' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.medium.id;
 				this.overlay = L.imageOverlay( filename, this.mediumBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
 				this.ui.video = this.overlay.getElement();
 			}
@@ -2622,7 +2622,7 @@ class TIMAATPublication {
 		
 			// analysis lists
 			this.ui.analysislist = $('#timaat-analysis-list');
-			for (let list of this.video.mediumAnalysisLists) {
+			for (let list of this.medium.mediumAnalysisLists) {
 				let item = $('<li class="list-group-item list-group-item-action pt-0 pb-0 pl-2 pr-2"><i class="fas fa-check-circle"></i> <span class="item-title">'+list.mediumAnalysisListTranslations[0].title+'</span></li>');
 				list.ui = item;
 				this.ui.analysislist.append(item);
@@ -2634,41 +2634,41 @@ class TIMAATPublication {
 			$('.segment-section').hide();
 		
 			// medium metadata
-			let title = this.video.displayTitle.name+' ('+this.video.displayTitle.language.code+')';
-			if ( this.video.originalTitle ) title += '<br>OT: '+this.video.originalTitle.name+' ('+this.video.originalTitle.language.code+')'
+			let title = this.medium.displayTitle.name+' ('+this.medium.displayTitle.language.code+')';
+			if ( this.medium.originalTitle ) title += '<br>OT: '+this.medium.originalTitle.name+' ('+this.medium.originalTitle.language.code+')'
 			this.ui.medium.title.find('.contents').html(title);
-			if ( !this.video.remark || this.video.remark.length == 0) this.ui.medium.remark.addClass('empty')
-			else this.ui.medium.remark.find('.contents').html(this.video.remark);
-			this.ui.medium.releaseDate.find('.contents').html(this.formatDate(this.video.releaseDate));
-			if ( !this.video.sources || this.video.sources.length == 0 ) this.ui.medium.source.addClass('empty');
+			if ( !this.medium.remark || this.medium.remark.length == 0) this.ui.medium.remark.addClass('empty')
+			else this.ui.medium.remark.find('.contents').html(this.medium.remark);
+			this.ui.medium.releaseDate.find('.contents').html(this.formatDate(this.medium.releaseDate));
+			if ( !this.medium.sources || this.medium.sources.length == 0 ) this.ui.medium.source.addClass('empty');
 			else {
 				let sources = '';
-				for (let source of this.video.sources) {
+				for (let source of this.medium.sources) {
 					if ( source.isPrimarySource ) sources += '<div class="d-flex justify-content-between"><span class="badge badge-primary mt-1">Primary</span><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
 					else sources += '<div class="d-flex justify-content-end"><span>'+this.formatDate(source.lastAccessed)+'</span></div>';
 					if ( source.isStillAvailable ) sources += '<a href="'+source.url+'">'+source.url+'</a>'; else sources += '<span class="text-muted">'+source.url+'</span>';
 				}
 				this.ui.medium.source.find('.contents').html(sources);
 			}
-			if ( !this.video.copyright || this.video.copyright.length == 0) this.ui.medium.copyright.addClass('empty');
-			else this.ui.medium.copyright.find('.contents').html(this.video.copyright);
-			if ( !this.video.categories || this.video.categories.length == 0) this.ui.medium.categories.addClass('empty');
+			if ( !this.medium.copyright || this.medium.copyright.length == 0) this.ui.medium.copyright.addClass('empty');
+			else this.ui.medium.copyright.find('.contents').html(this.medium.copyright);
+			if ( !this.medium.categories || this.medium.categories.length == 0) this.ui.medium.categories.addClass('empty');
 			else {
 				let i = 0;
 				let categoryString = '';
-				for (; i < this.video.categories.length; i++) {
-					categoryString += this.video.categories[i].name + ', ';
+				for (; i < this.medium.categories.length; i++) {
+					categoryString += this.medium.categories[i].name + ', ';
 				}
 				categoryString = categoryString.slice(0, -2); // remove last ', ' from string
 				this.ui.medium.categories.removeClass('empty');
 				this.ui.medium.categories.find('.contents').html(categoryString);
 			}
-			if ( !this.video.tags || this.video.tags.length == 0) this.ui.medium.tags.addClass('empty');
+			if ( !this.medium.tags || this.medium.tags.length == 0) this.ui.medium.tags.addClass('empty');
 			else {
 				let i = 0;
 				let tagString = '';
-				for (; i < this.video.tags.length; i++) {
-					tagString += this.video.tags[i].name + ', ';
+				for (; i < this.medium.tags.length; i++) {
+					tagString += this.medium.tags[i].name + ', ';
 				}
 				tagString = tagString.slice(0, -2); // remove last ', ' from string
 				this.ui.medium.tags.removeClass('empty');
@@ -2827,7 +2827,7 @@ class TIMAATPublication {
 		$(window).resize(function() { TIMAATPub.fitVideo(); });
 		
 		// key events
-		let viewElement = ( this.video ) ? this.viewer : $('#timaat-collection');
+		let viewElement = ( this.medium ) ? this.viewer : $('#timaat-collection');
 		$([document.body,viewElement]).keydown(function(ev) {
 			if ( ev.target != document.body && ev.target != TIMAATPub.viewer ) return;
 			
@@ -2879,7 +2879,7 @@ class TIMAATPublication {
 			id = hash.substring(1);
 			if ( id == 0 ) return;
 			let list = null;
-			for ( let annoList of this.video.mediumAnalysisLists ) for ( let anno of annoList.annotations ) if ( anno.uuid.uuid == id ) list = annoList;
+			for ( let annoList of this.medium.mediumAnalysisLists ) for ( let anno of annoList.annotations ) if ( anno.uuid.uuid == id ) list = annoList;
 			if ( !list ) return;
 			
 			if ( list.id != TIMAATPub.curAnalysisList.id ) TIMAATPub.setupAnalysisList(list, false);
@@ -2892,8 +2892,8 @@ class TIMAATPublication {
 		});
 		
 		// text
-		if ( this.video ) {
-			$('.video-title').text(this.video.displayTitle.name);
+		if ( this.medium ) {
+			$('.video-title').text(this.medium.displayTitle.name);
 			this.ui.durationLabel.html(this.formatTime(this.duration, true));
 		} else {
 			$('.video-title').text(this.collection.title);
