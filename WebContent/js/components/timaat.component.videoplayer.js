@@ -1988,7 +1988,7 @@
 		},
 
 		managePublication: function() {
-			TIMAAT.Service.getSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(publication => {
+			TIMAAT.PublicationService.getSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(publication => {
       	console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
 				let modal = $('#timaat-videoplayer-publication');
 				TIMAAT.VideoPlayer.publication = publication;
@@ -2332,7 +2332,7 @@
 					password: password,
 				});
 				if (TIMAAT.VideoPlayer.publication) {
-					TIMAAT.Service.updateSinglePublication(publication).then(publication => {
+					TIMAAT.PublicationService.updateSinglePublication(publication).then(publication => {
 						console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
 						TIMAAT.VideoPlayer.publication = publication;
 						TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
@@ -2344,7 +2344,7 @@
 						$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
 					})
 				} else {
-					TIMAAT.Service.createSinglePublication(publication).then(publication => {
+					TIMAAT.PublicationService.createSinglePublication(publication).then(publication => {
 						console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
 						TIMAAT.VideoPlayer.publication = publication;
 						TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
@@ -2357,7 +2357,7 @@
 					})
 				}
 			} else {
-				TIMAAT.Service.deleteSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(status => {
+				TIMAAT.PublicationService.deleteSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(status => {
 					TIMAAT.VideoPlayer.publication = null;
 					TIMAAT.VideoPlayer._setupPublicationDialog(false, false);
 					$('#timaat-publication-settings-submit').prop('disabled', false);

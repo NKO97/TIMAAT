@@ -555,7 +555,7 @@
 					user: username,
 					password: password,
 				});
-				TIMAAT.Service.updateCollectionPublication(publication).then(publication => {
+				TIMAAT.PublicationService.updateCollectionPublication(publication).then(publication => {
 					dataset.publication = publication;
 					dataset._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
 					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
@@ -566,7 +566,7 @@
 					$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
 				})
 			} else {
-				TIMAAT.Service.deleteCollectionPublication(collection.model.id).then(status => {
+				TIMAAT.PublicationService.deleteCollectionPublication(collection.model.id).then(status => {
 					dataset.publication = null;
 					dataset._setupPublicationSheet(false, false);
 					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
@@ -993,7 +993,7 @@
 			$('#mediumCollection-publication').trigger('reset');
 			TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', collection.model.id);
 			mediumFormMetadataValidator.resetForm();
-			let publication = await TIMAAT.Service.getCollectionPublication(collection.model.id);
+			let publication = await TIMAAT.PublicationService.getCollectionPublication(collection.model.id);
 			this.mediaCollectionPublication = publication;
 			this._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
 		},
