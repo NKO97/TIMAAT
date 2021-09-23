@@ -49,7 +49,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.model.FIPOP.Uuid;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
@@ -542,50 +541,14 @@ public class EndpointAnnotation {
 		annotation.setId(0);
 		annotation.getSelectorSvgs().get(0).setId(0);
 		annotation.setMediumAnalysisList(mediumAnalysisList);
+		annotation.setUuid(UUID.randomUUID().toString());
 		
 		// set up metadata
 		annotation.getAnnotationTranslations().get(0).setId(0);
 		annotation.getAnnotationTranslations().get(0).setAnnotation(annotation);
 		annotation.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 	
-		// create IRI
-		// String iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
-		// 		"://"+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getHost()+
-		// 		":"+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getPort()+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getPath()+
-		// 		"iri/"+Math.random(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
-		// Iri iri = new Iri();
-		// iri.setId(0);
-		// iri.setIri(iristring);
 		EntityTransaction entityTransaction = entityManager.getTransaction();
-		// entityTransaction.begin();
-		// entityManager.persist(iri);
-		// entityManager.flush();
-		// entityTransaction.commit();
-		// entityManager.refresh(iri);
-		// iristring = containerRequestContext.getUriInfo().getBaseUri().getScheme()+
-		// 		"://"+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getHost()+
-		// 		":"+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getPort()+
-		// 		containerRequestContext.getUriInfo().getBaseUri().getPath()+
-		// 		"iri/"+iri.getId(); // TODO refactor, db demands unique IRI, but IRI id can only be constructed after being persisted to DB, FIPOP model needs update
-		// iri.setIri(iristring);
-		// entityTransaction = entityManager.getTransaction();
-		// entityTransaction.begin();
-		// entityManager.persist(iri);
-		// entityManager.flush();
-		// entityTransaction.commit();
-		// entityManager.refresh(iri);		
-		// annotation.setIri(iri);
-		
-		// create UUID
-		Uuid uuid = new Uuid();
-		uuid.setId(0);
-		uuid.setUuid(UUID.randomUUID().toString());
-		annotation.setUuid(uuid);
 		
 		// update log metadata
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
@@ -608,8 +571,6 @@ public class EndpointAnnotation {
 		entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(annotation.getAnnotationTranslations().get(0));
-		entityManager.persist(uuid);
-		annotation.setUuid(uuid);
 		entityManager.persist(annotation);
 		newSVG.setAnnotation(annotation);
 		entityManager.persist(newSVG);
@@ -673,12 +634,11 @@ public class EndpointAnnotation {
     	// update annotation
 		if ( updatedAnno.getAnnotationTranslations().get(0).getTitle() != null ) annotation.getAnnotationTranslations().get(0).setTitle(updatedAnno.getAnnotationTranslations().get(0).getTitle());
 		annotation.getAnnotationTranslations().get(0).setComment(updatedAnno.getAnnotationTranslations().get(0).getComment());
-		// if ( updatedAnno.getStartTimeProp() >= 0 ) annotation.setStartTime(updatedAnno.getStartTimeProp());
-		// if ( updatedAnno.getEndTimeProp() >= 0 ) annotation.setEndTime(updatedAnno.getEndTimeProp());
 		annotation.setStartTime(updatedAnno.getStartTime());
 		annotation.setEndTime(updatedAnno.getEndTime());
 		annotation.setLayerVisual(updatedAnno.getLayerVisual());
 		annotation.setLayerAudio(updatedAnno.getLayerAudio());
+		if (annotation.getUuid() == null) annotation.setUuid(UUID.randomUUID().toString()); // update entries that existed before uuid became a string
 
 		if ( updatedAnno.getSelectorSvgs() != null && (updatedAnno.getSelectorSvgs().size() > 0) && updatedAnno.getSelectorSvgs().get(0).getColorHex() != null )
 			annotation.getSelectorSvgs().get(0).setColorHex(updatedAnno.getSelectorSvgs().get(0).getColorHex());

@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
@@ -414,10 +415,10 @@ public class EndpointAnalysisList {
 																		 String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		MediumAnalysisList newList = null;    	
-    	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    	Medium medium = entityManager.find(Medium.class, mediumId);
-    	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
-    	// parse JSON data
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
+		// parse JSON data
 		try {
 			newList = mapper.readValue(jsonData, MediumAnalysisList.class);
 		} catch (IOException e) {
@@ -430,6 +431,7 @@ public class EndpointAnalysisList {
 		newList.setMedium(medium);
 		newList.setAnalysisSegments(new ArrayList<AnalysisSegment>());
 		newList.setAnnotations(new ArrayList<Annotation>());
+		newList.setUuid(UUID.randomUUID().toString());
 		newList.getMediumAnalysisListTranslations().get(0).setId(0);
 		newList.getMediumAnalysisListTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		newList.getMediumAnalysisListTranslations().get(0).setMediumAnalysisList(newList);
@@ -697,6 +699,7 @@ public class EndpointAnalysisList {
 		List<Tag> oldTags = mediumAnalysisList.getTags();
 		mediumAnalysisList.setTags(updatedList.getTags());
 		mediumAnalysisList.setGlobalPermission(updatedList.getGlobalPermission());
+		if (updatedList.getUuid() == null) mediumAnalysisList.setUuid(UUID.randomUUID().toString()); // update entries that existed before uuid became a string
 		
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			mediumAnalysisList.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));

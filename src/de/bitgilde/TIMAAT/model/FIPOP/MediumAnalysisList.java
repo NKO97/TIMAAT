@@ -48,6 +48,8 @@ public class MediumAnalysisList implements Serializable {
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
+	private String uuid;
+
 	//bi-directional many-to-one association to AnalysisSegment
 	@OneToMany(mappedBy="mediumAnalysisList")
   @JsonManagedReference(value = "MediumAnalysisList-AnalysisSegment")
@@ -80,6 +82,11 @@ public class MediumAnalysisList implements Serializable {
 	@ManyToOne
   @JsonBackReference(value = "Medium-MediumAnalysisList")
 	private Medium medium;
+
+	@OneToOne(mappedBy="mediumAnalysisList")
+	// @JsonManagedReference(value="MediumAnalysisList-Publication")
+	// @JoinColumn(name="medium_analysis_list_id", nullable = true)
+	private Publication publication;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
@@ -325,6 +332,14 @@ public class MediumAnalysisList implements Serializable {
 		userAccountHasMediumAnalysisList.setMediumAnalysisList(null);
 
 		return userAccountHasMediumAnalysisList;
+	}
+
+	public String getUuid() {
+		return this.uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 }

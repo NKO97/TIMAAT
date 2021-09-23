@@ -376,8 +376,8 @@
 			});
 
 			// publication dialog events
-			$('#timaat-publish-medium-switch, #timaat-publication-protected-switch').on('change', ev => {
-				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-medium-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
+			$('#timaat-publish-analysis-switch, #timaat-publication-protected-switch').on('change', ev => {
+				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-analysis-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
 			});
 
 			let dialog = $('#timaat-videoplayer-publication');
@@ -389,7 +389,7 @@
 			});
 
 			dialog.find('.username, .password').on('change input', ev => {
-				let enabled = $('#timaat-publish-medium-switch').prop('checked');
+				let enabled = $('#timaat-publish-analysis-switch').prop('checked');
 				let restricted = $('#timaat-publication-protected-switch').prop('checked');
 				let username = dialog.find('.username').val();
 				let password = dialog.find('.password').val();
@@ -1457,7 +1457,7 @@
 
 			// TODO currently, setupAnalysisList will be called too many times (list length +1 times)
 			if ( lists.length > 0 ) {
-				if (TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.model.video && TIMAAT.VideoPlayer.curAnalysisList == TIMAAT.VideoPlayer.model.video.id ){
+				if (TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.model.video && TIMAAT.VideoPlayer.curAnalysisList == TIMAAT.VideoPlayer.model.video.id ){ //! TODO last check weird
 					await TIMAAT.VideoPlayer.setupAnalysisList(TIMAAT.VideoPlayer.curAnalysisList);	
 				} else {
 					await TIMAAT.VideoPlayer.setupAnalysisList(lists[0]);
@@ -1988,7 +1988,8 @@
 		},
 
 		managePublication: function() {
-			TIMAAT.Service.getSinglePublication(TIMAAT.VideoPlayer.model.video.id).then(publication => {
+			TIMAAT.Service.getSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(publication => {
+      	console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
 				let modal = $('#timaat-videoplayer-publication');
 				TIMAAT.VideoPlayer.publication = publication;
 				TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
@@ -2310,7 +2311,7 @@
 		
 		_updatePublicationSettings: function() {
 			let dialog = $('#timaat-videoplayer-publication');
-			let enabled = $('#timaat-publish-medium-switch').prop('checked');
+			let enabled = $('#timaat-publish-analysis-switch').prop('checked');
 			let restricted = $('#timaat-publication-protected-switch').prop('checked');
 			let username = ( dialog.find('.username').val() && restricted ) ? dialog.find('.username').val() : '';
 			let password = ( dialog.find('.password').val() && restricted ) ? dialog.find('.password').val() : '';
@@ -2319,29 +2320,44 @@
 			if ( enabled ) {
 				let publication = (TIMAAT.VideoPlayer.publication) ? TIMAAT.VideoPlayer.publication : { id: 0 };
 				publication.access = (restricted) ? 'protected' : 'public';
-				publication.collectionId = null;
+				publication.mediaCollectionAnalysisList = null;
 				publication.ownerId = TIMAAT.Service.session.id;
 				publication.settings = null;
 				publication.slug = TIMAAT.Util.createUUIDv4();
-				publication.startMediumId = TIMAAT.VideoPlayer.model.video.id;
+				publication.mediumAnalysisListId = TIMAAT.VideoPlayer.curAnalysisList.id;
 				publication.title = dialog.find('.publicationtitle').val();
 				publication.credentials = JSON.stringify({
 					scheme: 'password',
 					user: username,
 					password: password,
 				});
-				TIMAAT.Service.updateSinglePublication(publication).then(publication => {
-					TIMAAT.VideoPlayer.publication = publication;
-					TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
-					$('#timaat-publication-settings-submit').prop('disabled', false);
-					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
-					dialog.find('.saveinfo').show().delay(1000).fadeOut();
-				}).catch( e => {
-					$('#timaat-publication-settings-submit').prop('disabled', false);
-					$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
-				})
+				if (TIMAAT.VideoPlayer.publication) {
+					TIMAAT.Service.updateSinglePublication(publication).then(publication => {
+						console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
+						TIMAAT.VideoPlayer.publication = publication;
+						TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+						$('#timaat-publication-settings-submit').prop('disabled', false);
+						$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+						dialog.find('.saveinfo').show().delay(1000).fadeOut();
+					}).catch( e => {
+						$('#timaat-publication-settings-submit').prop('disabled', false);
+						$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+					})
+				} else {
+					TIMAAT.Service.createSinglePublication(publication).then(publication => {
+						console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
+						TIMAAT.VideoPlayer.publication = publication;
+						TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
+						$('#timaat-publication-settings-submit').prop('disabled', false);
+						$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+						dialog.find('.saveinfo').show().delay(1000).fadeOut();
+					}).catch( e => {
+						$('#timaat-publication-settings-submit').prop('disabled', false);
+						$('#timaat-publication-settings-submit i.login-spinner').addClass('d-none');
+					})
+				}
 			} else {
-				TIMAAT.Service.deleteSinglePublication(TIMAAT.VideoPlayer.model.video.id).then(status => {
+				TIMAAT.Service.deleteSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(status => {
 					TIMAAT.VideoPlayer.publication = null;
 					TIMAAT.VideoPlayer._setupPublicationDialog(false, false);
 					$('#timaat-publication-settings-submit').prop('disabled', false);
@@ -2356,7 +2372,7 @@
 		},
 		
 		_setupPublicationDialog: function(enabled, restricted) {
-			$('#timaat-publish-medium-switch').prop('checked', enabled);
+			$('#timaat-publish-analysis-switch').prop('checked', enabled);
 			$('#timaat-publication-protected-switch').prop('checked', restricted);
 			let credentials = {};
 			try {

@@ -1,15 +1,20 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -24,8 +29,7 @@ import jakarta.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
-import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -52,6 +56,7 @@ public class EndpointPublication {
 	@Secured
 	@Path("{id}")
 	public Response getPublication(@PathParam("id") int id) {
+		// System.out.println("getPublication");
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
@@ -76,177 +81,156 @@ public class EndpointPublication {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("medium/{mediumId}")
-	public Response getPublicationByMedium(@PathParam("mediumId") int mediumId) {
-		System.out.println("getPublicationByMedium");
+	@Path("analysisList/{mediumAnalysisListId}")
+	public Response getPublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId) {
+		// System.out.println("getPublicationByMediumAnalysisList");
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
 		// find publication
-		Query countQuery = em.createQuery("SELECT COUNT(p) FROM Publication p where p.collection = NULL AND p.startMedium.id = :mediumId")
-												 .setParameter("mediumId", mediumId);
+		Query countQuery = em.createQuery("SELECT COUNT(p) FROM Publication p WHERE p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId")
+												 .setParameter("mediumAnalysisListId", mediumAnalysisListId);
 		long entries = (long) countQuery.getSingleResult();
-		System.out.println("getPublicationByMedium - entries: "+ entries);
 		// early out if medium is not connected to a publication
 		if (entries == 0) {
-			System.out.println("getPublicationByMedium - early out");
+			// System.out.println("getPublicationByMediumAnalysisList - early out");
 			return Response.noContent().build();
 		}
+		// TODO check and prevent 2 or more results (which should never happen)
 
-		Publication pub = null;
+		Publication publication = null;
 		try {
-			// pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection=NULL AND p.startMedium.id=:medium AND p.owner.id=:owner")
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection = NULL AND p.startMedium.id = :mediumId")
-														.setParameter("mediumId", mediumId)
+			// pub = (Publication) em.createQuery("SELECT p FROM Publication p WHERE p.mediaCollectionAnalysisList=NULL AND p.startMedium.id=:medium AND p.owner.id=:owner")
+			publication = (Publication) em.createQuery("SELECT p FROM Publication p WHERE p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId")
+														.setParameter("mediumAnalysisListId", mediumAnalysisListId)
 														// .setParameter("owner", userID)
 														.getSingleResult();
 		} catch (Exception e) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		// if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
-		// if ( pub.getOwner().getId() != userID )
-		// 	return Response.status(Status.FORBIDDEN).build();
-		System.out.println("getPublicationByMedium - publication found");
-		return Response.ok().entity(pub).build();
+
+		return Response.ok().entity(publication).build();
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("collection/{colId}")
-	public Response getPublicationByCollection(@PathParam("colId") int colId) {
-		EntityManager em = TIMAATApp.emf.createEntityManager();
-		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
-		// find publication
-		List<Publication> publicationList = new ArrayList<>();
-		Query query;
-		try {
-			// query = em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
-			query = em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection")
-								.setParameter("collection", colId);
-								// .setParameter("owner", userID);
-		} catch (Exception e) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		publicationList = castList(Publication.class, query.getResultList());
-		if ( publicationList.size() == 0) { // no publication defined yet
-			return Response.noContent().build();
-		}
-		Publication pub = publicationList.get(0);
-		// if ( pub.getOwner().getId() != userID )
-		// 	return Response.status(Status.FORBIDDEN).build();
-
-		
-		return Response.ok().entity(pub).build();
-	}
-	
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("medium/{mediumId}")
-	public Response updatePublicationByMedium(@PathParam("mediumId") int mediumId, Publication publication) {
-		EntityManager em = TIMAATApp.emf.createEntityManager();
-		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
-		// find publication
-		Publication pub = null;
-		try {
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection=NULL AND p.startMedium.id=:medium AND p.owner.id=:owner")
-														.setParameter("medium", mediumId)
-														.setParameter("owner", userID)
-														.getSingleResult();
-		} catch (Exception e) {
-			pub = null;
-		}
-		if ( pub == null ) {
-			// create publication
-			publication.setCollection(null);
-			Medium m = em.find(Medium.class, mediumId);
-			if ( m == null ) return Response.status(Status.BAD_REQUEST).build();
-			publication.setStartMedium(m);
-			UserAccount owner = em.find(UserAccount.class, userID);
-			if ( owner == null ) return Response.status(Status.BAD_REQUEST).build();
-			publication.setOwner(owner);
-			pub = publication;
-		} else {
-			pub.setTitle(publication.getTitle());
-			pub.setCredentials(publication.getCredentials());
-			pub.setSettings(publication.getSettings());
-			pub.setAccess(publication.getAccess());
-		}
-		EntityTransaction entityTransaction = em.getTransaction();
-		entityTransaction.begin();
-		em.persist(pub);
-		em.flush();
-		entityTransaction.commit();
-		em.refresh(pub);
-		em.refresh(pub.getOwner());
-		em.refresh(pub.getStartMedium());
-		
-		return Response.ok().entity(pub).build();
-	}
+	// TODO getPublicationbyMediaCollectionAnalysisList()
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("collection/{colId}")
-	public Response updatePublicationByCollection(@PathParam("colId") int colId, Publication publication) {
+	@Path("analysisList/{mediumAnalysisListId}")
+	public Response createPublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																												String jsonData) {
+		// System.out.println("createPublicationByMediumAnalysisList");
+
+		
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Publication publication = null;
+		try {
+			publication = mapper.readValue(jsonData, Publication.class);
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		if ( publication == null ) return Response.status(Status.BAD_REQUEST).build();
+
+		// Publication is either for a mediumAnalysisList OR a mediaCollectionAnalysisList // TODO OR a workAnalysisList
+		if (publication.getMediumAnalysisListId() > 0 && publication.getMediaCollectionAnalysisListId() > 0) {
+			return Response.status(Status.CONFLICT).build();
+		}
+
+		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) {
+			// System.out.println("createPublicationByMediumAnalysisList - no analysisList found");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+		publication.setId(0);
+		publication.setMediumAnalysisList(mediumAnalysisList);
+		// publication.setOwner(owner);
+		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+			publication.setOwner(em.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		} else {
+			return Response.serverError().build();
+		}
+
+		EntityTransaction entityTransaction = em.getTransaction();
+		entityTransaction.begin();
+		em.persist(publication);
+		em.flush();
+		entityTransaction.commit();
+		em.refresh(publication);
+		em.refresh(publication.getMediumAnalysisList());
+		
+		return Response.ok().entity(publication).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("analysisList/{mediumAnalysisListId}")
+	public Response updatePublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																												String jsonData) {
+		System.out.println("updatePublicationByMediumAnalysisList");
+
+		ObjectMapper mapper = new ObjectMapper();
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
-		// find publication
-		Publication pub = null;
+		Publication publication = null;
 		try {
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
-														.setParameter("collection", colId)
-														.setParameter("owner", userID)
-														.getSingleResult();
+			publication = mapper.readValue(jsonData, Publication.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// find publication
+		try {
+			Query query = em.createQuery("SELECT p FROM Publication p where p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId AND p.owner.id = :owner")
+											.setParameter("mediumAnalysisListId", mediumAnalysisListId)
+											.setParameter("owner", userID);
+			List<Publication> publications = castList(Publication.class, query.getResultList());
+			publication = publications.get(0);
 		} catch (Exception e) {
-			pub = null;
+			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( pub == null ) {
-			// create publication
-			publication.setCollection(null);
-			MediaCollection c = em.find(MediaCollection.class, colId);
-			if ( c == null ) return Response.status(Status.BAD_REQUEST).build();
-			publication.setCollection(c);
-			UserAccount owner = em.find(UserAccount.class, userID);
-			if ( owner == null ) return Response.status(Status.BAD_REQUEST).build();
-			publication.setOwner(owner);
-			pub = publication;
-		} else {
-			pub.setTitle(publication.getTitle());
-			pub.setCredentials(publication.getCredentials());
-			pub.setSettings(publication.getSettings());
-			pub.setAccess(publication.getAccess());
-		}
+		if (publication == null) return Response.status(Status.BAD_REQUEST).build();
+		
+		publication.setTitle(publication.getTitle());
+		publication.setCredentials(publication.getCredentials());
+		publication.setSettings(publication.getSettings());
+		publication.setAccess(publication.getAccess());
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
-		em.persist(pub);
+		em.persist(publication);
 		em.flush();
 		entityTransaction.commit();
-		em.refresh(pub);
-		em.refresh(pub.getOwner());
-		em.refresh(pub.getCollection());
+		em.refresh(publication);
+		em.refresh(publication.getOwner());
+		em.refresh(publication.getMediumAnalysisList());
 		
-		return Response.ok().entity(pub).build();
+		return Response.ok().entity(publication).build();
 	}
-	
-	
+
+	// TODO updatePublicationbyMediaCollectionAnalysisList()
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("medium/{mediumId}")
-	public Response deletePublicationByMedium(@PathParam("mediumId") int mediumId) {
+	@Path("analysisList/{mediumAnalysisListId}")
+	public Response deletePublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
 		// find publication
 		Publication pub = null;
 		try {
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection=NULL AND p.startMedium.id=:medium AND p.owner.id=:owner")
-														.setParameter("medium", mediumId)
+			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId AND p.owner.id = :owner")
+														.setParameter("mediumAnalysisListId", mediumAnalysisListId)
 														.setParameter("owner", userID)
 														.getSingleResult();
 		} catch (Exception e) {
@@ -262,33 +246,7 @@ public class EndpointPublication {
 		return Response.ok().build();
 	}
 
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("collection/{colId}")
-	public Response deletePublicationByCollection(@PathParam("colId") int colId) {
-		EntityManager em = TIMAATApp.emf.createEntityManager();
-		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
-		// find publication
-		Publication pub = null;
-		try {
-			pub = (Publication) em.createQuery("SELECT p FROM Publication p where p.collection.id=:collection AND p.owner.id=:owner")
-														.setParameter("collection", colId)
-														.setParameter("owner", userID)
-														.getSingleResult();
-		} catch (Exception e) {
-			pub = null;
-		}
-		if ( pub != null ) {
-			EntityTransaction entityTransaction = em.getTransaction();
-			entityTransaction.begin();
-			em.remove(pub);
-			em.flush();
-			entityTransaction.commit();
-		}
-		return Response.ok().build();
-	}
+	// TODO deletePublicationbyMediaCollectionAnalysisList()
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());

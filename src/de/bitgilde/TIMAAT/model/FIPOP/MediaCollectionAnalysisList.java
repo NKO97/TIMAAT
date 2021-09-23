@@ -33,6 +33,8 @@ public class MediaCollectionAnalysisList implements Serializable {
 	@Column(name="last_edited_at")
 	private Timestamp lastEditedAt;
 
+	// private String uuid;
+
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne
 	@JoinColumn(name="created_by_user_account_id")
@@ -57,6 +59,11 @@ public class MediaCollectionAnalysisList implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="media_collection_id", nullable=false)
 	private MediaCollection mediaCollection;
+
+	@OneToOne(mappedBy="mediaCollectionAnalysisList")
+	// @JsonManagedReference(value="MediaCollectionAnalysisList-Publication")
+	// @JoinColumn(name="media_collection_analysis_list_id", nullable = true)
+	private Publication publication;
 
 	//bi-directional many-to-one association to MediaCollectionAnalysisListHasTag
 	// @OneToMany(mappedBy="mediaCollectionAnalysisList")
@@ -218,5 +225,13 @@ public class MediaCollectionAnalysisList implements Serializable {
 
 		return userAccountHasMediaCollectionAnalysisList;
 	}
+
+	// public String getUuid() {
+	// 	return this.uuid;
+	// }
+
+	// public void setUuid(String uuid) {
+	// 	this.uuid = uuid;
+	// }
 
 }

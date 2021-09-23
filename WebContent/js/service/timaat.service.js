@@ -36,10 +36,11 @@
 			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
 		},
 		
-		async getSinglePublication(mediumID) {
+		async getSinglePublication(mediumAnalysisListId) {
+      // console.log("TCL: getSinglePublication -> mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/analysisList/"+mediumAnalysisListId,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -59,10 +60,11 @@
 			});		
 		},
 		
-		async updateSinglePublication(publication) {
+		async createSinglePublication(publication) {
+      // console.log("TCL: updateSinglePublication -> publication", publication);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+publication.startMediumId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/analysisList/"+publication.mediumAnalysisListId,
 					type       : "POST",
 					data       : JSON.stringify(publication),
 					contentType: "application/json; charset=utf-8",
@@ -81,10 +83,33 @@
 			});		
 		},
 
-		async deleteSinglePublication(mediumID) {
+		async updateSinglePublication(publication) {
+      // console.log("TCL: updateSinglePublication -> publication", publication);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/medium/"+mediumID,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/analysisList/"+publication.mediumAnalysisListId,
+					type       : "PATCH",
+					data       : JSON.stringify(publication),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: updateSinglePublication -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					resolve(null);
+				});	
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});		
+		},
+
+		async deleteSinglePublication(mediumAnalysisListId) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/publication/analysisList/"+mediumAnalysisListId,
 					type       : "DELETE",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",

@@ -44,6 +44,8 @@ public class Annotation implements Serializable {
 	@Column(name="end_time", columnDefinition = "INT")
 	private long endTime;
 
+	private String uuid;
+
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
 	@JsonManagedReference(value= "Annotation-Analysis")
@@ -54,11 +56,6 @@ public class Annotation implements Serializable {
 	@JoinColumn(name="segment_selector_type_id")
 	@JsonBackReference(value = "SegmentSelectorType-Annotation")
 	private SegmentSelectorType segmentSelectorType;
-
-	//bi-directional many-to-one association to Iri
-	@ManyToOne
-	@JsonBackReference(value = "Iri-Annotation")
-	private Iri iri;
 
 	//bi-directional many-to-one association to MediumAnalysisList
 	@ManyToOne
@@ -94,10 +91,6 @@ public class Annotation implements Serializable {
 	@Transient
 	@JsonProperty("lastEditedByUserAccountId")
 	private int lastEditedByUserAccountId;
-
-	//bi-directional many-to-one association to Uuid
-	@ManyToOne
-	private Uuid uuid;
 
 	//bi-directional many-to-many association to Actor
 	@ManyToMany
@@ -327,14 +320,6 @@ public class Annotation implements Serializable {
 		this.segmentSelectorType = segmentSelectorType;
 	}
 
-	public Iri getIri() {
-		return this.iri;
-	}
-
-	public void setIri(Iri iri) {
-		this.iri = iri;
-	}
-
 	public MediumAnalysisList getMediumAnalysisList() {
 		return this.mediumAnalysisList;
 	}
@@ -368,11 +353,11 @@ public class Annotation implements Serializable {
 		return this.getLastEditedByUserAccount().getId();
 	}
 
-	public Uuid getUuid() {
+	public String getUuid() {
 		return this.uuid;
 	}
 
-	public void setUuid(Uuid uuid) {
+	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 

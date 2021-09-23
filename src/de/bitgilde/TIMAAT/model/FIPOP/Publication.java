@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,9 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The persistent class for the province database table.
@@ -21,18 +24,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @NamedQuery(name="Publication.findAll", query="SELECT p FROM Publication p")
 public class Publication implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-
 	@ManyToOne
 	@JoinColumn(name="owner_user_account_id")
 	@JsonIgnore
 	private UserAccount owner;
+
 	@Transient
 	private Integer ownerId;
 
@@ -42,19 +44,22 @@ public class Publication implements Serializable {
 	@Column(nullable = false, length = 4096)
 	private String title;
 
-	@ManyToOne
+	@OneToOne
 	@JsonIgnore
-	@JoinColumn(name="media_collection_id", nullable = true)
-	private MediaCollection collection;
-	@Transient
-	private Integer collectionId;
+	@JoinColumn(name="medium_analysis_list_id", nullable = true)
+	private MediumAnalysisList mediumAnalysisList;
 
-	@ManyToOne
-	@JsonIgnore
-	@JoinColumn(name="medium_id", nullable = true)
-	private Medium startMedium;
 	@Transient
-	private Integer startMediumId;
+	@JsonProperty("mediumAnalysisListId")
+	private Integer mediumAnalysisListId;
+
+	@OneToOne
+	@JoinColumn(name="media_collection_analysis_list_id", nullable = true)
+	private MediaCollectionAnalysisList mediaCollectionAnalysisList;
+
+	@Transient
+	@JsonProperty("mediaCollectionAnalysisListId")
+	private Integer mediaCollectionAnalysisListId;
 
 	@Column(name = "access", nullable = false, length = 64)
 	private String access;
@@ -106,38 +111,30 @@ public class Publication implements Serializable {
 		this.title = title;
 	}
 
-	public MediaCollection getCollection() {
-		return collection;
+	public MediumAnalysisList getMediumAnalysisList() {
+		return mediumAnalysisList;
 	}
 
-	public void setCollection(MediaCollection collection) {
-		this.collection = collection;
+	public int getMediumAnalysisListId() {
+		if (Objects.isNull(this.mediumAnalysisList)) return 0;
+		return this.mediumAnalysisList.getId();
 	}
 
-	public Integer getCollectionId() {
-		if ( this.collection != null ) return this.collection.getId();
-		return collectionId;
+	public void setMediumAnalysisList(MediumAnalysisList mediumAnalysisList) {
+		this.mediumAnalysisList = mediumAnalysisList;
 	}
 
-	public void setCollectionId(Integer collectionId) {
-		this.collectionId = collectionId;
+	public MediaCollectionAnalysisList getMediaCollectionAnalysisList() {
+		return mediaCollectionAnalysisList;
 	}
 
-	public Medium getStartMedium() {
-		return startMedium;
+	public int getMediaCollectionAnalysisListId() {
+		if (Objects.isNull(this.mediaCollectionAnalysisList)) return 0;
+		return this.mediaCollectionAnalysisList.getId();
 	}
 
-	public void setStartMedium(Medium startMedium) {
-		this.startMedium = startMedium;
-	}
-
-	public Integer getStartMediumId() {
-		if ( this.startMedium != null ) return this.startMedium.getId();
-		return startMediumId;
-	}
-
-	public void setStartMediumId(Integer startMediumId) {
-		this.startMediumId = startMediumId;
+	public void setMediaCollectionAnalysisList(MediaCollectionAnalysisList mediaCollectionAnalysisList) {
+		this.mediaCollectionAnalysisList = mediaCollectionAnalysisList;
 	}
 
 	public String getAccess() {

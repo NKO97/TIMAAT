@@ -53,14 +53,11 @@ public class PublicationServlet {
 	@Context
 	ServletContext servletContext;	
 	
-	
-	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response serviceInfo() {
 		return Response.ok().entity("TIMAAT Publication Service").build();
 	}
-	
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
@@ -81,7 +78,7 @@ public class PublicationServlet {
 		}
 		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( pub.getCollection() != null && pub.getStartMedium() == null ) {
+		if ( pub.getMediaCollectionAnalysisList() != null && pub.getMediumAnalysisList() == null ) {
 			// serve collection overview template
 			String content = "";
 			try {
@@ -95,15 +92,25 @@ public class PublicationServlet {
 			String serCol = "";
 			try {
 				// strip analysis lists for overview
-				for ( MediaCollectionHasMedium m : pub.getCollection().getMediaCollectionHasMediums() ) {
+				for ( MediaCollectionHasMedium m : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() ) {
 					m.getMedium().setViewToken(null);
 					m.getMedium().setMediumAnalysisLists(null);
 				}
-				serCol = mapper.writeValueAsString(pub.getCollection());
+				serCol = mapper.writeValueAsString(pub.getMediaCollectionAnalysisList().getMediaCollection());
 				content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
 				
 				String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 				content = temp[0]+serCol+temp[1];
+				
+			} catch (JsonProcessingException e) {return Response.serverError().build();}
+
+			String serverMediumAnalysisList = "";
+			try {
+				serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
+				content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+				
+				String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
+				content = temp[0]+serverMediumAnalysisList+temp[1];
 				
 			} catch (JsonProcessingException e) {return Response.serverError().build();}
 			
@@ -123,11 +130,21 @@ public class PublicationServlet {
 
 		String serMedium = "";
 		try {
-			serMedium = mapper.writeValueAsString(pub.getStartMedium());
+			serMedium = mapper.writeValueAsString(pub.getMediumAnalysisList().getMedium());
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
 			
 			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 			content = temp[0]+serMedium+temp[1];
+			
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
+
+		String serverMediumAnalysisList = "";
+		try {
+			serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			
+			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
+			content = temp[0]+serverMediumAnalysisList+temp[1];
 			
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 		
@@ -153,11 +170,11 @@ public class PublicationServlet {
 		
 		// find medium
 		Medium medium = null;
-		if ( pub.getCollection() != null ) {
-			for ( MediaCollectionHasMedium m : pub.getCollection().getMediaCollectionHasMediums() )
+		if ( pub.getMediaCollectionAnalysisList() != null ) {
+			for ( MediaCollectionHasMedium m : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( m.getMedium().getId() == id ) medium = m.getMedium();
 		} else {
-			if ( pub.getStartMedium().getId() == id ) medium = pub.getStartMedium();
+			if ( pub.getMediumAnalysisList().getMedium().getId() == id ) medium = pub.getMediumAnalysisList().getMedium();
 		}
 		
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -182,11 +199,20 @@ public class PublicationServlet {
 			content = temp[0]+serMedium+temp[1];
 			
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
+
+		String serverMediumAnalysisList = "";
+		try {
+			serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			
+			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
+			content = temp[0]+serverMediumAnalysisList+temp[1];
+			
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
 		
 		return Response.ok().entity(content).build();
 	}
 
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{slug}/status")
@@ -204,7 +230,6 @@ public class PublicationServlet {
 
 		return Response.ok().entity("{id:"+pub.getId()+", access:\""+pub.getAccess()+"\"}").build();
 	}
-	
 
 	@HEAD
 	@Path("/{slug}/item-{id}")
@@ -228,9 +253,9 @@ public class PublicationServlet {
 
 		// find medium
 		Medium medium = null;
-		if ( pub.getStartMedium() != null && pub.getStartMedium().getId() == itemID ) medium = pub.getStartMedium();
-		else if ( pub.getCollection() != null ) 
-			for ( MediaCollectionHasMedium colMed : pub.getCollection().getMediaCollectionHasMediums() )
+		if ( pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -271,9 +296,9 @@ public class PublicationServlet {
 		
 		// find medium
 		Medium medium = null;
-		if ( pub.getStartMedium() != null && pub.getStartMedium().getId() == itemID ) medium = pub.getStartMedium();
-		else if ( pub.getCollection() != null ) 
-			for ( MediaCollectionHasMedium colMed : pub.getCollection().getMediaCollectionHasMediums() )
+		if ( pub.getMediumAnalysisList() != null && pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -310,9 +335,9 @@ public class PublicationServlet {
 		
 		// find medium
 		Medium medium = null;
-		if ( pub.getStartMedium() != null && pub.getStartMedium().getId() == itemID ) medium = pub.getStartMedium();
-		else if ( pub.getCollection() != null ) 
-			for ( MediaCollectionHasMedium colMed : pub.getCollection().getMediaCollectionHasMediums() )
+		if ( pub.getMediumAnalysisList() != null && pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -322,7 +347,6 @@ public class PublicationServlet {
 		    	
 		return Response.ok().entity(thumbnail).build();
 	}
-	
 	
 	private Response downloadFile(String fileName, HttpHeaders headers, String mimeType) {     
 		Response response = null;

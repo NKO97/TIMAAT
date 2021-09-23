@@ -1,116 +1,97 @@
 class AnalysisSegment {
-		constructor(model) {
-					// setup model
-					this.model = model;
-					this.active = false;
-					// TODO still needed?
-					// this._startTime = this.model.startTime;
-					// this._endTime = this.model.endTime;
-					
-					// create and style list view element
-					this.listView = $(`
-						<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
-							<div class="d-flex justify-content-between">
-								<span class="font-weight-bold pt-1 text-light pl-1">
-									<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i> 
-									<span class="timaat-annotation-segment-name"></span>
-								</span>
-							</div>
-						</li>`
-					);
-					// this.timelineView = $(`
-					// 	<div class="timaat-timeline-segment progress bg-info border border-dark" data-toggle="tooltip" data-placement="top" data-html="true">
-					// 		<!-- <div class="timaat-timeline-segment-name text-white font-weight-bold"></div> -->
-					// 	</div>`
-					// );
-					this.timelineView = $(`
-						<div class="timaat-timeline-segment">
-							<div class="timaat-timeline-segment-name text-white font-weight-bold"></div>
-						</div>`
-					);
-					
-					var segment = this; // save annotation for events
-				}
-				
-				updateUI() {
-					this.listView.attr('data-starttime', this.model.startTime);
-					this.listView.attr('data-endtime', this.model.endTime);
-					this.listView.attr('id', 'segment-'+this.model.id);
-					this.listView.attr('data-type', 'segment');
-					let timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
-					let name = this.model.analysisSegmentTranslations[0].name;
-					let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
-					let comment = this.model.analysisSegmentTranslations[0].comment;
-					let transcript = this.model.analysisSegmentTranslations[0].transcript;
-					if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
-					this.listView.find('.timaat-annotation-segment-name').html(name);
-					this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
-					this.listView.find('.timaat-annotation-segment-comment').html(comment);
-					this.listView.find('.timaat-annotation-segment-transcript').html(transcript);
-					this.timelineView.find('.timaat-timeline-segment-name ').html(name);
-					this.timelineView.attr('title', '<strong>'+name+'</strong><div class="mb-1"><i class="far fa-clock"></i> '+TIMAATPub.formatTime(this.model.startTime, true)+' - '+TIMAATPub.formatTime(this.model.endTime, true)+'</div>'+desc);
-					// comment
-					if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
-						this.listView.find('.timaat-annotation-segment-comment-icon').show();
-					else
-						this.listView.find('.timaat-annotation-segment-comment-icon').hide();
-					
-					// update timeline position
-					let magicoffset = 0;
-					let width = $('#video-seek-bar').width();
-					let length = ((this.model.endTime - this.model.startTime)) / TIMAATPub.duration * width;
-					let offset = (this.model.startTime) / TIMAATPub.duration * width;
-					this.timelineView.css('width', length+'%');
-					this.timelineView.css('margin-left', (offset+magicoffset)+'%');
+	constructor(model) {
+		// setup model
+		this.model = model;
+		this.active = false;
+		
+		// create and style list view element
+		this.listView = $(`
+			<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+				<div class="d-flex justify-content-between">
+					<span class="font-weight-bold pt-1 text-light pl-1">
+						<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i> 
+						<span class="timaat-annotation-segment-name"></span>
+					</span>
+				</div>
+			</li>`
+		);
 
-				}
-				
-				addUI() {
-					$('#timaat-annotation-list').append(this.listView);
-					$('#timaat-timeline-segment-pane').append(this.timelineView);
-					// $('.segment-seekbar').append(this.timelineView);
+		this.updateUI();
+		
+		var segment = this; // save annotation for events
+	}
+	
+	updateUI() {
+		this.listView.attr('data-starttime', this.model.startTime);
+		this.listView.attr('data-endtime', this.model.endTime);
+		this.listView.attr('id', 'segment-'+this.model.id);
+		this.listView.attr('data-type', 'segment');
+		let timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
+		let name = this.model.analysisSegmentTranslations[0].name;
+		let desc = ( this.model.analysisSegmentTranslations[0].shortDescription ) ? this.model.analysisSegmentTranslations[0].shortDescription : '';
+		let comment = this.model.analysisSegmentTranslations[0].comment;
+		let transcript = this.model.analysisSegmentTranslations[0].transcript;
+		if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
+		this.listView.find('.timaat-annotation-segment-name').html(name);
+		this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
+		this.listView.find('.timaat-annotation-segment-comment').html(comment);
+		this.listView.find('.timaat-annotation-segment-transcript').html(transcript);
+		// comment
+		if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
+			this.listView.find('.timaat-annotation-segment-comment-icon').show();
+		else
+			this.listView.find('.timaat-annotation-segment-comment-icon').hide();
 
-					var segment = this; // save annotation for events
-					// TODO might need to be adjusted
-					// attach event handlers
-					this.listView.on('click', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
-						TIMAATPub.pause();
-						TIMAATPub.selectAnnotation(null);
-						$('.annotation-section').hide();
-						$('.segment-section').show();
-						TIMAATPub.setSegmentMetadata(segment);
-					});
-					this.listView.on('dblclick', this, function(ev) {
-						TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
-						TIMAATPub.pause();
-						TIMAATPub.selectAnnotation(null);
-						$('.annotation-section').hide();
-						$('.segment-section').show();
-						TIMAATPub.setSegmentMetadata(segment);
-					});
-					this.updateUI();
-					this.timelineView.tooltip();
-				}
-				
-				removeUI() {
-					this.listView.remove();
-					this.timelineView.remove();
-					this.updateUI();      
-				}
+	}
+	
+	addUI() {
+		$('#timaat-annotation-list').append(this.listView);
 
-				// not in use
-				updateStatus(time) {
-					var status = false;
-					if ( time >= this.model.startTime && time < this.model.endTime) status = true;
+		var segment = this; // save annotation for events
+		// TODO might need to be adjusted
+		// attach event handlers
+		this.listView.on('click', this, function(ev) {
+			TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+			TIMAATPub.pause();
+			TIMAATPub.selectAnnotation(null);
+			$('.annotation-section').hide();
+			$('.segment-section').show();
+			TIMAATPub.setSegmentMetadata(segment);
+		});
+		this.listView.on('dblclick', this, function(ev) {
+			TIMAATPub.jumpVisible(segment.model.startTime, segment.model.endTime);
+			TIMAATPub.pause();
+			TIMAATPub.selectAnnotation(null);
+			$('.annotation-section').hide();
+			$('.segment-section').show();
+			TIMAATPub.setSegmentMetadata(segment);
+		});
+		this.updateUI();
+	}
+	
+	removeUI() {
+		this.listView.remove();
+		this.updateUI();      
+	}
 
-					// TODO might need to be adjusted
-					if ( status != this.active ) {
-						this.active = status;
-						if ( this.active ) this.timelineView.addClass('bg-info');
-						else this.timelineView.removeClass('bg-info');
-					}				
-				}
+	// not in use
+	updateStatus(time) {
+		time = parseFloat(time.toFixed(3));
+		var active = false;
+		if ( time >= this.model.startTime && time < this.model.endTime) {
+			active = true;
+		}
+		this.setActive(active)	
+	}
+
+	isActive() {
+		return this.active;
+	}
+
+	setActive(active) {
+		if ( this.active == active ) return;
+		this.active = active;
+	}
 
 }
 
@@ -494,10 +475,6 @@ class Annotation {
 			this.model.selectorSvgs[0].svgData = JSON.stringify(this.svg.model);
 		}
 
-		this._startTime = this.model.startTime;
-		this._endTime = this.model.endTime;
-		this._layerVisual = this.model.layerVisual;
-		this._layerAudio = this.model.layerAudio;
 		// create keyframes
 		for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new Keyframe(keyframe, this));
 
@@ -520,9 +497,9 @@ class Annotation {
 				</li>`
 		);
 		if (TIMAATPub.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
-			
+
 		this.updateUI();
-					
+
 		let anno = this; // save annotation for events
 
 		$('#timaat-annotation-list').append(this.listView);
@@ -543,7 +520,7 @@ class Annotation {
 			this.addSVGItem(item);
 		};
 		if ( !this.hasPolygons() ) this.addSVGItem(this._parseSVG({ id: "00000000-0000-4000-0000-000000000000", type: "rectangle", x: 0.0, y: 0.0, width: 1.0, height: 1.0, fill: 0 }));
-		
+
 		//! TODO differs from timaat.annotation.js
 		// attach event handlers
 		$(this.listView).on('click', this, function(ev) {
@@ -612,11 +589,11 @@ class Annotation {
 	}
 
 	get layerVisual() {
-		return this._layerVisual;
+		return this.model.layerVisual;
 	}
 
 	get layerAudio() {
-		return this._layerAudio;
+		return this.model.layerAudio;
 	}
 		
 	get stroke() {
@@ -624,11 +601,11 @@ class Annotation {
 	}
 
 	get startTime() {
-		return this._startTime;
+		return this.model.startTime;
 	}
 		
 	get endTime() {
-		return this._endTime;
+		return this.model.endTime;
 	}
 	
 	get type() {
@@ -636,7 +613,7 @@ class Annotation {
 	}
 	
 	get length() {
-		return this._endTime - this._startTime;
+		return this.model.endTime - this.model.startTime;
 	}
 
 	hasPolygons() {
@@ -644,7 +621,6 @@ class Annotation {
 		return this.svg.items.length > 0;
 	}
 
-	
 	updateUI() {
 		this.listView.attr('data-starttime', this.model.startTime);
 		this.listView.attr('data-endtime', this.model.endTime);
@@ -684,8 +660,8 @@ class Annotation {
 		let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
 		let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
 		let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
-		if ( this.layerVisual) {
-			if ( this.svg.items.length > 0 ) {
+		if ( this.model.layerVisual) {
+			if ( this.polygonCount > 0 ) {
 				typePolygon.show();
 				typeImage.hide();
 			}
@@ -757,7 +733,7 @@ class Annotation {
 
 	updateStatus(time) {
 		time = parseFloat(time.toFixed(3));
-		let animTime = time - this._startTime;
+		let animTime = time - this.model.startTime;
 		animTime = parseFloat(animTime.toFixed(3));
 		var active = false;
 		if (  TIMAATPub.duration == 0 || (time >= this.startTime && time < this.endTime)  ) active = true;
@@ -889,7 +865,6 @@ class Annotation {
 			$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
 		if ( elementTop > listHeight )
 			$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
-			
 	}
 	
 	_parseSVG(svgitem) {
@@ -972,6 +947,7 @@ class TIMAATPublication {
 			this.medium = TIMAATData;
 			this.duration = 0;
 		}
+		this.analysisList = TIMAATAnalysis;
 		this.frameRate = 25;
 		this.volume = 1.0;
 		this.markerList = [];
@@ -993,10 +969,8 @@ class TIMAATPublication {
 	
 	run() {
 		let hash = location.hash;
-		let startList = (this.medium) ? TIMAATPub.medium.mediumAnalysisLists[0] : null;
-		if ( TIMAATSettings.defList && TIMAATSettings.defList > 0 && this.medium ) for (let list of TIMAATPub.medium.mediumAnalysisLists) if ( list.id == TIMAATSettings.defList ) startList = list;
 		
-		if ( this.medium ) this.setupAnalysisList(startList);
+		if ( this.analysisList ) this.setupAnalysisList(this.analysisList);
 
 		// restore session
 		if ( hash && hash.length > 1 ) location.hash = hash;
@@ -1087,9 +1061,18 @@ class TIMAATPublication {
 			let wasActive = annotation.isActive();
 			annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
 			if ( annotation.isActive() && !wasActive ) {
-				if ( TIMAATSettings.stopImage && annotation.type == 0 ) TIMAATPub.pause();
-				if ( TIMAATSettings.stopPolygon && annotation.type == 1 ) TIMAATPub.pause();
-				if ( TIMAATSettings.stopAudio && annotation.type == 2 ) TIMAATPub.pause();
+				// console.log("pause annotation");
+				if ( TIMAATSettings.stopImage ) TIMAATPub.pause();
+				if ( TIMAATSettings.stopPolygon ) TIMAATPub.pause();
+				if ( TIMAATSettings.stopAudio ) TIMAATPub.pause();
+			}
+		}
+		for (let segment of TIMAATPub.analysisList.analysisSegmentsUI) {
+			let wasActive = segment.isActive();
+			segment.updateStatus(TIMAATPub.ui.video.currentTime*1000);
+			if ( segment.isActive() && !wasActive) {
+				// console.log("pause segment");
+				if ( TIMAATSettings.stopSegment ) TIMAATPub.pause();
 			}
 		}
 	}
@@ -1163,37 +1146,37 @@ class TIMAATPublication {
 	}
 	
 	setListMetadata() {
-		if ( !this.curAnalysisList ) return;
+		if ( !this.analysisList ) return;
 
-		if ( !this.curAnalysisList.mediumAnalysisListTranslations[0].title || this.curAnalysisList.mediumAnalysisListTranslations[0].title.length == 0) this.ui.list.title.addClass('empty');
+		if ( !this.analysisList.mediumAnalysisListTranslations[0].title || this.analysisList.mediumAnalysisListTranslations[0].title.length == 0) this.ui.list.title.addClass('empty');
 		else {
 			this.ui.list.title.removeClass('empty');
-			this.ui.list.title.find('.contents').html(this.curAnalysisList.mediumAnalysisListTranslations[0].title);
+			this.ui.list.title.find('.contents').html(this.analysisList.mediumAnalysisListTranslations[0].title);
 		}
-		if ( !this.curAnalysisList.mediumAnalysisListTranslations[0].text || this.curAnalysisList.mediumAnalysisListTranslations[0].text.length == 0) this.ui.list.comment.addClass('empty');
+		if ( !this.analysisList.mediumAnalysisListTranslations[0].text || this.analysisList.mediumAnalysisListTranslations[0].text.length == 0) this.ui.list.comment.addClass('empty');
 		else {
 			this.ui.list.comment.removeClass('empty');
-			this.ui.list.comment.find('.contents').html(this.curAnalysisList.mediumAnalysisListTranslations[0].text);
+			this.ui.list.comment.find('.contents').html(this.analysisList.mediumAnalysisListTranslations[0].text);
 		}
-		if ( !this.curAnalysisList.categorySets || this.curAnalysisList.categorySets.length == 0) {
+		if ( !this.analysisList.categorySets || this.analysisList.categorySets.length == 0) {
 			this.ui.list.categorySets.addClass('empty');
 		}	else {
 			let i = 0;
 			let categorySetString = '';
-			for (; i < this.curAnalysisList.categorySets.length; i++) {
-				categorySetString += this.curAnalysisList.categorySets[i].name + ', ';
+			for (; i < this.analysisList.categorySets.length; i++) {
+				categorySetString += this.analysisList.categorySets[i].name + ', ';
 			}
 			categorySetString = categorySetString.slice(0, -2); // remove last ', ' from string
 			this.ui.list.categorySets.removeClass('empty');
 			this.ui.list.categorySets.find('.contents').html(categorySetString);
 		}
-		if ( !this.curAnalysisList.tags || this.curAnalysisList.tags.length == 0) {
+		if ( !this.analysisList.tags || this.analysisList.tags.length == 0) {
 			this.ui.list.tags.addClass('empty');
 		} else {
 			let i = 0;
 			let tagString = '';
-			for (; i < this.curAnalysisList.tags.length; i++) {
-				tagString += this.curAnalysisList.tags[i].name + ', ';
+			for (; i < this.analysisList.tags.length; i++) {
+				tagString += this.analysisList.tags[i].name + ', ';
 			}
 			tagString = tagString.slice(0, -2); // remove last ', ' from string
 			this.ui.list.tags.removeClass('empty');
@@ -1245,134 +1228,6 @@ class TIMAATPublication {
 		}
 	}
 
-	setSequenceMetadata(sequence) {
-		if ( !sequence ) return;
-		
-		this.ui.sequenceMetadata.removeClass('d-none');
-
-		let name = sequence.model.analysisSequenceTranslations[0].name;
-		let desc = ( sequence.model.analysisSequenceTranslations[0].shortDescription ) ? sequence.model.analysisSequenceTranslations[0].shortDescription : '';
-		let comment = sequence.model.analysisSequenceTranslations[0].comment;
-		let transcript = sequence.model.analysisSequenceTranslations[0].transcript;
-
-		if ( !name || name.length == 0) this.ui.sequence.name.addClass('empty');
-		else {
-			this.ui.sequence.name.removeClass('empty');
-			this.ui.sequence.name.find('.contents').html(name);
-		}
-		if ( !desc || desc.length == 0) this.ui.sequence.description.addClass('empty');
-		else {
-			this.ui.sequence.description.removeClass('empty');
-			this.ui.sequence.description.find('.contents').html(desc);
-		}
-		if ( !comment || comment.length == 0) this.ui.sequence.comment.addClass('empty');
-		else {
-			this.ui.sequence.comment.removeClass('empty');
-			this.ui.sequence.comment.find('.contents').html(comment);
-		}
-		if ( !transcript || transcript.length == 0) this.ui.sequence.transcript.addClass('empty');
-		else {
-			this.ui.sequence.transcript.removeClass('empty');
-			this.ui.sequence.transcript.find('.contents').html(transcript);
-		}
-	}
-
-	setTakeMetadata(take) {
-		if ( !take ) return;
-		
-		this.ui.takeMetadata.removeClass('d-none');
-
-		let name = take.model.analysisTakeTranslations[0].name;
-		let desc = ( take.model.analysisTakeTranslations[0].shortDescription ) ? take.model.analysisTakeTranslations[0].shortDescription : '';
-		let comment = take.model.analysisTakeTranslations[0].comment;
-		let transcript = take.model.analysisTakeTranslations[0].transcript;
-
-		if ( !name || name.length == 0) this.ui.take.name.addClass('empty');
-		else {
-			this.ui.take.name.removeClass('empty');
-			this.ui.take.name.find('.contents').html(name);
-		}
-		if ( !desc || desc.length == 0) this.ui.take.description.addClass('empty');
-		else {
-			this.ui.take.description.removeClass('empty');
-			this.ui.take.description.find('.contents').html(desc);
-		}
-		if ( !comment || comment.length == 0) this.ui.take.comment.addClass('empty');
-		else {
-			this.ui.take.comment.removeClass('empty');
-			this.ui.take.comment.find('.contents').html(comment);
-		}
-		if ( !transcript || transcript.length == 0) this.ui.take.transcript.addClass('empty');
-		else {
-			this.ui.take.transcript.removeClass('empty');
-			this.ui.take.transcript.find('.contents').html(transcript);
-		}
-	}
-
-	setSceneMetadata(scene) {
-		if ( !scene ) return;
-		
-		this.ui.sceneMetadata.removeClass('d-none');
-
-		let name = scene.model.analysisSceneTranslations[0].name;
-		let desc = ( scene.model.analysisSceneTranslations[0].shortDescription ) ? scene.model.analysisSceneTranslations[0].shortDescription : '';
-		let comment = scene.model.analysisSceneTranslations[0].comment;
-		let transcript = scene.model.analysisSceneTranslations[0].transcript;
-
-		if ( !name || name.length == 0) this.ui.scene.name.addClass('empty');
-		else {
-			this.ui.scene.name.removeClass('empty');
-			this.ui.scene.name.find('.contents').html(name);
-		}
-		if ( !desc || desc.length == 0) this.ui.scene.description.addClass('empty');
-		else {
-			this.ui.scene.description.removeClass('empty');
-			this.ui.scene.description.find('.contents').html(desc);
-		}
-		if ( !comment || comment.length == 0) this.ui.scene.comment.addClass('empty');
-		else {
-			this.ui.scene.comment.removeClass('empty');
-			this.ui.scene.comment.find('.contents').html(comment);
-		}
-		if ( !transcript || transcript.length == 0) this.ui.scene.transcript.addClass('empty');
-		else {
-			this.ui.scene.transcript.removeClass('empty');
-			this.ui.scene.transcript.find('.contents').html(transcript);
-		}
-	}
-
-	setActionMetadata(action) {
-		if ( !action ) return;
-		
-		this.ui.actionMetadata.removeClass('d-none');
-
-		let name = action.model.analysisActionTranslations[0].name;
-		let desc = ( action.model.analysisActionTranslations[0].shortDescription ) ? action.model.analysisActionTranslations[0].shortDescription : '';
-		let comment = action.model.analysisActionTranslations[0].comment;
-		let transcript = action.model.analysisActionTranslations[0].transcript;
-
-		if ( !name || name.length == 0) this.ui.action.name.addClass('empty');
-		else {
-			this.ui.action.name.removeClass('empty');
-			this.ui.action.name.find('.contents').html(name);
-		}
-		if ( !desc || desc.length == 0) this.ui.action.description.addClass('empty');
-		else {
-			this.ui.action.description.removeClass('empty');
-			this.ui.action.description.find('.contents').html(desc);
-		}
-		if ( !comment || comment.length == 0) this.ui.action.comment.addClass('empty');
-		else {
-			this.ui.action.comment.removeClass('empty');
-			this.ui.action.comment.find('.contents').html(comment);
-		}
-		if ( !transcript || transcript.length == 0) this.ui.action.transcript.addClass('empty');
-		else {
-			this.ui.action.transcript.removeClass('empty');
-			this.ui.action.transcript.find('.contents').html(transcript);
-		}
-	}
-	
 	selectAnnotation(annotation, changehash=true) {
 		if ( this.curAnnotation == annotation && annotation != null ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
@@ -1380,7 +1235,7 @@ class TIMAATPublication {
 		if ( this.curAnnotation ) this.ui.segmentMetadata.addClass('d-none');
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(true);
 		if ( this.curAnnotation ) this.ui.annoMetadata.removeClass('d-none'); else this.ui.annoMetadata.addClass('d-none');
-		if ( changehash ) if (annotation) location.hash = '#'+annotation.model.uuid.uuid; else location.hash = '#' // UUIDs not yet available in timaat db
+		if ( changehash ) if (annotation) location.hash = '#'+annotation.model.uuid; else location.hash = '#' // UUIDs not yet available in timaat db
 		this.setAnnotationMetadata();
 	}
 	
@@ -1448,22 +1303,19 @@ class TIMAATPublication {
 		
 	}
 	
-	setupAnalysisList(analysislist, changehash=true) {
+	setupAnalysisList(analysisList, changehash=true) {
 		if ( !this.medium ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		
-		if ( this.analysislist ) this.analysislist.ui.removeClass('selected');
-
 		// setup model
-		this.analysislist = analysislist;
-		this.analysislist.ui.addClass('selected');
-		this.ui.listLabel.text(this.analysislist.ui.find('.item-title').text());
+		this.analysisList = analysisList;
+		this.ui.listLabel.text(this.analysisList.mediumAnalysisListTranslations[0].title);
 		// clear polygon UI
 		this.viewer.annoLayer.eachLayer(function(layer) {layer.remove()});
 
 		// clear old list contents if any			
-		if ( this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null) {
-			this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
+		if ( this.analysisList != null && this.analysisList.analysisSegmentsUI != null) {
+			this.analysisList.analysisSegmentsUI.forEach(function(segment) {
 				segment.removeUI();
 			});
 			this.annotationList.forEach(function(anno) {
@@ -1471,22 +1323,21 @@ class TIMAATPublication {
 			});
 		}
 		this.annotationList = [];
-		this.curAnalysisList = analysislist;
+		this.analysisList = analysisList;
 		this.setListMetadata();
 		
 		// setup segment model
-		if ( !this.curAnalysisList.analysisSegmentsUI ) {
-			this.curAnalysisList.analysisSegmentsUI = [];
-			for ( let segment of this.curAnalysisList.analysisSegments ) this.curAnalysisList.analysisSegmentsUI.push(new AnalysisSegment(segment));
+		if ( !this.analysisList.analysisSegmentsUI ) {
+			this.analysisList.analysisSegmentsUI = [];
+			for ( let segment of this.analysisList.analysisSegments ) this.analysisList.analysisSegmentsUI.push(new AnalysisSegment(segment));
 		}
 		this.sortSegments();
 		
-		
 		// build annotation list from model
-		if ( analysislist )
-			for (let annotation of analysislist.annotations) this.annotationList.push(new Annotation(annotation));
+		if ( analysisList )
+			for (let annotation of analysisList.annotations) this.annotationList.push(new Annotation(annotation));
 						
-		if ( this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null) this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
+		if ( this.analysisList != null && this.analysisList.analysisSegmentsUI != null) this.analysisList.analysisSegmentsUI.forEach(function(segment) {
 			segment.addUI();
 		});
 		this.selectAnnotation(null, changehash);
@@ -1499,7 +1350,7 @@ class TIMAATPublication {
 	}
 	
 	sortSegments() {
-		this.curAnalysisList.analysisSegmentsUI.sort(function (a, b) {
+		this.analysisList.analysisSegmentsUI.sort(function (a, b) {
 			if ( b.model.startTime < a.model.startTime ) return 1;
 			if ( b.model.startTime > a.model.startTime ) return -1;
 			return 0;
@@ -1513,6 +1364,7 @@ class TIMAATPublication {
 	
 	updateListUI() {
 		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
+		if (this.analysisList.analysisSegmentsUI) for (let segment of this.analysisList.analysisSegmentsUI) segment.updateStatus(TIMAATPub.ui.video.currentTime*1000);
 	}
 	
 	sortListUI() {
@@ -1609,7 +1461,8 @@ class TIMAATPublication {
 				let filename = ( TIMAATSettings.offline ) ? this.medium.id+'.mp4' : window.location.pathname.substring(0,window.location.pathname.lastIndexOf('/')+1) + 'item-'+this.medium.id;
 				this.overlay = L.videoOverlay(filename, this.mediumBounds, { autoplay: false, loop: false} ).addTo(this.viewer);
 				this.ui.video = this.overlay.getElement();
-			} else if (TIMAATData.mediumImage) {
+			} 
+			else if (TIMAATData.mediumImage) {
 				this.mediumBounds = L.latLngBounds([[ this.medium.mediumImage.height, 0], [ 0, this.medium.mediumImage.width]]);
 				this.viewer.setMaxBounds(this.mediumBounds);
 				this.viewer.fitBounds(this.mediumBounds);
@@ -1621,15 +1474,6 @@ class TIMAATPublication {
 			// polygon layer
 			this.viewer.annoLayer = new L.LayerGroup();;
 			this.viewer.addLayer(this.viewer.annoLayer);
-		
-			// analysis lists
-			this.ui.analysislist = $('#timaat-analysis-list');
-			for (let list of this.medium.mediumAnalysisLists) {
-				let item = $('<li class="list-group-item list-group-item-action pt-0 pb-0 pl-2 pr-2"><i class="fas fa-check-circle"></i> <span class="item-title">'+list.mediumAnalysisListTranslations[0].title+'</span></li>');
-				list.ui = item;
-				this.ui.analysislist.append(item);
-				item.on('click', ev => { TIMAATPub.setupAnalysisList(list) });
-			}
 
 			// initial display adjustments
 			$('.annotation-section').hide();
@@ -1698,11 +1542,13 @@ class TIMAATPublication {
 		$('.settings-stop-image').prop('checked', TIMAATSettings.stopImage == true);
 		$('.settings-stop-polygon').prop('checked', TIMAATSettings.stopPolygon == true);
 		$('.settings-stop-audio').prop('checked', TIMAATSettings.stopAudio == true);
-		$('.settings-stop-image,.settings-stop-polygon,.settings-stop-audio').on('change', ev => {
+		$('.settings-stop-segment').prop('checked', TIMAATSettings.stopSegment == true);
+		$('.settings-stop-image, .settings-stop-polygon, .settings-stop-audio, .settings-stop-segment').on('change', ev => {
 			let status = $(ev.currentTarget).prop('checked');
 			if ( $(ev.currentTarget).hasClass('settings-stop-image') ) TIMAATSettings.stopImage = status;
 			if ( $(ev.currentTarget).hasClass('settings-stop-polygon') ) TIMAATSettings.stopPolygon = status;
 			if ( $(ev.currentTarget).hasClass('settings-stop-audio') ) TIMAATSettings.stopAudio = status;
+			if ( $(ev.currentTarget).hasClass('settings-stop-segment') ) TIMAATSettings.stopSegment = status;
 		});
 
 		// events
@@ -1880,13 +1726,10 @@ class TIMAATPublication {
 //			try { id = parseInt(hash.substring(1)); } catch(e) {};
 			id = hash.substring(1);
 			if ( id == 0 ) return;
-			let list = null;
-			for ( let annoList of this.medium.mediumAnalysisLists ) for ( let anno of annoList.annotations ) if ( anno.uuid.uuid == id ) list = annoList;
-			if ( !list ) return;
+
+			TIMAATPub.setupAnalysisList(this.analysisList, false);
 			
-			if ( list.id != TIMAATPub.curAnalysisList.id ) TIMAATPub.setupAnalysisList(list, false);
-			
-			if ( !TIMAATPub.curAnnotation || TIMAATPub.curAnnotation.model.uuid.uuid != id ) for ( let anno of TIMAATPub.annotationList ) if ( anno.model.uuid.uuid == id ) {
+			if ( !TIMAATPub.curAnnotation || TIMAATPub.curAnnotation.model.uuid != id ) for ( let anno of TIMAATPub.annotationList ) if ( anno.model.uuid == id ) {
 				TIMAATPub.selectAnnotation(anno);
 				TIMAATPub.pause();
 				TIMAATPub.jumpVisible(anno.startTime, anno.endTime);

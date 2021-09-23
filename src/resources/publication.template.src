@@ -55,6 +55,7 @@
     <script type="text/javascript">
 		 var TIMAATSettings = {{TIMAAT-SETTINGS}};
 		 var TIMAATData = {{TIMAAT-DATA}};
+     var TIMAATAnalysis = {{TIMAAT-ANALYSIS}}
 	</script>
 
 	<!-- ***************************************************************************************************************** -->
@@ -81,32 +82,17 @@
 
   <body onload="setupPublication()">
 		 <div id="timaat-left-sidebar" class="sidebar collapsed">
-			<div class="alert alert-dark mb-0">
-			<div class="btn-group btn-group-sm dropdown">
-          <button
-            type="button"
-            class="btn btn-outline-secondary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <i class="fas fa-list"></i>
-          </button>
-				<div class="dropdown-menu">
-            <ul
-              id="timaat-analysis-list"
-              class="list-group list-group-flush"
-            ></ul>
-				</div>
+			<div class="alert-dark mb-0">
+        <div class="mb-2 d-inline-flex timaat-list-info">
+          <span class="badge timaat-list-title"></span>
 			</div>
-        <span class="badge">Analyseliste</span>
       </div>
-      <a
+      <!-- <a
         href="javascript:void(0)"
         class="closebtn"
         onclick="TIMAATPub.closeSidebar('left')"
         ><i class="fas fa-chevron-circle-left"></i
-      ></a>
+      ></a> -->
 			<div class="timaat-annotation-wrapper overflow-auto">
         <ul
           id="timaat-annotation-list"
@@ -115,7 +101,7 @@
 			</div>
 		 </div>
 		 <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
-      <div class="alert alert-dark mb-0 text-right">
+      <div class="alert alert-dark mb-0 text-center">
         <span class="badge">Metadaten</span>
       </div>
       <a
@@ -627,40 +613,56 @@
                 <div class="font-weight-bold">
                   Wiedergabe anhalten bei Annotationen vom Typ:
                 </div>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-                      <input
-                        type="checkbox"
-                        class="timaat-settings settings-stop-image"
-                      />
-    </div>
-  </div>
-                  <div class="form-control">
-                    <i class="fas fa-image"></i> ganzes Bild
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                                      <input
+                                        type="checkbox"
+                                        class="timaat-settings settings-stop-image"
+                                      />
+                    </div>
                   </div>
-  <div class="input-group-prepend">
-    <div class="input-group-text">
-                      <input
-                        type="checkbox"
-                        class="timaat-settings settings-stop-polygon"
-                      />
-    </div>
-  </div>
-                  <div class="form-control">
-                    <i class="fas fa-draw-polygon"></i> Polygon
+                                  <div class="form-control">
+                                    <i class="fas fa-image"></i> ganzes Bild
+                                  </div>
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                                      <input
+                                        type="checkbox"
+                                        class="timaat-settings settings-stop-polygon"
+                                      />
+                    </div>
                   </div>
-  <div class="input-group-prepend">
-    <div class="input-group-text">
+                                  <div class="form-control">
+                                    <i class="fas fa-draw-polygon"></i> Polygon
+                                  </div>
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                                      <input
+                                        type="checkbox"
+                                        class="timaat-settings settings-stop-audio"
+                                      />
+                    </div>
+                  </div>
+                                  <div class="form-control">
+                                    <i class="fas fa-headphones"></i> Audiospur
+                </div>
+                <div class="font-weight-bold">
+                  Wiedergabe anhalten bei:
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-audio"
+                        class="timaat-settings settings-stop-segment"
                       />
-    </div>
-  </div>
+                    </div>
+                  </div>
                   <div class="form-control">
-                    <i class="fas fa-headphones"></i> Audiospur
-</div>
+                    <i class="fas fa-ruler-horizontal"></i> Segment
+                  </div>
+                </div>
 					</div>
 			</div>
             </div>
@@ -777,11 +779,6 @@
 				</div>
 			</div>
 				</div>
-        <div class="mb-2 d-inline-flex timaat-list-info">
-          <i class="ml-2 fas fa-list fa-fw"></i> &nbsp;<span
-            class="timaat-list-title"
-          ></span>
-			</div>
       </div>
 		 </div>
   </body>

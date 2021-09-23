@@ -57,6 +57,7 @@
 }
 .metadata-field .contents {
 	display: inline;
+	word-break: break-word;
 }
 
 .metadata-field.empty .empty-placeholder {
@@ -132,7 +133,9 @@ body {
 }
 
 .timaat-list-title {
-	color: #CCCCCC;
+	/* color: #CCCCCC; */
+	white-space: normal;
+	word-wrap: break-word;
 }
 
 .tooltip .tooltip-inner {
@@ -148,7 +151,7 @@ body {
 }
 
 .timaat-annotation-wrapper, .timaat-metadata-wrapper {
-	position: absolute;
+	/* position: absolute; */
 	min-width: 250px;
 	top: 3.5em;
 	bottom: 0;
