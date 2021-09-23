@@ -377,7 +377,25 @@
 
 			// publication dialog events
 			$('#timaat-publish-analysis-switch, #timaat-publication-protected-switch').on('change', ev => {
-				TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-analysis-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
+				// TIMAAT.VideoPlayer._setupPublicationDialog($('#timaat-publish-analysis-switch').prop('checked'), $('#timaat-publication-protected-switch').prop('checked'));
+				let enabled = $('#timaat-publish-analysis-switch').prop('checked');
+				let restricted =  $('#timaat-publication-protected-switch').prop('checked');
+				let credentials = {};
+				try {
+					credentials = JSON.parse(TIMAAT.VideoPlayer.publication.credentials);
+				} catch (e) { credentials = {}; }
+				let dialog = $('#timaat-videoplayer-publication');
+				let username = ( credentials.user && enabled ) ? credentials.user : '';
+				let password = ( credentials.password && enabled ) ? credentials.password : '';
+				dialog.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
+				if ( restricted ) dialog.find('.protectedicon').addClass('fa-lock'); else dialog.find('.protectedicon').addClass('fa-lock-open');
+				dialog.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
+				dialog.find('.username').prop('disabled', !enabled || !restricted);
+				dialog.find('.username').val(username);
+				dialog.find('.password').prop('disabled', !enabled || !restricted);
+				dialog.find('.password').val(password);
+				dialog.find('.password').attr('type', 'password');
+				$('#timaat-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
 			});
 
 			let dialog = $('#timaat-videoplayer-publication');
@@ -2385,8 +2403,7 @@
 			let url = ( TIMAAT.VideoPlayer.publication ) ? window.location.protocol+'//'+window.location.host+window.location.pathname+'publication/'+TIMAAT.VideoPlayer.publication.slug+'/' : '';
 			dialog.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
 			if ( restricted ) dialog.find('.protectedicon').addClass('fa-lock'); else dialog.find('.protectedicon').addClass('fa-lock-open');
-			
-			
+
 			dialog.find('.publicationtitle').prop('disabled', !enabled);
 			dialog.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
 			dialog.find('.username').prop('disabled', !enabled || !restricted);
@@ -2399,13 +2416,12 @@
 			if ( enabled ) {
 				dialog.find('.publicationtitle').val(title);
 				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>'; 
-				else url = '- Publikationslink nach dem Speichern verfügbar -';
+				else url = '- Publication link will be available after saving -';
 				dialog.find('.publicationurl').html(url);
 			} else {
 				dialog.find('.publicationtitle').val('');
-				dialog.find('.publicationurl').html('- Video nicht publiziert -');
+				dialog.find('.publicationurl').html('- Medium not published -');
 			}
-			
 		},
 		
 		_updateAnimations: function() {

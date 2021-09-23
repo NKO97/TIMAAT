@@ -90,9 +90,8 @@ public class EndpointPublication {
 		Query countQuery = em.createQuery("SELECT COUNT(p) FROM Publication p WHERE p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId")
 												 .setParameter("mediumAnalysisListId", mediumAnalysisListId);
 		long entries = (long) countQuery.getSingleResult();
-		// early out if medium is not connected to a publication
+		// early out if analysis is not connected to a publication
 		if (entries == 0) {
-			// System.out.println("getPublicationByMediumAnalysisList - early out");
 			return Response.noContent().build();
 		}
 		// TODO check and prevent 2 or more results (which should never happen)
@@ -168,6 +167,8 @@ public class EndpointPublication {
 		return Response.ok().entity(publication).build();
 	}
 
+	// TODO createPublicationbyMediaCollectionAnalysisList()
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -179,31 +180,26 @@ public class EndpointPublication {
 
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
+		Publication updatedPublication = null;
+		// int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
 		
-		Publication publication = null;
+		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
+		Publication publication = mediumAnalysisList.getPublication();
+		if (publication == null) return Response.status(Status.NOT_FOUND).build();
+
 		try {
-			publication = mapper.readValue(jsonData, Publication.class);
+			updatedPublication = mapper.readValue(jsonData, Publication.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// find publication
-		try {
-			Query query = em.createQuery("SELECT p FROM Publication p where p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId AND p.owner.id = :owner")
-											.setParameter("mediumAnalysisListId", mediumAnalysisListId)
-											.setParameter("owner", userID);
-			List<Publication> publications = castList(Publication.class, query.getResultList());
-			publication = publications.get(0);
-		} catch (Exception e) {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if (publication == null) return Response.status(Status.BAD_REQUEST).build();
 		
-		publication.setTitle(publication.getTitle());
-		publication.setCredentials(publication.getCredentials());
-		publication.setSettings(publication.getSettings());
-		publication.setAccess(publication.getAccess());
+		publication.setTitle(updatedPublication.getTitle());
+		publication.setCredentials(updatedPublication.getCredentials());
+		publication.setSettings(updatedPublication.getSettings());
+		publication.setAccess(updatedPublication.getAccess());
+
 		EntityTransaction entityTransaction = em.getTransaction();
 		entityTransaction.begin();
 		em.persist(publication);

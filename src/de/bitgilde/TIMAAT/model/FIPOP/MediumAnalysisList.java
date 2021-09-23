@@ -243,6 +243,14 @@ public class MediumAnalysisList implements Serializable {
 		this.medium = medium;
 	}
 
+	public Publication getPublication() {
+		return this.publication;
+	}
+
+	public void setPublication(Publication publication) {
+		this.publication = publication;
+	}
+
 	public UserAccount getCreatedByUserAccount() {
 		return this.createdByUserAccount;
 	}
