@@ -138,7 +138,7 @@ body {
 	word-wrap: break-word;
 }
 
-.tooltip .tooltip-inner {
+/* .tooltip .tooltip-inner {
 	text-align: left;
 }
 
@@ -148,7 +148,7 @@ body {
 	overflow: auto;
 	white-space: normal;
 	text-align: justify;
-}
+} */
 
 .timaat-annotation-wrapper, .timaat-metadata-wrapper {
 	/* position: absolute; */
