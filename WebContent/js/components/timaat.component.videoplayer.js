@@ -1995,12 +1995,9 @@
 
 		offLinePublication: function() {
 			let modal = $('#timaat-videoplayer-download-publication');
-			if (TIMAAT.VideoPlayer.mediaType == 'video') {
-				modal.find('a.download-player-link').attr('href', 'api/medium/video/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
-				modal.find('a.download-medium-link').attr('href', 'api/medium/video/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
-			} else if (TIMAAT.VideoPlayer.mediaType == 'image') {
-				modal.find('a.download-player-link').attr('href', 'api/medium/image/offline/'+this.model.video.id+'.html'+'?authToken='+TIMAAT.Service.session.token);
-				modal.find('a.download-medium-link').attr('href', 'api/medium/image/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
+		if (TIMAAT.VideoPlayer.mediaType == 'video' || TIMAAT.VideoPlayer.mediaType == 'image') {
+				modal.find('a.download-player-link').attr('href', 'api/publication/offline/'+TIMAAT.VideoPlayer.curAnalysisList.id+'?authToken='+TIMAAT.Service.session.token);
+				modal.find('a.download-medium-link').attr('href', 'api/medium/'+TIMAAT.VideoPlayer.mediaType+'/'+this.model.video.id+'/download'+'?token='+this.model.video.viewToken+'&force=true');
 			}
 			modal.modal('show');
 		},

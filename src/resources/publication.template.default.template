@@ -97,7 +97,7 @@
     <script type="text/javascript">
 		 var TIMAATSettings = {{TIMAAT-SETTINGS}};
 		 var TIMAATData = {{TIMAAT-DATA}};
-     var TIMAATAnalysis = {{TIMAAT-ANALYSIS}}
+     var TIMAATAnalysis = {{TIMAAT-ANALYSIS}};
 	</script>
 
 	<!-- ***************************************************************************************************************** -->
@@ -116,19 +116,19 @@
 		 	function setupPublication() {
 				window.TIMAATPub = new TIMAATPublication();
 				// load annotation list
-				TIMAATPub.setupAnalysisList(TIMAATPub.video.mediumAnalysisLists[0]); // TODO
+				TIMAATPub.setupAnalysisList(TIMAATPub.analysisList);
 			}
 		 </script>
   </head>
 
 	<!-- ***************************************************************************************************************** -->
 
-	<body onload="setupPublication()">
+<body onload="setupPublication()">
     <div id="timaat-left-sidebar" class="sidebar collapsed">
       <div class="alert-dark mb-0">
         <div class="mb-2 d-inline-flex timaat-list-info">
           <span class="badge timaat-list-title"></span>
-			</div>
+        </div>
       </div>
       <!-- <a
         href="javascript:void(0)"
@@ -286,11 +286,11 @@
               </div>
             </div>
             <!--
-   <div class="metadata-field annotation-places">
-   <div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
-   <div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
-   </div>
-   -->
+						<div class="metadata-field annotation-places">
+						<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
+						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
+						</div>
+						-->
           </div>
           <div class="metadata-section segment-section">
             <div

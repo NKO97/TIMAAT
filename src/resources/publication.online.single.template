@@ -59,7 +59,7 @@
     <script type="text/javascript">
       var TIMAATSettings = {{TIMAAT-SETTINGS}};
       var TIMAATData = {{TIMAAT-DATA}};
-      var TIMAATAnalysis = {{TIMAAT-ANALYSIS}}
+      var TIMAATAnalysis = {{TIMAAT-ANALYSIS}};
     </script>
 
     <!-- ***************************************************************************************************************** -->
