@@ -204,7 +204,9 @@ public class EndpointUserAccount {
 
 	public static int getPermissionLevelForAnalysisList(int userAccountId, int mediumAnalysisListId) {
 		// System.out.println("getPermissionLevelForAnalysisList - userId: " + userAccountId + " listId: " + mediumAnalysisListId);
-		UserAccountHasMediumAnalysisList uahmal;
+		if (userAccountId == 1) return 4; //* admin always has full access
+
+		UserAccountHasMediumAnalysisList uahmal = null;
 		try {
 			String countQuerySQL = "SELECT COUNT (uahmal) FROM UserAccountHasMediumAnalysisList uahmal WHERE uahmal.userAccount.id = :userAccountId AND uahmal.mediumAnalysisList.id = :mediumAnalysisListId";
 			Query countQuery = TIMAATApp.emf.createEntityManager()
@@ -218,25 +220,39 @@ public class EndpointUserAccount {
 					.setParameter("userAccountId", userAccountId)
 					.setParameter("mediumAnalysisListId", mediumAnalysisListId)
 					.getSingleResult();
-			} else {
-				return -1;
-			}
+			} 
 		} catch (NoResultException nre) {
-			System.out.println("No entry found. Setting value to -1");
+			// System.out.println("No entry found. Setting value to 0");
 			nre.printStackTrace();
-			return -1; // no permission set for this user on this mediumAnalysisList
+			return 0; // no permission set for this user on this mediumAnalysisList
 		} catch (Exception e) {
-			System.out.println("No entry found. Setting value to -1");
+			// System.out.println("No entry found. Setting value to 0");
 			e.printStackTrace();
-			return -1; // no permission set for this user on this mediumAnalysisList
+			return 0; // no permission set for this user on this mediumAnalysisList
 		}
 		// System.out.println("getPermissionLevelForAnalysisList - permission level found: " + uahmal.getPermissionType().getId());
-		return uahmal.getPermissionType().getId();
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
+		byte globalPermissionType = mediumAnalysisList.getGlobalPermission();
+		int permissionType = 0;
+		if (uahmal != null)
+		{
+			permissionType = uahmal.getPermissionType().getId();
+		}
+		if ( permissionType < 1 && globalPermissionType < 1) {
+			return 0;
+		} else {
+			int maxPermissionType = Math.max(permissionType, globalPermissionType);
+			return maxPermissionType;
+		}
 	}
 
 	public static int getPermissionLevelForMediumCollection(int userAccountId, int mediaCollectionId) {
 		// System.out.println("getPermissionLevelForMediaCollection - userId: " + userAccountId + " listId: " + mediaCollectionId);
-		UserAccountHasMediaCollection uahmc;
+		if (userAccountId == 1) return 4; //* admin always has full access
+
+		UserAccountHasMediaCollection uahmc = null;
 		try {
 			String countQuerySQL = "SELECT COUNT (uahmc) FROM UserAccountHasMediaCollection uahmc WHERE uahmc.userAccount.id = :userAccountId AND uahmc.mediaCollection.id = :mediaCollectionId";
 			Query countQuery = TIMAATApp.emf.createEntityManager()
@@ -250,20 +266,31 @@ public class EndpointUserAccount {
 					.setParameter("userAccountId", userAccountId)
 					.setParameter("mediaCollectionId", mediaCollectionId)
 					.getSingleResult();
-			} else {
-				return -1;
 			}
 		} catch (NoResultException nre) {
-			System.out.println("No entry found. Setting value to -1");
+			// System.out.println("No entry found. Setting value to 0");
 			nre.printStackTrace();
-			return -1; // no permission set for this user on this mediaCollection
+			return 0; // no permission set for this user on this mediaCollection
 		} catch (Exception e) {
-			System.out.println("No entry found. Setting value to -1");
+			// System.out.println("No entry found. Setting value to 0");
 			e.printStackTrace();
-			return -1; // no permission set for this user on this mediaCollection
+			return 0; // no permission set for this user on this mediaCollection
 		}
 		// System.out.println("getPermissionLevelForMediaCollection- permission level found: " + uahmc.getPermissionType().getId());
-		return uahmc.getPermissionType().getId();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediaCollection mediaCollection = entityManager.find(MediaCollection.class, mediaCollectionId);
+		byte globalPermissionType = mediaCollection.getGlobalPermission();
+		int permissionType = 0;
+		if (uahmc != null)
+		{
+			permissionType = uahmc.getPermissionType().getId();
+		}
+		if ( permissionType < 1 && globalPermissionType < 1) {
+			return 0;
+		} else {
+			int maxPermissionType = Math.max(permissionType, globalPermissionType);
+			return maxPermissionType;
+		}
 	}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {

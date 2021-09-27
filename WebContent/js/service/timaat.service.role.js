@@ -57,12 +57,13 @@
       });			
     },
 
-    async createRole() {
-			// console.log("TCL: async createRole()");
+    async createRole(model) {
+			// console.log("TCL: async createRole(model)", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/0",
 					type       : "POST",
+					data       : JSON.stringify(model),
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
 					beforeSend : function (xhr) {
@@ -79,12 +80,13 @@
 			});
 		},
 
-		async createRoleGroup() {
-			// console.log("TCL: async createRoleGroup()");
+		async createRoleGroup(model) {
+			// console.log("TCL: async createRoleGroup(model)", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/roleGroup/0",
 					type       : "POST",
+					data       : JSON.stringify(model),
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
 					beforeSend : function (xhr) {

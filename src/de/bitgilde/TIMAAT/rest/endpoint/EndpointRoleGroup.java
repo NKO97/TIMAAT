@@ -198,22 +198,48 @@ public class EndpointRoleGroup {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response createRoleGroup(@PathParam("id") int id) {
-		System.out.println("EndpointRole: createRoleGroup");
+	public Response createRoleGroup(@PathParam("id") int id,
+																	String jsonData) {
+		System.out.println("EndpointRole: createRoleGroup " + jsonData);
 
+		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = new RoleGroup();
+		// sanitize object data
 		roleGroup.setId(0);
 
-		// System.out.println("EndpointRole: createRoleGroup - persist roleGroup");
-
-		// persist Medium
+		// persist roleGroup
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(roleGroup);
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(roleGroup);
+
+		RoleGroup roleGroupContent = null;
+		try {
+			roleGroupContent = mapper.readValue(jsonData, RoleGroup.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( roleGroupContent == null) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
+		roleGroupContent.getRoleGroupTranslations().get(0).setRoleGroup(roleGroup);
+		roleGroup.setRoleGroupTranslations(roleGroupContent.getRoleGroupTranslations());
+		roleGroup.setRoles(roleGroupContent.getRoles());
+
+		// persist roleGroup data
+		entityTransaction.begin();
+		entityManager.merge(roleGroup);
+		entityManager.persist(roleGroup);
+		entityTransaction.commit();
+		entityManager.refresh(roleGroup);
+		for (Role role : roleGroup.getRoles()) {
+			entityManager.refresh(role);
+		}
 
 		// add log entry
 		UserLogManager.getLogger()
