@@ -1324,7 +1324,7 @@
                     </span>
                     <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
                   </a>
-                  <span class="videotime" style="padding-left:20px">00:00:00.000</span>
+<!--                   <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
                   <!-- Playback Speed Control -->
                   <div class="btn-group btn-group-sm float-right">
                     <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
@@ -1350,8 +1350,13 @@
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body m-1">
-                	<div class="d-flex justify-content-between align-items-end mb-2">
-						        <div>00:00</div>
+                	<div class="d-flex justify-content-between align-items-end mt-2 mb-2">
+
+						<div class="btn-group btn-group-sm mr-3">
+							<button class="btn btn-sm btn-dark small timeline-zoom-in"><i class="fas fa-search-plus fa-fw"></i></button>
+							<button class="btn btn-sm btn-dark small timeline-zoom-out"><i class="fas fa-search-minus fa-fw"></i></button>
+						</div>
+
                 		<div class="btn-group">
                 			<button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
                         <i class="fas fa-video"></i> Video
@@ -1360,26 +1365,82 @@
                         <i class="fas fa-headphones"></i> Audio
                       </button>
                 		</div>
-						        <div class="timaat-videoduration">xx:xx</div>
+ 						        <div class="timaat-videoduration">N/A</div>
                 	</div>
-                	<div id="timaat-timeline-zoomable-wrapper" class="pb-2">
-                    <div id="timaat-timeline-zoomable">
-                      <div id="timaat-timeline-segment-pane"></div>
-                      <div id="timaat-timeline-sequence-pane"></div>
-                      <div id="timaat-timeline-take-pane"></div>
-                      <div id="timaat-timeline-scene-pane"></div>
-                      <div id="timaat-timeline-action-pane"></div>
-                      <div id="timaat-timeline-keyframe-pane"></div>
-                      <div id="timaat-timeline-slider-pane">
+                	
+                	<div id="timaat-timeline-slider-pane" class="mt-2 mb-2">
                         <input type="range" class="timaat-timeline-slider" id="video-seek-bar" min="0" max="100" step="0.01" value="0">
-                        <br>
-                        <div id="timaat-timeline-marker-pane">
-                          <div class="timaat-audio-layer mb-2">
-                            <div class="timaat-audio-baseline"></div>
-                            <img class="timaat-audio-waveform" src="img/audio-placeholder.png" alt="Audio Waveform"/>
-                          </div>
-                        </div>
-                      </div>
+                    </div>
+                	
+                	
+                	<div id="timeline" class="pb-2">
+                    <div id="timaat-timeline-zoomable">
+						<div class="timeline-layer-pane bg-dark">
+							<div class="time-indicator bg-warning"></div>
+
+						  <div class="timeline-section border-top border-dark" style="height: 2em;">
+							  <div class="timeline-section-header timeline-control small border-right border-bottom border-dark float-left pt-0" style="margin-left: 0px;">
+								  <div class="input-group input-group-sm">
+									  <div class="input-group-prepend">
+										  <button class="btn btn-sm btn-dark small" disabled><i class="fas fa-clock fa-fw"></i></button>
+									</div>
+									  <input type="text" value="00:00:00.000" style="color:black; font-family: 'Courier', monospace;" class="form-control form-control-sm pl-1 pr-1 text-right videotime" disabled>
+								  </div>
+							  </div>
+							  <div class="timeline-section-content timeline-info bg-secondary border-bottom border-dark" style="overflow: hidden;"></div>
+						  </div>
+
+					  <div class="timeline-sortable-sections ui-sortable">
+						  
+
+						  <div class="timeline-section timeline-section-segment-structure" style="position: relative; top: 0px; left: 0px;">
+							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
+								  <div class="d-flex justify-content-between">
+									  <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Segments</span>
+									  <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
+								  </div>
+							  </div>
+							  <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
+                      			<div id="timaat-timeline-segment-pane"></div>
+                      			<div id="timaat-timeline-sequence-pane"></div>
+                      			<div id="timaat-timeline-take-pane"></div>
+            			        <div id="timaat-timeline-scene-pane"></div>
+								<div id="timaat-timeline-action-pane"></div>
+							  </div>
+						  </div>
+						  
+						  <div class="timeline-section timeline-section-annotation">
+							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
+								  <div class="d-flex justify-content-between">
+									  <span class="timeline-section-title pl-2 text-light"><i class="fas fa-draw-polygon fa-fw"></i> Analysis<br><span id="timeline-list-title" class="badge badge-secondary">N/A</span></span>
+									  <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
+								  </div>
+							  </div>
+							  <div class="timeline-section-content bg-light border-bottom border-dark">
+		  	                      <div id="timaat-timeline-keyframe-pane"></div>
+								  <div id="timaat-timeline-marker-pane"></div>
+							  </div>
+						  </div>
+						  
+						  
+						  <div class="timeline-section timeline-section-audio" style="height: 70px;">
+							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
+								  <div class="d-flex justify-content-between">
+									  <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio Layer</span>
+									  <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
+								  </div>
+							  </div>
+							  <div class="timeline-section-content bg-light border-bottom border-dark" style="">
+								  <div style="width: 100%; height: 100%;background:linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );">
+									  <div class="timaat-audio-waveform" style="width:100%;height:100%;background: url('img/audio-placeholder.png');background-size: 100% 100%; background-repeat: no-repeat;"></div>
+								  </div>
+							  </div>
+						  </div>
+
+					  </div>
+				  </div>
+
+
                     </div>
                 	</div>
                 </div>

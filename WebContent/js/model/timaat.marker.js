@@ -124,7 +124,7 @@
 			  // add events
 			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				  TIMAAT.VideoPlayer.pause();
-				  TIMAAT.VideoPlayer.jumpTo(ev.data.from);
+				  TIMAAT.VideoPlayer.jumpTo(ev.data.from/1000);
 				  TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);
 			  });
 			  this._updateElementStyle();
@@ -214,11 +214,15 @@
 			  var length = (this._to - this._from) / TIMAAT.VideoPlayer.duration * width;
 			  length = Math.max(0,length);
 			  var offset = this._from / TIMAAT.VideoPlayer.duration * width;
-			  this.ui.element.css('width', length+'px');
-			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
+
+			  this.ui.element.css('width', (length/width*100.0)+'%');
+			  this.ui.element.css('margin-left', ((offset)/width*100.0)+'%');
+
+//			  this.ui.element.css('width', length+'px');
+//			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
 
 			  var startoffset = 20;
-			  if ( TIMAAT.VideoPlayer.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
+//			  if ( TIMAAT.VideoPlayer.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
 			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
 		  }
 		  

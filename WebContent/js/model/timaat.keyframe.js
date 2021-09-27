@@ -273,9 +273,9 @@
 		}
 
 		_updateOffsetUI() {
-			  var width =  $('#video-seek-bar').width();
-			  var offset = (this.parent.startTime+this.time) / TIMAAT.VideoPlayer.duration * width;
-			  this.ui.timelineView.css('margin-left', offset+'px');
+//			  var width =  $('#video-seek-bar').width();
+			  let offset = (this.parent.startTime+this.time) / TIMAAT.VideoPlayer.duration * 100.0;
+			  this.ui.timelineView.css('margin-left', offset+'%');
 		}
 		
 		updateStatus() {

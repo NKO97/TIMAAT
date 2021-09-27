@@ -807,6 +807,9 @@
 		initInspectorControls: function() {
 			// setup sidebar inspector controls
 			TIMAAT.VideoPlayer.inspector = new TIMAAT.Inspector(TIMAAT.VideoPlayer.viewer);		
+
+			// setup timeline controls
+			TIMAAT.VideoPlayer.timeline = new TIMAAT.Timeline();		
 			
 			// init summernote fields
 			$('#timaat-inspector-meta-comment').summernote({
@@ -1347,8 +1350,8 @@
 			// setup timeline UI
 			$('.timaat-videoplayer-timeline-area').show();
 			let token = TIMAAT.VideoPlayer.model.video.viewToken;
-			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "img/audio-placeholder.png");
-			$('#timaat-timeline-marker-pane img.timaat-audio-waveform').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.video.id+"/audio/combined?token="+token);
+			$('.timeline-section-audio .timaat-audio-waveform').css('background-image', 'url("img/audio-placeholder.png")');
+			$('.timeline-section-audio .timaat-audio-waveform').css('background-image', 'url("/TIMAAT/api/medium/video/'+TIMAAT.VideoPlayer.model.video.id+'/audio/combined?token='+token+'")');
 			
 			// setup analysis list UI
 			$('#timaat-analysislist-chooser').empty();
@@ -1356,6 +1359,9 @@
 
 			// setup inspector
 			TIMAAT.VideoPlayer.inspector.reset();
+			
+			// setup timeline
+			TIMAAT.VideoPlayer.timeline.initVideo(video);
 			
 			// setup video overlay and UI
 			$(TIMAAT.VideoPlayer.viewer.getContainer()).removeClass('timaat-videoplayer-video-viewer').removeClass('timaat-videoplayer-image-viewer')
@@ -1412,7 +1418,11 @@
 			});
 			$(this.video).on('timeupdate', function(ev) {
 				if (TIMAAT.VideoPlayer.duration == 0) return;	
-				$('.videotime').html(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));		
+				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));
+
+				// DEBUG TIMELINE
+				TIMAAT.VideoPlayer.timeline.setTime(TIMAAT.VideoPlayer.video.currentTime);
+						
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
 				$('#video-seek-bar').val(value);
 				$('#video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
@@ -1545,8 +1555,12 @@
 
 			if (this.curAnalysisList) {
 				TIMAAT.URLHistory.setURL(null, 'Analysis · '+ this.curAnalysisList.mediumAnalysisListTranslations[0].title, '#analysis/'+this.curAnalysisList.id);
+				// DEBUG
+				$('#timeline-list-title').text('"'+this.curAnalysisList.mediumAnalysisListTranslations[0].title+'"');
 			} else {
 				TIMAAT.URLHistory.setURL(null, 'Video Player', '#analysis');
+				// DEBUG
+				$('#timeline-list-title').text('N/A');
 			}
 		},
 		
@@ -2074,7 +2088,7 @@
 					sortedList[i].marker.updateView();
 				}
 			}
-			$('#timaat-timeline-marker-pane').css('height', (15+(maxOffset*12))+'px');
+			$('#timaat-timeline-marker-pane').css('height', (30+(maxOffset*12))+'px');
 		},
 		
 		updateListUI: function(viaTimeUpdate = null) {
@@ -2151,11 +2165,13 @@
 					action.removeUI();
 				});
 			}
+			/*
 			$('#timaat-timeline-segment-pane').hide();
 			$('#timaat-timeline-sequence-pane').hide();
 			$('#timaat-timeline-take-pane').hide();
 			$('#timaat-timeline-scene-pane').hide();
 			$('#timaat-timeline-action-pane').hide();
+			*/
 		},
 
 		createTimelineSegmentElementStructure: function() {

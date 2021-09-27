@@ -462,6 +462,7 @@ a.dropdown-item {
 }
 
 #timaat-timeline-keyframe-pane {
+	position: absolute;
 	width: 100%;
 	height: 20px;
 }
@@ -470,7 +471,7 @@ a.dropdown-item {
 	font-size: 8px;
 	height: 20px;
 	z-index: 200;
-	margin-top: 12px;
+	margin-top: 10px;
 	position: absolute;
 	float: left;
 	border-left: 2px solid black;
@@ -530,6 +531,7 @@ a.dropdown-item {
 	display: block;
 }
 
+/*
 #timaat-timeline-marker-pane.timaat-timeline-audio-layer {
 	padding-bottom: 85px;
 }
@@ -538,6 +540,7 @@ a.dropdown-item {
 	display: block;
 	margin-top: -58px;
 }
+*/
 
 .timaat-audio-layer {
 	transition: height 0.5s;
@@ -548,9 +551,11 @@ a.dropdown-item {
 	border: 1px solid gray;
 	border-top: none;
 }
+/*
 #timaat-timeline-marker-pane.timaat-timeline-audio-layer .timaat-audio-layer {
 	height: 50px;
 }
+*/
 .timaat-audio-layer .timaat-audio-baseline {
 	background: linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );
 	width: 100%;
@@ -567,7 +572,7 @@ a.dropdown-item {
 
 .timaat-timeline-marker {
 	pointer-events: none;
-	margin-top: -21px;
+/*	margin-top: -20px; */
 	position: absolute;
 	float: left;
 	width: 0px;
@@ -1008,4 +1013,92 @@ Tooltip container
 /* Mark valid inputs during .invalid state */
 .invalid input:required:valid {
   background: #17D654;
+}
+
+/* Timeline */
+#timeline {
+	overflow: hidden;
+}
+#timaat-timeline-zoomable {
+	position: relative;
+}
+.timeline-fulltick {
+	cursor: pointer;
+	min-width: 50px;
+	max-width: 80px;
+	width: 50px;
+	position: relative;
+	height: 100%;
+}
+.time-indicator {
+	position: absolute;
+	z-index: 100;
+	margin-left: 10%;
+	height: 100%;
+	width: 1px;
+	top: 1px;
+	left: 150px;
+	bottom: 1px;
+	cursor: pointer;
+	transition: margin-left 0.1s;
+}
+.timeline-section-header.timeline-control {
+	cursor: auto;
+	background-color: #444a50;
+}
+.timeline-layer-pane {
+	overflow: auto;
+	background: #333;
+}
+.timeline-section {
+	position: relative;
+	height: 70px;
+	transition: height 0.2s;
+}
+.timeline-section .timeline-section-header .timeline-section-widgets {
+	cursor: pointer;
+}
+.timeline-section-header {
+	position: absolute;
+	padding-top: 2px;
+	overflow: hidden;
+	width: 150px;
+	height: 100%;
+	box-shadow: 1px 0px 2px #333;
+	cursor: ns-resize;
+	z-index: 10;
+}
+.timeline-section.collapsed .timeline-section-header .collapse-widget i:before {
+	content: "\f105";
+}
+.timeline-section .timeline-section-header .collapse-widget i:before {
+	content: "\f107";
+}
+
+.timeline-section-title {
+	text-shadow: 1px 1px 2px black;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.timeline-section-content {
+	position: relative;
+	margin-left: 150px;
+	width: 5000px;
+	height: 100%;
+	overflow: visible;
+	box-shadow: 2px 0px 2px black;
+	transition: width 0.6s;
+}
+.timeline-section-segment-structure {
+	height: 98px;
+}
+.timeline-section.collapsed {
+	height: 24px !important;
+}
+.timeline-section-annotation.collapsed {
+	height: 31px !important;
+}
+.timeline-section-annotation.collapsed .timeline-section-header .badge-secondary {
+	display: none;
 }

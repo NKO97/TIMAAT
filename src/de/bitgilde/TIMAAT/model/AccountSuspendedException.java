@@ -8,4 +8,3 @@ public class AccountSuspendedException extends Exception {
 		super();
 	}
 }
-
