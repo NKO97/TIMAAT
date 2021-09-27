@@ -1,10 +1,14 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
@@ -19,6 +23,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -29,10 +34,13 @@ import jakarta.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 
 /**
 *
@@ -76,6 +84,65 @@ public class EndpointPublication {
 
 		
 		return Response.ok().entity(pub).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Path("offline/{mediumAnalysisListId}")
+	public Response getOfflinePublication(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
+																				@QueryParam("authToken") String authToken) {
+    // System.out.println("getOfflinePublication");
+
+    // verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		EntityManager em = TIMAATApp.emf.createEntityManager();
+		UserAccount userAccount = em.find(UserAccount.class, userId);
+		containerRequestContext.setProperty("TIMAAT.userID", userAccount.getId());
+		containerRequestContext.setProperty("TIMAAT.userName", userAccount.getAccountName());
+		containerRequestContext.setProperty("TIMAAT.user", userAccount);		
+		
+		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = mediumAnalysisList.getMedium();
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+
+		String content = "";
+		try {
+			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
+		} catch (IOException | URISyntaxException e1) {
+			return Response.serverError().build();
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		PublicationSettings settings = new PublicationSettings();
+		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false).setOffline(true);
+
+		String serMedium = "";
+		try {
+			serMedium = mapper.writeValueAsString(medium);
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			
+			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
+			content = temp[0]+serMedium+temp[1];
+			
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
+
+		String serverMediumAnalysisList = "";
+		try {
+			serverMediumAnalysisList = mapper.writeValueAsString(mediumAnalysisList);
+			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
+			
+			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
+			content = temp[0]+serverMediumAnalysisList+temp[1];
+			
+		} catch (JsonProcessingException e) {return Response.serverError().build();}
+		
+		return Response.ok().header("Content-Disposition", "attachment; filename=\""+mediumAnalysisList.getMediumAnalysisListTranslations().get(0).getTitle()+"-player.html\"").entity(content).build();
 	}
 
 	@GET

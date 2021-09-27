@@ -98,350 +98,349 @@ class AnalysisSegment {
 /* ****************************************************************** */
 
 class Marker {
-		  constructor(annotation) {
-			  this.parent = annotation;
-			  this.annotation = annotation;
-			  // this.annotationID = annotation.model.id;
-			  this._from = Math.min(annotation.startTime, TIMAATPub.duration);
-			  this._to = Math.max(annotation.startTime, annotation.model.endTime);
-			  this._colorHex = annotation.model.selectorSvgs[0].colorHex;
-			  
-			  // construct marker element
-			  this.ui = {
-					  offset: 0,
-						element: $(`<div class="timaat-timeline-marker">
-													<div class="timaat-timeline-markerbar">
-													</div>
-													<div class="timaat-timeline-markerhead">
-													</div>
-													<div class="timaat-timeline-marker-start">
-													</div>
-													<div class="timaat-timeline-marker-end">
-													</div>
-												</div>`),			  };
-			  this.ui.element.attr('id','timaat-marker-'+this.parent.model.id);
-			    
-			  this.regionstart = $(this.ui.element.find('.timaat-timeline-marker-start'));
-			  this.regionend = $(this.ui.element.find('.timaat-timeline-marker-end'));
-			    
-			  this._updateElementColor();
-			  this._updateElementOffset();
-			  $('#timaat-timeline-marker-pane').append(this.ui.element);
-			  TIMAATPub.markerList.push(this);
-			    
-			  // add events
-			  this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
-				  TIMAATPub.pause();
-				  TIMAATPub.jumpTo(ev.data.from);
-				  TIMAATPub.selectAnnotation(ev.data.parent);
-			  });
-			  this._updateElementStyle();
-		  }
-
-		  
-		  get UIOffset() {
-			  return this.ui.offset;
-		  }
-				
-		  set UIOffset(offset) {
-			  if ( this.ui.offset == offset ) return;
-			  this.ui.offset = offset;
-			  this._updateElementOffset();
-		  };
-		  
-		  get from() {
-			  return this._from;
-		  }
-				
-		  get to() {
-			  return this._to;
-		  }
-				
-		  get color() {
-			  return this._colorHex;
-		  }
-			  
-		  remove() {
-			  this.ui.element.remove();
-		  }
-			  
-		  updateView() {
-			  this._from = this.parent.startTime;
-			  this._to = this.parent.endTime;
-			  this._colorHex = this.parent.svg.colorHex;
-			  this._updateElementColor();
-			  this._updateElementOffset();
-			  this._updateElementStyle();
-			  
-			  if ( this.parent.isSelected() && this.parent.isAnimation() ) this.ui.element.addClass('timaat-timeline-marker-anim');
-			  else this.ui.element.removeClass('timaat-timeline-marker-anim');
-			  
-			  if ( this.parent.isSelected() && !this.parent.isAnimation() ) {
-				  this.regionstart.attr('style','position:relative;');
-				  this.regionstart.show();
-				  this.regionend.attr('style','position:relative;');
-				  this.regionend.show();
-			  } else {
-				  this.regionstart.hide();
-				  this.regionend.hide();
-			  }
-		  }
-
-		  _updateElementColor() {
-			  this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._colorHex, 0.3));
-			  this.ui.element.css('border-left-color', '#'+this._colorHex);
-			  this.ui.element.find('.timaat-timeline-markerhead').css('background-color', '#'+this._colorHex);
-			  this.ui.element.removeClass('timaat-timeline-marker-white');
-			  if ( this._colorHex.toLowerCase() == 'ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
-		  }
-			  
-		  _updateElementOffset() {
-			  var magicoffset = 0; // TODO replace input slider
-
-			  var width = $('.video-seek-bar').width();
-			  var length = (this._to - this._from) / TIMAATPub.duration * width;
-			  length = Math.max(0,length);
-			  var offset = this._from / TIMAATPub.duration * width;
-			  this.ui.element.css('width', length+'px');
-			  this.ui.element.css('margin-left', (offset+magicoffset)+'px');
-
-			  var startoffset = 20;
-			  if ( TIMAATPub.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
-			  this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
-		  }
-		  
-		  _updateElementStyle() {
-			  this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon')
-																													 .removeClass('timaat-markerhead-anim');
-			  if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
-			  else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
-			  
-				(this.annotation.model.layerVisual) ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.removeClass('timaat-timeline-marker-visual');
-				(this.annotation.model.layerAudio) ? this.ui.element.addClass('timaat-timeline-marker-audio') : this.ui.element.removeClass('timaat-timeline-marker-audio');
-			}
-
-			hexToRgbA(hex, alpha) {
-				var r = parseInt(hex.slice(0, 2), 16);
-				var	g = parseInt(hex.slice(2, 4), 16);
-				var b = parseInt(hex.slice(4, 6), 16);
-				return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
-			}
-
+	constructor(annotation) {
+		this.parent = annotation;
+		this.annotation = annotation;
+		// this.annotationID = annotation.model.id;
+		this._from = Math.min(annotation.startTime, TIMAATPub.duration);
+		this._to = Math.max(annotation.startTime, annotation.model.endTime);
+		this._colorHex = annotation.model.selectorSvgs[0].colorHex;
+		
+		// construct marker element
+		this.ui = {
+				offset: 0,
+				element: $(`<div class="timaat-timeline-marker">
+											<div class="timaat-timeline-markerbar">
+											</div>
+											<div class="timaat-timeline-markerhead">
+											</div>
+											<div class="timaat-timeline-marker-start">
+											</div>
+											<div class="timaat-timeline-marker-end">
+											</div>
+										</div>`),			  };
+		this.ui.element.attr('id','timaat-marker-'+this.parent.model.id);
+			
+		this.regionstart = $(this.ui.element.find('.timaat-timeline-marker-start'));
+		this.regionend = $(this.ui.element.find('.timaat-timeline-marker-end'));
+			
+		this._updateElementColor();
+		this._updateElementOffset();
+		$('#timaat-timeline-marker-pane').append(this.ui.element);
+		TIMAATPub.markerList.push(this);
+			
+		// add events
+		this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
+			TIMAATPub.pause();
+			TIMAATPub.jumpTo(ev.data.from);
+			TIMAATPub.selectAnnotation(ev.data.parent);
+		});
+		this._updateElementStyle();
 	}
+
+	get UIOffset() {
+		return this.ui.offset;
+	}
+		
+	set UIOffset(offset) {
+		if ( this.ui.offset == offset ) return;
+		this.ui.offset = offset;
+		this._updateElementOffset();
+	};
+	
+	get from() {
+		return this._from;
+	}
+		
+	get to() {
+		return this._to;
+	}
+		
+	get color() {
+		return this._colorHex;
+	}
+		
+	remove() {
+		this.ui.element.remove();
+	}
+		
+	updateView() {
+		this._from = this.parent.startTime;
+		this._to = this.parent.endTime;
+		this._colorHex = this.parent.svg.colorHex;
+		this._updateElementColor();
+		this._updateElementOffset();
+		this._updateElementStyle();
+		
+		if ( this.parent.isSelected() && this.parent.isAnimation() ) this.ui.element.addClass('timaat-timeline-marker-anim');
+		else this.ui.element.removeClass('timaat-timeline-marker-anim');
+		
+		if ( this.parent.isSelected() && !this.parent.isAnimation() ) {
+			this.regionstart.attr('style','position:relative;');
+			this.regionstart.show();
+			this.regionend.attr('style','position:relative;');
+			this.regionend.show();
+		} else {
+			this.regionstart.hide();
+			this.regionend.hide();
+		}
+	}
+
+	_updateElementColor() {
+		this.ui.element.find('.timaat-timeline-markerbar').css('background-color', this.hexToRgbA(this._colorHex, 0.3));
+		this.ui.element.css('border-left-color', '#'+this._colorHex);
+		this.ui.element.find('.timaat-timeline-markerhead').css('background-color', '#'+this._colorHex);
+		this.ui.element.removeClass('timaat-timeline-marker-white');
+		if ( this._colorHex.toLowerCase() == 'ffffff' ) this.ui.element.addClass('timaat-timeline-marker-white');
+	}
+		
+	_updateElementOffset() {
+		var magicoffset = 0; // TODO replace input slider
+
+		var width = $('.video-seek-bar').width();
+		var length = (this._to - this._from) / TIMAATPub.duration * width;
+		length = Math.max(0,length);
+		var offset = this._from / TIMAATPub.duration * width;
+		this.ui.element.css('width', length+'px');
+		this.ui.element.css('margin-left', (offset+magicoffset)+'px');
+
+		var startoffset = 20;
+		if ( TIMAATPub.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
+		this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
+	}
+	
+	_updateElementStyle() {
+		this.ui.element.find('.timaat-timeline-markerhead').removeClass('timaat-markerhead-polygon')
+																												.removeClass('timaat-markerhead-anim');
+		if ( this.parent.isAnimation() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-anim');
+		else if ( this.parent.hasPolygons() ) this.ui.element.find('.timaat-timeline-markerhead').addClass('timaat-markerhead-polygon');
+		
+		(this.annotation.model.layerVisual) ? this.ui.element.addClass('timaat-timeline-marker-visual') : this.ui.element.removeClass('timaat-timeline-marker-visual');
+		(this.annotation.model.layerAudio) ? this.ui.element.addClass('timaat-timeline-marker-audio') : this.ui.element.removeClass('timaat-timeline-marker-audio');
+	}
+
+	hexToRgbA(hex, alpha) {
+		var r = parseInt(hex.slice(0, 2), 16);
+		var	g = parseInt(hex.slice(2, 4), 16);
+		var b = parseInt(hex.slice(4, 6), 16);
+		return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+	}
+
+}
 	
 /* ****************************************************************** */
 
 class Keyframe {
-		constructor(keyframe, annotation) {
-			this.parent = annotation;
-			// this.annotation = annotation;
-			this.model = keyframe;
-			// this.annotationID = annotation.model.id;
-			this._time = this.model.time;
-			this._visible = true;
-			this._selected = false;
-			
-			this.shapes = [];
-			this.shapeMap = new Map();
-			for (let svgitem of this.model.shapes) {
-				let shape = this._parseModel(svgitem);
-				this.addShape(shape);
-			}
-			// init keyframe UI
-			this.ui = {
-					timelineTemplate : `<div class="timaat-timeline-keyframe">
-																<div class="timaat-timeline-keyframehead">
+	constructor(keyframe, annotation) {
+		this.parent = annotation;
+		// this.annotation = annotation;
+		this.model = keyframe;
+		// this.annotationID = annotation.model.id;
+		this._time = this.model.time;
+		this._visible = true;
+		this._selected = false;
+		
+		this.shapes = [];
+		this.shapeMap = new Map();
+		for (let svgitem of this.model.shapes) {
+			let shape = this._parseModel(svgitem);
+			this.addShape(shape);
+		}
+		// init keyframe UI
+		this.ui = {
+				timelineTemplate : `<div class="timaat-timeline-keyframe">
+															<div class="timaat-timeline-keyframehead">
+															</div>
+														</div>`,
+				inspectorTemplate : `<div class="list-group-item p-0">
+															<div class="input-group input-group-sm">
+																<div class="input-group-prepend">
+																	<span class="input-group-text keyframe-number">01</span>
 																</div>
-															</div>`,
-					inspectorTemplate : `<div class="list-group-item p-0">
-																<div class="input-group input-group-sm">
-																	<div class="input-group-prepend">
-																		<span class="input-group-text keyframe-number">01</span>
-																	</div>
-																	<input type="text" class="form-control keyframe-time">
-																	<div class="input-group-append">
-																		<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
-																		<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
-																	</div>
+																<input type="text" class="form-control keyframe-time">
+																<div class="input-group-append">
+																	<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
+																	<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
 																</div>
-															</div>`
-			};
-			this.ui.timelineView = $(this.ui.timelineTemplate);
-			this.ui.inspectorView = $(this.ui.inspectorTemplate);
-			if ( this._time == 0 ) {
-				this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
-				this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
-			}
-			this.ui.head = this.ui.timelineView.find('.timaat-timeline-keyframehead');
-			$('#timaat-timeline-keyframe-pane').append(this.ui.timelineView);
-			if ( this.time == 0 ) this.ui.head.addClass('first');
+															</div>
+														</div>`
+		};
+		this.ui.timelineView = $(this.ui.timelineTemplate);
+		this.ui.inspectorView = $(this.ui.inspectorTemplate);
+		if ( this._time == 0 ) {
+			this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
+			this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
+		}
+		this.ui.head = this.ui.timelineView.find('.timaat-timeline-keyframehead');
+		$('#timaat-timeline-keyframe-pane').append(this.ui.timelineView);
+		if ( this.time == 0 ) this.ui.head.addClass('first');
 
-			// add events
-			this.ui.head.on('click', this, function(ev) {
-				TIMAATPub.pause();
-				TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
-			});
-			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
-				if ( !ev.data ) return;
-				let keyframe = ev.data;
-				let anno = keyframe.parent;
-				let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
-				let minTime = 0;
-				if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 0.001;
-				minTime = parseFloat(minTime.toFixed(3));
-				newTime = Math.max(minTime, newTime);
-				let maxTime = anno.length;
-				if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 0.001;
-				maxTime = parseFloat(maxTime.toFixed(3));
-				newTime = Math.min(newTime, maxTime);
-				if ( newTime != keyframe.time ) {
-					keyframe.time = newTime;
-					keyframe.updateUI();
-					anno._updateShapeUI();
-					anno.updateEditableUI();
-				}
-			});
-			this.ui.inspectorView.find('.keyframe-undo').on('click', this, function(ev) {
-				if ( !ev.data ) return;
-				ev.data.parent._updateShapeUI();
-				ev.data.parent.updateEditableUI();
-			});
-			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
-				if ( !ev.data ) return;
-				ev.data.parent.removeKeyframe(ev.data);
-			});
+		// add events
+		this.ui.head.on('click', this, function(ev) {
+			TIMAATPub.pause();
+			TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
+		});
+		if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
+			if ( !ev.data ) return;
+			let keyframe = ev.data;
+			let anno = keyframe.parent;
+			let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
+			let minTime = 0;
+			if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 0.001;
+			minTime = parseFloat(minTime.toFixed(3));
+			newTime = Math.max(minTime, newTime);
+			let maxTime = anno.length;
+			if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 0.001;
+			maxTime = parseFloat(maxTime.toFixed(3));
+			newTime = Math.min(newTime, maxTime);
+			if ( newTime != keyframe.time ) {
+				keyframe.time = newTime;
+				keyframe.updateUI();
+				anno._updateShapeUI();
+				anno.updateEditableUI();
+			}
+		});
+		this.ui.inspectorView.find('.keyframe-undo').on('click', this, function(ev) {
+			if ( !ev.data ) return;
+			ev.data.parent._updateShapeUI();
+			ev.data.parent.updateEditableUI();
+		});
+		this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
+			if ( !ev.data ) return;
+			ev.data.parent.removeKeyframe(ev.data);
+		});
 
-			this.updateUI();
-			this._updateOffsetUI();
-			this.updateTimeUI();
-		}
-		
-		addShape(shape) {
-			// check if shape id exists
-			if ( this.shapeMap.has(shape.id) ) return;
-			this.shapes.push(shape);
-			this.shapeMap.set(shape.id, shape);
-		}
-		
-		removeShape(shape) {
-			if ( !shape ) return;
-			let id = (shape.id) ? shape.id : shape;
-			let kfShape = this.shapeMap.get(id);
-			if ( !kfShape ) return;
-			let index = this.shapes.indexOf(kfShape);
-			if ( index < 0 ) return;
-			this.shapes.splice(index, 1);
-			this.shapeMap.delete(id);
-		}
-		
-		get time() {
-			return this._time;
-		}
-
-		getShape(id) {
-			return this.shapeMap.get(id);
-		}
-		
-		_parseModel(svgitem) {
-			let shape = {
-					type: svgitem.type,
-			}
-			let width = 0;
-			let height = 0;
-			if (TIMAATData.mediumVideo) {
-				width = TIMAATPub.medium.mediumVideo.width;
-				height = TIMAATPub.medium.mediumVideo.height;
-			} else if (TIMAATData.mediumImage) {
-				width = TIMAATPub.medium.mediumImage.width;
-				height = TIMAATPub.medium.mediumImage.height;
-			}
-			let factor = TIMAATPub.mediumBounds.getNorth() / height;
-			let id = svgitem.id;
-			if ( !id ) {
-				// id = TIMAAT.Util.createUUIDv4();
-				id = '-----';
-				console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
-			}
-			shape.id = id;
-			switch (svgitem.type) {
-				case "rectangle":
-					// shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
-					shape.bounds = [ [Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
-					return shape;
-				case "polygon":
-				case "line":
-					let points = new Array();
-					for (let point of svgitem.points) {
-						// let lat = height-(point[1]*height);
-						let lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
-						let lng = point[0]*width;
-						points.push([lat, lng]);
-					};
-					shape.points = points;
-					return shape;
-				case "circle":
-					// let lat = height-(svgitem.y*height);
-					let lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
-					// let lng = svgitem.x*width;
-					let lng = svgitem.x*factor*width;
-					shape.point = [lat, lng];
-					// shape.radius = svgitem.radius;
-					shape.radius = svgitem.radius * factor;
-					return shape;
-			}
-		}
-		
-		remove() {
-			// remove UI
-			this.ui.timelineView.remove();
-			this.ui.inspectorView.find('.keyframe-time').off();
-			this.ui.inspectorView.remove();
-		}
-
-		_updateOffsetUI() {
-			  var width = $('.video-seek-bar').width();
-			  var offset = (this.parent.startTime+this.time) / TIMAATPub.duration * width;
-			  this.ui.timelineView.css('margin-left', offset+'px');
-		}
-		
-		updateStatus() {
-		}
-		
-		updateTimeUI() {
-			this.ui.inspectorView.find('.keyframe-time').val(TIMAATPub.formatTime(this.parent.startTime+this._time, true));
-		}
-		
-		updateUI() {
-			let visible = this.parent.isSelected() && this.parent.isAnimation();
-			if ( visible != this._visible ) {
-				this._visible = visible;
-				if ( visible ) {
-					this.ui.timelineView.show();
-					this._updateOffsetUI();
-				} else  this.ui.timelineView.hide();
-			}
-			if ( this._visible ) {
-				let selected = this.parent.isOnKeyframe() && this.parent.currentKeyframe == this;
-				if ( selected != this._selected ) {
-					this._selected = selected;
-					if ( selected ) this.ui.head.addClass('selected'); else this.ui.head.removeClass('selected');
-				}
-				
-				let maxPadding = (this.parent.svg.keyframes.length+1).toString().length;
-				if (maxPadding < 2) maxPadding = 2;
-				let frameNumber = this.parent.svg.keyframes.indexOf(this)+1;
-				let padNumber = frameNumber;
-				if ( typeof(String.prototype.padStart) === 'function' ) padNumber = frameNumber.toString().padStart(maxPadding, '0');
-				else {
-					// TODO only for Internet Explorer
-					padNumber = ('000'+frameNumber).substr(-3);
-				}
-				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
-			}
-		}
-		
+		this.updateUI();
+		this._updateOffsetUI();
+		this.updateTimeUI();
 	}
+	
+	addShape(shape) {
+		// check if shape id exists
+		if ( this.shapeMap.has(shape.id) ) return;
+		this.shapes.push(shape);
+		this.shapeMap.set(shape.id, shape);
+	}
+	
+	removeShape(shape) {
+		if ( !shape ) return;
+		let id = (shape.id) ? shape.id : shape;
+		let kfShape = this.shapeMap.get(id);
+		if ( !kfShape ) return;
+		let index = this.shapes.indexOf(kfShape);
+		if ( index < 0 ) return;
+		this.shapes.splice(index, 1);
+		this.shapeMap.delete(id);
+	}
+	
+	get time() {
+		return this._time;
+	}
+
+	getShape(id) {
+		return this.shapeMap.get(id);
+	}
+	
+	_parseModel(svgitem) {
+		let shape = {
+				type: svgitem.type,
+		}
+		let width = 0;
+		let height = 0;
+		if (TIMAATData.mediumVideo) {
+			width = TIMAATPub.medium.mediumVideo.width;
+			height = TIMAATPub.medium.mediumVideo.height;
+		} else if (TIMAATData.mediumImage) {
+			width = TIMAATPub.medium.mediumImage.width;
+			height = TIMAATPub.medium.mediumImage.height;
+		}
+		let factor = TIMAATPub.mediumBounds.getNorth() / height;
+		let id = svgitem.id;
+		if ( !id ) {
+			// id = TIMAAT.Util.createUUIDv4();
+			id = '-----';
+			console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+		}
+		shape.id = id;
+		switch (svgitem.type) {
+			case "rectangle":
+				// shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
+				shape.bounds = [ [Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
+				// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+				return shape;
+			case "polygon":
+			case "line":
+				let points = new Array();
+				for (let point of svgitem.points) {
+					// let lat = height-(point[1]*height);
+					let lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
+					let lng = point[0]*width;
+					points.push([lat, lng]);
+				};
+				shape.points = points;
+				return shape;
+			case "circle":
+				// let lat = height-(svgitem.y*height);
+				let lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
+				// let lng = svgitem.x*width;
+				let lng = svgitem.x*factor*width;
+				shape.point = [lat, lng];
+				// shape.radius = svgitem.radius;
+				shape.radius = svgitem.radius * factor;
+				return shape;
+		}
+	}
+	
+	remove() {
+		// remove UI
+		this.ui.timelineView.remove();
+		this.ui.inspectorView.find('.keyframe-time').off();
+		this.ui.inspectorView.remove();
+	}
+
+	_updateOffsetUI() {
+			var width = $('.video-seek-bar').width();
+			var offset = (this.parent.startTime+this.time) / TIMAATPub.duration * width;
+			this.ui.timelineView.css('margin-left', offset+'px');
+	}
+	
+	updateStatus() {
+	}
+	
+	updateTimeUI() {
+		this.ui.inspectorView.find('.keyframe-time').val(TIMAATPub.formatTime(this.parent.startTime+this._time, true));
+	}
+	
+	updateUI() {
+		let visible = this.parent.isSelected() && this.parent.isAnimation();
+		if ( visible != this._visible ) {
+			this._visible = visible;
+			if ( visible ) {
+				this.ui.timelineView.show();
+				this._updateOffsetUI();
+			} else  this.ui.timelineView.hide();
+		}
+		if ( this._visible ) {
+			let selected = this.parent.isOnKeyframe() && this.parent.currentKeyframe == this;
+			if ( selected != this._selected ) {
+				this._selected = selected;
+				if ( selected ) this.ui.head.addClass('selected'); else this.ui.head.removeClass('selected');
+			}
+			
+			let maxPadding = (this.parent.svg.keyframes.length+1).toString().length;
+			if (maxPadding < 2) maxPadding = 2;
+			let frameNumber = this.parent.svg.keyframes.indexOf(this)+1;
+			let padNumber = frameNumber;
+			if ( typeof(String.prototype.padStart) === 'function' ) padNumber = frameNumber.toString().padStart(maxPadding, '0');
+			else {
+				// TODO only for Internet Explorer
+				padNumber = ('000'+frameNumber).substr(-3);
+			}
+			this.ui.inspectorView.find('.keyframe-number').text(padNumber);
+		}
+	}
+	
+}
 
 /* ****************************************************************** */
 
