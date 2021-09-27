@@ -97,7 +97,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		// check for permission level
-		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 3 && userId != 1) { // only mods and admins may see permission list
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 3) { // only mods and admins may see permission list
 			return Response.status(Status.FORBIDDEN).build();
 		}
 
@@ -668,7 +668,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		// check for permission level
-		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2 && userId != 1) {
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
 
@@ -750,7 +750,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		// check for permission level
-		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 4 && userId != 1) {
+		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 4) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
     	
@@ -798,9 +798,8 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) && (
-				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
-				(permissionLevel != 3 && permissionLevel != 4))) {
+		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
@@ -883,9 +882,8 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) && (
-				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
-				(permissionLevel != 3 && permissionLevel != 4))) {
+		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
@@ -950,9 +948,8 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) &&
-				((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
-				(permissionLevel != 3 && permissionLevel != 4))) {
+		if ((userId != 1) && ((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
+													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
 		} // else user has permission for requested change 
 
@@ -1052,9 +1049,9 @@ public class EndpointAnalysisList {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("segment/{id}")
 	@Secured
-	public Response updateAnalysisSegment(@PathParam("id") int segmentId,
-																				String jsonData,
-																				@QueryParam("authToken") String authToken) {
+		public Response updateAnalysisSegment(@PathParam("id") int segmentId,
+																					String jsonData,
+																					@QueryParam("authToken") String authToken) {
 		// System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);

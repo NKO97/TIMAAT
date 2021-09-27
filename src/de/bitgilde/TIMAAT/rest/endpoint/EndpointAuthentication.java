@@ -112,7 +112,7 @@ public class EndpointAuthentication {
 	@Secured
 	public Response getMediumAnalysisListPermissionLevel(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
 																		 									 @QueryParam("authToken") String authToken) {
-
+    // System.out.println("getMediumAnalysisListPermissionLevel for analysisListId " + mediumAnalysisListId);
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -127,14 +127,10 @@ public class EndpointAuthentication {
 		}		
 		// check for permission level
 		int permissionType = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
-		byte globalPermissionType = mediumAnalysisList.getGlobalPermission();
-		if ( permissionType < 1 && globalPermissionType < 1) {
+		if ( permissionType < 1) {
 			return Response.status(Status.UNAUTHORIZED).build();
 		} else {
-			int maxPermissionType = Math.max(permissionType, globalPermissionType);
-			return Response.ok().entity(maxPermissionType).build();
+			return Response.ok().entity(permissionType).build();
 		}
 	}
 
