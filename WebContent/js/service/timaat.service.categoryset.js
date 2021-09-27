@@ -106,6 +106,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
+          // console.log("TCL: }).done -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR responseText:", error.responseText);

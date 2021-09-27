@@ -212,7 +212,6 @@ public class EndpointCategorySet {
 		CategorySet newCategorySet = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
-		// parse JSON data
 		try {
 			newCategorySet = mapper.readValue(jsonData, CategorySet.class);
 		} catch (IOException e) {
@@ -220,6 +219,8 @@ public class EndpointCategorySet {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+
+		// parse JSON data
 		newCategorySet.setId(0);
 
 		// update log metadata
@@ -236,8 +237,6 @@ public class EndpointCategorySet {
 			return Response.serverError().build();
 		}
 
-		// System.out.println("EndpointCategorySet: createCategorySet - persist categorySet");
-
 		// persist Medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -248,8 +247,8 @@ public class EndpointCategorySet {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETCREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+															 UserLogManager.LogEvents.CATEGORYSETCREATED);
 		System.out.println("EndpointCategorySet: createCategorySet - done");
 		return Response.ok().entity(newCategorySet).build();
 	}

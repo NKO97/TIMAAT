@@ -79,7 +79,19 @@
         } 
         else { // create new role
 					var roleModel = await TIMAAT.RoleLists.createRoleModel(formDataObject);
-          var newRole = await TIMAAT.RoleLists.createRole(roleModel, roleGroupIdList);
+          var newRole = await TIMAAT.RoleService.createRole(roleModel);
+          let i = 0;
+          for (; i < roleGroupIdList.length; i++) {
+            let roleGroup = await TIMAAT.RoleService.getRoleGroup(roleGroupIdList[i].id);
+            roleGroup.roles.push(newRole);
+            await TIMAAT.RoleService.updateRoleGroup(roleGroup);
+          }
+          i = 0;
+          for (; i < roleActorIdList.length; i++) {
+            let actor = await TIMAAT.ActorService.getActor(roleActorIdList[i].id);
+            actor.roles.push(newRole);
+            await TIMAAT.ActorService.updateActor(actor);
+          }
           role = new TIMAAT.Role(newRole);
           $('#role-metadata-form').data('role', role);
           $('#list-tab-metadata').data('type', 'role');
@@ -186,7 +198,8 @@
         } 
         else { // create new role group
 					var roleGroupModel = await TIMAAT.RoleLists.createRoleGroupModel(formDataObject);
-          var newRoleGroup = await TIMAAT.RoleLists.createRoleGroup(roleGroupModel, roleIdList);
+          roleGroupModel.roles = roleIdList;
+          var newRoleGroup = await TIMAAT.RoleService.createRoleGroup(roleGroupModel);
           roleGroup = new TIMAAT.RoleGroup(newRoleGroup);
           $('#rolegroup-metadata-form').data('roleGroup', roleGroup);
           $('#list-tab-metadata').data('type', 'roleGroup');
@@ -520,12 +533,19 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'role-metadata-form');
       $('#list-tab-metadata').data('type', 'role');
 			$('#role-metadata-form').data('role', null);
-      $('#rolegroups-multi-select-dropdown').val(null).trigger('change');
-      $('#actors-multi-select-dropdown').val(null).trigger('change');
+      $('#rolegroups-multi-select-dropdown').val(null).trigger('change'); //! clears the visible list entries but not the selected elements of the dropdown list
+      $('#actors-multi-select-dropdown').val(null).trigger('change'); //! clears the visible list entries but not the selected elements of the dropdown list
+      var node = document.getElementById('dynamic-role-ispartof-rolegroup-fields');
+      while (node.lastChild) {
+        node.removeChild(node.lastChild)
+      }
+      node = document.getElementById('dynamic-role-actor-fields');
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+      }
       roleFormMetadataValidator.resetForm();
-      
+
       TIMAAT.UI.addSelectedClassToSelectedItem('role', null);
-      // TIMAAT.UI.subNavTab = 'dataSheet';
 
       // setup form
 			$('#role-metadata-form').trigger('reset');
@@ -533,6 +553,74 @@
       this.initFormDataSheetForEdit('role');
       $('#role-metadata-form-submit-button').html("Add");
       $('#roleFormHeader').html("Add Role");
+
+      $('#dynamic-role-ispartof-rolegroup-fields').append(this.appendRoleIsPartOfRoleGroupsDataset());
+      $('#rolegroups-multi-select-dropdown').select2({
+        closeOnSelect: false,
+        scrollAfterSelect: true,
+        allowClear: true,
+        ajax: {
+          url: 'api/roleGroup/selectList',
+          type: 'GET',
+          dataType: 'json',
+          delay: 250,
+          headers: {
+            "Authorization": "Bearer "+TIMAAT.Service.token,
+            "Content-Type": "application/json",
+          },
+          // additional parameters
+          data: function(params) {
+            // console.log("TCL: data: params", params);
+            return {
+              search: params.term,
+              page: params.page
+            };          
+          },
+          processResults: function(data, params) {
+            // console.log("TCL: processResults: data", data);
+            params.page = params.page || 1;
+            return {
+              results: data
+            };
+          },
+          cache: false
+        },
+        minimumInputLength: 0,
+      });
+      $('#dynamic-role-actor-fields').append(this.appendRoleActorsDataset());
+      $('#actors-multi-select-dropdown').select2({
+        closeOnSelect: false,
+        scrollAfterSelect: true,
+        allowClear: true,
+        ajax: {
+          url: 'api/actor/selectList',
+          type: 'GET',
+          dataType: 'json',
+          delay: 250,
+          headers: {
+            "Authorization": "Bearer "+TIMAAT.Service.token,
+            "Content-Type": "application/json",
+          },
+          // additional parameters
+          data: function(params) {
+            // console.log("TCL: data: params", params);
+            return {
+              search: params.term,
+              page: params.page
+            };          
+          },
+          processResults: function(data, params) {
+            // console.log("TCL: processResults: data", data);
+            params.page = params.page || 1;
+            return {
+              results: data
+            };
+          },
+          cache: false
+        },
+        minimumInputLength: 0,
+      });
+      
     },
 
     addRoleGroup: function() {	
@@ -540,12 +628,14 @@
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'rolegroup-metadata-form');
       $('#list-tab-metadata').data('type', 'roleGroup');
 			$('#rolegroup-metadata-form').data('roleGroup', null);
-      $('#roles-multi-select-dropdown').val(null).trigger('change');
-      $('#actors-multi-select-dropdown').val(null).trigger('change');
+      // $('#roles-multi-select-dropdown').val(null).trigger('change'); //! clears the visible list entries but not the selected elements of the dropdown list
+      var node = document.getElementById('dynamic-rolegroup-contains-role-fields');
+			while (node.lastChild) {
+				node.removeChild(node.lastChild)
+      }
       roleGroupFormMetadataValidator.resetForm();
       
       TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', null);
-      // TIMAAT.UI.subNavTab = 'dataSheet';
 
       // setup form
 			$('#rolegroup-metadata-form').trigger('reset');
@@ -553,10 +643,44 @@
       this.initFormDataSheetForEdit('roleGroup');
       $('#rolegroup-metadata-form-submit-button').html("Add");
       $('#roleGroupFormHeader').html("Add Role Group");
+
+      $('#dynamic-rolegroup-contains-role-fields').append(this.appendRoleGroupContainsRolesDataset());
+      $('#roles-multi-select-dropdown').select2({
+        closeOnSelect: false,
+        scrollAfterSelect: true,
+        allowClear: true,
+        ajax: {
+          url: 'api/role/selectList',
+          type: 'GET',
+          dataType: 'json',
+          delay: 250,
+          headers: {
+            "Authorization": "Bearer "+TIMAAT.Service.token,
+            "Content-Type": "application/json",
+          },
+          // additional parameters
+          data: function(params) {
+            // console.log("TCL: data: params", params);
+            return {
+              search: params.term,
+              page: params.page
+            };          
+          },
+          processResults: function(data, params) {
+            // console.log("TCL: processResults: data", data);
+            params.page = params.page || 1;
+            return {
+              results: data
+            };
+          },
+          cache: false
+        },
+        minimumInputLength: 0,
+      }); 
     },
 
     roleFormDataSheet: async function(action, data) {
-      // console.log("TCL: action, data: ", action, data);
+      // console.log("TCL: roleFormDataSheet - action, data: ", action, data);
       var node = document.getElementById('dynamic-role-ispartof-rolegroup-fields');
       while (node.lastChild) {
         node.removeChild(node.lastChild)
@@ -608,9 +732,8 @@
       await TIMAAT.RoleService.getRoleHasRoleGroupList(data.model.id).then(function (data) {
         // console.log("TCL: then: data", data);
         var roleGroupSelect = $('#rolegroups-multi-select-dropdown');
-        // console.log("TCL: roleGroupSelect", roleGroupSelect);
         if (data.length > 0) {
-          data.sort((a, b) => (a.roleGroupTranslations[0].name > b.roleGroupTranslations[0].name)? 1 : -1);
+          data.sort((a, b) => (a.roleGroupTranslations[0].name > b.roleGroupTranslations[0].name) ? 1 : -1);
           // create the options and append to Select2
           var i = 0;
           for (; i < data.length; i++) {
@@ -661,10 +784,9 @@
       });
       await TIMAAT.ActorService.getActorsWithThisRoleList(data.model.id).then(function (data) {
         var actorSelect = $('#actors-multi-select-dropdown');
-        // console.log("TCL: actorSelect", actorSelect);
-        // console.log("TCL: then: data", data);
         if (data.length > 0) {
-          data.sort((a, b) => (a.displayName.name > b.displayName.name)? 1 : -1);
+          data.sort((a, b) => (a.displayName.name > b.displayName.name) ? 1 : -1);
+          // create the options and append to Select2
           var i = 0;
           for (; i < data.length; i++) {
             var option = new Option(data[i].displayName.name, data[i].id, true, true);
@@ -697,7 +819,7 @@
     },
 
     roleGroupFormDataSheet: async function(action, data) {
-      // console.log("TCL: action, data: ", action, data);
+      // console.log("TCL: roleGroupFormDataSheet - action, data: ", action, data);
       var node = document.getElementById('dynamic-rolegroup-contains-role-fields');
 			while (node.lastChild) {
 				node.removeChild(node.lastChild)
@@ -746,7 +868,7 @@
       await TIMAAT.RoleService.getRoleGroupHasRoleList(data.model.id).then(function (data) {
         // console.log("TCL: then: data", data);
         if (data.length > 0) {
-          data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name)? 1 : -1);
+          data.sort((a, b) => (a.roleTranslations[0].name > b.roleTranslations[0].name) ? 1 : -1);
           // create the options and append to Select2
           var i = 0;
           for (; i < data.length; i++) {
@@ -816,42 +938,8 @@
       return model;
     },
 
-    createRole: async function(model, roleGroupIdList) {
-    	// console.log("TCL: createRole: model, roleGroupIdList: ", model, roleGroupIdList);
-			try {
-        // create role or role group
-        var newModel = await TIMAAT.RoleService.createRole();
-        model.id = newModel.id;
-        // if (roleGroupIdList != null) {
-        //   await TIMAAT.RoleLists.updateRole(model, roleGroupIdList); // TODO may have to be adjusted once list can be created upon role/rolegroup creation
-        // }
-        var newTranslation = await TIMAAT.RoleService.addRoleTranslation(model)
-        model.roleTranslations[0] = newTranslation;
-			} catch(error) {
-				console.error("ERROR: ", error);
-			};
-			return model;
-		},
-
-    createRoleGroup: async function(model, roleIdList) {
-    	// console.log("TCL: createRoleGroup: model, roleIdList: ", model, roleIdList);
-			try {
-        // create role or role group
-        var newModel = await TIMAAT.RoleService.createRoleGroup();
-        model.id = newModel.id;
-        // if (roleIdList != null) {
-        //   await TIMAAT.RoleLists.updateRoleGroup(model, roleIdList); // TODO may have to be adjusted once list can be created upon role/rolegroup creation
-        // }
-        var newTranslation = await TIMAAT.RoleService.addRoleGroupTranslation(model)
-        model.roleGroupTranslations[0] = newTranslation;
-			} catch(error) {
-				console.error("ERROR: ", error);
-			};
-			return model;
-		},
-
-    updateRole: async function(role, roleIdList, roleActorIdList) {
-      // console.log("TCL: updateRole: async function -> role at beginning of update process: ", role, roleIdList, roleActorIdList);
+    updateRole: async function(role, roleGroupIdList, roleActorIdList) {
+      // console.log("TCL: updateRole: async function -> role at beginning of update process: ", role, roleGroupIdList, roleActorIdList);
       try { // update translation
         var tempName = await TIMAAT.RoleService.updateRoleTranslation(role.roleTranslations[0]);
         role.roleTranslations[0] = tempName;
@@ -861,8 +949,8 @@
       try { // update role_group_has_role table entries via role
         var existingRoleGroupEntries = await TIMAAT.RoleService.getRoleHasRoleGroupList(role.id);
         // console.log("TCL: existingRoleGroupEntries", existingRoleGroupEntries);
-        // console.log("TCL: roleIdList", roleIdList);
-        if (roleIdList == null) { //* all entries will be deleted
+        // console.log("TCL: roleGroupIdList", roleGroupIdList);
+        if (roleGroupIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all existingRoleGroupEntries: ", existingRoleGroupEntries);
           var i = 0;
           for (; i < existingRoleGroupEntries.length; i++) {
@@ -871,11 +959,11 @@
             await TIMAAT.RoleService.updateRoleGroup(existingRoleGroupEntries[i]);
           }         
         } else if (existingRoleGroupEntries.length == 0) { //* all entries will be added
-          // console.log("TCL: add all roleIdList: ", roleIdList);
+          // console.log("TCL: add all roleGroupIdList: ", roleGroupIdList);
           var i = 0;
-          for (; i < roleIdList.length; i++) {
-            // console.log("TCL: roleIdList[i].id", roleIdList[i].id);
-            var roleGroup = await TIMAAT.RoleService.getRoleGroup(roleIdList[i].id);
+          for (; i < roleGroupIdList.length; i++) {
+            // console.log("TCL: roleGroupIdList[i].id", roleGroupIdList[i].id);
+            var roleGroup = await TIMAAT.RoleService.getRoleGroup(roleGroupIdList[i].id);
             roleGroup.roles.push(role);
             await TIMAAT.RoleService.updateRoleGroup(roleGroup);
           }
@@ -886,13 +974,13 @@
           for (; i < existingRoleGroupEntries.length; i++) {
             var deleteId = true;
             var j = 0;
-            for (; j < roleIdList.length; j++) {
-              if( existingRoleGroupEntries[i].id == roleIdList[j].id) {
+            for (; j < roleGroupIdList.length; j++) {
+              if( existingRoleGroupEntries[i].id == roleGroupIdList[j].id) {
                 deleteId = false;
                 break; // no need to check further if match was found
               }
             }
-            if (deleteId) { // id is in existingRoleGroupEntries but not in roleIdList
+            if (deleteId) { // id is in existingRoleGroupEntries but not in roleGroupIdList
               // console.log("TCL: delete entry: ", existingRoleGroupEntries[i]);
               roleGroupEntriesToDelete.push(existingRoleGroupEntries[i]);
               existingRoleGroupEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
@@ -913,20 +1001,20 @@
           // create new entries
           var idsToCreate = [];
           i = 0;
-          for (; i < roleIdList.length; i++) {
-            // console.log("TCL: roleIdList", roleIdList);
+          for (; i < roleGroupIdList.length; i++) {
+            // console.log("TCL: roleGroupIdList", roleGroupIdList);
             var idExists = false;
             var item = { id: 0 };
             var j = 0;
             for (; j < existingRoleGroupEntries.length; j++) {
               // console.log("TCL: existingRoleGroupEntries", existingRoleGroupEntries);
-              if (roleIdList[i].id == existingRoleGroupEntries[j].id) {
+              if (roleGroupIdList[i].id == existingRoleGroupEntries[j].id) {
                 idExists = true;
                 break; // no need to check further if match was found
               }
             }
             if (!idExists) {
-              item.id = roleIdList[i].id;
+              item.id = roleGroupIdList[i].id;
               idsToCreate.push(item);
             }
           }
@@ -1041,8 +1129,8 @@
       await TIMAAT.UI.refreshDataTable('collective');
     },
 
-    updateRoleGroup: async function(roleGroup, roleGroupIdList) {
-      // console.log("TCL: updateRoleGroup: async function -> roleGroup at beginning of update process: ", roleGroup, roleGroupIdList);
+    updateRoleGroup: async function(roleGroup, roleIdList) {
+      // console.log("TCL: updateRoleGroup: async function -> roleGroup at beginning of update process: ", roleGroup, roleIdList);
       try { // update translation
         var tempName = await TIMAAT.RoleService.updateRoleGroupTranslation(roleGroup.roleGroupTranslations[0]);
         roleGroup.roleGroupTranslations[0] = tempName;
@@ -1051,42 +1139,42 @@
       };
 
       try { // update role_group_has_role table entries via role group
-        var existingRoleGroupEntries = await TIMAAT.RoleService.getRoleGroupHasRoleList(roleGroup.id);
-        // console.log("TCL: existingRoleGroupEntries", existingRoleGroupEntries);
-        // console.log("TCL: roleGroupIdList", roleGroupIdList);
-        if (roleGroupIdList == null) { //* all entries will be deleted
-          // console.log("TCL: delete all existingRoleGroupEntries: ", existingRoleGroupEntries);
+        var existingRoleEntries = await TIMAAT.RoleService.getRoleGroupHasRoleList(roleGroup.id);
+        // console.log("TCL: existingRoleEntries", existingRoleEntries);
+        // console.log("TCL: roleIdList", roleIdList);
+        if (roleIdList == null) { //* all entries will be deleted
+          // console.log("TCL: delete all existingRoleEntries: ", existingRoleEntries);
           roleGroup.roles = [];
           await TIMAAT.RoleService.updateRoleGroup(roleGroup);       
-        } else if (existingRoleGroupEntries.length == 0) { //* all entries will be added
-          // console.log("TCL: add all roleGroupIdList: ", roleGroupIdList);
-          roleGroup.roles = roleGroupIdList;
+        } else if (existingRoleEntries.length == 0) { //* all entries will be added
+          // console.log("TCL: add all roleIdList: ", roleIdList);
+          roleGroup.roles = roleIdList;
           await TIMAAT.RoleService.updateRoleGroup(roleGroup);          
         } else { //* add/remove entries
           // delete removed entries
-          var roleGroupEntriesToDelete = [];
+          var roleEntriesToDelete = [];
           var i = 0;
-          for (; i < existingRoleGroupEntries.length; i++) {
+          for (; i < existingRoleEntries.length; i++) {
             var deleteId = true;
             var j = 0;
-            for (; j < roleGroupIdList.length; j++) {
-              if( existingRoleGroupEntries[i].id == roleGroupIdList[j].id) {
+            for (; j < roleIdList.length; j++) {
+              if( existingRoleEntries[i].id == roleIdList[j].id) {
                 deleteId = false;
                 break; // no need to check further if match was found
               }
             }
-            if (deleteId) { // id is in existingRoleGroupEntries but not in roleGroupIdList
-              // console.log("TCL: delete entry: ", existingRoleGroupEntries[i]);
-              roleGroupEntriesToDelete.push(existingRoleGroupEntries[i]);
-              existingRoleGroupEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
+            if (deleteId) { // id is in existingRoleEntries but not in roleIdList
+              // console.log("TCL: delete entry: ", existingRoleEntries[i]);
+              roleEntriesToDelete.push(existingRoleEntries[i]);
+              existingRoleEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
               i--; // so the next list item is not jumped over due to the splicing
             }
           }
-          // console.log("TCL: roleGroupEntriesToDelete", roleGroupEntriesToDelete);
-          if (roleGroupEntriesToDelete.length > 0) { // anything to delete?
+          // console.log("TCL: roleEntriesToDelete", roleEntriesToDelete);
+          if (roleEntriesToDelete.length > 0) { // anything to delete?
             var i = 0;
-            for (; i < roleGroupEntriesToDelete.length; i++) {
-              var index = roleGroup.roles.findIndex(({id}) => id === roleGroupEntriesToDelete[i].id);
+            for (; i < roleEntriesToDelete.length; i++) {
+              var index = roleGroup.roles.findIndex(({id}) => id === roleEntriesToDelete[i].id);
               roleGroup.roles.splice(index,1);
             }
             await TIMAAT.RoleService.updateRoleGroup(roleGroup);
@@ -1094,20 +1182,20 @@
           // create new entries
           var idsToCreate = [];
           i = 0;
-          for (; i < roleGroupIdList.length; i++) {
-            // console.log("TCL: roleGroupIdList", roleGroupIdList);
+          for (; i < roleIdList.length; i++) {
+            // console.log("TCL: roleIdList", roleIdList);
             var idExists = false;
             var item = { id: 0 };
             var j = 0;
-            for (; j < existingRoleGroupEntries.length; j++) {
-              // console.log("TCL: existingRoleGroupEntries", existingRoleGroupEntries);
-              if (roleGroupIdList[i].id == existingRoleGroupEntries[j].id) {
+            for (; j < existingRoleEntries.length; j++) {
+              // console.log("TCL: existingRoleEntries", existingRoleEntries);
+              if (roleIdList[i].id == existingRoleEntries[j].id) {
                 idExists = true;
                 break; // no need to check further if match was found
               }
             }
             if (!idExists) {
-              item.id = roleGroupIdList[i].id;
+              item.id = roleIdList[i].id;
               idsToCreate.push(item);
             }
           }

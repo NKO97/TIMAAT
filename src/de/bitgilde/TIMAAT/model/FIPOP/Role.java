@@ -113,14 +113,14 @@ public class Role implements Serializable {
 
 		public RoleGroup addRoleGroup(RoleGroup roleGroup) {
 		getRoleGroups().add(roleGroup);
-		// roleGroup.addRole(this);
+		roleGroup.addRole(this);
 
 		return roleGroup;
 	}
 
 	public RoleGroup removeRoleGroup(RoleGroup roleGroup) {
 		getRoleGroups().remove(roleGroup);
-		// roleGroup.removeRole(this);
+		roleGroup.removeRole(this);
 
 		return roleGroup;
 	}

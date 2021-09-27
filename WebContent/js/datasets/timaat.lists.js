@@ -81,7 +81,6 @@
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
         }
-        TIMAAT.UI.displayDataSetContent('dataSheet', data, type);
       });
     },
 
