@@ -1093,7 +1093,7 @@ Tooltip container
 	height: 100%;
 	overflow: visible;
 	box-shadow: 2px 0px 2px black;
-	transition: width 0.6s;
+/* 	transition: width 0.6s; */
 }
 .timeline-section-segment-structure {
 	height: 98px;

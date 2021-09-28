@@ -115,7 +115,7 @@
 			let newZoom = Math.min(this.ui.minZoom, Math.max(this.ui.maxZoom, zoom));
 			if ( newZoom == this.ui.zoom ) return;
 
-			let start = this.ui.pane.scrollLeft() / this.ui.width;
+			let center = (this.ui.pane.scrollLeft() + (this.ui.uiWidth / 2)) / this.ui.width;
 			
 			this.ui.zoom = newZoom;
 			this.ui.width = (this.duration / 1000.0 / this.ui.zoom * 50.0);
@@ -125,7 +125,7 @@
 			this.ui.zoomin.prop('disabled', this.ui.zoom == this.ui.maxZoom);
 			this.ui.zoomout.prop('disabled', this.ui.zoom == this.ui.minZoom);
 			this.updateIndicator();
-			this.ui.pane.scrollLeft(start * this.ui.width);			
+			this.ui.pane.scrollLeft((center * this.ui.width) - (this.ui.uiWidth / 2 ));			
 		}
 		
 		updateIndicator() {
