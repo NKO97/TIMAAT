@@ -61,15 +61,15 @@
 				  drag: function(ev,ui) {
 					  if ( ui.position.left > _markerlength ) ui.position.left = _markerlength;
 			    	
-					  var width = $('#video-seek-bar').width();
+					  var width = TIMAAT.VideoPlayer.timeline.ui.width;
 					  var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
 					  var newoffset = Math.max(0.0, offset+ui.position.left);
 					  var newfrom = newoffset * TIMAAT.VideoPlayer.duration / width;
-					  TIMAAT.VideoPlayer.jumpTo(newfrom);
+					  TIMAAT.VideoPlayer.jumpTo(newfrom / 1000.0);
 			    		
 				  },
 				  stop: function(ev, ui) {
-					  var width = $('#video-seek-bar').width();
+					  var width = TIMAAT.VideoPlayer.timeline.ui.width;
 					  var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
 					  var newoffset = Math.max(0.0, offset+ui.position.left);
 					  var newfrom = newoffset * TIMAAT.VideoPlayer.duration / width;
@@ -87,28 +87,26 @@
 				  start: function(ev,ui) {
 					  TIMAAT.VideoPlayer.pause();
 					  _markerlength = -Math.max(0.0, $(this).position().left);
-					  // console.log(_markerlength);
 					  if (_markerlength < 0 ) _markerlength -= 1;
 				  },
 				  drag: function(ev,ui) {
-					  // console.log(ui.position.left, _markerlength);
 					  if ( ui.position.left < -2 ) ui.position.left = -2;
 
-					  var width = $('#video-seek-bar').width();
+					  var width = TIMAAT.VideoPlayer.timeline.ui.width;
 					  var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
 					  var newoffset = Math.max(0.0, offset+ui.position.left+2);
 					  var newlength = newoffset * TIMAAT.VideoPlayer.duration / width;
 
-					  TIMAAT.VideoPlayer.jumpTo(newlength);
+					  TIMAAT.VideoPlayer.jumpTo(newlength / 1000.0);
 				  },
 				  stop: function(ev, ui) {
-					  var width = $('#video-seek-bar').width();
+					  var width = TIMAAT.VideoPlayer.timeline.ui.width;
 					  var offset = marker._from / TIMAAT.VideoPlayer.duration * width;
 					  var newoffset = Math.max(0.0, offset+ui.position.left+2);
 					  var newlength = newoffset * TIMAAT.VideoPlayer.duration / width;
 
 					  marker.parent.endTime = newlength;
-					  TIMAAT.VideoPlayer.jumpTo(newlength);
+					  TIMAAT.VideoPlayer.jumpTo(newlength / 1000.0);
 					  marker.updateView();
 					  TIMAAT.VideoPlayer.inspector.updateItem();
 

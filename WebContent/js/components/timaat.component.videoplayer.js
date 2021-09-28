@@ -69,6 +69,7 @@
 
 			// adjust timeline view upon window resize
 			$(window).resize( function() {
+				TIMAAT.VideoPlayer.timeline.invalidateSize();
 				if (TIMAAT.VideoPlayer.curAnalysisList != null) {
 					for (let marker of TIMAAT.VideoPlayer.markerList) marker._updateElementOffset();
 					for (let anno of TIMAAT.VideoPlayer.annotationList) for (let keyframe of anno.svg.keyframes) keyframe._updateOffsetUI();
@@ -1420,8 +1421,8 @@
 				if (TIMAAT.VideoPlayer.duration == 0) return;	
 				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));
 
-				// DEBUG TIMELINE
-				TIMAAT.VideoPlayer.timeline.setTime(TIMAAT.VideoPlayer.video.currentTime);
+				// update timeline
+				TIMAAT.VideoPlayer.timeline.updateIndicator();
 						
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
 				$('#video-seek-bar').val(value);
@@ -2245,11 +2246,15 @@
 			}
 		},
 		
+		isPlaying: function() {
+			if (!this.video || !this.video.currentTime) return false;
+			return this.video.currentTime > 0 && !this.video.paused && !this.video.ended && this.video.readyState > this.video.HAVE_CURRENT_DATA;
+		},
+		
 		pause: function() {
 			if ( !this.video || this.mediaType != 'video' ) return;
-			var isPlaying = this.video.currentTime > 0 && !this.video.paused && !this.video.ended && this.video.readyState > this.video.HAVE_CURRENT_DATA;
 
-			if (isPlaying) {
+			if (this.isPlaying()) {
 				this.video.pause();
 			}
 			// this.video.pause();
@@ -2262,9 +2267,8 @@
 
 		play: function() {
 			if ( !this.video || this.mediaType != 'video' ) return;
-			var isPlaying = this.video.currentTime > 0 && !this.video.paused && !this.video.ended && this.video.readyState > this.video.HAVE_CURRENT_DATA;
 
-			if (!isPlaying) {
+			if (!this.isPlaying()) {
 				this.video.play();
 			}
 			// this.video.play();
@@ -2465,6 +2469,10 @@
 				
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
 				if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+			
+			// update timeline
+			TIMAAT.VideoPlayer.timeline.updateIndicator();
+			
 		},
 		
 		_analysislistAdded: function(analysislist) {

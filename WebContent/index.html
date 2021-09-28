@@ -1352,9 +1352,12 @@
                 <div class="card-body m-1">
                 	<div class="d-flex justify-content-between align-items-end mt-2 mb-2">
 
-						<div class="btn-group btn-group-sm mr-3">
-							<button class="btn btn-sm btn-dark small timeline-zoom-in"><i class="fas fa-search-plus fa-fw"></i></button>
-							<button class="btn btn-sm btn-dark small timeline-zoom-out"><i class="fas fa-search-minus fa-fw"></i></button>
+						<div class="timeline-controls">
+							<div class="btn-group btn-group-sm mr-2">
+								<button title="zoom in timeline" class="btn btn-sm btn-dark small timeline-zoom-in"><i class="fas fa-search-plus fa-fw"></i></button>
+								<button title="zoom out timeline" class="btn btn-sm btn-dark small timeline-zoom-out"><i class="fas fa-search-minus fa-fw"></i></button>
+							</div>
+							<button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timeline-track"><i class="fas fa-map-pin fa-fw"></i></button>
 						</div>
 
                 		<div class="btn-group">
@@ -1392,22 +1395,6 @@
 
 					  <div class="timeline-sortable-sections ui-sortable">
 						  
-
-						  <div class="timeline-section timeline-section-segment-structure" style="position: relative; top: 0px; left: 0px;">
-							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
-								  <div class="d-flex justify-content-between">
-									  <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Segments</span>
-									  <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
-								  </div>
-							  </div>
-							  <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
-                      			<div id="timaat-timeline-segment-pane"></div>
-                      			<div id="timaat-timeline-sequence-pane"></div>
-                      			<div id="timaat-timeline-take-pane"></div>
-            			        <div id="timaat-timeline-scene-pane"></div>
-								<div id="timaat-timeline-action-pane"></div>
-							  </div>
-						  </div>
 						  
 						  <div class="timeline-section timeline-section-annotation">
 							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
@@ -1419,6 +1406,23 @@
 							  <div class="timeline-section-content bg-light border-bottom border-dark">
 		  	                      <div id="timaat-timeline-keyframe-pane"></div>
 								  <div id="timaat-timeline-marker-pane"></div>
+							  </div>
+						  </div>
+						  
+						  
+						  <div class="timeline-section timeline-section-segment-structure">
+							  <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
+								  <div class="d-flex justify-content-between">
+									  <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Structure</span>
+									  <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
+								  </div>
+							  </div>
+							  <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
+                      			<div id="timaat-timeline-segment-pane"></div>
+                      			<div id="timaat-timeline-sequence-pane"></div>
+                      			<div id="timaat-timeline-take-pane"></div>
+            			        <div id="timaat-timeline-scene-pane"></div>
+								<div id="timaat-timeline-action-pane"></div>
 							  </div>
 						  </div>
 						  

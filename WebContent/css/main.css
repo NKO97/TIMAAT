@@ -1030,10 +1030,13 @@ Tooltip container
 	position: relative;
 	height: 100%;
 }
+.timeline-tick-0, .timeline-tick-1, .timeline-tick-2, .timeline-tick-3, .timeline-tick-4, .timeline-tick-5, .timeline-tick-6, .timeline-tick-7, .timeline-tick-8, .timeline-tick-9 {
+	pointer-events: none;
+}
 .time-indicator {
 	position: absolute;
 	z-index: 100;
-	margin-left: 10%;
+	margin-left: 0;
 	height: 100%;
 	width: 1px;
 	top: 1px;
@@ -1049,6 +1052,8 @@ Tooltip container
 .timeline-layer-pane {
 	overflow: auto;
 	background: #333;
+	overflow-y: hidden;
+	position: relative;
 }
 .timeline-section {
 	position: relative;
@@ -1066,7 +1071,7 @@ Tooltip container
 	height: 100%;
 	box-shadow: 1px 0px 2px #333;
 	cursor: ns-resize;
-	z-index: 10;
+	z-index: 1100;
 }
 .timeline-section.collapsed .timeline-section-header .collapse-widget i:before {
 	content: "\f105";
@@ -1093,6 +1098,10 @@ Tooltip container
 .timeline-section-segment-structure {
 	height: 98px;
 }
+.timeline-section-segment-structure .timeline-section-content {
+	overflow: hidden;
+}
+
 .timeline-section.collapsed {
 	height: 24px !important;
 }

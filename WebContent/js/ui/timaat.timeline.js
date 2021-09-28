@@ -28,12 +28,14 @@
 			this.ui.zoom = 1;
 			this.ui.minZoom = 1;
 			this.ui.maxZoom = 1;
+			this.ui.tracking = false;
 			
 			let timeline = this;
 			this.ui.indicator = $('.time-indicator');
 			this.ui.pane = $('#timeline .timeline-layer-pane');
 			this.ui.zoomin = $('.timeline-zoom-in');
 			this.ui.zoomout = $('.timeline-zoom-out');
+			this.ui.track = $('.timeline-track');
 			this.ui.zoomin.prop('disabled', true);
 			this.ui.zoomout.prop('disabled', true);
 			
@@ -65,15 +67,31 @@
 				let section = $(this).parent().parent().parent().parent();
 				if ( section.hasClass('collapsed') ) section.removeClass('collapsed'); else section.addClass('collapsed');
 			});
+			this.tracking = this.ui.tracking;
 			
 			this.ui.zoomin.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom-1); });
 			this.ui.zoomout.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom+1); });
+			this.ui.track.on('click', function(ev) { timeline.tracking = !timeline.isTacking; });
 			
-			this.ui.timeinfo.on('click', function(ev) {
-				console.log(ev.originalEvent);
+			this.ui.timeinfo.on('click mousedown drag', function(ev) {
+				let el = $(ev.target);
+				let offset = ev.offsetX;
+				if ( el && el.hasClass('timeline-fulltick') ) {
+					TIMAAT.VideoPlayer.jumpTo(parseInt(el.attr('data-start')) + ((offset / 50.0) * timeline.ui.zoom));
+				}
 			});
 					
 
+		}
+		
+		get isTacking() {
+			return this.ui.tracking;
+		}
+		
+		set tracking(tracking) {
+			this.ui.tracking = tracking;
+			this.ui.track.removeClass('btn-primary').removeClass('btn-outline-secondary');
+			this.ui.track.addClass((this.ui.tracking)?'btn-primary':'btn-outline-secondary');
 		}
 		
 		initVideo(video) {
@@ -81,30 +99,52 @@
 			if ( this.video ) {
 				this.ui.zoom = 0;
 				this.duration = this.video.mediumVideo.length;
+				this.durationSek = this.video.mediumVideo.length / 1000.0;				
 				this.ui.minZoom = Math.max(1, Math.floor(this.duration / 1000.0 / 40.0));
 				this.setZoom(this.ui.minZoom);
+				this.invalidateSize();
+				this.updateIndicator();
 			}
 		}
 				
 		reset() {
+			this.invalidateSize();
 		}
 		
 		setZoom(zoom) {
 			let newZoom = Math.min(this.ui.minZoom, Math.max(this.ui.maxZoom, zoom));
 			if ( newZoom == this.ui.zoom ) return;
+
+			let start = this.ui.pane.scrollLeft() / this.ui.width;
 			
 			this.ui.zoom = newZoom;
 			this.ui.width = (this.duration / 1000.0 / this.ui.zoom * 50.0);
 			this.ui.pane.find('.timeline-section-content').css('width', this.ui.width+'px');
 			this._initTicks();
-			
-			
+
 			this.ui.zoomin.prop('disabled', this.ui.zoom == this.ui.maxZoom);
 			this.ui.zoomout.prop('disabled', this.ui.zoom == this.ui.minZoom);
+			this.updateIndicator();
+			this.ui.pane.scrollLeft(start * this.ui.width);			
 		}
 		
-		setTime(time) {
-//			this.ui.indicator.css('margin-left', (TIMAAT.VideoPlayer.video.currentTime*100000.0/TIMAAT.VideoPlayer.model.video.mediumVideo.length)+'%');
+		updateIndicator() {
+			if ( !TIMAAT.VideoPlayer.video || !TIMAAT.VideoPlayer.video.currentTime ) return;
+			let pos = (TIMAAT.VideoPlayer.video.currentTime / this.durationSek) * this.ui.width;
+			this.ui.indicator.css('margin-left', pos + 'px');
+			
+			if ( this.ui.tracking ) {			
+				// keep time indicator visible
+				let scroll = this.ui.pane.scrollLeft();
+				if ( pos < scroll ) this.ui.pane.scrollLeft(pos-100);
+				else if ( (!TIMAAT.VideoPlayer.isPlaying() && pos > (scroll + this.ui.uiWidth))
+					   || (TIMAAT.VideoPlayer.isPlaying() && pos > (scroll + (this.ui.uiWidth/2))) ) {
+					 this.ui.pane.scrollLeft( (TIMAAT.VideoPlayer.isPlaying()) ? (pos-(this.ui.uiWidth/2)) : (pos+this.ui.uiWidth-100) );
+				}
+			}
+		}
+		invalidateSize() {
+			this.ui.uiWidth = $('#timeline').width();
 		}
 		
 		_initTicks() {
@@ -112,6 +152,7 @@
 			for (let i = 0; i <= Math.ceil(this.duration / 1000.0 / this.ui.zoom)+1; i++) {
 				let tick = $(this.ui.tickTemplate);
 				let time = i * this.ui.zoom;
+				tick.attr('data-start', time);
 				let hour = Math.floor(time / 3600.0);
 				let min = Math.floor((time-(hour*60)) / 60.0);
 				let sek = time % 60;
