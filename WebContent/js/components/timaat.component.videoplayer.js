@@ -1447,7 +1447,9 @@
 				list.ui = $('<option value="'+list.id+'">'+TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'title')+'</option>');
 				list.ui.data('list', list);
 				$('#timaat-analysislist-chooser').append(list.ui);
-			});			
+			});
+
+			// TODO move to setupAnalysisList and create structure for current list only
 			// setup segment model
 			lists.forEach(function(list) {
 				list.analysisSegmentsUI = Array();
@@ -1486,7 +1488,7 @@
 
 			// TODO currently, setupAnalysisList will be called too many times (list length +1 times)
 			if ( lists.length > 0 ) {
-				if (TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.model.video && TIMAAT.VideoPlayer.curAnalysisList == TIMAAT.VideoPlayer.model.video.id ){ //! TODO last check weird
+				if (TIMAAT.VideoPlayer.curAnalysisList && TIMAAT.VideoPlayer.model.video ){
 					await TIMAAT.VideoPlayer.setupAnalysisList(TIMAAT.VideoPlayer.curAnalysisList);	
 				} else {
 					await TIMAAT.VideoPlayer.setupAnalysisList(lists[0]);

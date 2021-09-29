@@ -675,16 +675,10 @@
               TIMAAT.VideoPlayer.setupMedium(video);
               let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
               //* setup UI
-						  await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
-              // TIMAAT.VideoPlayer.setupAnalysisList(analysisList);
+              await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
               $('#timaat-analysislist-chooser').val(analysisList.id);
-              // console.log("TCL: setupView:function -> analysisList", analysisList);
               $('#timaat-analysislist-chooser').trigger('change');
-              // TIMAAT.VideoPlayer.setupAnalysisList(analysisList);
-              // TIMAAT.UI.clearLastSelection('analysisList');
               if ( pathSegments.length == 2 ) { //* #analysis/:id     (default view, show analysis list)
-                // required to load the correct analysis if the url is wrong (e.g. permission to linked analysis changed)
-                TIMAAT.AnalysisListService.getAnalysisLists(video.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
               } else { //* as long as no substructure is accessible via url
                 this.redirectToDefaultView();
               }
