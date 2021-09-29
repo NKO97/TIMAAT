@@ -995,7 +995,7 @@
 				if ( TIMAAT.UI.component != 'videoplayer' ) return;
 				if ( ! TIMAAT.VideoPlayer.video ) return;
 				if ( ev.target != document.body && ev.target != window.map ) return;
-				
+
 				var key;
 				if ( ev.originalEvent.key ) key = ev.originalEvent.key;
 				else key = ev.originalEvent.originalEvent.key;
@@ -1034,15 +1034,6 @@
 				ev.preventDefault();
 				$(this).toggleClass('active');
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
-			});
-
-			$('#timaat-component-videoplayer').on('keydown', function(event) {
-				event.stopPropagation();
-				if (event.which == '37') { // == left
-					$('.stepbckbutton').trigger('click');
-				} else if (event.which == '39') { // == right
-					$('.stepfwdbutton').trigger('click');
-				}
 			});
 
 			$('.stepbckbutton').on('click dblclick', function(ev) {
