@@ -799,7 +799,6 @@
 				let userDisplayNameAndPermissionList = await TIMAAT.MediumCollectionService.getDisplayNamesAndPermissions(mediumCollection.model.id);
         // console.log("TCL: manageMediumCollection:function -> userDisplayNameAndPermissionList", userDisplayNameAndPermissionList);
 				TIMAAT.MediumCollectionDatasets.userPermissionList = userDisplayNameAndPermissionList;
-				//? TODO allow global read / write access
 				let modalBodyText = `<div class="col-12">
 					<div class="row">
 						<div class="col-7">
@@ -981,8 +980,8 @@
 					</div>
 				</div>`;
 				modal.find('.modal-body').html(modalBodyText);
-				if (mediumCollection.globalPermission == null) mediumCollection.globalPermission = 0;
-				$('#globalPermission_'+ mediumCollection.globalPermission).prop('checked', true);
+				if (mediumCollection.model.globalPermission == null) mediumCollection.model.globalPermission = 0;
+				$('#globalPermission_'+ mediumCollection.model.globalPermission).prop('checked', true);
 				modal.modal('show');
 			}
 			// TODO else show popup 'you have no rights'

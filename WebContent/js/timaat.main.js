@@ -4,11 +4,11 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	var version = 'v0.13.7b-dev (2021-09-29)';
+	var version = 'v0.14.0-release (2021-09-30)';
 
-	document.title = 'TIMAAT - Client '+version;
+	document.title = 'TIMAAT - Client ' + version;
 	$('#timaat-version-info').text(version);
-		$('#timaat-title-info').text(`TIMAAT - Time-based Image Area Annotation Tool `+ version);
+		$('#timaat-title-info').text(`TIMAAT - Time-based Image Area Annotation Tool ` + version);
 	
 	exports.version = version;
 	window.TIMAAT = exports;

@@ -1601,7 +1601,6 @@
 				// get all display names and permissions for this analysis
 				let userDisplayNameAndPermissionList = await TIMAAT.AnalysisListService.getDisplayNamesAndPermissions(this.curAnalysisList.id);
 				TIMAAT.VideoPlayer.userPermissionList = userDisplayNameAndPermissionList;
-				//? TODO allow global read / write access
 				let modalBodyText = `<div class="col-12">
 					<div class="row">
 						<div class="col-7">
