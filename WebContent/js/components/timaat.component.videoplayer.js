@@ -1491,32 +1491,32 @@
 				analysisList.annotations.forEach(function(annotation) {
 					TIMAAT.VideoPlayer.annotationList.push(new TIMAAT.Annotation(annotation));				
 				});
+				// setup segment model
+				analysisList.analysisSegmentsUI = Array();
+				analysisList.analysisSequencesUI = Array();
+				analysisList.analysisTakesUI = Array();
+				analysisList.analysisScenesUI = Array();
+				analysisList.analysisActionsUI = Array();
+				analysisList.analysisSegments.forEach(function(segment) {
+					analysisList.analysisSegmentsUI.push(new TIMAAT.AnalysisSegment(segment));
+					segment.analysisSequences.forEach(function(sequence) {
+						sequence.segmentId = segment.id;
+						analysisList.analysisSequencesUI.push(new TIMAAT.AnalysisSequence(sequence));
+						sequence.analysisTakes.forEach(function(take) {
+							take.sequenceId = sequence.id;
+							analysisList.analysisTakesUI.push(new TIMAAT.AnalysisTake(take));
+						});
+					});
+					segment.analysisScenes.forEach(function(scene) {
+						scene.segmentId = segment.id;
+						analysisList.analysisScenesUI.push(new TIMAAT.AnalysisScene(scene));
+						scene.analysisActions.forEach(function(action) {
+							action.sceneId = scene.id;
+							analysisList.analysisActionsUI.push(new TIMAAT.AnalysisAction(action));
+						});
+					});
+				});
 			}
-			// setup segment model
-			analysisList.analysisSegmentsUI = Array();
-			analysisList.analysisSequencesUI = Array();
-			analysisList.analysisTakesUI = Array();
-			analysisList.analysisScenesUI = Array();
-			analysisList.analysisActionsUI = Array();
-			analysisList.analysisSegments.forEach(function(segment) {
-				analysisList.analysisSegmentsUI.push(new TIMAAT.AnalysisSegment(segment));
-				segment.analysisSequences.forEach(function(sequence) {
-					sequence.segmentId = segment.id;
-					analysisList.analysisSequencesUI.push(new TIMAAT.AnalysisSequence(sequence));
-					sequence.analysisTakes.forEach(function(take) {
-						take.sequenceId = sequence.id;
-						analysisList.analysisTakesUI.push(new TIMAAT.AnalysisTake(take));
-					});
-				});
-				segment.analysisScenes.forEach(function(scene) {
-					scene.segmentId = segment.id;
-					analysisList.analysisScenesUI.push(new TIMAAT.AnalysisScene(scene));
-					scene.analysisActions.forEach(function(action) {
-						action.sceneId = scene.id;
-						analysisList.analysisActionsUI.push(new TIMAAT.AnalysisAction(action));
-					});
-				});
-			});
 			TIMAAT.VideoPlayer.sortTimelineSegmentElementStructure();
 			this.showTimelineSegmentElementStructure();
 			// this.selectAnnotation(null);
