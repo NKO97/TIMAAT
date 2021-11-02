@@ -274,8 +274,7 @@
 				if (!$('#medium-metadata-form').valid()) return false;
 
 				var medium = $('#medium-metadata-form').data('medium');
-				// var type = $('#medium-metadata-form').data('type');	
-				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
+				var type = $('#medium-metadata-form').data('type');
 
 				// create/edit medium window submitted data
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
