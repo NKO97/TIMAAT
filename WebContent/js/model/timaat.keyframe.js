@@ -73,12 +73,12 @@
 				let anno = keyframe.parent;
 				let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
 				let minTime = 0;
-				if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 0.001;
-				minTime = parseFloat(minTime.toFixed(3));
+				if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 1;
+				minTime = Math.floor(minTime);
 				newTime = Math.max(minTime, newTime);
 				let maxTime = anno.length;
-				if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 0.001;
-				maxTime = parseFloat(maxTime.toFixed(3));
+				if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 1;
+				maxTime = Math.floor(maxTime);
 				newTime = Math.min(newTime, maxTime);
 				if ( newTime != keyframe.time ) {
 					keyframe.time = newTime;
@@ -127,7 +127,7 @@
 
 		set time(time) {
 			if ( this._time == 0 ) return;
-			this._time = parseFloat(time.toFixed(3));;
+			this._time = Math.floor(time);
 			this.parent.setChanged();
 			this._updateOffsetUI();
 			this.updateTimeUI();
@@ -273,9 +273,9 @@
 		}
 
 		_updateOffsetUI() {
-//			  var width =  $('#video-seek-bar').width();
-			  let offset = (this.parent.startTime+this.time) / TIMAAT.VideoPlayer.duration * 100.0;
-			  this.ui.timelineView.css('margin-left', offset+'%');
+			// var width =  $('#video-seek-bar').width();
+			let offset = (this.parent.startTime / 1000 + this.time / 1000) / TIMAAT.VideoPlayer.duration * 100.0;
+			this.ui.timelineView.css('margin-left', offset+'%');
 		}
 		
 		updateStatus() {

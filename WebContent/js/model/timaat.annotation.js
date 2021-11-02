@@ -203,7 +203,7 @@
 			if ( this._destroyed ) return;
 			this.updateStatus(time);
 			let relTime = time - this.startTime;
-			relTime = parseFloat(relTime.toFixed(3));
+			relTime = Math.floor(relTime);
 			relTime = (relTime < 0) ? 0 : relTime;
 			if ( relTime  == 0 ) return;
 			let exists = false;

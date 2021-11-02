@@ -76,7 +76,7 @@ class AnalysisSegment {
 
 	// not in use
 	updateStatus(time) {
-		time = parseFloat(time.toFixed(3));
+		time = Math.floor(time);
 		var active = false;
 		if ( time >= this.model.startTime && time < this.model.endTime) {
 			active = true;
@@ -286,12 +286,12 @@ class Keyframe {
 			let anno = keyframe.parent;
 			let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
 			let minTime = 0;
-			if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 0.001;
-			minTime = parseFloat(minTime.toFixed(3));
+			if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 1;
+			minTime = Math.floor(minTime);
 			newTime = Math.max(minTime, newTime);
 			let maxTime = anno.length;
-			if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 0.001;
-			maxTime = parseFloat(maxTime.toFixed(3));
+			if ( anno.svg.keyframes.indexOf(keyframe) < (anno.svg.keyframes.length-1) ) maxTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)+1 ].time - 1;
+			maxTime = Math.floor(maxTime);
 			newTime = Math.min(newTime, maxTime);
 			if ( newTime != keyframe.time ) {
 				keyframe.time = newTime;
@@ -400,7 +400,7 @@ class Keyframe {
 
 	_updateOffsetUI() {
 			var width = $('.video-seek-bar').width();
-			var offset = (this.parent.startTime+this.time) / TIMAATPub.duration * width;
+			var offset = (this.parent.startTime / 1000 + this.time / 1000) / TIMAATPub.duration * width;
 			this.ui.timelineView.css('margin-left', offset+'px');
 	}
 	
@@ -731,9 +731,9 @@ class Annotation {
 	}
 
 	updateStatus(time) {
-		time = parseFloat(time.toFixed(3));
+		time = Math.floor(time);
 		let animTime = time - this.model.startTime;
-		animTime = parseFloat(animTime.toFixed(3));
+		animTime = Math.floor(animTime);
 		var active = false;
 		if (  TIMAATPub.duration == 0 || (time >= this.startTime && time < this.endTime)  ) active = true;
 		this.setActive(active);

@@ -1041,9 +1041,7 @@
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
 				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
-				TIMAAT.VideoPlayer.jumpTo(
-					Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) - frameTime)
-				);
+				TIMAAT.VideoPlayer.jumpTo( Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) - frameTime));
 			});
 
 			$('.stepfwdbutton').on('click dblclick', function(ev) {
@@ -1051,9 +1049,7 @@
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
 				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
-				TIMAAT.VideoPlayer.jumpTo(
-					Math.min(TIMAAT.VideoPlayer.video.duration, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) + frameTime)
-				);
+				TIMAAT.VideoPlayer.jumpTo( Math.min(TIMAAT.VideoPlayer.video.duration, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) + frameTime) );
 			});
 
 			$('.repeatbutton').on('click', function(ev) {
@@ -1410,14 +1406,14 @@
 			});
 			$(this.video).on('timeupdate', function(ev) {
 				if (TIMAAT.VideoPlayer.duration == 0) return;	
-				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime*1000, true));
+				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true));
 
 				// update timeline
 				TIMAAT.VideoPlayer.timeline.updateIndicator();
 						
 				var value = (100 / TIMAAT.VideoPlayer.video.duration) * TIMAAT.VideoPlayer.video.currentTime;
 				$('#video-seek-bar').val(value);
-				$('#video-seek-bar').css('background',"linear-gradient(to right,  #ed1e24 0%,#ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
+				$('#video-seek-bar').css('background', "linear-gradient(to right, #ed1e24 0%, #ed1e24 "+value+"%,#939393 "+value+"%,#939393 100%)");
 				// update annotation list UI
 				// console.log("TCL: timeupdate -> TIMAAT.VideoPlayer.updateListUI()");
 				TIMAAT.VideoPlayer.updateListUI("timeupdate");
