@@ -20,14 +20,14 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import javax.xml.ws.ServiceMode;
+import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.rest.Secured;
 
-@ServiceMode
+@Service
 @Path("/tag")
 public class EndpointTag {
   @Context
