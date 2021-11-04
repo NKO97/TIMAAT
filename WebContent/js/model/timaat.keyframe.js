@@ -29,8 +29,8 @@
 			
 			this.shapes = [];
 			this.shapeMap = new Map();
-			for (let svgitem of this.model.shapes) {
-				let shape = this._parseModel(svgitem);
+			for (let svgItem of this.model.shapes) {
+				let shape = this._parseModel(svgItem);
 				this.addShape(shape);
 			}
 			// init keyframe UI
@@ -65,7 +65,7 @@
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime / 1000 + ev.data.time / 1000);
 			});
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;
@@ -143,8 +143,8 @@
 			this._time = this.model.time;
 			this.shapes = [];
 			this.shapeMap.clear();
-			for (let svgitem of this.model.shapes) {
-				let shape = this._parseModel(svgitem);
+			for (let svgItem of this.model.shapes) {
+				let shape = this._parseModel(svgItem);
 				this.shapes.push(shape);
 				this.shapeMap.set(shape.id, shape);
 			}
@@ -159,7 +159,7 @@
 		}
 		
 		_syncToModel(shapes) {
-
+    	// console.log("TCL: Keyframe -> _syncToModel -> shapes", shapes);
 			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
 			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
@@ -226,28 +226,29 @@
 			return model;
 		}
 		
-		_parseModel(svgitem) {
+		_parseModel(svgItem) {
+      // console.log("TCL: Keyframe -> _parseModel -> svgItem", svgItem);
 			let shape = {
-					type: svgitem.type,
+					type: svgItem.type,
 			}
 			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
 			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
-			let id = svgitem.id;
+			let id = svgItem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
-				console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Keyframe -> _parseSVG -> svgItem: Required attribute ID missing from model", svgItem);
 			}
 			shape.id = id;
-			switch (svgitem.type) {
+			switch (svgItem.type) {
 				case "rectangle":
-					shape.bounds = [ [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+					shape.bounds = [ [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*(svgItem.y+svgItem.height)*height)), Math.round(svgItem.x*factor*width)], [Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgItem.y)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)] ];
+					// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgItem.y*height)), Math.round(svgItem.x*factor*width)), L.latLng(Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgItem.y+svgItem.height)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)) );
 					return shape;
 				case "polygon":
 				case "line":
 					let points = new Array();
-					for (let point of svgitem.points) {
+					for (let point of svgItem.points) {
 						let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						let lng = point[0]*factor*width;
 						points.push([lat, lng]);
@@ -256,11 +257,11 @@
 					shape.points = points;
 					return shape;
 				case "circle":
-					let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
-					let lng = svgitem.x*factor*width;
+					let lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgItem.y*factor*height);
+					let lng = svgItem.x*factor*width;
 					shape.point = [lat, lng];
 					// shape.point = L.latLng(lat,lng);
-					shape.radius = svgitem.radius * factor;
+					shape.radius = svgItem.radius * factor;
 					return shape;
 			}
 		}
@@ -274,15 +275,15 @@
 
 		_updateOffsetUI() {
 			// var width =  $('#video-seek-bar').width();
-			let offset = (this.parent.startTime / 1000 + this.time / 1000) / TIMAAT.VideoPlayer.duration * 100.0;
-			this.ui.timelineView.css('margin-left', offset+'%');
+			let offset = (this.parent.startTime + this.time) / TIMAAT.VideoPlayer.duration * 100.0;
+			this.ui.timelineView.css('margin-left', offset + '%');
 		}
 		
 		updateStatus() {
 		}
 		
 		updateTimeUI() {
-			this.ui.inspectorView.find('.keyframe-time').val(TIMAAT.Util.formatTime(this.parent.startTime+this._time, true));
+			this.ui.inspectorView.find('.keyframe-time').val(TIMAAT.Util.formatTime(this.parent.startTime + this._time, true));
 		}
 		
 		updateUI() {
@@ -301,9 +302,9 @@
 					if ( selected ) this.ui.head.addClass('selected'); else this.ui.head.removeClass('selected');
 				}
 				
-				let maxPadding = (this.parent.svg.keyframes.length+1).toString().length;
+				let maxPadding = (this.parent.svg.keyframes.length + 1).toString().length;
 				if (maxPadding < 2) maxPadding = 2;
-				let frameNumber = this.parent.svg.keyframes.indexOf(this)+1;
+				let frameNumber = this.parent.svg.keyframes.indexOf(this) + 1;
 				let padNumber = frameNumber;
 				if ( typeof(String.prototype.padStart) === 'function' ) padNumber = frameNumber.toString().padStart(maxPadding, '0');
 				else {

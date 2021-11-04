@@ -549,11 +549,11 @@
 		}
 
 		updateStatus(time) {
-			time = parseFloat(time.toFixed(3));
+			time = Math.floor(time);
 			let animTime = time - this._startTime;
 			animTime = parseFloat(animTime.toFixed(3));
 			var active = false;
-			if (  TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time < this.endTime)  ) active = true;
+			if ( TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time < this.endTime) ) active = true;
 			this.setActive(active);
 			if ( animTime == this._animTime ) return;
 			this._animTime = animTime;

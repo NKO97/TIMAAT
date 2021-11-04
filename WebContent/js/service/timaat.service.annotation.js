@@ -132,7 +132,7 @@
     // },
     
     async updateAnnotation(model) {
-			console.log("TCL: updateAnnotation -> model", model);
+			// console.log("TCL: updateAnnotation -> model", model);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+model.id+'/?authToken='+TIMAAT.Service.session.token,

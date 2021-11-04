@@ -1179,7 +1179,7 @@
 					TIMAAT.VideoPlayer.pause();
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
 					anno.removeAnimationKeyframes();
-					anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime*1000);
+					anno.updateStatus(TIMAAT.VideoPlayer.video.currentTime * 1000);
 					TIMAAT.VideoPlayer.updateUI();
 					inspector.updateItem();
 				}

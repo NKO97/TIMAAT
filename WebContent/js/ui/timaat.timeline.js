@@ -33,11 +33,11 @@
 			let timeline = this;
 			this.ui.indicator = $('.time-indicator');
 			this.ui.pane = $('#timeline .timeline-layer-pane');
-			this.ui.zoomin = $('.timeline-zoom-in');
-			this.ui.zoomout = $('.timeline-zoom-out');
+			this.ui.zoomIn = $('.timeline-zoom-in');
+			this.ui.zoomOut = $('.timeline-zoom-out');
 			this.ui.track = $('.timeline-track');
-			this.ui.zoomin.prop('disabled', true);
-			this.ui.zoomout.prop('disabled', true);
+			this.ui.zoomIn.prop('disabled', true);
+			this.ui.zoomOut.prop('disabled', true);
 			
 			this.ui.timeinfo = this.ui.pane.find('.timeline-info');
 			this.ui.tickTemplate = `<div class="timeline-fulltick float-left pt-1">
@@ -69,8 +69,8 @@
 			});
 			this.tracking = this.ui.tracking;
 			
-			this.ui.zoomin.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom-1); });
-			this.ui.zoomout.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom+1); });
+			this.ui.zoomIn.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom-1); });
+			this.ui.zoomOut.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom+1); });
 			this.ui.track.on('click', function(ev) { timeline.tracking = !timeline.isTacking; });
 			
 			this.ui.timeinfo.on('click mousedown drag', function(ev) {
@@ -99,7 +99,7 @@
 			if ( this.video ) {
 				this.ui.zoom = 0;
 				this.duration = this.video.mediumVideo.length;
-				this.durationSek = this.video.mediumVideo.length / 1000.0;				
+				this.durationSec = this.video.mediumVideo.length / 1000.0;				
 				this.ui.minZoom = Math.max(1, Math.floor(this.duration / 1000.0 / 40.0));
 				this.setZoom(this.ui.minZoom);
 				this.invalidateSize();
@@ -119,18 +119,18 @@
 			
 			this.ui.zoom = newZoom;
 			this.ui.width = (this.duration / 1000.0 / this.ui.zoom * 50.0);
-			this.ui.pane.find('.timeline-section-content').css('width', this.ui.width+'px');
+			this.ui.pane.find('.timeline-section-content').css('width', this.ui.width + 'px');
 			this._initTicks();
 
-			this.ui.zoomin.prop('disabled', this.ui.zoom == this.ui.maxZoom);
-			this.ui.zoomout.prop('disabled', this.ui.zoom == this.ui.minZoom);
+			this.ui.zoomIn.prop('disabled', this.ui.zoom == this.ui.maxZoom);
+			this.ui.zoomOut.prop('disabled', this.ui.zoom == this.ui.minZoom);
 			this.updateIndicator();
 			this.ui.pane.scrollLeft((center * this.ui.width) - (this.ui.uiWidth / 2 ));			
 		}
 		
 		updateIndicator() {
 			if ( !TIMAAT.VideoPlayer.video || !TIMAAT.VideoPlayer.video.currentTime ) return;
-			let pos = (TIMAAT.VideoPlayer.video.currentTime / this.durationSek) * this.ui.width;
+			let pos = (TIMAAT.VideoPlayer.video.currentTime / this.durationSec) * this.ui.width;
 			this.ui.indicator.css('margin-left', pos + 'px');
 			
 			if ( this.ui.tracking ) {			

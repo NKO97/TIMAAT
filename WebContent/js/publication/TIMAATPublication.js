@@ -400,7 +400,7 @@ class Keyframe {
 
 	_updateOffsetUI() {
 			var width = $('.video-seek-bar').width();
-			var offset = (this.parent.startTime / 1000 + this.time / 1000) / TIMAATPub.duration * width;
+			var offset = (this.parent.startTime + this.time) / TIMAATPub.duration * width;
 			this.ui.timelineView.css('margin-left', offset+'px');
 	}
 	
@@ -1058,7 +1058,7 @@ class TIMAATPublication {
 		
 		for (let annotation of TIMAATPub.annotationList) {
 			let wasActive = annotation.isActive();
-			annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
+			annotation.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
 			if ( annotation.isActive() && !wasActive ) {
 				// console.log("pause annotation");
 				if ( TIMAATSettings.stopImage ) TIMAATPub.pause();
@@ -1068,7 +1068,7 @@ class TIMAATPublication {
 		}
 		for (let segment of TIMAATPub.analysisList.analysisSegmentsUI) {
 			let wasActive = segment.isActive();
-			segment.updateStatus(TIMAATPub.ui.video.currentTime*1000);
+			segment.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
 			if ( segment.isActive() && !wasActive) {
 				// console.log("pause segment");
 				if ( TIMAATSettings.stopSegment ) TIMAATPub.pause();
@@ -1362,8 +1362,8 @@ class TIMAATPublication {
 	}
 	
 	updateListUI() {
-		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime*1000);
-		if (this.analysisList.analysisSegmentsUI) for (let segment of this.analysisList.analysisSegmentsUI) segment.updateStatus(TIMAATPub.ui.video.currentTime*1000);
+		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
+		if (this.analysisList.analysisSegmentsUI) for (let segment of this.analysisList.analysisSegmentsUI) segment.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
 	}
 	
 	sortListUI() {
