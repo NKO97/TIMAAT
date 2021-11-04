@@ -75,7 +75,8 @@ class AnalysisSegment {
 	}
 
 	// not in use
-	updateStatus(time) {
+	updateStatus(timeInSeconds) {
+		let time = timeInSeconds * 1000;
 		time = Math.floor(time);
 		var active = false;
 		if ( time >= this.model.startTime && time < this.model.endTime) {
@@ -278,7 +279,7 @@ class Keyframe {
 		// add events
 		this.ui.head.on('click', this, function(ev) {
 			TIMAATPub.pause();
-			TIMAATPub.jumpTo(ev.data.parent.startTime/1000 + ev.data.time/1000);
+			TIMAATPub.jumpTo(ev.data.parent.startTime / 1000 + ev.data.time / 1000);
 		});
 		if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 			if ( !ev.data ) return;
@@ -730,7 +731,8 @@ class Annotation {
 		return this.model;
 	}
 
-	updateStatus(time) {
+	updateStatus(timeInSeconds) {
+		let time = timeInSeconds * 1000;
 		time = Math.floor(time);
 		let animTime = time - this.model.startTime;
 		animTime = Math.floor(animTime);
@@ -1046,11 +1048,11 @@ class TIMAATPublication {
 	}
 	
 	updateSeekBar() {
-		this.ui.videoProgress.css('width', parseFloat( ((this.ui.video.currentTime*1000 / this.duration) * 100.0).toString() )+'%' );
+		this.ui.videoProgress.css('width', parseFloat( ((this.ui.video.currentTime * 1000 / this.duration) * 100.0).toString() )+'%' );
 	}
 	
 	updateTimeInfo() {
-		this.ui.timeLabel.text(this.formatTime(this.ui.video.currentTime*1000, true));
+		this.ui.timeLabel.text(this.formatTime(this.ui.video.currentTime * 1000, true));
 	}
 	
 	_updateAnimations() {
@@ -1058,7 +1060,7 @@ class TIMAATPublication {
 		
 		for (let annotation of TIMAATPub.annotationList) {
 			let wasActive = annotation.isActive();
-			annotation.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
+			annotation.updateStatus(TIMAATPub.ui.video.currentTime);
 			if ( annotation.isActive() && !wasActive ) {
 				// console.log("pause annotation");
 				if ( TIMAATSettings.stopImage ) TIMAATPub.pause();
@@ -1068,7 +1070,7 @@ class TIMAATPublication {
 		}
 		for (let segment of TIMAATPub.analysisList.analysisSegmentsUI) {
 			let wasActive = segment.isActive();
-			segment.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
+			segment.updateStatus(TIMAATPub.ui.video.currentTime);
 			if ( segment.isActive() && !wasActive) {
 				// console.log("pause segment");
 				if ( TIMAATSettings.stopSegment ) TIMAATPub.pause();
@@ -1362,8 +1364,8 @@ class TIMAATPublication {
 	}
 	
 	updateListUI() {
-		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
-		if (this.analysisList.analysisSegmentsUI) for (let segment of this.analysisList.analysisSegmentsUI) segment.updateStatus(TIMAATPub.ui.video.currentTime * 1000);
+		if (this.annotationList) for (let annotation of this.annotationList) annotation.updateStatus(TIMAATPub.ui.video.currentTime);
+		if (this.analysisList.analysisSegmentsUI) for (let segment of this.analysisList.analysisSegmentsUI) segment.updateStatus(TIMAATPub.ui.video.currentTime);
 	}
 	
 	sortListUI() {
@@ -1593,7 +1595,7 @@ class TIMAATPublication {
 			if ( e.type == 'mousemove' && e.originalEvent.buttons != 1 ) return;
 			let seekPos = e.pageX - $('#timaat-video-controls')[0].offsetLeft - $('.video-seek-bar')[0].offsetLeft;
 			let seekVal = seekPos / $('.video-seek-bar')[0].clientWidth;
-			TIMAATPub.jumpTo(seekVal * TIMAATPub.duration/1000);
+			TIMAATPub.jumpTo(seekVal * TIMAATPub.duration / 1000);
 		});
 
 		$('.volume-seekbar').on('click mousemove', e => {

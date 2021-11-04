@@ -117,7 +117,7 @@
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime / 1000, ev.data.endTime / 1000);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 				else TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
@@ -133,7 +133,7 @@
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime/1000, ev.data.endTime/1000);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime / 1000, ev.data.endTime / 1000);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();
@@ -199,9 +199,10 @@
 			return index;
 		}
 		
-		addKeyframeAt(time) {
+		addKeyframeAt(timeInSeconds) {
 			if ( this._destroyed ) return;
-			this.updateStatus(time);
+			this.updateStatus(timeInSeconds);
+			let time = timeInSeconds * 1000;
 			let relTime = time - this.startTime;
 			relTime = Math.floor(relTime);
 			relTime = (relTime < 0) ? 0 : relTime;
@@ -336,8 +337,14 @@
 		set startTime(startTime) {
 			this._startTime = Math.max(0, (Math.min(startTime, TIMAAT.VideoPlayer.duration)));
 			this._endTime = Math.max(startTime, this._endTime);
-			if ( this._startTime != this.model.startTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
-			if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+			if ( this._startTime != this.model.startTime ) {
+				this.setChanged();
+				TIMAAT.VideoPlayer.updateUI();
+			}
+			if ( this._endTime != this.model.endTime ) {
+				this.setChanged();
+				TIMAAT.VideoPlayer.updateUI();
+			}
 			this.svg.keyframes[0].updateTimeUI();
 		};
 		  
@@ -348,7 +355,10 @@
 		set endTime(endTime) {
 			this._endTime = Math.min(endTime, TIMAAT.VideoPlayer.duration);
 			this._endTime = Math.max(this._startTime, this._endTime);
-			if ( this._endTime != this.model.endTime ) {this.setChanged();TIMAAT.VideoPlayer.updateUI();}
+			if ( this._endTime != this.model.endTime ) {
+				this.setChanged();
+				TIMAAT.VideoPlayer.updateUI();
+			}
 		};
 		
 		get length() {
@@ -548,10 +558,10 @@
 			this.changed = false;
 		}
 
-		updateStatus(time) {
-			time = Math.floor(time);
+		updateStatus(timeInSeconds) {
+			let time = timeInSeconds * 1000;
 			let animTime = time - this._startTime;
-			animTime = parseFloat(animTime.toFixed(3));
+			animTime = Math.floor(animTime);
 			var active = false;
 			if ( TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time < this.endTime) ) active = true;
 			this.setActive(active);

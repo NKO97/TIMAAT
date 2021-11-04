@@ -122,7 +122,7 @@
 			// add events
 			this.ui.element.find('.timaat-timeline-markerbar,.timaat-timeline-markerhead').on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.jumpTo(ev.data.from/1000);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.from / 1000);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data.parent);
 			});
 			this._updateElementStyle();

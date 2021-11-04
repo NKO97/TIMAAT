@@ -91,7 +91,7 @@
 		},
 
 		createAnnotation(model, analysisListId, callback) {
-      console.log("TCL: createAnnotation -> model", model);
+      // console.log("TCL: createAnnotation -> model", model);
 			jQuery.ajax({
 				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/mediumAnalysisList/"+analysisListId+'/?authToken='+TIMAAT.Service.session.token,
 				type       : "POST",

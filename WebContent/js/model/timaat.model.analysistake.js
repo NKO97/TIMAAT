@@ -83,7 +83,7 @@
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curTake = take;
-			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime / 1000, take.model.endTime / 1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
@@ -97,7 +97,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
+				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime / 1000, take.model.endTime / 1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -110,7 +110,7 @@
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curTake = take;
-			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(take.model.startTime / 1000, take.model.endTime / 1000);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
@@ -125,7 +125,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime/1000, take.model.endTime/1000);
+				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime / 1000, take.model.endTime / 1000);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -150,8 +150,9 @@
 			this.updateUI();
 		}
 			
-		updateStatus(time, onTimeUpdate) {
+		updateStatus(timeInSeconds, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
+			let time = timeInSeconds * 1000;
 			var highlight = false;
 			if ( time >= this.model.startTime && time < this.model.endTime) highlight = true;
 

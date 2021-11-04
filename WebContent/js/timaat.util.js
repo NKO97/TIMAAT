@@ -182,10 +182,10 @@
 			let fuzzyDate = '';
 
 			let now     = Date.now();
-			let seconds = Math.floor((now-timestamp)/1000);
-			let minutes = Math.floor(seconds/60);
-			let hours   = Math.floor(minutes/60);
-			let days    = Math.floor(hours/24);
+			let seconds = Math.floor((now-timestamp) / 1000);
+			let minutes = Math.floor(seconds / 60);
+			let hours   = Math.floor(minutes / 60);
+			let days    = Math.floor(hours / 24);
 			let weeks   = Math.floor(days / 7);
 			let months  = Math.floor(days / 30);
 			let years   = Math.floor(days / 365);
