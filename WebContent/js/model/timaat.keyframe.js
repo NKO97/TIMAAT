@@ -55,7 +55,7 @@
 			};
 			this.ui.timelineView = $(this.ui.timelineTemplate);
 			this.ui.inspectorView = $(this.ui.inspectorTemplate);
-			if ( this._time == 0 ) {
+			if ( this._time == 0 || this._time == (this.parent.model.endTime - this.parent.model.startTime)) {
 				this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
 				this.ui.inspectorView.find('.keyframe-undo').prop('disabled', true);
 				this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
@@ -69,6 +69,7 @@
 				TIMAAT.VideoPlayer.pause();
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime / 1000 + ev.data.time / 1000);
 			});
+
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;
 				let keyframe = ev.data;
@@ -89,17 +90,20 @@
 					anno.updateEditableUI();
 				}
 			});
+
 			this.ui.inspectorView.find('.keyframe-undo').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				ev.data.discardChanges();
 				ev.data.parent._updateShapeUI();
 				ev.data.parent.updateEditableUI();
 			});
+
 			this.ui.inspectorView.find('.keyframe-jumpTo').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				let time = (ev.data.parent.model.startTime + ev.data.model.time) / 1000;
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});
+
 			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				ev.data.parent.removeKeyframe(ev.data);
