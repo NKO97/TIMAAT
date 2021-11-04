@@ -1078,7 +1078,7 @@
 					TIMAAT.VideoPlayer.volume = TIMAAT.VideoPlayer.video.volume;
 					$('#timaat-volume-slider').val(0);
 				} else {
-					$('#timaat-volume-slider').val(TIMAAT.VideoPlayer.volume*100);
+					$('#timaat-volume-slider').val(TIMAAT.VideoPlayer.volume * 100);
 				}
 				$('#timaat-volume-slider').change();
 			});

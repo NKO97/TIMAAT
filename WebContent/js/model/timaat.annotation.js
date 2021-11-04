@@ -563,7 +563,7 @@
 			let animTime = time - this._startTime;
 			animTime = Math.floor(animTime);
 			var active = false;
-			if ( TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time < this.endTime) ) active = true;
+			if ( TIMAAT.VideoPlayer.duration == 0 || (time >= this.startTime && time <= this.endTime) ) active = true;
 			this.setActive(active);
 			if ( animTime == this._animTime ) return;
 			this._animTime = animTime;
