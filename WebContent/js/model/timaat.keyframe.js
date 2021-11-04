@@ -46,8 +46,9 @@
 																	</div>
 																	<input type="text" class="form-control keyframe-time">
 																	<div class="input-group-append">
-																		<button class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
-																		<button class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
+																		<button title="undo time change" class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
+																		<button title="jump to keyframe" class="btn btn-secondary keyframe-jumpTo"><i class="fas fa-compress-arrows-alt fa-fw"></i></button>
+																		<button title="delete keyframe" class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
 																	</div>
 																</div>
 															</div>`
@@ -56,6 +57,7 @@
 			this.ui.inspectorView = $(this.ui.inspectorTemplate);
 			if ( this._time == 0 ) {
 				this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
+				this.ui.inspectorView.find('.keyframe-undo').prop('disabled', true);
 				this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
 			}
 			this.ui.head = this.ui.timelineView.find('.timaat-timeline-keyframehead');
@@ -92,6 +94,11 @@
 				ev.data.discardChanges();
 				ev.data.parent._updateShapeUI();
 				ev.data.parent.updateEditableUI();
+			});
+			this.ui.inspectorView.find('.keyframe-jumpTo').on('click', this, function(ev) {
+				if ( !ev.data ) return;
+				let time = (ev.data.parent.model.startTime + ev.data.model.time) / 1000;
+				TIMAAT.VideoPlayer.jumpTo(time);
 			});
 			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
 				if ( !ev.data ) return;
