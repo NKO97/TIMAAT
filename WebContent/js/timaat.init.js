@@ -22,7 +22,7 @@ requirejs.config({
 		"popper"                         : '../vendor/popper/popper.min',
 		"select2"                        : '../vendor/select2/js/select2.min',
 		"summernote"                     : '../vendor/summernote/summernote.min',
-		"sbadmin2"                       : 'sb-admin-2',
+		"sbadmin2"                       : '../vendor/sb-admin-2/js/sb-admin-2',
 		"TIMAAT"                         : 'timaat.main',
 		"TIMAAT-html"                    : 'timaat.html',
 		"TIMAAT-URLHistory"              : 'timaat.url',
