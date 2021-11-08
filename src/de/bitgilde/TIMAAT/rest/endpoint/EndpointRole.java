@@ -27,7 +27,6 @@ import jakarta.ws.rs.core.Response.Status;
 
 import org.jvnet.hk2.annotations.Service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -36,7 +35,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.RoleGroup;
-import de.bitgilde.TIMAAT.model.FIPOP.RoleGroupTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.RoleTranslation;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;

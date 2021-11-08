@@ -32,7 +32,6 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountStatus;
 import de.bitgilde.TIMAAT.model.FIPOP.UserPassword;

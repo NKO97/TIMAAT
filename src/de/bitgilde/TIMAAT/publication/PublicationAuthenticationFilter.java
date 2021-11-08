@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.publication.PublicationAuthentication;
-import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 
 /**
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
