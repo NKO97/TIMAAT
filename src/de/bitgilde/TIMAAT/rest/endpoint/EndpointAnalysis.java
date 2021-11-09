@@ -1041,7 +1041,7 @@ public class EndpointAnalysis {
 						List<PhysicalExpressionIntensityTranslation> physicalExpressionIntensityTranslationList = castList(PhysicalExpressionIntensityTranslation.class, query.getResultList());
 						List<SelectElement> physicalExpressionIntensitySelectList = new ArrayList<>();
 						for (PhysicalExpressionIntensityTranslation physicalExpressionIntensityTranslation : physicalExpressionIntensityTranslationList) {
-							physicalExpressionIntensitySelectList.add(new SelectElement(physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getAnalysisMethodId(), physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getValue() + " tt" + physicalExpressionIntensityTranslation.getName()));
+							physicalExpressionIntensitySelectList.add(new SelectElement(physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getAnalysisMethodId(), physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getValue() + " " + physicalExpressionIntensityTranslation.getName()));
 						}
 						selectElementList = physicalExpressionIntensitySelectList;
 					break;
