@@ -1,4 +1,4 @@
-ALTER TABLE `analysis_method_type_translation` CHANGE `analysis_method_type_id` `analysis_method_type_id` INT(11) NOT NULL AFTER `id`;
+ALTER TABLE `FIPOP`.`analysis_method_type_translation` CHANGE `analysis_method_type_id` `analysis_method_type_id` INT(11) NOT NULL AFTER `id`;
 
 -- -----------------------------------------------------
 -- Table `FIPOP`.`acting_technique`
