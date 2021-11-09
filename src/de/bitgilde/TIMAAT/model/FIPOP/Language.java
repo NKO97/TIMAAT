@@ -28,6 +28,11 @@ public class Language implements Serializable {
 
 	private String name;
 
+	//bi-directional many-to-one association to ActorPersonTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<ActingTechniqueTranslation> actingTechniqueTranslations;
+
 	//bi-directional many-to-one association to ActorActorRelationshipTypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -228,6 +233,26 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<EventTypeTranslation> eventTypeTranslations;
 
+	//bi-directional many-to-one association to EventTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<FacialExpressionIntensityTranslation> facialExpressionIntensityTranslations;
+
+	//bi-directional many-to-one association to EventTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<FacialExpressionTranslation> facialExpressionTranslations;
+
+	//bi-directional many-to-one association to EventTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<GesturalEmotionIntensityTranslation> gesturalEmotionIntensityTranslations;
+
+	//bi-directional many-to-one association to EventTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<GesturalEmotionTranslation> gesturalEmotionTranslations;
+
 	//bi-directional many-to-one association to InstrumentSubtypeTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -357,6 +382,16 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<PhoneNumberTypeTranslation> phoneNumberTypeTranslations;
+
+	//bi-directional many-to-one association to PhoneNumberTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<PhysicalExpressionIntensityTranslation> physicalExpressionIntensityTranslations;
+
+	//bi-directional many-to-one association to PhoneNumberTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<PhysicalExpressionTranslation> physicalExpressionTranslations;
 
 	// //bi-directional many-to-one association to RatingCategoryTranslation
 	// @OneToMany(mappedBy="language")
@@ -511,6 +546,14 @@ public class Language implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<ActingTechniqueTranslation> getActingTechniqueTranslations() {
+		return this.actingTechniqueTranslations;
+	}
+
+	public void setActingTechniqueTranslations(List<ActingTechniqueTranslation> actingTechniqueTranslations) {
+		this.actingTechniqueTranslations = actingTechniqueTranslations;
 	}
 
 	public List<ActorActorRelationshipTypeTranslation> getActorActorRelationshipTypeTranslations() {
@@ -1393,6 +1436,38 @@ public class Language implements Serializable {
 		return eventTypeTranslation;
 	}
 
+	public List<FacialExpressionIntensityTranslation> getFacialExpressionIntensityTranslations() {
+		return this.facialExpressionIntensityTranslations;
+	}
+
+	public void setFacialExpressionIntensityTranslations(List<FacialExpressionIntensityTranslation> facialExpressionIntensityTranslations) {
+		this.facialExpressionIntensityTranslations = facialExpressionIntensityTranslations;
+	}
+
+	public List<FacialExpressionTranslation> getFacialExpressionTranslations() {
+		return this.facialExpressionTranslations;
+	}
+
+	public void setFacialExpressionTranslations(List<FacialExpressionTranslation> facialExpressionTranslations) {
+		this.facialExpressionTranslations = facialExpressionTranslations;
+	}
+
+	public List<GesturalEmotionIntensityTranslation> getGesturalEmotionIntensityTranslations() {
+		return this.gesturalEmotionIntensityTranslations;
+	}
+
+	public void setGesturalEmotionIntensityTranslations(List<GesturalEmotionIntensityTranslation> gesturalEmotionIntensityTranslations) {
+		this.gesturalEmotionIntensityTranslations = gesturalEmotionIntensityTranslations;
+	}
+
+	public List<GesturalEmotionTranslation> getGesturalEmotionTranslations() {
+		return this.gesturalEmotionTranslations;
+	}
+
+	public void setGesturalEmotionTranslations(List<GesturalEmotionTranslation> gesturalEmotionTranslations) {
+		this.gesturalEmotionTranslations = gesturalEmotionTranslations;
+	}
+
 	public List<InstrumentSubtypeTranslation> getInstrumentSubtypeTranslations() {
 		return this.instrumentSubtypeTranslations;
 	}
@@ -1831,6 +1906,22 @@ public class Language implements Serializable {
 		phoneNumberTypeTranslation.setLanguage(null);
 
 		return phoneNumberTypeTranslation;
+	}
+
+	public List<PhysicalExpressionIntensityTranslation> getPhysicalExpressionIntensityTranslations() {
+		return this.physicalExpressionIntensityTranslations;
+	}
+
+	public void setPhysicalExpressionIntensityTranslations(List<PhysicalExpressionIntensityTranslation> physicalExpressionIntensityTranslations) {
+		this.physicalExpressionIntensityTranslations = physicalExpressionIntensityTranslations;
+	}
+
+	public List<PhysicalExpressionTranslation> getPhysicalExpressionTranslations() {
+		return this.physicalExpressionTranslations;
+	}
+
+	public void setPhysicalExpressionTranslations(List<PhysicalExpressionTranslation> physicalExpressionTranslations) {
+		this.physicalExpressionTranslations = physicalExpressionTranslations;
 	}
 
 	// public List<RatingCategoryTranslation> getRatingCategoryTranslations() {

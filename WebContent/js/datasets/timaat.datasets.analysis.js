@@ -414,6 +414,44 @@
             analysis.analysisMethod.lighting = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "lighting");
             console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
           break;
+          case 44: // AnalysisActor
+            analysisMethodVariantModel = {
+              analysisMethodId: 0,
+              actingTechnique: null,
+              facialExpression: null,
+              facialExpressionIntensity: null,
+              gesturalEmotion: null,
+              gesturalEmotionIntensity: null,
+              physicalExpression: null,
+              physicalExpressionIntensity: null
+            };
+            (Number($('#acting-technique-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.actingTechnique = { analysisMethodId: Number($('#acting-technique-select-dropdown').val()) };
+            (Number($('#facial-expression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpression = { analysisMethodId: Number($('#facial-expression-select-dropdown').val()) };
+            (Number($('#facial-expression-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpressionIntensity = { analysisMethodId: Number($('#facial-expression-intensity-select-dropdown').val()) };
+            (Number($('#gestural-emotion-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotion = { analysisMethodId: Number($('#gestural-emotion-select-dropdown').val()) };
+            (Number($('#gestural-emotion-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotionIntensity = { analysisMethodId: Number($('#gestural-emotion-intensity-select-dropdown').val()) };
+            (Number($('#physical-expression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpression = { analysisMethodId: Number($('#physical-expression-select-dropdown').val()) };
+            (Number($('#physical-expression-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpressionIntensity = { analysisMethodId: Number($('#physical-expression-intensity-select-dropdown').val()) };
+
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+            analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
+            analysis.analysisMethod.analysisActor = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisActor");
+            console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
+          break;
+          case 45: // Acting Technique - Part of 44: Analysis Actor
+          break;
+          case 46: // Facial Expression - Part of 44: Analysis Actor
+          break;
+          case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
+          break;
+          case 48: // Gestural Emotion - Part of 44: Analysis Actor
+          break;
+          case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
+          break;
+          case 50: // Physical Expression - Part of 44: Analysis Actor
+          break;
+          case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
+          break;
         }
         modal.modal('hide');
         TIMAAT.VideoPlayer.curAnnotation.model.analysis.push(analysis);
@@ -1714,7 +1752,7 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Lighting</h5>
               <div class="form-group">
-              <label for="lighting-type-select-dropdown">Lighting type</label>
+                <label for="lighting-type-select-dropdown">Lighting type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1726,7 +1764,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="light-position-select-dropdown">Light position</label>
+                <label for="light-position-select-dropdown">Light position</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1736,20 +1774,21 @@
                           data-placeholder="Select light position">
                   </select>
                 </div>
-                <div class="form-group">
+              </div>
+              <div class="form-group">
                 <label for="light-position-angle-horizontal-select-dropdown">Light position horizontal angle</label>
-                  <div class="col-md-12">
-                    <select class="form-control form-control-md select-dropdown"
-                            style="width:100%;"
-                            id="light-position-angle-horizontal-select-dropdown"
-                            name="analysisMethodId"
-                            data-role="analysisMethodId"
-                            data-placeholder="Select light position horizontal angle">
-                    </select>
-                  </div>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="light-position-angle-horizontal-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select light position horizontal angle">
+                  </select>
                 </div>
-              </div><div class="form-group">
-              <label for="light-position-angle-vertical-select-dropdown">Light position vertical angle</label>
+              </div>
+              <div class="form-group">
+                <label for="light-position-angle-vertical-select-dropdown">Light position vertical angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1761,7 +1800,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="light-modifier-select-dropdown">Light modifier</label>
+                <label for="light-modifier-select-dropdown">Light modifier</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1773,7 +1812,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="lighting-duration-select-dropdown">Lighting duration</label>
+                <label for="lighting-duration-select-dropdown">Lighting duration</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1798,6 +1837,126 @@
           $('#light-modifier-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightingDuration/selectList/';
           $('#lighting-duration-select-dropdown').select2(select2Options);
+        break;
+        case 44:
+          $('#analysisAddLabel').text('Describe actor');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <h5 class="modal-title">Analysis Actor</h5>
+              <div class="form-group">
+                <label for="acting-technique-select-dropdown">Acting Technique</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="acting-technique-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select acting technique">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="facial-expression-select-dropdown">Facial Expression</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="facial-expression-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select facial expression">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="facial-expression-intensity-select-dropdown">Facial Expression Intensity</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="facial-expression-intensity-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select facial expression intensity">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="physical-expression-select-dropdown">Physical Expression</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="physical-expression-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select physical expression">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="physical-expression-intensity-select-dropdown">Physical Expression Intensity</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="physical-expression-intensity-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select physical expression intensity">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="gestural-emotion-select-dropdown">Gestural Emotion</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="gestural-emotion-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select gestural emotion">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="gestural-emotion-intensity-select-dropdown">Gestural Emotion Intensity</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="gestural-emotion-intensity-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select gestural emotion intensity">
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/actingTechnique/selectList/';
+          $('#acting-technique-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/facialExpression/selectList/';
+          $('#facial-expression-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/facialExpressionIntensity/selectList/';
+          $('#facial-expression-intensity-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/physicalExpression/selectList/';
+          $('#physical-expression-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/physicalExpressionIntensity/selectList/';
+          $('#physical-expression-intensity-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/gesturalEmotion/selectList/';
+          $('#gestural-emotion-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/gesturalEmotionIntensity/selectList/';
+          $('#gestural-emotion-intensity-select-dropdown').select2(select2Options);
+        break;
+        case 45: // Acting Technique - Part of 44: Analysis Actor
+        break;
+        case 46: // Facial Expression - Part of 44: Analysis Actor
+        break;
+        case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
+        break;
+        case 48: // Gestural Emotion - Part of 44: Analysis Actor
+        break;
+        case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
+        break;
+        case 50: // Physical Expression - Part of 44: Analysis Actor
+        break;
+        case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
         break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
@@ -2385,6 +2544,58 @@
             <td>`+lightingDuration+`</td>
           </tr>`;
         break;
+        case 44: // Analysis Actor
+          let actingTechnique = (data.analysisMethod.analysisActor.actingTechnique == null) ? '' : data.analysisMethod.analysisActor.actingTechnique.actingTechniqueTranslations[0].name;
+          let facialExpression = (data.analysisMethod.analysisActor.facialExpression == null) ? '' : data.analysisMethod.analysisActor.facialExpression.facialExpressionTranslations[0].name;
+          let facialExpressionIntensity = (data.analysisMethod.analysisActor.facialExpressionIntensity == null) ? '' : data.analysisMethod.analysisActor.facialExpressionIntensity.value + ' ' + data.analysisMethod.analysisActor.facialExpressionIntensity.facialExpressionIntensityTranslations[0].name;
+          let gesturalEmotion = (data.analysisMethod.analysisActor.gesturalEmotion == null) ? '' : data.analysisMethod.analysisActor.gesturalEmotion.gesturalEmotionTranslations[0].name;
+          let gesturalEmotionIntensity = (data.analysisMethod.analysisActor.gesturalEmotionIntensity == null) ? '' : data.analysisMethod.analysisActor.gesturalEmotionIntensity.value + ' ' + data.analysisMethod.analysisActor.gesturalEmotionIntensity.gesturalEmotionIntensityTranslations[0].name;
+          let physicalExpression = (data.analysisMethod.analysisActor.physicalExpression == null) ? '' : data.analysisMethod.analysisActor.physicalExpression.physicalExpressionTranslations[0].name;
+          let physicalExpressionIntensity = (data.analysisMethod.analysisActor.physicalExpressionIntensity == null) ? '' : data.analysisMethod.analysisActor.physicalExpressionIntensity.value + ' ' + data.analysisMethod.analysisActor.physicalExpressionIntensity.physicalExpressionIntensityTranslations[0].name;
+          details +=
+          `<tr>
+            <td>Acting Technique</td>
+            <td>`+actingTechnique+`</td>
+          </tr>
+          <tr>
+            <td>Facial Expression</td>
+            <td>`+facialExpression+`</td>
+          </tr>
+          <tr>
+            <td>Facial Expression Intensity</td>
+            <td>`+facialExpressionIntensity+`</td>
+          </tr>
+          <tr>
+            <td>Physical Expression</td>
+            <td>`+physicalExpression+`</td>
+          </tr>
+          <tr>
+            <td>Physical Expression Intensity</td>
+            <td>`+physicalExpressionIntensity+`</td>
+          </tr>
+          <tr>
+            <td>Gestural Emotion</td>
+            <td>`+gesturalEmotion+`</td>
+          </tr>
+          <tr>
+            <td>Gestural Emotion Intensity</td>
+            <td>`+gesturalEmotionIntensity+`</td>
+          </tr>`;
+        break;
+        case 45: // Acting Technique - Part of 44: Analysis Actor
+        break;
+        case 46: // Facial Expression - Part of 44: Analysis Actor
+        break;
+        case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
+        break;
+        case 48: // Gestural Emotion - Part of 44: Analysis Actor
+        break;
+        case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
+        break;
+        case 50: // Physical Expression - Part of 44: Analysis Actor
+        break;
+        case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
+        break;
       }
       // add analysis table fields
       details += `
@@ -2473,7 +2684,7 @@
 						// }
 						// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name +`
             let nameDisplay = `<p>` + `  ` + analysisMethodType.analysisMethodTypeTranslations[0].name;
-            if ([1,7,8,9,10,11,12,14,16,17,20,22,23,34,43].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
+            if ([1,7,8,9,10,11,12,14,16,17,20,22,23,34,43,44].indexOf(analysisMethodType.id) > -1 && TIMAAT.VideoPlayer.curAnnotation) { //* TODO allow adding only for existing methods
               var i = 0;
               var methodIsStaticAndExists = false;
               for (; i < TIMAAT.VideoPlayer.curAnnotation.model.analysis.length; i++) {

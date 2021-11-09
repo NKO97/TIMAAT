@@ -4,6 +4,8 @@
 	<persistence-unit name="FIPOP-JPA" transaction-type="RESOURCE_LOCAL">
 	  <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:/FIPOP</jta-data-source>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActingTechnique</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ActingTechniqueTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Actor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ActorActorRelationshipTypeTranslation</class>
@@ -33,6 +35,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Analysis</class> 
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisActionTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisActor</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodTypeTranslation</class>
@@ -111,6 +114,14 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.EventTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.FacialExpression</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.FacialExpressionIntensity</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.FacialExpressionIntensityTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.FacialExpressionTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotion</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionIntensity</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionIntensityTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditing</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageGallery</class>
@@ -194,6 +205,10 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpression</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpressionIntensity</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpressionIntensityTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpressionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Platform</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeed</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeedTranslation</class>

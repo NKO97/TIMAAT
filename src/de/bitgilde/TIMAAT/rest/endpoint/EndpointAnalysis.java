@@ -31,7 +31,9 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.ActingTechniqueTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisActor;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethod;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMethodType;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisMusic;
@@ -57,6 +59,10 @@ import de.bitgilde.TIMAAT.model.FIPOP.ConceptDirectionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EditingMontage;
 import de.bitgilde.TIMAAT.model.FIPOP.EditingRhythmTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.FacialExpressionIntensityTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.FacialExpressionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionIntensityTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -71,6 +77,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
 import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacroTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicroTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpressionIntensityTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.PhysicalExpressionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeedTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Rhythm;
 import de.bitgilde.TIMAAT.model.FIPOP.SoundEffectDescriptive;
@@ -119,9 +127,9 @@ public class EndpointAnalysis {
 		}
 
 		// exclude method type entries that are not standalone
-		// String excludedMethodTypeIds = "amt.id NOT IN (9,10,11,12,13,14,17,21,24,25,26,27,28,29,30,31,32,33,35,36,37,38,39,40,41,42)";
+		// String excludedMethodTypeIds = "amt.id NOT IN (9,10,11,12,13,14,17,21,24,25,26,27,28,29,30,31,32,33,35,36,37,38,39,40,41,42,45,46,47,48,49,50,51)";
 		// include method type entries that are standalone only
-		String includedMethodTypeIds = "amt.id IN (1,2,3,4,5,6,7,8,15,16,18,19,20,22,23,34,43)";
+		String includedMethodTypeIds = "amt.id IN (1,2,3,4,5,6,7,8,15,16,18,19,20,22,23,34,43,44)";
 
 		String analysesBasedOnLayer = ""; // no exclusion if both layers are available
 		if (visualLayer && !audioLayer) {
@@ -336,27 +344,65 @@ public class EndpointAnalysis {
 				}
 			break;
 			case 39: // Light Position Angle Horizontal - Part of 43: Lighting
-			for (AnalysisMethod analysisMethod : analysisMethodList) {
-				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleHorizontal().getLightPositionAngleHorizontalTranslations().get(0).getName()));
-			}
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleHorizontal().getLightPositionAngleHorizontalTranslations().get(0).getName()));
+				}
 			break;
 			case 40: // Light Position Angle Vertical - Part of 43: Lighting
-			for (AnalysisMethod analysisMethod : analysisMethodList) {
-				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleVertical().getLightPositionAngleVerticalTranslations().get(0).getName()));
-			}
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleVertical().getLightPositionAngleVerticalTranslations().get(0).getName()));
+				}
 			break;
 			case 41: // Light Modifier - Part of 43: Lighting
-			for (AnalysisMethod analysisMethod : analysisMethodList) {
-				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightModifier().getLightModifierTranslations().get(0).getName()));
-			}
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightModifier().getLightModifierTranslations().get(0).getName()));
+				}
 			break;
 			case 42: // Lighting Duration - Part of 43: Lighting
-			for (AnalysisMethod analysisMethod : analysisMethodList) {
-				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingDuration().getLightingDurationTranslations().get(0).getName()));
-			}
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingDuration().getLightingDurationTranslations().get(0).getName()));
+				}
 			break;
 			case 43: // Lighting
 			break;
+			case 44: // Analysis Actor
+			break;
+			case 45: // Acting Technique - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getActingTechnique().getActingTechniqueTranslations().get(0).getName()));
+				}
+			break;
+			case 46: // Facial Expression - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getFacialExpression().getFacialExpressionTranslations().get(0).getName()));
+				}
+			break;
+			case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getFacialExpressionIntensity().getFacialExpressionIntensityTranslations().get(0).getName()));
+				}
+			break;
+			case 48: // Gestural Emotion - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getGesturalEmotion().getGesturalEmotionTranslations().get(0).getName()));
+				}
+			break;
+			case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getGesturalEmotionIntensity().getGesturalEmotionIntensityTranslations().get(0).getName()));
+				}
+			break;
+			case 50: // Physical Expression - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPhysicalExpression().getPhysicalExpressionTranslations().get(0).getName()));
+				}
+			break;
+			case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPhysicalExpressionIntensity().getPhysicalExpressionIntensityTranslations().get(0).getName()));
+				}
+			break;
+
 		}
 
 		return Response.ok().entity(analysisMethodSelectList).build();
@@ -405,7 +451,6 @@ public class EndpointAnalysis {
 				this.text = text; this.children = children;
 			};
 		}
-
 
 		// determine which analysis method entries shall be displayed
 		// EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -927,6 +972,94 @@ public class EndpointAnalysis {
 						selectElementList = lightingDurationSelectList;
 					break;
 				}
+			break;
+			case 44: // Analysis Actor
+				switch(element) {
+					case "actingTechnique":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT att FROM ActingTechniqueTranslation att WHERE att.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY att.id ASC");
+						List<ActingTechniqueTranslation> actingTechniqueTranslationList = castList(ActingTechniqueTranslation.class, query.getResultList());
+						List<SelectElement> actingTechniqueSelectList = new ArrayList<>();
+						for (ActingTechniqueTranslation actingTechniqueTranslation : actingTechniqueTranslationList) {
+							actingTechniqueSelectList.add(new SelectElement(actingTechniqueTranslation.getActingTechnique().getAnalysisMethodId(), actingTechniqueTranslation.getName()));
+						}
+						selectElementList = actingTechniqueSelectList;
+					break;
+					case "facialExpression":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT fet FROM FacialExpressionTranslation fet WHERE fet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY fet.id ASC");
+						List<FacialExpressionTranslation> facialExpressionTranslationList = castList(FacialExpressionTranslation.class, query.getResultList());
+						List<SelectElement> facialExpressionSelectList = new ArrayList<>();
+						for (FacialExpressionTranslation facialExpressionTranslation : facialExpressionTranslationList) {
+							facialExpressionSelectList.add(new SelectElement(facialExpressionTranslation.getFacialExpression().getAnalysisMethodId(), facialExpressionTranslation.getName()));
+						}
+						selectElementList = facialExpressionSelectList;
+					break;
+					case "facialExpressionIntensity":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT feit FROM FacialExpressionIntensityTranslation feit WHERE feit.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY feit.id ASC");
+						List<FacialExpressionIntensityTranslation> facialExpressionIntensityTranslationList = castList(FacialExpressionIntensityTranslation.class, query.getResultList());
+						List<SelectElement> facialExpressionIntensitySelectList = new ArrayList<>();
+						for (FacialExpressionIntensityTranslation facialExpressionIntensityTranslation : facialExpressionIntensityTranslationList) {
+							facialExpressionIntensitySelectList.add(new SelectElement(facialExpressionIntensityTranslation.getFacialExpressionIntensity().getAnalysisMethodId(), facialExpressionIntensityTranslation.getFacialExpressionIntensity().getValue() + " " + facialExpressionIntensityTranslation.getName()));
+						}
+						selectElementList = facialExpressionIntensitySelectList;
+					break;
+					case "gesturalEmotion":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT get FROM GesturalEmotionTranslation get WHERE get.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY get.id ASC");
+						List<GesturalEmotionTranslation> gesturalEmotionTranslationList = castList(GesturalEmotionTranslation.class, query.getResultList());
+						List<SelectElement> gesturalEmotionSelectList = new ArrayList<>();
+						for (GesturalEmotionTranslation gesturalEmotionTranslation : gesturalEmotionTranslationList) {
+							gesturalEmotionSelectList.add(new SelectElement(gesturalEmotionTranslation.getGesturalEmotion().getAnalysisMethodId(), gesturalEmotionTranslation.getName()));
+						}
+						selectElementList = gesturalEmotionSelectList;
+					break;
+					case "gesturalEmotionIntensity":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT geit FROM GesturalEmotionIntensityTranslation geit WHERE geit.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY geit.id ASC");
+						List<GesturalEmotionIntensityTranslation> gesturalEmotionIntensityTranslationList = castList(GesturalEmotionIntensityTranslation.class, query.getResultList());
+						List<SelectElement> gesturalEmotionIntensitySelectList = new ArrayList<>();
+						for (GesturalEmotionIntensityTranslation gesturalEmotionIntensityTranslation : gesturalEmotionIntensityTranslationList) {
+							gesturalEmotionIntensitySelectList.add(new SelectElement(gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getAnalysisMethodId(), gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getValue() + " " + gesturalEmotionIntensityTranslation.getName()));
+						}
+						selectElementList = gesturalEmotionIntensitySelectList;
+					break;
+					case "physicalExpression":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT pet FROM PhysicalExpressionTranslation pet WHERE pet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY pet.id ASC");
+						List<PhysicalExpressionTranslation> physicalExpressionTranslationList = castList(PhysicalExpressionTranslation.class, query.getResultList());
+						List<SelectElement> physicalExpressionSelectList = new ArrayList<>();
+						for (PhysicalExpressionTranslation physicalExpressionTranslation : physicalExpressionTranslationList) {
+							physicalExpressionSelectList.add(new SelectElement(physicalExpressionTranslation.getPhysicalExpression().getAnalysisMethodId(), physicalExpressionTranslation.getName()));
+						}
+						selectElementList = physicalExpressionSelectList;
+					break;
+					case "physicalExpressionIntensity":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT peit FROM PhysicalExpressionIntensityTranslation peit WHERE peit.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY peit.id ASC");
+						List<PhysicalExpressionIntensityTranslation> physicalExpressionIntensityTranslationList = castList(PhysicalExpressionIntensityTranslation.class, query.getResultList());
+						List<SelectElement> physicalExpressionIntensitySelectList = new ArrayList<>();
+						for (PhysicalExpressionIntensityTranslation physicalExpressionIntensityTranslation : physicalExpressionIntensityTranslationList) {
+							physicalExpressionIntensitySelectList.add(new SelectElement(physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getAnalysisMethodId(), physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getValue() + " tt" + physicalExpressionIntensityTranslation.getName()));
+						}
+						selectElementList = physicalExpressionIntensitySelectList;
+					break;
+				}
+			break;
+			case 45: // Acting Technique - Part of 44: Analysis Actor
+			break;
+			case 46: // Facial Expression - Part of 44: Analysis Actor
+			break;
+			case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
+			break;
+			case 48: // Gestural Emotion - Part of 44: Analysis Actor
+			break;
+			case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
+			break;
+			case 50: // Physical Expression - Part of 44: Analysis Actor
+			break;
+			case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
 			break;
 		}
 
@@ -1592,6 +1725,47 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
 		System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective - done");
 		return Response.ok().entity(conceptCameraPositionAndPerspective).build();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("analysisActor/{analysisMethodId}")
+	@Secured
+	public Response createAnalysisMethodAnalysisActor(@PathParam("analysisMethodId") int analysisMethodId, 
+																							 			String jsonData) {
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+		AnalysisActor analysisActor = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			analysisActor = mapper.readValue(jsonData, AnalysisActor.class);
+		} catch (IOException e) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( analysisActor == null ) {
+			System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: analysisActor == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(analysisActor);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(analysisActor);
+		entityManager.refresh(analysisActor.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor - done");
+		return Response.ok().entity(analysisActor).build();
 	}
 
 	@POST

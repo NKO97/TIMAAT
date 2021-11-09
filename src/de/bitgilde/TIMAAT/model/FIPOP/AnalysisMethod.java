@@ -174,7 +174,39 @@ public class AnalysisMethod implements Serializable {
 	
 	//bi-directional one-to-one association to ImageCadreEditing
 	@OneToOne(mappedBy="analysisMethod")
-	private ImageCadreEditing imageCadreEditing;	
+	private ImageCadreEditing imageCadreEditing;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private AnalysisActor analysisActor;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private ActingTechnique actingTechnique;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private FacialExpression facialExpression;
+	
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private FacialExpressionIntensity facialExpressionIntensity;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private GesturalEmotion gesturalEmotion;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private GesturalEmotionIntensity gesturalEmotionIntensity;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private PhysicalExpression physicalExpression;
+
+	//bi-directional one-to-one association to AnalysisMusic
+	@OneToOne(mappedBy="analysisMethod")
+	private PhysicalExpressionIntensity physicalExpressionIntensity;	
 
 	public AnalysisMethod() {
 	}
@@ -503,6 +535,70 @@ public class AnalysisMethod implements Serializable {
 
 	public void setImageCadreEditing(ImageCadreEditing imageCadreEditing) {
 		this.imageCadreEditing = imageCadreEditing;
+	}
+
+	public AnalysisActor getAnalysisActor() {
+		return this.analysisActor;
+	}
+
+	public void SetAnalysisActor(AnalysisActor analysisActor) {
+		this.analysisActor = analysisActor;
+	}
+
+	public ActingTechnique getActingTechnique() {
+		return this.actingTechnique;
+	}
+
+	public void SetActingTechnique(ActingTechnique actingTechnique) {
+		this.actingTechnique = actingTechnique;
+	}
+
+	public FacialExpression getFacialExpression() {
+		return this.facialExpression;
+	}
+
+	public void SetFacialExpression(FacialExpression facialExpression) {
+		this.facialExpression = facialExpression;
+	}
+
+	public FacialExpressionIntensity getFacialExpressionIntensity() {
+		return this.facialExpressionIntensity;
+	}
+
+	public void SetFacialExpressionIntensity(FacialExpressionIntensity facialExpressionIntensity) {
+		this.facialExpressionIntensity = facialExpressionIntensity;
+	}
+
+	public GesturalEmotion getGesturalEmotion() {
+		return this.gesturalEmotion;
+	}
+
+	public void SetGesturalEmotion(GesturalEmotion gesturalEmotion) {
+		this.gesturalEmotion = gesturalEmotion;
+	}
+
+	public GesturalEmotionIntensity getGesturalEmotionIntensity() {
+		return this.gesturalEmotionIntensity;
+	}
+
+	public void SetGesturalEmotionIntensity(GesturalEmotionIntensity gesturalEmotionIntensity) {
+		this.gesturalEmotionIntensity = gesturalEmotionIntensity;
+	}
+
+	public PhysicalExpression getPhysicalExpression() {
+		return this.physicalExpression;
+	}
+
+	public void SetPhysicalExpression(PhysicalExpression physicalExpression) {
+		this.physicalExpression = physicalExpression;
+	}
+
+	public PhysicalExpressionIntensity getPhysicalExpressionIntensity() {
+		return this.physicalExpressionIntensity;
+	}
+
+	public void SetPhysicalExpressionIntensity(PhysicalExpressionIntensity physicalExpressionIntensity) {
+		this.physicalExpressionIntensity = physicalExpressionIntensity;
 	}
 
 }
