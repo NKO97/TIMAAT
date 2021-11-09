@@ -481,7 +481,7 @@ INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_anal
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (2, 233, 1, 'Modern Acting');
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (3, 234, 1, 'Method Acting (e.g. Strasner Technique, Adler Technique)');
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (4, 235, 1, 'Meisner Technique');
-INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (5, 236, 1, 'Chekov Technoque');
+INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (5, 236, 1, 'Chekov Technique');
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (6, 237, 1, 'Theater Acting (commercial)');
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (7, 238, 1, 'Theater Acting (cultural)');
 INSERT INTO `FIPOP`.`acting_technique_translation` (`id`, `acting_technique_analysis_method_id`, `language_id`, `name`) VALUES (8, 239, 1, 'Theater Acting (political/propagandistic)');
