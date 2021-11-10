@@ -4322,7 +4322,7 @@
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', mediumModel.id);
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', mediumModel);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
