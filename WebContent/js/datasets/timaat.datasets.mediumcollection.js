@@ -1076,7 +1076,7 @@
 					mediumCollectionElement.on('click', '.collectionItem-annotate-button', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
-						if ( !medium.mediumVideo && !medium.mediumImage ) return; //* allow annotating only for videos and images
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
@@ -1299,21 +1299,18 @@
 						if ( collectionItem.medium.mediumVideo ){
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
 								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
-								// ui += `<form action="/TIMAAT/api/medium/video/`+collectionItem.medium.id+`/upload" method="post" enctype="multipart/form-data">
-								// 				<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
-								// 				<button type="submit" title="Upload video" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
-								// 			 </form>`;
 							} else {
 								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( collectionItem.medium.mediumAudio ){
+							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (collectionItem.medium.mediumImage) {
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
 								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
-								// ui += `<form action="/TIMAAT/api/medium/image/`+collectionItem.medium.id+`/upload" method="post" enctype="multipart/form-data">
-								// 				<input name="file" accept=".png" class="timaat-medium-upload-file d-none" type="file" />
-								// 				<button type="submit" title="Upload image" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
-								// 			</form>`;
-								// }
 							} else {
 								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}

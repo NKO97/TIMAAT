@@ -324,8 +324,8 @@
                     <i class="fas fa-users fa-fw"></i>
                   </a>
                 </li>
-                <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
-                    <!-- <a
+                <!-- <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
+                    <!~~ <a
                     onclick="TIMAAT.UI.showComponent('locations')"
                     data-toggle="popover"
                     data-trigger="hover"
@@ -336,10 +336,10 @@
                           <div class='arrow'></div>
                           <h3 class='popover-header'></h3>
                       </div>"
-                    title="Orte"> -->
+                    title="Orte"> ~~>
                     <i class="fas fa-map-marked-alt fa-fw"></i>
-                  <!-- </a> -->
-                </li>
+                  <!~~ </a> ~~>
+                </li> -->
                 <li class="timaat-sidebar-tab timaat-sidebar-tab-events">
                   <a
                     onclick="TIMAAT.EventDatasets.initEventComponent()"
@@ -621,7 +621,7 @@
                       <h5 class="card-title text-center">Mediumdatei</h5>
                       <h6 class="card-subtitle mb-0 text-center text-muted">Hinweis: darf nicht umbenannt werden</h6>
                       <p style="font-size: 400%" class="card-text text-center"><i class="far fa-file-video"></i></p>
-                      <a href="#" download class="download-medium-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Video herunterladen</button></a>
+                      <a href="#" download class="download-medium-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Medium herunterladen</button></a>
                     </div>
                   </div>
                     </div>
@@ -809,12 +809,12 @@
             <div class="leaflet-sidebar-tabs">
               <ul role="tablist" class="inspector-tabs"> <!-- top aligned tabs -->
                 <li><a title="Edit metadata" id="timaat-inspector-metadata-tab" href="#timaat-inspector-metadata" role="tab"><i class="fa fa-edit"></i></a></li>
-                <li><a title="Animation settings (only for Annotations)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
+                <li><a title="Animation settings (only for video annotations)" href="#timaat-inspector-animation" role="tab"><i class="fa fa-running"></i></a></li>
                 <li><a title="Link categories and tags" href="#timaat-inspector-categories-and-tags" role="tab"><i class="fas fa-tags"></i></a></li>
-                <li><a title="Link actors (only for Annotations)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
-                <li><a title="Link events (only for Annotations)" href="#timaat-inspector-events" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
-                <li><a title="Link locations (only for Annotations)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li>
-                <li><a title="Link analysis guidelines (only for Annotations)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
+                <li><a title="Link actors (only for annotations)" href="#timaat-inspector-actors" role="tab"><i class="fas fa-users"></i></a></li>
+                <li><a title="Link events (only for annotations)" href="#timaat-inspector-events" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
+                <!-- <li><a title="Link locations (only for annotations)" href="#timaat-inspector-locations" role="tab"><i class="fas fa-globe-americas"></i></a></li> -->
+                <li><a title="Link analysis guidelines (only for annotations)" href="#timaat-inspector-analysis" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
               </ul>
             </div>
             <!-- Tab panes -->
@@ -1296,43 +1296,43 @@
                   </div>
                 </div>
                 <div class="card-footer timaat-videoplayer-video-footer">
-                <div class="timaat-videoplayer-video-controls"> <!-- Begin Video Controls -->
-                  <!-- Playback Controls -->
-                  <div class="btn-group btn-group-sm mr-1">
-                    <button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary">
-                      <i class="fas fa-step-backward"></i>
-                    </button>
-                    <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
-                      <i class="play fas fa-play fa-fw"></i>
-                      <i class="pause fa fa-pause fa-fw"></i>
-                    </button>
-                    <button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary">
-                      <i class="fas fa-step-forward"></i>
-                    </button>
-                  </div>
-                  <!-- Playback Repeat Control -->
-                  <div class="btn-group btn-group-sm mr-3">
-                    <button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary">
-                      <i class="fas fa-sync"></i> A&rarr;B
-                    </button>
-                  </div>
-                  <!-- Volume Control -->
-                  <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
-                    <span id="timaat-volumeicon">
-                      <i class="volume fas fa-volume-up"></i>
-                      <i class="mute fas fa-volume-mute"></i>
-                    </span>
-                    <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
-                  </a>
-<!--                   <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
-                  <!-- Playback Speed Control -->
-                  <div class="btn-group btn-group-sm float-right">
-                    <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
-                      <span class="video-speed-info">1&times;</span>
-                    </button>
-                  </div>
-                  <hr style="margin: 2px; padding: 0"/>
-                </div> <!-- End Video Controls -->
+                  <div class="timaat-videoplayer-video-controls"> <!-- Begin Video Controls -->
+                    <!-- Playback Controls -->
+                    <div class="btn-group btn-group-sm mr-1">
+                      <button title="Ein Bild zurück [&larr;]" class="stepbckbutton btn btn-secondary">
+                        <i class="fas fa-step-backward"></i>
+                      </button>
+                      <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
+                        <i class="play fas fa-play fa-fw"></i>
+                        <i class="pause fa fa-pause fa-fw"></i>
+                      </button>
+                      <button title="Ein Bild vorwärts [&rarr;]" class="stepfwdbutton btn btn-secondary">
+                        <i class="fas fa-step-forward"></i>
+                      </button>
+                    </div>
+                    <!-- Playback Repeat Control -->
+                    <div class="btn-group btn-group-sm mr-3">
+                      <button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary">
+                        <i class="fas fa-sync"></i> A&rarr;B
+                      </button>
+                    </div>
+                    <!-- Volume Control -->
+                    <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
+                      <span id="timaat-volumeicon">
+                        <i class="volume fas fa-volume-up"></i>
+                        <i class="mute fas fa-volume-mute"></i>
+                      </span>
+                      <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
+                    </a>
+  <!--                   <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
+                    <!-- Playback Speed Control -->
+                    <div class="btn-group btn-group-sm float-right">
+                      <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
+                        <span class="video-speed-info">1&times;</span>
+                      </button>
+                    </div>
+                    <hr style="margin: 2px; padding: 0"/>
+                  </div> <!-- End Video Controls -->
                   <!--
                   <div id="timaat-mediadatasets-medium-tags" class="float-left">
                     <i class="fas fa-tag"></i>&nbsp;&nbsp;
@@ -1358,7 +1358,7 @@
                       </div>
                       <button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timeline-track"><i class="fas fa-map-pin fa-fw"></i></button>
                     </div>
-                		<div class="btn-group">
+                		<div id="layer-buttons" class="btn-group">
                 			<button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
                         <i class="fas fa-video"></i> Video
                       </button>
@@ -1418,7 +1418,7 @@
                           <div class="timeline-section timeline-section-audio" style="height: 70px;">
                             <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
                               <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio Layer</span>
+                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio Waveform</span>
                                 <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
                               </div>
                             </div>
@@ -2685,10 +2685,12 @@
                               </div>
                               <div class="video-preview">
                                 <video id="videoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
-                                  <!-- <source src="" id="videoSource" type="video/mp4">Your browser does not support the video tag. -->
                                 </video>
                               </div>
-                              
+                              <div class="audio-preview">
+                                <audio id="audioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                </audio>
+                              </div>                              
                             </div>
                           </div>
                         </form>

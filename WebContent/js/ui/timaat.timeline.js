@@ -94,6 +94,18 @@
 			this.ui.track.addClass((this.ui.tracking)?'btn-primary':'btn-outline-secondary');
 		}
 		
+		initAudio(audio) {
+			this.audio = audio;
+			if ( this.audio ) {
+				this.ui.zoom = 0;
+				this.duration = this.audio.mediumAudio.length;
+				this.durationSec = this.audio.mediumAudio.length / 1000.0;				
+				this.ui.minZoom = Math.max(1, Math.floor(this.duration / 1000.0 / 40.0));
+				this.setZoom(this.ui.minZoom);
+				this.invalidateSize();
+				this.updateIndicator();
+			}
+		}
 		initVideo(video) {
 			this.video = video;
 			if ( this.video ) {

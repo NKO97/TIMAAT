@@ -46,74 +46,76 @@
 			this.xhr = xhr;
 			$(form).off('submit'); $(form).off();
 
-			let uploaditem = this;
+			let uploadItem = this;
 			$(form).on('submit', function(e) {
-		        //prevent regular form posting
-		        e.preventDefault();
-		        let oldpercent = 0;
-		        xhr.upload.addEventListener('loadstart', function(event) {
-		        	uploaditem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
-		        	console.info('UPLOAD::Start', uploaditem.medium);
-		        }, false);
+				//prevent regular form posting
+				e.preventDefault();
+				let oldpercent = 0;
+				xhr.upload.addEventListener('loadstart', function(event) {
+					uploadItem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
+					console.info('UPLOAD::Start', uploadItem.medium);
+				}, false);
 
-		        xhr.upload.addEventListener('progress', function(event) {
-		            var percent = (100 * event.loaded / event.total);
-		            if ( oldpercent != percent.toFixed(1) ) {
-		            	oldpercent = percent.toFixed(1);
-//			            console.log('UPLOAD:Progress: ' + percent.toFixed(1)+'%', uploaditem.video);
-			            uploaditem.ui.find('.progress-bar').css('width', percent.toFixed(1) + '%').text(percent.toFixed(1)+'%');
-		            }
-		        }, false);
+				xhr.upload.addEventListener('progress', function(event) {
+						var percent = (100 * event.loaded / event.total);
+						if ( oldpercent != percent.toFixed(1) ) {
+							oldpercent = percent.toFixed(1);
+	//			            console.log('UPLOAD:Progress: ' + percent.toFixed(1)+'%', uploadItem.video);
+							uploadItem.ui.find('.progress-bar').css('width', percent.toFixed(1) + '%').text(percent.toFixed(1)+'%');
+						}
+				}, false);
 
-		        xhr.upload.addEventListener('load', function(event) {
-		        }, false);
+				xhr.upload.addEventListener('load', function(event) {
+				}, false);
 
-		        xhr.addEventListener('readystatechange', function(event) {
-		        	if ( uploaditem.state == 'abort' ) return;
-		            if (event.target.readyState == 4) {
-		            	if (event.target.status == 200) {
-				            uploaditem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload erfolgreich');
-		            		uploaditem.state = 'done';
-										console.info('UPLOAD::SUCCESS');
-										switch (type) {
-											case 'image':
-												var newImage = JSON.parse(event.target.responseText);
-                        // console.log("TCL: UploadItem -> constructor -> newImage", newImage);
-												uploaditem.medium.mediumImage.width = newImage.width;
-												uploaditem.medium.mediumImage.height = newImage.height;
-												uploaditem.medium.mediumImage.bitDepth = newImage.bitDepth;
-											break;
-											case 'video':
-												var newVideo = JSON.parse(event.target.responseText);
-                        // console.log("TCL: UploadItem -> constructor -> newVideo", newVideo);
-												uploaditem.medium.mediumVideo.width = newVideo.width;
-												uploaditem.medium.mediumVideo.height = newVideo.height;
-												uploaditem.medium.mediumVideo.length = newVideo.length;
-												uploaditem.medium.mediumVideo.frameRate = newVideo.frameRate;
-												// send event
-												$(document).trigger('success.upload.TIMAAT', uploaditem.medium);
-											break;
-										}
-										// send event										
-										$(document).trigger('success.upload.medium.TIMAAT', uploaditem.medium);
-										
-										// remove this item from upload manager
-										TIMAAT.UploadManager.removeUpload(uploaditem);
-		            	} else {
-		            		uploaditem.state = 'fail';
-			                console.error('UPLOAD FAILED: Error in the response.', event);
-				            uploaditem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload fehlgeschlagen');
-		            	}
-		            } else console.info('STATE CHANGE: ', event);
-		        }, false);
+				xhr.addEventListener('readystatechange', function(event) {
+					if ( uploadItem.state == 'abort' ) return;
+					if (event.target.readyState == 4) {
+						if (event.target.status == 200) {
+							uploadItem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload erfolgreich');
+							uploadItem.state = 'done';
+							console.info('UPLOAD::SUCCESS');
+							switch (type) {
+								case 'audio':
+									let newAudio = JSON.parse(event.target.responseText);
+									uploadItem.medium.mediumAudio.length = newAudio.length;
+								break;
+								case 'image':
+									var newImage = JSON.parse(event.target.responseText);
+									uploadItem.medium.mediumImage.width = newImage.width;
+									uploadItem.medium.mediumImage.height = newImage.height;
+									uploadItem.medium.mediumImage.bitDepth = newImage.bitDepth;
+								break;
+								case 'video':
+									var newVideo = JSON.parse(event.target.responseText);
+									uploadItem.medium.mediumVideo.width = newVideo.width;
+									uploadItem.medium.mediumVideo.height = newVideo.height;
+									uploadItem.medium.mediumVideo.length = newVideo.length;
+									uploadItem.medium.mediumVideo.frameRate = newVideo.frameRate;
+									// send event
+									// $(document).trigger('success.upload.TIMAAT', uploadItem.medium);
+								break;
+							}
+							// send event										
+							$(document).trigger('success.upload.medium.TIMAAT', uploadItem.medium);
+							
+							// remove this item from upload manager
+							TIMAAT.UploadManager.removeUpload(uploadItem);
+						} else {
+							uploadItem.state = 'fail';
+								console.error('UPLOAD FAILED: Error in the response.', event);
+							uploadItem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload fehlgeschlagen');
+						}
+					} else console.info('STATE CHANGE: ', event);
+				}, false);
 
-		        // posting the form with the same method and action as specified by the HTML markup
-		        xhr.open(this.getAttribute('method'), this.getAttribute('action'), true);
-		        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		        xhr.send(new FormData(this));
-		        
-		        this.reset();
-		    });
+				// posting the form with the same method and action as specified by the HTML markup
+				xhr.open(this.getAttribute('method'), this.getAttribute('action'), true);
+				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+				xhr.send(new FormData(this));
+				
+				this.reset();
+			});
 			
 			// start upload immediately for now --> this can later be used to queue video uploads
 			this.startUpload();
@@ -130,11 +132,11 @@
 		}
 		
 		_handleAbort(event) {
-			let uploaditem = event.data;
-			console.info('UPLOAD::Canceled by user request', uploaditem);
-			uploaditem.state = 'abort';
-			uploaditem.xhr.abort(); // cancel transfer if active
-			TIMAAT.UploadManager.removeUpload(uploaditem);
+			let uploadItem = event.data;
+			console.info('UPLOAD::Canceled by user request', uploadItem);
+			uploadItem.state = 'abort';
+			uploadItem.xhr.abort(); // cancel transfer if active
+			TIMAAT.UploadManager.removeUpload(uploadItem);
 		}
 		
 		
@@ -168,7 +170,7 @@
 			});
 			$('#timaat-upload-manager').on('inserted.bs.popover', function () {
 				$('.timaat-upload-details').append(TIMAAT.UploadManager.ui);
-				for (let uploaditem of TIMAAT.UploadManager.uploads) uploaditem.attachListeners();
+				for (let uploadItem of TIMAAT.UploadManager.uploads) uploadItem.attachListeners();
 			});
 		},
 		
@@ -179,11 +181,11 @@
 		
 		queueUpload: function(medium, form) {
 			if ( !medium || !form ) return;
-			for (let uploaditem of TIMAAT.UploadManager.uploads) if (uploaditem.medium.id == medium.id) return;
-			let uploaditem = new TIMAAT.UploadItem(medium, medium.mediaType.mediaTypeTranslations[0].type, form);
-			TIMAAT.UploadManager.uploads.push(uploaditem);
+			for (let uploadItem of TIMAAT.UploadManager.uploads) if (uploadItem.medium.id == medium.id) return;
+			let uploadItem = new TIMAAT.UploadItem(medium, medium.mediaType.mediaTypeTranslations[0].type, form);
+			TIMAAT.UploadManager.uploads.push(uploadItem);
 			// add UI
-			TIMAAT.UploadManager.ui.find('ul.timaat-upload-list').append(uploaditem.ui);
+			TIMAAT.UploadManager.ui.find('ul.timaat-upload-list').append(uploadItem.ui);
 			TIMAAT.UploadManager.ui.find('.timaat-uploads-message').hide();
 			$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-info');
 						

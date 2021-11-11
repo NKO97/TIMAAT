@@ -43,6 +43,7 @@
 				switch (mediumType) {
 					case 'audio':
 						// displayMediumTypeIcon = '  <i class="far fa-file-audio"></i> ';
+						fileTypesAccepted = '.mp3';
 					break;
 					case 'document':
 						// displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i> ';
@@ -81,9 +82,9 @@
 								</div>
 								<form action="/TIMAAT/api/medium/`+mediumType+`/`+this.model.id+`/upload" method="post" enctype="multipart/form-data">
 									<input name="file" accept="`+fileTypesAccepted+`" class="timaat-medium-upload-file d-none" type="file" />
-									<button type="submit" title="Datei hochladen" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
+									<button type="submit" title="Upload `+mediumType+`" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
 								</form>
-								<button type="button" title="Video annotieren" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
+								<button type="button" title="Annotate `+mediumType+`" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
 						</div>
 					</div>

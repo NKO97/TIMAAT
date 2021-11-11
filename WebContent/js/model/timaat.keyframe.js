@@ -171,9 +171,21 @@
 		
 		_syncToModel(shapes) {
     	// console.log("TCL: Keyframe -> _syncToModel -> shapes", shapes);
-			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
-			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
-			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+			let width = 0;
+			let height = 0;
+			let factor = 1;
+			switch(TIMAAT.VideoPlayer.mediaType) {
+				case 'image':
+					width = TIMAAT.VideoPlayer.model.video.mediumImage.width;
+					height = TIMAAT.VideoPlayer.model.video.mediumImage.height;
+					factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+				break;
+				case 'video':
+					width =  TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+					height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+					factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+				break;
+			}
 				
 			let model = {
 					time: this._time,

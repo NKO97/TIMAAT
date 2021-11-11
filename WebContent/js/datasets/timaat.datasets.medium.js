@@ -716,18 +716,22 @@
 				// console.log("TCL: uploadedMedium.fileStatus", uploadedMedium.fileStatus);
 				if ( event.type == 'success' ) {
 					switch (type) {
+						case 'audio':
+							medium.model.mediumAudio.length = uploadedMedium.mediumAudio.length;
+							await TIMAAT.UI.refreshDataTable('audio');
+						break;
 						case 'image':
-								medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
-								medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
-								// medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth; // TODO
-								await TIMAAT.UI.refreshDataTable('image');
+							medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
+							medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
+							// medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth; // TODO
+							await TIMAAT.UI.refreshDataTable('image');
 						break;
 						case 'video':
-								medium.model.mediumVideo.width = uploadedMedium.mediumVideo.width;
-								medium.model.mediumVideo.height = uploadedMedium.mediumVideo.height;
-								medium.model.mediumVideo.length = uploadedMedium.mediumVideo.length;
-								medium.model.mediumVideo.frameRate = uploadedMedium.mediumVideo.frameRate;
-								await TIMAAT.UI.refreshDataTable('video');
+							medium.model.mediumVideo.width = uploadedMedium.mediumVideo.width;
+							medium.model.mediumVideo.height = uploadedMedium.mediumVideo.height;
+							medium.model.mediumVideo.length = uploadedMedium.mediumVideo.length;
+							medium.model.mediumVideo.frameRate = uploadedMedium.mediumVideo.frameRate;
+							await TIMAAT.UI.refreshDataTable('video');
 						break;
 					}
 				}
@@ -2011,7 +2015,7 @@
 
 			$('#medium-preview-form :input').prop('disabled', true);
 			if ( data.model.fileStatus == 'noFile' || !data.model.fileStatus) {
-				if (data.model.mediumVideo || data.model.mediumImage) {
+				if (data.model.mediumVideo || data.model.mediumImage || data.model.mediumAudio ) {
 					$('.datasheet-form-upload-button').prop('disabled', false);
 					$('.datasheet-form-upload-button').show();
 				}
@@ -2030,7 +2034,7 @@
 			} else {
 				$('.datasheet-form-upload-button').hide();
 				$('.datasheet-form-upload-button').prop('disabled', true);
-				if (type == 'video' || type == 'image' ) {
+				if (type == 'video' || type == 'image' || type == 'audio') {
 					$('.datasheet-form-annotate-button').prop('disabled', false);
 					$('.datasheet-form-annotate-button').show();
 				} else {
@@ -2038,7 +2042,14 @@
 					$('.datasheet-form-annotate-button').prop('disabled', true);
 				}
 				switch (type) {
+					case 'audio': // TODO check audio-preview functionality
+						$('.video-preview').hide();
+						$('.image-preview').hide();
+						$('#audioPreview').attr('src', '/TIMAAT/api/medium/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
+						$('.audio-preview').show();
+					break;
 					case 'image':
+						$('.audio-preview').hide();
 						$('.video-preview').hide();
 						$('#mediumPreview').attr('src', '/TIMAAT/api/medium/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
 						$('#mediumPreview').attr('title', data.model.displayTitle.name);
@@ -2053,6 +2064,7 @@
 							$('#mediumPreview').attr('alt', 'placeholder');
 							$('.image-preview').show();
 						} else {
+							$('.audio-preview').hide();
 							$('.image-preview').hide();
 							$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 							$('.video-preview').show();
@@ -3415,14 +3427,14 @@
 			$('.datasheet-form-upload-button').hide();
 			$('.datasheet-form-upload-button').prop('disabled', true);
 			if ( model.fileStatus == 'noFile' || !model.fileStatus) {
-				if (model.mediumVideo || model.mediumImage) {
+				if (model.mediumVideo || model.mediumImage || model.mediumAudio) {
 					$('.datasheet-form-upload-button').prop('disabled', false);
 					$('.datasheet-form-upload-button').show();
 				}
 				$('.datasheet-form-annotate-button').hide();
 				$('.datasheet-form-annotate-button').prop('disabled', true);
 			} else {
-				if (model.mediaType.mediaTypeTranslations[0].type == 'video' || model.mediaType.mediaTypeTranslations[0].type == 'image') {
+				if (model.mediaType.mediaTypeTranslations[0].type == 'video' || model.mediaType.mediaTypeTranslations[0].type == 'image' || model.mediaType.mediaTypeTranslations[0].type == 'audio') {
 					$('.datasheet-form-annotate-button').prop('disabled', false);
 					$('.datasheet-form-annotate-button').show();
 				} else {
@@ -3969,17 +3981,18 @@
 					// 	medium.fileStatus = TIMAAT.MediumService.updateFileStatus(medium, 'document');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4089,17 +4102,18 @@
 					// 	medium.fileStatus = TIMAAT.MediumService.updateFileStatus(medium, 'image');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4209,17 +4223,18 @@
 					// 	medium.fileStatus = TIMAAT.MediumService.updateFileStatus(medium, 'software');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4329,17 +4344,18 @@
 					// 	medium.fileStatus = TIMAAT.MediumService.updateFileStatus(medium, 'text');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4450,17 +4466,18 @@
           // console.log("TCL: medium.fileStatus", medium.fileStatus);
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
@@ -4570,17 +4587,18 @@
 					// 	medium.fileStatus = TIMAAT.MediumService.updateFileStatus(medium, 'videogame');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) {
-					// console.log("TCL: medium", medium);
-					let noFileIcon = '';
-					if (medium.fileStatus == 'noFile') {
-						noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-					}
-					let commentIcon = ' ';
-					if (medium.remark.length > 0) {
-						commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
-					}
-					let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, medium, meta) 
+					{
+						// console.log("TCL: medium", medium);
+						let noFileIcon = '';
+						if (medium.fileStatus == 'noFile') {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
+						let commentIcon = ' ';
+						if (medium.remark.length > 0) {
+							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
+						}
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + medium.displayTitle.name +`</p>`;
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}

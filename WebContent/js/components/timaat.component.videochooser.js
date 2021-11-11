@@ -423,8 +423,8 @@
 					});
 
 					mediumElement.on('click', '.videochooser-annotate-button', async function(ev) {
-						//* only videos and images can be annotated
-						if (!medium.mediumVideo && !medium.mediumImage) return;
+						//* only videos, images and audios can be annotated
+						if (!medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return;
 						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
 						// $('.timaat-video-card').removeClass('bg-info text-white');
 						// $(this).addClass('bg-info text-white');
@@ -542,14 +542,21 @@
 							ui = `<div>
 								<form action="/TIMAAT/api/medium/video/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
 									<input name="file" accept=".mp4" class="timaat-medium-upload-file d-none" type="file" />
-									<button type="submit" title="Datei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
+									<button type="submit" title="Upload video" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
+								</form>
+								<button type="button" title="Annotate video" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+						} else if (medium.mediumAudio) {
+							ui = `<div>
+								<form action="/TIMAAT/api/medium/audio/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
+									<input name="file" accept=".mp3" class="timaat-medium-upload-file d-none" type="file" />
+									<button type="submit" title="Upload audio" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
 								<button type="button" title="Annotate video" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 						} else if (medium.mediumImage) {
 							ui = `<div>
 								<form action="/TIMAAT/api/medium/image/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
 									<input name="file" accept=".png" class="timaat-medium-upload-file d-none" type="file" />
-									<button type="submit" title="Datei hochladen" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
+									<button type="submit" title="Upload image" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
 								<button type="button" title="Annotate image" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 						} else {

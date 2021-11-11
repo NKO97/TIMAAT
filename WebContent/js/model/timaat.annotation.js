@@ -786,9 +786,21 @@
 			this._layerVisual = this.model.layerVisual;
 			this._layerAudio = this.model.layerAudio;
 
-			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
-			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
-			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+			let width = 0;
+			let height = 0;
+			let factor = 1;
+			switch(TIMAAT.VideoPlayer.mediaType) {
+				case 'video':
+					width =  TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+					height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+					factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+				break;
+				case 'image':
+					width = TIMAAT.VideoPlayer.model.video.mediumImage.width;
+					height = TIMAAT.VideoPlayer.model.video.mediumImage.height;
+					factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
+				break;
+			}
 			this.model.selectorSvgs[0].colorHex = this.svg.colorHex;
 			this.model.selectorSvgs[0].opacity = this.svg.opacity * 100; // 0..1 is stored as 0..100 in DB (Byte)
 			this.model.selectorSvgs[0].strokeWidth = this.svg.strokeWidth > 0 ? 1 : 0;

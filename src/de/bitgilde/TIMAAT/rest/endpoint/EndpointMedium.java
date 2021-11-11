@@ -222,11 +222,6 @@ public class EndpointMedium {
 																			@QueryParam("search") String search)	{
 		// System.out.println("EndpointMedium: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		String column = "m.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
-		}
-
 		class SelectElement{ 
 			public int id; 
 			public String text;
@@ -403,7 +398,7 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("mediatype/list")
-	public Response getMediatypeList() {
+	public Response getMediaTypeList() {
 		// System.out.println("EndpointMedium: getMediaTypeList");		
 		List<MediaType> mediaTypeList = castList(MediaType.class,TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList());
 		return Response.ok().entity(mediaTypeList).build();
@@ -2820,6 +2815,80 @@ public class EndpointMedium {
 	System.out.println("EndpointMedium: deleteSource - delete complete");	
 	return Response.ok().build();
 	}
+		
+	@POST
+	@Path("audio/{id}/upload")
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	public Response uploadAudio(@PathParam("id") int id,
+															@FormDataParam("file") InputStream uploadedInputStream,
+															@FormDataParam("file") FormDataContentDisposition fileDetail) {
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumAudio mediumAudio = entityManager.find(MediumAudio.class, id);
+		if (mediumAudio == null) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumAudio.getMedium().getFileStatus().compareTo("noFile") != 0 )
+			return Response.status(Status.FORBIDDEN).entity("ERROR::Audio file already exists").build();
+		
+		try {
+			// TODO assume MP3 upload only
+			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
+				+ "-upload.mp3";
+			File uploadTempFile = new File(
+				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/audio/" + tempName);
+
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
+			byte[] bytes = new byte[1024];
+			int sizeRead;
+			while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
+				stream.write(bytes, 0, sizeRead);
+			}
+			stream.flush();
+			stream.close();
+			System.out.println("You successfully uploaded !");
+
+			// get data from ffmpeg
+			AudioInformation info = getAudioFileInfo(
+				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/audio/" + tempName);
+			// mediumAudio.setAudioCodec("");
+			mediumAudio.setLength(info.getDuration());
+			
+			// rename file with medium
+			int mediumId = mediumAudio.getMediumId();
+			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				+ "medium/audio/" + tempName);
+			File mediumDirectory = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + mediumId);
+			mediumDirectory.mkdir();
+			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + mediumId + "/" + mediumId + "-audio.mp3")); // TODO assume mp3 upload only
+			mediumAudio.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				+ "medium/audio/" + mediumId	+ "/" + mediumId + "-audio.mp3");
+
+			EntityTransaction entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			entityManager.merge(mediumAudio);
+			entityManager.merge(mediumAudio.getMedium());
+			entityManager.persist(mediumAudio);
+			entityManager.persist(mediumAudio.getMedium());
+			entityManager.flush();
+			entityTransaction.commit();
+			entityManager.refresh(mediumAudio);
+
+			// add log entry
+			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+					UserLogManager.LogEvents.MEDIUMCREATED);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return Response.ok().entity(mediumAudio).build();
+	}
 
 	@POST
 	@Path("image/{id}/upload")
@@ -3073,6 +3142,33 @@ public class EndpointMedium {
 	}
 
 	@HEAD
+	@Path("audio/{id}/download")
+	@Produces("audio/mpeg")
+	public Response getAudioFileInfo(@PathParam("id") int id,
+																	 @QueryParam("token") String fileToken) {
+		
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}
+		if ( tokenMediumID != id ) return Response.status(401).build();
+			if ( mediumFileStatus(id, "audio").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
+			File file = new File( 
+				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/audio/" + id + "/" + id + "-audio.mp4");
+			
+		return Response.ok()
+			.status( Response.Status.PARTIAL_CONTENT )
+			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+			.header( "Accept-Ranges", "bytes" )
+			.build();
+	}
+
+	@HEAD
 	@Path("video/{id}/download")
 	@Produces("video/mp4")
 	public Response getVideoFileInfo(@PathParam("id") int id,
@@ -3097,6 +3193,41 @@ public class EndpointMedium {
 			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
 			.header( "Accept-Ranges", "bytes" )
 			.build();
+	}
+
+	@GET
+	@Path("audio/{id}/download")
+	@Produces("audio/mp4")
+	public Response getAudioFile(@Context HttpHeaders headers,
+															 @PathParam("id") int id,
+															 @QueryParam("token") String fileToken,
+															 @QueryParam("force") boolean force) {
+		
+		// verify token
+		if ( fileToken == null ) {
+			return Response.status(401).build();
+		}
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}		
+		if ( tokenMediumID != id ) {
+			return Response.status(401).build();
+		}
+
+		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumFileStatus(id, "audio").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+
+		if ( mediumFileStatus(id, "audio").compareTo("ready") != 0 )
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + id + "-audio.mp3", headers, id+".mp3");
+
+		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/audio/" + id + "/" + id + "-audio.mp3", headers, id+".mp3"); // currently no mp3 conversion
 	}
 
 	@GET
@@ -3144,11 +3275,10 @@ public class EndpointMedium {
 	}
 
 	@GET
-	@Path("video/{id}/audio/combined")
+	@Path("audio/{id}/audio/combined")
 	@Produces("image/png")
-	public Response getVideoAudioWaveform(
-			@PathParam("id") int id,
-			@QueryParam("token") String fileToken) {
+	public Response getAudioAudioWaveform(@PathParam("id") int id,
+																				@QueryParam("token") String fileToken) {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -3160,19 +3290,51 @@ public class EndpointMedium {
 		}		
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-			// load audio waveform image from storage
-			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+		// load audio waveform image from storage
+		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/audio/" + id + "/" + id + "-audio-all.png");
+		if ( !thumbnail.exists() ) {
+			// try to create waveform
+			System.out.println("Create audio waveform");
+			createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + id + "/" + id + "-audio.mp3", "audio");
+			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + id + "/" + id + "-audio-all.png");
+		}
+		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
+				
+		return Response.ok().entity(thumbnail).build();
+	}
+
+	@GET
+	@Path("video/{id}/audio/combined")
+	@Produces("image/png")
+	public Response getVideoAudioWaveform(@PathParam("id") int id,
+																				@QueryParam("token") String fileToken) {
+
+		// verify token
+		if ( fileToken == null ) return Response.status(401).build();
+		int tokenMediumID = 0;
+		try {
+			tokenMediumID = validateFileToken(fileToken);
+		} catch (Exception e) {
+			return Response.status(401).build();
+		}		
+		if ( tokenMediumID != id ) return Response.status(401).build();
+
+		// load audio waveform image from storage
+		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+			+ "medium/video/" + id + "/" + id + "-audio-all.png");
+		if ( !thumbnail.exists() ) {
+			// try to create waveform
+			createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/video/" + id + "-video-original.mp4", "video");
+			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/" + id + "-audio-all.png");
-			if ( !thumbnail.exists() ) {
-				// try to create waveform
-				createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "-video-original.mp4");
-				thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "/" + id + "-audio-all.png");
-			}
-			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
-		    	
-			return Response.ok().entity(thumbnail).build();
+		}
+		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
+				
+		return Response.ok().entity(thumbnail).build();
 	}
 	
 	@GET
@@ -3726,15 +3888,19 @@ public class EndpointMedium {
 		}
 
 		String fileExtension = ""; // TODO determine correct file type
-		if (type.equalsIgnoreCase("video")) fileExtension = "mp4";
+		if (type.equalsIgnoreCase("audio")) fileExtension = "mp3";
 		if (type.equalsIgnoreCase("image")) fileExtension = "png";
+		if (type.equalsIgnoreCase("video")) fileExtension = "mp4";
 
 		switch (type) {
+			case "audio": // currently mp3 files will only be uploaded but not converted
+				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready"; 
+			break;
 			case "image":
-			if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "uploaded";
-			if ( new File(mediumDir + "/" + id + "-" + type + "-thumb." + fileExtension ).exists() ) fileStatus = "thumbCreated";
-			if ( new File(mediumDir + "/" + id + "-" + type + "-scaled." + fileExtension ).exists() ) fileStatus = "ready";
-		break;
+				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "uploaded";
+				if ( new File(mediumDir + "/" + id + "-" + type + "-thumb." + fileExtension ).exists() ) fileStatus = "thumbCreated";
+				if ( new File(mediumDir + "/" + id + "-" + type + "-scaled." + fileExtension ).exists() ) fileStatus = "ready";
+			break;
 			case "video":
 				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "waiting";
 				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
@@ -3746,6 +3912,48 @@ public class EndpointMedium {
 		// System.out.println("mediumFileStatus end - id: "+ id + ", type: "+ type + ", fileStatus: " + fileStatus);
 
 		return fileStatus;
+	}
+
+	private AudioInformation getAudioFileInfo(String filename) throws IOException {
+		Runtime r = Runtime.getRuntime();
+		Process p;     // Process tracks one external native process
+		BufferedReader is;  // reader for output of process
+		String line;
+		
+		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
+		"-v", "error", "-select_streams", "v:0",
+		"-show_entries", "stream=r_frame_rate,codec_name",
+		"-show_entries", "format=duration", "-sexagesimal",
+		"-of", "json", filename };
+		AudioInformation audioInfo = new AudioInformation(0, "");
+
+		try {
+			p = r.exec(commandLine);
+			is = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			try {
+				p.waitFor();  // wait for process to complete
+			} catch (InterruptedException e) {
+				System.err.println(e);  // "can't happen"
+			}
+
+			String jsonString = "";
+			while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+
+			JSONObject json = new JSONObject(jsonString);
+			String sDuration = json.getJSONObject("format").getString("duration");
+			String[] hms = sDuration.split(":");
+			double dTotalSecs = Integer.parseInt(hms[0]) * 3600
+												+ Integer.parseInt(hms[1]) *   60
+												+ Double.parseDouble(hms[2]);
+			long lDuration = (long) (dTotalSecs*1000);
+			audioInfo.setDuration(lDuration);
+			audioInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return audioInfo;
 	}
 
 	private ImageInformation getImageFileInfo(File imgFile) throws IOException {
@@ -3823,50 +4031,50 @@ public class EndpointMedium {
 }
 
 	private VideoInformation getVideoFileInfo(String filename) {
-	    Runtime r = Runtime.getRuntime();
-	    Process p;     // Process tracks one external native process
-	    BufferedReader is;  // reader for output of process
-	    String line;
-	    
-	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
-	    "-v", "error", "-select_streams", "v:0",
-	    "-show_entries", "stream=width,height,r_frame_rate,codec_name",
-	    "-show_entries", "format=duration", "-sexagesimal",
-	    "-of", "json", filename };
-	    VideoInformation videoInfo = new VideoInformation(0, 0, 25, 0, "");
+		Runtime r = Runtime.getRuntime();
+		Process p;     // Process tracks one external native process
+		BufferedReader is;  // reader for output of process
+		String line;
+		
+		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
+		"-v", "error", "-select_streams", "v:0",
+		"-show_entries", "stream=width,height,r_frame_rate,codec_name",
+		"-show_entries", "format=duration", "-sexagesimal",
+		"-of", "json", filename };
+		VideoInformation videoInfo = new VideoInformation(0, 0, 25, 0, "");
 
-	    try {
-	    	p = r.exec(commandLine);
-	    	is = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		try {
+			p = r.exec(commandLine);
+			is = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-	    	try {
-	    		p.waitFor();  // wait for process to complete
-	    	} catch (InterruptedException e) {
-	    		System.err.println(e);  // "can't happen"
-	    	}
+			try {
+				p.waitFor();  // wait for process to complete
+			} catch (InterruptedException e) {
+				System.err.println(e);  // "can't happen"
+			}
 
-	    	String jsonString = "";
-	    	while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
+			String jsonString = "";
+			while ((line = is.readLine()) != null) if ( line != null ) jsonString += line;
 
-	    	JSONObject json = new JSONObject(jsonString);
-	    	int framerate = 30; // TODO
-	    	videoInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getInt("width"));
-	    	videoInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getInt("height"));
-	    	videoInfo.setFramerate(framerate);
-				String sDuration = json.getJSONObject("format").getString("duration");
-				String[] hms = sDuration.split(":");
-        double dTotalSecs = Integer.parseInt(hms[0]) * 3600
-                          + Integer.parseInt(hms[1]) *   60
-                          + Double.parseDouble(hms[2]);
-				long lDuration = (long) (dTotalSecs*1000);
-	    	videoInfo.setDuration(lDuration);
-	    	videoInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
-	    } catch (IOException e1) {
-	    	// TODO Auto-generated catch block
-	    	e1.printStackTrace();
-	    }
+			JSONObject json = new JSONObject(jsonString);
+			int framerate = 30; // TODO
+			videoInfo.setWidth(json.getJSONArray("streams").getJSONObject(0).getInt("width"));
+			videoInfo.setHeight(json.getJSONArray("streams").getJSONObject(0).getInt("height"));
+			videoInfo.setFramerate(framerate);
+			String sDuration = json.getJSONObject("format").getString("duration");
+			String[] hms = sDuration.split(":");
+			double dTotalSecs = Integer.parseInt(hms[0]) * 3600
+												+ Integer.parseInt(hms[1]) *   60
+												+ Double.parseDouble(hms[2]);
+			long lDuration = (long) (dTotalSecs*1000);
+			videoInfo.setDuration(lDuration);
+			videoInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-	    return videoInfo;
+		return videoInfo;
 	}
 
 	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException
@@ -3907,10 +4115,11 @@ public class EndpointMedium {
 		}
 	}
 
-	private void createAudioWaveform(int id, String filename) {
-		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/video/" + id);
-		if ( !videoDir.exists() ) videoDir.mkdirs();
+	private void createAudioWaveform(int id, String filename, String mediumType) {
+		File mediumDirectory = null;
+			mediumDirectory = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/"+mediumType+"/" + id);
+		if ( !mediumDirectory.exists() ) mediumDirectory.mkdirs();
 
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
@@ -3920,7 +4129,7 @@ public class EndpointMedium {
 	    "-filter_complex", "aformat=channel_layouts=mono,showwavespic=s=5000x300:colors=395C8D", // waveform settings
 	    "-frames:v", "1", "-y", 
 			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/" + id + "-audio-all.png" };
+				+ "medium/"+mediumType+"/" + id + "/" + id + "-audio-all.png" };
 
 	    try {
 			p = r.exec(commandLine);

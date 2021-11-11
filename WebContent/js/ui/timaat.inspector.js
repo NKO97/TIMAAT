@@ -411,6 +411,7 @@
 					var opacity = Number($('#timaat-inspector-meta-opacity').val());
 					let layerVisual = $('#timaat-inspector-meta-visual-layer').is(":checked") ? true : false;
 					let layerAudio = $('#timaat-inspector-meta-audio-layer').is(":checked") ? true : false;
+					if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'audio') layerAudio = true; // layer display is invisible in audio but needs to be set
 					if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'image') layerVisual = true; // layer display is invisible in image but needs to be set
 					var comment = $('#timaat-inspector-meta-comment').summernote('code');
 					comment = comment.substring(0,4096);
@@ -1243,7 +1244,7 @@
 			this.disablePanel('timaat-inspector-categories-and-tags');
 			this.disablePanel('timaat-inspector-actors');
 			this.disablePanel('timaat-inspector-events');
-			this.disablePanel('timaat-inspector-locations');
+			// this.disablePanel('timaat-inspector-locations');
 			this.disablePanel('timaat-inspector-analysis');
 			this.ui.keyframeList.children().detach();
 			
@@ -1269,19 +1270,19 @@
 					}
 					this.enablePanel('timaat-inspector-metadata');
 					// animation panel
-					if ( TIMAAT.VideoPlayer.duration > 0 ) this.enablePanel('timaat-inspector-animation');
+					if ( TIMAAT.VideoPlayer.model.video.mediumVideo ) this.enablePanel('timaat-inspector-animation');
 					else this.disablePanel('timaat-inspector-animation');
 					if ( item != null ) {
 						this.enablePanel('timaat-inspector-actors');
 						this.enablePanel('timaat-inspector-events');
-						this.enablePanel('timaat-inspector-locations');
+						// this.enablePanel('timaat-inspector-locations');
 						this.enablePanel('timaat-inspector-analysis');
 						this.enablePanel('timaat-inspector-categories-and-tags');
 					}
 					// metadata panel
 					$('#timaat-inspector-meta-color-group').show();
 					$('#timaat-inspector-meta-opacity-group').show();
-					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#timaat-inspector-meta-type-group').show();
+					if ( TIMAAT.VideoPlayer.model.video.mediumVideo) $('#timaat-inspector-meta-type-group').show(); // TODO may have to change when new media types can be annotated
 					else $('#timaat-inspector-meta-type-group').hide();
 					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#timaat-inspector-meta-timecode-group').show();
 					else $('#timaat-inspector-meta-timecode-group').hide();
@@ -1305,12 +1306,15 @@
 					let layerVisual = false;
 					let layerAudio = false;
 					switch (TIMAAT.VideoPlayer.curAnalysisList.mediumType) {
-						case 'video':
-							layerVisual = (anno) ? anno.layerVisual : true;
+						case 'audio':
 							layerAudio = (anno) ? anno.layerAudio : true;
 						break;
 						case 'image':
 							layerVisual = (anno) ? anno.layerVisual : true;
+						break;
+						case 'video':
+							layerVisual = (anno) ? anno.layerVisual : true;
+							layerAudio = (anno) ? anno.layerAudio : true;
 						break;
 					}
 					var comment = (anno) ? anno.model.annotationTranslations[0].comment : "";

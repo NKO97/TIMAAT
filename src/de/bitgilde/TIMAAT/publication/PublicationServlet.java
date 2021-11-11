@@ -274,6 +274,14 @@ public class PublicationServlet {
 							 .header( HttpHeaders.CONTENT_LENGTH, file.length() )
 							 .header( "Accept-Ranges", "bytes" )
 							 .build();
+		} else if (medium.getMediumAudio() != null) {
+			File file = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+													 + "medium/audio/" + itemID + "/" + itemID + "-audio.mp3");
+			rb.header("Content-Type", "audio/mpeg");
+			return rb.status( Response.Status.PARTIAL_CONTENT )
+							 .header( HttpHeaders.CONTENT_LENGTH, file.length() )
+							 .header( "Accept-Ranges", "bytes" )
+							 .build();
 		}
 		else return Response.status(Status.NOT_FOUND).build();
 	}
@@ -313,6 +321,12 @@ public class PublicationServlet {
 					+ "medium/image/" + itemID + "-image-original.png", headers, itemID+".png");
 			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/image/" + itemID + "/" + itemID + "-image-scaled.png", headers, itemID+".png");
+		} else if (medium.getMediumAudio() != null) {
+			if ( EndpointMedium.mediumFileStatus(itemID, "audio").compareTo("ready") != 0 )
+				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/audio/" + itemID + "-audio.mp3", headers, itemID+".mp3");
+			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+				+ "medium/audio/" + itemID + "/" + itemID + "-audio.mp3", headers, itemID+".mp3");
 		} else return Response.status(Status.NOT_FOUND).build();
 	}
 	
