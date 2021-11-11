@@ -1201,6 +1201,10 @@
 							ui = `<div style="display:flex">
 											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
+						} else if (collectionItem.medium.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
 						} else {
 							ui = `<div style="display:flex">
 											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
@@ -1282,6 +1286,7 @@
 						} else {
 							let i = 0;
 							let languageDisplay = '';
+							data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
 							for (; i < data.length; i++) {
 								if (data[i].mediumLanguageType.id == 1) {
 									languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
