@@ -1220,7 +1220,7 @@
 			this.mediaType = type;
 
 			// setup model
-			// this.curFrameRate = 25; // TODO
+			this.curFrameRate = 25; // required for step forward and step backward functionality
 			this.model.video = audio;
 			this.duration = audio.mediumAudio.length;
 			// remove all annotations and markers
@@ -2395,6 +2395,7 @@
 		},
 		
 		jumpTo: function(timeInSeconds) {
+    	// console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> timeInSeconds", timeInSeconds);
 			if ( !this.video || this.mediaType != 'video' && this.mediaType != 'audio' ) return;
 			this.video.currentTime = timeInSeconds;
 			// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
