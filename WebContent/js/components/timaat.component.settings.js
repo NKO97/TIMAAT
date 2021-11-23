@@ -39,17 +39,22 @@
 			});
 
       $('#length-fix-button').on('click', function(event) {
-        console.log("length fix button clicked");
         if (TIMAAT.Service.session.displayName == "admin") {
+          console.log("length fix button clicked");
           TIMAAT.Settings.fixLength();
         }
       });
 
       $('#no-permission-set-fix-button').on('click', function(event) {
-        console.log("add missing permissions");
         if (TIMAAT.Service.session.displayName == "admin") {
-          console.log("admin may use the button");
+          console.log("add missing permissions");
           TIMAAT.Settings.fixPermissions();
+        }
+      });
+      $('#no-annotation-uuid-set-fix-button').on('click', function(event) {
+        if (TIMAAT.Service.session.displayName == "admin") {
+          console.log("add missing annotation uuids");
+          TIMAAT.Settings.fixAnnotationUUIDs();
         }
       });
     },    
@@ -85,6 +90,27 @@
       return new Promise(resolve => {
         $.ajax({
           url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/permissionFix"+'?authToken='+TIMAAT.Service.session.token,
+          type:"PATCH",
+          contentType:"application/json; charset=utf-8",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+          },
+        }).done(function(data) {
+          resolve(data);
+        }).fail(function(error) {
+          console.error("ERROR: ", error);
+          console.error("ERROR responseText: ", error.responseText);
+        });
+      }).catch((error) => {
+        console.error("ERROR: ", error);
+      });
+    },
+
+    fixAnnotationUUIDs: async function() {
+      console.log("fix annotation uuids");
+      return new Promise(resolve => {
+        $.ajax({
+          url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/uuidFix"+'?authToken='+TIMAAT.Service.session.token,
           type:"PATCH",
           contentType:"application/json; charset=utf-8",
           beforeSend: function (xhr) {

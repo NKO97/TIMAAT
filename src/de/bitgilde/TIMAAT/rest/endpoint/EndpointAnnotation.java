@@ -971,6 +971,41 @@ public class EndpointAnnotation {
 		return Response.ok().build();
 	}
 
+	@PATCH
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("uuidFix")
+	@Secured
+	public Response updateAllAnnotationUuids(@QueryParam("authToken") String authToken) {
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		if (userId != 1) { // only Admin may update file lengths
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String sql = "SELECT a FROM Annotation a WHERE a.uuid IS NULL";
+		Query query = entityManager.createQuery(sql);		
+		List<Annotation> annotations = castList(Annotation.class, query.getResultList());
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		for (Annotation annotation : annotations) {
+			annotation.setUuid(UUID.randomUUID().toString());
+			entityTransaction.begin();
+			entityManager.merge(annotation);
+			entityManager.persist(annotation);
+			entityTransaction.commit();
+			entityManager.refresh(annotation);
+		}
+		System.out.println("Completed updating all annotation uuids.");
+		return Response.ok().build();
+}
+
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
     for(Object o: c)

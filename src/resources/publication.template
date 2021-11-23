@@ -2241,14 +2241,21 @@ class TIMAATPublication {
 		}
 	}
 
-	selectAnnotation(annotation, changehash=true) {
+	selectAnnotation(annotation, changeHash=true) {
 		if ( this.curAnnotation == annotation && annotation != null ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		this.curAnnotation = annotation;
-		if ( this.curAnnotation ) this.ui.segmentMetadata.addClass('d-none');
-		if ( this.curAnnotation ) this.curAnnotation.setSelected(true);
-		if ( this.curAnnotation ) this.ui.annoMetadata.removeClass('d-none'); else this.ui.annoMetadata.addClass('d-none');
-		if ( changehash ) if (annotation) location.hash = '#'+annotation.model.uuid; else location.hash = '#' // UUIDs not yet available in timaat db
+		if ( this.curAnnotation ) {
+			this.ui.segmentMetadata.addClass('d-none');
+			this.curAnnotation.setSelected(true);
+			this.ui.annoMetadata.removeClass('d-none');
+		} else {
+			this.ui.annoMetadata.addClass('d-none');
+		}
+		if ( changeHash ) {
+			if (annotation) location.hash = '#'+annotation.model.uuid; 
+			else location.hash = '#' // UUIDs not yet available in timaat db
+		}
 		this.setAnnotationMetadata();
 	}
 	
