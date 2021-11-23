@@ -117,7 +117,7 @@
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime / 1000, ev.data.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 				else TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
@@ -133,7 +133,7 @@
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
-				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime / 1000, ev.data.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(ev.data.startTime, ev.data.endTime);
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();

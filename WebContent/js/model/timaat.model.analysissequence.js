@@ -83,7 +83,7 @@
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
-			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime / 1000, sequence.model.endTime / 1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime, sequence.model.endTime);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
@@ -96,7 +96,7 @@
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime / 1000, sequence.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime, sequence.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -109,7 +109,7 @@
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curSequence = sequence;
-			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime / 1000, sequence.model.endTime / 1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime, sequence.model.endTime);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(sequence, 'sequence');
@@ -123,7 +123,7 @@
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'sequence';
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime / 1000, sequence.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(sequence.model.startTime, sequence.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {

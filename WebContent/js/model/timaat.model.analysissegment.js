@@ -95,7 +95,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime / 1000, segment.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -113,7 +113,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime / 1000, segment.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -131,7 +131,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime / 1000, segment.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -150,7 +150,7 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime / 1000, segment.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {

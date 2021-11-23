@@ -85,7 +85,7 @@
 			// attach event handlers
 			// this.listView.on('click', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curAction = action;
-			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime / 1000, action.model.endTime / 1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
@@ -99,7 +99,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'action';
-				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime / 1000, action.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -112,7 +112,7 @@
 			});
 			// this.listView.on('dblclick', this, function(ev) {
 			// 	TIMAAT.VideoPlayer.curAction = action;
-			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime/!000, action.model.endTime / 1000);
+			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
 			// 	TIMAAT.VideoPlayer.pause();
 			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
 			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
@@ -127,7 +127,7 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'action';
-				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime / 1000, action.model.endTime / 1000);
+				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {

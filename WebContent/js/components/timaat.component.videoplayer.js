@@ -2401,11 +2401,11 @@
 			// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
 		},
 		
-		jumpVisible: function(startInSeconds, endInSeconds) {
+		jumpVisible: function(startInMilliseconds, endInMilliseconds) {
 			// console.log("TCL: jumpVisible: function(startInSeconds, endInSeconds)", startInSeconds, endInSeconds);
 			if ( !this.video || this.mediaType != 'video' && this.mediaType != 'audio') return;
-			var curTime = this.video.currentTime;
-			if ( curTime < startInSeconds || curTime >= endInSeconds ) this.video.currentTime = startInSeconds;
+			let curTime = this.video.currentTime * 1000;
+			if ( curTime < startInMilliseconds || curTime >= endInMilliseconds ) this.video.currentTime = startInMilliseconds / 1000;
 			// this.updateListUI(); // obsolete as on timeupdate is called afterward
 		},
 
