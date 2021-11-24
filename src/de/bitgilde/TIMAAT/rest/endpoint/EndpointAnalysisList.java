@@ -38,6 +38,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisActionTranslation;
@@ -199,14 +200,6 @@ public class EndpointAnalysisList {
 	{
 		System.out.println("EndpointAnalysisList: getSegmentCategorySelectList - Id: "+ id);
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
 		MediumAnalysisList mediumAnalysisList = segment.getMediumAnalysisList();
@@ -277,14 +270,6 @@ public class EndpointAnalysisList {
 	{
 		System.out.println("EndpointAnalysisList: getSequenceCategorySelectList - Id: "+ id);
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
 		MediumAnalysisList mediumAnalysisList = sequence.getAnalysisSegment().getMediumAnalysisList();
@@ -354,14 +339,6 @@ public class EndpointAnalysisList {
 																							 @QueryParam("search") String search)
 	{
 		System.out.println("EndpointAnalysisList: getSceneCategorySelectList - Id: "+ id);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
@@ -507,14 +484,6 @@ public class EndpointAnalysisList {
 	{
 		System.out.println("EndpointAnalysisList: getActionCategorySelectList - Id: "+ id);
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
 		MediumAnalysisList mediumAnalysisList = action.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList();
@@ -584,14 +553,6 @@ public class EndpointAnalysisList {
 																							 @QueryParam("search") String search)
 	{
 		System.out.println("EndpointAnalysisList: getTakeCategorySelectList - Id: "+ id);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake take = entityManager.find(AnalysisTake.class, id);

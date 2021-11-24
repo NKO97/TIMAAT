@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -213,14 +214,6 @@ public class EndpointActor {
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
 		}
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		
 		// define default query strings
 		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
@@ -262,14 +255,6 @@ public class EndpointActor {
 																 @QueryParam("search") String search)
 	{
 		// System.out.println("EndpointActor: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
@@ -400,14 +385,6 @@ public class EndpointActor {
 		String column = "a.id";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
-		}
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
 		}
 		
 		// define default query strings
@@ -540,14 +517,6 @@ public class EndpointActor {
 				if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
 			}
 	
-			class SelectElement{ 
-				public int id; 
-				public String text;
-				public SelectElement(int id, String text) {
-					this.id = id; this.text = text;
-				};
-			}
-			
 			// define default query strings
 			String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
 			String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
@@ -719,13 +688,7 @@ public class EndpointActor {
 		// System.out.println("EndpointActor: getSexSelectList");
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
+		
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {

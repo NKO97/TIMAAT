@@ -34,6 +34,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
@@ -431,14 +432,6 @@ public class EndpointAnnotation {
 																				@QueryParam("search") String search)
 	{
 		System.out.println("EndpointAnnotation: getCategorySelectList - Id: "+ id);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);

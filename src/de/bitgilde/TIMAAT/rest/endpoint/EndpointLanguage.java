@@ -29,6 +29,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -117,13 +118,6 @@ public class EndpointLanguage {
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {

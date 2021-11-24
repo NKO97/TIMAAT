@@ -30,6 +30,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
@@ -204,14 +205,6 @@ public class EndpointEvent {
 		// 	if (orderby.equalsIgnoreCase("name")) column = "et.name"; // TODO change access in DB-Schema 
 		// }
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
 		String eventSearchQuery = "SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(et.name) LIKE lower(concat('%', :name,'%')) ORDER BY et.name ASC";
 		String eventQuery = "SELECT et FROM EventTranslation et WHERE et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY et.name ASC";
 		
@@ -247,14 +240,6 @@ public class EndpointEvent {
 	{
 		// System.out.println("EndpointEvent: getEventList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		List<SelectElement> eventSelectList = new ArrayList<>();

@@ -29,6 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jvnet.hk2.annotations.Service;
 
+import de.bitgilde.TIMAAT.SelectElement;
+import de.bitgilde.TIMAAT.SelectElementWithChildren;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.ActingTechniqueTranslation;
@@ -191,14 +193,6 @@ public class EndpointAnalysis {
 		// if ( orderby != null ) {
 		// 	if (orderby.equalsIgnoreCase("name")) column = "amtt.name";
 		// }
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		
 		// determine which analysis method entries shall be displayed
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -426,31 +420,6 @@ public class EndpointAnalysis {
 		// }
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
-		// class SelectElementWithChildren{ 
-		// 	public int id; 
-		// 	public String text;
-		// 	public List<SelectElement> children;
-		// 	public SelectElementWithChildren(int id, String text, List<SelectElement> children) {
-		// 		this.id = id; this.text = text; this.children = children;
-		// 	};
-		// }
-
-		class SelectElementWithChildren{ 
-			public String text;
-			public List<SelectElement> children;
-			public SelectElementWithChildren(String text, List<SelectElement> children) {
-				this.text = text; this.children = children;
-			};
-		}
 
 		// determine which analysis method entries shall be displayed
 		// EntityManager entityManager = TIMAATApp.emf.createEntityManager();

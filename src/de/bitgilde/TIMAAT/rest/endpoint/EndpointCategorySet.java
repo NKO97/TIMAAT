@@ -32,6 +32,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
@@ -144,14 +145,7 @@ public class EndpointCategorySet {
 																					 @QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all categorysets
 		// System.out.println("EndpointCategorySet: getCategorySetSelectList - search string: "+ search);
-		
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
+
 		// System.out.println("EndpointCategorySet: getCategorySetSelectListForId - create query");
 		// search
 		Query query;

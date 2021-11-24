@@ -57,6 +57,8 @@ import org.json.JSONObject;
 import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.SelectElement;
+import de.bitgilde.TIMAAT.SelectElementWithToken;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.fileInformation.*;
@@ -221,14 +223,6 @@ public class EndpointMedium {
 																			@QueryParam("orderby") String orderby,
 																			@QueryParam("search") String search)	{
 		// System.out.println("EndpointMedium: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
@@ -276,17 +270,6 @@ public class EndpointMedium {
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
 		}
-
-		class SelectElement{
-			public int id; 
-			public String text;
-			public String token;
-			public SelectElement(int id, String text, String token) {
-				this.id = id;
-				this.text = text;
-				this.token = token;
-			};
-		}
 		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
@@ -309,14 +292,14 @@ public class EndpointMedium {
 		// if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
-		List<SelectElement> mediumSelectList = new ArrayList<>();
+		List<SelectElementWithToken> mediumSelectList = new ArrayList<>();
 		for (Medium medium : mediumList) {
 			if (medium.getMediumImage() != null) {
 				// System.out.println("id + viewToken: " + medium.getId() + " - " + medium.getViewToken());
 				// if (medium.getViewToken() == null) {
 				// 	medium.setViewToken(issueFileToken(medium.getId()));
 				// }
-				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName(), medium.getViewToken()));
+				mediumSelectList.add(new SelectElementWithToken(medium.getId(), medium.getDisplayTitle().getName(), medium.getViewToken()));
 			}
 		}
 
@@ -340,14 +323,6 @@ public class EndpointMedium {
 			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
 		}
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
 		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
@@ -950,14 +925,6 @@ public class EndpointMedium {
 		Actor actor = entityManager.find(Actor.class, actorId);
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
-
 		List<Role> roleList = actor.getRoles();
 		List<SelectElement> roleSelectList = new ArrayList<>();
 		for (Role role: roleList) {
@@ -1055,14 +1022,6 @@ public class EndpointMedium {
 																				@QueryParam("search") String search)
 	{
 		// System.out.println("EndpointMedium: getCategorySelectList - Id: "+ id);
-
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);

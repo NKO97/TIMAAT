@@ -22,6 +22,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
+import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DatatableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
@@ -98,13 +99,6 @@ public class EndpointTag {
 		// System.out.println("EndpointTag: getTagSelectList");
 		// System.out.println("EndpointTag: getTagSelectList - search string: "+ search);
 
-		class SelectElement{ 
-			public int id; 
-			public String text;
-			public SelectElement(int id, String text) {
-				this.id = id; this.text = text;
-			};
-		}
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
