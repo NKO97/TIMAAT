@@ -266,10 +266,10 @@ public class EndpointMedium {
 	{
 		// System.out.println("EndpointMedium: getImageSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		String column = "m.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
-		}
+		// String column = "m.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		// }
 		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
@@ -318,10 +318,10 @@ public class EndpointMedium {
 	{
 		// System.out.println("EndpointMedium: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		String column = "m.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
-		}
+		// String column = "m.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		// }
 
 		// TODO search all titles, not displayTitle only
 		// define default query strings

@@ -272,10 +272,10 @@ public class EndpointAnnotation {
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "a.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
-		}
+		// String column = "a.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		// }
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
@@ -323,10 +323,10 @@ public class EndpointAnnotation {
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "a.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.analysisMethod.analysisMethodType.analysisMethodTypeTranslation.name";
-		}
+		// String column = "a.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "a.analysisMethod.analysisMethodType.analysisMethodTypeTranslation.name";
+		// }
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
@@ -373,10 +373,10 @@ public class EndpointAnnotation {
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "e.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "et.name";
-		}
+		// String column = "e.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "et.name";
+		// }
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);

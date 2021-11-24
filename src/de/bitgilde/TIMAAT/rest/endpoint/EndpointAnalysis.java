@@ -189,7 +189,7 @@ public class EndpointAnalysis {
 		//* use if only one select list has to be returned for a method type
 		// System.out.println("EndpointAnalysis: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		String column = "a.id";
+		// String column = "a.id";
 		// if ( orderby != null ) {
 		// 	if (orderby.equalsIgnoreCase("name")) column = "amtt.name";
 		// }

@@ -137,9 +137,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
   }
 
   public static Boolean isTokenValid(String token) {
-      Jws<Claims> jws;
       try {
-        jws = Jwts.parserBuilder().setSigningKey(TIMAATKeyGenerator.generateKey()).build().parseClaimsJws(token);
+        Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(TIMAATKeyGenerator.generateKey()).build().parseClaimsJws(token);
       } catch (JwtException e) {
           e.printStackTrace();
           return false;

@@ -210,10 +210,10 @@ public class EndpointActor {
 	{
 		// System.out.println("EndpointActor: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		String column = "a.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
-		}
+		// String column = "a.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		// }
 		
 		// define default query strings
 		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
@@ -382,10 +382,10 @@ public class EndpointActor {
 																			@QueryParam("length") Integer length,
 																			@QueryParam("orderby") String orderby,
 																			@QueryParam("search") String search)	{
-		String column = "a.id";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
-		}
+		// String column = "a.id";
+		// if ( orderby != null ) {
+		// 	if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+		// }
 		
 		// define default query strings
 		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
@@ -512,10 +512,10 @@ public class EndpointActor {
 																					@QueryParam("length") Integer length,
 																					@QueryParam("orderby") String orderby,
 																					@QueryParam("search") String search) {
-			String column = "a.id";
-			if ( orderby != null ) {
-				if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
-			}
+			// String column = "a.id";
+			// if ( orderby != null ) {
+			// 	if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema 
+			// }
 	
 			// define default query strings
 			String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
@@ -688,7 +688,7 @@ public class EndpointActor {
 		// System.out.println("EndpointActor: getSexSelectList");
 
 		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
-		
+
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
