@@ -38,6 +38,7 @@ import org.jvnet.hk2.annotations.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.bitgilde.TIMAAT.DisplayElementNameAndPermission;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction;
@@ -105,25 +106,12 @@ public class EndpointAnalysisList {
     EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		List<UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisListList = mediumAnalysisList.getUserAccountHasMediumAnalysisLists();
-		class DisplayNameElement {
-			public int userAccountId;
-			public String displayName;
-			public int permissionId;
-			public DisplayNameElement(int userAccountId, String displayName, int permissionId) {
-				this.userAccountId = userAccountId;
-				this.displayName = displayName;
-				this.permissionId = permissionId;
-			};
-			public String getDisplayName() {
-				return this.displayName;
-			}
-		}
-		List<DisplayNameElement> displayNameElementList = new ArrayList<>();
+		List<DisplayElementNameAndPermission> displayElementNameAndPermission = new ArrayList<>();
 		for (UserAccountHasMediumAnalysisList userAccountHasMediumAnalysisList : userAccountHasMediumAnalysisListList) {
-			displayNameElementList.add(new DisplayNameElement(userAccountHasMediumAnalysisList.getUserAccount().getId(), userAccountHasMediumAnalysisList.getUserAccount().getDisplayName(), userAccountHasMediumAnalysisList.getPermissionType().getId()));
+			displayElementNameAndPermission.add(new DisplayElementNameAndPermission(userAccountHasMediumAnalysisList.getUserAccount().getId(), userAccountHasMediumAnalysisList.getUserAccount().getDisplayName(), userAccountHasMediumAnalysisList.getPermissionType().getId()));
 		}
-		Collections.sort(displayNameElementList, (Comparator<DisplayNameElement>) (DisplayNameElement d1, DisplayNameElement d2) -> d1.getDisplayName().toLowerCase().compareTo(d2.getDisplayName().toLowerCase()) );
-		return Response.ok().entity(displayNameElementList).build();
+		Collections.sort(displayElementNameAndPermission, (Comparator<DisplayElementNameAndPermission>) (DisplayElementNameAndPermission d1, DisplayElementNameAndPermission d2) -> d1.getDisplayName().toLowerCase().compareTo(d2.getDisplayName().toLowerCase()) );
+		return Response.ok().entity(displayElementNameAndPermission).build();
 	}
 
 	@GET
