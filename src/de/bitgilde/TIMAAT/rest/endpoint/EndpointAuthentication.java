@@ -174,7 +174,7 @@ public class EndpointAuthentication {
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 		try {
-			UserAccount user = authenticate(username, password);
+			authenticate(username, password);
 		} catch(Exception e) {
 			// password does not match password stored in DB
 			return Response.ok().entity(isValid).build();
@@ -341,15 +341,15 @@ public class EndpointAuthentication {
 		return String.format("%x", new BigInteger(1, arg));
 	}
 	
-	private static byte[] hexStringToByteArray(String s) {
-		int len = s.length();
-		byte[] data = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-				data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-															+ Character.digit(s.charAt(i+1), 16));
-		}
-		return data;
-	}
+	// private static byte[] hexStringToByteArray(String s) {
+	// 	int len = s.length();
+	// 	byte[] data = new byte[len / 2];
+	// 	for (int i = 0; i < len; i += 2) {
+	// 			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	// 														+ Character.digit(s.charAt(i+1), 16));
+	// 	}
+	// 	return data;
+	// }
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());
