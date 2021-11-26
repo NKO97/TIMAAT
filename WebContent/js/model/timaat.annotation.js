@@ -736,9 +736,19 @@
 		}
 		
 		_parseSVG(svgitem) {
-			// console.log("TCL: Annotation -> _parseSVG -> svgitem", svgitem);
-			let width = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.width : TIMAAT.VideoPlayer.model.video.mediumImage.width;
-			let height = ( TIMAAT.VideoPlayer.mediaType == 'video' ) ? TIMAAT.VideoPlayer.model.video.mediumVideo.height : TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			// console.log("TCL: Annotation -> _parseSVG -> svgItem", svgItem);
+			let width = 1;
+			let height = 1;
+			if (TIMAAT.VideoPlayer.mediaType == 'video') {
+				width = TIMAAT.VideoPlayer.model.video.mediumVideo.width;
+				height = TIMAAT.VideoPlayer.model.video.mediumVideo.height;
+			} else if (TIMAAT.VideoPlayer.mediaType == 'image') {
+				width = TIMAAT.VideoPlayer.model.video.mediumImage.width;
+				height = TIMAAT.VideoPlayer.model.video.mediumImage.height;
+			} else if (TIMAAT.VideoPlayer.mediaType == 'audio') {
+				width = 800;
+				height = 600;
+			}
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 			let id = svgitem.id;
 			if ( !id ) {
