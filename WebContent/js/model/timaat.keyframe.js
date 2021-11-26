@@ -252,7 +252,7 @@
 		_parseModel(svgItem) {
       // console.log("TCL: Keyframe -> _parseModel -> svgItem", svgItem);
 			let shape = {
-					type: svgItem.type,
+				type: svgItem.type,
 			}
 			let width = 1;
 			let height = 1;

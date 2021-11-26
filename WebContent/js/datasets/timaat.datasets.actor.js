@@ -525,15 +525,15 @@
 			});
 
 			$(document).on('click', '.isBirthName', function(event) {
-        if ($(this).data('waschecked') == true)
+        if ($(this).data('wasChecked') == true)
         {
           $(this).prop('checked', false);
-					// $(this).data('waschecked', false);
-					$('input[name="isBirthName"]').data('waschecked', false);
+					// $(this).data('wasChecked', false);
+					$('input[name="isBirthName"]').data('wasChecked', false);
         }
         else {
-					$('input[name="isBirthName"]').data('waschecked', false);
-					$(this).data('waschecked', true);
+					$('input[name="isBirthName"]').data('wasChecked', false);
+					$(this).data('wasChecked', true);
 				}
 			});
 
@@ -571,7 +571,7 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" data-waschecked="false" placeholder="Is birth Name">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" data-wasChecked="false" placeholder="Is birth Name">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
@@ -1409,12 +1409,12 @@
 					return false;
 				// console.log("TCL: newEmailAddress", newEmailAddress);
 				if (newEmailAddress != '') { // TODO is '' proper check?
-					var emailAddressesinForm = $('#actor-emailaddresses-form').serializeArray();
-					// console.log("TCL: emailAddressesinForm", emailAddressesinForm);
+					var emailAddressesInForm = $('#actor-emailaddresses-form').serializeArray();
+					// console.log("TCL: emailAddressesInForm", emailAddressesInForm);
 					var i;
 					var numberOfEmailAddressElements = 2;
-					if (emailAddressesinForm.length > numberOfEmailAddressElements) {
-						var indexName = emailAddressesinForm[emailAddressesinForm.length-numberOfEmailAddressElements-1].name; // find last used indexed name (first prior to new address fields)
+					if (emailAddressesInForm.length > numberOfEmailAddressElements) {
+						var indexName = emailAddressesInForm[emailAddressesInForm.length-numberOfEmailAddressElements-1].name; // find last used indexed name (first prior to new address fields)
 						var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 						i = Number(indexString)+1;
 					}
@@ -1760,12 +1760,12 @@
 					return false;
 				// console.log("TCL: newPhoneNumber", newPhoneNumber);
 				if (newPhoneNumber != '') { // TODO is '' proper check?
-					var phoneNumbersinForm = $('#actor-phonenumbers-form').serializeArray();
-					// console.log("TCL: phoneNumbersinForm", phoneNumbersinForm);
+					var phoneNumbersInForm = $('#actor-phonenumbers-form').serializeArray();
+					// console.log("TCL: phoneNumbersInForm", phoneNumbersInForm);
 					var i;
 					var numberOfPhoneNumberElements = 2;
-					if (phoneNumbersinForm.length > numberOfPhoneNumberElements) {
-						var indexName = phoneNumbersinForm[phoneNumbersinForm.length-numberOfPhoneNumberElements-1].name; // find last used indexed name (first prior to new phone number fields)
+					if (phoneNumbersInForm.length > numberOfPhoneNumberElements) {
+						var indexName = phoneNumbersInForm[phoneNumbersInForm.length-numberOfPhoneNumberElements-1].name; // find last used indexed name (first prior to new phone number fields)
 						var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 						i = Number(indexString)+1;
 					}
@@ -2199,7 +2199,7 @@
 				}));
 				// console.log("TCL: newMemberOfCollectiveData", newMemberOfCollectiveData);
 				if (newMemberOfCollectiveData[1] == "" && newMemberOfCollectiveData[2] == "") { // [0] is hidden id field
-					// console.log("no data endered");
+					// console.log("no data entered");
 					return false; // don't add if all add fields were empty
 				}
 				var newMembershipDetailsEntry = {
@@ -2501,7 +2501,7 @@
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
 			});
 
-			// cancel add/edit button in membershipofcollective form functionality
+			// cancel add/edit button in memberOfCollective form functionality
 			$('#actor-memberofcollectives-form-dismiss').on('click', function(event) {
 				let actor = $('#actor-memberofcollectives-form').data('actor');
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
@@ -2743,38 +2743,38 @@
 			// console.log("TCL: setActorHasAddressList -> actor", actor);
 			if ( !actor ) return;
 			// setup model
-			var actorHasAddrs = Array();
+			var actorHasAddresses = Array();
 			actor.model.actorHasAddresses.forEach(function(actorHasAddress) { 
 				if ( actorHasAddress.id.actorId > 0 && actorHasAddress.id.addressId > 0 )
 				actorHasAddress.address.streetName = "TEMP NAME";
 				actorHasAddress.address.cityName = "TEMP NAME";
-				actorHasAddrs.push(actorHasAddress); 
+				actorHasAddresses.push(actorHasAddress); 
 			});
-			this.actorHasAddresses = actorHasAddrs;
+			this.actorHasAddresses = actorHasAddresses;
 		},
 
 		setActorHasEmailAddressList: function(actor) {
 			// console.log("TCL: setActorHasEmailAddressList -> actor", actor);
 			if ( !actor ) return;
 			// setup model
-			var actorHasEmailAddrs = Array();
+			var actorHasEmailAddresses = Array();
 			actor.model.actorHasEmailAddresses.forEach(function(actorHasEmailAddress) { 
 				if ( actorHasEmailAddress.id.actorId > 0 && actorHasEmailAddress.id.emailAddressId > 0 )
-				actorHasEmailAddrs.push(actorHasEmailAddress); 
+				actorHasEmailAddresses.push(actorHasEmailAddress); 
 			});
-			this.actorHasEmailAddresses = actorHasEmailAddrs;
+			this.actorHasEmailAddresses = actorHasEmailAddresses;
 		},
 
 		setActorHasPhoneNumberList: function(actor) {
 			// console.log("TCL: setActorHasPhoneNumberList -> actor", actor);
 			if ( !actor ) return;
 			// setup model
-			var actorHasPhoneNmbrs = Array();
+			var actorHasPhoneNumbers = Array();
 			actor.model.actorHasPhoneNumbers.forEach(function(actorHasPhoneNumber) { 
 				if ( actorHasPhoneNumber.id.actorId > 0 && actorHasPhoneNumber.id.emailAddressId > 0 )
-				actorHasPhoneNmbrs.push(actorHasPhoneNumber); 
+				actorHasPhoneNumbers.push(actorHasPhoneNumber); 
 			});
-			this.actorHasPhoneNumbers = actorHasPhoneNmbrs;
+			this.actorHasPhoneNumbers = actorHasPhoneNumbers;
 		},
 
 		setPersonIsMemberOfCollectiveList: function(actor, type) {
@@ -2832,12 +2832,12 @@
 			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
 			// setup model
-			var phoneNmbrTypes = Array();
+			var phoneNumberTypes = Array();
 			phoneNumberTypes.forEach(function(phoneNumberType) { 
 				if ( phoneNumberType.id > 0 )
-					phoneNmbrTypes.push(phoneNumberType); 
+					phoneNumberTypes.push(phoneNumberType); 
 			});
-			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNmbrTypes;
+			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNumberTypes;
 		},
 		
 		addActor: function(type) {	
@@ -2935,7 +2935,7 @@
 				$('#actor-metadata-form :input').prop('disabled', true);
 				this.initFormForShow();
 				$('#actor-datasheet-form-profile-image-selection').hide();
-				$('#actorFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+				$('#actorFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
 				if (type == 'person') {
 					$('#person-sex-type-select-dropdown').select2('destroy').attr('readonly', true);
 				}
@@ -3064,7 +3064,7 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" data-waschecked="true" placeholder="Is birth Name"">
+									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" data-wasChecked="true" placeholder="Is birth Name"">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
@@ -5418,7 +5418,7 @@
 
 		setupActorDataTable: function() {
 			// console.log("TCL: setupActorDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -5534,7 +5534,7 @@
 
 		setupPersonDataTable: function() {			
 			// console.log("TCL: setupPersonDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -5639,7 +5639,7 @@
 
 		setupCollectiveDataTable: function() {			
 			// console.log("TCL: setupCollectiveDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],

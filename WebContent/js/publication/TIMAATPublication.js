@@ -122,8 +122,8 @@ class Marker {
 										</div>`),			  };
 		this.ui.element.attr('id','timaat-marker-'+this.parent.model.id);
 			
-		this.regionstart = $(this.ui.element.find('.timaat-timeline-marker-start'));
-		this.regionend = $(this.ui.element.find('.timaat-timeline-marker-end'));
+		this.regionStart = $(this.ui.element.find('.timaat-timeline-marker-start'));
+		this.regionEnd = $(this.ui.element.find('.timaat-timeline-marker-end'));
 			
 		this._updateElementColor();
 		this._updateElementOffset();
@@ -177,13 +177,13 @@ class Marker {
 		else this.ui.element.removeClass('timaat-timeline-marker-anim');
 		
 		if ( this.parent.isSelected() && !this.parent.isAnimation() ) {
-			this.regionstart.attr('style','position:relative;');
-			this.regionstart.show();
-			this.regionend.attr('style','position:relative;');
-			this.regionend.show();
+			this.regionStart.attr('style','position:relative;');
+			this.regionStart.show();
+			this.regionEnd.attr('style','position:relative;');
+			this.regionEnd.show();
 		} else {
-			this.regionstart.hide();
-			this.regionend.hide();
+			this.regionStart.hide();
+			this.regionEnd.hide();
 		}
 	}
 
@@ -196,18 +196,18 @@ class Marker {
 	}
 		
 	_updateElementOffset() {
-		var magicoffset = 0; // TODO replace input slider
+		var magicOffset = 0; // TODO replace input slider
 
 		var width = $('.video-seek-bar').width();
 		var length = (this._to - this._from) / TIMAATPub.duration * width;
 		length = Math.max(0,length);
 		var offset = this._from / TIMAATPub.duration * width;
 		this.ui.element.css('width', length+'px');
-		this.ui.element.css('margin-left', (offset+magicoffset)+'px');
+		this.ui.element.css('margin-left', (offset+magicOffset)+'px');
 
-		var startoffset = 20;
-		if ( TIMAATPub.activeLayer == 'audio' ) startoffset += 37; // compensate for audio waveform
-		this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startoffset+(this.ui.offset*12))+'px' );
+		var startOffset = 20;
+		if ( TIMAATPub.activeLayer == 'audio' ) startOffset += 37; // compensate for audio waveform
+		this.ui.element.find('.timaat-timeline-markerbar').css('margin-top', (startOffset+(this.ui.offset*12))+'px' );
 	}
 	
 	_updateElementStyle() {
@@ -243,8 +243,8 @@ class Keyframe {
 		
 		this.shapes = [];
 		this.shapeMap = new Map();
-		for (let svgitem of this.model.shapes) {
-			let shape = this._parseModel(svgitem);
+		for (let svgItem of this.model.shapes) {
+			let shape = this._parseModel(svgItem);
 			this.addShape(shape);
 		}
 		// init keyframe UI
@@ -342,12 +342,12 @@ class Keyframe {
 		return this.shapeMap.get(id);
 	}
 	
-	_parseModel(svgitem) {
+	_parseModel(svgItem) {
 		let shape = {
-				type: svgitem.type,
+				type: svgItem.type,
 		}
-		let width = 0;
-		let height = 0;
+		let width = 1;
+		let height = 1;
 		if (TIMAATData.mediumVideo) {
 			width = TIMAATPub.medium.mediumVideo.width;
 			height = TIMAATPub.medium.mediumVideo.height;
@@ -359,23 +359,23 @@ class Keyframe {
 			height = 600;
 		}
 		let factor = TIMAATPub.mediumBounds.getNorth() / height;
-		let id = svgitem.id;
+		let id = svgItem.id;
 		if ( !id ) {
 			// id = TIMAAT.Util.createUUIDv4();
 			id = '-----';
-			console.warn("WARNING: Keyframe -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+			console.warn("WARNING: Keyframe -> _parseSVG -> svgItem: Required attribute ID missing from model", svgItem);
 		}
 		shape.id = id;
-		switch (svgitem.type) {
+		switch (svgItem.type) {
 			case "rectangle":
-				// shape.bounds = [ [Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*width)], [Math.round(height-((svgitem.y)*height)), Math.round((svgitem.x+svgitem.width)*width)] ];
-				shape.bounds = [ [Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*(svgitem.y+svgitem.height)*height)), Math.round(svgitem.x*factor*width)], [Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)] ];
-				// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)), L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)) );
+				// shape.bounds = [ [Math.round(height-((svgItem.y+svgItem.height)*height)), Math.round(svgItem.x*width)], [Math.round(height-((svgItem.y)*height)), Math.round((svgItem.x+svgItem.width)*width)] ];
+				shape.bounds = [ [Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*(svgItem.y+svgItem.height)*height)), Math.round(svgItem.x*factor*width)], [Math.round(TIMAATPub.mediumBounds.getNorth()-((svgItem.y)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)] ];
+				// shape.bounds = L.latLngBounds( L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgItem.y*height)), Math.round(svgItem.x*factor*width)), L.latLng(Math.round(TIMAATPub.mediumBounds.getNorth()-((svgItem.y+svgItem.height)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)) );
 				return shape;
 			case "polygon":
 			case "line":
 				let points = new Array();
-				for (let point of svgitem.points) {
+				for (let point of svgItem.points) {
 					// let lat = height-(point[1]*height);
 					let lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
 					let lng = point[0]*width;
@@ -384,13 +384,13 @@ class Keyframe {
 				shape.points = points;
 				return shape;
 			case "circle":
-				// let lat = height-(svgitem.y*height);
-				let lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
-				// let lng = svgitem.x*width;
-				let lng = svgitem.x*factor*width;
+				// let lat = height-(svgItem.y*height);
+				let lat = TIMAATPub.mediumBounds.getNorth()-(svgItem.y*factor*height);
+				// let lng = svgItem.x*width;
+				let lng = svgItem.x*factor*width;
 				shape.point = [lat, lng];
-				// shape.radius = svgitem.radius;
-				shape.radius = svgitem.radius * factor;
+				// shape.radius = svgItem.radius;
+				shape.radius = svgItem.radius * factor;
 				return shape;
 		}
 	}
@@ -518,8 +518,8 @@ class Annotation {
 		//! TODO differs from timaat.annotation.js
 		// convert SVG data
 		this.polygonCount = this.svg.model.keyframes[0].shapes.length;
-		for (let svgitem of this.svg.model.keyframes[0].shapes) {
-			let item = this._parseSVG(svgitem);
+		for (let svgItem of this.svg.model.keyframes[0].shapes) {
+			let item = this._parseSVG(svgItem);
 			this.addSVGItem(item);
 		};
 		if ( !this.hasPolygons() ) this.addSVGItem(this._parseSVG({ id: "00000000-0000-4000-0000-000000000000", type: "rectangle", x: 0.0, y: 0.0, width: 1.0, height: 1.0, fill: 0 }));
@@ -792,34 +792,34 @@ class Annotation {
 		return this.selected;
 	}
 	
-	syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
-		if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
-		let id = svgitem.options.id;
+	syncShape(svgItem, shape = null, force = this.isOnKeyframe()) {
+		if ( !svgItem || !svgItem.options || !svgItem.options.id || !force) return;
+		let id = svgItem.options.id;
 		if ( !shape ) shape = this.currentKeyframe.getShape(id);
 		if ( !shape ) return;
 		switch (shape.type) {
 			case 'rectangle':
-				shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
+				shape.bounds = [ [svgItem.getBounds().getSouthWest().lat, svgItem.getBounds().getSouthWest().lng], [svgItem.getBounds().getNorthEast().lat, svgItem.getBounds().getNorthEast().lng] ];
 				break;
 
 			case "polygon":
-				shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
+				shape.points = this._copyLatLngs(svgItem.getLatLngs()[0]);
 				break;
 			case "line":
-				shape.points = this._copyLatLngs(svgitem.getLatLngs());
+				shape.points = this._copyLatLngs(svgItem.getLatLngs());
 				break;
 
 			case "circle":
-				shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
-				shape.radius = svgitem.getRadius();
+				shape.point = [svgItem.getLatLng().lat, svgItem.getLatLng().lng];
+				shape.radius = svgItem.getRadius();
 				break;
 		}
 		return shape;
 	}
 	
-	_copyLatLngs(latlngs) {
+	_copyLatLngs(latLngs) {
 		let points = new Array();
-		for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
+		for (let latLng of latLngs) points.push([latLng.lat, latLng.lng]);
 		return points;
 	}
 	
@@ -848,10 +848,10 @@ class Annotation {
 				item.setBounds(shape.bounds);
 				return;
 			case "polygon":
-				item.setLatLngs([shape.points]);
+				item.setLatLng([shape.points]);
 				return;
 			case "line":
-				item.setLatLngs(shape.points);
+				item.setLatLng(shape.points);
 				return;
 			case "circle":
 				item.setLatLng(shape.point);
@@ -871,7 +871,7 @@ class Annotation {
 			$('.timaat-annotation-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
 	}
 	
-	_parseSVG(svgitem) {
+	_parseSVG(svgItem) {
 		let width = 0;
 		let height = 0;
 		if (TIMAATData.mediumVideo) {
@@ -885,20 +885,20 @@ class Annotation {
 			height = 600;
 		}
 		let factor = TIMAATPub.mediumBounds.getNorth() / height;
-		let id = svgitem.id;
+		let id = svgItem.id;
 		if ( !id ) {
 			id = '-----';
-			console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+			console.warn("WARNING: Annotation -> _parseSVG -> svgItem: Required attribute ID missing from model", svgItem);
 		}
-		switch (svgitem.type) {
+		switch (svgItem.type) {
 			case "rectangle":
 				// [[ height, x], [ y, width]]
-				// var bounds = [[ Math.round(height-(svgitem.y*height)), Math.round(svgitem.x*width)], [ Math.round(height-((svgitem.y+svgitem.height)*height)), Math.round((svgitem.x+svgitem.width)*width)]];
+				// var bounds = [[ Math.round(height-(svgItem.y*height)), Math.round(svgItem.x*width)], [ Math.round(height-((svgItem.y+svgItem.height)*height)), Math.round((svgItem.x+svgItem.width)*width)]];
 				// let options = {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}
-				var bounds = [[ Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAATPub.mediumBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+				var bounds = [[ Math.round(TIMAATPub.mediumBounds.getNorth()-(factor*svgItem.y*height)), Math.round(svgItem.x*factor*width)], [ Math.round(TIMAATPub.mediumBounds.getNorth()-((svgItem.y+svgItem.height)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)]];
 				return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 				// TODO still required?
-				// if ( svgitem.fill == 0 ) {
+				// if ( svgItem.fill == 0 ) {
 				// 	options.fill = false;
 				// 	options.weight = 5
 				// 	options.opacity = 0.7;
@@ -906,7 +906,7 @@ class Annotation {
 				// return L.rectangle(bounds, options);
 			case "polygon":
 				var points = new Array();
-				$(svgitem.points).each(function(index,point) {
+				$(svgItem.points).each(function(index,point) {
 					// var lat = height-(point[1]*height);
 					var lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
 					// var lng = point[0]*width;
@@ -916,7 +916,7 @@ class Annotation {
 				return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 			case "line":
 				var points = new Array();
-				$(svgitem.points).each(function(index,point) {
+				$(svgItem.points).each(function(index,point) {
 					// var lat = height-(point[1]*height);
 					var lat = TIMAATPub.mediumBounds.getNorth()-(point[1]*factor*height);
 					// var lng = point[0]*width;
@@ -925,12 +925,12 @@ class Annotation {
 				});
 				return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, opacity: this.svg.opacity});
 			case "circle":
-				// var lat = height-(svgitem.y*height);
-				var lat = TIMAATPub.mediumBounds.getNorth()-(svgitem.y*factor*height);
-				// var lng = svgitem.x*width;
-				var lng = svgitem.x*factor*width;
-				// var radius = svgitem.radius;
-				var radius = svgitem.radius * factor;
+				// var lat = height-(svgItem.y*height);
+				var lat = TIMAATPub.mediumBounds.getNorth()-(svgItem.y*factor*height);
+				// var lng = svgItem.x*width;
+				var lng = svgItem.x*factor*width;
+				// var radius = svgItem.radius;
+				var radius = svgItem.radius * factor;
 				return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth, fillOpacity: this.svg.opacity});
 		}
 	}		
@@ -1321,7 +1321,7 @@ class TIMAATPublication {
 		
 	}
 	
-	setupAnalysisList(analysisList, changehash=true) {
+	setupAnalysisList(analysisList, changeHash=true) {
 		if ( !this.medium ) return;
 		if ( this.curAnnotation ) this.curAnnotation.setSelected(false);
 		
@@ -1358,7 +1358,7 @@ class TIMAATPublication {
 		if ( this.analysisList != null && this.analysisList.analysisSegmentsUI != null) this.analysisList.analysisSegmentsUI.forEach(function(segment) {
 			segment.addUI();
 		});
-		this.selectAnnotation(null, changehash);
+		this.selectAnnotation(null, changeHash);
 		this.updateListUI();
 		this.sortListUI();
 		
@@ -1634,7 +1634,7 @@ class TIMAATPublication {
 			TIMAATPub.setVolume(seekVal);
 		});
 
-		$('.stepbckbutton').on('click dblclick', ev => {
+		$('.stepBackButton').on('click dblclick', ev => {
 			ev.preventDefault();
 			ev.stopPropagation();
 			TIMAATPub.pause();
@@ -1644,7 +1644,7 @@ class TIMAATPublication {
 			);
 		});
 
-		$('.stepfwdbutton').on('click dblclick', ev => {
+		$('.stepForwardButton').on('click dblclick', ev => {
 			ev.preventDefault();
 			ev.stopPropagation();
 			TIMAATPub.pause();
@@ -1719,11 +1719,11 @@ class TIMAATPublication {
 				break;
 			case "ArrowLeft":
 				ev.preventDefault();
-				$('.stepbckbutton').click();
+				$('.stepBackButton').click();
 				break;
 			case "ArrowRight":
 				ev.preventDefault();
-				$('.stepfwdbutton').click();
+				$('.stepForwardButton').click();
 				break;
 			case "m":
 				ev.preventDefault();

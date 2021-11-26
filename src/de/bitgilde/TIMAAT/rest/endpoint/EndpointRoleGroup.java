@@ -66,7 +66,7 @@ public class EndpointRoleGroup {
 		// System.out.println("EndpointRole: getRoleGroupList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		String languageQuery = "SELECT rgt.name FROM RoleGroupTranslation rgt WHERE rgt.roleGroup.id = rg.id AND rgt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
 
 		// sanitize user input
@@ -144,7 +144,7 @@ public class EndpointRoleGroup {
 																				 @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all role groups
 		System.out.println("EndpointRole: getRoleGroupSelectList - search string: "+ search);
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		
 		// System.out.println("EndpointRole: getRoleGroupSelectListForId - create query");
 		// search
@@ -332,10 +332,10 @@ public class EndpointRoleGroup {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{rolegroupId}/translation/{id}")
+	@Path("{roleGroupId}/translation/{id}")
 	@Secured
 	public Response createRoleGroupTranslation(@PathParam("id") int id,
-																						 @PathParam("rolegroupId") int roleGroupId,
+																						 @PathParam("roleGroupId") int roleGroupId,
 																						 String jsonData) {
 
 		System.out.println("EndpointRole: createRoleGroupTranslation: jsonData: "+jsonData);

@@ -825,15 +825,15 @@
 			});
 
 			$(document).on('click', '.isOriginalTitle', function(event) {
-        if ($(this).data('waschecked') == true)
+        if ($(this).data('wasChecked') == true)
         {
           $(this).prop('checked', false);
-					// $(this).data('waschecked', false);
-					$('input[name="isOriginalTitle"]').data('waschecked', false);
+					// $(this).data('wasChecked', false);
+					$('input[name="isOriginalTitle"]').data('wasChecked', false);
         }
         else {
-					$('input[name="isOriginalTitle"]').data('waschecked', false);
-					$(this).data('waschecked', true);
+					$('input[name="isOriginalTitle"]').data('wasChecked', false);
+					$(this).data('wasChecked', true);
 				}
 			});
 
@@ -874,7 +874,7 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" data-waschecked="false" placeholder="Is Original Title">
+									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" data-wasChecked="false" placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
@@ -2122,7 +2122,7 @@
 												 type="radio"
 												 name="isOriginalTitle"
 												 data-role="originalTitle[`+medium.model.titles[i].id+`]"
-												 data-waschecked="true"
+												 data-wasChecked="true"
 												 placeholder="Is Original Title">
 								</div>
 							</div>
@@ -3638,7 +3638,7 @@
 
 		setupMediaDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -3662,7 +3662,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: ''
+							// mediumSubtype: ''
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -3784,7 +3784,7 @@
 
 		setupAudioDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableAudio = $('#timaat-mediadatasets-audio-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -3808,7 +3808,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'audio'
+							// mediumSubtype: 'audio'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -3905,7 +3905,7 @@
 
 		setupDocumentDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableDocument = $('#timaat-mediadatasets-document-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -3929,7 +3929,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'document'
+							// mediumSubtype: 'document'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4026,7 +4026,7 @@
 
 		setupImageDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableImage = $('#timaat-mediadatasets-image-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -4050,7 +4050,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'image'
+							// mediumSubtype: 'image'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4147,7 +4147,7 @@
 
 		setupSoftwareDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableSoftware = $('#timaat-mediadatasets-software-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -4171,7 +4171,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'software'
+							// mediumSubtype: 'software'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4268,7 +4268,7 @@
 
 		setupTextDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableText = $('#timaat-mediadatasets-text-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -4292,7 +4292,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'text'
+							// mediumSubtype: 'text'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4389,7 +4389,7 @@
 
 		setupVideoDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableVideo = $('#timaat-mediadatasets-video-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -4413,7 +4413,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'video'
+							// mediumSubtype: 'video'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4511,7 +4511,7 @@
 
 		setupVideogameDataTable: function() {			
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableVideogame = $('#timaat-mediadatasets-videogame-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -4535,7 +4535,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// mediumsubtype: 'videogame'
+							// mediumSubtype: 'videogame'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;

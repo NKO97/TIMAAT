@@ -70,7 +70,7 @@ public class EndpointLocation {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("locationtype/list")
+	@Path("locationType/list")
 	public Response getLocationTypeList() {
 		List<LocationType> locationTypeList = castList(LocationType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("LocationType.findAll").getResultList());
 		return Response.ok().entity(locationTypeList).build();
@@ -167,7 +167,7 @@ public class EndpointLocation {
 	@GET
   @Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("locationtype/all")
+	@Path("locationType/all")
 	public Response getAllLocationTypes() {
 		System.out.println("EndpointLocation: getAllLocations");
 		List<LocationType> locationTypes = null;
@@ -326,14 +326,14 @@ public class EndpointLocation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{location}/translation/{id}")
-	public Response createLocationTranslation(@PathParam("location") int locationid, @PathParam("id") int id, String jsonData) {
+	@Path("{locationId}/translation/{id}")
+	public Response createLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointLocation: createLocationTranslation jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		LocationTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Location location = entityManager.find(Location.class, locationid);
+		Location location = entityManager.find(Location.class, locationId);
 
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
@@ -376,8 +376,8 @@ public class EndpointLocation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{location}/translation/{id}")
-	public Response updateLocationTranslation(@PathParam("location") int locationid, @PathParam("id") int id, String jsonData) {
+	@Path("{locationId}/translation/{id}")
+	public Response updateLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointLocation: updateLocationTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -417,9 +417,9 @@ public class EndpointLocation {
 	// not needed yet (should be necessary once several translations for an location exist and individual ones need to be removed)
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{location}/translation/{id}")
+	@Path("{locationId}/translation/{id}")
 	@Secured
-	public Response deleteLocationTranslation(@PathParam("location") int locationId, @PathParam("id") int id) {	
+	public Response deleteLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id) {	
 
 		System.out.println("EndpointLocation: deleteLocationTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();

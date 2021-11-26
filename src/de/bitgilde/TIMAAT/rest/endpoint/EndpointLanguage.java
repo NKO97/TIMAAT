@@ -62,7 +62,7 @@ public class EndpointLanguage {
 		// System.out.println("EndpointLanguage: getLanguageList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		// String languageQuery = "SELECT l.name FROM Language l"; //  WHERE l.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery = "SELECT rt.name FROM Language rt WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery2 = "SELECT rt.name WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
@@ -116,7 +116,7 @@ public class EndpointLanguage {
 		// System.out.println("EndpointLanguage: getLanguageSelectList");
 		// System.out.println("EndpointLanguage: getLanguageSelectList - search string: "+ search);
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
 		// search
 		Query query;

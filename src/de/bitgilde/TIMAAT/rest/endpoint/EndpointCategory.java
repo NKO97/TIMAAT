@@ -273,10 +273,10 @@ public class EndpointCategory {
 			return Response.notModified().build();
 		}
 
-		// update categoryset
+		// update categorySet
 		if ( updatedCategory.getName() != null ) category.setName(updatedCategory.getName());
 
-		// persist categoryset
+		// persist categorySet
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(category);

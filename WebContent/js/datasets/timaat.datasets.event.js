@@ -350,7 +350,7 @@
 				this.initFormForShow(data.model);
 				$('#event-metadata-form-submit-button').hide();
 				$('#event-metadata-form-dismiss-button').hide();
-				$('#eventFormHeader').html("Event Datasheet (#"+ data.model.id+')');
+				$('#eventFormHeader').html("Event Data Sheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
 				this.initEventFormDataForEdit();
@@ -572,7 +572,7 @@
 
 		setupEventDataTable: function() {
 			// console.log("TCL: setupDataTable");
-			// setup datatable
+			// setup dataTable
 			this.dataTableEvent = $('#timaat-eventdatasets-event-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],

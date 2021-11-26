@@ -714,7 +714,7 @@
             <div class="btn-group btn-group-sm playback-controls">
               <button
                 title="Ein Bild zurück [&larr;]"
-                class="stepbckbutton btn btn-outline-secondary text-white"
+                class="stepBackButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-backward"></i>
               </button>
@@ -732,7 +732,7 @@
               </button>
               <button
                 title="Ein Bild vorwärts [&rarr;]"
-                class="stepfwdbutton btn btn-outline-secondary text-white"
+                class="stepForwardButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-forward"></i>
               </button>

@@ -35,10 +35,10 @@
 			
 			this.attachListeners();
 			
-			let filelist = $(form).find('.timaat-medium-upload-file')[0].files;
-			if ( filelist && filelist.length > 0 ) {
-				this.filename = filelist[0].name;
-				this.filesize = filelist[0].size;
+			let fileList = $(form).find('.timaat-medium-upload-file')[0].files;
+			if ( fileList && fileList.length > 0 ) {
+				this.filename = fileList[0].name;
+				this.fileSize = fileList[0].size;
 				this.ui.find('.filename').text(this.filename);
 			}
 			
@@ -50,7 +50,7 @@
 			$(form).on('submit', function(e) {
 				//prevent regular form posting
 				e.preventDefault();
-				let oldpercent = 0;
+				let oldPercent = 0;
 				xhr.upload.addEventListener('loadstart', function(event) {
 					uploadItem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
 					console.info('UPLOAD::Start', uploadItem.medium);
@@ -58,8 +58,8 @@
 
 				xhr.upload.addEventListener('progress', function(event) {
 						var percent = (100 * event.loaded / event.total);
-						if ( oldpercent != percent.toFixed(1) ) {
-							oldpercent = percent.toFixed(1);
+						if ( oldPercent != percent.toFixed(1) ) {
+							oldPercent = percent.toFixed(1);
 	//			            console.log('UPLOAD:Progress: ' + percent.toFixed(1)+'%', uploadItem.video);
 							uploadItem.ui.find('.progress-bar').css('width', percent.toFixed(1) + '%').text(percent.toFixed(1)+'%');
 						}

@@ -164,7 +164,7 @@
       // console.log("TCL: createCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hascategory/"+categorySetHasCategory.id.categoryId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hasCategory/"+categorySetHasCategory.id.categoryId,
 					type       : "POST",
 					data       : JSON.stringify(categorySetHasCategory),
 					contentType: "application/json; charset=utf-8",
@@ -186,7 +186,7 @@
       // console.log("TCL: updateCategorySetHasCategory -> categorySetHasCategory", categorySetHasCategory);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hascategory/"+categorySetHasCategory.id.categoryId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetHasCategory.id.categorySetId+"/hasCategory/"+categorySetHasCategory.id.categoryId,
 					type       : "PATCH",
 					data       : JSON.stringify(categorySetHasCategory),
 					contentType: "application/json; charset=utf-8",
@@ -208,7 +208,7 @@
     // console.log("TCL: deleteCategorySetHasCategory -> categorySetId, categoryId", categorySetId, categoryId);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetId+"/hascategory/"+categoryId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySetId+"/hasCategory/"+categoryId,
 					type       : "DELETE",
 					contentType: "application/json; charset=utf-8",
 					beforeSend : function (xhr) {
@@ -228,7 +228,7 @@
       // console.log("TCL: checkForDuplicate -> name", name);
 			return new Promise(resolve => {
 				jQuery.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/isduplicate",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/isDuplicate",
 					type       : "POST",
 					data       : JSON.stringify(name),
 					contentType: "application/json; charset=utf-8",

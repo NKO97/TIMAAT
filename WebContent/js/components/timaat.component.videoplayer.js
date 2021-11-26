@@ -320,7 +320,7 @@
 
 			$(document).on('change', '[data-role="changeUserPermissionAnalysisList"] > [data-role="select"]', async function(event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
 				let permissionId = $(this).closest('.custom-select').val();
 
 				// prevent removal of the last admin. One admin has to exist at any time
@@ -351,7 +351,7 @@
 
 			$(document).on('click','[data-role="removeUserPermissionAnalysisList"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
 				let index = TIMAAT.VideoPlayer.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
 				let userPermissionId = TIMAAT.VideoPlayer.userPermissionList[index].permissionId;
 				if (!userPermissionId) return;
@@ -666,17 +666,17 @@
 				var bounds = TIMAAT.VideoPlayer.confineBounds(ev.layer.getBounds(), ev.offset.x, ev.offset.y);
 				if ( ev.layer.setBounds ) ev.layer.setBounds(L.latLngBounds(bounds.getNorthEast(),bounds.getSouthWest())); else {
 					// TODO refactor
-					var latlngs = ( ev.layer.getLatLngs != null ) ? ev.layer.getLatLngs() : [ev.layer.getLatLng()];
-					$(latlngs[0]).each(function(item,latlng) {
+					var latLngs = ( ev.layer.getLatLngs != null ) ? ev.layer.getLatLngs() : [ev.layer.getLatLng()];
+					$(latLngs[0]).each(function(item,latLng) {
 						var minLat = ( ev.layer instanceof L.Circle ) ? ev.layer.getRadius() : 0;
 						var minLng = ( ev.layer instanceof L.Circle ) ? ev.layer.getRadius() : 0;
 						var maxLat = ( ev.layer instanceof L.Circle ) ? (TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat-ev.layer.getRadius()) : TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
 						var maxLng = ( ev.layer instanceof L.Circle ) ? (TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng-ev.layer.getRadius()) : TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
-						if (latlng.lng < minLng ) latlng.lng = minLng;
-						if (latlng.lat < minLat ) latlng.lat = minLat;
-						if (latlng.lng > maxLng ) latlng.lng = maxLng;
-						if (latlng.lat > maxLat ) latlng.lat = maxLat;
-						if ( ev.layer instanceof L.Circle ) ev.layer.setLatLng(latlng);
+						if (latLng.lng < minLng ) latLng.lng = minLng;
+						if (latLng.lat < minLat ) latLng.lat = minLat;
+						if (latLng.lng > maxLng ) latLng.lng = maxLng;
+						if (latLng.lat > maxLat ) latLng.lat = maxLat;
+						if ( ev.layer instanceof L.Circle ) ev.layer.setLatLng(latLng);
 					});
 				}		   
 			});
@@ -714,25 +714,25 @@
 					ev.vertex.delete();
 					return;
 				}
-				var latlng = ev.latlng;
-				if (latlng.lng < 0 ) latlng.lng = 0;
-				if (latlng.lat < 0 ) latlng.lat = 0;
-				if (latlng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latlng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
-				if (latlng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latlng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
-				ev.vertex.setLatLng(latlng);		    			    	
+				var latLng = ev.latLng;
+				if (latLng.lng < 0 ) latLng.lng = 0;
+				if (latLng.lat < 0 ) latLng.lat = 0;
+				if (latLng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latLng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
+				if (latLng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latLng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
+				ev.vertex.setLatLng(latLng);		    			    	
 			});	
 
 			TIMAAT.VideoPlayer.viewer.on('editable:vertex:drag', function(ev) {
-				var latlng = ev.latlng;
-				if (latlng.lng < 0 ) latlng.lng = 0;
-				if (latlng.lat < 0 ) latlng.lat = 0;
-				if (latlng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latlng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
-				if (latlng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latlng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
-				ev.vertex.setLatLng(latlng);
+				var latLng = ev.latLng;
+				if (latLng.lng < 0 ) latLng.lng = 0;
+				if (latLng.lat < 0 ) latLng.lat = 0;
+				if (latLng.lng > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng ) latLng.lng = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lng;
+				if (latLng.lat > TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat ) latLng.lat = TIMAAT.VideoPlayer.videoBounds.getNorthEast().lat;
+				ev.vertex.setLatLng(latLng);
 
 				if ( TIMAAT.VideoPlayer.curTool == 'circle' || (ev.vertex.editor.feature.getRadius != null) ) {
-					if ( ev.vertex.editor.feature.getLatLng() == ev.vertex.latlng ) return;
-					var radius = TIMAAT.VideoPlayer.viewer.distance(ev.vertex.editor.feature.getLatLng(),ev.vertex.latlng);
+					if ( ev.vertex.editor.feature.getLatLng() == ev.vertex.latLng ) return;
+					var radius = TIMAAT.VideoPlayer.viewer.distance(ev.vertex.editor.feature.getLatLng(),ev.vertex.latLng);
 					radius = Math.max(5,radius);
 					ev.vertex.editor.feature.setRadius( radius );
 					// console.log(ev.vertex, ev.vertex.editor.feature, ev.vertex.editor.feature.getRadius());
@@ -844,8 +844,8 @@
 
 			$('#timaat-analysislist-delete-submit-button').on('click', function(ev) {
 				var modal = $('#timaat-videoplayer-analysislist-delete');
-				var list = modal.data('analysislist');
-				if (list) TIMAAT.VideoPlayer._analysislistRemoved(list);
+				var list = modal.data('analysisList');
+				if (list) TIMAAT.VideoPlayer._analysisListRemoved(list);
 				modal.modal('hide');
 			});
 
@@ -1007,11 +1007,11 @@
 					break;
 				case "ArrowLeft":
 					ev.preventDefault();
-					$('.stepbckbutton').click();
+					$('.stepBackButton').click();
 					break;
 				case "ArrowRight":
 					ev.preventDefault();
-					$('.stepfwdbutton').click();
+					$('.stepForwardButton').click();
 					break;
 				case "r":
 					ev.preventDefault();
@@ -1036,7 +1036,7 @@
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
 			});
 
-			$('.stepbckbutton').on('click dblclick', function(ev) {
+			$('.stepBackButton').on('click dblclick', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
@@ -1044,7 +1044,7 @@
 				TIMAAT.VideoPlayer.jumpTo( Math.max(0, (Math.round(TIMAAT.VideoPlayer.video.currentTime / frameTime) * frameTime) - frameTime));
 			});
 
-			$('.stepfwdbutton').on('click dblclick', function(ev) {
+			$('.stepForwardButton').on('click dblclick', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
@@ -1123,7 +1123,7 @@
 			}
 			// await Promise.all(TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id).then(result => TIMAAT.VideoPlayer.setupMediumAnalysisLists(result)));
 			let analysisLists =	await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
-			// TODO change so that instead the user is asked which analysislist to use or if a new one shall be created
+			// TODO change so that instead the user is asked which analysisList to use or if a new one shall be created
 			TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 			TIMAAT.VideoPlayer.initAnalysisListMenu();
 		},
@@ -1695,14 +1695,14 @@
 			// console.log("TCL: addAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
-			TIMAAT.VideoPlayer.inspector.setItem(null, 'analysislist');			
+			TIMAAT.VideoPlayer.inspector.setItem(null, 'analysisList');			
 		},
 		
-		updateAnalysisList: async function(analysislist) {
-			// console.log("TCL: updateAnalysisList - analysislist", analysislist);
+		updateAnalysisList: async function(analysisList) {
+			// console.log("TCL: updateAnalysisList - analysisList", analysisList);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateMediumAnalysisList(analysislist);
-			// console.log("TCL: updateAnalysisList - analysislist", analysislist);
+			await TIMAAT.AnalysisListService.updateMediumAnalysisList(analysisList);
+			// console.log("TCL: updateAnalysisList - analysisList", analysisList);
 			// TODO update UI list view
 			TIMAAT.VideoPlayer.curAnalysisList.ui.html(TIMAAT.Util.getDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title'));
 		},
@@ -1711,7 +1711,7 @@
 			// console.log("TCL: editAnalysisList: function()");
 			TIMAAT.VideoPlayer.pause();
 			TIMAAT.VideoPlayer.selectAnnotation(null);
-			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysislist');
+			TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnalysisList, 'analysisList');
 			TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 		},
 		
@@ -1719,7 +1719,7 @@
 			// console.log("TCL: removeAnalysisList: function()");
 			if ( !this.curAnalysisList ) return;
 			TIMAAT.VideoPlayer.pause();
-			$('#timaat-videoplayer-analysislist-delete').data('analysislist', this.curAnalysisList);
+			$('#timaat-videoplayer-analysislist-delete').data('analysisList', this.curAnalysisList);
 			$('#timaat-videoplayer-analysislist-delete').modal('show');
 		},
 
@@ -2595,19 +2595,19 @@
 			
 		},
 		
-		_analysislistAdded: function(analysislist) {
-			// console.log("TCL: _analysislistAdded: function(analysislist) - analysislist", analysislist);
+		_analysisListAdded: function(analysisList) {
+			// console.log("TCL: _analysisListAdded: function(analysisList) - analysisList", analysisList);
 			// console.log("TCL ~ TIMAAT.VideoPlayer.model", TIMAAT.VideoPlayer.model);
 			var wasEmpty = TIMAAT.VideoPlayer.model.analysisLists.length == 0;
-			TIMAAT.VideoPlayer.model.analysisLists.push(analysislist);
+			TIMAAT.VideoPlayer.model.analysisLists.push(analysisList);
 			
-			analysislist.ui = $('<option value="'+analysislist.id+'">'+TIMAAT.Util.getDefaultTranslation(analysislist, 'mediumAnalysisListTranslations', 'title')+'</option>');
-			analysislist.ui.data('list', analysislist);
+			analysisList.ui = $('<option value="'+analysisList.id+'">'+TIMAAT.Util.getDefaultTranslation(analysisList, 'mediumAnalysisListTranslations', 'title')+'</option>');
+			analysisList.ui.data('list', analysisList);
 			
 			// update UI
 			if ( wasEmpty ) $('#timaat-analysislist-chooser').empty();			
-			$('#timaat-analysislist-chooser').append(analysislist.ui);
-			$('#timaat-analysislist-chooser').val(analysislist.id);
+			$('#timaat-analysislist-chooser').append(analysisList.ui);
+			$('#timaat-analysislist-chooser').val(analysisList.id);
 
 			$('#timaat-analysislist-chooser').trigger('change');
 			// TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
@@ -2615,18 +2615,18 @@
 			TIMAAT.VideoPlayer.initAnalysisListMenu();
 		},
 		
-		_analysislistRemoved: async function(analysislist) {
-			// console.log("TCL: _analysislistRemoved: function(analysislist)");
-			// console.log("TCL: analysislist", analysislist);
+		_analysisListRemoved: async function(analysisList) {
+			// console.log("TCL: _analysisListRemoved: function(analysisList)");
+			// console.log("TCL: analysisList", analysisList);
 			// sync to server
-			TIMAAT.AnalysisListService.removeAnalysisList(analysislist);
+			TIMAAT.AnalysisListService.removeAnalysisList(analysisList);
 
 			// remove from model lists
-			var index = TIMAAT.VideoPlayer.model.analysisLists.indexOf(analysislist);
+			var index = TIMAAT.VideoPlayer.model.analysisLists.indexOf(analysisList);
 			if (index > -1) TIMAAT.VideoPlayer.model.analysisLists.splice(index, 1);
 			
 			// update UI list view
-			$('#timaat-analysislist-chooser').find('[value="'+analysislist.id+'"]').remove();
+			$('#timaat-analysislist-chooser').find('[value="'+analysisList.id+'"]').remove();
 			$('#timaat-analysislist-chooser').trigger('change');
 			if ( TIMAAT.VideoPlayer.model.analysisLists.length == 0 ) {
 				await TIMAAT.VideoPlayer.setupAnalysisList(null);

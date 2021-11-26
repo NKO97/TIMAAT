@@ -73,7 +73,7 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 */
 
 @Service
-@Path("/analysislist")
+@Path("/analysisList")
 public class EndpointAnalysisList {
 
 	@Context
@@ -411,7 +411,7 @@ public class EndpointAnalysisList {
 		newList.setCreatedAt(creationDate);
 		newList.setLastEditedAt(creationDate);
 		
-		// persist analysislist and polygons
+		// persist analysisList and polygons
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newList.getMediumAnalysisListTranslations().get(0));
@@ -637,7 +637,7 @@ public class EndpointAnalysisList {
 		}
 		if ( updatedList == null ) return Response.notModified().build();
 		    	
-    // update analysislist
+    // update analysisList
 		if ( updatedList.getMediumAnalysisListTranslations() != null )
 			for ( MediumAnalysisListTranslation trans : updatedList.getMediumAnalysisListTranslations() ) {
 				mediumAnalysisList.setTitle(trans.getTitle(), trans.getLanguage().getCode());
@@ -968,7 +968,7 @@ public class EndpointAnalysisList {
 		analysisSegment.getAnalysisSegmentTranslations().get(0).setAnalysisSegment(analysisSegment);
 		analysisSegment.getAnalysisSegmentTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
-		// persist analysissegment and list
+		// persist analysisSegment and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(analysisSegment.getAnalysisSegmentTranslations().get(0));
@@ -1145,7 +1145,7 @@ public class EndpointAnalysisList {
 		analysisSequence.getAnalysisSequenceTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		
-		// persist analysissequence and list
+		// persist analysisSequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(analysisSequence);
@@ -1302,7 +1302,7 @@ public class EndpointAnalysisList {
 		newTranslation.setLanguage(language);
 		analysisSequence.addAnalysisSequenceTranslation(newTranslation);
 		
-		// persist analysissequence and list
+		// persist analysisSequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newTranslation);
@@ -1440,7 +1440,7 @@ public class EndpointAnalysisList {
 		newScene.getAnalysisSceneTranslations().get(0).setAnalysisScene(newScene);
 		newScene.getAnalysisSceneTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
-		// persist analysisscene and list
+		// persist analysisScene and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newScene);
@@ -1596,7 +1596,7 @@ public class EndpointAnalysisList {
 		newTranslation.setLanguage(language);
 		analysisScene.addAnalysisSceneTranslation(newTranslation);
 		
-		// persist analysisscene and list
+		// persist analysisScene and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newTranslation);
@@ -1734,7 +1734,7 @@ public class EndpointAnalysisList {
 		newTake.getAnalysisTakeTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
 		
-		// persist analysistake and list
+		// persist analysisTake and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newTake);
@@ -1889,7 +1889,7 @@ public class EndpointAnalysisList {
 		newTranslation.setLanguage(language);
 		analysisTake.addAnalysisTakeTranslation(newTranslation);
 		
-		// persist analysistake and list
+		// persist analysisTake and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newTranslation);
@@ -2026,7 +2026,7 @@ public class EndpointAnalysisList {
 		newAction.getAnalysisActionTranslations().get(0).setAnalysisAction(newAction);
 		newAction.getAnalysisActionTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
 		
-		// persist analysisaction and list
+		// persist analysisAction and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newAction);
@@ -2181,7 +2181,7 @@ public class EndpointAnalysisList {
 		newTranslation.setLanguage(language);
 		analysisAction.addAnalysisActionTranslation(newTranslation);
 		
-		// persist analysisaction and list
+		// persist analysisAction and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newTranslation);

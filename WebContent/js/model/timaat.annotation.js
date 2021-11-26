@@ -66,8 +66,8 @@
 			if (TIMAAT.VideoPlayer.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
 			
 			// convert SVG data
-			for (let svgitem of this.svg.model.keyframes[0].shapes) {
-				let item = this._parseSVG(svgitem);
+			for (let svgItem of this.svg.model.keyframes[0].shapes) {
+				let item = this._parseSVG(svgItem);
 				this.addSVGItem(item);
 				item.dragging.disable();
 			};
@@ -533,8 +533,8 @@
 
 			this.svg.model = JSON.parse(this.model.selectorSvgs[0].svgData);
 			this._upgradeModel();
-			for (let svgitem of this.svg.model.keyframes[0].shapes) {
-				let item = this._parseSVG(svgitem);
+			for (let svgItem of this.svg.model.keyframes[0].shapes) {
+				let item = this._parseSVG(svgItem);
 				this.addSVGItem(item);
 			}
 			
@@ -655,34 +655,34 @@
 			return this.selected;
 		}
 		
-		syncShape(svgitem, shape = null, force = this.isOnKeyframe()) {
-			if ( !svgitem || !svgitem.options || !svgitem.options.id || !force) return;
-			let id = svgitem.options.id;
+		syncShape(svgItem, shape = null, force = this.isOnKeyframe()) {
+			if ( !svgItem || !svgItem.options || !svgItem.options.id || !force) return;
+			let id = svgItem.options.id;
 			if ( !shape ) shape = this.currentKeyframe.getShape(id);
 			if ( !shape ) return;
 			switch (shape.type) {
 				case 'rectangle':
-					shape.bounds = [ [svgitem.getBounds().getSouthWest().lat, svgitem.getBounds().getSouthWest().lng], [svgitem.getBounds().getNorthEast().lat, svgitem.getBounds().getNorthEast().lng] ];
+					shape.bounds = [ [svgItem.getBounds().getSouthWest().lat, svgItem.getBounds().getSouthWest().lng], [svgItem.getBounds().getNorthEast().lat, svgItem.getBounds().getNorthEast().lng] ];
 					break;
 
 				case "polygon":
-					shape.points = this._copyLatLngs(svgitem.getLatLngs()[0]);
+					shape.points = this._copyLatLngs(svgItem.getLatLngs()[0]);
 					break;
 				case "line":
-					shape.points = this._copyLatLngs(svgitem.getLatLngs());
+					shape.points = this._copyLatLngs(svgItem.getLatLngs());
 					break;
 
 				case "circle":
-					shape.point = [svgitem.getLatLng().lat, svgitem.getLatLng().lng];
-					shape.radius = svgitem.getRadius();
+					shape.point = [svgItem.getLatLng().lat, svgItem.getLatLng().lng];
+					shape.radius = svgItem.getRadius();
 					break;
 			}
 			return shape;
 		}
 		
-		_copyLatLngs(latlngs) {
+		_copyLatLngs(latLngs) {
 			let points = new Array();
-			for (let latlng of latlngs) points.push([latlng.lat, latlng.lng]);
+			for (let latLng of latLngs) points.push([latLng.lat, latLng.lng]);
 			return points;
 		}
 		
@@ -711,10 +711,10 @@
 					item.setBounds(shape.bounds);
 					return;
 				case "polygon":
-					item.setLatLngs([shape.points]);
+					item.setLatLng([shape.points]);
 					return;
 				case "line":
-					item.setLatLngs(shape.points);
+					item.setLatLng(shape.points);
 					return;
 				case "circle":
 					item.setLatLng(shape.point);
@@ -735,7 +735,7 @@
 				
 		}
 		
-		_parseSVG(svgitem) {
+		_parseSVG(svgItem) {
 			// console.log("TCL: Annotation -> _parseSVG -> svgItem", svgItem);
 			let width = 1;
 			let height = 1;
@@ -750,19 +750,19 @@
 				height = 600;
 			}
 			let factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
-			let id = svgitem.id;
+			let id = svgItem.id;
 			if ( !id ) {
 				id = TIMAAT.Util.createUUIDv4();
-				console.warn("WARNING: Annotation -> _parseSVG -> svgitem: Required attribute ID missing from model", svgitem);
+				console.warn("WARNING: Annotation -> _parseSVG -> svgItem: Required attribute ID missing from model", svgItem);
 			}
-			switch (svgitem.type) {
+			switch (svgItem.type) {
 				case "rectangle":
 					// [[ height, x], [ y, width]]
-					var bounds = [[ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgitem.y*height)), Math.round(svgitem.x*factor*width)], [ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgitem.y+svgitem.height)*factor*height)), Math.round((svgitem.x+svgitem.width)*factor*width)]];
+					var bounds = [[ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-(factor*svgItem.y*height)), Math.round(svgItem.x*factor*width)], [ Math.round(TIMAAT.VideoPlayer.videoBounds.getNorth()-((svgItem.y+svgItem.height)*factor*height)), Math.round((svgItem.x+svgItem.width)*factor*width)]];
 					return L.rectangle(bounds, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 				case "polygon":
 					var points = new Array();
-					$(svgitem.points).each(function(index,point) {
+					$(svgItem.points).each(function(index,point) {
 						var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
@@ -770,16 +770,16 @@
 					return L.polygon(points, {transform: true, id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 				case "line":
 					var points = new Array();
-					$(svgitem.points).each(function(index,point) {
+					$(svgItem.points).each(function(index,point) {
 						var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(point[1]*factor*height);
 						var lng = point[0]*factor*width;
 						points.push([lat,lng]);
 					});
 					return L.polyline(points, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO , opacity: this.svg.opacity ? (not working)
 				case "circle":
-					var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgitem.y*factor*height);
-					var lng = svgitem.x*factor*width;
-					var radius = svgitem.radius * factor;
+					var lat = TIMAAT.VideoPlayer.videoBounds.getNorth()-(svgItem.y*factor*height);
+					var lng = svgItem.x*factor*width;
+					var radius = svgItem.radius * factor;
 					return L.circle([lat,lng], radius, {id: id, draggable: true, color: '#'+this.svg.colorHex, weight: this.svg.strokeWidth}); // TODO fillOpacity?
 			}
 		}

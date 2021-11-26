@@ -143,7 +143,7 @@ public class EndpointCategorySet {
 	public Response getCategorySetSelectList(@QueryParam("search") String search,
 																					 @QueryParam("page") Integer page,
 																					 @QueryParam("per_page") Integer per_page) {
-		// returns list of id and name combinations of all categorysets
+		// returns list of id and name combinations of all categorySets
 		// System.out.println("EndpointCategorySet: getCategorySetSelectList - search string: "+ search);
 
 		// System.out.println("EndpointCategorySet: getCategorySetSelectListForId - create query");
@@ -274,7 +274,7 @@ public class EndpointCategorySet {
 		}
 
 		// Set<CategorySetHasCategory> oldCategories = categorySet.getCategorySetHasCategories();
-		// update categoryset
+		// update categorySet
 		if ( updatedCategorySet.getName() != null ) categorySet.setName(updatedCategorySet.getName());
 		// categorySet.setCategorySetHasCategories(updatedCategorySet.getCategorySetHasCategories());
 
@@ -286,7 +286,7 @@ public class EndpointCategorySet {
 			// DEBUG do nothing - production system should abort with internal server error			
 		}
 
-		// persist categoryset
+		// persist categorySet
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(categorySet);
@@ -338,7 +338,7 @@ public class EndpointCategorySet {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("isduplicate")
+	@Path("isDuplicate")
 	@Secured
 	public Response categorySetCheckForDuplicate(String name) {
 		System.out.println("EndpointCategorySet: categorySetDuplicateCheck - name: "+name);
@@ -390,7 +390,7 @@ public class EndpointCategorySet {
 		// entityManager.refresh(cshc);
 
 
-		// TODO once tree hierarchy for categorysets is implemented
+		// TODO once tree hierarchy for categorySets is implemented
 		// System.out.println("EndpointCategorySet: createCategorySetHasCategory - prepare categorySetHasCategory content");
 		// // Fill CategorySetHasCategory entry with additional data
 		// ObjectMapper mapper = new ObjectMapper();
@@ -424,7 +424,7 @@ public class EndpointCategorySet {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{categorySetId}/hascategory/{categoryId}")
+	@Path("{categorySetId}/hasCategory/{categoryId}")
 	@Secured
 	public Response updateCategorySetHasCategory(@PathParam("categorySetId") int categorySetId,
 																							 @PathParam("categoryId") int categoryId,
@@ -471,7 +471,7 @@ public class EndpointCategorySet {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{categorySetId}/hascategory/{categoryId}")
+	@Path("{categorySetId}/hasCategory/{categoryId}")
 	@Secured
 	public Response deleteCategorySetHasCategory(@PathParam("categorySetId") int categorySetId,
 																							 @PathParam("categoryId") int categoryId) {

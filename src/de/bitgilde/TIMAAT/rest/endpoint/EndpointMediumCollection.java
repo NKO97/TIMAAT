@@ -260,7 +260,7 @@ public class EndpointMediumCollection {
 		Query query;
 		String sql;
 		List<Medium> mediumList = new ArrayList<>();
-		if (id == 0) { // init datatable is required but calls function with id 0
+		if (id == 0) { // init dataTable is required but calls function with id 0
 			// System.out.println("No collection -> no entries");
 			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, new ArrayList<>())).build();
 		}
@@ -403,7 +403,7 @@ public class EndpointMediumCollection {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		
-		// TODO get all mediacollections no matter the type, display type in frontend instead
+		// TODO get all mediaCollections no matter the type, display type in frontend instead
 		// String sql = "SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC";
 		String sql;
 		Query query;
@@ -419,7 +419,7 @@ public class EndpointMediumCollection {
 										// .setParameter("type", entityManager.find(MediaCollectionType.class, 2)); // TODO refactor type
 		List<MediaCollection> mediaCollectionList = castList(MediaCollection.class, query.getResultList());
 		
-		// strip analysislists
+		// strip analysisLists
 		for ( MediaCollection mediaCollection : mediaCollectionList ) {
 			if ( noContents != null ) mediaCollection.getMediaCollectionHasMediums().clear();
 			for ( MediaCollectionHasMedium mchm : mediaCollection.getMediaCollectionHasMediums() ) {
@@ -457,7 +457,7 @@ public class EndpointMediumCollection {
 	// 	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 		
 	// 	if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
-	// 	// strip analysislists
+	// 	// strip analysisLists
 	// 	for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
 	// 		m.getMedium().getMediumAnalysisLists().clear();
 	// 		m.getMedium().getFileStatus();
@@ -476,7 +476,7 @@ public class EndpointMediumCollection {
 																		 @QueryParam("draw") Integer draw,
 																		 @QueryParam("start") Integer start,
 																		 @QueryParam("length") Integer length,
-																		 @QueryParam("mediumsubtype") String mediumSubType,
+																		 @QueryParam("mediumSubtype") String mediumSubtype,
 																		 @QueryParam("orderby") String orderby,
 																		 @QueryParam("dir") String direction,
 																		 @QueryParam("search") String search)
@@ -497,12 +497,12 @@ public class EndpointMediumCollection {
 			if (orderby.equalsIgnoreCase("duration")) column = "mchm.medium.mediumVideo.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query
-			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
+			// - dependencies  --> actor --> actorNames --> actorName.isdisplayname
 			// + --> role == 5 --> producer 
 		}
 
 		String subType = "";
-		if ( mediumSubType != null && mediumSubType.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
+		if ( mediumSubtype != null && mediumSubtype.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
 
 		// calculate total # of records
 		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType);
@@ -535,7 +535,7 @@ public class EndpointMediumCollection {
 
 		List<Medium> media = castList(Medium.class, query.getResultList());
 
-		// strip analysislists
+		// strip analysisLists
 		for ( Medium m : media ) {
 			m.getMediumAnalysisLists().clear();
 			m.getFileStatus();
@@ -567,7 +567,7 @@ public class EndpointMediumCollection {
 		// returns list of id and name combinations of all Languages
 		System.out.println("EndpointMediumCollection: getTypeSelectList");
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
 		// search
 		Query query = TIMAATApp.emf.createEntityManager().createQuery(
@@ -613,7 +613,7 @@ public class EndpointMediumCollection {
 		// update log metadata
 		// TODO log not in model
 
-		// persist mediacollection
+		// persist mediaCollection
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(newCol);
@@ -668,7 +668,7 @@ public class EndpointMediumCollection {
 			return Response.serverError().build();
 		}
 		
-		// persist mediacollection
+		// persist mediaCollection
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.persist(newCol);

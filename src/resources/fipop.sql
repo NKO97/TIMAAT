@@ -14062,9 +14062,9 @@ INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (7, 'userActivat
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (8, 'mediumCreated');
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (9, 'mediumEdited');
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (10, 'mediumDeleted');
-INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (11, 'analysislistCreated');
-INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (12, 'analysislistEdited');
-INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (13, 'analysislistDeleted');
+INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (11, 'analysisListCreated');
+INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (12, 'analysisListEdited');
+INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (13, 'analysisListDeleted');
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (14, 'annotationCreated');
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (15, 'annotationEdited');
 INSERT INTO `FIPOP`.`user_log_event_type` (`id`, `type`) VALUES (16, 'annotationDeleted');

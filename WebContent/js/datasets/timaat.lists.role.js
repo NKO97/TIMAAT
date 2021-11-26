@@ -303,7 +303,7 @@
 
     setupRoleDataTable: function() {			
       // console.log("TCL: setupRoleDataTable");
-      // setup datatable
+      // setup dataTable
       this.dataTableRoles = $('#timaat-rolelists-role-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
@@ -396,7 +396,7 @@
 
     setupRoleGroupDataTable: function() {			
       // console.log("TCL: setupRoleGroupDataTable");
-      // setup datatable
+      // setup dataTable
       this.dataTableRoleGroups = $('#timaat-rolelists-rolegroup-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],

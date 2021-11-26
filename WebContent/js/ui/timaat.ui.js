@@ -111,17 +111,17 @@
 						break;
 					case 'userCreated':
 					case 'mediumCreated':
-					case 'analysislistCreated':			    			
+					case 'analysisListCreated':			    			
 					case 'annotationCreated':
 						icon = 'fas fa-plus-square';
 						break;
 					case 'mediumEdited':
-					case 'analysislistEdited':			    			
-					case 'analysislistDeleted':
+					case 'analysisListEdited':			    			
+					case 'analysisListDeleted':
 						icon = 'fas fa-edit';
 						break;
 					case 'mediumDeleted':
-					case 'analysislistDeleted':			    			
+					case 'analysisListDeleted':			    			
 					case 'annotationDeleted':
 						icon = 'fas fa-trash-alt';
 						break;

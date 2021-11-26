@@ -66,7 +66,7 @@ public class EndpointRole {
 		// System.out.println("EndpointRole: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		String languageQuery = "SELECT rt.name FROM RoleTranslation rt WHERE rt.role.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		
 		// sanitize user input
@@ -147,7 +147,7 @@ public class EndpointRole {
 		System.out.println("EndpointRole: getRoleSelectList");
 		System.out.println("EndpointRole: getRoleSelectList - search string: "+ search);
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
 		// search
 		Query query;

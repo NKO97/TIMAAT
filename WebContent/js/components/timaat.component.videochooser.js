@@ -31,7 +31,7 @@
 		loadCollections: function() {
 			// load media collections
 			TIMAAT.MediumCollectionService.getMediaCollections(this.setupMediaCollections);
-			// init datatable
+			// init dataTable
 			this.setupDataTable();
 			// if ( !this.collection ) {
 				this.collection = 'init';
@@ -184,39 +184,39 @@
 			// upload event listeners
 			$(document).on('added.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
-				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
-				if ( !myvideo ) return;
-				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
+				let myVideo = $('#videochooser-item-'+video.id).parent().data('video');
+				if ( !myVideo ) return;
+				myVideo.ui.find('.timaat-medium-upload').css('display', 'none');
 			});
 
 			$(document).on('success.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
-				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
-				if ( !myvideo ) return;
-				myvideo.mediumVideo.width = video.mediumVideo.width;
-				myvideo.mediumVideo.height = video.mediumVideo.height;
-				myvideo.mediumVideo.length = video.mediumVideo.length;
-				myvideo.mediumVideo.frameRate = video.mediumVideo.frameRate;
+				let myVideo = $('#videochooser-item-'+video.id).parent().data('video');
+				if ( !myVideo ) return;
+				myVideo.mediumVideo.width = video.mediumVideo.width;
+				myVideo.mediumVideo.height = video.mediumVideo.height;
+				myVideo.mediumVideo.length = video.mediumVideo.length;
+				myVideo.mediumVideo.frameRate = video.mediumVideo.frameRate;
 
-				myvideo.ui.find('.timaat-medium-upload').css('display', 'none');
-				myvideo.ui.find('.videochooser-annotate-button').show();
-				myvideo.ui.find('.timaat-medium-status').show();
-				myvideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myvideo.mediumVideo.length,true));
-				TIMAAT.VideoChooser.updateVideoStatus(myvideo);
+				myVideo.ui.find('.timaat-medium-upload').css('display', 'none');
+				myVideo.ui.find('.videochooser-annotate-button').show();
+				myVideo.ui.find('.timaat-medium-status').show();
+				myVideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myVideo.mediumVideo.length,true));
+				TIMAAT.VideoChooser.updateVideoStatus(myVideo);
 				TIMAAT.VideoChooser.dt.ajax.reload(null, false);
 			});
 
 			$(document).on('removed.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
-				let myvideo = $('#videochooser-item-'+video.id).parent().data('video');
-				if ( !myvideo ) return;
-				if ( myvideo.fileStatus == 'noFile' ) myvideo.ui.find('.timaat-medium-upload').css('display', 'block');
+				let myVideo = $('#videochooser-item-'+video.id).parent().data('video');
+				if ( !myVideo ) return;
+				if ( myVideo.fileStatus == 'noFile' ) myVideo.ui.find('.timaat-medium-upload').css('display', 'block');
 			});
 			
 			$('#timaat-videochooser-list').hide();
 
 			var DataTable = $.fn.dataTable;
-			/* Set the defaults for DataTables initialisation */
+			/* Set the defaults for DataTables initialization */
 			$.extend( true, DataTable.defaults, {
 				dom:
 					"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
@@ -354,7 +354,7 @@
 		},
 
 		setupDataTable: function() {
-			// setup datatable
+			// setup dataTable
 			this.dt = $('#timaat-videochooser-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 2, 'asc' ]],
@@ -377,7 +377,7 @@
 							length: data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir: data.order[0].dir,
-							// mediumsubtype: 'video'
+							// mediumSubtype: 'video'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -389,15 +389,15 @@
 					},
 					"dataSrc": function(data) {
 						// setup model
-						var vids = Array();
+						var videos = Array();
 						var newVideo;
 						data.data.forEach(function(video) { 
 							if ( video.id > 0 && video.mediumVideo) {
 								newVideo = new TIMAAT.Medium(video, 'video');
-								vids.push(newVideo);
+								videos.push(newVideo);
 							}
 						});
-						TIMAAT.VideoChooser.videos = vids;
+						TIMAAT.VideoChooser.videos = videos;
 						TIMAAT.VideoChooser.videos.model = data.data;
 						return data.data; // data.map(medium => new TIMAAT.Medium(medium));            
 					}
@@ -510,7 +510,7 @@
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
-							// TODO not working anymore due to server side datatable data search
+							// TODO not working anymore due to server side dataTable data search
 							medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
 								if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
@@ -666,8 +666,8 @@
 
 				// user selected file, trigger form submit / upload
 				video.ui.find('.timaat-medium-upload-file').off('change').on('change', function(ev) {
-					let filelist = video.ui.find('.timaat-medium-upload-file')[0].files;
-					if ( filelist.length  > 0 ) TIMAAT.UploadManager.queueUpload(video, video.ui.find('form'));
+					let fileList = video.ui.find('.timaat-medium-upload-file')[0].files;
+					if ( fileList.length  > 0 ) TIMAAT.UploadManager.queueUpload(video, video.ui.find('form'));
 				});
 			}
 			if ( TIMAAT.UploadManager.isUploading(video) ) video.ui.find('.timaat-medium-upload').css('display', 'none');
@@ -896,22 +896,22 @@
 		},
 
 		_addCollection: function(collection) {
-			var colelement = $(`<li id="timaat-videochooser-collection-`+collection.id+`" class="list-group-item list-group-item-action">
+			var collectionElement = $(`<li id="timaat-videochooser-collection-`+collection.id+`" class="list-group-item list-group-item-action">
 			<i class="fas fa-folder"></i><span class="collection-title"> `+collection.title+`</span></li>`);
 			
-			colelement.appendTo('#timaat-videochooser-collectionlist');
+			collectionElement.appendTo('#timaat-videochooser-collectionlist');
 			
 			// collection events
-			colelement.on('click', function(ev) { 
+			collectionElement.on('click', function(ev) { 
 				TIMAAT.VideoChooser.setCollection(collection); 
 				TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediaLibrary/'+collection.id);
 			});
 
-			// colelement.on('dblclick', function(ev) {
+			// collectionElement.on('dblclick', function(ev) {
 			// 	$('#timaat-videochooser-mediacollection-meta').data('mediacollection', collection);
 			// 	$('#timaat-videochooser-mediacollection-meta').modal('show');
 			// });
-			collection.ui = colelement;
+			collection.ui = collectionElement;
 
 			// add to action target list
 			var target = $('<option value="'+collection.id+'">'+collection.title+'</option>');

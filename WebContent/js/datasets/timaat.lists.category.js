@@ -312,7 +312,7 @@
           scrollAfterSelect: true,
           allowClear: true,
           ajax: {
-            url: 'api/analysislist/'+type+'/'+segmentElementId+'/category/selectList/',
+            url: 'api/analysisList/'+type+'/'+segmentElementId+'/category/selectList/',
             type: 'GET',
             dataType: 'json',
             delay: 250,
@@ -509,32 +509,32 @@
         }
         // console.log("TCL: categorySetIdList", categorySetIdList);
         // TODO check if any annotation is using categories from category sets that will be removed with this operation
-        var annosUseCategorySet = false;
-        var annoInBothLists = false;
+        var annotationsUseCategorySet = false;
+        var annotationInBothLists = false;
         if (categorySetIdList.length < mediumAnalysisList.categorySets.length) {
-          annosUseCategorySet = true;
+          annotationsUseCategorySet = true;
           // console.log("TCL: list contains less sets than before.");
         } else {
           i = 0;
           var j = 0;
           for (; i < mediumAnalysisList.categorySets.length; i++) {
-            annoInBothLists = false;
+            annotationInBothLists = false;
             for (; j < categorySetIdList.length; j++) {
               if (mediumAnalysisList.categorySets[i].id == categorySetIdList[j].id) {
-                annoInBothLists = true;
+                annotationInBothLists = true;
                 // console.log("TCL: match found!");
                 break;
               }
             }
-            if (!annoInBothLists) {
+            if (!annotationInBothLists) {
               // console.log("TCL mediumAnalysisList.categorySets[i].id not available anymore", mediumAnalysisList.categorySets[i].id);
-              annosUseCategorySet = true;
+              annotationsUseCategorySet = true;
               break;
             }
           }
         }
-        if (annosUseCategorySet) {
-          // console.log("TCL: $ -> annosUseCategorySet", annosUseCategorySet);
+        if (annotationsUseCategorySet) {
+          // console.log("TCL: $ -> annotationsUseCategorySet", annotationsUseCategorySet);
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('mediumAnalysisList', mediumAnalysisList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('categorySetIdList', categorySetIdList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').modal('show');
@@ -656,7 +656,7 @@
 
 		setupCategoryDataTable: function() {			
       // console.log("TCL: setupCategoryDataTable");
-      // setup datatable
+      // setup dataTable
       this.dataTableCategories = $('#timaat-categorylists-category-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
@@ -748,7 +748,7 @@
 
     setupCategorySetDataTable: function() {			
       // console.log("TCL: setupCategorySetDataTable");
-      // setup datatable
+      // setup dataTable
       this.dataTableCategorySets = $('#timaat-categorylists-categoryset-table').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
@@ -1482,12 +1482,12 @@
               // will also remove categories from all affected elements (annotations, segment structure elements)
               await TIMAAT.AnalysisListService.removeCategorySet(mediumAnalysisListModel.id, entriesToDelete[i].id);
             }
-            // categories will be removed from annotations if corresponding category set is removed from analysislist
+            // categories will be removed from annotations if corresponding category set is removed from analysisList
             i = 0;
             for (; i < mediumAnalysisListModel.annotations.length; i++) {
               mediumAnalysisListModel.annotations[i].categories = await TIMAAT.AnnotationService.getSelectedCategories(mediumAnalysisListModel.annotations[i].id);
             }
-            // categories will be removed from segment structure elements if corresponding category set is removed from analysislist
+            // categories will be removed from segment structure elements if corresponding category set is removed from analysisList
             i = 0;
             let j = 0;
             let k = 0;

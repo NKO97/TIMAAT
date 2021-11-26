@@ -65,13 +65,13 @@
 			case 'mediumCreated':
 				type = 'Video Upload';
 				break;
-			case 'analysislistCreated':
+			case 'analysisListCreated':
 				type = 'Analyseliste angelegt';
 				break;
-			case 'analysislistEdited':
+			case 'analysisListEdited':
 				type = 'Analyseliste bearbeitet';
 				break;
-			case 'analysislistDeleted':
+			case 'analysisListDeleted':
 				type = 'Analyseliste gelöscht';
 				break;
 			case 'annotationCreated':
@@ -103,7 +103,7 @@
 			// console.log("TCL: resolveUserID: idElement, myself ", idElement, myself);
 			if ( !myself ) myself = "mir";
 			
-			var id = $(idElement).data('userid');
+			var id = $(idElement).data('userId');
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
 			else if ( TIMAAT.Service.idCache.has(id) ) $(idElement).text(TIMAAT.Service.idCache.get(id));
 			else {

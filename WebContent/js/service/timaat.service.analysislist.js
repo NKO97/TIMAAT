@@ -67,7 +67,7 @@
 		async getAnalysisList(mediumAnalysisListId) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId,
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -91,7 +91,7 @@
       // console.log("TCL: getCategorySetList -> mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/list/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/categorySet/list/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -115,7 +115,7 @@
 			// console.log("TCL: getSelectedCategories -> typeId, type", typeId, type);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+typeId+"/category/list/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+typeId+"/category/list/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -139,7 +139,7 @@
       // console.log("TCL: getTagList -> for mediumAnalysisListId", mediumAnalysisListId);
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/hasTagList/",
+					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/hasTagList/",
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",
@@ -175,7 +175,7 @@
 					}
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/medium/"+mediumId,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/medium/"+mediumId,
 				type:"POST",
 				data: JSON.stringify(model),
 				contentType:"application/json; charset=utf-8",
@@ -203,7 +203,7 @@
 				tags: analysisList.tags,
 			};
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+list.id+'/?authToken='+TIMAAT.Service.session.token,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+list.id+'/?authToken='+TIMAAT.Service.session.token,
 				type:"PATCH",
 				data: JSON.stringify(list),
 				contentType:"application/json; charset=utf-8",
@@ -238,7 +238,7 @@
       // console.log("TCL: updateMediumAnalysisList -> updateList", updateList);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+analysisList.id+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+analysisList.id+'/?authToken='+TIMAAT.Service.session.token,
 					type:"PATCH",
 					data: JSON.stringify(updateList),
 					contentType:"application/json; charset=utf-8",
@@ -262,7 +262,7 @@
 			console.log("TCL: addUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -285,7 +285,7 @@
 			console.log("TCL: updateUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
 					type:"PATCH",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -308,7 +308,7 @@
       console.log("TCL: removeUserAccountHasMediumAnalysisList -> userAccountId, mediumAnalysisListId", userAccountId, mediumAnalysisListId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/"+'?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/"+'?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -329,7 +329,7 @@
 		removeAnalysisList(analysisList) {
 			// console.log("TCL: removeAnalysisList -> analysisList", analysisList);
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+analysisList.id+'/?authToken='+TIMAAT.Service.session.token,
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+analysisList.id+'/?authToken='+TIMAAT.Service.session.token,
 				type:"DELETE",
 				contentType:"application/json; charset=utf-8",
 				beforeSend: function (xhr) {
@@ -347,7 +347,7 @@
 			// console.log("TCL: addCategorySet -> mediumAnalysisListId, categorySetId", mediumAnalysisListId, categorySetId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/"+categorySetId+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/categorySet/"+categorySetId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -369,7 +369,7 @@
 			// console.log("TCL: removeCategorySet -> mediumAnalysisListId, categorySetName", mediumAnalysisListId, categorySetName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/categorySet/"+categorySetId+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/categorySet/"+categorySetId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -392,7 +392,7 @@
 			// console.log("TCL: addCategory -> typeId, categoryId, type", typeId, categoryId, type);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+typeId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+typeId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -414,7 +414,7 @@
 			// console.log("TCL: removeCategory -> typeId, categoryId, type)", typeId, categoryId, type));
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+typeId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+typeId+"/category/"+categoryId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -437,7 +437,7 @@
 			// console.log("TCL: addTag -> mediumAnalysisListId, tagId", mediumAnalysisListId, tagId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/tag/"+tagId,
 					type:"POST",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
@@ -459,7 +459,7 @@
 			// console.log("TCL: removeTag -> mediumAnalysisListId, tagName", mediumAnalysisListId, tagName);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+mediumAnalysisListId+"/tag/"+tagId,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/tag/"+tagId,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -481,7 +481,7 @@
 			// console.log("TCL: createSegmentElement -> type, model, parentElementId", type, model, parentElementId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+parentElementId+"/"+type+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+parentElementId+"/"+type+'/?authToken='+TIMAAT.Service.session.token,
 					type:"POST",
 					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
@@ -507,7 +507,7 @@
       // console.log("TCL: updateSegmentElement ~ type, model", type, model);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+model.id+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+model.id+'/?authToken='+TIMAAT.Service.session.token,
 					type:"PATCH",
 					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
@@ -531,7 +531,7 @@
 			// console.log("TCL: updateSegmentElementTranslation -> type, model", type, model);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/translation/"+model.id+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/translation/"+model.id+'/?authToken='+TIMAAT.Service.session.token,
 					type:"PATCH",
 					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
@@ -555,7 +555,7 @@
 			// console.log("TCL: removeSegment -> type, modelId", type, modelId);
 			return new Promise(resolve => {
 				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysislist/"+type+"/"+modelId+'/?authToken='+TIMAAT.Service.session.token,
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+modelId+'/?authToken='+TIMAAT.Service.session.token,
 					type:"DELETE",
 					contentType:"application/json; charset=utf-8",
 					beforeSend: function (xhr) {
@@ -600,7 +600,7 @@
 		async getDisplayNamesAndPermissions(mediumAnalysisListId) {
 			return new Promise(resolve => {
 				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/analysislist/'+mediumAnalysisListId+'/displayNames/'+'?authToken='+TIMAAT.Service.session.token,
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/analysisList/'+mediumAnalysisListId+'/displayNames/'+'?authToken='+TIMAAT.Service.session.token,
 					type       : "GET",
 					contentType: "application/json; charset=utf-8",
 					dataType   : "json",

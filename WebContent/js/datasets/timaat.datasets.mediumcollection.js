@@ -351,7 +351,7 @@
 
 			$(document).on('change', '[data-role="changeUserPermissionMediumCollection"] > [data-role="select"]', async function(event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
 				let permissionId = $(this).closest('.custom-select').val();
 
 				// prevent removal of the last admin. One admin has to exist at any time
@@ -382,7 +382,7 @@
 
 			$(document).on('click','[data-role="removeUserPermissionMediumCollection"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userid;
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
 				let index = TIMAAT.MediumCollectionDatasets.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
 				let userPermissionId = TIMAAT.MediumCollectionDatasets.userPermissionList[index].permissionId;
 				if (!userPermissionId) return;
@@ -478,7 +478,7 @@
 				TIMAAT.URLHistory.setURL(null, title + ' · Collection Items · ' + type[0].toUpperCase() + type.slice(1), '#mediumCollection/' + id + '/items');
 			});
 
-			// add medium collection button functionality (in medium collection list - opens datasheet form)
+			// add medium collection button functionality (in medium collection list - opens dataSheet form)
 			$('#mediumcollection-items-add-button').on('click', function(event) {
 				if (TIMAAT.MediumCollectionDatasets.currentPermissionLevel < 2) {
 					$('#mediumCollectionInsufficientPermissionModal').modal('show');
@@ -717,7 +717,7 @@
 				$('.form-buttons :input').prop('disabled', false);
 				$('#mediumcollection-metadata-form-submit-button').hide();
 				$('#mediumcollection-metadata-form-dismiss-button').hide();
-				$('#mediumCollectionFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+				$('#mediumCollectionFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
 				$('#mediumcollection-metadata-form-submit-button').html('Save');
@@ -775,7 +775,7 @@
 				$('#mediumcollection-items-add-button').prop('disabled', false);
 				$('#mediumcollection-items-add-button :input').prop('disabled', false);
 				$('#mediumcollection-items-add-button').show();
-				$('#mediumCollectionFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+				$('#mediumCollectionFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
 			}
 			else if (action == 'edit') {
 				$('#mediumCollection-mediaItems-submit').html('Save');
@@ -1248,8 +1248,8 @@
 							if (collectionItem.medium.originalTitle != null && collectionItem.medium.displayTitle.id != collectionItem.medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+collectionItem.medium.originalTitle.name+`)</i></p>`;
 							}
-							// TODO not working anymore due to server side datatable data search
-							collectionItem.medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+							// TODO not working anymore due to server side dataTable data search
+							collectionItem.medium.titles.forEach(function(title) { // make additional titles searchable in media library
 								if (title.id != collectionItem.medium.displayTitle.id && (collectionItem.medium.originalTitle == null || title.id != collectionItem.medium.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
 								}
@@ -1573,7 +1573,7 @@
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
-							medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+							medium.titles.forEach(function(title) { // make additional titles searchable in media library
 								if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
 								}
@@ -1692,7 +1692,7 @@
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
-							medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+							medium.titles.forEach(function(title) { // make additional titles searchable in media library
 								if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
 									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
 								}

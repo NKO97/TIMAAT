@@ -85,7 +85,7 @@ public class EndpointEvent {
 		// System.out.println("EndpointEvent: getEventList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		String languageQuery = "SELECT et.name FROM EventTranslation et WHERE et.event.id = e.id AND et.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery2 = "SELECT et.name WHERE et.event.id = e.id AND et.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
 		
@@ -198,7 +198,7 @@ public class EndpointEvent {
 	{
 		// System.out.println("EndpointEvent: getEventList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
 		// String column = "e.id";
 		// if ( orderby != null ) {

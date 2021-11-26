@@ -23,7 +23,7 @@
 
 		listLocationTypes(callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/locationtype/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/location/locationType/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",

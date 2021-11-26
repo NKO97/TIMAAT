@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class SqlTimeDeserializer extends JsonDeserializer<Time>  {
 	@Override
-    public Time deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,JsonProcessingException {
+    public Time deserialize(JsonParser jp, DeserializationContext deserializationContext) throws IOException,JsonProcessingException {
         return Time.valueOf(jp.getValueAsString() + ":00");
     }
 
