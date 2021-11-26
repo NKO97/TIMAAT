@@ -39,7 +39,6 @@ public class ActorPersonIsMemberOfActorCollective implements Serializable {
 
 	//bi-directional many-to-one association to MembershipDetail
 	@OneToMany(mappedBy="actorPersonIsMemberOfActorCollective")
-	@JsonIgnore
 	private List<MembershipDetail> membershipDetails;
 
 	public ActorPersonIsMemberOfActorCollective() {

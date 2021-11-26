@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the membership_detail database table.
@@ -29,7 +31,7 @@ public class MembershipDetail implements Serializable {
 
 	//bi-directional many-to-one association to ActorPersonIsMemberOfActorCollective
 	@ManyToOne
-	// @JsonBackReference(value = "ActorPersonIsMemberOFActorCollectives-MemberShipDetails")
+	@JsonIgnore
 	@JoinColumns({
 		@JoinColumn(name="actor_person_actor_id", referencedColumnName="actor_person_actor_id"),
 		@JoinColumn(name="member_of_actor_collective_actor_id", referencedColumnName="member_of_actor_collective_actor_id")
