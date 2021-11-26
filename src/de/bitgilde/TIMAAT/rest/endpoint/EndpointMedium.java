@@ -60,7 +60,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithToken;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.fileInformation.*;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -178,7 +178,7 @@ public class EndpointMedium {
 					break;
 				}
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -211,7 +211,7 @@ public class EndpointMedium {
 			}
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -372,7 +372,7 @@ public class EndpointMedium {
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("mediatype/list")
+	@Path("mediaType/list")
 	public Response getMediaTypeList() {
 		// System.out.println("EndpointMedium: getMediaTypeList");		
 		List<MediaType> mediaTypeList = castList(MediaType.class,TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList());
@@ -441,7 +441,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT ma.medium FROM MediumAudio ma ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -450,7 +450,7 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -515,7 +515,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT md.medium FROM MediumDocument md ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -524,7 +524,7 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -589,7 +589,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mi.medium FROM MediumImage mi ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -598,7 +598,7 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -663,7 +663,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT ms.medium FROM MediumSoftware ms ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -672,7 +672,7 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}	
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -737,7 +737,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mt.medium FROM MediumText mt ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -746,7 +746,7 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 	
 	@GET
@@ -772,7 +772,7 @@ public class EndpointMedium {
 			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query // should be ordered in front end instead
-			// - dependencies  --> actor --> actornames --> actorname.isdisplayname
+			// - dependencies  --> actor --> actorNames --> actorName.isdisplayname
 			// + --> role == 5 --> producer
 		}
 
@@ -817,7 +817,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideo mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -827,7 +827,7 @@ public class EndpointMedium {
 			for (Medium medium : mediumList) {
 				medium.getMediumAnalysisLists().clear();
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 		}
 	}
 
@@ -894,7 +894,7 @@ public class EndpointMedium {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = "SELECT mv.medium FROM MediumVideogame mv ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -903,14 +903,14 @@ public class EndpointMedium {
 			mediumList = castList(Medium.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 	
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("hasActor/{actor_id}/withRoles/selectList")
-	public Response getRoleSelectList(@PathParam("actor_id") int actorId,
+	@Path("hasActor/{actorId}/withRoles/selectList")
+	public Response getRoleSelectList(@PathParam("actorId") int actorId,
 																		@QueryParam("search") String search,
 																		@QueryParam("page") Integer page,
 																		@QueryParam("per_page") Integer per_page,
@@ -919,7 +919,7 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: getRoleSelectList for actor id: "+ actorId);
 		// System.out.println("EndpointMedium: getRoleSelectList - search string: "+ search);
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
@@ -3022,7 +3022,7 @@ public class EndpointMedium {
 			 * while ((read = uploadedInputStream.read(bytes)) != -1) { out.write(bytes, 0,
 			 * read); out.flush(); } out.close();
 			 */
-			// persist mediumvideo changes
+			// persist mediumVideo changes
 			// TODO load from config
 			// MediaType mt = entityManager.find(MediaType.class, 6);
 			// Language lang = entityManager.find(Language.class, 1);
@@ -3428,13 +3428,13 @@ public class EndpointMedium {
 		}		
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-		int seks = -1;
+		int seconds = -1;
 		if ( milliseconds != null ) try {
-			seks = (int) (Integer.parseInt(milliseconds) / 1000);
-		} catch (NumberFormatException e) { seks = -1; };		
-		if ( seks >= 0 ) seks++;
+			seconds = (int) (Integer.parseInt(milliseconds) / 1000);
+		} catch (NumberFormatException e) { seconds = -1; };		
+		if ( seconds >= 0 ) seconds++;
 		
-		if ( seks < 0 ) {
+		if ( seconds < 0 ) {
 			// load thumbnail from storage
 /*
 			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id);
@@ -3453,7 +3453,7 @@ public class EndpointMedium {
 */
    	
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seks) + ".jpg");
+				+ "medium/video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seconds) + ".jpg");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 			return Response.ok().entity(thumbnail).build();
@@ -4110,12 +4110,12 @@ public class EndpointMedium {
 		// System.out.println("issueFileToken for id "+ mediumID);
 		Key key = TIMAATKeyGenerator.generateKey();
 		
-		JwtBuilder tokenbuilder = Jwts.builder().claim("file", mediumID).setIssuer(
+		JwtBuilder jwtBuilder = Jwts.builder().claim("file", mediumID).setIssuer(
 			TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME));
-		if ( crc != null ) tokenbuilder
+		if ( crc != null ) jwtBuilder
 		.setSubject(crc.getProperty("TIMAAT.userName").toString())
 		.claim("id", Integer.parseInt(crc.getProperty("TIMAAT.userID").toString()));
-		String token = tokenbuilder.setIssuedAt(new Date())
+		String token = jwtBuilder.setIssuedAt(new Date())
 			.setExpiration(EndpointAuthentication.toDate(LocalDateTime.now().plusHours(8L)))
 			.signWith(key, SignatureAlgorithm.HS512).compact();
 		return token;

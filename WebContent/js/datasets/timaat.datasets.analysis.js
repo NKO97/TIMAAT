@@ -2712,7 +2712,7 @@
           "zeroRecords"      : "No analysis guidelines found.",
           "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis guidelines total)",
           "infoEmpty"        : "No analysis guidelines available.",
-          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis guildelines)',
+          "infoFiltered"     : '(&mdash; _TOTAL_ of _MAX_ analysis guidelines)',
           "paginate"         : {
             "first"   : "<<",
             "previous": "<",
@@ -2746,7 +2746,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							as_datatable: true,
+							asDataTable: true,
 						}
 						// if ( data.search && data.search.value && data.search.value.length > 0 ) serverData.search = data.search.value;
 						return serverData;

@@ -1277,8 +1277,8 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("sequence/{sequence_id}/translation")
-	public Response createAnalysisSequenceTranslation(@PathParam("sequence_id") int sequenceId,
+	@Path("sequence/{sequenceId}/translation")
+	public Response createAnalysisSequenceTranslation(@PathParam("sequenceId") int sequenceId,
 																										String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSequenceTranslation newTranslation = null;
@@ -1329,9 +1329,9 @@ public class EndpointAnalysisList {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("sequence/translation/{translation_id}")
+	@Path("sequence/translation/{translationId}")
 	@Secured
-	public Response updateAnalysisSequenceTranslation(@PathParam("translation_id") int translationId,
+	public Response updateAnalysisSequenceTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
 		System.out.println("updateAnalysisSequenceTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1372,9 +1372,9 @@ public class EndpointAnalysisList {
 
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
-	@Path("sequence/translation/{translation_id}")
+	@Path("sequence/translation/{translationId}")
 	@Secured
-	public Response deleteAnalysisSequenceTranslation(@PathParam("translation_id") int translationId,
+	public Response deleteAnalysisSequenceTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1572,8 +1572,8 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("scene/{scene_id}/translation")
-	public Response createAnalysisSceneTranslation(@PathParam("scene_id") int sceneId, String jsonData) {
+	@Path("scene/{sceneId}/translation")
+	public Response createAnalysisSceneTranslation(@PathParam("sceneId") int sceneId, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSceneTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1623,9 +1623,9 @@ public class EndpointAnalysisList {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("scene/translation/{translation_id}")
+	@Path("scene/translation/{translationId}")
 	@Secured
-	public Response updateAnalysisSceneTranslation(@PathParam("translation_id") int translationId,
+	public Response updateAnalysisSceneTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
 		System.out.println("updateAnalysisSceneTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1666,9 +1666,9 @@ public class EndpointAnalysisList {
 
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
-	@Path("scene/translation/{translation_id}")
+	@Path("scene/translation/{translationId}")
 	@Secured
-	public Response deleteAnalysisSceneTranslation(@PathParam("translation_id") int translationId) {
+	public Response deleteAnalysisSceneTranslation(@PathParam("translationId") int translationId) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSceneTranslation analysisSceneTranslation = entityManager.find(AnalysisSceneTranslation.class, translationId);
@@ -1865,8 +1865,8 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("take/{take_id}/translation")
-	public Response createAnalysisTakeTranslation(@PathParam("take_id") int takeId, String jsonData) {
+	@Path("take/{takeId}/translation")
+	public Response createAnalysisTakeTranslation(@PathParam("takeId") int takeId, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTakeTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1916,9 +1916,9 @@ public class EndpointAnalysisList {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("take/translation/{translation_id}")
+	@Path("take/translation/{translationId}")
 	@Secured
-	public Response updateAnalysisTakeTranslation(@PathParam("translation_id") int translationId,
+	public Response updateAnalysisTakeTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
 		System.out.println("updateAnalysisTakeTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1959,9 +1959,9 @@ public class EndpointAnalysisList {
 
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
-	@Path("take/translation/{translation_id}")
+	@Path("take/translation/{translationId}")
 	@Secured
-	public Response deleteAnalysisTakeTranslation(@PathParam("translation_id") int translationId) {
+	public Response deleteAnalysisTakeTranslation(@PathParam("translationId") int translationId) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTakeTranslation analysisTakeTranslation = entityManager.find(AnalysisTakeTranslation.class, translationId);
@@ -2157,8 +2157,8 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("action/{action_id}/translation")
-	public Response createAnalysisActionTranslation(@PathParam("action_id") int actionId, String jsonData) {
+	@Path("action/{actionId}/translation")
+	public Response createAnalysisActionTranslation(@PathParam("actionId") int actionId, String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisActionTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2208,9 +2208,9 @@ public class EndpointAnalysisList {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("action/translation/{translation_id}")
+	@Path("action/translation/{translationId}")
 	@Secured
-	public Response updateAnalysisActionTranslation(@PathParam("translation_id") int translationId,
+	public Response updateAnalysisActionTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
 		System.out.println("updateAnalysisActionTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2251,9 +2251,9 @@ public class EndpointAnalysisList {
 
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
-	@Path("action/translation/{translation_id}")
+	@Path("action/translation/{translationId}")
 	@Secured
-	public Response deleteAnalysisActionTranslation(@PathParam("translation_id") int translationId) {
+	public Response deleteAnalysisActionTranslation(@PathParam("translationId") int translationId) {
     	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisActionTranslation analysisActionTranslation = entityManager.find(AnalysisActionTranslation.class, translationId);

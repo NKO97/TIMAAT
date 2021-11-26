@@ -35,7 +35,7 @@ import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.EventTranslation;
@@ -154,7 +154,7 @@ public class EndpointEvent {
 			eventList = castList(Event.class, query.getResultList());
 		}	
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, eventList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, eventList)).build();
   }
 
 	@GET

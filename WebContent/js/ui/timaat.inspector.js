@@ -26,10 +26,10 @@
 			// init sidebar control
 			this._viewer = viewer;
 			this._inspector = L.control.sidebar({
-				autopan: false,
-				container: 'timaat-inspector',
+				autoPan    : false,
+				container  : 'timaat-inspector',
 				closeButton: true,
-				position: 'right',
+				position   : 'right',
 			}).addTo(viewer);
 			
 			// activate floating inspector
@@ -149,7 +149,7 @@
 								nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
 							}
 						}
-						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
 								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
 							}
@@ -159,7 +159,7 @@
 				}],
 				language: this.ui.actorLang,
 			});
-//			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Verfügbare Actors');
+//			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Available Actors');
 			
 			this.ui.dataTableAnnoActors = $('#timaat-inspector-actors-pane .actors-annotation').DataTable({
 				lengthChange	: false,
@@ -182,7 +182,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							as_datatable: true,
+							asDataTable: true,
 						}
 //						if ( data.search && data.search.value && data.search.value.length > 0 ) serverData.search = data.search.value;
 						return serverData;
@@ -355,7 +355,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							as_datatable: true,
+							asDataTable: true,
 						}
 						// if ( data.search && data.search.value && data.search.value.length > 0 ) serverData.search = data.search.value;
 						return serverData;

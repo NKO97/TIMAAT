@@ -24,7 +24,7 @@ import org.jvnet.hk2.annotations.Service;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.rest.Secured;
 
@@ -85,7 +85,7 @@ public class EndpointTag {
 
 		List<Tag> tagList = castList(Tag.class, query.getResultList());
 		
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, tagList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, tagList)).build();
   }
 
   @GET

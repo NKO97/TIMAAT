@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
@@ -266,9 +266,9 @@ public class EndpointAnnotation {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
 			@QueryParam("search") String search, // not supported
-			@QueryParam("as_datatable") String asDatatable
+			@QueryParam("asDataTable") String asDataTable
 	)	{
-		// System.out.println("EndpointAnnotation: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationActors: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" asDataTable: "+asDataTable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -279,14 +279,14 @@ public class EndpointAnnotation {
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
-		if ( asDatatable == null ) {
+		if ( asDataTable == null ) {
 			if ( anno != null ) return Response.ok().entity(anno.getActors()).build();
 			else return Response.status(Status.NOT_FOUND).build();
 		} else {
-			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Actor>())).build();
+			if ( anno == null ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, new ArrayList<Actor>())).build();
 			else {
 				List<Actor> actors = anno.getActors();
-				if ( actors.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, actors)).build();
+				if ( actors.size() == 0 ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, actors)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
 					Collections.sort(actors, (Comparator<Actor>) (Actor a1, Actor a2) -> a1.getDisplayName().getName().toLowerCase().compareTo( a2.getDisplayName().getName().toLowerCase()));
 				else
@@ -298,9 +298,9 @@ public class EndpointAnnotation {
 					if ( length == null ) length = 1;
 					if ( length < 1 ) length = 1;
 					if ( (start+length) > actors.size() ) length = actors.size()-start;
-					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors.subList(start, start+length))).build();
+					return Response.ok().entity(new DataTableInfo(draw, actors.size(), actors.size(), actors.subList(start, start+length))).build();
 				} else 
-					return Response.ok().entity(new DatatableInfo(draw, actors.size(), actors.size(), actors)).build();
+					return Response.ok().entity(new DataTableInfo(draw, actors.size(), actors.size(), actors)).build();
 			}
 		}
 	}
@@ -317,9 +317,9 @@ public class EndpointAnnotation {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
 			@QueryParam("search") String search, //* not supported
-			@QueryParam("as_datatable") String asDatatable
+			@QueryParam("asDataTable") String asDataTable
 	)	{
-		// System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationAnalysis: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" asDataTable: "+asDataTable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -330,14 +330,14 @@ public class EndpointAnnotation {
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
-		if ( asDatatable == null ) {
+		if ( asDataTable == null ) {
 			if ( anno != null ) return Response.ok().entity(anno.getAnalysis()).build();
 			else return Response.status(Status.NOT_FOUND).build();
 		} else {
-			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Analysis>())).build();
+			if ( anno == null ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, new ArrayList<Analysis>())).build();
 			else {
 				List<Analysis> analysis = anno.getAnalysis();
-				if ( analysis.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, analysis)).build();
+				if ( analysis.size() == 0 ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, analysis)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
 					Collections.sort(analysis, (Comparator<Analysis>) (Analysis a1, Analysis a2) -> a1.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase().compareTo( a2.getAnalysisMethod().getAnalysisMethodType().getAnalysisMethodTypeTranslations().get(0).getName().toLowerCase()));
 				else
@@ -348,9 +348,9 @@ public class EndpointAnnotation {
 					if ( length == null ) length = 1;
 					if ( length < 1 ) length = 1;
 					if ( (start+length) > analysis.size() ) length = analysis.size()-start;
-					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis.subList(start, start+length))).build();
+					return Response.ok().entity(new DataTableInfo(draw, analysis.size(), analysis.size(), analysis.subList(start, start+length))).build();
 				} else 
-					return Response.ok().entity(new DatatableInfo(draw, analysis.size(), analysis.size(), analysis)).build();
+					return Response.ok().entity(new DataTableInfo(draw, analysis.size(), analysis.size(), analysis)).build();
 			}
 		}
 	}
@@ -367,9 +367,9 @@ public class EndpointAnnotation {
 			@QueryParam("orderby") String orderby,
 			@QueryParam("dir") String direction,
 			@QueryParam("search") String search, // not supported
-			@QueryParam("as_datatable") String asDatatable
+			@QueryParam("asDataTable") String asDataTable
 	)	{
-		// System.out.println("EndpointAnnotation: getAnnotationEvent: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" as_datatable: "+asDatatable);
+		// System.out.println("EndpointAnnotation: getAnnotationEvent: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" asDataTable: "+asDataTable);
 		// sanitize user input
 		if ( draw == null ) draw = 0;
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
@@ -380,14 +380,14 @@ public class EndpointAnnotation {
 
 		// retrieve annotation
 		Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, id);
-		if ( asDatatable == null ) {
+		if ( asDataTable == null ) {
 			if ( anno != null ) return Response.ok().entity(anno.getEvents()).build();
 			else return Response.status(Status.NOT_FOUND).build();
 		} else {
-			if ( anno == null ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, new ArrayList<Event>())).build();
+			if ( anno == null ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, new ArrayList<Event>())).build();
 			else {
 				List<Event> events = anno.getEvents();
-				if ( events.size() == 0 ) return Response.ok().entity(new DatatableInfo(draw, 0, 0, events)).build();
+				if ( events.size() == 0 ) return Response.ok().entity(new DataTableInfo(draw, 0, 0, events)).build();
 				if ( direction.compareTo("ASC") == 0 ) 
 					Collections.sort(events, (Comparator<Event>) (Event a1, Event a2) -> a1.getEventTranslations().get(0).getName().toLowerCase().compareTo( a2.getEventTranslations().get(0).getName().toLowerCase()));
 				else
@@ -399,9 +399,9 @@ public class EndpointAnnotation {
 					if ( length == null ) length = 1;
 					if ( length < 1 ) length = 1;
 					if ( (start+length) > events.size() ) length = events.size()-start;
-					return Response.ok().entity(new DatatableInfo(draw, events.size(), events.size(), events.subList(start, start+length))).build();
+					return Response.ok().entity(new DataTableInfo(draw, events.size(), events.size(), events.subList(start, start+length))).build();
 				} else 
-					return Response.ok().entity(new DatatableInfo(draw, events.size(), events.size(), events)).build();
+					return Response.ok().entity(new DataTableInfo(draw, events.size(), events.size(), events)).build();
 			}
 		}
 	}
@@ -810,15 +810,15 @@ public class EndpointAnnotation {
 
   //   	// check if category exists    	
   //   	Category category = null;
-  //   	List<Category> categorys = null;
+  //   	List<Category> categories = null;
   //   	try {
-  //       	categorys = (List<Category>) entityManager.createQuery("SELECT t from Category t WHERE t.name=:name")
+  //       	categories = (List<Category>) entityManager.createQuery("SELECT t from Category t WHERE t.name=:name")
   //       			.setParameter("name", categoryName)
   //       			.getResultList();
   //   	} catch(Exception e) {};
     	
   //   	// find category case sensitive
-  //   	for ( Category listCategory : categorys )
+  //   	for ( Category listCategory : categories )
   //   		if ( listCategory.getName().compareTo(categoryName) == 0 ) category = listCategory;
     	
   //   	// create category if it doesn't exist yet
@@ -862,8 +862,8 @@ public class EndpointAnnotation {
     	
   //   	// check if Annotation already has category
   //   	Category category = null;
-  //   	for ( Category annocategory:annotation.getCategories()) {
-  //   		if ( annocategory.getName().compareTo(categoryName) == 0 ) category = annocategory;
+  //   	for ( Category annoCategory:annotation.getCategories()) {
+  //   		if ( annoCategory.getName().compareTo(categoryName) == 0 ) category = annoCategory;
   //   	}
   //   	if ( category != null ) {
   //       // attach category to annotation and vice versa    	

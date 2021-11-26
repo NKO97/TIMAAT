@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
@@ -113,7 +113,7 @@ public class EndpointCategory {
 			for (; i < end; i++) {
 				filteredCategoryList.add(categoryList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredCategoryList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredCategoryList)).build();
 		} else {
 			sql = "SELECT c FROM Category c ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -121,7 +121,7 @@ public class EndpointCategory {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			categoryList = castList(Category.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, categoryList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, categoryList)).build();
   }
 
 	@GET
@@ -139,9 +139,9 @@ public class EndpointCategory {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{category_id}/set/{categoryset_id}")
-	public Response getCategoryHasCategorySet(@PathParam("category_id") Integer categoryId,
-																						@PathParam("categoryset_id") Integer categorySetId) {
+	@Path("{categoryId}/set/{categorySetId}")
+	public Response getCategoryHasCategorySet(@PathParam("categoryId") Integer categoryId,
+																						@PathParam("categorySetId") Integer categorySetId) {
 		// System.out.println("EndpointCategorySet: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();

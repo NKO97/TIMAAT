@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
@@ -111,7 +111,7 @@ public class EndpointRole {
 			for (; i < end; i++) {
 				filteredRoleList.add(roleList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredRoleList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredRoleList)).build();
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 			// "SELECT r FROM Role r ORDER BY "+column+" "+direction);
@@ -120,7 +120,7 @@ public class EndpointRole {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			roleList = castList(Role.class, query.getResultList());
 		}	
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, roleList)).build();
   }
 
 	@GET
@@ -173,8 +173,8 @@ public class EndpointRole {
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{role_id}/hasList")
-	public Response getRoleHasRoleGroupList(@PathParam("role_id") Integer roleId)
+	@Path("{roleId}/hasList")
+	public Response getRoleHasRoleGroupList(@PathParam("roleId") Integer roleId)
 	{
 		System.out.println("EndpointRole: getRoleHasRoleGroupList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -273,10 +273,10 @@ public class EndpointRole {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{role_id}/translation/{id}")
+	@Path("{roleId}/translation/{id}")
 	@Secured
 	public Response createRoleTranslation(@PathParam("id") int id,
-																				@PathParam("role_id") int roleId,
+																				@PathParam("roleId") int roleId,
 																				String jsonData) {
 
 		System.out.println("EndpointRole: createRoleTranslation: jsonData: "+jsonData);

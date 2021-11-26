@@ -38,7 +38,7 @@ import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorCollective;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasAddress;
@@ -179,7 +179,7 @@ public class EndpointActor {
 			for(; i < end; i++) {
 				filteredActorList.add(actorList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 			// calculate search result # of records
 			// countQuery = entityManager.createQuery(actorSearchCountQuery);
 			// countQuery.setParameter("title1", search);
@@ -195,7 +195,7 @@ public class EndpointActor {
 			actorList = castList(Actor.class, query.getResultList());
 		}
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 
 	}
 
@@ -280,8 +280,8 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("actortype/list")
-	public Response getActortypeList() {
+	@Path("actorType/list")
+	public Response getActorTypeList() {
 		// System.out.println("EndpointActor: getActorTypeList");		
 		List<ActorType> actorTypeList = castList(ActorType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("ActorType.findAll").getResultList());
 		return Response.ok().entity(actorTypeList).build();
@@ -351,7 +351,7 @@ public class EndpointActor {
 			for(; i < end; i++) {
 				filteredActorList.add(actorList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 		} else {
 			sql = "SELECT ap.actor FROM ActorPerson ap ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -359,7 +359,7 @@ public class EndpointActor {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			actorList = castList(Actor.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
 
 	@GET
@@ -480,7 +480,7 @@ public class EndpointActor {
 			for(; i < end; i++) {
 				filteredActorList.add(actorList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 		} else {
 			sql = "SELECT ac.actor FROM ActorCollective ac ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -489,7 +489,7 @@ public class EndpointActor {
 			actorList = castList(Actor.class, query.getResultList());
 		}		
 
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
 	}
 	
 	@GET
@@ -549,7 +549,7 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("addresstype/list")
+	@Path("addressType/list")
 	public Response getAddressTypeList() {
 		// System.out.println("EndpointActor: getAddressTypeList");		
 		List<AddressType> addressTypeList = castList(AddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("AddressType.findAll").getResultList());
@@ -559,7 +559,7 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("emailaddresstype/list")
+	@Path("emailAddressType/list")
 	public Response getEmailAddressTypeList() {
 		// System.out.println("EndpointActor: getEmailAddressTypeList");		
 		List<EmailAddressType> emailAddressTypeList = castList(EmailAddressType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("EmailAddressType.findAll").getResultList());
@@ -569,7 +569,7 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("phonenumbertype/list")
+	@Path("phoneNumberType/list")
 	public Response getPhoneNumberTypeList() {
 		// System.out.println("EndpointActor: getPhoneNumberTypeList");		
 		List<PhoneNumberType> emailAddressTypeList = castList(PhoneNumberType.class, TIMAATApp.emf.createEntityManager().createNamedQuery("PhoneNumberType.findAll").getResultList());
@@ -611,9 +611,9 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{actor_id}/role/{role_id}/list")
-	public Response getActorRoleInMediumList(@PathParam("actor_id") int actorId,
-																					 @PathParam("role_id") int roleId)
+	@Path("{actorId}/role/{roleId}/list")
+	public Response getActorRoleInMediumList(@PathParam("actorId") int actorId,
+																					 @PathParam("roleId") int roleId)
 	{
 		// System.out.println("EndpointActor: getActorRoleInMediumList - actorId, roleId: " + actorId + " " + roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -637,8 +637,8 @@ public class EndpointActor {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("withRole/{role_id}")
-	public Response getActorsWithThisRoleList(@PathParam("role_id") int roleId)
+	@Path("withRole/{roleId}")
+	public Response getActorsWithThisRoleList(@PathParam("roleId") int roleId)
 	{
 		// System.out.println("EndpointActor: getActorsWithThisRoleList - ID: "+ roleId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -687,7 +687,7 @@ public class EndpointActor {
 		// returns list of id and name combinations of all Languages
 		// System.out.println("EndpointActor: getSexSelectList");
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi language is not implemented yet, use the 'default' language entry
 
 		// search
 		Query query;
@@ -1045,8 +1045,8 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{person_id}/translation/{id}")
-	public Response createPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id, String jsonData) {
+	@Path("{personId}/translation/{id}")
+	public Response createPersonTranslation(@PathParam("personId") int personId, @PathParam("id") int id, String jsonData) {
 		
 		// System.out.println("PersonEndpoint: createPersonTranslation jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1094,8 +1094,8 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{person_id}/translation/{id}")
-	public Response updateActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id, String jsonData) {
+	@Path("{personId}/translation/{id}")
+	public Response updateActorPersonTranslation(@PathParam("personId") int personId, @PathParam("id") int id, String jsonData) {
 
 		// System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1135,9 +1135,9 @@ public class EndpointActor {
 	// not needed yet (should be necessary once several translations for an person exist and individual ones need to be removed)
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{person_id}/translation/{id}")
+	@Path("{personId}/translation/{id}")
 	@Secured
-	public Response deleteActorPersonTranslation(@PathParam("person_id") int personId, @PathParam("id") int id) {	
+	public Response deleteActorPersonTranslation(@PathParam("personId") int personId, @PathParam("id") int id) {	
 
 		// System.out.println("ActorPersonEndpoint: deleteActorPersonTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1348,9 +1348,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/name/{id}")
+	@Path("{actorId}/name/{id}")
 	@Secured
-	public Response addName(@PathParam("actorid") int actorId, 
+	public Response addName(@PathParam("actorId") int actorId, 
 													@PathParam("id") int id,
 													String jsonData) {
 
@@ -1541,9 +1541,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/address/{id}")
+	@Path("{actorId}/address/{id}")
 	@Secured
-	public Response addAddress(@PathParam("actorid") int actorId, @PathParam("id") int id, String jsonData) {
+	public Response addAddress(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointActor: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1662,9 +1662,9 @@ public class EndpointActor {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actor_id}/address/{address_id}")
+	@Path("{actorId}/address/{addressId}")
 	@Secured
-	public Response updateActorHasAddress(@PathParam("actor_id") int actorId, @PathParam("address_id") int addressId, String jsonData) {
+	public Response updateActorHasAddress(@PathParam("actorId") int actorId, @PathParam("addressId") int addressId, String jsonData) {
 
 		System.out.println("EndpointActor: updateActorHasAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1740,7 +1740,7 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("emailaddress/{id}")
+	@Path("emailAddress/{id}")
 	@Secured
 	public Response createEmailAddress(@PathParam("id") int id, String jsonData) {
 
@@ -1793,9 +1793,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/emailaddress/{id}")
+	@Path("{actorId}/emailAddress/{id}")
 	@Secured
-	public Response addEmailAddress(@PathParam("actorid") int actorId, @PathParam("id") int id, String jsonData) {
+	public Response addEmailAddress(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointActor: addEmailAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1863,7 +1863,7 @@ public class EndpointActor {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("emailaddress/{id}")
+	@Path("emailAddress/{id}")
 	@Secured
 	public Response updateEmailAddress(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointActor: updateEmailAddress - jsonData: " + jsonData);
@@ -1904,9 +1904,9 @@ public class EndpointActor {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actor_id}/emailaddress/{emailaddress_id}")
+	@Path("{actorId}/emailAddress/{emailAddressId}")
 	@Secured
-	public Response updateActorHasEmailAddress(@PathParam("actor_id") int actorId, @PathParam("emailaddress_id") int emailAddressId, String jsonData) {
+	public Response updateActorHasEmailAddress(@PathParam("actorId") int actorId, @PathParam("emailAddressId") int emailAddressId, String jsonData) {
 
 		System.out.println("EndpointActor: updateActorHasEmailAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1917,8 +1917,8 @@ public class EndpointActor {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		EmailAddress emailAddress = entityManager.find(EmailAddress.class, emailAddressId);
-		ActorHasEmailAddress ahekey = new ActorHasEmailAddress(actor, emailAddress);
-		ActorHasEmailAddress actorHasEmailAddress = entityManager.find(ActorHasEmailAddress.class, ahekey.getId());
+		ActorHasEmailAddress aheakey = new ActorHasEmailAddress(actor, emailAddress);
+		ActorHasEmailAddress actorHasEmailAddress = entityManager.find(ActorHasEmailAddress.class, aheakey.getId());
 		// System.out.println("EndpointActor: updateActorHasEmailAddress - actorId :"+actorHasEmailAddress.getActor().getId());
 		// System.out.println("EndpointActor: updateActorHasEmailAddress - emailAddressId :"+actorHasEmailAddress.getEmailAddress().getId());
 		// System.out.println("EndpointActor: updateActorHasEmailAddress - parse json data");
@@ -1956,7 +1956,7 @@ public class EndpointActor {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("emailaddress/{id}")
+	@Path("emailAddress/{id}")
 	@Secured
 	public Response deleteEmailAddress(@PathParam("id") int id) {    
 		System.out.println("EndpointActor: deleteEmailAddress");	
@@ -1980,7 +1980,7 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("phonenumber/{id}")
+	@Path("phoneNumber/{id}")
 	@Secured
 	public Response createPhoneNumber(@PathParam("id") int id, String jsonData) {
 
@@ -2033,9 +2033,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/phonenumber/{id}")
+	@Path("{actorId}/phoneNumber/{id}")
 	@Secured
-	public Response addPhoneNumber(@PathParam("actorid") int actorId, @PathParam("id") int id, String jsonData) {
+	public Response addPhoneNumber(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointActor: addPhoneNumber: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2103,7 +2103,7 @@ public class EndpointActor {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("phonenumber/{id}")
+	@Path("phoneNumber/{id}")
 	@Secured
 	public Response updatePhoneNumber(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointActor: updatePhoneNumber - jsonData: " + jsonData);
@@ -2144,9 +2144,9 @@ public class EndpointActor {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actor_id}/phonenumber/{phonenumber_id}")
+	@Path("{actorId}/phoneNumber/{phoneNumberId}")
 	@Secured
-	public Response updateActorHasPhoneNumber(@PathParam("actor_id") int actorId, @PathParam("phonenumber_id") int phoneNumberId, String jsonData) {
+	public Response updateActorHasPhoneNumber(@PathParam("actorId") int actorId, @PathParam("phoneNumberId") int phoneNumberId, String jsonData) {
 
 		System.out.println("EndpointActor: updateActorHasPhoneNumber - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2157,8 +2157,8 @@ public class EndpointActor {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, phoneNumberId);
-		ActorHasPhoneNumber ahekey = new ActorHasPhoneNumber(actor, phoneNumber);
-		ActorHasPhoneNumber actorHasPhoneNumber = entityManager.find(ActorHasPhoneNumber.class, ahekey.getId());
+		ActorHasPhoneNumber ahpnkey = new ActorHasPhoneNumber(actor, phoneNumber);
+		ActorHasPhoneNumber actorHasPhoneNumber = entityManager.find(ActorHasPhoneNumber.class, ahpnkey.getId());
 		// System.out.println("EndpointActor: updateActorHasPhoneNumber - actorId :"+actorHasPhoneNumber.getActor().getId());
 		// System.out.println("EndpointActor: updateActorHasPhoneNumber - phoneNumberId :"+actorHasPhoneNumber.getPhoneNumber().getId());
 		// System.out.println("EndpointActor: updateActorHasPhoneNumber - parse json data");
@@ -2196,7 +2196,7 @@ public class EndpointActor {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("phonenumber/{id}")
+	@Path("phoneNumber/{id}")
 	@Secured
 	public Response deletePhoneNumber(@PathParam("id") int id) {    
 		System.out.println("EndpointActor: deletePhoneNumber");	
@@ -2488,9 +2488,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("citizenship/{id}/{language_id}")
+	@Path("citizenship/{id}/{languageId}")
 	@Secured
-	public Response createCitizenship(@PathParam("id") int id, String jsonData, @PathParam("language_id") int languageId) {
+	public Response createCitizenship(@PathParam("id") int id, String jsonData, @PathParam("languageId") int languageId) {
 
 		System.out.println("EndpointActor: createCitizenship: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2564,9 +2564,9 @@ public class EndpointActor {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{actorid}/citizenship/{id}")
+	@Path("{actorId}/citizenship/{id}")
 	@Secured
-	public Response addCitizenship(@PathParam("actorid") int actorId, @PathParam("id") int id, String jsonData) {
+	public Response addCitizenship(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
 
 		System.out.println("EndpointActor: addCitizenship: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();

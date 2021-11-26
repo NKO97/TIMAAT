@@ -32,7 +32,7 @@ import org.jvnet.hk2.annotations.Service;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithChildren;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.ActingTechniqueTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisActor;
@@ -173,7 +173,7 @@ public class EndpointAnalysis {
 				analysisMethodTypeList = castList(AnalysisMethodType.class, query.getResultList());
 				// System.out.println("analysisMethodTypeList size: " + analysisMethodTypeList.size());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, analysisMethodTypeList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, analysisMethodTypeList)).build();
   }
 	
 	@GET
@@ -419,7 +419,7 @@ public class EndpointAnalysis {
 		// 	if (orderby.equalsIgnoreCase("name")) column = "amtt.name";
 		// }
 
-		if ( languageCode == null) languageCode = "default"; // as long as multilanguage is not implemented yet, use the 'default' language entry
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
 		// determine which analysis method entries shall be displayed
 		// EntityManager entityManager = TIMAATApp.emf.createEntityManager();

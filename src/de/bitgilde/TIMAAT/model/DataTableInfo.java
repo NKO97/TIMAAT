@@ -2,7 +2,7 @@ package de.bitgilde.TIMAAT.model;
 
 import java.util.List;
 
-public class DatatableInfo {
+public class DataTableInfo {
 
 	public int draw;
 	public long recordsTotal;
@@ -11,11 +11,11 @@ public class DatatableInfo {
 	public List<?> data;
 
 
-	public DatatableInfo() {
+	public DataTableInfo() {
 		
 	}
 
-	public DatatableInfo(int draw, long recordsTotal, long recordsFiltered, List<?> data) {
+	public DataTableInfo(int draw, long recordsTotal, long recordsFiltered, List<?> data) {
 		this.draw = draw;
 		this.recordsTotal = recordsTotal;
 		this.recordsFiltered = recordsFiltered;

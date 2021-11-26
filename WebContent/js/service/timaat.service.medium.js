@@ -23,7 +23,7 @@
 
 		listMediumTypes(callback) {
 			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/mediatype/list",
+				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/mediaType/list",
 				type:"GET",
 				contentType:"application/json; charset=utf-8",
 				dataType:"json",

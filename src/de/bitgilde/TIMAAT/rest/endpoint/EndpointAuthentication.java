@@ -240,12 +240,12 @@ public class EndpointAuthentication {
 
 		newHash = newHash.substring(newHash.lastIndexOf("$")+1); // remove hash algorithm metadata
 
-		String hexhash = toHex(Base64.getDecoder().decode(newHash));
-		while (hexhash.length() < 64) hexhash = "0" + hexhash;
+		String hexHash = toHex(Base64.getDecoder().decode(newHash));
+		while (hexHash.length() < 64) hexHash = "0" + hexHash;
 
 		// compare calculated server hash with DB stored old hashes
 		for (UserPasswordOldHash oldHash : userAccount.getUserPasswordOldHash()) {
-			if ( hexhash.compareTo(oldHash.getStretchedHashEncrypted()) == 0 ) {
+			if ( hexHash.compareTo(oldHash.getStretchedHashEncrypted()) == 0 ) {
 				return Response.status(Status.CONFLICT).build();
 			}
 		}
@@ -268,7 +268,7 @@ public class EndpointAuthentication {
 		entityTransaction.commit();
 		entityManager.refresh(userPasswordOldHash);
 
-		userPassword.setStretchedHashEncrypted(hexhash);
+		userPassword.setStretchedHashEncrypted(hexHash);
 		entityTransaction.begin();
 		entityManager.merge(userPassword);
 		entityManager.persist(userPassword);
@@ -304,15 +304,15 @@ public class EndpointAuthentication {
 
 		hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
 		
-		String hexhash = toHex(Base64.getDecoder().decode(hash));
-		while (hexhash.length() < 64) hexhash = "0" + hexhash;
+		String hexHash = toHex(Base64.getDecoder().decode(hash));
+		while (hexHash.length() < 64) hexHash = "0" + hexHash;
 
-		// System.out.println("Entered: " + hexhash);
+		// System.out.println("Entered: " + hexHash);
 		// System.out.println("Stored: " + user.getUserPassword().getStretchedHashEncrypted());
 		System.out.println("User logged in: " + user.getDisplayName() + " at " + LocalDateTime.now());
 
 		// compare calculated server hash with DB stored hash
-		if ( hexhash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
+		if ( hexHash.compareTo(user.getUserPassword().getStretchedHashEncrypted()) != 0 )
 			throw new CredentialException();
 
 		return user;

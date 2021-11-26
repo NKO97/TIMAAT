@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.DisplayElementNameAndPermission;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAlbum;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionAnalysisList;
@@ -146,7 +146,7 @@ public class EndpointMediumCollection {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumCollectionList = castList(MediaCollection.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumCollectionList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumCollectionList)).build();
 	}
 
 	@GET
@@ -216,7 +216,7 @@ public class EndpointMediumCollection {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = mediumCollectionListQuery+" ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -224,7 +224,7 @@ public class EndpointMediumCollection {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -262,7 +262,7 @@ public class EndpointMediumCollection {
 		List<Medium> mediumList = new ArrayList<>();
 		if (id == 0) { // init datatable is required but calls function with id 0
 			// System.out.println("No collection -> no entries");
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, new ArrayList<>())).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, new ArrayList<>())).build();
 		}
 		MediaCollection mediaCollection = entityManager.find(MediaCollection.class, id);
 		if (mediaCollection == null) return Response.status(Status.BAD_REQUEST).build();
@@ -299,7 +299,7 @@ public class EndpointMediumCollection {
 				filteredMediumList.add(mediumList.get(i));
 			}
 			// System.out.println("Collection has #entries: "+ filteredMediumList.size());
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = mediaCollectionListQuery+" ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -309,7 +309,7 @@ public class EndpointMediumCollection {
 			mediaCollectionHasMediumList = castList(MediaCollectionHasMedium.class, query.getResultList());
 		}
 		// System.out.println("Collection has #entries: "+ mediaCollectionHasMediumList.size());
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediaCollectionHasMediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediaCollectionHasMediumList)).build();
 	}
 
 	@GET
@@ -376,7 +376,7 @@ public class EndpointMediumCollection {
 			for(; i < end; i++) {
 				filteredMediumList.add(mediumList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
 		} else {
 			sql = mediumNotInListQuery+" ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -384,7 +384,7 @@ public class EndpointMediumCollection {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -542,7 +542,7 @@ public class EndpointMediumCollection {
 			m.getViewToken();
 		}
 	
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, media)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, media)).build();
 	}
 	
 	@GET

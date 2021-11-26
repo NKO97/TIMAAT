@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.RoleGroup;
@@ -111,7 +111,7 @@ public class EndpointRoleGroup {
 			for (; i < end; i++) {
 				filteredRoleGroupList.add(roleGroupList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredRoleGroupList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredRoleGroupList)).build();
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 			// "SELECT r FROM Role r ORDER BY "+column+" "+direction);
@@ -120,7 +120,7 @@ public class EndpointRoleGroup {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			roleGroupList = castList(RoleGroup.class, query.getResultList());
 		}	
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, roleGroupList)).build();
   }
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -332,10 +332,10 @@ public class EndpointRoleGroup {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{rolegroup_id}/translation/{id}")
+	@Path("{rolegroupId}/translation/{id}")
 	@Secured
 	public Response createRoleGroupTranslation(@PathParam("id") int id,
-																						 @PathParam("rolegroup_id") int roleGroupId,
+																						 @PathParam("rolegroupId") int roleGroupId,
 																						 String jsonData) {
 
 		System.out.println("EndpointRole: createRoleGroupTranslation: jsonData: "+jsonData);

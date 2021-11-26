@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
@@ -113,7 +113,7 @@ public class EndpointCategorySet {
 			for (; i < end; i++) {
 				filteredCategorySetList.add(categorySetList.get(i));
 			}
-			return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, filteredCategorySetList)).build();
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredCategorySetList)).build();
 		} else {
 			sql = "SELECT cs FROM CategorySet cs ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql);
@@ -121,7 +121,7 @@ public class EndpointCategorySet {
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			categorySetList = castList(CategorySet.class, query.getResultList());
 		}
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, categorySetList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, categorySetList)).build();
   }
 
 	@GET
@@ -354,10 +354,10 @@ public class EndpointCategorySet {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{categoryset_id}/hascategory/{category_id}")
+	@Path("{categorySetId}/hasCategory/{categoryId}")
 	@Secured
-	public Response createCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
-																							 @PathParam("category_id") int categoryId,
+	public Response createCategorySetHasCategory(@PathParam("categorySetId") int categorySetId,
+																							 @PathParam("categoryId") int categoryId,
 																							 String jsonData) {
 		System.out.println("EndpointCategorySet: createCategorySetHasCategory - jsonData: "+jsonData);
 
@@ -424,10 +424,10 @@ public class EndpointCategorySet {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{categoryset_id}/hascategory/{category_id}")
+	@Path("{categorySetId}/hascategory/{categoryId}")
 	@Secured
-	public Response updateCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
-																							 @PathParam("category_id") int categoryId,
+	public Response updateCategorySetHasCategory(@PathParam("categorySetId") int categorySetId,
+																							 @PathParam("categoryId") int categoryId,
 																							 String jsonData) {
 		System.out.println("EndpointCategorySet: updateCategorySetHasCategory - jsonData: "+ jsonData);
 
@@ -471,10 +471,10 @@ public class EndpointCategorySet {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{categoryset_id}/hascategory/{category_id}")
+	@Path("{categorySetId}/hascategory/{categoryId}")
 	@Secured
-	public Response deleteCategorySetHasCategory(@PathParam("categoryset_id") int categorySetId,
-																							 @PathParam("category_id") int categoryId) {
+	public Response deleteCategorySetHasCategory(@PathParam("categorySetId") int categorySetId,
+																							 @PathParam("categoryId") int categoryId) {
 		System.out.println("EndpointCategorySet: deleteCategorySetHasCategory");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);

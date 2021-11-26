@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DatatableInfo;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.security.UserLogManager;
@@ -101,7 +101,7 @@ public class EndpointLanguage {
 
 		List<Language> languageList = castList(Language.class, query.getResultList());
 		
-		return Response.ok().entity(new DatatableInfo(draw, recordsTotal, recordsFiltered, languageList)).build();
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, languageList)).build();
   }
 
 	@GET
