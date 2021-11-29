@@ -1924,7 +1924,7 @@
 				this.initFormForShow(data.model);
 				$('#medium-metadata-form-submit-button').hide();
 				$('#medium-metadata-form-dismiss-button').hide();
-				$('#mediumFormHeader').html(type+" Datasheet (#"+ data.model.id+')');
+				$('#mediumFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
 				$('#medium-title-language-select-dropdown').select2('destroy').attr("readonly", true);
 			}
 			else if ( action == 'edit' ) {

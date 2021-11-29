@@ -508,7 +508,7 @@
         $('#timaat-taglists-metadata-form-delete').show();
         $('#timaat-taglists-metadata-form-submit').hide();
         $('#timaat-taglists-metadata-form-dismiss').hide();
-        $('#tagFormHeader').html("Tag Datasheet (#"+ data.model.id+')');
+        $('#tagFormHeader').html("Tag Data Sheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
         $('#timaat-taglists-metadata-form :input').prop('disabled', false);
