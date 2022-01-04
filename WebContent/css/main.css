@@ -1071,7 +1071,7 @@ Tooltip container
 	height: 100%;
 	box-shadow: 1px 0px 2px #333;
 	cursor: ns-resize;
-	z-index: 1100;
+	z-index: 1025;
 }
 .timeline-section.collapsed .timeline-section-header .collapse-widget i:before {
 	content: "\f105";

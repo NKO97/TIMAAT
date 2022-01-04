@@ -1,5 +1,5 @@
 #timaat-inspector {
-	z-index: 1000; /* behind modal dialogs */
+	z-index: 1040; /* behind modal dialogs */
 	box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.5); /* UI separation for floating inspector */
 	max-height: 600px;
 	position: absolute;
