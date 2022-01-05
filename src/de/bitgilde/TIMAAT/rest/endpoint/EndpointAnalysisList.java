@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.rest.endpoint;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,6 +60,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.PermissionType;
+import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
@@ -2938,6 +2940,85 @@ public class EndpointAnalysisList {
  	
 		return Response.ok().build();
 	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("keyframeFix")
+	@Secured
+	public Response getOldKeyframeTimestamps(@QueryParam("authToken") String authToken) {
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		if (userId != 1) { // only Admin may update file lengths
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
+
+		System.out.println("user authenticated. Retrieving keyframes.");
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		String exclude1 = "\"\"";
+		String exclude2 = "\"{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}\"";
+		String exclude3 = "\"[]\"";
+		String sql = "SELECT s FROM SelectorSvg s WHERE s.svgData <> :exclude1 AND s.svgData <> :exclude2 AND s.svgData <> :exclude3";
+		System.out.println("query: " + sql);
+		Query query = entityManager.createQuery(sql)
+															 .setParameter("exclude1", exclude1)
+															 .setParameter("exclude2", exclude2)
+															 .setParameter("exclude3", exclude3);
+		List<SelectorSvg> selectorSvgList = castList(SelectorSvg.class, query.getResultList());
+
+		return Response.ok(selectorSvgList).build();
+	}
+
+	@PATCH
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("keyframeFix")
+	@Secured
+	public Response updateOldKeyframeTimestamps(@QueryParam("authToken") String authToken,
+																							String jsonData) {
+		// verify auth token
+		int userId = 0;
+		if (AuthenticationFilter.isTokenValid(authToken)) {
+			userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		if (userId != 1) { // only Admin may update file lengths
+			return Response.status(Status.FORBIDDEN).build(); 
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		List<SelectorSvg> selectorSvgList = null;
+		try {
+			selectorSvgList = Arrays.asList(mapper.readValue(jsonData, SelectorSvg[].class));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( selectorSvgList == null ) return Response.notModified().build();
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		SelectorSvg selectorSvg;
+		for (SelectorSvg updatedSelectorSvg : selectorSvgList) {
+			selectorSvg = entityManager.find(SelectorSvg.class, updatedSelectorSvg.getId());
+			if (selectorSvg == null) continue; // step over invalid entries (which shouldn't occur)
+			selectorSvg.setSvgData(updatedSelectorSvg.getSvgData());
+			entityTransaction.begin();
+			entityManager.merge(selectorSvg);
+			entityManager.persist(selectorSvg);
+			entityTransaction.commit();
+			entityManager.refresh(selectorSvg);
+		}
+
+		System.out.println("Completed updating all keyframe time values.");
+		return Response.ok().build();
+}
 
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());

@@ -57,6 +57,12 @@
           TIMAAT.Settings.fixAnnotationUUIDs();
         }
       });
+      $('#keyframe-time-seconds-to-milliseconds-fix-button').on('click', function(event) {
+        if (TIMAAT.Service.session.displayName == "admin") {
+          console.log("fix annotation keyframe timestamps from s to ms");
+          TIMAAT.Settings.fixKeyframeTimes();
+        }
+      });
     },    
 
     loadSettings: function() {
@@ -112,6 +118,83 @@
         $.ajax({
           url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/uuidFix"+'?authToken='+TIMAAT.Service.session.token,
           type:"PATCH",
+          contentType:"application/json; charset=utf-8",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+          },
+        }).done(function(data) {
+          resolve(data);
+        }).fail(function(error) {
+          console.error("ERROR: ", error);
+          console.error("ERROR responseText: ", error.responseText);
+        });
+      }).catch((error) => {
+        console.error("ERROR: ", error);
+      });
+    },
+
+    fixKeyframeTimes: async function() {
+      console.log("fix keyframe timestamps");
+      let selectorSvgList = await this.getSelectorSvgData();
+      console.log("selectorSvgList", selectorSvgList);
+      let svgDataList = [];
+      selectorSvgList.forEach(function(selectorSvg) {
+        svgDataList.push(JSON.parse(selectorSvg.svgData));
+      });
+      console.log("svgDataList: ", svgDataList);
+      let i = selectorSvgList.length -1;
+      for (; i >= 0; i--) {
+        if (svgDataList[i].keyframes && svgDataList[i].keyframes.length > 1) { // fix time data s -> ms
+          svgDataList[i].keyframes.forEach(function(keyframe) {
+            console.log("TCL: fix value from ", keyframe.time);
+            if (keyframe.time < 50) {
+              keyframe.time *= 1000;
+            }
+            keyframe.time = Math.floor(keyframe.time);
+            console.log("TCL: to ", keyframe.time);
+          });
+        } else { // reduce list to entries which have animation data
+          selectorSvgList.splice(i,1);
+          svgDataList.splice(i,1);
+        }
+      }
+      console.log("svgDataList: ", svgDataList);
+      i = 0;
+      for (; i < selectorSvgList.length; i++) {
+        selectorSvgList[i].svgData = JSON.stringify(svgDataList[i]);
+
+      }
+      console.log("selectorSvgList", selectorSvgList);
+      await this.setFixedSelectorSvgData(selectorSvgList);
+    },
+
+    getSelectorSvgData: async function() {
+      return new Promise(resolve => {
+        $.ajax({
+          url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/keyframeFix"+'?authToken='+TIMAAT.Service.session.token,
+          type:"GET",
+          dataType: 'json',
+          contentType:"application/json; charset=utf-8",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+          },
+        }).done(function(data) {
+          resolve(data);
+        }).fail(function(error) {
+          console.error("ERROR: ", error);
+          console.error("ERROR responseText: ", error.responseText);
+        });
+      }).catch((error) => {
+        console.error("ERROR: ", error);
+      });
+    },
+
+    setFixedSelectorSvgData: async function(model) {
+      return new Promise(resolve => {
+        $.ajax({
+          url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/keyframeFix"+'?authToken='+TIMAAT.Service.session.token,
+          type:"PATCH",
+          data: JSON.stringify(model),
           contentType:"application/json; charset=utf-8",
           beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);

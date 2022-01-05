@@ -848,10 +848,10 @@ class Annotation {
 				item.setBounds(shape.bounds);
 				return;
 			case "polygon":
-				item.setLatLng([shape.points]);
+				item.setLatLngs([shape.points]);
 				return;
 			case "line":
-				item.setLatLng(shape.points);
+				item.setLatLngs(shape.points);
 				return;
 			case "circle":
 				item.setLatLng(shape.point);
