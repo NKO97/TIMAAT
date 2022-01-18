@@ -25,11 +25,16 @@ public class ChangeInDynamics implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="changeInDynamics")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to ChangeInDynamicsTranslation
 	@OneToMany(mappedBy="changeInDynamics")
 	private List<ChangeInDynamicsTranslation> changeInDynamicsTranslations;
+
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="changeInDynamics")
+	@JsonIgnore
+	private List<Music> musicList;
 
 	public ChangeInDynamics() {
 	}
@@ -42,23 +47,23 @@ public class ChangeInDynamics implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setChangeInDynamics(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setChangeInDynamics(null);
 
 		return analysisMusic;
@@ -84,6 +89,28 @@ public class ChangeInDynamics implements Serializable {
 		changeInDynamicsTranslation.setChangeInDynamics(null);
 
 		return changeInDynamicsTranslation;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
+	}
+
+	public Music addMusic(Music music) {
+		getMusicList().add(music);
+		music.setChangeInDynamics(this);
+
+		return music;
+	}
+
+	public Music removeMusic(Music music) {
+		getMusicList().remove(music);
+		music.setChangeInDynamics(null);
+
+		return music;
 	}
 
 }

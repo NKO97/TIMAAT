@@ -165,9 +165,9 @@ public class EndpointMediumCollection {
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "m.title1.name";
+		String column = "m.displayTitle.name";
 		if ( orderby != null) {
-			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -183,7 +183,7 @@ public class EndpointMediumCollection {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching media			
-			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.title1.name "+direction;
+			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			mediumList = castList(Medium.class, query.getResultList());
@@ -245,7 +245,7 @@ public class EndpointMediumCollection {
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "mchm.sortOrder";
 		if ( orderby != null) {
-			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -328,9 +328,9 @@ public class EndpointMediumCollection {
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "m.title1.name";
+		String column = "m.displayTitle.name";
 		if ( orderby != null) {
-			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -347,7 +347,7 @@ public class EndpointMediumCollection {
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
 			// find all matching media
-			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumNotInListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.title1.name "+direction;
+			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumNotInListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
 			mediumList = castList(Medium.class, query.getResultList());
@@ -493,7 +493,7 @@ public class EndpointMediumCollection {
 
 		String column = "mchm.medium.id";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mchm.medium.displayTitle.name";
 			if (orderby.equalsIgnoreCase("duration")) column = "mchm.medium.mediumVideo.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query
@@ -501,11 +501,11 @@ public class EndpointMediumCollection {
 			// + --> role == 5 --> producer 
 		}
 
-		String subType = "";
-		if ( mediumSubtype != null && mediumSubtype.compareTo("video") == 0 ) subType = "AND mchm.medium.mediumVideo != NULL";
+		String subtype = "";
+		if ( mediumSubtype != null && mediumSubtype.compareTo("video") == 0 ) subtype = "AND mchm.medium.mediumVideo != NULL";
 
 		// calculate total # of records
-		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType);
+		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subtype);
 		countQuery.setParameter("id", id);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
@@ -515,18 +515,18 @@ public class EndpointMediumCollection {
 		if ( search != null && search.length() > 0 ) {
 			// calculate search result # of records
 			countQuery = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType);
+					"SELECT COUNT(mchm.medium) FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.displayTitle.name) LIKE lower(concat('%', :displayTitle,'%')) AND mchm.mediaCollection.id=:id "+subtype);
 			countQuery.setParameter("id", id);
-			countQuery.setParameter("title1", search);
+			countQuery.setParameter("displayTitle", search);
 			recordsFiltered = (long) countQuery.getSingleResult();
 			// perform search
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.title1.name) LIKE lower(concat('%', :title1,'%')) AND mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
-			query.setParameter("title1", search);
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE lower(mchm.medium.displayTitle.name) LIKE lower(concat('%', :displayTitle,'%')) AND mchm.mediaCollection.id=:id "+subtype+" ORDER BY "+column+" "+direction);
+			query.setParameter("displayTitle", search);
 //			query.setParameter("title2", search);
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
-					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subType+" ORDER BY "+column+" "+direction);
+					"SELECT mchm.medium FROM MediaCollectionHasMedium mchm WHERE mchm.mediaCollection.id=:id "+subtype+" ORDER BY "+column+" "+direction);
 		}
 		query.setParameter("id", id);
 

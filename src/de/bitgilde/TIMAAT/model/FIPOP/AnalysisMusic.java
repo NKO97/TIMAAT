@@ -38,7 +38,7 @@ public class AnalysisMusic implements Serializable {
 	private AnalysisMethod analysisMethod;
 
 	//bi-directional many-to-one association to Articulation
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name="articulation_id")
 	private Articulation articulation;
 
@@ -98,11 +98,11 @@ public class AnalysisMusic implements Serializable {
 	private Timbre timbre;
 
 	// //bi-directional many-to-many association to Genre
-	// @ManyToMany(mappedBy="analysisMusics")
+	// @ManyToMany(mappedBy="analysisMusicList")
 	// private List<Genre> genres;
 
 	//bi-directional many-to-many association to LineupMember
-	@ManyToMany(mappedBy="analysisMusics")
+	@ManyToMany(mappedBy="analysisMusicList")
 	@JsonIgnore
 	private List<LineupMember> lineupMembers;
 

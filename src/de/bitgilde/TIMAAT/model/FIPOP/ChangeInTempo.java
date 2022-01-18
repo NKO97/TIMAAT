@@ -25,7 +25,7 @@ public class ChangeInTempo implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="changeInTempo")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to ChangeInTempoTranslation
 	@OneToMany(mappedBy="changeInTempo")
@@ -42,23 +42,23 @@ public class ChangeInTempo implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setChangeInTempo(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setChangeInTempo(null);
 
 		return analysisMusic;

@@ -32,6 +32,11 @@ public class MediumAudio implements Serializable {
 	@JoinColumn(name="audio_codec_information_id")
 	private AudioCodecInformation audioCodecInformation;
 
+	//bi-directional many-to-one association to AudioPostProduction
+	@ManyToOne
+	@JoinColumn(name="audio_post_production_id")
+	private AudioPostProduction audioPostProduction;
+
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
@@ -86,6 +91,15 @@ public class MediumAudio implements Serializable {
 	public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
 		this.audioCodecInformation = audioCodecInformation;
 	}
+
+	public AudioPostProduction getAudioPostProduction() {
+		return this.audioPostProduction;
+	}
+
+	public void setAudioPostProduction(AudioPostProduction audioPostProduction) {
+		this.audioPostProduction = audioPostProduction;
+	}
+
 
 	public Medium getMedium() {
 		return this.medium;

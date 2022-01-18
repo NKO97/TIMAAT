@@ -42,6 +42,11 @@ public class ActorHasRole implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
+	//bi-directional many-to-many association to Music
+	@ManyToMany(mappedBy="actorHasRoles")
+	@JsonIgnore
+	private List<Music> musicList;
+
 	public ActorHasRole() {
 	}
 
@@ -73,6 +78,14 @@ public class ActorHasRole implements Serializable {
 
 	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
 	}
 
 }

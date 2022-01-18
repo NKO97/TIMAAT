@@ -104,6 +104,7 @@ public class TIMAATApp extends Application {
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointLocation.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointMediumCollection.class);
+        resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointMusic.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointPublication.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointRole.class);
         resources.add(de.bitgilde.TIMAAT.rest.endpoint.EndpointRoleGroup.class);

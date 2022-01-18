@@ -31,6 +31,7 @@
 		selectedEventId: null,
 		selectedMediumId: null,
 		selectedMediumCollectionId: null,
+		selectedMusicId: null,
 		
 		init: function() {
 			// console.log("TCL: UI: init: function()");
@@ -152,7 +153,7 @@
 			// console.log("TCL: component", component);
 			TIMAAT.UI.component = component;
 			TIMAAT.VideoPlayer.pause(); // TODO refactor
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			$('.timaat-component').hide();
 			$('.timaat-sidebar-tab').removeClass('bg-info');
 			$('.timaat-sidebar-tab a').removeClass('selected');
@@ -163,7 +164,7 @@
 				// TIMAAT.AnalysisListService.getAnalysisLists(TIMAAT.VideoPlayer.selectedVideo.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
 			}
 			if (component == 'media') {
-				$('#previewTab').removeClass('annotationView');
+				$('#mediumPreviewTab').removeClass('annotationView');
 				$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 				$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 				TIMAAT.MediumDatasets.container = 'media';
@@ -385,6 +386,9 @@
 				case 'mediumCollection':
 					$('#medium-tabs').show();
 				break;
+				case 'music':
+					$('#music-tabs').show();
+				break;
 				case 'settings':
 					$('#settings-tabs').show();
 				break;
@@ -442,15 +446,18 @@
 				break;
 				case 'medium':
 					$('#medium-nav-tabs').show();
-					if ($('#previewTab').hasClass('annotationView')) {
+					if ($('#mediumPreviewTab').hasClass('annotationView')) {
 						$('.preview-data-tab').hide();
 					} else {
 						$('.preview-data-tab').show();
-						$('#previewTab').removeClass('annotationView');
+						$('#mediumPreviewTab').removeClass('annotationView');
 					}
 				break;
 				case 'mediumCollection':
 					$('#mediumcollection-nav-tabs').show();
+				break;
+				case 'music':
+					$('#music-nav-tabs').show();
 				break;
 			}
 			this.setDataSetContentActiveNavTab(navTabLinkId);
@@ -516,16 +523,16 @@
           }
         break;
         case 'medium':
-					var subType = data.model.mediaType.mediaTypeTranslations[0].type;
-					TIMAAT.UI.addSelectedClassToSelectedItem(subType, data.model.id);
+					var subtype = data.model.mediaType.mediaTypeTranslations[0].type;
+					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
 					switch(form) {
 						case 'preview':
 							this.setDataSetContentActiveNavTab('medium-tab-preview');
-							TIMAAT.MediumDatasets.mediumFormPreview(subType, data);
+							TIMAAT.MediumDatasets.mediumFormPreview(subtype, data);
 						break;
 						case 'dataSheet':
 							this.setDataSetContentActiveNavTab('medium-tab-metadata');
-							TIMAAT.MediumDatasets.mediumFormDataSheet(mode, subType, data);
+							TIMAAT.MediumDatasets.mediumFormDataSheet(mode, subtype, data);
 						break;
 						case 'titles':
 							this.setDataSetContentActiveNavTab('medium-tab-titles');
@@ -542,12 +549,12 @@
 					}
         break;
         case 'mediumCollection':
-					var subType = type = data.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
-					TIMAAT.UI.addSelectedClassToSelectedItem(subType, data.model.id);
+					var subtype = type = data.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
+					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
           switch(form) {
             case 'dataSheet':
               this.setDataSetContentActiveNavTab('mediumcollection-tab-metadata');
-              TIMAAT.MediumCollectionDatasets.mediumCollectionFormDataSheet(mode, subType, data);
+              TIMAAT.MediumCollectionDatasets.mediumCollectionFormDataSheet(mode, subtype, data);
             break;
             case 'items':
               this.setDataSetContentActiveNavTab('mediumcollection-tab-items');
@@ -559,6 +566,27 @@
             break;
           }
         break;
+				case 'music':
+					var subtype = data.model.musicType.musicTypeTranslations[0].type;
+					switch(form) {
+						case 'preview':
+							this.setDataSetContentActiveNavTab('music-tab-preview');
+							TIMAAT.MusicDatasets.musicFormPreview(subtype, data);
+						break;
+						case 'dataSheet':
+							this.setDataSetContentActiveNavTab('music-tab-metadata');
+							TIMAAT.MusicDatasets.musicFormDataSheet(mode, subtype, data);
+						break;
+						case 'titles':
+							this.setDataSetContentActiveNavTab('music-tab-titles');
+							TIMAAT.MusicDatasets.musicFormTitles(mode, data);
+						break;
+						case 'actorWithRoles':
+							this.setDataSetContentActiveNavTab('music-tab-actorwithroles');
+							TIMAAT.MusicDatasets.musicFormActorRoles(mode, data);
+						break;
+					}
+				break;
 				case 'event':
 					switch(form) {
 						case 'dataSheet':
@@ -568,12 +596,12 @@
 					}
 				break;
 				case 'actor':
-					var subType = data.model.actorType.actorTypeTranslations[0].type;
-					TIMAAT.UI.addSelectedClassToSelectedItem(subType, data.model.id);
+					var subtype = data.model.actorType.actorTypeTranslations[0].type;
+					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
 					switch(form) {
 						case 'dataSheet':
 							this.setDataSetContentActiveNavTab('actor-tab-metadata');
-							TIMAAT.ActorDatasets.actorFormDataSheet(mode, subType, data);
+							TIMAAT.ActorDatasets.actorFormDataSheet(mode, subtype, data);
 						break;
 						case 'names':
 							this.setDataSetContentActiveNavTab('actor-tab-names');
@@ -593,7 +621,7 @@
 						break;
 						case 'memberOfCollectives':
 							this.setDataSetContentActiveNavTab('actor-tab-memberofcollectives');
-							TIMAAT.ActorDatasets.actorFormMemberOfCollectives(mode, subType, data);
+							TIMAAT.ActorDatasets.actorFormMemberOfCollectives(mode, subtype, data);
 						break;
 						case 'actorRelationships':
 							this.setDataSetContentActiveNavTab('actor-tab-actorrelationships');
@@ -722,6 +750,36 @@
 						$(TIMAAT.EventDatasets.dataTableEvent.row('#'+id).node()).addClass('selected');
 					}
 					this.selectedEventId = id;
+				break;
+				case 'music':
+					if (this.selectedMusicId && this.selectedMusicId != id) {
+						$(TIMAAT.MusicDatasets.dataTableMusic.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					}
+					// add selection to new row
+					if (id) {
+						$(TIMAAT.MusicDatasets.dataTableMusic.row('#'+id).node()).addClass('selected');
+					}
+					this.selectedMusicId = id;
+				break;
+				case 'nashid':
+					if (this.selectedMusicId && this.selectedMusicId != id) {
+						$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					}
+					// add selection to new row
+					if (id) {
+						$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+id).node()).addClass('selected');
+					}
+					this.addSelectedClassToSelectedItem('music', id);
+				break;
+				case 'churchMusic':
+					if (this.selectedMusicId && this.selectedMusicId != id) {
+						$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					}
+					// add selection to new row
+					if (id) {
+						$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+id).node()).addClass('selected');
+					}
+					this.addSelectedClassToSelectedItem('music', id);
 				break;
 				case 'medium':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -891,12 +949,36 @@
 					// this.clearLastSelection('actor');
 				break;
 				case 'event':
-					if (!TIMAAT.ActorDatasets.events) return;
+					if (!TIMAAT.EventDatasets.events) return;
 					for (; i < TIMAAT.EventDatasets.events.length; i++) {
 						$(TIMAAT.EventDatasets.dataTableEvent.row('#'+TIMAAT.EventDatasets.events[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.EventDatasets.dataTableEvent.row('#'+this.selectedEventId).node()).removeClass('selected');
 					this.selectedEventId = null;
+				break;
+				case 'music':
+					if (!TIMAAT.MusicDatasets.musicList) return;
+					for (; i < TIMAAT.MusicDatasets.musicList.length; i++) {
+						$(TIMAAT.MusicDatasets.dataTableMusic.row('#'+TIMAAT.MusicDatasets.musicList[i].model.id).node()).removeClass('selected');
+					}
+					$(TIMAAT.MusicDatasets.dataTableMusic.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					this.selectedMusicId = null;
+				break;
+				case 'nashid':
+					if (!TIMAAT.MusicDatasets.nashidList) return;
+					for (; i < TIMAAT.MusicDatasets.nashidList.length; i++) {
+						$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+TIMAAT.MusicDatasets.nashidList[i].model.id).node()).removeClass('selected');
+					}
+					$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					this.clearLastSelection('music');
+				break;
+				case 'churchMusic':
+					if (!TIMAAT.MusicDatasets.churchMusicList) return;
+					for (; i < TIMAAT.MusicDatasets.churchMusicList.length; i++) {
+						$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+TIMAAT.MusicDatasets.churchMusicList[i].model.id).node()).removeClass('selected');
+					}
+					$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+this.selectedMusicId).node()).removeClass('selected');
+					this.clearLastSelection('music');
 				break;
 				case 'mediumCollection':
 					if (!TIMAAT.MediumCollectionDatasets.mediaCollectionList) return;
@@ -1044,6 +1126,23 @@
 					if (TIMAAT.EventDatasets.dataTableEvent) {
 						TIMAAT.EventDatasets.dataTableEvent.ajax.reload(null, false);
 					}	
+				break;
+				case 'music':
+					if (TIMAAT.MusicDatasets.dataTableMusic) {
+						TIMAAT.MusicDatasets.dataTableMusic.ajax.reload(null, false);
+					}	
+				break;
+				case 'nashid':
+					if (TIMAAT.MusicDatasets.dataTableNashid) {
+						TIMAAT.MusicDatasets.dataTableNashid.ajax.reload(null, false);
+					}
+					await this.refreshDataTable('music');
+				break;
+				case 'churchMusic':
+					if (TIMAAT.MusicDatasets.dataTableChurchMusic) {
+						TIMAAT.MusicDatasets.dataTableChurchMusic.ajax.reload(null, false);
+					}
+					await this.refreshDataTable('music');
 				break;
 				case 'category':
           if (TIMAAT.CategoryLists.dataTableCategories) {

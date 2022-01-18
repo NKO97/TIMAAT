@@ -239,14 +239,14 @@
 				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"mir")});
 			});
 
-			$('#timaat-videoplayer-video-user-log').popover({
-				container: 'body',
-				html: true,
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
-				content: '<div class="timaat-user-log-details">Keine Daten erfasst</div>',
-				placement: 'left',
-				trigger: 'click',
-			});			
+			// $('#timaat-videoplayer-video-user-log').popover({
+			// 	container: 'body',
+			// 	html: true,
+			// 	title: '<i class="fas fa-user"></i> Bearbeitungslog',
+			// 	content: '<div class="timaat-user-log-details">Keine Daten erfasst</div>',
+			// 	placement: 'left',
+			// 	trigger: 'click',
+			// });			
 		},
 
 		initMenu: function() {
@@ -1297,7 +1297,7 @@
 			// setup medium data sheet
 			TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
-			$('#previewTab').addClass('annotationView');
+			$('#mediumPreviewTab').addClass('annotationView');
 			$('#timaat-mediadatasets-medium-tabs').show();
 			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
 			TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
@@ -1391,7 +1391,7 @@
 
 			TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
-			$('#previewTab').addClass('annotationView');
+			$('#mediumPreviewTab').addClass('annotationView');
 			$('#timaat-mediadatasets-medium-tabs').show();
 			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
 			TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');			
@@ -1519,7 +1519,7 @@
 			// setup medium data sheet
 			TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
-			$('#previewTab').addClass('annotationView');
+			$('#mediumPreviewTab').addClass('annotationView');
 			$('#timaat-mediadatasets-medium-tabs').show();
 			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
 			TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');

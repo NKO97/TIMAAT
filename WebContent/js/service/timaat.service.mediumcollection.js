@@ -135,13 +135,13 @@
 			});
 		},
 
-		async createMediumCollectionSubtype(type, mediumCollectionModel, subTypeModel) {
-      // console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subTypeModel", type, mediumCollectionModel, subTypeModel);
+		async createMediumCollectionSubtype(type, mediumCollectionModel, subtypeModel) {
+      // console.log("TCL: createMediumCollectionSubtype -> type, mediumCollectionModel, subtypeModel", type, mediumCollectionModel, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+type+"/"+mediumCollectionModel.id,
 					type:"POST",
-					data: JSON.stringify(subTypeModel),
+					data: JSON.stringify(subtypeModel),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {

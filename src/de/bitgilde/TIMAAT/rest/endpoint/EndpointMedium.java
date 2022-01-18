@@ -67,6 +67,8 @@ import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
+import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
+import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
@@ -129,7 +131,7 @@ public class EndpointMedium {
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "m.id";
 		if ( orderby != null) {
-			if (orderby.equalsIgnoreCase("title")) column = "m.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
 		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -173,7 +175,7 @@ public class EndpointMedium {
 				switch (type) {
 					case "video":
 					case "image":
-						// strip analysis lists for faster response --> get lists via EndpointAnalysisList
+						// strip analysis lists for faster response --> get lists via EndpointMediumList
 						medium.getMediumAnalysisLists().clear();
 					break;
 				}
@@ -185,33 +187,21 @@ public class EndpointMedium {
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
-		}
-
-		// for (Medium m : mediumList) {
-		// 	MediumVideo video = m.getMediumVideo();
-		// 	if ( video != null ) {
-		// 		video.setStatus(videoStatus(m.getId()));
-		// 		video.setViewToken(issueFileToken(m.getId()));
-		// 		m.setMediumVideo(video);
-		// 		video.getStatus();
-		// 		video.getViewToken();
-		// 	}
-		// 	// strip analysis lists for faster response --> get lists via EndpointAnalysisList
-		// 	m.getMediumAnalysisLists().clear();			
-		// }
-
-		for (Medium medium : mediumList) {
-			String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
-			switch (type) {
-				case "video":
-				case "image":
-					// strip analysis lists for faster response --> get lists via EndpointAnalysisList
-					medium.getMediumAnalysisLists().clear();
-				break;
+		
+			for (Medium medium : mediumList) {
+				String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
+				switch (type) {
+					case "video":
+					case "image":
+						// strip analysis lists for faster response --> get lists via EndpointMediumList
+						medium.getMediumAnalysisLists().clear();
+					break;
+				}
 			}
-		}
 
-		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+		}
 	}
 
 	@GET
@@ -226,8 +216,8 @@ public class EndpointMedium {
 		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
-		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
-		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.displayTitle.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.displayTitle.name";
 
 		// search
 		Query query;
@@ -268,13 +258,13 @@ public class EndpointMedium {
 
 		// String column = "m.id";
 		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema 
 		// }
 		
 		// TODO search all titles, not displayTitle only
 		// define default query strings
-		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
-		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.displayTitle.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.displayTitle.name";
 
 		// search
 		Query query;
@@ -320,13 +310,13 @@ public class EndpointMedium {
 
 		// String column = "m.id";
 		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.title1.name"; // TODO change displayTitle access in DB-Schema 
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema 
 		// }
 
 		// TODO search all titles, not displayTitle only
 		// define default query strings
-		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.title1.name";
-		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.title1.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.title1.name";
+		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
+		String mediumSearchQuery = "SELECT m FROM Medium m WHERE lower(m.displayTitle.name) LIKE lower(concat('%', :name,'%')) ORDER BY m.displayTitle.name";
 
 		// search
 		Query query;
@@ -383,12 +373,12 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("audio/list")
-	public Response getAudioList(	@QueryParam("draw") Integer draw,
-																@QueryParam("start") Integer start,
-																@QueryParam("length") Integer length,
-																@QueryParam("orderby") String orderby,
-																@QueryParam("dir") String direction,
-																@QueryParam("search") String search) {
+	public Response getAudioList(@QueryParam("draw") Integer draw,
+															 @QueryParam("start") Integer start,
+															 @QueryParam("length") Integer length,
+															 @QueryParam("orderby") String orderby,
+															 @QueryParam("dir") String direction,
+															 @QueryParam("search") String search) {
 		// System.out.println("EndpointMedium: getAudioList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
 		
@@ -397,7 +387,7 @@ public class EndpointMedium {
 
 		String column = "ma.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "ma.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "ma.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -471,7 +461,7 @@ public class EndpointMedium {
 
 		String column = "md.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "md.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "md.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -545,7 +535,7 @@ public class EndpointMedium {
 
 		String column = "mi.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "mi.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mi.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -619,7 +609,7 @@ public class EndpointMedium {
 
 		String column = "ms.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "ms.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "ms.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -693,7 +683,7 @@ public class EndpointMedium {
 
 		String column = "mt.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "mt.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mt.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -768,7 +758,7 @@ public class EndpointMedium {
 
 		String column = "mv.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.displayTitle.name";
 			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query // should be ordered in front end instead
@@ -850,7 +840,7 @@ public class EndpointMedium {
 
 		String column = "mv.mediumId";
 		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.title1.name";
+			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.displayTitle.name";
 		}
 
 		// calculate total # of records
@@ -1232,7 +1222,7 @@ public class EndpointMedium {
 		if ( updatedMedium == null ) return Response.notModified().build();	
 
 		// update medium
-		//! Don't change media type. MediumSubType won't match anymore
+		//! Don't change media type. MediumSubtype won't match anymore
 		if ( updatedMedium.getReleaseDate() != null ) medium.setReleaseDate(updatedMedium.getReleaseDate());
 		medium.setRecordingStartDate(updatedMedium.getRecordingStartDate());
 		medium.setRecordingEndDate(updatedMedium.getRecordingEndDate());
@@ -1353,7 +1343,9 @@ public class EndpointMedium {
 			System.out.println("EndpointMedium: createAudio: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+		
 		// sanitize object data
+		// AudioPostProduction audioPostProduction = new AudioPostProduction();
 
 		// update log metadata
 		// Not necessary, a audio will always be created in conjunction with a medium
@@ -1399,6 +1391,7 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: update audio - audio.id:"+audio.getMediumId());
 		if ( updatedAudio.getLength() > 0) audio.setLength(updatedAudio.getLength());
 		if ( updatedAudio.getAudioCodecInformation() != null ) audio.setAudioCodecInformation(updatedAudio.getAudioCodecInformation());
+		// if ( updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations() != null ) audio.getAudioPostProduction().setAudioPostProductionTranslations(updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations());
 		
 		// update log metadata
 		audio.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
@@ -1406,7 +1399,8 @@ public class EndpointMedium {
 			audio.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+		}	
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(audio);
@@ -2775,6 +2769,187 @@ public class EndpointMedium {
 	return Response.ok().build();
 	}
 		
+	@POST
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}")
+	@Secured
+	public Response createAudioPostProduction(@PathParam("id") int id) {
+		System.out.println("EndpointMedium: createAudioPostProduction: ");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		AudioPostProduction audioPostProduction = new AudioPostProduction();
+
+		// sanitize object data
+		audioPostProduction.setId(0);
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(audioPostProduction);
+		entityManager.flush();
+		entityTransaction.commit();
+		entityManager.refresh(audioPostProduction);
+		// entityManager.refresh(audioPostProduction.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointMedium: createAudioPostProduction - done");
+		return Response.ok().entity(audioPostProduction).build();
+	}
+
+	@DELETE
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}")
+	@Secured
+	public Response deleteAudioPostProduction(@PathParam("id") int id) {
+		System.out.println("EndpointMedium: deleteAudioPostProduction");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
+
+		if ( audioPostProduction == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(audioPostProduction);
+		//* ON DELETE CASCADE deletes connected audio_post_production_translation entries
+		entityTransaction.commit();
+		
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext
+		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
+		System.out.println("EndpointMedium: deleteAudioPostProduction - delete complete");	
+		return Response.ok().build();
+	}
+
+	@POST
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}/translation")
+	@Secured
+	public Response createAudioPostProductionTranslation(@PathParam("id") int id, 
+																											 String jsonData) {
+		System.out.println("EndpointMedium: createAudioPostProductionTranslation: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		AudioPostProductionTranslation audioPostProductionTranslation = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		// parse JSON data
+		try {
+			audioPostProductionTranslation = mapper.readValue(jsonData, AudioPostProductionTranslation.class);
+		} catch (IOException e) {
+			System.out.println("EndpointMedium: createAudioPostProductionTranslation: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( audioPostProductionTranslation == null ) {
+			System.out.println("EndpointMedium: createAudioPostProductionTranslation: newAudio == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+		audioPostProductionTranslation.setId(0);
+		Language language = entityManager.find(Language.class, audioPostProductionTranslation.getLanguage().getId());
+		audioPostProductionTranslation.setLanguage(language);
+		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
+		audioPostProductionTranslation.setAudioPostProduction(audioPostProduction);
+
+		// update log metadata
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newAnalysis.setCreatedAt(creationDate);
+		// newAnalysis.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// 	return Response.serverError().build();
+		// }
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(language);
+		entityManager.persist(audioPostProductionTranslation);
+		entityManager.flush();
+		audioPostProductionTranslation.setLanguage(language);
+		audioPostProductionTranslation.setAudioPostProduction(audioPostProduction);
+		entityTransaction.commit();
+		entityManager.refresh(audioPostProductionTranslation);
+		entityManager.refresh(language);
+		entityManager.refresh(audioPostProduction);
+		// entityManager.refresh(audioPostProduction.getAnalysisMethod());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointMedium: createAudioPostProductionTranslation - done");
+		return Response.ok().entity(audioPostProductionTranslation).build();
+	}
+
+	@PATCH
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Path("audioPostProduction/{id}/translation")
+	@Secured
+	public Response updateAudioPostProductionTranslation(@PathParam("id") int id, 
+																											 String jsonData) {
+		System.out.println("EndpointMedium: updateAudioPostProductionTranslation: " + jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		AudioPostProductionTranslation updatedAudioPostProductionTranslation = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		AudioPostProductionTranslation audioPostProductionTranslation = entityManager.find(AudioPostProductionTranslation.class, id);
+
+		if (audioPostProductionTranslation == null) return Response.status(Status.NOT_FOUND).build();
+		// parse JSON data
+		try {
+			updatedAudioPostProductionTranslation = mapper.readValue(jsonData, AudioPostProductionTranslation.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedAudioPostProductionTranslation == null ) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// update audioPostProductionTranslation
+		audioPostProductionTranslation.setOverdubbing(updatedAudioPostProductionTranslation.getOverdubbing());
+		audioPostProductionTranslation.setReverb(updatedAudioPostProductionTranslation.getReverb());
+		audioPostProductionTranslation.setDelay(updatedAudioPostProductionTranslation.getDelay());
+		audioPostProductionTranslation.setPanning(updatedAudioPostProductionTranslation.getPanning());
+		audioPostProductionTranslation.setBass(updatedAudioPostProductionTranslation.getBass());
+		audioPostProductionTranslation.setTreble(updatedAudioPostProductionTranslation.getTreble());
+
+		// update log metadata
+		// Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+		// newAnalysis.setCreatedAt(creationDate);
+		// newAnalysis.setLastEditedAt(creationDate);
+		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
+		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
+		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
+		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
+		// } else {
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// 	return Response.serverError().build();
+		// }
+
+		// persist analysis method
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(audioPostProductionTranslation);
+		entityManager.persist(audioPostProductionTranslation);
+		entityTransaction.commit();
+		entityManager.refresh(audioPostProductionTranslation);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
+		System.out.println("EndpointMedium: createAudioPostProductionTranslation - done");
+		return Response.ok().entity(audioPostProductionTranslation).build();
+	}
+
 	@POST
 	@Path("audio/{id}/upload")
 	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  

@@ -25,7 +25,7 @@ public class Rhythm implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="rhythm")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	public Rhythm() {
 	}
@@ -46,23 +46,23 @@ public class Rhythm implements Serializable {
 		this.type = type;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setRhythm(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setRhythm(null);
 
 		return analysisMusic;

@@ -24,11 +24,16 @@ public class Jins implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="jins")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to JinsTranslation
 	@OneToMany(mappedBy="jins")
 	private List<JinsTranslation> jinsTranslations;
+
+	//bi-directional many-to-one association to MusicNashid
+	@OneToMany(mappedBy="jins")
+	@JsonIgnore
+	private List<MusicNashid> musicNashidList;
 
 	public Jins() {
 	}
@@ -41,23 +46,23 @@ public class Jins implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setJins(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setJins(null);
 
 		return analysisMusic;
@@ -83,6 +88,28 @@ public class Jins implements Serializable {
 		jinsTranslation.setJins(null);
 
 		return jinsTranslation;
+	}
+
+	public List<MusicNashid> getMusicNashidList() {
+		return this.musicNashidList;
+	}
+
+	public void setMusicNashidList(List<MusicNashid> musicNashidList) {
+		this.musicNashidList = musicNashidList;
+	}
+
+	public MusicNashid addMusicNashid(MusicNashid musicNashid) {
+		getMusicNashidList().add(musicNashid);
+		musicNashid.setJins(this);
+
+		return musicNashid;
+	}
+
+	public MusicNashid removeMusicNashid(MusicNashid musicNashid) {
+		getMusicNashidList().remove(musicNashid);
+		musicNashid.setJins(null);
+
+		return musicNashid;
 	}
 
 }

@@ -600,6 +600,95 @@ var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validat
     analysisMethodModal.submit();
   },
 });
+var musicFormMetadata = $('#music-metadata-form');
+var musicFormMetadataValidator = $('#music-metadata-form').validate({
+  rules: {
+    displayTitle: {
+      required: true,
+      minlength: 3,
+      maxlength: 200
+    },
+    displayTitleLanguageId: {
+      required: true,
+    },
+    typeId: {
+      required: true,
+    },
+    tempo: {
+      number: true,
+      maxlength: 4
+    }
+  },
+  messages: {
+    displayTitle: {
+      required: "Enter a title (min length: 3)",
+      minlength: "Title too short: min length is 3",
+      maxlength: "Title is too long: max length is 200"
+    },
+    displayTitleLanguageId: {
+      required: "Please provide the title's language"
+    },
+    typeId: {
+      required: "Please provide the type of the music"
+    },
+    tempo: {
+      number: "Please provide a valid number",
+      maxLength: "Number is too large"
+    }
+  },
+  submitHandler: function(musicFormMetadata) {
+    musicFormMetadata.submit();
+  },
+});
+var musicFormTitles = $('#music-titles-form');
+var musicFormTitlesValidator = $('#music-titles-form').validate({
+  rules: {
+    title: {
+      required: true,
+      minlength: 3,
+      maxlength: 200,
+    },
+    titleLanguageId: {
+      required: true,
+    },
+  },
+  messages: {
+    title: {
+      required: "Enter a title (min length: 3)",
+      minlength: "Title too short: min length is 3",
+      maxlength: "Title is too long: max length is 200"
+    },
+    titleLanguageId: {
+      required: "Please select a language."
+    }
+  },
+  submitHandler: function(musicFormTitles) {
+    musicFormTitles.submit();
+  },
+});
+var musicFormActorRoles = $('#music-actorwithroles-form');
+var musicFormActorRolesValidator = $('#music-actorwithroles-form').validate({
+  ignore: [],
+  rules: {
+    actorId: {
+      required: true,
+    },
+    roleId: {
+      required: true,
+    },
+  },
+  messages: {
+    actorId: {
+      required: 'Please select an actor.'
+    },
+    roleId: {
+      required: 'Please select at least one role.'
+    }
+  },
+  submitHandler: function(musicFormLanguageTracks) {
+    musicFormLanguageTracks.submit();
+  },
+});
 
 
 function allocateArray(strOrArr) {

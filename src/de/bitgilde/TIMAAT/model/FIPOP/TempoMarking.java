@@ -25,7 +25,12 @@ public class TempoMarking implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="tempoMarking")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
+
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="tempoMarking")
+	@JsonIgnore
+	private List<Music> musicList;
 
 	//bi-directional many-to-one association to TempoMarkingTranslation
 	@OneToMany(mappedBy="tempoMarking")
@@ -42,26 +47,48 @@ public class TempoMarking implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setTempoMarking(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setTempoMarking(null);
 
 		return analysisMusic;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
+	}
+
+	public Music addMusic(Music music) {
+		getMusicList().add(music);
+		music.setTempoMarking(this);
+
+		return music;
+	}
+
+	public Music removeMusic(Music music) {
+		getMusicList().remove(music);
+		music.setTempoMarking(null);
+
+		return music;
 	}
 
 	public List<TempoMarkingTranslation> getTempoMarkingTranslations() {

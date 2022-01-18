@@ -269,8 +269,8 @@
 				if (!$('#actor-metadata-form').valid()) return false;
 
 				var actor = $('#actor-metadata-form').data('actor');
-				// var type = $('#actor-metadata-form').data('type');	
-				var type = actor.model.actorType.actorTypeTranslations[0].type;
+				var type = $('#actor-metadata-form').data('type');	
+				// var type = actor.model.actorType.actorTypeTranslations[0].type; // won't work for adding new actors
 
 				// create/Edit actor window submitted data
 				var formData = $('#actor-metadata-form').serializeArray();
@@ -279,16 +279,16 @@
 					formDataObject[field.name] = field.value;
 				});
 				var formDataSanitized = formDataObject;
-				formDataSanitized.isFictional = (formDataObject.isFictional == "on") ? true : false;
-				formDataSanitized.nameUsedFrom = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
+				formDataSanitized.dateOfBirth   = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
+				formDataSanitized.dayOfDeath    = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
+				formDataSanitized.disbanded     = moment.utc(formDataObject.disbanded, "YYYY-MM-DD");
+				formDataSanitized.founded       = moment.utc(formDataObject.founded, "YYYY-MM-DD");
+				formDataSanitized.isFictional   = (formDataObject.isFictional == "on") ? true : false;
+				formDataSanitized.nameUsedFrom  = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
 				formDataSanitized.nameUsedUntil = moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD");
-				formDataSanitized.sexId = Number(formDataObject.sexId);
-				formDataSanitized.dateOfBirth = moment.utc(formDataObject.dateOfBirth, "YYYY-MM-DD");
-				formDataSanitized.dayOfDeath = moment.utc(formDataObject.dayOfDeath, "YYYY-MM-DD");
-				formDataSanitized.placeOfBirth = (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth);
-				formDataSanitized.placeOfDeath = (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath);
-				formDataSanitized.founded = moment.utc(formDataObject.founded, "YYYY-MM-DD");
-				formDataSanitized.disbanded = moment.utc(formDataObject.disbanded, "YYYY-MM-DD");
+				formDataSanitized.placeOfBirth  = (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth);
+				formDataSanitized.placeOfDeath  = (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath);
+				formDataSanitized.sexId         = Number(formDataObject.sexId);
 				delete formDataSanitized.imageId;
 				
 				var formImageIds = [];
@@ -631,7 +631,7 @@
 				event.preventDefault();
 				var node = document.getElementById("new-name-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 				// test if form is valid 
 				if (!$('#actor-names-form').valid()) {
@@ -1111,7 +1111,7 @@
 				event.preventDefault();
 				var node = document.getElementById("new-actorhasaddress-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 				// test if form is valid 
 				if (!$('#actor-addresses-form').valid()) {
@@ -1484,7 +1484,7 @@
 				event.preventDefault();
 				var node = document.getElementById("new-actorhasemailaddress-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 				// test if form is valid 
 				if (!$('#actor-emailaddresses-form').valid()) {
@@ -1836,7 +1836,7 @@
 				event.preventDefault();
 				var node = document.getElementById("new-actorhasphonenumber-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 				// test if form is valid 
 				if (!$('#actor-phonenumbers-form').valid()) {
@@ -2243,7 +2243,7 @@
 				event.preventDefault();
 				var node = document.getElementById("new-personismemberofcollective-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 				// the original actor model (in case of editing an existing actor)
 				var actor = $('#actor-metadata-form').data('actor');
@@ -2853,7 +2853,7 @@
 			$('.carousel-indicators').empty();
 			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
@@ -2884,7 +2884,7 @@
 			$('.carousel-indicators').empty();
 			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-metadata-form').trigger('reset');
 
@@ -3037,11 +3037,11 @@
 			// console.log("TCL: actorFormNames: action, actor", action, actor);
 			var node = document.getElementById("dynamic-name-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			var node = document.getElementById("new-name-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-names-form').trigger('reset');
 			actorFormNamesValidator.resetForm();
@@ -3147,11 +3147,11 @@
     	// console.log("TCL: actorFormAddresses: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasaddress-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			var node = document.getElementById("new-actorhasaddress-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-addresses-form').trigger('reset');
 			actorFormAddressesValidator.resetForm();
@@ -3345,11 +3345,11 @@
     	// console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			var node = document.getElementById("new-actorhasemailaddress-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-emailaddresses-form').trigger('reset');
 			actorFormEmailAddressesValidator.resetForm();
@@ -3432,11 +3432,11 @@
     	// console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			var node = document.getElementById("new-actorhasphonenumber-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-phonenumbers-form').trigger('reset');
 			actorFormPhoneNumbersValidator.resetForm();
@@ -3522,11 +3522,11 @@
     	// console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
 			var node = document.getElementById("dynamic-personismemberofcollective-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			var node = document.getElementById("new-personismemberofcollective-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-memberofcollectives-form').trigger('reset');
 			actorFormMemberOfCollectivesValidator.resetForm();
@@ -3670,7 +3670,7 @@
 			// console.log("TCL: actorFormRoles: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorhasrole-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-roles-form').trigger('reset');
 			// actorFormRolesValidator.resetForm();
@@ -3757,7 +3757,7 @@
 			// console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
 			var node = document.getElementById("dynamic-actorroleinmedium-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			}
 			$('#actor-role-in-medium-form').trigger('reset');
 			var actorIsProducer = false;

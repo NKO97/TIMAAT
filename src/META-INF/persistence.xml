@@ -85,6 +85,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempo</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChurchMusicalKey</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.ChurchMusicalKeyTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Citizenship</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.City</class>
@@ -198,9 +200,16 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMacroTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicro</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MontageFigureMicroTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Music</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKey</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRolePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicNashid</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PermissionType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType</class>
@@ -247,6 +256,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Territory</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TerritoryTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TextSetting</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.TextSettingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Timbre</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>
@@ -264,6 +275,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordHashType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserPasswordOldHash</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Voice</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPattern</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPatternTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.VoiceTypeTranslation</class>
 		<properties>

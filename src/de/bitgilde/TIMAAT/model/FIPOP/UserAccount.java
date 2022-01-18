@@ -148,6 +148,16 @@ public class UserAccount implements Serializable {
 	@JsonManagedReference(value = "MediumAnalysisList-LastEditedByUserAccount")
 	private List<MediumAnalysisList> mediumAnalysisListsLastEditedByUserAccount;
 
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="createdByUserAccount")
+	@JsonManagedReference(value = "Music-CreatedByUserAccount")
+	private List<Music> musicCreatedByUserAccount;
+
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="lastEditedByUserAccount")
+	@JsonManagedReference(value = "Music-LastEditedByUserAccount")
+	private List<Music> musicLastEditedByUserAccount;
+
 	//bi-directional many-to-one association to UserAccessToken
 	// @OneToMany(mappedBy="userAccount")
 	// private List<UserAccessToken> userAccessTokens;
@@ -706,6 +716,50 @@ public class UserAccount implements Serializable {
 		mediumAnalysisListsLastEditedByUserAccount.setLastEditedByUserAccount(null);
 
 		return mediumAnalysisListsLastEditedByUserAccount;
+	}
+
+	public List<Music> getMusicDisplayTitle() {
+		return this.musicCreatedByUserAccount;
+	}
+
+	public void setMusicDisplayTitle(List<Music> musicCreatedByUserAccount) {
+		this.musicCreatedByUserAccount = musicCreatedByUserAccount;
+	}
+
+	public Music addMusicDisplayTitle(Music musicCreatedByUserAccount) {
+		getMusicDisplayTitle().add(musicCreatedByUserAccount);
+		musicCreatedByUserAccount.setCreatedByUserAccount(this);
+
+		return musicCreatedByUserAccount;
+	}
+
+	public Music removeMusicDisplayTitle(Music musicCreatedByUserAccount) {
+		getMusicDisplayTitle().remove(musicCreatedByUserAccount);
+		musicCreatedByUserAccount.setCreatedByUserAccount(null);
+
+		return musicCreatedByUserAccount;
+	}
+
+	public List<Music> getMusicOriginalTitle() {
+		return this.musicLastEditedByUserAccount;
+	}
+
+	public void setMusicOriginalTitle(List<Music> musicLastEditedByUserAccount) {
+		this.musicLastEditedByUserAccount = musicLastEditedByUserAccount;
+	}
+
+	public Music addMusicOriginalTitle(Music musicLastEditedByUserAccount) {
+		getMusicOriginalTitle().add(musicLastEditedByUserAccount);
+		musicLastEditedByUserAccount.setLastEditedByUserAccount(this);
+
+		return musicLastEditedByUserAccount;
+	}
+
+	public Music removeMusicOriginalTitle(Music musicLastEditedByUserAccount) {
+		getMusicOriginalTitle().remove(musicLastEditedByUserAccount);
+		musicLastEditedByUserAccount.setLastEditedByUserAccount(null);
+
+		return musicLastEditedByUserAccount;
 	}
 
 	// public List<UserAccessToken> getUserAccessTokens() {

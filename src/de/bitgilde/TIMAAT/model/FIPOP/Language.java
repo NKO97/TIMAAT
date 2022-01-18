@@ -173,6 +173,11 @@ public class Language implements Serializable {
 	@JsonIgnore
 	private List<ChangeInTempoTranslation> changeInTempoTranslations;
 
+	//bi-directional many-to-one association to ChurchMusicalKeyTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<ChurchMusicalKeyTranslation> churchMusicalKeyTranslations;
+
 	//bi-directional many-to-one association to CitizenshipTranslation
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
@@ -367,6 +372,11 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<MusicalKeyTranslation> musicalKeyTranslations;
+
+	//bi-directional many-to-one association to MusicTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MusicTypeTranslation> musicTypeTranslations;
 
 	// //bi-directional many-to-one association to NoiseSubtypeTranslation
 	// @OneToMany(mappedBy="language")
@@ -1172,6 +1182,28 @@ public class Language implements Serializable {
 		return changeInTempoTranslation;
 	}
 
+	public List<ChurchMusicalKeyTranslation> getChurchMusicalKeyTranslations() {
+		return this.churchMusicalKeyTranslations;
+	}
+
+	public void setChurchMusicalKeyTranslations(List<ChurchMusicalKeyTranslation> churchMusicalKeyTranslations) {
+		this.churchMusicalKeyTranslations = churchMusicalKeyTranslations;
+	}
+
+	public ChurchMusicalKeyTranslation addChurchMusicalKeyTranslation(ChurchMusicalKeyTranslation churchMusicalKeyTranslation) {
+		getChurchMusicalKeyTranslations().add(churchMusicalKeyTranslation);
+		churchMusicalKeyTranslation.setLanguage(this);
+
+		return churchMusicalKeyTranslation;
+	}
+
+	public ChurchMusicalKeyTranslation removeChurchMusicalKeyTranslation(ChurchMusicalKeyTranslation churchMusicalKeyTranslation) {
+		getChurchMusicalKeyTranslations().remove(churchMusicalKeyTranslation);
+		churchMusicalKeyTranslation.setLanguage(null);
+
+		return churchMusicalKeyTranslation;
+	}
+
 	public List<CitizenshipTranslation> getCitizenshipTranslations() {
 		return this.citizenshipTranslations;
 	}
@@ -1840,6 +1872,28 @@ public class Language implements Serializable {
 		musicalKeyTranslation.setLanguage(null);
 
 		return musicalKeyTranslation;
+	}
+
+	public List<MusicTypeTranslation> getMusicTypeTranslations() {
+		return this.musicTypeTranslations;
+	}
+
+	public void setMusicTypeTranslations(List<MusicTypeTranslation> musicTypeTranslations) {
+		this.musicTypeTranslations = musicTypeTranslations;
+	}
+
+	public MusicTypeTranslation addMusicTypeTranslation(MusicTypeTranslation musicTypeTranslation) {
+		getMusicTypeTranslations().add(musicTypeTranslation);
+		musicTypeTranslation.setLanguage(this);
+
+		return musicTypeTranslation;
+	}
+
+	public MusicTypeTranslation removeMusicTypeTranslation(MusicTypeTranslation musicTypeTranslation) {
+		getMusicTypeTranslations().remove(musicTypeTranslation);
+		musicTypeTranslation.setLanguage(null);
+
+		return musicTypeTranslation;
 	}
 
 	// public List<NoiseSubtypeTranslation> getNoiseSubtypeTranslations() {

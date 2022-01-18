@@ -103,12 +103,12 @@ public class Medium implements Serializable {
 	//bi-directional many-to-one association to Title
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="display_title_title_id")
-	private Title title1;
+	private Title displayTitle;
 
 	//bi-directional many-to-one association to Title
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="original_title_title_id")
-	private Title title2;
+	private Title originalTitle;
 
 	//bi-directional many-to-one association to Work
 	// @ManyToOne
@@ -132,7 +132,7 @@ public class Medium implements Serializable {
 	@OneToOne(mappedBy="medium")
 	private MediumVideo mediumVideo;
 
-	//bi-directional one-to-one association to MediumAudio
+	//bi-directional one-to-one association to MediumVideogame
 	@OneToOne(mappedBy="medium")
 	private MediumVideogame mediumVideogame;
 
@@ -437,22 +437,20 @@ public class Medium implements Serializable {
 		this.reference = reference;
 	}
 
-	// display title
 	public Title getDisplayTitle() {
-		return this.title1;
+		return this.displayTitle;
 	}
 
-	public void setDisplayTitle(Title title) {
-		this.title1 = title;
+	public void setDisplayTitle(Title displayTitle) {
+		this.displayTitle = displayTitle;
 	}
 
-	// original title
 	public Title getOriginalTitle() {
-		return this.title2;
+		return this.originalTitle;
 	}
 
 	public void setOriginalTitle(Title title) {
-		this.title2 = title;
+		this.originalTitle = title;
 	}
 
 	// 	public Work getWork() {

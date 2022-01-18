@@ -39,7 +39,7 @@ public class LineupMember implements Serializable {
 			@JoinColumn(name="analysis_music_analysis_method_id")
 			}
 		)
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to ActorPerson
 	@ManyToOne
@@ -91,12 +91,12 @@ public class LineupMember implements Serializable {
 		this.position = position;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public ActorPerson getActorPerson() {
